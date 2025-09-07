@@ -1,0 +1,301 @@
+<?php
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ExcelController;
+use App\Http\Controllers\Api\V1\Auth\AuthController;
+use App\Http\Controllers\Api\V1\User\UserController;
+use App\Http\Controllers\Api\V1\User\UserCatalogueController;
+use App\Http\Controllers\Api\V1\Product\ProductController;
+use App\Http\Controllers\Api\V1\Product\ProductCatalogueController;
+use App\Http\Controllers\Api\V1\Product\ProductVariantController;
+use App\Http\Controllers\Api\V1\Brand\BrandController;
+use App\Http\Controllers\Api\V1\Attribute\AttributeController;
+use App\Http\Controllers\Api\V1\Attribute\AttributeCatalogueController;
+use App\Http\Controllers\Api\V1\Post\PostController;
+use App\Http\Controllers\Api\V1\Post\PostCatalogueController;
+use App\Http\Controllers\Api\V1\Post\TagController;
+use App\Http\Controllers\Api\V1\Faq\FaqController;
+use App\Http\Controllers\Api\V1\Faq\FaqCatalogueController;
+use App\Http\Controllers\Api\V1\Promotion\PromotionCatalogueController;
+use App\Http\Controllers\Api\V1\AgencySystem\AgencyController;
+use App\Http\Controllers\Api\V1\AgencySystem\AgencyWorkingHourController;
+use App\Http\Controllers\Api\V1\Image\ImageController;
+use App\Http\Controllers\Api\V1\Permission\PermissionController;
+use App\Http\Controllers\Api\V1\Mail\MailController;
+use App\Http\Controllers\Api\V1\User\AddressOrderController;
+use App\Http\Controllers\Api\V1\Banner\BannerController;
+
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+*/
+
+$routeExcept = ['create', 'edit'];
+
+// Auth routes
+Route::group(['prefix' => 'v1/auth'], function(){
+    Route::post('login', [AuthController::class, 'login']);
+    Route::post('register', [AuthController::class, 'register']);
+    Route::post('refresh', [AuthController::class, 'refresh']);
+    Route::middleware(['jwt:api', 'convert', 'checkPermission'])->group(function(){
+        Route::get('me', [AuthController::class, 'me']);
+        Route::post('logout', [AuthController::class, 'logout']);
+    });
+});
+
+// Upload routes
+Route::middleware(['jwt:api', 'convert'])->group(function(){
+    Route::post('v1/upload-temp', [ImageController::class, 'uploadTemp']);
+});
+
+// Protected routes
+Route::group(['prefix' => 'v1'], function() use ($routeExcept){
+    Route::middleware(['jwt:api', 'convert', 'checkPermission'])->group(function() use ($routeExcept){
+
+        // Excel routes
+        Route::group(['prefix' => 'excel'], function(){
+            Route::post('export', [ExcelController::class, 'export']);
+            Route::post('import', [ExcelController::class, 'import']);
+            Route::post('template', [ExcelController::class, 'template']);
+            Route::get('statistics', [ExcelController::class, 'statistics']);
+            Route::get('download/{filename}', [ExcelController::class, 'download'])->name('excel.download');
+        });
+
+        // Attribute Catalogue routes
+        Route::group(['prefix' => 'attribute_catalogues'], function(){
+            Route::delete('bulkDelete', [AttributeCatalogueController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [AttributeCatalogueController::class, 'attach']);
+            Route::delete('{id}/detach', [AttributeCatalogueController::class, 'detach']);
+            Route::post('bulkStore', [AttributeCatalogueController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [AttributeCatalogueController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [AttributeCatalogueController::class, 'bulkUpdate']);
+        });
+        Route::resource('attribute_catalogues', AttributeCatalogueController::class)->except($routeExcept); 
+
+        // Attribute routes
+        Route::group(['prefix' => 'attributes'], function(){
+            Route::delete('bulkDelete', [AttributeController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [AttributeController::class, 'attach']);
+            Route::delete('{id}/detach', [AttributeController::class, 'detach']);
+            Route::post('bulkStore', [AttributeController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [AttributeController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [AttributeController::class, 'bulkUpdate']);
+        });
+        Route::resource('attributes', AttributeController::class)->except($routeExcept); 
+
+        // Permission routes
+        Route::group(['prefix' => 'permissions'], function(){
+            Route::delete('bulkDelete', [PermissionController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [PermissionController::class, 'attach']);
+            Route::delete('{id}/detach', [PermissionController::class, 'detach']);
+            Route::post('bulkStore', [PermissionController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [PermissionController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [PermissionController::class, 'bulkUpdate']);
+        });
+        Route::resource('permissions', PermissionController::class)->except($routeExcept); 
+
+        // Post Catalogue routes
+        Route::group(['prefix' => 'post_catalogues'], function(){
+            Route::delete('bulkDelete', [PostCatalogueController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [PostCatalogueController::class, 'attach']);
+            Route::delete('{id}/detach', [PostCatalogueController::class, 'detach']);
+            Route::post('bulkStore', [PostCatalogueController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [PostCatalogueController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [PostCatalogueController::class, 'bulkUpdate']);
+        });
+        Route::resource('post_catalogues', PostCatalogueController::class)->except($routeExcept); 
+
+        // Post routes
+        Route::group(['prefix' => 'posts'], function(){
+            Route::delete('bulkDelete', [PostController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [PostController::class, 'attach']);
+            Route::delete('{id}/detach', [PostController::class, 'detach']);
+            Route::post('bulkStore', [PostController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [PostController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [PostController::class, 'bulkUpdate']);
+        });
+        Route::resource('posts', PostController::class)->except($routeExcept); 
+
+        // Product Catalogue routes
+        Route::group(['prefix' => 'product_catalogues'], function(){
+            Route::delete('bulkDelete', [ProductCatalogueController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [ProductCatalogueController::class, 'attach']);
+            Route::delete('{id}/detach', [ProductCatalogueController::class, 'detach']);
+            Route::post('bulkStore', [ProductCatalogueController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [ProductCatalogueController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [ProductCatalogueController::class, 'bulkUpdate']);
+        });
+        Route::resource('product_catalogues', ProductCatalogueController::class)->except($routeExcept); 
+
+        // Product routes
+        Route::group(['prefix' => 'products'], function(){
+            Route::delete('bulkDelete', [ProductController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [ProductController::class, 'attach']);
+            Route::delete('{id}/detach', [ProductController::class, 'detach']);
+            Route::post('bulkStore', [ProductController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [ProductController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [ProductController::class, 'bulkUpdate']);
+        });
+        Route::resource('products', ProductController::class)->except($routeExcept); 
+
+        // Promotion Catalogue routes
+        Route::group(['prefix' => 'promotion_catalogues'], function(){
+            Route::delete('bulkDelete', [PromotionCatalogueController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [PromotionCatalogueController::class, 'attach']);
+            Route::delete('{id}/detach', [PromotionCatalogueController::class, 'detach']);
+            Route::post('bulkStore', [PromotionCatalogueController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [PromotionCatalogueController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [PromotionCatalogueController::class, 'bulkUpdate']);
+        });
+        Route::resource('promotion_catalogues', PromotionCatalogueController::class)->except($routeExcept); 
+
+
+        // User Catalogue routes
+        Route::group(['prefix' => 'user_catalogues'], function(){
+            Route::delete('bulkDelete', [UserCatalogueController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [UserCatalogueController::class, 'attach']);
+            Route::delete('{id}/detach', [UserCatalogueController::class, 'detach']);
+            Route::post('bulkStore', [UserCatalogueController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [UserCatalogueController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [UserCatalogueController::class, 'bulkUpdate']);
+        });
+        Route::resource('user_catalogues', UserCatalogueController::class)->except($routeExcept); 
+
+        // User routes
+        Route::group(['prefix' => 'users'], function(){
+            Route::delete('bulkDelete', [UserController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [UserController::class, 'attach']);
+            Route::delete('{id}/detach', [UserController::class, 'detach']);
+            Route::post('bulkStore', [UserController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [UserController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [UserController::class, 'bulkUpdate']);
+        });
+        Route::resource('users', UserController::class)->except($routeExcept); 
+
+        // Brand routes
+        Route::group(['prefix' => 'brands'], function(){
+            Route::delete('bulkDelete', [BrandController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [BrandController::class, 'attach']);
+            Route::delete('{id}/detach', [BrandController::class, 'detach']);
+            Route::post('bulkStore', [BrandController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [BrandController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [BrandController::class, 'bulkUpdate']);
+        });
+        Route::resource('brands', BrandController::class)->except($routeExcept);
+
+        // Product Variant routes
+        Route::group(['prefix' => 'product_variants'], function(){
+            Route::delete('bulkDelete', [ProductVariantController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [ProductVariantController::class, 'attach']);
+            Route::delete('{id}/detach', [ProductVariantController::class, 'detach']);
+            Route::post('bulkStore', [ProductVariantController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [ProductVariantController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [ProductVariantController::class, 'bulkUpdate']);
+        });
+        Route::resource('product_variants', ProductVariantController::class)->except($routeExcept);
+
+        // Tag routes
+        Route::group(['prefix' => 'tags'], function(){
+            Route::delete('bulkDelete', [TagController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [TagController::class, 'attach']);
+            Route::delete('{id}/detach', [TagController::class, 'detach']);
+            Route::post('bulkStore', [TagController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [TagController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [TagController::class, 'bulkUpdate']);
+        });
+        Route::resource('tags', TagController::class)->except($routeExcept);
+
+        // FAQ routes
+        Route::group(['prefix' => 'faqs'], function(){
+            Route::delete('bulkDelete', [FaqController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [FaqController::class, 'attach']);
+            Route::delete('{id}/detach', [FaqController::class, 'detach']);
+            Route::post('bulkStore', [FaqController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [FaqController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [FaqController::class, 'bulkUpdate']);
+        });
+        Route::resource('faqs', FaqController::class)->except($routeExcept);
+
+        // FAQ Catalogue routes
+        Route::group(['prefix' => 'faq_catalogues'], function(){
+            Route::delete('bulkDelete', [FaqCatalogueController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [FaqCatalogueController::class, 'attach']);
+            Route::delete('{id}/detach', [FaqCatalogueController::class, 'detach']);
+            Route::post('bulkStore', [FaqCatalogueController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [FaqCatalogueController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [FaqCatalogueController::class, 'bulkUpdate']);
+        });
+        Route::resource('faq_catalogues', FaqCatalogueController::class)->except($routeExcept);
+
+        // Agency routes
+        Route::group(['prefix' => 'agencies'], function(){
+            Route::delete('bulkDelete', [AgencyController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [AgencyController::class, 'attach']);
+            Route::delete('{id}/detach', [AgencyController::class, 'detach']);
+            Route::post('bulkStore', [AgencyController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [AgencyController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [AgencyController::class, 'bulkUpdate']);
+        });
+        Route::resource('agencies', AgencyController::class)->except($routeExcept);
+
+        // Agency Working Hour routes
+        Route::group(['prefix' => 'agency_working_hours'], function(){
+            Route::delete('bulkDelete', [AgencyWorkingHourController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [AgencyWorkingHourController::class, 'attach']);
+            Route::delete('{id}/detach', [AgencyWorkingHourController::class, 'detach']);
+            Route::post('bulkStore', [AgencyWorkingHourController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [AgencyWorkingHourController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [AgencyWorkingHourController::class, 'bulkUpdate']);
+        });
+        Route::resource('agency_working_hours', AgencyWorkingHourController::class)->except($routeExcept);
+
+        // Image routes
+        Route::group(['prefix' => 'images'], function(){
+            Route::delete('bulkDelete', [ImageController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [ImageController::class, 'attach']);
+            Route::delete('{id}/detach', [ImageController::class, 'detach']);
+            Route::post('bulkStore', [ImageController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [ImageController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [ImageController::class, 'bulkUpdate']);
+        });
+        Route::resource('images', ImageController::class)->except($routeExcept);
+
+        // Mail routes
+        Route::group(['prefix' => 'mails'], function(){
+            Route::delete('bulkDelete', [MailController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [MailController::class, 'attach']);
+            Route::delete('{id}/detach', [MailController::class, 'detach']);
+            Route::post('bulkStore', [MailController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [MailController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [MailController::class, 'bulkUpdate']);
+        });
+        Route::resource('mails', MailController::class)->except($routeExcept);
+
+        // Address Order routes
+        Route::group(['prefix' => 'address_orders'], function(){
+            Route::delete('bulkDelete', [AddressOrderController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [AddressOrderController::class, 'attach']);
+            Route::delete('{id}/detach', [AddressOrderController::class, 'detach']);
+            Route::post('bulkStore', [AddressOrderController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [AddressOrderController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [AddressOrderController::class, 'bulkUpdate']);
+        });
+        Route::resource('address_orders', AddressOrderController::class)->except($routeExcept);
+
+        // Banner routes
+        Route::group(['prefix' => 'banners'], function(){
+            Route::delete('bulkDelete', [BannerController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [BannerController::class, 'attach']);
+            Route::delete('{id}/detach', [BannerController::class, 'detach']);
+            Route::post('bulkStore', [BannerController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [BannerController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [BannerController::class, 'bulkUpdate']);
+        });
+        Route::resource('banners', BannerController::class)->except($routeExcept);
+
+        // generate route
+        
+    });
+});

@@ -1,0 +1,14 @@
+1. Giả sử: 100 data --> cache tại 1 thời điểm là 7h30 thời gian cache là một tiếng
+trong 1 tiếng đó nếu như mà có request gửi lên (không quan tâm bao nhiêu request) => vào cache lấy dat
+
+--> tại thời điểm 8h30 100 data sẽ hết cache
+tại thời điểm 8h31
+    1 triệu request gửi lên -> 100 data -> cache miss -> 1 triệu request -> truy cập database lấy dữ liệu -> tăng tải database => crash
+    --> Stempade cache: bão cache
+    Kỹ thuật cơ bản: cache lock và random cache time to live -> tgian cache linh hoạt, đơn giản, tự quản
+
+Chiến lược cache:
+1. Khi khởi tạo data -> cache lại luôn -> id = 1 user_catalogues cache->show: cache 1 tiếng
+2. UPdate data vậy khi lấy data thì lấy ở cache hay db -> phải đòng bộ dư liệu trong caceh và trong data base khi có thay đổi
+3. vào lấy data -> vào cache trước -> nếu không có data -> thì vào database -> cache lại
+

@@ -1,0 +1,42 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "start": "cd laravel-api && php artisan serve && cd nuxt-app && npm run dev"
+  },
+  "dependencies": {
+    "@nuxt/image": "^1.10.0",
+    "@nuxtjs/i18n": "^10.0.6",
+    "@nuxtjs/tailwindcss": "^6.14.0",
+    "@pinia/nuxt": "^0.11.2",
+    "@primevue/themes": "^4.3.7",
+    "@splidejs/splide-extension-auto-scroll": "^0.5.3",
+    "@splidejs/vue-splide": "^0.6.12",
+    "@types/jquery": "^3.5.32",
+    "@vee-validate/zod": "^4.15.1",
+    "axios": "^1.11.0",
+    "jquery": "^3.7.1",
+    "nuxt": "^4.0.1",
+    "pinia": "^3.0.3",
+    "pinia-plugin-persistedstate": "^4.5.0",
+    "vee-validate": "^4.15.1",
+    "vue": "^3.5.17",
+    "vue-router": "^4.5.1",
+    "vue-sonner": "^2.0.2",
+    "zod": "^3.25.76"
+  },
+  "prettier": {
+    "printWidth": 3000,
+    "htmlWhitespaceSensitivity": "ignore",
+    "embeddedLanguageFormatting": "auto"
+  },
+  "devDependencies": {
+    "@primevue/nuxt-module": "^4.3.7"
+  }
+}

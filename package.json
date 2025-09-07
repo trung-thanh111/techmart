@@ -1,0 +1,13 @@
+{
+  "name": "fullstack-app",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "npm run start:tabs",
+    "start:tabs": "start cmd /k \"cd laravel-api && php artisan serve\" && start cmd /k \"cd nuxt-app && npm run dev\"",
+    "start:api": "cd laravel-api && php artisan serve",
+    "start:client": "cd nuxt-app && npm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^7.6.0"
+  }
+}

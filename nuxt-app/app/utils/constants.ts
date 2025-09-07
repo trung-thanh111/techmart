@@ -1,0 +1,11 @@
+export const TOLOGIN = "/auth/login";
+export const TOREGISTER = "/auth/register";
+export const TODASHBOARD = "/admin/dashboard";
+export const TOHOME = "/";
+// export const TOFORBIDDEN = "/forbidden";
+// export const TO404 = "/404";
+// export const TO500 = "/500";
+// admin route
+export const USERCATALOGUEINDEX = "/admin/user/catalogue";
+export const USERCATALOGUECREATE = "/admin/user/catalogue/create";
+export const USERCATALOGUEUPDATE = "/admin/user/catalogue/update";

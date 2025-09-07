@@ -1,0 +1,4 @@
+- SoftDeletes
+        permission
+        user
+        user_catalogue

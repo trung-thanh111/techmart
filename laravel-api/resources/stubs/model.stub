@@ -1,0 +1,28 @@
+<?php
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Traits\HasQuery;
+
+class {{name}} extends Model
+{
+    use HasQuery;
+
+    protected $table = '{{tableName}}s';
+
+    protected $fillable = [
+        'name',
+        'publish'
+    ];
+
+    protected $casts = [];
+
+    /**
+     * Biến này đăng ký quan hệ được phép bắn lên từ client
+     *
+     * @var array
+     */
+    public $relationable = [];
+
+}

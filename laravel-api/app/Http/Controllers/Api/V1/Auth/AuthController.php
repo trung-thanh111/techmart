@@ -1,0 +1,89 @@
+<?php
+namespace App\Http\Controllers\Api\V1\Auth;
+
+use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
+use App\Http\Resources\ApiResource;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Lang;
+use App\Http\Requests\Auth\AuthRequest;
+use App\Http\Requests\Auth\RegisterRequest;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Services\Interfaces\Auth\AuthServiceInterface as AuthService;
+use Illuminate\Http\Request;
+use Tymon\JWTAuth\Exceptions\UserNotDefinedException;
+
+class AuthController extends Controller
+{
+    private $authService;
+
+    public function __construct(
+        AuthService $authService
+    ) {
+        $this->authService = $authService;
+    }
+
+    public function login(AuthRequest $request): JsonResponse
+    {
+        try {
+            $response = $this->authService->authenticate($request);
+            return ApiResource::ok($response['data'], Lang::get('message.login_success'))->withCookie($response['authCookie']);
+
+        } catch (ModelNotFoundException $e) {
+            return ApiResource::message($e->getMessage(), Response::HTTP_NOT_FOUND);
+        } catch (AuthenticationException $e) {
+            return ApiResource::message($e->getMessage(), Response::HTTP_UNAUTHORIZED);
+        } catch (\Throwable $th) {
+            return ApiResource::message($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function register(RegisterRequest $request): JsonResponse
+    {
+        try {
+            $response = $this->authService->register($request);
+            return ApiResource::ok($response['data'], Lang::get('message.register_success'))->withCookie($response['authCookie']);
+
+        } catch (ModelNotFoundException $e) {
+            return ApiResource::message($e->getMessage(), Response::HTTP_NOT_FOUND);
+        } catch (AuthenticationException $e) {
+            return ApiResource::message($e->getMessage(), Response::HTTP_UNAUTHORIZED);
+        } catch (\Throwable $th) {
+            return ApiResource::message($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function me(): JsonResponse{
+        try {
+
+            $response = $this->authService->getMe();
+            return ApiResource::ok($response, Lang::get('message.get_user_success'));
+
+        } catch(UserNotDefinedException $e){
+            return ApiResource::message($e->getMessage(), Response::HTTP_BAD_REQUEST);
+        } catch (\Throwable $th) {
+            return ApiResource::message($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function refresh(Request $request): JsonResponse {
+        try {
+            $response = $this->authService->refreshToken($request);
+            return ApiResource::ok($response['data'], Lang::get('message.refresh_token_success'))->withCookie($response['authCookie']);
+        } catch (\Throwable $th) {
+            return ApiResource::message($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function logout(): JsonResponse{
+        try {
+            $this->authService->logout();
+            return ApiResource::message(Lang::get('message.logout_success'));
+        } catch (\Throwable $th) {
+            return ApiResource::message($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+}

@@ -1,0 +1,54 @@
+<?php
+namespace App\Services\Impl\{{namespace}};
+
+use Illuminate\Http\Request;
+use App\Services\Impl\BaseService;
+use Illuminate\Database\Eloquent\Model;
+use App\Repositories\{{namespace}}\{{name}}Repository;
+use App\Http\Resources\{{namespace}}\{{name}}Resource;
+use App\Services\Interfaces\{{namespace}}\{{name}}ServiceInterface;
+
+class {{name}}Service extends BaseService implements {{name}}ServiceInterface {
+
+protected $repository;
+
+protected $complexFilter = ['id'];
+
+protected $with = [];
+protected $relationFilter = [];
+
+protected $cacheKeyPrefix = '{{cacheKeyPrefix}}s';
+protected $cacheTags = ['{{cacheKeyPrefix}}s:collection'];
+
+protected $useUpload = false;
+
+    public function __construct(
+        {{name}}Repository $repository
+    ) {
+        $this->repository = $repository;
+    }
+
+    protected function getRepository(){
+        return $this->repository;
+    }
+
+    /**
+     * nhiệm vụ bắt data từ client post lên (dạng thô, chuỗi, file, ....)
+     *
+     */
+    protected function prepareModelData(Request $request): self {
+
+        return $this->initializeBasicModelData($request);
+    }
+
+    protected function initializeBasicModelData(Request $request): self {
+        $fillable = $this->repository->getFillable();
+        $this->modelData = $request->only($fillable);
+        return $this;
+    }
+
+    protected function getResource(Model $resource){
+        return new {{name}}Resource($resource);
+    }
+
+}

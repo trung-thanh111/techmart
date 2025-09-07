@@ -1,0 +1,1 @@
+// swiper.client.ts - placeholder 

@@ -1,0 +1,8 @@
+<?php
+namespace App\Services\Interfaces\{{namespace}};
+
+use Illuminate\Http\Request;
+
+interface {{name}}ServiceInterface{
+
+}
