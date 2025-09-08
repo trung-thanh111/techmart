@@ -1,5 +1,9 @@
 {
   "admin": {
+    "common": {
+      "import": "Nhập dữ liệu",
+      "export": "Xuất dữ liệu"
+    },
     "header": {
       "search": "Tìm kiếm...",
       "recentSearches": "Tìm kiếm gần đây",

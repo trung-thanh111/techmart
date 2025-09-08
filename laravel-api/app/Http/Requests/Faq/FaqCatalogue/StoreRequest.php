@@ -26,7 +26,7 @@ class StoreRequest extends BaseRequest
             "description" => "nullable|string",
             "image" => "nullable|string|max:255",
             "is_featured" => "nullable|boolean",
-            "publish" => "required|integer|in:1,2",
+            "publish" => "required|integer|in:0,1,2",
         ];
     }
 

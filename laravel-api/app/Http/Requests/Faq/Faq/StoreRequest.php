@@ -27,7 +27,7 @@ class StoreRequest extends BaseRequest
             "sort_order" => "nullable|integer|min:0",
             "is_featured" => "nullable|boolean",
             "faq_catalogue_id" => "required|integer|exists:faq_catalogues,id",
-            "publish" => "required|integer|in:1,2",
+            "publish" => "required|integer|in:0,1,2",
         ];
     }
 

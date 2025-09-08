@@ -33,7 +33,7 @@ class UpdateRequest extends BaseRequest
         $sometime = ($method === 'PATCH') ? 'sometimes' : '';
         return [
             "name" => "required|string|max:255|{$sometime}",
-            "publish" => "required|integer|in:1,2|{$sometime}",
+            "publish" => "required|integer|in:0,1,2|{$sometime}",
         ];
     }
 

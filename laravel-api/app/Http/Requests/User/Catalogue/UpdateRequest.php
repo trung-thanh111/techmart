@@ -36,7 +36,7 @@ class UpdateRequest extends BaseRequest
 
             ],
             "description" => "nullable|string",
-            "publish" => "required|integer|in:1,2|{$sometime}",
+            "publish" => "required|integer|in:0,1,2|{$sometime}",
         ];
     }
 

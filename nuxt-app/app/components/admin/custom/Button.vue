@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { computed } from "vue";
+import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 const { t } = useI18n();
 
 const props = withDefaults(
@@ -10,12 +13,15 @@ const props = withDefaults(
     severity?: "primary" | "secondary" | "success" | "info" | "warning" | "help" | "danger";
     to?: string;
     variant?: "success" | "cancel" | "delete" | "duplicate" | "custom";
+    icon?: string;
+    iconPos?: "left" | "right";
   }>(),
   {
     type: "submit",
     loading: false,
     severity: "primary",
     variant: "custom",
+    iconPos: "left",
   }
 );
 
@@ -69,12 +75,13 @@ const finalClass = computed(() => {
 
 const onClick = async (event: MouseEvent) => {
   if (props.to) {
-    await navigateTo(props.to);
+    const router = useRouter();
+    await router.push(props.to);
   }
   emit("click", event);
 };
 </script>
 
 <template>
-  <Button :type="type" :label="finalLabel" :severity="finalSeverity" :loading="loading" :class="finalClass" :pt="{ loadingicon: 'w-4 h-4 mr-0.5' }" @click="onClick" />
+  <Button :type="type" :label="finalLabel" :severity="finalSeverity" :loading="loading" :icon="icon" :iconPos="iconPos" :class="finalClass" :pt="{ loadingicon: 'w-4 h-4 mr-0.5' }" @click="onClick" />
 </template>

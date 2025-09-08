@@ -28,7 +28,7 @@ class StoreRequest extends BaseRequest
             "name" => "required|string|max:255",
             "email" => "required|email|max:255|unique:users,email",
             "password" => "required|string|min:8",
-            "publish" => "required|integer|in:1,2",
+            "publish" => "required|integer|in:0,1,2",
             "user_catalogues" => "required|array",
             "user_catalogues.*" => "exists:user_catalogues,id",
             "image" => "sometimes|mimes:{$mimes}|max:{$max_size}"

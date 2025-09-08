@@ -39,7 +39,7 @@ class UpdateRequest extends BaseRequest
             "description" => "nullable|string|{$sometime}",
             "image" => "nullable|string|max:255|{$sometime}",
             "is_featured" => "nullable|boolean|{$sometime}",
-            "publish" => "required|integer|in:1,2|{$sometime}",
+            "publish" => "required|integer|in:0,1,2|{$sometime}",
         ];
     }
 

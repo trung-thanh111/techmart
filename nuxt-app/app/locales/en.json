@@ -1,5 +1,9 @@
 {
   "admin": {
+    "common": {
+      "import": "Import data",
+      "export": "Export data"
+    },
     "header": {
       "search": "Search...",
       "recentSearches": "Recent Searches",
