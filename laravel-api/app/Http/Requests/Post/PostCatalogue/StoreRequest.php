@@ -34,7 +34,7 @@ class StoreRequest extends BaseRequest
             "extra_album" => "nullable",
             "table_of_content" => "nullable|boolean",
             "order" => "nullable|integer",
-            "publish" => "required|integer|in:1,2",
+            "publish" => "required|integer|in:0,1,2",
             "meta_title" => "nullable|string|max:255",
             "meta_keyword" => "nullable|string|max:255",
             "meta_description" => "nullable|string|max:500",

@@ -54,15 +54,6 @@ Route::middleware(['jwt:api', 'convert'])->group(function(){
 Route::group(['prefix' => 'v1'], function() use ($routeExcept){
     Route::middleware(['jwt:api', 'convert', 'checkPermission'])->group(function() use ($routeExcept){
 
-        // Excel routes
-        Route::group(['prefix' => 'excel'], function(){
-            Route::post('export', [ExcelController::class, 'export']);
-            Route::post('import', [ExcelController::class, 'import']);
-            Route::post('template', [ExcelController::class, 'template']);
-            Route::get('statistics', [ExcelController::class, 'statistics']);
-            Route::get('download/{filename}', [ExcelController::class, 'download'])->name('excel.download');
-        });
-
         // Attribute Catalogue routes
         Route::group(['prefix' => 'attribute_catalogues'], function(){
             Route::delete('bulkDelete', [AttributeCatalogueController::class, 'bulkDelete']);

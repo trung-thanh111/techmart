@@ -27,7 +27,7 @@ class StoreRequest extends BaseRequest
             "module" => "required|string|max:255",
             "title" => "nullable|string|max:255",
             "user_id" => "nullable|integer|exists:users,id",
-            "publish" => "required|integer|in:1,2",
+            "publish" => "required|integer|in:0,1,2",
         ];
     }
 

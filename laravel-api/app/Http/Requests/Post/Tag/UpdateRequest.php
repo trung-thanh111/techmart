@@ -44,7 +44,7 @@ class UpdateRequest extends BaseRequest
             ],
             "description" => "{$sometime}|nullable|string",
             "color" => "nullable|string|max:7|regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/|{$sometime}",
-            "publish" => "required|integer|in:1,2|{$sometime}",
+            "publish" => "required|integer|in:0,1,2|{$sometime}",
         ];
     }
 

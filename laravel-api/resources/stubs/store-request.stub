@@ -23,7 +23,7 @@ class StoreRequest extends BaseRequest
     {
         return [
             "name" => "required|string|max:255",
-            "publish" => "required|integer|in:1,2",
+            "publish" => "required|integer|in:0,1,2",
         ];
     }
 

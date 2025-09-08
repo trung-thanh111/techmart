@@ -40,7 +40,7 @@ class UpdateRequest extends BaseRequest
             "sort_order" => "nullable|integer|min:0|{$sometime}",
             "is_featured" => "nullable|boolean|{$sometime}",
             "faq_catalogue_id" => "required|integer|exists:faq_catalogues,id|{$sometime}",
-            "publish" => "required|integer|in:1,2|{$sometime}",
+            "publish" => "required|integer|in:0,1,2|{$sometime}",
         ];
     }
 

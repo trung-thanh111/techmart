@@ -57,7 +57,7 @@
         <Button variant="success" :loading="isLoading" />
       </div>
     </div>
-    <div class="col-lg-4">
+    <div class="col-lg-4 mt-0">
       <div class="card">
         <div class="card-header">
           <h5 class="card-title mb-0">{{ $t('admin.page.userCatalogue.status') }}</h5>

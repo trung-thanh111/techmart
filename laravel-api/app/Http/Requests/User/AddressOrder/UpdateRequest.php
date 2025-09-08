@@ -50,7 +50,7 @@ class UpdateRequest extends BaseRequest
             "postal_code" => "required|string|max:20|{$sometime}",
             "country_code" => "nullable|string|max:2|{$sometime}",
             "is_default" => "boolean|{$sometime}",
-            "publish" => "required|integer|in:1,2|{$sometime}",
+            "publish" => "required|integer|in:0,1,2|{$sometime}",
         ];
     }
 
