@@ -39,7 +39,6 @@ const isBulkSelecting = computed(() => selectedIds.value.length >= 1);
 const hasData = computed(() => Boolean(data.value?.data?.data?.length));
 const hasSelectedItems = computed(() => selectedIds.value.length > 0);
 
-
 definePageMeta({
   layout: "admin",
   middleware: ["auth-required", "auth-admin"],
@@ -48,7 +47,7 @@ definePageMeta({
 
 <template>
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h5 class="mb-0 text-uppercase fw-bold">{{ $t('admin.page.userCatalogue.title') }}</h5>
+    <h5 class="mb-0 text-uppercase fw-bold">{{ $t("admin.page.userCatalogue.title") }}</h5>
     <Breadcrumb :crumbs="[{ label: $t('admin.page.userCatalogue.breadcrumb') }]" />
   </div>
   <div class="card shadow-sm">
@@ -58,10 +57,14 @@ definePageMeta({
           <Button variant="delete" type="button" :label="`${$t('admin.common.delete')} (${selectedIds.length})`" :loading="isLoading" :disabled="!hasSelectedItems" data-bs-toggle="modal" data-bs-target="#deleteMultipleRecord" />
           <Button variant="cancel" :loading="isLoading" :disabled="!hasSelectedItems" @click="updateSelectedIds([])" />
         </div>
+        <div class="d-flex align-items-center gap-2">
+          <Button variant="custom" severity="secondary" :label="$t('admin.common.import')" icon="ri-upload-2-line" :loading="false" @click="" />
+          <Button variant="custom" severity="secondary" :label="$t('admin.common.export')" icon="ri-download-2-line" :loading="false" @click="" />
           <NuxtLink to="/admin/user/catalogue/create" class="btn btn-success">
             <i class="ri-add-line me-1"></i>
             {{ $t('admin.common.create') }}
           </NuxtLink>
+        </div>
       </div>
       <FilterBar @search="search" />
       <div class="table-responsive">
