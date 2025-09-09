@@ -25,7 +25,7 @@ class StoreRequest extends BaseRequest
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:255',
             'order' => 'nullable|integer|min:0',
-            'publish' => 'required|integer|in:1,2',
+            'publish' => 'required|integer|in:0,1,2',
             'attribute_catalogue_id' => 'required|integer|min:0'
         ];
     }

@@ -31,7 +31,7 @@ class BulkStoreRequest extends BaseRequest
             "data.*.website" => "nullable|url|max:255",
             "data.*.country" => "nullable|string|max:100",
             "data.*.order" => "nullable|integer|min:0",
-            "data.*.publish" => "required|integer|in:1,2",
+            "data.*.publish" => "required|integer|in:0,1,2",
         ];
     }
 

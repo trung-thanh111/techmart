@@ -25,6 +25,10 @@ class AddressOrderResource extends JsonResource
             'state' => $this->state ?? null,
             'postalCode' => $this->postal_code ?? null,
             'countryCode' => $this->country_code,
+            'user' => $this->whenLoaded('users', [
+                'id' => $this->users->id,
+                'name' => $this->users->name,
+            ]),
             'isDefault' => $this->is_default,
             'publish' => $this->publish,
             'createdAt' => $this->created_at ?? null,

@@ -38,7 +38,7 @@ class UpdateRequest extends BaseRequest
             'day_of_week' => "required|string|max:255|{$sometime}",
             'open_time' => "nullable|{$sometime}",
             'close_time' => "nullable|{$sometime}",
-            'publish' => "required|integer|in:1,2|{$sometime}",
+            'publish' => "required|integer|in:0,1,2|{$sometime}",
         ];
     }
 

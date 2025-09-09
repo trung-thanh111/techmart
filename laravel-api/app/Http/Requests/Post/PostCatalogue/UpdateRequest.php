@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Requests\Post\PostCatalogue;
 
 use App\Http\Requests\BaseRequest;
@@ -43,7 +44,7 @@ class UpdateRequest extends BaseRequest
             "extra_album" => "nullable|json|{$sometime}",
             "table_of_content" => "nullable|boolean|{$sometime}",
             "order" => "nullable|integer|{$sometime}",
-            "publish" => "required|integer|in:1,2|{$sometime}",
+            "publish" => "required|integer|in:0,1,2|{$sometime}",
             "meta_title" => "nullable|string|max:255|{$sometime}",
             "meta_keyword" => "nullable|string|max:255|{$sometime}",
             "meta_description" => "nullable|string|max:500|{$sometime}",
@@ -67,9 +68,8 @@ class UpdateRequest extends BaseRequest
         ]);
     }
 
-    public function messages(){
-        return [
-
-        ];
+    public function messages()
+    {
+        return [];
     }
 }

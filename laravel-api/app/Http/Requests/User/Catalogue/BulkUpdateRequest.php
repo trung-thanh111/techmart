@@ -37,7 +37,7 @@ class BulkUpdateRequest extends BaseRequest
                 Rule::unique('user_catalogues', 'slug')->ignore($id),
             ];
             $rules["data.$key.description"] = "nullable|string";
-            $rules["data.$key.publish"] = "required|integer|in:1,2|{$sometime}";
+            $rules["data.$key.publish"] = "required|integer|in:0,1,2|{$sometime}";
         }
         return $rules;
     }

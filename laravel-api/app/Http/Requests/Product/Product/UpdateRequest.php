@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Requests\Product\Product;
 
 use App\Enums\Common;
@@ -35,17 +36,19 @@ class UpdateRequest extends BaseRequest
         $sometime = ($method === 'PATCH') ? 'sometimes' : '';
         return [
             "name" => "required|string|max:255|{$sometime}",
-            "publish" => "required|integer|in:1,2|{$sometime}",
+            "publish" => "required|integer|in:0,1,2|{$sometime}",
         ];
     }
 
-    public function prepareForValidation(){
+    public function prepareForValidation()
+    {
         // $this->merge([
         //    ...($this->has('name') && !$this->has('slug') ? ['slug' => Str::slug($this->name)] : [])
         // ]);
     }
 
-    public function messages(){
+    public function messages()
+    {
         return [];
     }
 }

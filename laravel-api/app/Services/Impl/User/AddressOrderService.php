@@ -2,6 +2,7 @@
 namespace App\Services\Impl\User;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Services\Impl\BaseService;
 use Illuminate\Database\Eloquent\Model;
 use App\Repositories\User\AddressOrderRepository;
@@ -12,9 +13,11 @@ class AddressOrderService extends BaseService implements AddressOrderServiceInte
 
 protected $repository;
 
+protected $fieldSearchs = ['title', 'full_name', 'phone', 'email', 'address'];
+
 protected $complexFilter = ['id'];
 
-protected $with = [];
+protected $with = ['users'];
 protected $relationFilter = [];
 
 protected $cacheKeyPrefix = 'address_orders';
@@ -49,6 +52,41 @@ protected $useUpload = false;
 
     protected function getResource(Model $resource){
         return new AddressOrderResource($resource);
+    }
+
+    protected function beforeSave(Request $request, ?int $id = 0): self
+    {
+        return parent::beforeSave($request, $id);
+    }
+    // set is_default = 0 for other records
+    protected function afterSave(Request $request): self
+    {
+        $result = parent::afterSave($request);
+        $isDefault = (int)($request->input('is_default') ?? 0) === 1;
+        if ($isDefault && $this->model) {
+            $currentId = $this->model->id;
+            $userId = $this->model->user_id ?? $request->input('user_id');
+            if ($userId) {
+                $table = $this->repository->getTable();
+                $affectedIds = DB::table($table)
+                    ->where('user_id', $userId)
+                    ->where('id', '!=', $currentId)
+                    ->where('is_default', 1)
+                    ->pluck('id')
+                    ->all();
+
+                if (!empty($affectedIds)) {
+                    DB::table($table)
+                        ->whereIn('id', $affectedIds)
+                        ->update(['is_default' => 0]);
+
+                    foreach ($affectedIds as $affectedId) {
+                        $this->clearCacheById($affectedId);
+                    }
+                }
+            }
+        }
+        return $result;
     }
 
 }

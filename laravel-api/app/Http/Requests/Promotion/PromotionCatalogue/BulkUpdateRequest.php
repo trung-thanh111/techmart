@@ -35,9 +35,9 @@ class BulkUpdateRequest extends BaseRequest
             $rules["data.$key.description"] = "nullable|string|max:255|{$sometime}";
             $rules["data.$key.image"] = "nullable|string|max:255|{$sometime}";
             $rules["data.$key.icon"] = "nullable|string|max:255|{$sometime}";
-            $rules["data.$key.order"] = "required|integer|in:1,2|{$sometime}";
+            $rules["data.$key.order"] = "required|integer|in:0,1,2|{$sometime}";
             $rules["data.$key.index"] = "nullable|integer|{$sometime}";
-            $rules["data.$key.publish"] = "required|integer|in:1,2|{$sometime}";
+            $rules["data.$key.publish"] = "required|integer|in:0,1,2|{$sometime}";
         }
         return $rules;
     }

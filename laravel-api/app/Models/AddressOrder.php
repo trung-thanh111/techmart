@@ -28,7 +28,9 @@ class AddressOrder extends Model
         'publish'
     ];
 
-    protected $casts = [];
+    protected $casts = [
+        'is_default' => 'boolean',
+    ];
 
     /**
      * Biến này đăng ký quan hệ được phép bắn lên từ client

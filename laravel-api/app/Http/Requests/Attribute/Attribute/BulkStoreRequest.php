@@ -27,7 +27,7 @@ class BulkStoreRequest extends BaseRequest
             "data.*.description" => "nullable|string",
             "data.*.order" => "nullable|integer|min:0",
             "data.*.attribute_catalogue_id" => "required|integer|min:0",
-            "data.*.publish" => "required|integer|in:1,2",
+            "data.*.publish" => "required|integer|in:0,1,2",
         ];
     }
 

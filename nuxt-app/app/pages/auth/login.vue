@@ -33,7 +33,7 @@
                 <Field v-slot="{ field, errorMessage, meta }" name="email" :validate-on-input="true">
                   <input v-bind="field" id="email" type="email" placeholder="Email của bạn" :class="['w-full border rounded px-3 py-2 text-sm focus:outline-none pr-10 transition-colors', errorMessage && meta.touched ? 'border-red-500 focus:border-red-500' : 'border-gray-300 focus:border-sky-500']" />
                   <small v-if="errorMessage && meta.touched" class="error-message">
-                    {{ errorMessage }}
+                    {{ $t(errorMessage) }}
                   </small>
                 </Field>
               </div>
@@ -54,7 +54,7 @@
                     </button>
                   </div>
                   <small v-if="errorMessage && meta.touched" class="error-message">
-                    {{ errorMessage }}
+                    {{ $t(errorMessage) }}
                   </small>
                 </Field>
               </div>

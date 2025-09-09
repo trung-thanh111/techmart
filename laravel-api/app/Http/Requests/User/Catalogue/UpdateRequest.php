@@ -33,14 +33,15 @@ class UpdateRequest extends BaseRequest
                 "string",
                 // Rule này sẽ bỏ qua validation slug theo id trong bảng user_catalogues
                 Rule::unique('user_catalogues')->ignore($this->route('user_catalogue')),
-
+                "{$sometime}"
             ],
             "description" => "nullable|string",
-            "publish" => "required|integer|in:1,2|{$sometime}",
+            "publish" => "required|integer|in:0,1,2|{$sometime}",
         ];
     }
 
-    public function prepareForValidation(){
+    public function prepareForValidation()
+    {
         $this->merge([
             'slug' => Str::slug($this->name),
         ]);

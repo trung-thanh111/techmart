@@ -30,7 +30,7 @@ class StoreRequest extends BaseRequest
             "website" => "nullable|url|max:255",
             "country" => "nullable|string|max:100",
             "order" => "nullable|integer|min:0",
-            "publish" => "required|integer|in:1,2",
+            "publish" => "required|integer|in:0,1,2",
             "user_id" => "required|integer|exists:users,id",
         ];
     }

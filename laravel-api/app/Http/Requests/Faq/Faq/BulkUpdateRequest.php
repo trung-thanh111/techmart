@@ -37,7 +37,7 @@ class BulkUpdateRequest extends BaseRequest
             $rules["data.$key.sort_order"] = "nullable|integer|min:0|{$sometime}";
             $rules["data.$key.is_featured"] = "nullable|boolean|{$sometime}";
             $rules["data.$key.faq_catalogue_id"] = "required|integer|exists:faq_catalogues,id|{$sometime}";
-            $rules["data.$key.publish"] = "required|integer|in:1,2|{$sometime}";
+            $rules["data.$key.publish"] = "required|integer|in:0,1,2|{$sometime}";
         }
         return $rules;
     }

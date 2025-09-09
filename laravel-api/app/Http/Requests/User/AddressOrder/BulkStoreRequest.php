@@ -34,7 +34,7 @@ class BulkStoreRequest extends BaseRequest
             "data.*.postal_code" => "required|string|max:20",
             "data.*.country_code" => "nullable|string|max:2",
             "data.*.is_default" => "boolean",
-            "data.*.publish" => "required|integer|in:1,2",
+            "data.*.publish" => "required|integer|in:0,1,2",
         ];
     }
 

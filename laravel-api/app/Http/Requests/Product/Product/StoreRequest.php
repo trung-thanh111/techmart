@@ -34,7 +34,7 @@ class StoreRequest extends BaseRequest
             "order" => "nullable|integer|min:0",
             "product_catalogue_id" => "nullable|integer|min:0",
             "brand_id" => "nullable|integer|min:0",
-            "publish" => "required|integer|in:1,2",
+            "publish" => "required|integer|in:0,1,2",
         ];
     }
 

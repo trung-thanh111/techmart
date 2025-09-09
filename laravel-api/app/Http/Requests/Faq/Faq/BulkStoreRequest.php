@@ -29,7 +29,7 @@ class BulkStoreRequest extends BaseRequest
             "data.*.sort_order" => "nullable|integer|min:0",
             "data.*.is_featured" => "nullable|boolean",
             "data.*.faq_catalogue_id" => "required|integer|exists:faq_catalogues,id",
-            "data.*.publish" => "required|integer|in:1,2",
+            "data.*.publish" => "required|integer|in:0,1,2",
         ];
     }
 

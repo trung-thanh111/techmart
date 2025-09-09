@@ -34,7 +34,7 @@ class BulkUpdateRequest extends BaseRequest
             $rules["data.$key.name"] = "required|string|max:255|{$sometime}";
             $rules["data.$key.description"]  = "nullable|string|max:255|{$sometime}";
             $rules["data.$key.color"]  = "nullable|string|max:7|regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/|{$sometime}";
-            $rules["data.$key.publish"] = "required|integer|in:1,2|{$sometime}";
+            $rules["data.$key.publish"] = "required|integer|in:0,1,2|{$sometime}";
         }
         return $rules;
     }

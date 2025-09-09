@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Requests\Post\Tag;
 
 use App\Enums\Common;
@@ -44,18 +45,20 @@ class UpdateRequest extends BaseRequest
             ],
             "description" => "{$sometime}|nullable|string",
             "color" => "nullable|string|max:7|regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/|{$sometime}",
-            "publish" => "required|integer|in:1,2|{$sometime}",
+            "publish" => "required|integer|in:0,1,2|{$sometime}",
         ];
     }
 
-    public function prepareForValidation(){
+    public function prepareForValidation()
+    {
         $this->merge([
             'user_id' => auth(Common::API)->user()->id,
-           ...($this->has('name') && !$this->has('slug') ? ['slug' => Str::slug($this->name)] : [])
+            ...($this->has('name') && !$this->has('slug') ? ['slug' => Str::slug($this->name)] : [])
         ]);
     }
 
-    public function messages(){
+    public function messages()
+    {
         return [];
     }
 }

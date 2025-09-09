@@ -25,11 +25,9 @@ export const useUserCatalogue = (
   const slug = computed(() => slugify(values.name || ""));
 
   const schema = {
-    name: z.string({ required_error: t('admin.validation.nameRequired') }).trim().min(1, t('admin.validation.nameRequired')).max(255, t('admin.validation.nameMaxLength')),
+    name: z.string({ required_error: 'admin.validation.nameRequired'}).trim().min(1, 'admin.validation.nameRequired').max(255, 'admin.validation.nameMaxLength'),
     description: z.string().nullable().optional(),
-    publish: z
-      .number({ required_error: t('admin.validation.statusRequired') })
-      .refine((val) => [0, 1, 2].includes(val), { message: t('admin.validation.statusInvalid') }),
+    publish: z.number({ required_error: 'admin.validation.statusRequired'}).refine((val) => [0, 1, 2].includes(val), { message: 'admin.validation.statusInvalid'}),
   };
   const createSchema = z.object({ ...schema });
   const updateSchema = z.object({ ...schema });
@@ -194,11 +192,5 @@ export const useUserCatalogue = (
   };
 };
 
-// Export types for external use
-export type TUserCatalogueCreate = {
-  name: string;
-  description?: string | null;
-  publish: number;
-};
-
+export type TUserCatalogueCreate = Partial<IUserCatalogue>;
 export type TUserCatalogueUpdate = TUserCatalogueCreate;

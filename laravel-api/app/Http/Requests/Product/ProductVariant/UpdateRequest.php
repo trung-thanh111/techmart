@@ -43,7 +43,7 @@ class UpdateRequest extends BaseRequest
             "weight" => "{$sometime}|nullable|integer|min:0",
             "barcode" => "{$sometime}|nullable|integer|min:0",
             "product_id" => "{$sometime}|nullable|integer",
-            "publish" => "{$sometime}|required|integer|in:1,2",
+            "publish" => "{$sometime}|required|integer|in:0,1,2",
         ];
     }
 

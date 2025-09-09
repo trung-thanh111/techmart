@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Requests\User\User;
 
 use App\Http\Requests\BaseRequest;
@@ -32,7 +33,7 @@ class UpdateRequest extends BaseRequest
         $sometime = ($method === 'PATCH') ? 'sometimes' : '';
         return [
             "name" => "required|string|max:255|{$sometime}",
-            "publish" => "required|integer|in:1,2|{$sometime}",
+            "publish" => "required|integer|in:0,1,2|{$sometime}",
             "email" => [
                 "{$sometime}",
                 'required',
@@ -45,13 +46,10 @@ class UpdateRequest extends BaseRequest
         ];
     }
 
-    public function prepareForValidation(){
+    public function prepareForValidation() {}
 
-    }
-
-    public function messages(){
-        return [
-
-        ];
+    public function messages()
+    {
+        return [];
     }
 }
