@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 interface Option {
   name: string;
   value: number;
@@ -15,13 +14,13 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 
-const options: Option[] = [
-  { name: t('admin.page.userCatalogue.published'), value: 2 },
-  { name: t('admin.page.userCatalogue.draft'), value: 1 },
-  { name: t('admin.page.userCatalogue.hidden'), value: 0 },
-];
+const options = computed<Option[]>(() => [
+  { name: t("admin.common.published"), value: 2 },
+  { name: t("admin.common.draft"), value: 1 },
+  { name: t("admin.common.hidden"), value: 0 },
+]);
 </script>
 
 <template>
-  <Select :options="options" optionLabel="name" optionValue="value" :modelValue="props.modelValue" @update:modelValue="emit('update:modelValue', $event)" :placeholder="$t('admin.components.filterBar.selectStatus')" checkmark class="rounded py-[1px] w-100 md:w-56" size="small"/>
+  <Select :options="options" optionLabel="name" optionValue="value" :modelValue="props.modelValue" @update:modelValue="emit('update:modelValue', $event)" :placeholder="$t('admin.components.filterBar.selectStatus')" checkmark class="rounded py-[1px] w-100 md:w-56" size="small" />
 </template>

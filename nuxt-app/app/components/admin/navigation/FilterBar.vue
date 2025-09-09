@@ -35,9 +35,9 @@ const perpageOptions = computed(() => [
 ]);
 
 const publishOptions = computed(() => [
-  { name: t('admin.page.userCatalogue.published'), value: 2 },
-  { name: t('admin.page.userCatalogue.draft'), value: 1 },
-  { name: t('admin.page.userCatalogue.hidden'), value: 0 },
+  { name: t('admin.common.published'), value: 2 },
+  { name: t('admin.common.draft'), value: 1 },
+  { name: t('admin.common.hidden'), value: 0 },
 ]);
 
 const handleSearch = () => {

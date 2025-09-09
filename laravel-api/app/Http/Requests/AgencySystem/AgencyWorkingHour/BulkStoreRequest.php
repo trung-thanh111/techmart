@@ -23,7 +23,7 @@ class BulkStoreRequest extends BaseRequest
     {
         return [
             "data.*.name" => "required|string|max:255",
-            "data.*.publish" => "required|integer|in:1,2",
+            "data.*.publish" => "required|integer|in:0,1,2",
         ];
     }
 

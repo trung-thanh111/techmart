@@ -40,7 +40,7 @@ class UpdateRequest extends BaseRequest
             "website" => "{$sometime}|nullable|url|max:255",
             "country" => "{$sometime}|nullable|string|max:100",
             "order" => "{$sometime}|nullable|integer|min:0",
-            "publish" => "{$sometime}|required|integer|in:1,2",
+            "publish" => "{$sometime}|required|integer|in:0,1,2",
             "user_id" => "{$sometime}|required|integer|exists:users,id",
             "slug" => [
                 "required",

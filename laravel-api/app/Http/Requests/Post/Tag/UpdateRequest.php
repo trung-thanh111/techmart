@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Requests\Post\Tag;
 
 use App\Enums\Common;
@@ -48,14 +49,16 @@ class UpdateRequest extends BaseRequest
         ];
     }
 
-    public function prepareForValidation(){
+    public function prepareForValidation()
+    {
         $this->merge([
             'user_id' => auth(Common::API)->user()->id,
-           ...($this->has('name') && !$this->has('slug') ? ['slug' => Str::slug($this->name)] : [])
+            ...($this->has('name') && !$this->has('slug') ? ['slug' => Str::slug($this->name)] : [])
         ]);
     }
 
-    public function messages(){
+    public function messages()
+    {
         return [];
     }
 }

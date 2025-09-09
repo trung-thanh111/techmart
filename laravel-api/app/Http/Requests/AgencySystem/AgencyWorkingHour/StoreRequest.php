@@ -25,7 +25,7 @@ class StoreRequest extends BaseRequest
             'day_of_week' => 'required|string|max:255',
             'open_time' => 'nullable',
             'close_time' => 'nullable',
-            'publish' => 'required|integer|in:1,2',
+            'publish' => 'required|integer|in:0,1,2',
         ];
     }
 

@@ -9,3 +9,7 @@ export const TOHOME = "/";
 export const USERCATALOGUEINDEX = "/admin/user/catalogue";
 export const USERCATALOGUECREATE = "/admin/user/catalogue/create";
 export const USERCATALOGUEUPDATE = "/admin/user/catalogue/update";
+
+export const ADDRESSORDERINDEX = "/admin/user/address_order";
+export const ADDRESSORDERCREATE = "/admin/user/address_order/create";
+export const ADDRESSORDERUPDATE = "/admin/user/address_order/update";

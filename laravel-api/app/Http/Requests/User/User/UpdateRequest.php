@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Requests\User\User;
 
 use App\Http\Requests\BaseRequest;
@@ -45,13 +46,10 @@ class UpdateRequest extends BaseRequest
         ];
     }
 
-    public function prepareForValidation(){
+    public function prepareForValidation() {}
 
-    }
-
-    public function messages(){
-        return [
-
-        ];
+    public function messages()
+    {
+        return [];
     }
 }

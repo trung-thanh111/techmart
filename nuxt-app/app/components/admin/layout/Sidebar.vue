@@ -10,62 +10,64 @@
       <button type="button" class="btn" style="float: right; margin-top: 4px">
         <i class="ri-record-circle-line"></i>
       </button>
-    </div> 
+    </div>
     <div id="scrollbar">
       <div class="container-fluid px-0">
         <ul class="navbar-nav" id="navbar-nav">
-          <li class="menu-title"><span class="text-light">{{ $t('admin.sidebar.statistics') }}</span></li>
+          <li class="menu-title">
+            <span class="text-light">{{ $t("admin.sidebar.statistics") }}</span>
+          </li>
           <li class="nav-item">
             <NuxtLink class="nav-link menu-link" to="/admin/dashboard">
               <i class="ri-dashboard-2-line"></i>
-              <span data-key="t-dashboards">{{ $t('admin.sidebar.dashboard') }}</span>
+              <span data-key="t-dashboards">{{ $t("admin.sidebar.dashboard") }}</span>
             </NuxtLink>
           </li>
           <li class="menu-title">
             <i class="ri-more-fill"></i>
-            <span class="text-light">{{ $t('admin.sidebar.management') }}</span>
+            <span class="text-light">{{ $t("admin.sidebar.management") }}</span>
           </li>
           <li class="nav-item">
             <a class="nav-link menu-link" href="#sidebarProducts" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProducts">
               <i class="ri-pages-line"></i>
-              <span data-key="t-product-pages">{{ $t('admin.sidebar.products') }}</span>
+              <span data-key="t-product-pages">{{ $t("admin.sidebar.products") }}</span>
             </a>
             <div class="collapse menu-dropdown" id="sidebarProducts">
               <ul class="nav nav-sm flex-column">
                 <li class="nav-item">
-                  <a href="#" class="nav-link" data-key="t-product-catelogue">{{ $t('admin.sidebar.productCatalogue') }}</a>
+                  <a href="#" class="nav-link" data-key="t-product-catelogue">{{ $t("admin.sidebar.productCatalogue") }}</a>
                 </li>
                 <li class="nav-item">
-                  <a href="#sidebarProduct" class="nav-link menu-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProduct" data-key="t-profile">{{ $t('admin.sidebar.products') }}</a>
+                  <a href="#sidebarProduct" class="nav-link menu-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProduct" data-key="t-profile">{{ $t("admin.sidebar.products") }}</a>
                   <div class="collapse menu-dropdown" id="sidebarProduct">
                     <ul class="nav nav-sm flex-column">
                       <li class="nav-item">
-                        <a href="#" class="nav-link" data-key="t-product-list">{{ $t('admin.sidebar.productList') }}</a>
+                        <a href="#" class="nav-link" data-key="t-product-list">{{ $t("admin.sidebar.productList") }}</a>
                       </li>
                       <li class="nav-item">
-                        <a href="#" class="nav-link" data-key="t-product-create">{{ $t('admin.sidebar.productCreate') }}</a>
+                        <a href="#" class="nav-link" data-key="t-product-create">{{ $t("admin.sidebar.productCreate") }}</a>
                       </li>
                     </ul>
                   </div>
                 </li>
                 <li class="nav-item">
-                  <a href="#sidebarAttribute" class="nav-link menu-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAttribute" data-key="t-profile">{{ $t('admin.sidebar.attributes') }}</a>
+                  <a href="#sidebarAttribute" class="nav-link menu-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAttribute" data-key="t-profile">{{ $t("admin.sidebar.attributes") }}</a>
                   <div class="collapse menu-dropdown" id="sidebarAttribute">
                     <ul class="nav nav-sm flex-column">
                       <li class="nav-item">
-                        <a href="#" class="nav-link" data-key="t-attribute-catalogue">{{ $t('admin.sidebar.attributeCatalogue') }}</a>
+                        <a href="#" class="nav-link" data-key="t-attribute-catalogue">{{ $t("admin.sidebar.attributeCatalogue") }}</a>
                       </li>
                       <li class="nav-item">
-                        <a href="#" class="nav-link" data-key="t-attribute-list">{{ $t('admin.sidebar.attributeList') }}</a>
+                        <a href="#" class="nav-link" data-key="t-attribute-list">{{ $t("admin.sidebar.attributeList") }}</a>
                       </li>
                     </ul>
                   </div>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link" data-key="t-product-brand">{{ $t('admin.sidebar.brands') }}</a>
+                  <a href="#" class="nav-link" data-key="t-product-brand">{{ $t("admin.sidebar.brands") }}</a>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link" data-key="t-product-attribute">{{ $t('admin.sidebar.tags') }}</a>
+                  <a href="#" class="nav-link" data-key="t-product-attribute">{{ $t("admin.sidebar.tags") }}</a>
                 </li>
               </ul>
             </div>
@@ -73,143 +75,146 @@
           <li class="nav-item">
             <a class="nav-link menu-link" href="#sidebarusers" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarusers">
               <i class="ri-group-line"></i>
-              <span data-key="t-user-pages">{{ $t('admin.sidebar.customers') }}</span>
+              <span data-key="t-user-pages">{{ $t("admin.sidebar.customers") }}</span>
             </a>
             <div class="collapse menu-dropdown" id="sidebarusers">
               <ul class="nav nav-sm flex-column">
                 <li class="nav-item">
-                  <NuxtLink to="/admin/user/catalogue" class="nav-link" data-key="t-user-catelogue">{{ $t('admin.sidebar.customerCatalogue') }}</NuxtLink>
+                  <NuxtLink to="/admin/user/catalogue" class="nav-link" data-key="t-user-catelogue">{{ $t("admin.sidebar.customerCatalogue") }}</NuxtLink>
                 </li>
                 <li class="nav-item">
-                  <a href="#sidebaruser" class="nav-link menu-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebaruser" data-key="t-user">{{ $t('admin.sidebar.customers') }}</a>
+                  <a href="#sidebaruser" class="nav-link menu-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebaruser" data-key="t-user">{{ $t("admin.sidebar.customers") }}</a>
                   <div class="collapse menu-dropdown" id="sidebaruser">
                     <ul class="nav nav-sm flex-column">
                       <li class="nav-item">
-                        <NuxtLink to="user/users" class="nav-link" data-key="t-user-list">{{ $t('admin.sidebar.customerList') }}</NuxtLink>
+                        <NuxtLink to="user/users" class="nav-link" data-key="t-user-list">{{ $t("admin.sidebar.customerList") }}</NuxtLink>
                       </li>
                       <li class="nav-item">
-                        <NuxtLink to="user/create" class="nav-link" data-key="t-user-create">{{ $t('admin.sidebar.customerCreate') }}</NuxtLink>
+                        <NuxtLink to="user/create" class="nav-link" data-key="t-user-create">{{ $t("admin.sidebar.customerCreate") }}</NuxtLink>
                       </li>
                     </ul>
                   </div>
                 </li>
                 <li class="nav-item">
-                  <a href="#sidebarAttribute" class="nav-link menu-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAttribute" data-key="t-profile">{{ $t('admin.sidebar.attributes') }}</a>
+                  <NuxtLink to="/admin/user/address_order" class="nav-link" data-key="t-user-address-order">{{ $t("admin.sidebar.addressOrder") }}</NuxtLink>
+                </li>
+                <li class="nav-item">
+                  <a href="#sidebarAttribute" class="nav-link menu-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAttribute" data-key="t-profile">{{ $t("admin.sidebar.attributes") }}</a>
                   <div class="collapse menu-dropdown" id="sidebarAttribute">
                     <ul class="nav nav-sm flex-column">
                       <li class="nav-item">
-                        <a href="#" class="nav-link" data-key="t-attribute-catalogue">{{ $t('admin.sidebar.attributeCatalogue') }}</a>
+                        <a href="#" class="nav-link" data-key="t-attribute-catalogue">{{ $t("admin.sidebar.attributeCatalogue") }}</a>
                       </li>
                       <li class="nav-item">
-                        <a href="#" class="nav-link" data-key="t-attribute-list">{{ $t('admin.sidebar.attributeList') }}</a>
+                        <a href="#" class="nav-link" data-key="t-attribute-list">{{ $t("admin.sidebar.attributeList") }}</a>
                       </li>
                     </ul>
                   </div>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link" data-key="t-user-brand">{{ $t('admin.sidebar.brands') }}</a>
+                  <a href="#" class="nav-link" data-key="t-user-brand">{{ $t("admin.sidebar.brands") }}</a>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link" data-key="t-user-attribute">{{ $t('admin.sidebar.tags') }}</a>
+                  <a href="#" class="nav-link" data-key="t-user-attribute">{{ $t("admin.sidebar.tags") }}</a>
                 </li>
               </ul>
             </div>
           </li>
           <li class="menu-title">
             <i class="ri-more-fill"></i>
-            <span class="text-light">{{ $t('admin.sidebar.configuration') }}</span>
+            <span class="text-light">{{ $t("admin.sidebar.configuration") }}</span>
           </li>
           <li class="nav-item">
             <a class="nav-link menu-link" href="#sidebarUI" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarUI">
               <i class="ri-pencil-ruler-2-line"></i>
-              <span data-key="t-base-ui">{{ $t('admin.sidebar.interface') }}</span>
+              <span data-key="t-base-ui">{{ $t("admin.sidebar.interface") }}</span>
             </a>
             <div class="collapse menu-dropdown mega-dropdown-menu" id="sidebarUI">
               <div class="row">
                 <div class="col-lg-4">
                   <ul class="nav nav-sm flex-column">
                     <li class="nav-item">
-                      <a href="ui-alerts.html" class="nav-link" data-key="t-alerts">{{ $t('admin.sidebar.alerts') }}</a>
+                      <a href="ui-alerts.html" class="nav-link" data-key="t-alerts">{{ $t("admin.sidebar.alerts") }}</a>
                     </li>
                     <li class="nav-item">
-                      <a href="ui-badges.html" class="nav-link" data-key="t-badges">{{ $t('admin.sidebar.badges') }}</a>
+                      <a href="ui-badges.html" class="nav-link" data-key="t-badges">{{ $t("admin.sidebar.badges") }}</a>
                     </li>
                     <li class="nav-item">
-                      <a href="ui-buttons.html" class="nav-link" data-key="t-buttons">{{ $t('admin.sidebar.buttons') }}</a>
+                      <a href="ui-buttons.html" class="nav-link" data-key="t-buttons">{{ $t("admin.sidebar.buttons") }}</a>
                     </li>
                     <li class="nav-item">
-                      <a href="ui-colors.html" class="nav-link" data-key="t-colors">{{ $t('admin.sidebar.colors') }}</a>
+                      <a href="ui-colors.html" class="nav-link" data-key="t-colors">{{ $t("admin.sidebar.colors") }}</a>
                     </li>
                     <li class="nav-item">
-                      <a href="ui-cards.html" class="nav-link" data-key="t-cards">{{ $t('admin.sidebar.cards') }}</a>
+                      <a href="ui-cards.html" class="nav-link" data-key="t-cards">{{ $t("admin.sidebar.cards") }}</a>
                     </li>
                     <li class="nav-item">
-                      <a href="ui-carousel.html" class="nav-link" data-key="t-carousel">{{ $t('admin.sidebar.carousel') }}</a>
+                      <a href="ui-carousel.html" class="nav-link" data-key="t-carousel">{{ $t("admin.sidebar.carousel") }}</a>
                     </li>
                     <li class="nav-item">
-                      <a href="ui-dropdowns.html" class="nav-link" data-key="t-dropdowns">{{ $t('admin.sidebar.dropdowns') }}</a>
+                      <a href="ui-dropdowns.html" class="nav-link" data-key="t-dropdowns">{{ $t("admin.sidebar.dropdowns") }}</a>
                     </li>
                     <li class="nav-item">
-                      <a href="ui-grid.html" class="nav-link" data-key="t-grid">{{ $t('admin.sidebar.grid') }}</a>
-                    </li>
-                  </ul>
-                </div>
-                <div class="col-lg-4">
-                  <ul class="nav nav-sm flex-column">
-                    <li class="nav-item">
-                      <a href="ui-images.html" class="nav-link" data-key="t-images">{{ $t('admin.sidebar.images') }}</a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="ui-tabs.html" class="nav-link" data-key="t-tabs">{{ $t('admin.sidebar.tabs') }}</a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="ui-accordions.html" class="nav-link" data-key="t-accordion-collapse">{{ $t('admin.sidebar.accordion') }}</a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="ui-modals.html" class="nav-link" data-key="t-modals">{{ $t('admin.sidebar.modals') }}</a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="ui-offcanvas.html" class="nav-link" data-key="t-offcanvas">{{ $t('admin.sidebar.offcanvas') }}</a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="ui-placeholders.html" class="nav-link" data-key="t-placeholders">{{ $t('admin.sidebar.placeholders') }}</a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="ui-progress.html" class="nav-link" data-key="t-progress">{{ $t('admin.sidebar.progress') }}</a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="ui-notifications.html" class="nav-link" data-key="t-notifications">{{ $t('admin.sidebar.notifications') }}</a>
+                      <a href="ui-grid.html" class="nav-link" data-key="t-grid">{{ $t("admin.sidebar.grid") }}</a>
                     </li>
                   </ul>
                 </div>
                 <div class="col-lg-4">
                   <ul class="nav nav-sm flex-column">
                     <li class="nav-item">
-                      <a href="ui-media.html" class="nav-link" data-key="t-media-object">{{ $t('admin.sidebar.mediaObject') }}</a>
+                      <a href="ui-images.html" class="nav-link" data-key="t-images">{{ $t("admin.sidebar.images") }}</a>
                     </li>
                     <li class="nav-item">
-                      <a href="ui-embed-video.html" class="nav-link" data-key="t-embed-video">{{ $t('admin.sidebar.embedVideo') }}</a>
+                      <a href="ui-tabs.html" class="nav-link" data-key="t-tabs">{{ $t("admin.sidebar.tabs") }}</a>
                     </li>
                     <li class="nav-item">
-                      <a href="ui-typography.html" class="nav-link" data-key="t-typography">{{ $t('admin.sidebar.typography') }}</a>
+                      <a href="ui-accordions.html" class="nav-link" data-key="t-accordion-collapse">{{ $t("admin.sidebar.accordion") }}</a>
                     </li>
                     <li class="nav-item">
-                      <a href="ui-lists.html" class="nav-link" data-key="t-lists">{{ $t('admin.sidebar.lists') }}</a>
+                      <a href="ui-modals.html" class="nav-link" data-key="t-modals">{{ $t("admin.sidebar.modals") }}</a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="ui-offcanvas.html" class="nav-link" data-key="t-offcanvas">{{ $t("admin.sidebar.offcanvas") }}</a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="ui-placeholders.html" class="nav-link" data-key="t-placeholders">{{ $t("admin.sidebar.placeholders") }}</a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="ui-progress.html" class="nav-link" data-key="t-progress">{{ $t("admin.sidebar.progress") }}</a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="ui-notifications.html" class="nav-link" data-key="t-notifications">{{ $t("admin.sidebar.notifications") }}</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-4">
+                  <ul class="nav nav-sm flex-column">
+                    <li class="nav-item">
+                      <a href="ui-media.html" class="nav-link" data-key="t-media-object">{{ $t("admin.sidebar.mediaObject") }}</a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="ui-embed-video.html" class="nav-link" data-key="t-embed-video">{{ $t("admin.sidebar.embedVideo") }}</a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="ui-typography.html" class="nav-link" data-key="t-typography">{{ $t("admin.sidebar.typography") }}</a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="ui-lists.html" class="nav-link" data-key="t-lists">{{ $t("admin.sidebar.lists") }}</a>
                     </li>
                     <li class="nav-item">
                       <a href="ui-links.html" class="nav-link">
-                        <span data-key="t-links">{{ $t('admin.sidebar.links') }}</span>
-                        <span class="badge badge-pill bg-success" data-key="t-new">{{ $t('admin.sidebar.new') }}</span>
+                        <span data-key="t-links">{{ $t("admin.sidebar.links") }}</span>
+                        <span class="badge badge-pill bg-success" data-key="t-new">{{ $t("admin.sidebar.new") }}</span>
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a href="ui-general.html" class="nav-link" data-key="t-general">{{ $t('admin.sidebar.general') }}</a>
+                      <a href="ui-general.html" class="nav-link" data-key="t-general">{{ $t("admin.sidebar.general") }}</a>
                     </li>
                     <li class="nav-item">
-                      <a href="ui-ribbons.html" class="nav-link" data-key="t-ribbons">{{ $t('admin.sidebar.ribbons') }}</a>
+                      <a href="ui-ribbons.html" class="nav-link" data-key="t-ribbons">{{ $t("admin.sidebar.ribbons") }}</a>
                     </li>
                     <li class="nav-item">
-                      <a href="ui-utilities.html" class="nav-link" data-key="t-utilities">{{ $t('admin.sidebar.utilities') }}</a>
+                      <a href="ui-utilities.html" class="nav-link" data-key="t-utilities">{{ $t("admin.sidebar.utilities") }}</a>
                     </li>
                   </ul>
                 </div>

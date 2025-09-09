@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Requests\Post\PostCatalogue;
 
 use App\Http\Requests\BaseRequest;
@@ -67,9 +68,8 @@ class UpdateRequest extends BaseRequest
         ]);
     }
 
-    public function messages(){
-        return [
-
-        ];
+    public function messages()
+    {
+        return [];
     }
 }

@@ -41,6 +41,7 @@ class UpdateRequest extends BaseRequest
                 "string",
                 "max:255",
                 Rule::unique('address_orders', 'slug')->ignore($this->route('address_order')),
+                "{$sometime}"
             ],
             "full_name" => "required|string|max:255|{$sometime}",
             "phone" => "required|string|max:20|{$sometime}",

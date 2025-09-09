@@ -25,7 +25,7 @@ class BulkStoreRequest extends BaseRequest
             "data.*.name" => "required|string|max:255",
             "data.*.slug" => "required|string|unique:user_catalogues,slug",
             "data.*.description" => "nullable|string",
-            "data.*.publish" => "required|integer|in:1,2",
+            "data.*.publish" => "required|integer|in:0,1,2",
         ];
     }
 }

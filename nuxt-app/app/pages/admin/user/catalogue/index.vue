@@ -54,7 +54,7 @@ definePageMeta({
     <div class="card-body">
       <div class="d-flex justify-content-between align-items-center mb-3">
         <div class="d-flex align-items-center fz-[12px] gap-2" :class="{ 'opacity-0': !hasSelectedItems }">
-          <Button variant="delete" type="button" :label="`${$t('admin.page.userCatalogue.delete')} (${selectedIds.length})`" :loading="isLoading" :disabled="!hasSelectedItems" data-bs-toggle="modal" data-bs-target="#deleteMultipleRecord" />
+          <Button variant="delete" type="button" :label="`${$t('admin.common.delete')} (${selectedIds.length})`" :loading="isLoading" :disabled="!hasSelectedItems" data-bs-toggle="modal" data-bs-target="#deleteMultipleRecord" />
           <Button variant="cancel" :loading="isLoading" :disabled="!hasSelectedItems" @click="updateSelectedIds([])" />
         </div>
         <div class="d-flex align-items-center gap-2">
@@ -62,7 +62,7 @@ definePageMeta({
           <Button variant="custom" severity="secondary" :label="$t('admin.common.export')" icon="ri-download-2-line" :loading="false" @click="" />
           <NuxtLink to="/admin/user/catalogue/create" class="btn btn-success">
             <i class="ri-add-line me-1"></i>
-            {{ $t("admin.page.userCatalogue.create") }}
+            {{ $t('admin.common.create') }}
           </NuxtLink>
         </div>
       </div>
@@ -80,14 +80,14 @@ definePageMeta({
               <th style="width: 50px">
                 <AppCheckbox :model-value="selectedIds" :is-select-all="true" @update:model-value="handleSelectedIdsChange" />
               </th>
-              <th>{{ $t("admin.page.userCatalogue.groupInfo") }}</th>
-              <th class="text-center">{{ $t("admin.page.userCatalogue.status") }}</th>
-              <th class="text-end">{{ $t("admin.page.userCatalogue.actions") }}</th>
+              <th>{{ $t('admin.page.userCatalogue.groupInfo') }}</th>
+              <th class="text-center">{{ $t('admin.common.status') }}</th>
+              <th class="text-end">{{ $t('admin.common.actions') }}</th>
             </tr>
           </thead>
           <tbody>
             <tr v-if="isLoading">
-              <td colspan="4" class="text-center text-muted">{{ $t("admin.page.userCatalogue.loading") }}</td>
+              <td colspan="4" class="text-center text-muted">{{ $t('admin.common.loading') }}</td>
             </tr>
             <template v-else>
               <tr v-for="item in data?.data?.data ?? []" :key="item.id" @click="handleRowClick(item)" class="cursor-pointer" :class="{ 'table-active': selectedIds.includes(item.id) }">
@@ -101,7 +101,7 @@ definePageMeta({
                 </td>
                 <td class="text-center">
                   <span :class="['badge', item.publish === 2 ? 'bg-success-subtle text-success' : item.publish === 1 ? 'bg-secondary-subtle text-secondary' : 'bg-danger-subtle text-danger']">
-                    {{ item.publish === 2 ? $t("admin.page.userCatalogue.published") : item.publish === 1 ? $t("admin.page.userCatalogue.draft") : $t("admin.page.userCatalogue.hidden") }}
+                    {{ item.publish === 2 ? $t('admin.common.published') : item.publish === 1 ? $t('admin.common.draft') : $t('admin.common.hidden') }}
                   </span>
                 </td>
                 <td class="text-end" @click.stop>
@@ -113,13 +113,13 @@ definePageMeta({
                       <li>
                         <NuxtLink class="dropdown-item text-info" :to="`/admin/user/catalogue/${item.id}/edit`">
                           <i class="ri-edit-box-line me-1"></i>
-                          {{ $t("admin.page.userCatalogue.edit") }}
+                          {{ $t('admin.common.edit') }}
                         </NuxtLink>
                       </li>
                       <li>
                         <button type="button" class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteRecord" @click.stop="handleDeleteSingle(item)">
                           <i class="ri-delete-bin-line me-1"></i>
-                          {{ $t("admin.page.userCatalogue.delete") }}
+                          {{ $t('admin.common.delete') }}
                         </button>
                       </li>
                     </ul>
@@ -127,7 +127,7 @@ definePageMeta({
                 </td>
               </tr>
               <tr v-if="(data?.data?.data?.length ?? 0) === 0">
-                <td colspan="4" class="text-center text-muted">{{ $t("admin.page.userCatalogue.noData") }}</td>
+                <td colspan="4" class="text-center text-muted">{{ $t('admin.common.noData') }}</td>
               </tr>
             </template>
           </tbody>
@@ -141,19 +141,19 @@ definePageMeta({
     <div class="modal-dialog zoomIn">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title text-danger uppercase" id="deleteRecordLabel">{{ $t("admin.page.userCatalogue.deleteRecord") }}</h5>
+          <h5 class="modal-title text-danger uppercase" id="deleteRecordLabel">{{ $t('admin.common.deleteRecord') }}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body py-4">
-          <h5 class="fs-15">{{ $t("admin.page.userCatalogue.confirmDelete") }}</h5>
+          <h5 class="fs-15">{{ $t('admin.common.confirmDelete') }}</h5>
           <div v-if="selectedItem" class="mt-3">
-            <p class="text-muted fz-[12px] mt-3 mb-1">{{ $t("admin.page.userCatalogue.record") }}</p>
+            <p class="text-muted fz-[12px] mt-3 mb-1">{{ $t('admin.common.record') }}</p>
             <input :value="selectedItem.name" type="text" class="form-control border-danger border-1 text-danger" readonly />
           </div>
         </div>
         <div class="modal-footer">
           <Button variant="cancel" data-bs-dismiss="modal" />
-          <Button variant="delete" :loading="isLoading" :label="$t('admin.page.userCatalogue.delete')" :disabled="!selectedItem" @click="handleConfirmDeleteSingle" />
+          <Button variant="delete" :loading="isLoading" :label="$t('admin.common.delete')" :disabled="!selectedItem" @click="handleConfirmDeleteSingle" />
         </div>
       </div>
     </div>
@@ -162,13 +162,13 @@ definePageMeta({
     <div class="modal-dialog modal-lg zoomIn">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title text-danger uppercase" id="deleteMultipleRecordLabel">{{ $t("admin.page.userCatalogue.deleteMultiple") }}</h5>
+          <h5 class="modal-title text-danger uppercase" id="deleteMultipleRecordLabel">{{ $t('admin.common.deleteMultiple') }}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body py-4">
-          <h5 class="fs-15">{{ $t("admin.page.userCatalogue.confirmDeleteMultiple") }}</h5>
+          <h5 class="fs-15">{{ $t('admin.common.confirmDeleteMultiple') }}</h5>
           <div class="mt-3">
-            <p class="text-muted fz-[12px] mb-2">{{ $t("admin.page.userCatalogue.selectedRecords") }} ({{ selectedIds.length }}):</p>
+            <p class="text-muted fz-[12px] mb-2">{{ $t('admin.common.selectedRecords') }} ({{ selectedIds.length }}):</p>
             <div class="border rounded p-3 bg-light max-h-[300px] overflow-y-auto">
               <ul class="list-unstyled mb-0">
                 <li v-for="item in data?.data?.data?.filter((i) => selectedIds.includes(i.id))" :key="item.id" class="py-1">
@@ -183,7 +183,7 @@ definePageMeta({
         </div>
         <div class="modal-footer">
           <Button variant="cancel" data-bs-dismiss="modal" />
-          <Button variant="delete" :loading="isLoading" :label="$t('admin.page.userCatalogue.deleteAll')" :disabled="selectedIds.length === 0" @click="handleConfirmDeleteMultiple" />
+          <Button variant="delete" :loading="isLoading" :label="$t('admin.common.deleteAll')" :disabled="selectedIds.length === 0" @click="handleConfirmDeleteMultiple" />
         </div>
       </div>
     </div>

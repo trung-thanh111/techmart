@@ -30,7 +30,7 @@ class BulkUpdateRequest extends BaseRequest
         foreach ($this->input('data', []) as $key => $val) {
             $id = $val['id'] ?? null;
             $rules["data.$key.name"] = "required|string|max:255|{$sometime}";
-            $rules["data.$key.publish"] = "required|integer|in:1,2|{$sometime}";
+            $rules["data.$key.publish"] = "required|integer|in:0,1,2|{$sometime}";
             $rules["data.$key.description"] = "nullable|string|max:255|{$sometime}";
             $rules["data.$key.attribute_catalogue_id"] = "required|integer|min:0|{$sometime}";
         }

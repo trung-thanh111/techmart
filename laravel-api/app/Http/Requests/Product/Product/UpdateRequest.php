@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Requests\Product\Product;
 
 use App\Enums\Common;
@@ -39,13 +40,15 @@ class UpdateRequest extends BaseRequest
         ];
     }
 
-    public function prepareForValidation(){
+    public function prepareForValidation()
+    {
         // $this->merge([
         //    ...($this->has('name') && !$this->has('slug') ? ['slug' => Str::slug($this->name)] : [])
         // ]);
     }
 
-    public function messages(){
+    public function messages()
+    {
         return [];
     }
 }

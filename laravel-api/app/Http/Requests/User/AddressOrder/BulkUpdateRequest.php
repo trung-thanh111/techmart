@@ -46,7 +46,7 @@ class BulkUpdateRequest extends BaseRequest
             $rules["data.$key.address"] = "required|string|max:255|{$sometime}";
             $rules["data.$key.state"] = "nullable|string|max:100|{$sometime}";
             $rules["data.$key.postal_code"] = "required|string|max:20|{$sometime}";
-            $rules["data.$key.publish"] = "required|integer|in:1,2|{$sometime}";
+            $rules["data.$key.publish"] = "required|integer|in:0,1,2|{$sometime}";
         }
         return $rules;
     }
