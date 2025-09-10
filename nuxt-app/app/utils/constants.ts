@@ -13,3 +13,7 @@ export const USERCATALOGUEUPDATE = "/admin/user/catalogue/update";
 export const ADDRESSORDERINDEX = "/admin/user/address_order";
 export const ADDRESSORDERCREATE = "/admin/user/address_order/create";
 export const ADDRESSORDERUPDATE = "/admin/user/address_order/update";
+
+export const USERINDEX = "/admin/user/user";
+export const USERCREATE = "/admin/user/user/create";
+export const USERUPDATE = "/admin/user/user/update";

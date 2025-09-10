@@ -4,8 +4,6 @@ export interface IUserCatalogue {
   slug: string;
   description: string | null;
   publish: number;
-  createdAt: string | null;
-  updatedAt: string | null;
 }
 
 export interface Option {

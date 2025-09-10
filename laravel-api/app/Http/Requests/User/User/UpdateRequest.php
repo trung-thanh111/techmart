@@ -33,6 +33,15 @@ class UpdateRequest extends BaseRequest
         $sometime = ($method === 'PATCH') ? 'sometimes' : '';
         return [
             "name" => "required|string|max:255|{$sometime}",
+            "last_name" => "nullable|string|max:255|{$sometime}",
+            "first_name" => "nullable|string|max:255|{$sometime}",
+            "description" => "nullable|string|max:255|{$sometime}",
+            "birthday" => "nullable|date|{$sometime}",
+            "gender" => "nullable|string|in:male,female,other|{$sometime}",
+            "phone" => "nullable|string|max:255|{$sometime}",
+            "address" => "nullable|string|max:255|{$sometime}",
+            "user_catalogue_id" => "nullable|integer|exists:user_catalogues,id|{$sometime}",
+            "image" => "nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048|{$sometime}",
             "publish" => "required|integer|in:0,1,2|{$sometime}",
             "email" => [
                 "{$sometime}",
@@ -40,9 +49,9 @@ class UpdateRequest extends BaseRequest
                 'email',
                 Rule::unique('users')->ignore($this->route('user'))
             ],
-            "password" => "required|string|min:8|{$sometime}",
-            "user_catalogues" => "required|array|{$sometime}",
-            "user_catalogues.*" => "exists:user_catalogues,id|{$sometime}",
+            "password" => "string|min:8|{$sometime}",
+            // "user_catalogues" => "required|array|{$sometime}",
+            // "user_catalogues.*" => "exists:user_catalogues,id|{$sometime}",
         ];
     }
 

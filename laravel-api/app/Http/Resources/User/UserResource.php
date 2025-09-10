@@ -33,6 +33,7 @@ class UserResource extends JsonResource
             ],
             'addressOrder' => AddressOrderResource::collection($this->address_orders),
             'userCatalogue' => UserCatalogueResource::collection($this->user_catalogues),
+            'publish' => $this->publish,
             'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
             'updatedAt' => $this->updated_at?->format('Y-m-d H:i:s'),
             'deletedAt' => $this->deleted_at?->format('Y-m-d H:i:s'),

@@ -1,6 +1,7 @@
 {
   "admin": {
     "common": {
+      "noteUploadImage": "Chấp nhận các định dạng: jpg, jpeg, png, gif, webp.",
       "titleNote": "Thông tin",
       "note": "Lưu ý: Điền thông tin đầy đủ và chính xác để giúp hệ thống quản lý dễ dàng hơn.",
       "required": "Những trường có dấu (*) là bắt buộc!",
@@ -225,6 +226,38 @@
         "description": "Sản phẩm",
         "keywords": "Sản phẩm"
       },
+      "user": {
+        "title": "Quản lý khách hàng",
+        "breadcrumb": "Quản lý khách hàng",
+        "groupInfo": "Thông tin khách hàng",
+        "form": {
+          "name": "Họ và tên",
+          "namePlaceholder": "Nhập họ và tên",
+          "firstName": "Tên",
+          "firstNamePlaceholder": "Nhập tên",
+          "lastName": "Họ", 
+          "lastNamePlaceholder": "Nhập họ",
+          "email": "Email",
+          "emailPlaceholder": "Nhập địa chỉ email",
+          "phone": "Số điện thoại",
+          "phonePlaceholder": "Nhập số điện thoại",
+          "birthday": "Ngày sinh",
+          "gender": "Giới tính",
+          "genderPlaceholder": "Chọn giới tính",
+          "genderMale": "Nam",
+          "genderFemale": "Nữ", 
+          "genderOther": "Khác",
+          "password": "Mật khẩu",
+          "passwordPlaceholder": "Nhập mật khẩu",
+          "passwordOptional": "Để trống để giữ mật khẩu hiện tại",
+          "address": "Địa chỉ",
+          "addressPlaceholder": "Nhập địa chỉ",
+          "description": "Mô tả",
+          "descriptionPlaceholder": "Nhập mô tả",
+          "userCatalogue": "Vai trò",
+          "userCataloguePlaceholder": "Chọn vai trò"
+        }
+      },
       "addressOrder": {
         "title": "Địa chỉ nhận hàng",
         "breadcrumb": "Danh sách địa chỉ",
@@ -288,6 +321,8 @@
     },
     "validation": {
       "nameRequired": "Bạn chưa nhập tên cho bản ghi",
+      "emailRequired": "Bạn chưa nhập email cho bản ghi",
+      "passwordRequired": "Bạn chưa nhập mật khẩu cho bản ghi",
       "nameMaxLength": "Tên đã vượt quá 255 ký tự",
       "statusRequired": "Bạn chưa chọn trạng thái",
       "statusInvalid": "Trạng thái không hợp lệ",
@@ -306,7 +341,12 @@
       "stateMaxLength": "Tỉnh/TP vượt quá 100 ký tự",
       "postalCodeRequired": "Mã bưu chính là bắt buộc",
       "postalCodeMaxLength": "Mã bưu chính vượt quá 20 ký tự",
-      "countryCodeMaxLength": "Mã quốc gia vượt quá 2 ký tự"
+      "countryCodeMaxLength": "Mã quốc gia vượt quá 2 ký tự",
+      "firstNameMaxLength": "Tên vượt quá 255 ký tự",
+      "lastNameMaxLength": "Họ vượt quá 255 ký tự",
+      "descriptionMaxLength": "Mô tả vượt quá 255 ký tự",
+      "passwordMinLength": "Mật khẩu phải có ít nhất 8 ký tự",
+      "userCatalogueRequired": "Vai trò người dùng là bắt buộc"
     },
     "messages": {
       "createSuccess": "Thêm mới thành công",
