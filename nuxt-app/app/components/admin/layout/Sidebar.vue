@@ -80,20 +80,20 @@
             <div class="collapse menu-dropdown" id="sidebarusers">
               <ul class="nav nav-sm flex-column">
                 <li class="nav-item">
-                  <NuxtLink to="/admin/user/catalogue" class="nav-link" data-key="t-user-catelogue">{{ $t("admin.sidebar.customerCatalogue") }}</NuxtLink>
-                </li>
-                <li class="nav-item">
                   <a href="#sidebaruser" class="nav-link menu-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebaruser" data-key="t-user">{{ $t("admin.sidebar.customers") }}</a>
                   <div class="collapse menu-dropdown" id="sidebaruser">
                     <ul class="nav nav-sm flex-column">
                       <li class="nav-item">
-                        <NuxtLink to="user/users" class="nav-link" data-key="t-user-list">{{ $t("admin.sidebar.customerList") }}</NuxtLink>
+                        <NuxtLink to="/admin/user/user" class="nav-link" data-key="t-user-list">{{ $t("admin.sidebar.customerList") }}</NuxtLink>
                       </li>
                       <li class="nav-item">
-                        <NuxtLink to="user/create" class="nav-link" data-key="t-user-create">{{ $t("admin.sidebar.customerCreate") }}</NuxtLink>
+                        <NuxtLink to="/admin/user/user/create" class="nav-link" data-key="t-user-create">{{ $t("admin.sidebar.customerCreate") }}</NuxtLink>
                       </li>
                     </ul>
                   </div>
+                </li>
+                <li class="nav-item">
+                  <NuxtLink to="/admin/user/catalogue" class="nav-link" data-key="t-user-catelogue">{{ $t("admin.sidebar.customerCatalogue") }}</NuxtLink>
                 </li>
                 <li class="nav-item">
                   <NuxtLink to="/admin/user/address_order" class="nav-link" data-key="t-user-address-order">{{ $t("admin.sidebar.addressOrder") }}</NuxtLink>

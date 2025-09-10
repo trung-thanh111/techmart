@@ -230,6 +230,38 @@
         "description": "Products",
         "keywords": "Products"
       },
+      "user": {
+        "title": "User Management",
+        "breadcrumb": "User Management",
+        "groupInfo": "User Information",
+        "form": {
+          "name": "Full Name",
+          "namePlaceholder": "Enter full name",
+          "firstName": "First Name",
+          "firstNamePlaceholder": "Enter first name",
+          "lastName": "Last Name", 
+          "lastNamePlaceholder": "Enter last name",
+          "email": "Email",
+          "emailPlaceholder": "Enter email address",
+          "phone": "Phone",
+          "phonePlaceholder": "Enter phone number",
+          "birthday": "Birthday",
+          "gender": "Gender",
+          "genderPlaceholder": "Select gender",
+          "genderMale": "Male",
+          "genderFemale": "Female", 
+          "genderOther": "Other",
+          "password": "Password",
+          "passwordPlaceholder": "Enter password",
+          "passwordOptional": "Leave blank to keep current password",
+          "address": "Address",
+          "addressPlaceholder": "Enter address",
+          "description": "Description",
+          "descriptionPlaceholder": "Enter description",
+          "userCatalogue": "User Role",
+          "userCataloguePlaceholder": "Select user roles"
+        }
+      },
       "addressOrder": {
         "title": "Address Order",
         "breadcrumb": "Address Order List",
@@ -305,7 +337,14 @@
       "stateMaxLength": "State exceeds 100 characters",
       "postalCodeRequired": "Postal code is required",
       "postalCodeMaxLength": "Postal code exceeds 20 characters",
-      "countryCodeMaxLength": "Country code exceeds 2 characters"
+      "countryCodeMaxLength": "Country code exceeds 2 characters",
+      "firstNameMaxLength": "First name exceeds 255 characters",
+      "lastNameMaxLength": "Last name exceeds 255 characters",
+      "descriptionMaxLength": "Description exceeds 255 characters",
+      "emailRequired": "Email is required",
+      "passwordRequired": "Password is required",
+      "passwordMinLength": "Password must be at least 8 characters",
+      "userCatalogueRequired": "User catalogue is required"
     },
     "messages": {
       "createSuccess": "Created successfully",

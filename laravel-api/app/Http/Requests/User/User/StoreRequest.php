@@ -27,10 +27,17 @@ class StoreRequest extends BaseRequest
         return [
             "name" => "required|string|max:255",
             "email" => "required|email|max:255|unique:users,email",
+            "last_name" => "nullable|string|max:255",
+            "first_name" => "nullable|string|max:255",
+            "description" => "nullable|string|max:255",
+            "birthday" => "nullable|date",
+            "gender" => "nullable|string|in:male,female,other",
+            "phone" => "nullable|string|max:255",
+            "address" => "nullable|string|max:255",
             "password" => "required|string|min:8",
             "publish" => "required|integer|in:0,1,2",
-            "user_catalogues" => "required|array",
-            "user_catalogues.*" => "exists:user_catalogues,id",
+            // "user_catalogues" => "required|array",
+            // "user_catalogues.*" => "exists:user_catalogues,id",
             "image" => "sometimes|mimes:{$mimes}|max:{$max_size}"
         ];
     }

@@ -20,11 +20,11 @@ class UserCatalogueResource extends JsonResource
             'slug' => $this->slug,
             'description' => $this->description,
             'publish' => $this->publish,
-            'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
-            'updatedAt' => $this->updated_at?->format('Y-m-d H:i:s'),
-            'deletedAt' => $this->deleted_at?->format('Y-m-d H:i:s'),
-            'createdAtHuman' => $this->created_at?->diffForHumans(),
-            'updatedAtHuman' => $this->updated_at?->diffForHumans(),
+            // 'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
+            // 'updatedAt' => $this->updated_at?->format('Y-m-d H:i:s'),
+            // 'deletedAt' => $this->deleted_at?->format('Y-m-d H:i:s'),
+            // 'createdAtHuman' => $this->created_at?->diffForHumans(),
+            // 'updatedAtHuman' => $this->updated_at?->diffForHumans(),
         ];
     }
 }

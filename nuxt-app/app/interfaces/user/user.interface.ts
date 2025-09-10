@@ -12,6 +12,7 @@ export interface IUser {
   address: string | null;
   userCatalogueId: number;
   image: { path: string | null; url: string | null };
+  addressOrder: any[];
   userCatalogue: any[];
   publish: number | null;
   createdAt: string | null;
@@ -46,4 +47,10 @@ export interface IAuthState {
   expireAt: number | null;
   isAuthenticated: boolean;
   isAdmin: boolean;
+}
+
+export interface PayloadFilter {
+  keyword: string;
+  perpage: number;
+  publish: string | number | null;
 }

@@ -73,7 +73,6 @@ export const useAddressOrder = (
   };
 
   const handleUpdate = handleSubmit(async (payload: TAddressOrderUpdate) => {
-    console.info("Payload update:", payload);
     isLoading.value = true;
     try {
       const id = Number(useRoute().params.id);
