@@ -7,10 +7,7 @@ return [
             'jpeg',
             'jpg',
             'png',
-            'svg',
-            'gif',
             'webp',
-            'avif',
         ],
         'base_path' => 'uploads',
         'pipeline' => [
