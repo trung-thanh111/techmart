@@ -157,18 +157,7 @@
       <div class="card">
         <div class="card-body p-4">
           <div class="text-center">
-            <div class="profile-user mb-4">
-              <img src="/shared/images/defaults/avatar.jpg" class="rounded-circle avatar-xl img-thumbnail user-profile-image material-shadow" alt="user-profile-image" />
-              <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
-                <input id="profile-img-file-input" type="file" class="profile-img-file-input" />
-                <label for="profile-img-file-input" class="profile-photo-edit avatar-xs">
-                  <span class="avatar-title rounded-circle bg-light text-body material-shadow">
-                    <i class="ri-camera-fill"></i>
-                  </span>
-                </label>
-              </div>
-            </div>
-            <p class="text-muted text-xs mb-0">{{ $t("admin.common.noteUploadImage") }}</p>
+            <SingleImageUpload :initial-url="null" :note="$t('admin.common.noteUploadImage')" @selected="(f)=> setValues({ ...(values as any), image: f } as any)" />
           </div>
         </div>
       </div>
@@ -208,9 +197,11 @@ import PublishSelect from "~/components/admin/custom/PublishSelect.vue";
 import Button from "~/components/admin/custom/Button.vue";
 import Breadcrumb from "~/components/admin/navigation/Breadcrumb.vue";
 import { useUser } from "~/composables/admin/user/useUser";
+import SingleImageUpload from "~/components/admin/custom/SingleImageUpload.vue";
 import { USERINDEX } from "~/utils/constants";
 
-const { isLoading, showPassword, genderOptions, handleStore, userCatalogueOptions  } = useUser();
+const { isLoading, showPassword, genderOptions, handleStore, userCatalogueOptions, setValues, values } = useUser();
+// nhận file từ component con qua event 'selected'
 
 definePageMeta({
   layout: "admin",

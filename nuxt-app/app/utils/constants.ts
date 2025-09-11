@@ -17,3 +17,6 @@ export const ADDRESSORDERUPDATE = "/admin/user/address_order/update";
 export const USERINDEX = "/admin/user/user";
 export const USERCREATE = "/admin/user/user/create";
 export const USERUPDATE = "/admin/user/user/update";
+
+export const MAX_FILE_SIZE = 5 * 1024 * 1024;
+export const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/jpg"];

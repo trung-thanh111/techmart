@@ -6,7 +6,7 @@ import { useAppToast } from "~/composables/useAppToast";
 import { useUserService } from "~/services/user/user.service";
 import type { IApiOk, IPaginate } from "~/interfaces/base.interface";
 import type { IUser, PayloadFilter } from "~/interfaces/user/user.interface";
-import { USERINDEX } from "~/utils/constants";
+import { USERINDEX, MAX_FILE_SIZE, ACCEPTED_IMAGE_TYPES } from "~/utils/constants";
 
 export const useUser = (
   initialFilters?: PayloadFilter,
@@ -37,7 +37,7 @@ export const useUser = (
     password: z.string().min(8, 'admin.validation.passwordMinLength').optional(),
     publish: z.number({ required_error: 'admin.validation.statusRequired' }).refine((val) => [0, 1, 2].includes(val), { message: 'admin.validation.statusInvalid' }),
     userCatalogueId: z.number({ required_error: 'admin.validation.userCatalogueRequired' }).optional(),
-    image: z.any().optional(),
+    image: z.any().optional().refine((file) => !file || file.size <= MAX_FILE_SIZE, 'admin.common.maxFileSize').refine((file) => !file || ACCEPTED_IMAGE_TYPES.includes(file.type), 'admin.common.acceptedImageTypes'),
   };
   const createSchema = z.object({
     ...schema,

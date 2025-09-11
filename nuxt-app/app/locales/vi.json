@@ -1,7 +1,10 @@
 {
   "admin": {
     "common": {
-      "noteUploadImage": "Chấp nhận các định dạng: jpg, jpeg, png, gif, webp.",
+      "noteUploadImage": "Chấp nhận các định dạng: jpg, jpeg, png, webp.",
+      "upload": "Tải lên",
+      "maxFileSize": "Ảnh phải nhỏ hơn hoặc bằng 5MB",
+      "acceptedImageTypes": "Chỉ chấp nhận định dạng JPEG, PNG, WEBP",
       "titleNote": "Thông tin",
       "note": "Lưu ý: Điền thông tin đầy đủ và chính xác để giúp hệ thống quản lý dễ dàng hơn.",
       "required": "Những trường có dấu (*) là bắt buộc!",
