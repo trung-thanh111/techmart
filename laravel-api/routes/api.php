@@ -35,27 +35,27 @@ use App\Http\Controllers\Api\V1\Banner\BannerController;
 $routeExcept = ['create', 'edit'];
 
 // Auth routes
-Route::group(['prefix' => 'v1/auth'], function(){
+Route::group(['prefix' => 'v1/auth'], function () {
     Route::post('login', [AuthController::class, 'login']);
     Route::post('register', [AuthController::class, 'register']);
     Route::post('refresh', [AuthController::class, 'refresh']);
-    Route::middleware(['jwt:api', 'convert', 'checkPermission'])->group(function(){
+    Route::middleware(['jwt:api', 'convert', 'checkPermission'])->group(function () {
         Route::get('me', [AuthController::class, 'me']);
         Route::post('logout', [AuthController::class, 'logout']);
     });
 });
 
 // Upload routes
-Route::middleware(['jwt:api', 'convert'])->group(function(){
+Route::middleware(['jwt:api', 'convert'])->group(function () {
     Route::post('v1/upload-temp', [ImageController::class, 'uploadTemp']);
 });
 
 // Protected routes
-Route::group(['prefix' => 'v1'], function() use ($routeExcept){
-    Route::middleware(['jwt:api', 'convert', 'checkPermission'])->group(function() use ($routeExcept){
+Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
+    Route::middleware(['jwt:api', 'convert', 'checkPermission'])->group(function () use ($routeExcept) {
 
         // Attribute Catalogue routes
-        Route::group(['prefix' => 'attribute_catalogues'], function(){
+        Route::group(['prefix' => 'attribute_catalogues'], function () {
             Route::delete('bulkDelete', [AttributeCatalogueController::class, 'bulkDelete']);
             Route::post('{id}/attach', [AttributeCatalogueController::class, 'attach']);
             Route::delete('{id}/detach', [AttributeCatalogueController::class, 'detach']);
@@ -63,10 +63,10 @@ Route::group(['prefix' => 'v1'], function() use ($routeExcept){
             Route::put('bulkUpdate', [AttributeCatalogueController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [AttributeCatalogueController::class, 'bulkUpdate']);
         });
-        Route::resource('attribute_catalogues', AttributeCatalogueController::class)->except($routeExcept); 
+        Route::resource('attribute_catalogues', AttributeCatalogueController::class)->except($routeExcept);
 
         // Attribute routes
-        Route::group(['prefix' => 'attributes'], function(){
+        Route::group(['prefix' => 'attributes'], function () {
             Route::delete('bulkDelete', [AttributeController::class, 'bulkDelete']);
             Route::post('{id}/attach', [AttributeController::class, 'attach']);
             Route::delete('{id}/detach', [AttributeController::class, 'detach']);
@@ -74,10 +74,10 @@ Route::group(['prefix' => 'v1'], function() use ($routeExcept){
             Route::put('bulkUpdate', [AttributeController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [AttributeController::class, 'bulkUpdate']);
         });
-        Route::resource('attributes', AttributeController::class)->except($routeExcept); 
+        Route::resource('attributes', AttributeController::class)->except($routeExcept);
 
         // Permission routes
-        Route::group(['prefix' => 'permissions'], function(){
+        Route::group(['prefix' => 'permissions'], function () {
             Route::delete('bulkDelete', [PermissionController::class, 'bulkDelete']);
             Route::post('{id}/attach', [PermissionController::class, 'attach']);
             Route::delete('{id}/detach', [PermissionController::class, 'detach']);
@@ -85,10 +85,10 @@ Route::group(['prefix' => 'v1'], function() use ($routeExcept){
             Route::put('bulkUpdate', [PermissionController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [PermissionController::class, 'bulkUpdate']);
         });
-        Route::resource('permissions', PermissionController::class)->except($routeExcept); 
+        Route::resource('permissions', PermissionController::class)->except($routeExcept);
 
         // Post Catalogue routes
-        Route::group(['prefix' => 'post_catalogues'], function(){
+        Route::group(['prefix' => 'post_catalogues'], function () {
             Route::delete('bulkDelete', [PostCatalogueController::class, 'bulkDelete']);
             Route::post('{id}/attach', [PostCatalogueController::class, 'attach']);
             Route::delete('{id}/detach', [PostCatalogueController::class, 'detach']);
@@ -96,10 +96,10 @@ Route::group(['prefix' => 'v1'], function() use ($routeExcept){
             Route::put('bulkUpdate', [PostCatalogueController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [PostCatalogueController::class, 'bulkUpdate']);
         });
-        Route::resource('post_catalogues', PostCatalogueController::class)->except($routeExcept); 
+        Route::resource('post_catalogues', PostCatalogueController::class)->except($routeExcept);
 
         // Post routes
-        Route::group(['prefix' => 'posts'], function(){
+        Route::group(['prefix' => 'posts'], function () {
             Route::delete('bulkDelete', [PostController::class, 'bulkDelete']);
             Route::post('{id}/attach', [PostController::class, 'attach']);
             Route::delete('{id}/detach', [PostController::class, 'detach']);
@@ -107,10 +107,10 @@ Route::group(['prefix' => 'v1'], function() use ($routeExcept){
             Route::put('bulkUpdate', [PostController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [PostController::class, 'bulkUpdate']);
         });
-        Route::resource('posts', PostController::class)->except($routeExcept); 
+        Route::resource('posts', PostController::class)->except($routeExcept);
 
         // Product Catalogue routes
-        Route::group(['prefix' => 'product_catalogues'], function(){
+        Route::group(['prefix' => 'product_catalogues'], function () {
             Route::delete('bulkDelete', [ProductCatalogueController::class, 'bulkDelete']);
             Route::post('{id}/attach', [ProductCatalogueController::class, 'attach']);
             Route::delete('{id}/detach', [ProductCatalogueController::class, 'detach']);
@@ -118,10 +118,10 @@ Route::group(['prefix' => 'v1'], function() use ($routeExcept){
             Route::put('bulkUpdate', [ProductCatalogueController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [ProductCatalogueController::class, 'bulkUpdate']);
         });
-        Route::resource('product_catalogues', ProductCatalogueController::class)->except($routeExcept); 
+        Route::resource('product_catalogues', ProductCatalogueController::class)->except($routeExcept);
 
         // Product routes
-        Route::group(['prefix' => 'products'], function(){
+        Route::group(['prefix' => 'products'], function () {
             Route::delete('bulkDelete', [ProductController::class, 'bulkDelete']);
             Route::post('{id}/attach', [ProductController::class, 'attach']);
             Route::delete('{id}/detach', [ProductController::class, 'detach']);
@@ -129,10 +129,10 @@ Route::group(['prefix' => 'v1'], function() use ($routeExcept){
             Route::put('bulkUpdate', [ProductController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [ProductController::class, 'bulkUpdate']);
         });
-        Route::resource('products', ProductController::class)->except($routeExcept); 
+        Route::resource('products', ProductController::class)->except($routeExcept);
 
         // Promotion Catalogue routes
-        Route::group(['prefix' => 'promotion_catalogues'], function(){
+        Route::group(['prefix' => 'promotion_catalogues'], function () {
             Route::delete('bulkDelete', [PromotionCatalogueController::class, 'bulkDelete']);
             Route::post('{id}/attach', [PromotionCatalogueController::class, 'attach']);
             Route::delete('{id}/detach', [PromotionCatalogueController::class, 'detach']);
@@ -140,11 +140,11 @@ Route::group(['prefix' => 'v1'], function() use ($routeExcept){
             Route::put('bulkUpdate', [PromotionCatalogueController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [PromotionCatalogueController::class, 'bulkUpdate']);
         });
-        Route::resource('promotion_catalogues', PromotionCatalogueController::class)->except($routeExcept); 
+        Route::resource('promotion_catalogues', PromotionCatalogueController::class)->except($routeExcept);
 
 
         // User Catalogue routes
-        Route::group(['prefix' => 'user_catalogues'], function(){
+        Route::group(['prefix' => 'user_catalogues'], function () {
             Route::delete('bulkDelete', [UserCatalogueController::class, 'bulkDelete']);
             Route::post('{id}/attach', [UserCatalogueController::class, 'attach']);
             Route::delete('{id}/detach', [UserCatalogueController::class, 'detach']);
@@ -152,10 +152,10 @@ Route::group(['prefix' => 'v1'], function() use ($routeExcept){
             Route::put('bulkUpdate', [UserCatalogueController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [UserCatalogueController::class, 'bulkUpdate']);
         });
-        Route::resource('user_catalogues', UserCatalogueController::class)->except($routeExcept); 
+        Route::resource('user_catalogues', UserCatalogueController::class)->except($routeExcept);
 
         // User routes
-        Route::group(['prefix' => 'users'], function(){
+        Route::group(['prefix' => 'users'], function () {
             Route::delete('bulkDelete', [UserController::class, 'bulkDelete']);
             Route::post('{id}/attach', [UserController::class, 'attach']);
             Route::delete('{id}/detach', [UserController::class, 'detach']);
@@ -163,10 +163,10 @@ Route::group(['prefix' => 'v1'], function() use ($routeExcept){
             Route::put('bulkUpdate', [UserController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [UserController::class, 'bulkUpdate']);
         });
-        Route::resource('users', UserController::class)->except($routeExcept); 
+        Route::resource('users', UserController::class)->except($routeExcept);
 
         // Brand routes
-        Route::group(['prefix' => 'brands'], function(){
+        Route::group(['prefix' => 'brands'], function () {
             Route::delete('bulkDelete', [BrandController::class, 'bulkDelete']);
             Route::post('{id}/attach', [BrandController::class, 'attach']);
             Route::delete('{id}/detach', [BrandController::class, 'detach']);
@@ -177,7 +177,7 @@ Route::group(['prefix' => 'v1'], function() use ($routeExcept){
         Route::resource('brands', BrandController::class)->except($routeExcept);
 
         // Product Variant routes
-        Route::group(['prefix' => 'product_variants'], function(){
+        Route::group(['prefix' => 'product_variants'], function () {
             Route::delete('bulkDelete', [ProductVariantController::class, 'bulkDelete']);
             Route::post('{id}/attach', [ProductVariantController::class, 'attach']);
             Route::delete('{id}/detach', [ProductVariantController::class, 'detach']);
@@ -188,7 +188,7 @@ Route::group(['prefix' => 'v1'], function() use ($routeExcept){
         Route::resource('product_variants', ProductVariantController::class)->except($routeExcept);
 
         // Tag routes
-        Route::group(['prefix' => 'tags'], function(){
+        Route::group(['prefix' => 'tags'], function () {
             Route::delete('bulkDelete', [TagController::class, 'bulkDelete']);
             Route::post('{id}/attach', [TagController::class, 'attach']);
             Route::delete('{id}/detach', [TagController::class, 'detach']);
@@ -199,7 +199,7 @@ Route::group(['prefix' => 'v1'], function() use ($routeExcept){
         Route::resource('tags', TagController::class)->except($routeExcept);
 
         // FAQ routes
-        Route::group(['prefix' => 'faqs'], function(){
+        Route::group(['prefix' => 'faqs'], function () {
             Route::delete('bulkDelete', [FaqController::class, 'bulkDelete']);
             Route::post('{id}/attach', [FaqController::class, 'attach']);
             Route::delete('{id}/detach', [FaqController::class, 'detach']);
@@ -210,7 +210,7 @@ Route::group(['prefix' => 'v1'], function() use ($routeExcept){
         Route::resource('faqs', FaqController::class)->except($routeExcept);
 
         // FAQ Catalogue routes
-        Route::group(['prefix' => 'faq_catalogues'], function(){
+        Route::group(['prefix' => 'faq_catalogues'], function () {
             Route::delete('bulkDelete', [FaqCatalogueController::class, 'bulkDelete']);
             Route::post('{id}/attach', [FaqCatalogueController::class, 'attach']);
             Route::delete('{id}/detach', [FaqCatalogueController::class, 'detach']);
@@ -221,7 +221,7 @@ Route::group(['prefix' => 'v1'], function() use ($routeExcept){
         Route::resource('faq_catalogues', FaqCatalogueController::class)->except($routeExcept);
 
         // Agency routes
-        Route::group(['prefix' => 'agencies'], function(){
+        Route::group(['prefix' => 'agencies'], function () {
             Route::delete('bulkDelete', [AgencyController::class, 'bulkDelete']);
             Route::post('{id}/attach', [AgencyController::class, 'attach']);
             Route::delete('{id}/detach', [AgencyController::class, 'detach']);
@@ -232,7 +232,7 @@ Route::group(['prefix' => 'v1'], function() use ($routeExcept){
         Route::resource('agencies', AgencyController::class)->except($routeExcept);
 
         // Agency Working Hour routes
-        Route::group(['prefix' => 'agency_working_hours'], function(){
+        Route::group(['prefix' => 'agency_working_hours'], function () {
             Route::delete('bulkDelete', [AgencyWorkingHourController::class, 'bulkDelete']);
             Route::post('{id}/attach', [AgencyWorkingHourController::class, 'attach']);
             Route::delete('{id}/detach', [AgencyWorkingHourController::class, 'detach']);
@@ -243,7 +243,7 @@ Route::group(['prefix' => 'v1'], function() use ($routeExcept){
         Route::resource('agency_working_hours', AgencyWorkingHourController::class)->except($routeExcept);
 
         // Image routes
-        Route::group(['prefix' => 'images'], function(){
+        Route::group(['prefix' => 'images'], function () {
             Route::delete('bulkDelete', [ImageController::class, 'bulkDelete']);
             Route::post('{id}/attach', [ImageController::class, 'attach']);
             Route::delete('{id}/detach', [ImageController::class, 'detach']);
@@ -254,7 +254,7 @@ Route::group(['prefix' => 'v1'], function() use ($routeExcept){
         Route::resource('images', ImageController::class)->except($routeExcept);
 
         // Mail routes
-        Route::group(['prefix' => 'mails'], function(){
+        Route::group(['prefix' => 'mails'], function () {
             Route::delete('bulkDelete', [MailController::class, 'bulkDelete']);
             Route::post('{id}/attach', [MailController::class, 'attach']);
             Route::delete('{id}/detach', [MailController::class, 'detach']);
@@ -265,7 +265,7 @@ Route::group(['prefix' => 'v1'], function() use ($routeExcept){
         Route::resource('mails', MailController::class)->except($routeExcept);
 
         // Address Order routes
-        Route::group(['prefix' => 'address_orders'], function(){
+        Route::group(['prefix' => 'address_orders'], function () {
             Route::delete('bulkDelete', [AddressOrderController::class, 'bulkDelete']);
             Route::post('{id}/attach', [AddressOrderController::class, 'attach']);
             Route::delete('{id}/detach', [AddressOrderController::class, 'detach']);
@@ -276,7 +276,7 @@ Route::group(['prefix' => 'v1'], function() use ($routeExcept){
         Route::resource('address_orders', AddressOrderController::class)->except($routeExcept);
 
         // Banner routes
-        Route::group(['prefix' => 'banners'], function(){
+        Route::group(['prefix' => 'banners'], function () {
             Route::delete('bulkDelete', [BannerController::class, 'bulkDelete']);
             Route::post('{id}/attach', [BannerController::class, 'attach']);
             Route::delete('{id}/detach', [BannerController::class, 'detach']);
@@ -287,6 +287,6 @@ Route::group(['prefix' => 'v1'], function() use ($routeExcept){
         Route::resource('banners', BannerController::class)->except($routeExcept);
 
         // generate route
-        
+
     });
 });

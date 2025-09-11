@@ -192,7 +192,7 @@ export const useUser = (
     return data.value?.data?.data?.map((item) => item.id) || [];
   };
 
-  const genderOptions = computed(() =>([
+  const genderOptions = computed(() => ([
     { name: t("admin.page.user.form.genderMale"), value: "male" },
     { name: t("admin.page.user.form.genderFemale"), value: "female" },
     { name: t("admin.page.user.form.genderOther"), value: "other" },

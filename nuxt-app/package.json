@@ -7,8 +7,7 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
-    "start": "cd laravel-api && php artisan serve && cd nuxt-app && npm run dev"
+    "postinstall": "nuxt prepare"
   },
   "dependencies": {
     "@nuxt/image": "^1.10.0",
@@ -20,7 +19,6 @@
     "@splidejs/vue-splide": "^0.6.12",
     "@types/jquery": "^3.5.32",
     "@vee-validate/zod": "^4.15.1",
-    "axios": "^1.11.0",
     "jquery": "^3.7.1",
     "nuxt": "^4.0.1",
     "pinia": "^3.0.3",

@@ -21,11 +21,12 @@ class UploadTempRequest extends FormRequest
      */
     public function rules(): array
     {
-        $mimeTypes = implode(',', config('upload.image.allowed_type'));
         $maxSize = config('upload.image.max_size');
+        $mimes   = 'jpeg,jpg,png,gif,webp';
         return [
-            "file" => "required|mimes:{$mimeTypes}|max:{$maxSize}",
-            "session_id" => "required|string|max:255"
+            'file'   => 'required',
+            'file.*' => "mimes:{$mimes}|max:{$maxSize}",
+            'session_id' => 'required|string|max:255',
         ];
     }
 
