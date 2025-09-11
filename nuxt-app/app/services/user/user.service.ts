@@ -2,6 +2,7 @@ import type { IApiOk, IApiMessage, IPaginate } from "~/interfaces/base.interface
 import type { IUser } from "~/interfaces/user/user.interface";
 import { useApi } from "~/composables/useApi";
 import type { IUserCatalogue } from "~/interfaces/user/catalogue.interface";
+import { formData } from "~/utils/formData";
 
 const ENDPOINT = "/api/v1";
 
@@ -17,7 +18,7 @@ export const useUserService = {
     const { privateFetch } = useApi();
     return await privateFetch<IApiOk<IUser>>(`${ENDPOINT}/users`, {
       method: "POST",
-      body: payload,
+      body: formData(payload),
     });
   },
 
@@ -31,8 +32,9 @@ export const useUserService = {
   update: async (id: number, payload: Partial<IUser>): Promise<IApiOk<IUser>> => {
     const { privateFetch } = useApi();
     return await privateFetch<IApiOk<IUser>>(`${ENDPOINT}/users/${id}`, {
-      method: "PUT",
-      body: payload,
+      method: "POST",
+      body: formData(payload),
+      params: { _method: "PUT" },
     });
   },
 

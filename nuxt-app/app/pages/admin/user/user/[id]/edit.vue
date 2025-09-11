@@ -157,18 +157,7 @@
       <div class="card">
         <div class="card-body p-4">
           <div class="text-center">
-            <div class="profile-user mb-4">
-              <img src="/shared/images/defaults/avatar.jpg" class="rounded-circle avatar-xl img-thumbnail user-profile-image material-shadow" alt="user-profile-image" />
-              <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
-                <input id="profile-img-file-input" type="file" class="profile-img-file-input" />
-                <label for="profile-img-file-input" class="profile-photo-edit avatar-xs">
-                  <span class="avatar-title rounded-circle bg-light text-body material-shadow">
-                    <i class="ri-camera-fill"></i>
-                  </span>
-                </label>
-              </div>
-            </div>
-            <p class="text-muted text-xs mb-0">{{ $t("admin.common.noteUploadImage") }}</p>
+            <SingleImageUpload :initial-url="currentImageUrl" :note="$t('admin.common.noteUploadImage')" @selected="(f)=> setValues({ ...(values as any), image: f } as any)" />
           </div>
         </div>
       </div>
@@ -209,8 +198,10 @@ import Button from "~/components/admin/custom/Button.vue";
 import Breadcrumb from "~/components/admin/navigation/Breadcrumb.vue";
 import { useUser } from "~/composables/admin/user/useUser";
 import { USERINDEX } from "~/utils/constants";
+import SingleImageUpload from "~/components/admin/custom/SingleImageUpload.vue";
 
-const { isLoading, userCatalogueOptions, genderOptions, show, handleUpdate, setValues } = useUser(undefined, "update");
+const { isLoading, userCatalogueOptions, genderOptions, show, handleUpdate, setValues, values } = useUser(undefined, "update");
+const currentImageUrl = ref<string | null>(null);
 
 const id = Number(useRoute().params.id);
 const { data } = await show(id);
@@ -227,7 +218,10 @@ setValues({
   address: data.address,
   publish: data.publish || 0,
   userCatalogueId: data.userCatalogueId,
+  image: data.image?.path || null,
 });
+
+currentImageUrl.value = data?.image?.path ? (data?.image?.url || null) : null;
 
 definePageMeta({
   layout: "admin",
