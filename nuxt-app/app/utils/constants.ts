@@ -18,5 +18,9 @@ export const USERINDEX = "/admin/user/user";
 export const USERCREATE = "/admin/user/user/create";
 export const USERUPDATE = "/admin/user/user/update";
 
+export const POSTCATALOGUEINDEX = "/admin/post/catalogue";
+export const POSTCATALOGUECREATE = "/admin/post/catalogue/create";
+export const POSTCATALOGUEUPDATE = "/admin/post/catalogue/update";
+
 export const MAX_FILE_SIZE = 5 * 1024 * 1024;
 export const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/jpg"];

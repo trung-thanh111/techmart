@@ -98,24 +98,34 @@
                 <li class="nav-item">
                   <NuxtLink to="/admin/user/address_order" class="nav-link" data-key="t-user-address-order">{{ $t("admin.sidebar.addressOrder") }}</NuxtLink>
                 </li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link menu-link" href="#sidebarposts" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarposts">
+              <i class="ri-news-line"></i>
+              <span data-key="t-post-pages">{{ $t("admin.sidebar.posts") }}</span>
+            </a>
+            <div class="collapse menu-dropdown" id="sidebarposts">
+              <ul class="nav nav-sm flex-column">
                 <li class="nav-item">
-                  <a href="#sidebarAttribute" class="nav-link menu-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAttribute" data-key="t-profile">{{ $t("admin.sidebar.attributes") }}</a>
-                  <div class="collapse menu-dropdown" id="sidebarAttribute">
+                  <a href="#sidebarpost" class="nav-link menu-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarpost" data-key="t-post">{{ $t("admin.sidebar.posts") }}</a>
+                  <div class="collapse menu-dropdown" id="sidebarpost">
                     <ul class="nav nav-sm flex-column">
                       <li class="nav-item">
-                        <a href="#" class="nav-link" data-key="t-attribute-catalogue">{{ $t("admin.sidebar.attributeCatalogue") }}</a>
+                        <NuxtLink to="/admin/post/post" class="nav-link" data-key="t-post-list">{{ $t("admin.sidebar.postList") }}</NuxtLink>
                       </li>
                       <li class="nav-item">
-                        <a href="#" class="nav-link" data-key="t-attribute-list">{{ $t("admin.sidebar.attributeList") }}</a>
+                        <NuxtLink to="/admin/post/post/create" class="nav-link" data-key="t-post-create">{{ $t("admin.sidebar.postCreate") }}</NuxtLink>
                       </li>
                     </ul>
                   </div>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link" data-key="t-user-brand">{{ $t("admin.sidebar.brands") }}</a>
+                  <NuxtLink to="/admin/post/catalogue" class="nav-link" data-key="t-post-catelogue">{{ $t("admin.sidebar.postCatalogue") }}</NuxtLink>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link" data-key="t-user-attribute">{{ $t("admin.sidebar.tags") }}</a>
+                  <NuxtLink to="/admin/post/tag" class="nav-link" data-key="t-post-address-order">{{ $t("admin.sidebar.tags") }}</NuxtLink>
                 </li>
               </ul>
             </div>

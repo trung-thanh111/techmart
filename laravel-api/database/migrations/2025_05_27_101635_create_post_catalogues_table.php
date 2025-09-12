@@ -27,6 +27,7 @@ return new class extends Migration
             $table->text('extra_album')->nullable();
             $table->boolean('table_of_content')->default(false);
             $table->integer('order')->nullable();
+            $table->boolean('is_hot')->default(false);
             $table->tinyInteger('publish')->default(2);
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
             $table->string('meta_title', 255)->nullable();

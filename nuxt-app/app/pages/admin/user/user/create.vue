@@ -193,15 +193,14 @@
 
 <script setup lang="ts">
 import { Field } from "vee-validate";
-import PublishSelect from "~/components/admin/custom/PublishSelect.vue";
 import Button from "~/components/admin/custom/Button.vue";
+import PublishSelect from "~/components/admin/custom/PublishSelect.vue";
 import Breadcrumb from "~/components/admin/navigation/Breadcrumb.vue";
+import { USERINDEX } from "~/utils/constants";
 import { useUser } from "~/composables/admin/user/useUser";
 import SingleImageUpload from "~/components/admin/custom/SingleImageUpload.vue";
-import { USERINDEX } from "~/utils/constants";
 
 const { isLoading, showPassword, genderOptions, handleStore, userCatalogueOptions, setValues, values } = useUser();
-// nhận file từ component con qua event 'selected'
 
 definePageMeta({
   layout: "admin",
