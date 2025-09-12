@@ -14,7 +14,6 @@ export const useUser = (
 ) => {
   const { t } = useI18n();
   const toast = useAppToast();
-
   const data = ref<IApiOk<IPaginate<IUser>>>();
   const filters = ref<PayloadFilter>(initialFilters ?? { keyword: "", perpage: 10, publish: null });
   const page = ref(1);
@@ -57,7 +56,6 @@ export const useUser = (
   });
 
   const handleStore = handleSubmit(async (payload: TUserCreate | TUserUpdate) => {
-    console.info("payload:", payload)
     isLoading.value = true;
     try {
       const response = await useUserService.store(payload as Partial<IUser>);

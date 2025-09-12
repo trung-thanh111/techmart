@@ -3,6 +3,7 @@
     "common": {
       "noteUploadImage": "Chấp nhận các định dạng: jpg, jpeg, png, webp.",
       "upload": "Tải lên",
+      "image": "Hình ảnh",
       "maxFileSize": "Ảnh phải nhỏ hơn hoặc bằng 5MB",
       "acceptedImageTypes": "Chỉ chấp nhận định dạng JPEG, PNG, WEBP",
       "titleNote": "Thông tin",
@@ -25,11 +26,16 @@
       "draft": "Nháp",
       "hidden": "Ẩn",
       "record": "Bản ghi",
+      "hot": "Nổi bật",
       "selectedRecords": "Danh sách bản ghi được chọn",
       "deleteRecord": "Xóa bản ghi",
       "deleteMultiple": "Xóa hàng loạt",
       "confirmDelete": "Hãy xác nhận thông tin để xóa. Không thể phục hồi!",
-      "confirmDeleteMultiple": "Hãy xác nhận danh sách bản ghi cần xóa. Không thể phục hồi!"
+      "confirmDeleteMultiple": "Hãy xác nhận danh sách bản ghi cần xóa. Không thể phục hồi!",
+      "seo": "Cấu hình SEO",
+      "metaTitle": "Tiêu đề SEO",
+      "metaKeyword": "Từ khóa SEO",
+      "metaDescription": "Mô tả SEO"
     },
     "header": {
       "search": "Tìm kiếm...",
@@ -85,6 +91,10 @@
       "customerCatalogue": "Nhóm khách hàng",
       "customerList": "Danh sách",
       "customerCreate": "Thêm mới",
+      "posts": "Bài viết",
+      "postCatalogue": "Nhóm bài viết",
+      "postList": "Danh sách",
+      "postCreate": "Thêm mới",
       "addressOrder": "Địa chỉ nhận hàng",
       "configuration": "Cấu hình",
       "interface": "Giao diện",
@@ -229,6 +239,24 @@
         "description": "Sản phẩm",
         "keywords": "Sản phẩm"
       },
+      "postCatalogue": {
+        "title": "Quản lý nhóm bài viết",
+        "breadcrumb": "Quản lý nhóm bài viết",
+        "groupInfo": "Thông tin ",
+        "form": {
+          "name": "Tên",
+          "namePlaceholder": "Nhập tên cho bản ghi",
+          "description": "Mô tả",
+          "descriptionPlaceholder": "Nhập mô tả",
+          "order": "Thứ tự",
+          "orderPlaceholder": "Nhập thứ tự",
+          "urlTooltip": "URL của bản ghi",
+          "isHot": "Nổi bật",
+          "isHotPlaceholder": "Chọn nổi bật",
+          "publishedAt": "Ngày đăng",
+          "parant": "Danh mục cha"
+        }
+      },
       "user": {
         "title": "Quản lý khách hàng",
         "breadcrumb": "Quản lý khách hàng",
@@ -238,7 +266,7 @@
           "namePlaceholder": "Nhập họ và tên",
           "firstName": "Tên",
           "firstNamePlaceholder": "Nhập tên",
-          "lastName": "Họ", 
+          "lastName": "Họ",
           "lastNamePlaceholder": "Nhập họ",
           "email": "Email",
           "emailPlaceholder": "Nhập địa chỉ email",
@@ -248,7 +276,7 @@
           "gender": "Giới tính",
           "genderPlaceholder": "Chọn giới tính",
           "genderMale": "Nam",
-          "genderFemale": "Nữ", 
+          "genderFemale": "Nữ",
           "genderOther": "Khác",
           "password": "Mật khẩu",
           "passwordPlaceholder": "Nhập mật khẩu",
@@ -349,7 +377,11 @@
       "lastNameMaxLength": "Họ vượt quá 255 ký tự",
       "descriptionMaxLength": "Mô tả vượt quá 255 ký tự",
       "passwordMinLength": "Mật khẩu phải có ít nhất 8 ký tự",
-      "userCatalogueRequired": "Vai trò người dùng là bắt buộc"
+      "userCatalogueRequired": "Vai trò người dùng là bắt buộc",
+      "metaTitleMaxLength": "Tiêu đề SEO vượt quá 255 ký tự",
+      "metaDescriptionMaxLength": "Mô tả SEO vượt quá 255 ký tự",
+      "metaKeywordsMaxLength": "Từ khóa SEO vượt quá 255 ký tự",
+      "orderMin": "Giá trị tối thiểu là 1"
     },
     "messages": {
       "createSuccess": "Thêm mới thành công",

@@ -202,9 +202,9 @@ import SingleImageUpload from "~/components/admin/custom/SingleImageUpload.vue";
 
 const { isLoading, userCatalogueOptions, genderOptions, show, handleUpdate, setValues, values } = useUser(undefined, "update");
 const currentImageUrl = ref<string | null>(null);
-
 const id = Number(useRoute().params.id);
 const { data } = await show(id);
+currentImageUrl.value = data?.image?.path ? data?.image?.url || null : null;
 
 setValues({
   name: data.name,
@@ -218,10 +218,7 @@ setValues({
   address: data.address,
   publish: data.publish || 0,
   userCatalogueId: data.userCatalogueId,
-  image: data.image?.path || null,
 });
-
-currentImageUrl.value = data?.image?.path ? (data?.image?.url || null) : null;
 
 definePageMeta({
   layout: "admin",
