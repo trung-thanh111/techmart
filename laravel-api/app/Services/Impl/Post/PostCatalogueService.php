@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\Impl\Post;
 
 use Illuminate\Http\Request;
@@ -7,29 +8,36 @@ use Illuminate\Database\Eloquent\Model;
 use App\Repositories\Post\PostCatalogueRepository;
 use App\Http\Resources\Post\PostCatalogueResource;
 use App\Services\Interfaces\Post\PostCatalogueServiceInterface;
+use App\Services\Interfaces\ImageServiceInterface as ImageService;
 
-class PostCatalogueService extends BaseService implements PostCatalogueServiceInterface {
 
-protected $repository;
+class PostCatalogueService extends BaseService implements PostCatalogueServiceInterface
+{
 
-protected $complexFilter = ['id'];
+    protected $repository;
+    private const PIPELINE = 'default';
 
-protected $with = [];
-protected $relationFilter = [];
+    protected $complexFilter = ['id'];
 
-protected $cacheKeyPrefix = 'post_catalogues';
-protected $cacheTags = ['post_catalogues:collection'];
+    protected $with = [];
+    protected $relationFilter = [];
 
-protected $useNestedSet = true;
-protected $useUpload = true;
+    protected $cacheKeyPrefix = 'post_catalogues';
+    protected $cacheTags = ['post_catalogues:collection'];
+    protected $imageService;
+    protected $useNestedSet = true;
 
     public function __construct(
-        PostCatalogueRepository $repository
+        PostCatalogueRepository $repository,
+        ImageService $imageService
+
     ) {
         $this->repository = $repository;
+        $this->imageService = $imageService;
     }
 
-    protected function getRepository(){
+    protected function getRepository()
+    {
         return $this->repository;
     }
 
@@ -37,19 +45,22 @@ protected $useUpload = true;
      * nhiệm vụ bắt data từ client post lên (dạng thô, chuỗi, file, ....)
      *
      */
-    protected function prepareModelData(Request $request): self {
+    protected function prepareModelData(Request $request): self
+    {
 
-        return $this->initializeBasicModelData($request);
+        return $this->initializeBasicModelData($request)
+            ->uploadImage($request, 'image', self::PIPELINE, 'image');
     }
 
-    protected function initializeBasicModelData(Request $request): self {
+    protected function initializeBasicModelData(Request $request): self
+    {
         $fillable = $this->repository->getFillable();
         $this->modelData = $request->only($fillable);
         return $this;
     }
 
-    protected function getResource(Model $resource){
+    protected function getResource(Model $resource)
+    {
         return new PostCatalogueResource($resource);
     }
-
 }

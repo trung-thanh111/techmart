@@ -5,6 +5,7 @@ namespace App\Http\Requests\Post\PostCatalogue;
 use App\Http\Requests\BaseRequest;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use App\Enums\Common;
 
 class UpdateRequest extends BaseRequest
 {
@@ -32,24 +33,19 @@ class UpdateRequest extends BaseRequest
     {
         $method = $this->getMethod();
         $sometime = ($method === 'PATCH') ? 'sometimes' : '';
-
+        $mimes = implode(',', config('upload.image.allowed_type'));
+        $max_size = config('upload.image.max_size');
         return [
             "name" => "required|string|max:255|{$sometime}",
             "parent_id" => "nullable|integer|min:0|{$sometime}",
             "description" => "nullable|string|max:500|{$sometime}",
-            "content" => "nullable|string|{$sometime}",
-            "image" => "nullable|string|{$sometime}",
-            "icon" => "nullable|string|{$sometime}",
-            "album" => "nullable|json|{$sometime}",
-            "extra_album" => "nullable|json|{$sometime}",
-            "table_of_content" => "nullable|boolean|{$sometime}",
+            "image" => "sometimes|mimes:{$mimes}|max:{$max_size}",
+            "is_hot" => "nullable|boolean",
             "order" => "nullable|integer|{$sometime}",
             "publish" => "required|integer|in:0,1,2|{$sometime}",
             "meta_title" => "nullable|string|max:255|{$sometime}",
             "meta_keyword" => "nullable|string|max:255|{$sometime}",
             "meta_description" => "nullable|string|max:500|{$sometime}",
-            "scheme" => "nullable|string|{$sometime}",
-            "iframe" => "nullable|string|{$sometime}",
             "published_at" => "nullable|date|{$sometime}",
             "slug" => [
                 "required",
@@ -64,7 +60,9 @@ class UpdateRequest extends BaseRequest
     {
         $this->merge([
             'slug' => Str::slug($this->name),
+            'user_id' => auth(Common::API)->user()->id,
             'published_at' => $this->publish === 2 ? now() : null,
+            'is_hot' => $this->boolean('is_hot'),
         ]);
     }
 

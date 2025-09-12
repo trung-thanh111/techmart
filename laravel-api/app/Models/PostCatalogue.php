@@ -26,6 +26,7 @@ class PostCatalogue extends Model
         'table_of_content',
         'order',
         'publish',
+        'is_hot',
         'user_id',
         'meta_title',
         'meta_keyword',
@@ -46,6 +47,7 @@ class PostCatalogue extends Model
 
     protected $casts = [
         'album' => 'json',
+        'is_hot' => 'boolean',
     ];
     public function users(): BelongsTo
     {
