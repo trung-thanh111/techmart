@@ -30,7 +30,7 @@ export const useAddressOrderService = {
   update: async (id: number, payload: Partial<IAddressOrder>): Promise<IApiOk<IAddressOrder>> => {
     const { privateFetch } = useApi();
     return await privateFetch<IApiOk<IAddressOrder>>(`${ENDPOINT}/address_orders/${id}`, {
-      method: "PUT",
+      method: "PATCH",
       body: payload,
     });
   },

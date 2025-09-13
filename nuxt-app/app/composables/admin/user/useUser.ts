@@ -89,7 +89,6 @@ export const useUser = (
       await useUserService.update(id, payload as Partial<IUser>);
       toast.success(t('admin.messages.updateSuccess'));
       return navigateTo(USERINDEX);
-
     } catch (error: any) {
       console.error("Cập nhật thất bại:", error);
       toast.error(error?.response?.data?.message || t('admin.messages.updateFailed'));

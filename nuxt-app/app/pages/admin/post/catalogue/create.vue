@@ -30,19 +30,11 @@
               <p class="genrate_slug_to_name w-full pr-2" v-tooltip.bottom="$t('admin.page.postCatalogue.form.urlTooltip')">{{ config.public.baseUrl }}/{{ slug }}</p>
             </div>
           </div>
-          <div class="mb-3 row">
-            <div class="col-md-6">
-              <label class="form-label">{{ $t("admin.page.postCatalogue.form.publishedAt") }}</label>
-              <Field name="publishedAt" v-slot="{ field }">
-                <DatePicker :modelValue="field.value" @update:modelValue="field.onChange" dateFormat="yy-mm-dd" showIcon fluid iconDisplay="input" input-class="!rounded py-[7px] w-full" size="small" />
-              </Field>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">{{ $t("admin.page.postCatalogue.form.order") }}</label>
-              <Field name="order" v-slot="{ field }">
-                <InputNumber :modelValue="field.value" @update:modelValue="field.onChange" :min="1" showButtons class="w-full" input-class="!rounded py-[7px] w-full" size="small" />
-              </Field>
-            </div>
+          <div class="mb-3">
+            <label class="form-label">{{ $t("admin.page.postCatalogue.form.order") }}</label>
+            <Field name="order" v-slot="{ field }">
+              <InputNumber :modelValue="field.value" @update:modelValue="field.onChange" :min="1" showButtons class="w-full" input-class="!rounded py-[7px] w-full" size="small" />
+            </Field>
           </div>
           <div class="mb-3">
             <label class="form-label">{{ $t("admin.page.postCatalogue.form.description") }}</label>
@@ -81,7 +73,6 @@
           </div>
         </div>
       </div>
-
       <div class="flex justify-end gap-3 mt-4">
         <Button variant="cancel" :to="POSTCATALOGUEINDEX" />
         <Button variant="success" :loading="isLoading" />

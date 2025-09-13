@@ -3,10 +3,16 @@ export const formData = (payload: Record<string, any>): FormData => {
     Object.entries(payload).forEach(([key, value]) => {
         if (value === undefined || value === null) return;
         if (value instanceof File || value instanceof Blob) {
-            fd.append(key, value as Blob);
+            fd.append(key, value);
+        } else if (typeof value === "boolean") {
+            fd.append(key, value ? "1" : "0");
         } else if (Array.isArray(value)) {
-            value.forEach((v) => fd.append(`${key}[]`, v as any));
-        } else if (typeof value === 'object') {
+            if (value.every(v => typeof v !== "object")) {
+                value.forEach(v => fd.append(`${key}[]`, String(v)));
+            } else {
+                fd.append(key, JSON.stringify(value));
+            }
+        } else if (typeof value === "object") {
             fd.append(key, JSON.stringify(value));
         } else {
             fd.append(key, String(value));

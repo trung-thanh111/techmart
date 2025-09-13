@@ -30,7 +30,7 @@ export const userCatalogueService = {
   update: async (id: number, payload: Partial<IUserCatalogue>): Promise<IApiOk<IUserCatalogue>> => {
     const { privateFetch } = useApi();
     return await privateFetch<IApiOk<IUserCatalogue>>(`${ENDPOINT}/user_catalogues/${id}`, {
-      method: "PUT",
+      method: "PATCH",
       body: payload,
     });
   },

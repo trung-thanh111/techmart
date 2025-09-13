@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Resources\Post;
 
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class TagResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'publish' => $this->publish,
+            'publish' => (int) $this->publish,
             'createdAt' => $this->created_at ?? null,
             'updatedAt' => $this->updated_at ?? null,
         ];

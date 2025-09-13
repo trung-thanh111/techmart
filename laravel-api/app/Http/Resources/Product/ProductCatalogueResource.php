@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Resources\Product;
 
 use Illuminate\Http\Request;
@@ -16,9 +17,9 @@ class ProductCatalogueResource extends JsonResource
         return [
             'id' => $this->id,
             'parent_id' => $this->parent_id,
-            'lft' => $this->lft,
-            'rgt' => $this->rgt,
-            'level' => $this->level,
+            'lft' => (int) $this->lft,
+            'rgt' => (int) $this->rgt,
+            'level' => (int) $this->level,
             'name' => $this->name,
             'slug' => $this->slug,
             'description' => $this->description,

@@ -19,7 +19,7 @@ class BannerResource extends JsonResource
             'name' => $this->name,
             'image' => $this->image,
             'type' => $this->type,
-            'position' => $this->position,
+            'position' => (int) $this->position,
             'device' => $this->device,
             'display_mode' => $this->display_mode,
             'start_at' => $this->start_at,
@@ -31,7 +31,7 @@ class BannerResource extends JsonResource
                 'id' => $this->users->id,
                 'name' => $this->users->name,
             ]),
-            'publish' => $this->publish,
+            'publish' => (int) $this->publish,
             'createdAt' => $this->created_at ?? null,
             'updatedAt' => $this->updated_at ?? null,
         ];

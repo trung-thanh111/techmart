@@ -34,7 +34,7 @@ export const useUserService = {
     return await privateFetch<IApiOk<IUser>>(`${ENDPOINT}/users/${id}`, {
       method: "POST",
       body: formData(payload),
-      params: { _method: "PUT" },
+      params: { _method: "PATCH" },
     });
   },
 

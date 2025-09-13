@@ -18,12 +18,7 @@ class PostCatalogue extends Model
         'parent_id',
         'slug',
         'description',
-        'content',
         'image',
-        'icon',
-        'album',
-        'extra_album',
-        'table_of_content',
         'order',
         'publish',
         'is_hot',
@@ -31,9 +26,6 @@ class PostCatalogue extends Model
         'meta_title',
         'meta_keyword',
         'meta_description',
-        'scheme',
-        'iframe',
-        'published_at'
     ];
 
     /**

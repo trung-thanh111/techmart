@@ -46,24 +46,25 @@ class UpdateRequest extends BaseRequest
             "meta_title" => "nullable|string|max:255|{$sometime}",
             "meta_keyword" => "nullable|string|max:255|{$sometime}",
             "meta_description" => "nullable|string|max:500|{$sometime}",
-            "published_at" => "nullable|date|{$sometime}",
             "slug" => [
+                "{$sometime}",
                 "required",
                 "string",
                 Rule::unique('post_catalogues')->ignore($this->route('post_catalogue')),
-                "{$sometime}"
             ],
         ];
     }
 
     public function prepareForValidation()
     {
-        $this->merge([
-            'slug' => Str::slug($this->name),
-            'user_id' => auth(Common::API)->user()->id,
-            'published_at' => $this->publish === 2 ? now() : null,
-            'is_hot' => $this->boolean('is_hot'),
-        ]);
+        $data = [
+            'user_id' => auth(Common::API)->id(),
+            'is_hot'  => $this->boolean('is_hot'),
+        ];
+        if ($this->has('name')) {
+            $data['slug'] = Str::slug($this->name);
+        }
+        $this->merge($data);
     }
 
     public function messages()

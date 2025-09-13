@@ -254,7 +254,8 @@
           "isHot": "Nổi bật",
           "isHotPlaceholder": "Chọn nổi bật",
           "publishedAt": "Ngày đăng",
-          "parant": "Danh mục cha"
+          "parant": "Danh mục cha",
+          "postCataloguePlaceholder": "Chọn danh mục cha"
         }
       },
       "user": {
