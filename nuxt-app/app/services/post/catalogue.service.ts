@@ -33,7 +33,7 @@ export const postCatalogueService = {
     return await privateFetch<IApiOk<IPostCatalogue>>(`${ENDPOINT}/post_catalogues/${id}`, {
       method: "POST",
       body: formData(payload),
-      params: { _method: "PUT" },
+      params: { _method: "PATCH" },
     });
   },
 

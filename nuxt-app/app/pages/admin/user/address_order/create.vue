@@ -141,7 +141,7 @@
           <div class="mb-3">
             <div class="form-check d-flex align-items-center gap-2 ps-0">
               <Field name="isDefault" v-slot="{ field }">
-                <AppCheckbox v-model="field.value" inputId="id_default" size="large" />
+                <AppCheckbox v-model="field.value" inputId="id_default" class="scale-125" />
               </Field>
               <label for="id_default" class="mb-0">
                 {{ $t("admin.page.addressOrder.form.isDefault") }}

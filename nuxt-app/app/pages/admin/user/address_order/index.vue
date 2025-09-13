@@ -15,14 +15,6 @@ const handleSelectedIdsChange = (value: boolean | number[]) => {
   if (Array.isArray(value)) updateSelectedIds(value);
 };
 
-const handleRowClick = (item: any) => {
-  const currentIds = [...selectedIds.value];
-  const itemId = item.id;
-  if (currentIds.includes(itemId)) currentIds.splice(currentIds.indexOf(itemId), 1);
-  else currentIds.push(itemId);
-  updateSelectedIds(currentIds);
-};
-
 const handleDeleteSingle = (item: any) => setSelectedItem(item);
 
 const handleConfirmDeleteSingle = async () => {
@@ -86,8 +78,8 @@ definePageMeta({
               <td colspan="4" class="text-center text-muted">{{ $t("admin.common.loading") }}</td>
             </tr>
             <template v-else>
-              <tr v-for="item in data?.data?.data ?? []" :key="item.id" @click="handleRowClick(item)" class="cursor-pointer" :class="{ 'table-active': selectedIds.includes(item.id) }">
-                <td @click.stop>
+              <tr v-for="item in data?.data?.data ?? []" :key="item.id" class="cursor-pointer" :class="{ 'table-active': selectedIds.includes(item.id) }">
+                <td>
                   <AppCheckbox :model-value="selectedIds" :value="item.id" @update:model-value="handleSelectedIdsChange" />
                 </td>
                 <td>
@@ -100,7 +92,7 @@ definePageMeta({
                     {{ item.publish === 2 ? $t("admin.common.published") : item.publish === 1 ? $t("admin.common.draft") : $t("admin.common.hidden") }}
                   </span>
                 </td>
-                <td class="text-end" @click.stop>
+                <td class="text-end">
                   <div class="dropdown">
                     <button class="btn btn-sm btn-light" type="button" :class="{ disabled: isBulkSelecting }" :data-bs-toggle="isBulkSelecting ? null : 'dropdown'" @click.stop.prevent>
                       <i class="ri-more-2-fill"></i>

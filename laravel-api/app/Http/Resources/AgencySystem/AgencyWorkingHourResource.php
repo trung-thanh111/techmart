@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Resources\AgencySystem;
 
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ class AgencyWorkingHourResource extends JsonResource
             'dayOfWeek' => $this->day_of_week ?? null,
             'openTime' => $this->open_time ?? null,
             'closeTime' => $this->close_time ?? null,
-            'publish' => $this->publish ?? null,
+            'publish' => (int) $this->publish ?? null,
             'createdAt' => $this->created_at ?? null,
             'updatedAt' => $this->updated_at ?? null,
         ];

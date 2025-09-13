@@ -46,19 +46,11 @@
               <p class="genrate_slug_to_name w-full pr-2" v-tooltip.bottom="$t('admin.page.postCatalogue.form.urlTooltip')">{{ config.public.baseUrl }}/{{ slug }}</p>
             </div>
           </div>
-          <div class="mb-3 row">
-            <div class="col-md-6">
-              <label class="form-label">{{ $t("admin.page.postCatalogue.form.publishedAt") }}</label>
-              <Field name="publishedAt" v-slot="{ field }">
-                <DatePicker :modelValue="field.value" @update:modelValue="field.onChange" dateFormat="yy-mm-dd" showIcon fluid iconDisplay="input" input-class="!rounded py-[7px] w-full" size="small" />
-              </Field>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">{{ $t("admin.page.postCatalogue.form.order") }}</label>
-              <Field name="order" v-slot="{ field }">
-                <InputNumber :modelValue="field.value" @update:modelValue="field.onChange" :min="1" showButtons class="w-full" input-class="!rounded py-[7px] w-full" size="small" />
-              </Field>
-            </div>
+          <div class="mb-3">
+            <label class="form-label">{{ $t("admin.page.postCatalogue.form.order") }}</label>
+            <Field name="order" v-slot="{ field }">
+              <InputNumber :modelValue="field.value" @update:modelValue="field.onChange" :min="1" showButtons class="w-full" input-class="!rounded py-[7px] w-full" size="small" />
+            </Field>
           </div>
           <div class="mb-3">
             <label class="form-label">{{ $t("admin.page.postCatalogue.form.description") }}</label>
@@ -120,7 +112,7 @@
           <div class="mb-3">
             <label class="form-label">{{ $t("admin.page.postCatalogue.form.parant") }}</label>
             <Field name="parentId" v-slot="{ field }" :validate-on-input="true">
-              <Select :modelValue="field.value" @update:modelValue="field.onChange" :options="postCatalogueOptions" optionLabel="name" optionValue="value" filter :placeholder="$t('admin.page.user.form.postCataloguePlaceholder')" class="rounded py-[1px] w-100" size="small" />
+              <Select :modelValue="field.value" @update:modelValue="field.onChange" :options="postCatalogueOptions" optionLabel="name" optionValue="value" filter :placeholder="$t('admin.page.postCatalogue.form.postCataloguePlaceholder')" class="rounded py-[1px] w-100" size="small" />
             </Field>
           </div>
           <div class="mb-3">
@@ -158,7 +150,7 @@ import { slugify } from "~/utils/helpers";
 import AppCheckbox from "~/components/admin/custom/AppCheckbox.vue";
 import SingleImageUpload from "~/components/admin/custom/SingleImageUpload.vue";
 
-const { config, isLoading, postCatalogueOptions, show, handleUpdate, values, setValues } = usePostCatalogue(undefined, "update");
+const { config, isLoading, postCatalogueOptions, values, show, handleUpdate, setValues } = usePostCatalogue(undefined, "update");
 
 const id = Number(useRoute().params.id);
 const { data } = await show(id);
@@ -181,7 +173,6 @@ setValues({
   metaTitle: data.metaTitle,
   metaKeyword: data.metaKeyword,
   metaDescription: data.metaDescription,
-  publishedAt: data.publishedAt ? new Date(data.publishedAt) : null,
 });
 
 const currentImageUrl = ref<string | null>(null);

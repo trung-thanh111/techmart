@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Resources\Permission;
 
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class PermissionResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'publish' => $this->publish,
+            'publish' => (int) $this->publish,
             'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
             'updatedAt' => $this->updated_at?->format('Y-m-d H:i:s'),
             'deletedAt' => $this->deleted_at?->format('Y-m-d H:i:s'),

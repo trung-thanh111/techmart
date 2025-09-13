@@ -29,9 +29,8 @@ class PostResource extends JsonResource
                 ];
             }, $this->album) : [],
             'tableOfContent' => $this->table_of_content,
-            'order' => $this->order,
-            'publish' => $this->publish,
-            'userId' => $this->user_id,
+            'order' => (int) $this->order,
+            'publish' => (int) $this->publish,
             'creator' => $this->whenLoaded('user', [
                 'id' => $this->user->id,
                 'name' => $this->user->name,

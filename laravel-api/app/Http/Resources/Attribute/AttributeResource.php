@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Resources\Attribute;
 
 use Illuminate\Http\Request;
@@ -18,11 +19,10 @@ class AttributeResource extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug,
             'description' => $this->description,
-            'order' => $this->order,
-            'publish' => $this->publish,
+            'order' => (int) $this->order,
+            'publish' => (int) $this->publish,
             'publishText' => $this->publish ? 'Đã xuất bản' : 'Nháp',
-            'userId' => $this->user_id,
-            'attributeCatalogueId' => $this->attribute_catalogue_id,
+            'attributeCatalogueId' => (int) $this->attribute_catalogue_id,
             'creator' => $this->whenLoaded('users', [
                 'id' => $this->users->id,
                 'name' => $this->users->name,

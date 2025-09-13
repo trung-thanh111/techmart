@@ -1,4 +1,4 @@
-svg {
+/* svg {
   -ms-touch-action: none;
   touch-action: none;
 }
@@ -32,7 +32,7 @@ text,
   color: #fff;
 }
 .jvm-tooltip.active {
-  display: block;
+  display: none;
 }
 .jvm-zoom-btn {
   border-radius: 3px;
@@ -115,4 +115,4 @@ text,
   from {
     stroke-dashoffset: 250;
   }
-}
+} */

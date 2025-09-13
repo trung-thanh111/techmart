@@ -36,7 +36,6 @@ export const usePostCatalogue = (
     metaKeyword: z.string().max(255, 'admin.validation.metaKeywordMaxLength').nullable().optional(),
     parentId: z.number().nullable().optional(),
     isHot: z.boolean().default(false).optional(),
-    publishedAt: z.date().nullable().optional(),
   };
   const createSchema = z.object({ ...schema });
   const updateSchema = z.object({ ...schema });
@@ -54,7 +53,7 @@ export const usePostCatalogue = (
       const response = await postCatalogueService.store(payload as Partial<IPostCatalogue>);
       toast.success(response?.message || t('admin.messages.createSuccess'));
       resetForm();
-      // return navigateTo(POSTCATALOGUEINDEX);
+      return navigateTo(POSTCATALOGUEINDEX);
     } catch (error: any) {
       console.error("Store error:", error);
       toast.error(error?.response?.data?.message || t('admin.messages.createFailed'));
@@ -82,7 +81,6 @@ export const usePostCatalogue = (
       await postCatalogueService.update(id, payload as Partial<IPostCatalogue>);
       toast.success(t('admin.messages.updateSuccess'));
       return navigateTo(POSTCATALOGUEINDEX);
-
     } catch (error: any) {
       console.error("Store error:", error);
       toast.error(error?.response?.data?.message || t('admin.messages.updateFailed'));
@@ -90,6 +88,17 @@ export const usePostCatalogue = (
       isLoading.value = false;
     }
   });
+
+  const  handleToggleIsHot = async (item: any) => {
+  try {
+    const res = await postCatalogueService.update(item.id, { isHot: item.isHot });
+    console.info("res", res);
+    toast.success(t('admin.messages.updateSuccess'));
+  } catch (error: any) {
+    toast.error(error?.response?.data?.message || t('admin.messages.updateFailed'));
+    item.isHot = !item.isHot;
+  }
+};
 
   const handleDelete = async (id: number) => {
     isLoading.value = true;
@@ -206,6 +215,7 @@ export const usePostCatalogue = (
     handleUpdate,
     handleDelete,
     handleDeleteMultiple,
+    handleToggleIsHot,
     setSelectedItem,
     confirmDelete,
     fetchData,

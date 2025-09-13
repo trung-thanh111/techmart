@@ -7,7 +7,6 @@ export interface IPostCatalogue {
   icon?: string;
   order?: number;
   isHot?: boolean;
-  publishedAt?: string;
   description?: string;
   publish?: number;
   metaTitle?: string;

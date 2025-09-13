@@ -19,9 +19,8 @@ class AttributeCatalogueResource extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug,
             'description' => $this->description,
-            'order' => $this->order,
-            'publish' => $this->publish,
-            'publishText' => $this->publish ? 'Đã xuất bản' : 'Nháp',
+            'order' => (int) $this->order,
+            'publish' => (int) $this->publish,
             'userId' => $this->user_id,
             'creator' => $this->whenLoaded('users', [
                 'id' => $this->users->id,

@@ -6,21 +6,13 @@ import AppCheckbox from "~/components/admin/custom/AppCheckbox.vue";
 import Button from "~/components/admin/custom/Button.vue";
 import { usePostCatalogue } from "~/composables/admin/post/usePostCatalogue";
 
-const { data, isLoading, selectedIds, selectedItem, search, setPage, handleDeleteMultiple, setSelectedItem, confirmDelete, updateSelectedIds, getTotalItems, getAllItemIds } = usePostCatalogue();
+const { data, isLoading, selectedIds, selectedItem, search, setPage, handleDeleteMultiple, handleToggleIsHot, setSelectedItem, confirmDelete, updateSelectedIds, getTotalItems, getAllItemIds } = usePostCatalogue();
 
 provide("getTotalItems", getTotalItems);
 provide("getAllItemIds", getAllItemIds);
 
 const handleSelectedIdsChange = (value: boolean | number[]) => {
   if (Array.isArray(value)) updateSelectedIds(value);
-};
-
-const handleRowClick = (item: any) => {
-  const currentIds = [...selectedIds.value];
-  const itemId = item.id;
-  if (currentIds.includes(itemId)) currentIds.splice(currentIds.indexOf(itemId), 1);
-  else currentIds.push(itemId);
-  updateSelectedIds(currentIds);
 };
 
 const handleDeleteSingle = (item: any) => setSelectedItem(item);
@@ -90,25 +82,25 @@ definePageMeta({
               <td colspan="4" class="text-center text-muted">{{ $t("admin.common.loading") }}</td>
             </tr>
             <template v-else>
-              <tr v-for="item in data?.data?.data ?? []" :key="item.id" @click="handleRowClick(item)" class="cursor-pointer" :class="{ 'table-active': selectedIds.includes(item.id) }">
-                <td @click.stop>
+              <tr v-for="item in data?.data?.data ?? []" :key="item.id" class="cursor-pointer" :class="{ 'table-active': selectedIds.includes(item.id) }">
+                <td>
                   <AppCheckbox :model-value="selectedIds" :value="item.id" @update:model-value="handleSelectedIdsChange" />
                 </td>
-                <td @click.stop>
+                <td>
                   <NuxtLink class="hover:text-teal-500 flex items-center gap-2" :to="`/admin/post/catalogue/${item.id}/edit`">
-                    <NuxtImg :src="item.image?.path ? item.image?.url ?? '' : '/shared/images/defaults/record.jpg'" alt="image-record" class="rounded-md" width="120" height="80" loading="lazy" />
+                    <NuxtImg :src="item.image?.path ? item.image?.url ?? '' : '/shared/images/defaults/record.jpg'" alt="image-record" class="rounded-md w-[120px] h-[70px] object-cover" loading="lazy" />
                     {{ item.name }}
                   </NuxtLink>
                 </td>
-                <td class="text-center" @click.stop>
-                  <ToggleSwitch v-model="item.isHot" class="scale-75" />
+                <td class="text-center">
+                  <ToggleSwitch v-model="item.isHot" @update:modelValue="() => handleToggleIsHot(item)" class="scale-75" />
                 </td>
-                <td class="text-center" @click.stop>
+                <td class="text-center">
                   <span :class="['badge', item.publish === 2 ? 'bg-success-subtle text-success' : item.publish === 1 ? 'bg-secondary-subtle text-secondary' : 'bg-danger-subtle text-danger']">
                     {{ item.publish === 2 ? $t("admin.common.published") : item.publish === 1 ? $t("admin.common.draft") : $t("admin.common.hidden") }}
                   </span>
                 </td>
-                <td class="text-end" @click.stop>
+                <td class="text-end">
                   <div class="dropdown">
                     <button class="btn btn-sm btn-light" type="button" :class="{ disabled: isBulkSelecting }" :data-bs-toggle="isBulkSelecting ? null : 'dropdown'">
                       <i class="ri-more-2-fill"></i>

@@ -23,8 +23,8 @@ class BrandResource extends JsonResource
             'logoUrl' => $this->logo ? asset($this->logo) : '',
             'website' => $this->website,
             'country' => $this->country,
-            'order' => $this->order,
-            'publish' => $this->publish,
+            'order' => (int) $this->order,
+            'publish' => (int) $this->publish,
             'creator' => $this->whenLoaded('users', [
                 'id' => $this->users->id,
                 'name' => $this->users->name,
