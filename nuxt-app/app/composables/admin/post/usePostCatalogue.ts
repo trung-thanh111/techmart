@@ -89,16 +89,15 @@ export const usePostCatalogue = (
     }
   });
 
-  const  handleToggleIsHot = async (item: any) => {
-  try {
-    const res = await postCatalogueService.update(item.id, { isHot: item.isHot });
-    console.info("res", res);
-    toast.success(t('admin.messages.updateSuccess'));
-  } catch (error: any) {
-    toast.error(error?.response?.data?.message || t('admin.messages.updateFailed'));
-    item.isHot = !item.isHot;
-  }
-};
+  const handleToggleIsHot = async (item: any) => {
+    try {
+      const res = await postCatalogueService.update(item.id, { isHot: item.isHot });
+      toast.success(t('admin.messages.updateSuccess'));
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || t('admin.messages.updateFailed'));
+      item.isHot = !item.isHot;
+    }
+  };
 
   const handleDelete = async (id: number) => {
     isLoading.value = true;

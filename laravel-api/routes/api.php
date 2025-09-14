@@ -14,7 +14,7 @@ use App\Http\Controllers\Api\V1\Attribute\AttributeController;
 use App\Http\Controllers\Api\V1\Attribute\AttributeCatalogueController;
 use App\Http\Controllers\Api\V1\Post\PostController;
 use App\Http\Controllers\Api\V1\Post\PostCatalogueController;
-use App\Http\Controllers\Api\V1\Post\TagController;
+use App\Http\Controllers\Api\V1\Post\TagController as PostTagController;
 use App\Http\Controllers\Api\V1\Faq\FaqController;
 use App\Http\Controllers\Api\V1\Faq\FaqCatalogueController;
 use App\Http\Controllers\Api\V1\Promotion\PromotionCatalogueController;
@@ -187,16 +187,16 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
         });
         Route::resource('product_variants', ProductVariantController::class)->except($routeExcept);
 
-        // Tag routes
-        Route::group(['prefix' => 'tags'], function () {
-            Route::delete('bulkDelete', [TagController::class, 'bulkDelete']);
-            Route::post('{id}/attach', [TagController::class, 'attach']);
-            Route::delete('{id}/detach', [TagController::class, 'detach']);
-            Route::post('bulkStore', [TagController::class, 'bulkStore']);
-            Route::put('bulkUpdate', [TagController::class, 'bulkUpdate']);
-            Route::patch('bulkUpdate', [TagController::class, 'bulkUpdate']);
+        // Post Tag routes
+        Route::group(['prefix' => 'post_tags'], function () {
+            Route::delete('bulkDelete', [PostTagController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [PostTagController::class, 'attach']);
+            Route::delete('{id}/detach', [PostTagController::class, 'detach']);
+            Route::post('bulkStore', [PostTagController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [PostTagController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [PostTagController::class, 'bulkUpdate']);
         });
-        Route::resource('tags', TagController::class)->except($routeExcept);
+        Route::resource('post_tags', PostTagController::class)->except($routeExcept);
 
         // FAQ routes
         Route::group(['prefix' => 'faqs'], function () {

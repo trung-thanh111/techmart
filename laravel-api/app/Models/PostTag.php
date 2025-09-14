@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -18,10 +19,13 @@ class PostTag extends Model
         'description',
         'user_id',
         'color',
+        'is_hot',
         'publish'
     ];
 
-    protected $casts = [];
+    protected $casts = [
+        'is_hot' => 'boolean',
+    ];
 
     /**
      * Biến này đăng ký quan hệ được phép bắn lên từ client

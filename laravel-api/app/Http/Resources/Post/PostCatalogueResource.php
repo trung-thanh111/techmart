@@ -28,7 +28,7 @@ class PostCatalogueResource extends JsonResource
                 'url' => asset("/storage/{$this->image}") ?? null,
             ],
             'order' => (int) $this->order,
-            'isHot' => $this->is_hot,
+            'isHot' => (bool) $this->is_hot,
             'publish' => (int) $this->publish,
             'creator' => $this->whenLoaded('users', [
                 'id' => $this->users->id,
