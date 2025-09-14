@@ -125,7 +125,7 @@
                   <NuxtLink to="/admin/post/catalogue" class="nav-link" data-key="t-post-catelogue">{{ $t("admin.sidebar.postCatalogue") }}</NuxtLink>
                 </li>
                 <li class="nav-item">
-                  <NuxtLink to="/admin/post/tag" class="nav-link" data-key="t-post-address-order">{{ $t("admin.sidebar.tags") }}</NuxtLink>
+                  <NuxtLink to="/admin/post/tag" class="nav-link" data-key="t-post-tag">{{ $t("admin.sidebar.tags") }}</NuxtLink>
                 </li>
               </ul>
             </div>

@@ -46,7 +46,6 @@ class StoreRequest extends BaseRequest
             'slug' => generate_slug($this->name),
             'user_id' => auth(Common::API)->user()->id,
             'published_at' => $this->publish === 2 ? now() : null,
-            'is_hot' => $this->boolean('is_hot'),
         ]);
     }
 

@@ -44,7 +44,8 @@ class UpdateRequest extends BaseRequest
                 Rule::unique("post_tags", "slug")->ignore($this->route('post_tag'))
             ],
             "description" => "{$sometime}|nullable|string",
-            "color" => "nullable|string|max:7|regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/|{$sometime}",
+            "color" => ["$sometime", "nullable", "string", "max:7", "regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/"],
+            "is_hot" => "nullable|boolean|{$sometime}",
             "publish" => "required|integer|in:0,1,2|{$sometime}",
         ];
     }

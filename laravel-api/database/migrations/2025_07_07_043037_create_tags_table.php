@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('slug', 255)->unique();
             $table->string('description')->nullable();
             $table->string('color')->nullable();
+            $table->boolean('is_hot')->default(false);
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
             $table->tinyInteger('publish')->default(2);
             $table->timestamps();

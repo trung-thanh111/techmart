@@ -40,7 +40,7 @@ class UpdateRequest extends BaseRequest
             "parent_id" => "nullable|integer|min:0|{$sometime}",
             "description" => "nullable|string|max:500|{$sometime}",
             "image" => "sometimes|mimes:{$mimes}|max:{$max_size}",
-            "is_hot" => "nullable|boolean",
+            "is_hot" => "nullable|boolean|{$sometime}",
             "order" => "nullable|integer|{$sometime}",
             "publish" => "required|integer|in:0,1,2|{$sometime}",
             "meta_title" => "nullable|string|max:255|{$sometime}",
@@ -57,14 +57,10 @@ class UpdateRequest extends BaseRequest
 
     public function prepareForValidation()
     {
-        $data = [
-            'user_id' => auth(Common::API)->id(),
-            'is_hot'  => $this->boolean('is_hot'),
-        ];
-        if ($this->has('name')) {
-            $data['slug'] = Str::slug($this->name);
-        }
-        $this->merge($data);
+        $this->merge([
+            'user_id' => auth(Common::API)->user()->id,
+            ...($this->has('name') && !$this->has('slug') ? ['slug' => Str::slug($this->name)] : [])
+        ]);
     }
 
     public function messages()
