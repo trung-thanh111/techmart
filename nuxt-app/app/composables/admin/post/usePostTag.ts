@@ -1,6 +1,7 @@
 // composables/useUserTag.ts
 import z from "zod";
 import { useForm } from "vee-validate";
+import { errorToField } from "~/utils/helpers";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useAppToast } from "~/composables/useAppToast";
 import { postTagService } from "~/services/post/tag.service";
@@ -36,7 +37,7 @@ export const usePostTag = (
   type TPostTagCreate = z.infer<typeof createSchema>;
   type TPostTagUpdate = z.infer<typeof updateSchema>;
 
-  const { handleSubmit, values, errors, setValues, resetForm } = useForm<TPostTagCreate | TPostTagUpdate>({
+  const { handleSubmit, values, errors, setValues, resetForm, setFieldError } = useForm<TPostTagCreate | TPostTagUpdate>({
     validationSchema: toTypedSchema(mode === "create" ? createSchema : updateSchema),
   });
 
@@ -49,6 +50,9 @@ export const usePostTag = (
       resetForm();
       return navigateTo(POSTTAGINDEX);
     } catch (error: any) {
+      if (error?.data?.isValidationError) {
+        errorToField(setFieldError, error?.data?.errors, t, 'name'); return;
+      }
       console.error("Store error:", error);
       toast.error(error?.response?.data?.message || t('admin.messages.createFailed'));
       throw error;
@@ -76,7 +80,10 @@ export const usePostTag = (
       toast.success(t('admin.messages.updateSuccess'));
       return navigateTo(POSTTAGINDEX);
     } catch (error: any) {
-      console.error("Store error:", error);
+      if (error?.data?.isValidationError) {
+        errorToField(setFieldError, error?.data?.errors, t, 'name'); return;
+      }
+      console.error("Update error:", error);
       toast.error(error?.response?.data?.message || t('admin.messages.updateFailed'));
     } finally {
       isLoading.value = false;

@@ -1,6 +1,7 @@
 // composables/useUserCatalogue.ts
 import z from "zod";
 import { useForm } from "vee-validate";
+import { errorToField } from "~/utils/helpers";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useAppToast } from "~/composables/useAppToast";
 import { userCatalogueService } from "~/services/user/catalogue.service";
@@ -25,16 +26,16 @@ export const useUserCatalogue = (
   const slug = computed(() => slugify(values.name || ""));
 
   const schema = {
-    name: z.string({ required_error: 'admin.validation.nameRequired'}).trim().min(1, 'admin.validation.nameRequired').max(255, 'admin.validation.nameMaxLength'),
+    name: z.string({ required_error: 'admin.validation.nameRequired' }).trim().min(1, 'admin.validation.nameRequired').max(255, 'admin.validation.nameMaxLength'),
     description: z.string().nullable().optional(),
-    publish: z.number({ required_error: 'admin.validation.statusRequired'}).refine((val) => [0, 1, 2].includes(val), { message: 'admin.validation.statusInvalid'}),
+    publish: z.number({ required_error: 'admin.validation.statusRequired' }).refine((val) => [0, 1, 2].includes(val), { message: 'admin.validation.statusInvalid' }),
   };
   const createSchema = z.object({ ...schema });
   const updateSchema = z.object({ ...schema });
   type TUserCatalogueCreate = z.infer<typeof createSchema>;
   type TUserCatalogueUpdate = z.infer<typeof updateSchema>;
 
-  const { handleSubmit, values, errors, setValues, resetForm } = useForm<any>({
+  const { handleSubmit, values, errors, setValues, resetForm, setFieldError } = useForm<any>({
     validationSchema: toTypedSchema(mode === "create" ? createSchema : updateSchema),
   });
 
@@ -47,6 +48,10 @@ export const useUserCatalogue = (
       resetForm();
       return navigateTo(USERCATALOGUEINDEX);
     } catch (error: any) {
+      if (error?.data?.isValidationError) {
+        errorToField(setFieldError, error?.data?.errors, t, 'name');
+        return;
+      }
       console.error("Store error:", error);
       toast.error(error?.response?.data?.message || t('admin.messages.createFailed'));
       throw error;
@@ -73,7 +78,6 @@ export const useUserCatalogue = (
       await userCatalogueService.update(id, payload as Partial<IUserCatalogue>);
       toast.success(t('admin.messages.updateSuccess'));
       return navigateTo(USERCATALOGUEINDEX);
-
     } catch (error: any) {
       console.error("Store error:", error);
       toast.error(error?.response?.data?.message || t('admin.messages.updateFailed'));

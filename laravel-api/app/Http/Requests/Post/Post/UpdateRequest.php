@@ -54,20 +54,18 @@ class UpdateRequest extends BaseRequest
             "iframe" => "{$sometime}|nullable|string",
             "published_at" => "{$sometime}|nullable|date",
             "slug" => [
+                "{$sometime}",
                 "required",
                 "string",
                 Rule::unique('posts')->ignore($this->route('post')),
-                "{$sometime}"
             ],
         ];
     }
 
     public function prepareForValidation() {
-        if ($this->has('name') && !$this->has('slug')) {
-            $this->merge([
-                'slug' => Str::slug($this->name),
-            ]);
-        }
+        $this->merge([
+            ...($this->has('name') && !$this->has('slug') ? ['slug' => Str::slug($this->name)] : [])
+        ]);
     }
 
     public function messages()

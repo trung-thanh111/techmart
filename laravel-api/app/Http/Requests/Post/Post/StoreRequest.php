@@ -26,6 +26,7 @@ class StoreRequest extends BaseRequest
     {
         return [
             'name' => 'required|string|max:255',
+            'slug' => 'nullable|string|max:255|unique:posts,slug',
             'description' => 'nullable|string|max:500',
             'content' => 'nullable|string',
             'image' => 'nullable|string|max:255',
@@ -50,7 +51,7 @@ class StoreRequest extends BaseRequest
 
     public function prepareForValidation() {
         $this->merge([
-            'slug' => Str::slug($this->name),
+            'slug' => generate_slug($this->name),
             'user_id' => auth(Common::API)->user()->id,
             'published_at' => $this->publish === 2 ? now() : null,
         ]);

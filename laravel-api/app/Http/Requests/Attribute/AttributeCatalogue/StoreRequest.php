@@ -23,6 +23,7 @@ class StoreRequest extends BaseRequest
     {
         return [
             'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:attribute_catalogues,slug',
             'description' => 'nullable|string|max:255',
             'order' => 'nullable|integer|min:0',
             'publish' => 'required|integer|in:0,1,2'

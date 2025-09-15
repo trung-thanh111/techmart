@@ -24,17 +24,16 @@ export const useAddressOrder = (
   const slug = computed(() => slugify(values.title || ""));
 
   const schema = {
-    title: z.string({ required_error:'admin.validation.titleRequired'}).max(255,'admin.validation.titleMaxLength').trim().min(1,'admin.validation.titleRequired').max(255,'admin.validation.titleMaxLength'),
-    // slug: z.string({ required_error:'admin.validation.slugRequired'}).trim().min(1,'admin.validation.slugRequired').max(255,'admin.validation.slugMaxLength'),
-    fullName: z.string({ required_error:'admin.validation.fullNameRequired'}).trim().min(1,'admin.validation.fullNameRequired').max(255,'admin.validation.fullNameMaxLength'),
-    phone: z.string({ required_error:'admin.validation.phoneRequired'}).trim().min(1,'admin.validation.phoneRequired').max(20,'admin.validation.phoneMaxLength'),
-    email: z.string().email('admin.validation.emailInvalid').max(255,'admin.validation.emailMaxLength').nullable().optional(),
-    address: z.string({ required_error:'admin.validation.addressRequired'}).trim().min(1,'admin.validation.addressRequired').max(255,'admin.validation.addressMaxLength'),
-    state: z.string().max(100,'admin.validation.stateMaxLength').nullable().optional(),
-    postalCode: z.string({ required_error:'admin.validation.postalCodeRequired'}).trim().min(1,'admin.validation.postalCodeRequired').max(20,'admin.validation.postalCodeMaxLength'),
-    countryCode: z.string().max(2,'admin.validation.countryCodeMaxLength').nullable().optional(),
+    title: z.string({ required_error: 'admin.validation.titleRequired' }).max(255, 'admin.validation.titleMaxLength').trim().min(1, 'admin.validation.titleRequired').max(255, 'admin.validation.titleMaxLength'),
+    fullName: z.string({ required_error: 'admin.validation.fullNameRequired' }).trim().min(1, 'admin.validation.fullNameRequired').max(255, 'admin.validation.fullNameMaxLength'),
+    phone: z.string({ required_error: 'admin.validation.phoneRequired' }).trim().min(1, 'admin.validation.phoneRequired').max(20, 'admin.validation.phoneMaxLength'),
+    email: z.string().email('admin.validation.emailInvalid').max(255, 'admin.validation.emailMaxLength').nullable().optional(),
+    address: z.string({ required_error: 'admin.validation.addressRequired' }).trim().min(1, 'admin.validation.addressRequired').max(255, 'admin.validation.addressMaxLength'),
+    state: z.string().max(100, 'admin.validation.stateMaxLength').nullable().optional(),
+    postalCode: z.string({ required_error: 'admin.validation.postalCodeRequired' }).trim().min(1, 'admin.validation.postalCodeRequired').max(20, 'admin.validation.postalCodeMaxLength'),
+    countryCode: z.string().max(2, 'admin.validation.countryCodeMaxLength').nullable().optional(),
     isDefault: z.boolean().optional(),
-    publish: z.number({ required_error:'admin.validation.statusRequired'}).refine((val) => [0, 1, 2].includes(val), { message:'admin.validation.statusInvalid'}),
+    publish: z.number({ required_error: 'admin.validation.statusRequired' }).refine((val) => [0, 1, 2].includes(val), { message: 'admin.validation.statusInvalid' }),
   };
   const createSchema = z.object({ ...schema });
   const updateSchema = z.object({ ...schema });
@@ -49,12 +48,12 @@ export const useAddressOrder = (
     isLoading.value = true;
     try {
       const response = await useAddressOrderService.store(payload as Partial<IAddressOrder>);
-      toast.success(response?.message ||t('admin.messages.createSuccess'));
+      toast.success(response?.message || t('admin.messages.createSuccess'));
       resetForm();
       return navigateTo(ADDRESSORDERINDEX);
     } catch (error: any) {
       console.error("Thêm mới thất bại:", error);
-      toast.error(error?.response?.data?.message ||t('admin.messages.createFailed'));
+      toast.error(error?.response?.data?.message || t('admin.messages.createFailed'));
       throw error;
     } finally {
       isLoading.value = false;
@@ -79,10 +78,9 @@ export const useAddressOrder = (
       await useAddressOrderService.update(id, payload as Partial<IAddressOrder>);
       toast.success(t('admin.messages.updateSuccess'));
       return navigateTo(ADDRESSORDERINDEX);
-
     } catch (error: any) {
       console.error("Cập nhật thất bại:", error);
-      toast.error(error?.response?.data?.message ||t('admin.messages.updateFailed'));
+      toast.error(error?.response?.data?.message || t('admin.messages.updateFailed'));
     } finally {
       isLoading.value = false;
     }
@@ -95,7 +93,7 @@ export const useAddressOrder = (
       toast.success(t('admin.messages.deleteSuccess'));
       await fetchData();
     } catch (error: any) {
-      toast.error(error?.response?.data?.message ||t('admin.messages.deleteFailed'));
+      toast.error(error?.response?.data?.message || t('admin.messages.deleteFailed'));
     } finally {
       isLoading.value = false;
     }
@@ -110,7 +108,7 @@ export const useAddressOrder = (
       selectedIds.value = [];
       await fetchData();
     } catch (error: any) {
-      toast.error(error?.response?.data?.message ||t('admin.messages.deleteFailed'));
+      toast.error(error?.response?.data?.message || t('admin.messages.deleteFailed'));
     } finally {
       isLoading.value = false;
     }
@@ -136,7 +134,7 @@ export const useAddressOrder = (
       });
       data.value = response;
     } catch (err: any) {
-      toast.error(err?.response?.data?.message ||t('admin.messages.loadDataError'));
+      toast.error(err?.response?.data?.message || t('admin.messages.loadDataError'));
       console.error("Lỗi! Không tải được dữ liệu:", err);
     } finally {
       isLoading.value = false;

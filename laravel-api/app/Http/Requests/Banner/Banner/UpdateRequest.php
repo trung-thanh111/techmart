@@ -36,7 +36,13 @@ class UpdateRequest extends BaseRequest
         $sometime = ($method === 'PATCH') ? 'sometimes' : '';
         return [
             'name' => "required|string|max:255|{$sometime}",
-            'slug' => "nullable|string|max:255|{$sometime}",
+            'slug' => [
+                "{$sometime}",
+                "required",
+                "string",
+                "max:255",
+                Rule::unique("banners", "slug")->ignore($this->route("banner")),
+            ],
             'image' => "nullable|string|max:255|{$sometime}",
             'type' => "required|in:homepage,category,flash_sale,popup,custom|{$sometime}",
             'position' => "required|string|max:100|{$sometime}",

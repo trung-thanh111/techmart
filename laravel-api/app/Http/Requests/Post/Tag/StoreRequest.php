@@ -24,6 +24,7 @@ class StoreRequest extends BaseRequest
     {
         return [
             "name" => "required|string|max:255",
+            "slug" => "required|string|max:255|unique:post_tags,slug",
             "description" => "nullable|string|max:500",
             "color" => ["nullable", "string", "max:7", "regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/"],
             "publish" => "required|integer|in:0,1,2",
