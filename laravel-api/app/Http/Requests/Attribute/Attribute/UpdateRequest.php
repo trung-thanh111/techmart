@@ -39,11 +39,11 @@ class UpdateRequest extends BaseRequest
             "publish" => "{$sometime}|required|integer|in:0,1,2",
             "description" => "{$sometime}|nullable|string|max:255",
             "slug" => [
+                "{$sometime}",
                 "required",
                 "string",
                 "max:255",
                 Rule::unique('attribute_catalogues')->ignore($this->route('attribute_catalogue')),
-                "{$sometime}"
             ],
         ];
     }

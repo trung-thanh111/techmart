@@ -22,9 +22,20 @@ const createFetch = (options: FetchOptions = {}) => {
       if (response.status === 401) {
         navigateTo(TOLOGIN);
       }
+      if (response.status === 422) {
+        throw createError({
+          statusCode: 422,
+          statusMessage: response._data?.message,
+          data: {
+            isValidationError: true,
+            errors: response._data?.errors || {},
+          },
+        });
+      }
       throw createError({
         statusCode: response.status,
         statusMessage: response._data?.message || "API Error",
+        data: response._data,
       });
     },
   });

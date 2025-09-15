@@ -23,6 +23,7 @@ class StoreRequest extends BaseRequest
     {
         return [
             "name" => "required|string|max:255",
+             "slug" => "required|string|max:255|unique:permissions,slug",
             "value" => "required|integer|min:0",
             "module" => "required|string|max:255",
             "title" => "nullable|string|max:255",
@@ -31,7 +32,11 @@ class StoreRequest extends BaseRequest
         ];
     }
 
-    public function prepareForValidation() {}
+    public function prepareForValidation() {
+        $this->merge([
+            'slug' => generate_slug($this->name),
+        ]);
+    }
 
     public function messages()
     {

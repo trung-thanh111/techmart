@@ -23,10 +23,11 @@ class StoreRequest extends BaseRequest
     {
         return [
             "name" => "required|string|max:255",
-            "description" => "nullable|string",
+            "slug" => "required|string|max:255|unique:agencies,slug",
+            "description" => "nullable|string|max:255",
             "logo" => "nullable|max:255",
             "website" => "nullable|string|max:255",
-            "email" => "nullable|string|email",
+            "email" => "nullable|string|email|max:255",
             "phone" => "nullable|string|max:20",
             "address" => "nullable|string|max:255",
             "iframe_map" => "nullable|string",

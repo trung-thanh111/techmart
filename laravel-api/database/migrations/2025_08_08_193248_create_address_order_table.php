@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('address_orders', function (Blueprint $table) {
             $table->id();
             $table->string('title', 50)->nullable();
-            $table->string('slug', 255)->unique();
+            $table->string('slug', 255);
             $table->string('full_name', 100);
             $table->string('phone', 20);
             $table->string('email', 150)->nullable();

@@ -43,6 +43,13 @@ class UpdateRequest extends BaseRequest
             "address" => "nullable|string|max:255|{$sometime}",
             "iframe_map" => "nullable|string|{$sometime}",
             "publish" => "required|integer|in:0,1,2|{$sometime}",
+            "slug" => [
+                "{$sometime}",
+                "required",
+                "string",
+                "max:255",
+                Rule::unique("agencies", "slug")->ignore($this->route("agency")),
+            ],
         ];
     }
 

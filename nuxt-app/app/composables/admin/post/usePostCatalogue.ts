@@ -1,6 +1,7 @@
 // composables/useUserCatalogue.ts
 import z from "zod";
 import { useForm } from "vee-validate";
+import { errorToField } from "~/utils/helpers";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useAppToast } from "~/composables/useAppToast";
 import { postCatalogueService } from "~/services/post/catalogue.service";
@@ -42,7 +43,7 @@ export const usePostCatalogue = (
   type TPostCatalogueCreate = z.infer<typeof createSchema>;
   type TPostCatalogueUpdate = z.infer<typeof updateSchema>;
 
-  const { handleSubmit, values, errors, setValues, resetForm } = useForm<TPostCatalogueCreate | TPostCatalogueUpdate>({
+  const { handleSubmit, values, errors, setValues, resetForm, setFieldError } = useForm<TPostCatalogueCreate | TPostCatalogueUpdate>({
     validationSchema: toTypedSchema(mode === "create" ? createSchema : updateSchema),
   });
 
@@ -55,6 +56,10 @@ export const usePostCatalogue = (
       resetForm();
       return navigateTo(POSTCATALOGUEINDEX);
     } catch (error: any) {
+      if (error?.data?.isValidationError) {
+        errorToField(setFieldError, error?.data?.errors, t, 'name');
+        return;
+      }
       console.error("Store error:", error);
       toast.error(error?.response?.data?.message || t('admin.messages.createFailed'));
       throw error;
@@ -82,6 +87,9 @@ export const usePostCatalogue = (
       toast.success(t('admin.messages.updateSuccess'));
       return navigateTo(POSTCATALOGUEINDEX);
     } catch (error: any) {
+      if (error?.data?.isValidationError) {
+        errorToField(setFieldError, error?.data?.errors, t, 'name'); return;
+      }
       console.error("Store error:", error);
       toast.error(error?.response?.data?.message || t('admin.messages.updateFailed'));
     } finally {
@@ -91,7 +99,7 @@ export const usePostCatalogue = (
 
   const handleToggleIsHot = async (item: any) => {
     try {
-      const res = await postCatalogueService.update(item.id, { isHot: item.isHot });
+      await postCatalogueService.update(item.id, { isHot: item.isHot });
       toast.success(t('admin.messages.updateSuccess'));
     } catch (error: any) {
       toast.error(error?.response?.data?.message || t('admin.messages.updateFailed'));

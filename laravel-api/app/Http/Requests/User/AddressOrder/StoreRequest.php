@@ -24,7 +24,6 @@ class StoreRequest extends BaseRequest
     {
         return [
             "title" => "nullable|string|max:255",
-            "slug" => "required|string|max:255|unique:address_orders,slug",
             "full_name" => "required|string|max:255",
             "phone" => "required|string|max:20",
             "email" => "nullable|email|max:255",

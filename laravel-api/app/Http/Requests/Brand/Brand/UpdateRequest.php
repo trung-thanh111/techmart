@@ -43,11 +43,11 @@ class UpdateRequest extends BaseRequest
             "publish" => "{$sometime}|required|integer|in:0,1,2",
             "user_id" => "{$sometime}|required|integer|exists:users,id",
             "slug" => [
+                "{$sometime}",
                 "required",
                 "string",
                 "max:255",
                 Rule::unique('brands')->ignore($this->route('brand')),
-                "{$sometime}"
             ],
         ];
     }

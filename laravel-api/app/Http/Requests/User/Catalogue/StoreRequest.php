@@ -34,7 +34,7 @@ class StoreRequest extends BaseRequest
     public function prepareForValidation()
     {
         $this->merge([
-            'slug' => Str::slug($this->name),
+            'slug' => generate_slug($this->name),
         ]);
     }
 }

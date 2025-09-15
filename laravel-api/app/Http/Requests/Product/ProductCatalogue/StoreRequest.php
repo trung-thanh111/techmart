@@ -29,6 +29,7 @@ class StoreRequest extends BaseRequest
             'rgt' => 'nullable|integer',
             'level' => 'nullable|integer|min:0',
             'name' => 'required|string|max:255',
+            'slug' => 'nullable|string|max:255|unique:product_catalogues,slug',
             'description' => 'nullable|string',
             'image' => 'nullable|string|max:255',
             'icon' => 'nullable|string|max:255',

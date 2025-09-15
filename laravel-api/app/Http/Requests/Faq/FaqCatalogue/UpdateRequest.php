@@ -40,6 +40,13 @@ class UpdateRequest extends BaseRequest
             "image" => "nullable|string|max:255|{$sometime}",
             "is_featured" => "nullable|boolean|{$sometime}",
             "publish" => "required|integer|in:0,1,2|{$sometime}",
+            "slug" => [
+                "{$sometime}",
+                "required",
+                "string",
+                "max:255",
+                Rule::unique("faq_catalogues", "slug")->ignore($this->route("faq_catalogue")),
+            ],
         ];
     }
 

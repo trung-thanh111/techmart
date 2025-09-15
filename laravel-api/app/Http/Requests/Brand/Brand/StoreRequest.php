@@ -25,6 +25,7 @@ class StoreRequest extends BaseRequest
     {
         return [
             "name" => "required|string|max:255",
+             "slug" => "required|string|max:255|unique:brands,slug",
             "description" => "nullable|string",
             "logo" => "nullable",
             "website" => "nullable|url|max:255",

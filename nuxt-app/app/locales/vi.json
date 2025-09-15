@@ -369,6 +369,7 @@
     },
     "validation": {
       "nameRequired": "Bạn chưa nhập tên cho bản ghi",
+      "recordExists": "Bản ghi đã tồn tại!",
       "emailRequired": "Bạn chưa nhập email cho bản ghi",
       "passwordRequired": "Bạn chưa nhập mật khẩu cho bản ghi",
       "nameMaxLength": "Tên đã vượt quá 255 ký tự",

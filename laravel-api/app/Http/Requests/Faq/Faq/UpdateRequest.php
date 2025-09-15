@@ -41,6 +41,13 @@ class UpdateRequest extends BaseRequest
             "is_featured" => "nullable|boolean|{$sometime}",
             "faq_catalogue_id" => "required|integer|exists:faq_catalogues,id|{$sometime}",
             "publish" => "required|integer|in:0,1,2|{$sometime}",
+            "slug" => [
+                "{$sometime}",
+                "required",
+                "string",
+                "max:255",
+                Rule::unique("faqs", "slug")->ignore($this->route("faq")),
+            ],
         ];
     }
 
