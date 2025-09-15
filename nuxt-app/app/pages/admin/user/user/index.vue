@@ -6,7 +6,7 @@ import AppCheckbox from "~/components/admin/custom/AppCheckbox.vue";
 import Button from "~/components/admin/custom/Button.vue";
 import { useUser } from "~/composables/admin/user/useUser";
 
-const { data, isLoading, selectedIds, selectedItem, search, setPage, handleDeleteMultiple, setSelectedItem, confirmDelete, updateSelectedIds, getTotalItems, getAllItemIds } = useUser();
+const { data, isLoading, selectedIds, selectedItem, userCatalogueOptions, filters, search, setPage, handleDeleteMultiple, setSelectedItem, confirmDelete, updateSelectedIds, getTotalItems, getAllItemIds, loadUserCatalogue } = useUser();
 
 provide("getTotalItems", getTotalItems);
 provide("getAllItemIds", getAllItemIds);
@@ -54,7 +54,11 @@ definePageMeta({
           {{ $t("admin.common.create") }}
         </NuxtLink>
       </div>
-      <FilterBar @search="search" />
+      <FilterBar @search="search">
+        <div class="min-w-[200px]">
+          <Select v-model="filters.user_catalogue_id" :options="userCatalogueOptions" option-label="name" option-value="value" showClear :placeholder="$t('admin.page.user.filterUserGroup')" class="w-full text-sm" />
+        </div>
+      </FilterBar>
       <div class="table-responsive">
         <table class="table table-hover align-middle" style="table-layout: fixed">
           <colgroup>

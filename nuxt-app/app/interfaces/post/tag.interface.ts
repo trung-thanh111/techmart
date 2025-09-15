@@ -1,3 +1,5 @@
+import type { BasePayloadFilter } from "../base.interface";
+
 export interface IPostTag {
   id: number;
   name?: string;
@@ -12,8 +14,5 @@ export interface Option {
   name: string;
   value: string | null;
 }
-export interface PayloadFilter {
-  keyword: string;
-  perpage: number;
-  publish: string | number | null;
-}
+
+export type TagPayloadFilter = BasePayloadFilter;

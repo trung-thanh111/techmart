@@ -1,3 +1,5 @@
+import type { BasePayloadFilter } from "../base.interface";
+
 export interface IAddressOrder {
   id: number;
   title: string,
@@ -20,8 +22,7 @@ export interface Option {
   name: string;
   value: string | number | null;
 }
-export interface PayloadFilter {
-  keyword: string;
-  perpage: number;
-  publish: string | number | null;
+
+export interface AddressOrderPayloadFilter extends BasePayloadFilter {
+  user_id: number | null
 }

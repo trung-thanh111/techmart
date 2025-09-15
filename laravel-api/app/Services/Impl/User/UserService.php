@@ -16,6 +16,7 @@ class UserService extends BaseService implements UserServiceInterface
     private const PIPELINE = 'default';
     protected $repository;
 
+    protected $simpleFilter = ['publish', 'user_catalogue_id'];
     protected $complexFilter = ['id'];
     protected $with = [];
     protected $relationFilter = ['user_catalogues'];

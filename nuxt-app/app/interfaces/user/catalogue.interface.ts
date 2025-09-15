@@ -1,3 +1,5 @@
+import type { BasePayloadFilter } from "../base.interface";
+
 export interface IUserCatalogue {
   id: number;
   name: string;
@@ -10,8 +12,5 @@ export interface Option {
   name: string;
   value: string | number | null;
 }
-export interface PayloadFilter {
-  keyword: string;
-  perpage: number;
-  publish: string | number | null;
-}
+
+export type CataloguePayloadFilter = BasePayloadFilter;

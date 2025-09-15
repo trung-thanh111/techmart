@@ -49,4 +49,9 @@ export const userCatalogueService = {
       method: "DELETE"
     });
   },
+
+  all: async (): Promise<IApiOk<IUserCatalogue>> => {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiOk<IUserCatalogue>>(`${ENDPOINT}/user_catalogues?type=all`);
+  },
 };

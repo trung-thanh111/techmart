@@ -1,3 +1,5 @@
+import type { BasePayloadFilter } from "../base.interface";
+
 export interface IPostCatalogue {
   id: number;
   parentId?: number;
@@ -18,8 +20,5 @@ export interface Option {
   name: string;
   value: string | null;
 }
-export interface PayloadFilter {
-  keyword: string;
-  perpage: number;
-  publish: string | number | null;
-}
+
+export type CataloguePayloadFilter = BasePayloadFilter;

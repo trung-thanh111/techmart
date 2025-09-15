@@ -1,3 +1,5 @@
+import type { BasePayloadFilter } from "../base.interface";
+
 // Kiểu dữ liệu người dùng trả về từ BE
 export interface IUser {
   id: number;
@@ -53,4 +55,8 @@ export interface PayloadFilter {
   keyword: string;
   perpage: number;
   publish: string | number | null;
+}
+
+export interface UserPayloadFilter extends BasePayloadFilter {
+  user_catalogue_id: number | null;
 }
