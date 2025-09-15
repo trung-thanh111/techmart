@@ -3,12 +3,13 @@ import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useAppToast } from "~/composables/useAppToast";
 import { useAddressOrderService } from "~/services/user/address_order.service";
-import type { IApiOk, IPaginate } from "~/interfaces/base.interface";
-import type { IAddressOrder, PayloadFilter } from "~/interfaces/user/address_order.interface";
+import type { BasePayloadFilter, IApiOk, IPaginate } from "~/interfaces/base.interface";
+import type { IAddressOrder, AddressOrderPayloadFilter } from "~/interfaces/user/address_order.interface";
 import { ADDRESSORDERINDEX } from "~/utils/constants";
+import { useUserService } from "~/services/user/user.service";
 
 export const useAddressOrder = (
-  initialFilters?: PayloadFilter,
+  initialFilters?: AddressOrderPayloadFilter,
   mode: "create" | "update" = "create"
 ) => {
   const { t } = useI18n();
@@ -16,11 +17,12 @@ export const useAddressOrder = (
   const toast = useAppToast();
 
   const data = ref<IApiOk<IPaginate<IAddressOrder>>>();
-  const filters = ref<PayloadFilter>(initialFilters ?? { keyword: "", perpage: 10, publish: null });
+  const filters = ref<AddressOrderPayloadFilter>(initialFilters ?? { keyword: "", perpage: 10, publish: null, user_id: null });
   const page = ref(1);
   const isLoading = ref(false);
   const selectedIds = ref<number[]>([]);
   const selectedItem = ref<IAddressOrder | null>(null);
+  const userOptions = ref<{ name: string; value: number }[]>([]);
   const slug = computed(() => slugify(values.title || ""));
 
   const schema = {
@@ -141,8 +143,20 @@ export const useAddressOrder = (
     }
   };
 
-  const search = async (newFilters: PayloadFilter) => {
-    filters.value = newFilters;
+  const loadUser = async () => {
+    try {
+      const response = await useUserService.all();
+      const rows = response?.data ?? [];
+      userOptions.value = (Array.isArray(rows) ? rows : [rows])
+        .map((item: any) => ({ name: item.name, value: Number(item.id) }))
+        .filter((opt: any) => opt.name && !Number.isNaN(opt.value));
+    } catch (error) {
+      console.error("Lỗi! khi tải dữ liệu user all :", error);
+    }
+  };
+
+  const search = async (newFilters: BasePayloadFilter) => {
+    filters.value = { ...filters.value, ...newFilters };
     page.value = 1;
     selectedIds.value = [];
     await fetchData();
@@ -166,7 +180,10 @@ export const useAddressOrder = (
     return data.value?.data?.data?.map((item) => item.id) || [];
   };
 
-  onMounted(fetchData);
+  onMounted(() => {
+    fetchData()
+    loadUser()
+  });
 
   return {
     data,
@@ -179,6 +196,7 @@ export const useAddressOrder = (
     slug,
     selectedIds,
     selectedItem,
+    userOptions,
     setValues,
     show,
     handleStore,
@@ -188,6 +206,7 @@ export const useAddressOrder = (
     setSelectedItem,
     confirmDelete,
     fetchData,
+    loadUser,
     search,
     setPage,
     updateSelectedIds,

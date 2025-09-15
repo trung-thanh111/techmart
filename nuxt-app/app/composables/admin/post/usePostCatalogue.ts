@@ -5,12 +5,12 @@ import { errorToField } from "~/utils/helpers";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useAppToast } from "~/composables/useAppToast";
 import { postCatalogueService } from "~/services/post/catalogue.service";
-import type { IApiOk, IPaginate } from "~/interfaces/base.interface";
-import type { IPostCatalogue, PayloadFilter } from "~/interfaces/post/catalogue.interface";
+import type { BasePayloadFilter, IApiOk, IPaginate } from "~/interfaces/base.interface";
+import type { IPostCatalogue, CataloguePayloadFilter } from "~/interfaces/post/catalogue.interface";
 import { POSTCATALOGUEINDEX, MAX_FILE_SIZE, ACCEPTED_IMAGE_TYPES } from "~/utils/constants";
 
 export const usePostCatalogue = (
-  initialFilters?: PayloadFilter,
+  initialFilters?: CataloguePayloadFilter,
   mode: "create" | "update" = "create"
 ) => {
   const { t } = useI18n();
@@ -18,7 +18,7 @@ export const usePostCatalogue = (
   const toast = useAppToast();
 
   const data = ref<IApiOk<IPaginate<IPostCatalogue>>>();
-  const filters = ref<PayloadFilter>(initialFilters ?? { keyword: "", perpage: 10, publish: null });
+  const filters = ref<CataloguePayloadFilter>(initialFilters ?? { keyword: "", perpage: 10, publish: null });
   const page = ref(1);
   const isLoading = ref(false);
   const selectedIds = ref<number[]>([]);
@@ -174,8 +174,8 @@ export const usePostCatalogue = (
     }
   };
 
-  const search = async (newFilters: PayloadFilter) => {
-    filters.value = newFilters;
+  const search = async (newFilters: BasePayloadFilter) => {
+    filters.value = { ...filters.value, ...newFilters };
     page.value = 1;
     selectedIds.value = [];
     await fetchData();

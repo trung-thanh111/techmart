@@ -5,12 +5,12 @@ import { errorToField } from "~/utils/helpers";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useAppToast } from "~/composables/useAppToast";
 import { postTagService } from "~/services/post/tag.service";
-import type { IApiOk, IPaginate } from "~/interfaces/base.interface";
-import type { IPostTag, PayloadFilter } from "~/interfaces/post/tag.interface";
+import type { BasePayloadFilter, IApiOk, IPaginate } from "~/interfaces/base.interface";
+import type { IPostTag, TagPayloadFilter } from "~/interfaces/post/tag.interface";
 import { POSTTAGINDEX } from "~/utils/constants";
 
 export const usePostTag = (
-  initialFilters?: PayloadFilter,
+  initialFilters?: TagPayloadFilter,
   mode: "create" | "update" = "create"
 ) => {
   const { t } = useI18n();
@@ -18,7 +18,7 @@ export const usePostTag = (
   const toast = useAppToast();
 
   const data = ref<IApiOk<IPaginate<IPostTag>>>();
-  const filters = ref<PayloadFilter>(initialFilters ?? { keyword: "", perpage: 10, publish: null });
+  const filters = ref<TagPayloadFilter>(initialFilters ?? { keyword: "", perpage: 10, publish: null });
   const page = ref(1);
   const isLoading = ref(false);
   const selectedIds = ref<number[]>([]);
@@ -155,8 +155,8 @@ export const usePostTag = (
     }
   };
 
-  const search = async (newFilters: PayloadFilter) => {
-    filters.value = newFilters;
+  const search = async (newFilters: BasePayloadFilter) => {
+    filters.value = { ...filters.value, ...newFilters };
     page.value = 1;
     selectedIds.value = [];
     await fetchData();

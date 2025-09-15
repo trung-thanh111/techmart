@@ -1,7 +1,6 @@
 import type { IApiOk, IApiMessage, IPaginate } from "~/interfaces/base.interface";
 import type { IUser } from "~/interfaces/user/user.interface";
 import { useApi } from "~/composables/useApi";
-import type { IUserCatalogue } from "~/interfaces/user/catalogue.interface";
 import { formData } from "~/utils/formData";
 
 const ENDPOINT = "/api/v1";
@@ -53,9 +52,9 @@ export const useUserService = {
     });
   },
 
-  getAllUserCatalogues: async (): Promise<IApiOk<IUserCatalogue>> => {
+  all: async (): Promise<IApiOk<IUser>> => {
     const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IUserCatalogue>>(`${ENDPOINT}/user_catalogues?type=all`);
+    return await privateFetch<IApiOk<IUser>>(`${ENDPOINT}/users?type=all`);
   },
 
 };

@@ -6,7 +6,7 @@ import AppCheckbox from "~/components/admin/custom/AppCheckbox.vue";
 import Button from "~/components/admin/custom/Button.vue";
 import { useAddressOrder } from "~/composables/admin/user/useAddressOrder";
 
-const { data, isLoading, selectedIds, selectedItem, search, setPage, handleDeleteMultiple, setSelectedItem, confirmDelete, updateSelectedIds, getTotalItems, getAllItemIds } = useAddressOrder();
+const { data, isLoading, selectedIds, selectedItem, userOptions, filters, search, setPage, handleDeleteMultiple, setSelectedItem, confirmDelete, updateSelectedIds, getTotalItems, getAllItemIds } = useAddressOrder();
 
 provide("getTotalItems", getTotalItems);
 provide("getAllItemIds", getAllItemIds);
@@ -54,7 +54,11 @@ definePageMeta({
           {{ $t("admin.common.create") }}
         </NuxtLink>
       </div>
-      <FilterBar @search="search" />
+      <FilterBar @search="search">
+        <div class="min-w-[200px]">
+          <Select v-model="filters.user_id" :options="userOptions" option-label="name" option-value="value" showClear :placeholder="$t('admin.page.addressOrder.filterUser')" class="w-full text-sm" />
+        </div>
+      </FilterBar>
       <div class="table-responsive">
         <table class="table table-hover align-middle" style="table-layout: fixed">
           <colgroup>

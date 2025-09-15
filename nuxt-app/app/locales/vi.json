@@ -278,6 +278,7 @@
         "title": "Quản lý khách hàng",
         "breadcrumb": "Quản lý khách hàng",
         "groupInfo": "Thông tin khách hàng",
+        "filterUserGroup": "Nhóm khách hàng",
         "form": {
           "name": "Họ và tên",
           "namePlaceholder": "Nhập họ và tên",
@@ -310,6 +311,7 @@
         "title": "Địa chỉ nhận hàng",
         "breadcrumb": "Danh sách địa chỉ",
         "groupInfo": "Địa chỉ nhận hàng",
+        "filterUser": "Khách hàng",
         "form": {
           "titleNote": "Thông tin",
           "note": "Lưu ý: Điền đầy đủ và chính xác thông tin giúp hệ thống có thể dễ dàng quản lý hơn.",

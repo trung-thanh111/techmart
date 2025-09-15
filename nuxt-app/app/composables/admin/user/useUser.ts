@@ -5,17 +5,19 @@ import { toTypedSchema } from "@vee-validate/zod";
 import { useAppToast } from "~/composables/useAppToast";
 import { useUserService } from "~/services/user/user.service";
 import type { IApiOk, IPaginate } from "~/interfaces/base.interface";
-import type { IUser, PayloadFilter } from "~/interfaces/user/user.interface";
+import type { IUser, UserPayloadFilter } from "~/interfaces/user/user.interface";
+import type { BasePayloadFilter } from "~/interfaces/base.interface";
 import { USERINDEX, MAX_FILE_SIZE, ACCEPTED_IMAGE_TYPES } from "~/utils/constants";
+import { userCatalogueService } from "~/services/user/catalogue.service";
 
 export const useUser = (
-  initialFilters?: PayloadFilter,
+  initialFilters?: UserPayloadFilter,
   mode: "create" | "update" = "create"
 ) => {
   const { t } = useI18n();
   const toast = useAppToast();
   const data = ref<IApiOk<IPaginate<IUser>>>();
-  const filters = ref<PayloadFilter>(initialFilters ?? { keyword: "", perpage: 10, publish: null });
+  const filters = ref<UserPayloadFilter>(initialFilters ?? { keyword: "", perpage: 10, publish: null, user_catalogue_id: null });
   const page = ref(1);
   const isLoading = ref(false);
   const selectedIds = ref<number[]>([]);
@@ -154,7 +156,7 @@ export const useUser = (
 
   const loadUserCatalogue = async () => {
     try {
-      const response = await useUserService.getAllUserCatalogues();
+      const response = await userCatalogueService.all();
       const rows = response?.data ?? [];
       userCatalogueOptions.value = (Array.isArray(rows) ? rows : [rows])
         .map((item: any) => ({ name: item.name, value: Number(item.id) }))
@@ -164,8 +166,8 @@ export const useUser = (
     }
   };
 
-  const search = async (newFilters: PayloadFilter) => {
-    filters.value = newFilters;
+  const search = async (newFilters: BasePayloadFilter) => {
+    filters.value = { ...filters.value, ...newFilters };
     page.value = 1;
     selectedIds.value = [];
     await fetchData();

@@ -6,6 +6,12 @@ interface BaseInterface {
     timestamp: string,
 }
 
+export interface BasePayloadFilter {
+    keyword: string;
+    perpage: number;
+    publish: number | null;
+}
+
 // trường hợp response thành công -> có data trả về + base interface
 export interface IApiOk<T> extends BaseInterface {
     data: T
@@ -39,7 +45,7 @@ export type TLink = {
 }
 
 //interface phân trang
-export interface IPaginate<T>{
+export interface IPaginate<T> {
     current_page: number,
     data: T[],
     first_page_url: string,
