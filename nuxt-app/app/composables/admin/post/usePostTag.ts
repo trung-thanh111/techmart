@@ -1,4 +1,3 @@
-// composables/useUserTag.ts
 import z from "zod";
 import { useForm } from "vee-validate";
 import { errorToField } from "~/utils/helpers";
@@ -9,10 +8,7 @@ import type { BasePayloadFilter, IApiOk, IPaginate } from "~/interfaces/base.int
 import type { IPostTag, TagPayloadFilter } from "~/interfaces/post/tag.interface";
 import { POSTTAGINDEX } from "~/utils/constants";
 
-export const usePostTag = (
-  initialFilters?: TagPayloadFilter,
-  mode: "create" | "update" = "create"
-) => {
+export const usePostTag = (initialFilters?: TagPayloadFilter, mode: "create" | "update" = "create") => {
   const { t } = useI18n();
   const config = useRuntimeConfig();
   const toast = useAppToast();
@@ -26,10 +22,10 @@ export const usePostTag = (
   const slug = computed(() => slugify(values.name || ""));
 
   const schema = {
-    name: z.string({ required_error: 'admin.validation.nameRequired' }).trim().min(1, 'admin.validation.nameRequired').max(255, 'admin.validation.nameMaxLength'),
-    description: z.string().max(255, 'admin.validation.descriptionMaxLength').nullable().optional(),
-    color: z.string().max(7, 'admin.validation.colorMaxLength').nullable().optional(),
-    publish: z.number({ required_error: 'admin.validation.statusRequired' }).refine((val) => [0, 1, 2].includes(val), { message: 'admin.validation.statusInvalid' }),
+    name: z.string({ required_error: "admin.validation.nameRequired" }).trim().min(1, "admin.validation.nameRequired").max(255, "admin.validation.nameMaxLength"),
+    description: z.string().max(255, "admin.validation.descriptionMaxLength").nullable().optional(),
+    color: z.string().max(7, "admin.validation.colorMaxLength").nullable().optional(),
+    publish: z.number({ required_error: "admin.validation.statusRequired" }).refine((val) => [0, 1, 2].includes(val), { message: "admin.validation.statusInvalid" }),
     isHot: z.boolean().default(false).optional(),
   };
   const createSchema = z.object({ ...schema });
@@ -46,15 +42,16 @@ export const usePostTag = (
     isLoading.value = true;
     try {
       const response = await postTagService.store(payload as Partial<IPostTag>);
-      toast.success(response?.message || t('admin.messages.createSuccess'));
+      toast.success(response?.message || t("admin.messages.createSuccess"));
       resetForm();
       return navigateTo(POSTTAGINDEX);
     } catch (error: any) {
       if (error?.data?.isValidationError) {
-        errorToField(setFieldError, error?.data?.errors, t, 'name'); return;
+        errorToField(setFieldError, error?.data?.errors, t, "name");
+        return;
       }
       console.error("Store error:", error);
-      toast.error(error?.response?.data?.message || t('admin.messages.createFailed'));
+      toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
       throw error;
     } finally {
       isLoading.value = false;
@@ -67,7 +64,7 @@ export const usePostTag = (
       return response;
     } catch (error: any) {
       console.error("Lỗi! Không tìm thấy bản ghi: ", error);
-      toast.error(error?.response?.data?.message || t('admin.messages.createFailed'));
+      toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
       throw error;
     }
   };
@@ -77,14 +74,15 @@ export const usePostTag = (
     try {
       const id = Number(useRoute().params.id);
       await postTagService.update(id, payload as Partial<IPostTag>);
-      toast.success(t('admin.messages.updateSuccess'));
+      toast.success(t("admin.messages.updateSuccess"));
       return navigateTo(POSTTAGINDEX);
     } catch (error: any) {
       if (error?.data?.isValidationError) {
-        errorToField(setFieldError, error?.data?.errors, t, 'name'); return;
+        errorToField(setFieldError, error?.data?.errors, t, "name");
+        return;
       }
       console.error("Update error:", error);
-      toast.error(error?.response?.data?.message || t('admin.messages.updateFailed'));
+      toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
     } finally {
       isLoading.value = false;
     }
@@ -94,10 +92,10 @@ export const usePostTag = (
     isLoading.value = true;
     try {
       await postTagService.delete(id);
-      toast.success(t('admin.messages.deleteSuccess'));
+      toast.success(t("admin.messages.deleteSuccess"));
       await fetchData();
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || t('admin.messages.deleteFailed'));
+      toast.error(error?.response?.data?.message || t("admin.messages.deleteFailed"));
     } finally {
       isLoading.value = false;
     }
@@ -108,11 +106,11 @@ export const usePostTag = (
     isLoading.value = true;
     try {
       await postTagService.deleteMultiple(selectedIds.value);
-      toast.success(t('admin.messages.deleteMultipleSuccess', { count: selectedIds.value.length }));
+      toast.success(t("admin.messages.deleteMultipleSuccess", { count: selectedIds.value.length }));
       selectedIds.value = [];
       await fetchData();
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || t('admin.messages.deleteFailed'));
+      toast.error(error?.response?.data?.message || t("admin.messages.deleteFailed"));
     } finally {
       isLoading.value = false;
     }
@@ -121,9 +119,9 @@ export const usePostTag = (
   const handleToggleIsHot = async (item: any) => {
     try {
       const res = await postTagService.update(item.id, { isHot: item.isHot });
-      toast.success(t('admin.messages.updateSuccess'));
+      toast.success(t("admin.messages.updateSuccess"));
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || t('admin.messages.updateFailed'));
+      toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
       item.isHot = !item.isHot;
     }
   };
@@ -148,7 +146,7 @@ export const usePostTag = (
       });
       data.value = response;
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || t('admin.messages.loadDataError'));
+      toast.error(err?.response?.data?.message || t("admin.messages.loadDataError"));
       console.error("Fetch error:", err);
     } finally {
       isLoading.value = false;

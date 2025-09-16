@@ -22,9 +22,7 @@ export const postTagService = {
 
   show: async (id: number | string): Promise<IApiOk<IPostTag>> => {
     const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPostTag>>(
-      `${ENDPOINT}/post_tags/${id}`
-    );
+    return await privateFetch<IApiOk<IPostTag>>(`${ENDPOINT}/post_tags/${id}`);
   },
 
   update: async (id: number, payload: Partial<IPostTag>): Promise<IApiOk<IPostTag>> => {
@@ -39,7 +37,7 @@ export const postTagService = {
   delete: async (id: number): Promise<IApiMessage> => {
     const { privateFetch } = useApi();
     return await privateFetch<IApiMessage>(`${ENDPOINT}/post_tags/${id}`, {
-      method: "DELETE"
+      method: "DELETE",
     });
   },
 
@@ -47,7 +45,12 @@ export const postTagService = {
     const { privateFetch } = useApi();
     return await privateFetch<IApiMessage>(`${ENDPOINT}/post_tags/bulkDelete`, {
       body: { ids },
-      method: "DELETE"
+      method: "DELETE",
     });
+  },
+
+  all: async (): Promise<IApiOk<IPostTag>> => {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiOk<IPostTag>>(`${ENDPOINT}/post_tags?type=all`);
   },
 };

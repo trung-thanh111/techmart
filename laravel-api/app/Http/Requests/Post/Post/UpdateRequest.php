@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Post\Post;
 
+use App\Enums\Common;
 use App\Http\Requests\BaseRequest;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -37,21 +38,17 @@ class UpdateRequest extends BaseRequest
             "description" => "{$sometime}|nullable|string|max:500",
             "content" => "{$sometime}|nullable|string",
             "image" => "{$sometime}|nullable|string|max:255",
-            "icon" => "{$sometime}|nullable|string|max:255",
-            "album" => "{$sometime}|nullable|array",
-            "album.*.path" => "{$sometime}|nullable|string|max:255",
-            "extra_album" => "{$sometime}|nullable|array",
-            "extra_album.*.path" => "{$sometime}|nullable|string|max:255",
             "table_of_content" => "{$sometime}|nullable|boolean",
+            "is_hot" => "{$sometime}|nullable|boolean",
             "order" => "{$sometime}|nullable|integer|min:0",
+            "view_count" => "{$sometime}|nullable|integer|min:0",
             "post_catalogue_id" => "{$sometime}|nullable|integer|min:0",
+            "tag_id" => "{$sometime}|nullable|integer|min:0",
             "publish" => "{$sometime}|nullable|integer|in:0,1,2",
             "user_id" => "{$sometime}|nullable|integer|exists:users,id",
             "meta_title" => "{$sometime}|nullable|string|max:255",
             "meta_keyword" => "{$sometime}|nullable|string|max:255",
             "meta_description" => "{$sometime}|nullable|string|max:500",
-            "scheme" => "{$sometime}|nullable|string",
-            "iframe" => "{$sometime}|nullable|string",
             "published_at" => "{$sometime}|nullable|date",
             "slug" => [
                 "{$sometime}",
@@ -62,8 +59,10 @@ class UpdateRequest extends BaseRequest
         ];
     }
 
-    public function prepareForValidation() {
+    public function prepareForValidation()
+    {
         $this->merge([
+            'user_id' => auth(Common::API)->user()->id,
             ...($this->has('name') && !$this->has('slug') ? ['slug' => Str::slug($this->name)] : [])
         ]);
     }

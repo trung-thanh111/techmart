@@ -22,8 +22,11 @@ return new class extends Migration
             $table->text('album')->nullable();
             $table->text('extra_album')->nullable();
             $table->boolean('table_of_content')->default(false);
+            $table->boolean('is_hot')->default(false);
             $table->integer('order')->nullable();
             $table->integer('post_catalogue_id')->default(0);
+            $table->integer('tag_id')->default(0);
+            $table->integer('view_count')->default(0);
             $table->tinyInteger('publish')->default(2);
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
             $table->string('meta_title', 255)->nullable();

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\Impl\Post;
 
 use Illuminate\Http\Request;
@@ -6,30 +7,37 @@ use App\Services\Impl\BaseService;
 use Illuminate\Database\Eloquent\Model;
 use App\Repositories\Post\PostRepository;
 use App\Http\Resources\Post\PostResource;
+use App\Services\Impl\ImageService;
 use App\Services\Interfaces\Post\PostServiceInterface;
 
-class PostService extends BaseService implements PostServiceInterface {
+class PostService extends BaseService implements PostServiceInterface
+{
 
-protected $repository;
+    protected $repository;
+    private const PIPELINE = 'default';
 
-protected $complexFilter = ['id'];
+    protected $simpleFilter = ['publish', 'tag_id', 'post_catalogue_id'];
+    protected $complexFilter = ['id'];
 
-protected $with = [];
-protected $relationFilter = [];
+    protected $with = [];
+    protected $relationFilter = [];
 
-protected $cacheKeyPrefix = 'posts';
-protected $cacheTags = ['posts:collection'];
+    protected $cacheKeyPrefix = 'posts';
+    protected $cacheTags = ['posts:collection'];
 
-protected $useUpload = true;
+    protected $imageService;
 
 
     public function __construct(
-        PostRepository $repository
+        PostRepository $repository,
+        ImageService $imageService
     ) {
         $this->repository = $repository;
+        $this->imageService = $imageService;
     }
 
-    protected function getRepository(){
+    protected function getRepository()
+    {
         return $this->repository;
     }
 
@@ -37,19 +45,22 @@ protected $useUpload = true;
      * nhiệm vụ bắt data từ client post lên (dạng thô, chuỗi, file, ....)
      *
      */
-    protected function prepareModelData(Request $request): self {
+    protected function prepareModelData(Request $request): self
+    {
 
-        return $this->initializeBasicModelData($request);
+        return $this->initializeBasicModelData($request)
+            ->uploadImage($request, 'image', self::PIPELINE, 'image');
     }
 
-    protected function initializeBasicModelData(Request $request): self {
+    protected function initializeBasicModelData(Request $request): self
+    {
         $fillable = $this->repository->getFillable();
         $this->modelData = $request->only($fillable);
         return $this;
     }
 
-    protected function getResource(Model $resource){
+    protected function getResource(Model $resource)
+    {
         return new PostResource($resource);
     }
-
 }

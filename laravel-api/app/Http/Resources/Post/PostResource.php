@@ -21,25 +21,22 @@ class PostResource extends JsonResource
             'description' => $this->description,
             'content' => $this->content,
             'image' => $this->image,
-            'icon' => $this->icon,
-            'album' => (is_array($this->album) && count($this->album)) ? array_map(function ($item) {
-                return [
-                    'path' => $item['path'],
-                    'url' => asset("storage/{$item['path']}")
-                ];
-            }, $this->album) : [],
-            'tableOfContent' => $this->table_of_content,
+            'tableOfContent' => (bool) $this->table_of_content,
+            'isHot' => (bool) $this->is_hot,
             'order' => (int) $this->order,
             'publish' => (int) $this->publish,
-            'creator' => $this->whenLoaded('user', [
-                'id' => $this->user->id,
-                'name' => $this->user->name,
+            'viewCount' => (int) $this->view_count,
+            'postCatalogueId' => (int) $this->post_catalogue_id,
+            'tagId' => (int) $this->tag_id,
+            'creator' => $this->whenLoaded('users', [
+                'id' => $this->users->id,
+                'name' => $this->users->name,
             ]),
+            "postCatalogues" => new PostCatalogueResource($this->whenLoaded('post_catalogues')),
+            "tags" => new TagResource($this->whenLoaded('tags')),
             'metaTitle' => $this->meta_title,
             'metaKeyword' => $this->meta_keyword,
             'metaDescription' => $this->meta_description,
-            'scheme' => $this->scheme,
-            'iframe' => $this->iframe,
             'publishedAt' => $this->published_at,
             'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
             'updatedAt' => $this->updated_at?->format('Y-m-d H:i:s'),

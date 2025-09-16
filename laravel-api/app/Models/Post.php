@@ -19,24 +19,24 @@ class Post extends Model
         'description',
         'content',
         'image',
-        'icon',
-        'album',
-        'extra_album',
         'table_of_content',
         'order',
+        'is_hot',
+        'view_count',
         'post_catalogue_id',
+        'tag_id',
         'publish',
         'user_id',
         'meta_title',
         'meta_keyword',
         'meta_description',
-        'scheme',
-        'iframe',
         'published_at',
     ];
 
     protected $casts = [
-        'album' => 'json'
+        'album' => 'json',
+        'is_hot' => 'boolean',
+        'table_of_content' => 'boolean',
     ];
 
     /**
@@ -46,7 +46,8 @@ class Post extends Model
      */
     public $relationable = [
         'post_catalogues',
-        'posts'
+        'posts',
+        'post_tags'
     ];
 
     public function post_catalogues(): BelongsToMany
