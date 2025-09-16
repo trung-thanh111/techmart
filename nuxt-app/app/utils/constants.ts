@@ -26,5 +26,9 @@ export const POSTTAGINDEX = "/admin/post/tag";
 export const POSTTAGCREATE = "/admin/post/tag/create";
 export const POSTTAGUPDATE = "/admin/post/tag/update";
 
+export const POSTINDEX = "/admin/post/post";
+export const POSTCREATE = "/admin/post/post/create";
+export const POSTUPDATE = "/admin/post/post/update";
+
 export const MAX_FILE_SIZE = 5 * 1024 * 1024;
 export const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/jpg"];

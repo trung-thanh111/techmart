@@ -15,9 +15,8 @@ protected $repository;
 
 protected $fieldSearchs = ['title', 'full_name', 'phone', 'email', 'address'];
 
-protected $complexFilter = ['id'];
 protected $simpleFilter = ['publish', 'user_id'];
-
+protected $complexFilter = ['id'];
 
 protected $with = ['users'];
 protected $relationFilter = [];
