@@ -4,8 +4,6 @@ namespace App\Http\Requests\Post\Post;
 
 use App\Enums\Common;
 use App\Http\Requests\BaseRequest;
-use Illuminate\Support\Str;
-use Nette\Utils\Random;
 
 class StoreRequest extends BaseRequest
 {
@@ -52,8 +50,32 @@ class StoreRequest extends BaseRequest
         $this->merge([
             'slug' => generate_slug($this->name),
             'user_id' => auth(Common::API)->user()->id,
-            'published_at' => $this->publish === 2 ? now() : null,
+            'post_catalogue_id' => $this->getFirstArrayValue('postCatalogues'),
+            'tag_id' => $this->getFirstArrayValue('postTags'),
+            'published_at' => $this->published_at ?: ($this->publish === 2 ? now() : null),
         ]);
+    }
+
+    /**
+     * Lấy giá trị đầu tiên từ mảng một cách an toàn
+     * 
+     * @param string $field - Tên field chứa mảng
+     * @return mixed|null - Giá trị đầu tiên hoặc null
+     */
+    private function getFirstArrayValue(string $field)
+    {
+        if (!$this->has($field)) {
+            return null;
+        }
+        $value = $this->input($field);
+        if (!is_array($value) || empty($value)) {
+            return null;
+        }
+        $firstValue = reset($value);
+        if (is_numeric($firstValue) && $firstValue > 0) {
+            return (int) $firstValue;
+        }
+        return null;
     }
 
     public function messages()

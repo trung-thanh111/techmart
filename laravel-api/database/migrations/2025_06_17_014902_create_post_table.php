@@ -24,8 +24,8 @@ return new class extends Migration
             $table->boolean('table_of_content')->default(false);
             $table->boolean('is_hot')->default(false);
             $table->integer('order')->nullable();
-            $table->integer('post_catalogue_id')->default(0);
-            $table->integer('tag_id')->default(0);
+            $table->integer('post_catalogue_id')->default(0)->nullable();
+            $table->integer('tag_id')->default(0)->nullable();
             $table->integer('view_count')->default(0);
             $table->tinyInteger('publish')->default(2);
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');

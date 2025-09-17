@@ -21,7 +21,10 @@ class ProductResource extends JsonResource
             'slug' => $this->slug,
             'description' => $this->description,
             'content' => $this->content,
-            'image' => $this->image,
+            'image' => [
+                'path' => $this->image ?? null,
+                'url' => asset("/storage/{$this->image}") ?? null,
+            ],
             'price' => price_to_string($this->price),
             'made_in' => $this->made_in,
             'icon' => $this->icon,

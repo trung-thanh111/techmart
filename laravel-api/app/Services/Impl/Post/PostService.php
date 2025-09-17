@@ -19,8 +19,8 @@ class PostService extends BaseService implements PostServiceInterface
     protected $simpleFilter = ['publish', 'tag_id', 'post_catalogue_id'];
     protected $complexFilter = ['id'];
 
-    protected $with = [];
-    protected $relationFilter = [];
+    protected $with = ['post_catalogues', 'post_tags', 'relateds'];
+    protected $relationFilter = ['post_catalogues', 'post_tags'];
 
     protected $cacheKeyPrefix = 'posts';
     protected $cacheTags = ['posts:collection'];
@@ -47,7 +47,6 @@ class PostService extends BaseService implements PostServiceInterface
      */
     protected function prepareModelData(Request $request): self
     {
-
         return $this->initializeBasicModelData($request)
             ->uploadImage($request, 'image', self::PIPELINE, 'image');
     }

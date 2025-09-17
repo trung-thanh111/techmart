@@ -15,7 +15,7 @@ export interface IPost {
   postCatalogueId?: number;
   postCatalogues?: number[];
   tags?: number[];
-  posts?: number[];
+  relateds?: number[];
   publish?: number;
   metaTitle?: string;
   metaKeyword?: string;

@@ -17,7 +17,10 @@ class BannerResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'image' => $this->image,
+            'image' => [
+                'path' => $this->image ?? null,
+                'url' => asset("/storage/{$this->image}") ?? null,
+            ],
             'type' => $this->type,
             'position' => (int) $this->position,
             'device' => $this->device,

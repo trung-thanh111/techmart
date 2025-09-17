@@ -4,6 +4,8 @@ namespace App\Http\Resources\Post;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\Post\PostCatalogueResource;
+use App\Http\Resources\Post\TagResource;
 
 class PostResource extends JsonResource
 {
@@ -20,7 +22,10 @@ class PostResource extends JsonResource
             'slug' => $this->slug,
             'description' => $this->description,
             'content' => $this->content,
-            'image' => $this->image,
+            'image' => [
+                'path' => $this->image ?? null,
+                'url' => asset("/storage/{$this->image}") ?? null,
+            ],
             'tableOfContent' => (bool) $this->table_of_content,
             'isHot' => (bool) $this->is_hot,
             'order' => (int) $this->order,
@@ -32,8 +37,11 @@ class PostResource extends JsonResource
                 'id' => $this->users->id,
                 'name' => $this->users->name,
             ]),
-            "postCatalogues" => new PostCatalogueResource($this->whenLoaded('post_catalogues')),
-            "tags" => new TagResource($this->whenLoaded('tags')),
+            'postCatalogues' => PostCatalogueResource::collection($this->whenLoaded('post_catalogues')),
+            'tags' => TagResource::collection($this->whenLoaded('post_tags')),
+            'relateds' => $this->whenLoaded('relateds', function () {
+                return PostResource::collection($this->relateds);
+            }),
             'metaTitle' => $this->meta_title,
             'metaKeyword' => $this->meta_keyword,
             'metaDescription' => $this->meta_description,

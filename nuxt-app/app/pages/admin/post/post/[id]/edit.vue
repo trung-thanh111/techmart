@@ -141,7 +141,7 @@
         </div>
         <div class="card-body p-4">
           <div class="text-center">
-            <SingleImageUpload :initial-url="null" :note="$t('admin.common.noteUploadImage')" @selected="(f)=> setValues({ ...(values as any), image: f } as any)" />
+            <SingleImageUpload :initial-url="currentImageUrl" :note="$t('admin.common.noteUploadImage')" @selected="(f)=> setValues({ ...(values as any), image: f } as any)" />
           </div>
         </div>
       </div>
@@ -156,7 +156,7 @@
               <span class="text-danger">*</span>
             </label>
             <Field name="postCatalogues" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <MultiSelect :modelValue="field.value" @update:modelValue="field.onChange" :options="postCatalogueOptions" optionLabel="name" optionValue="value" filter display="chip" :placeholder="$t('admin.page.post.form.postCataloguePlaceholder')" class="w-100" />
+              <MultiSelect :modelValue="field.value" @update:modelValue="field.onChange" :options="postCatalogueOptions" optionLabel="name" optionValue="id" filter display="chip" :placeholder="$t('admin.page.post.form.postCataloguePlaceholder')" class="w-100" />
               <small v-if="errorMessage && meta.touched" class="text-danger">
                 {{ $t(errorMessage) }}
               </small>
@@ -167,7 +167,7 @@
               {{ $t("admin.page.post.form.tag") }}
             </label>
             <Field name="postTags" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <MultiSelect :modelValue="field.value" @update:modelValue="field.onChange" :options="tagOptions" optionLabel="name" optionValue="value" filter display="chip" :placeholder="$t('admin.page.post.form.tagPlaceholder')" class="rounded py-[1px] w-100" />
+              <MultiSelect :modelValue="field.value" @update:modelValue="field.onChange" :options="tagOptions" optionLabel="name" optionValue="id" filter display="chip" :placeholder="$t('admin.page.post.form.tagPlaceholder')" class="rounded py-[1px] w-100" />
               <small v-if="errorMessage && meta.touched" class="text-danger">
                 {{ $t(errorMessage) }}
               </small>
@@ -177,8 +177,8 @@
             <label class="form-label">
               {{ $t("admin.page.post.form.related") }}
             </label>
-            <Field name="posts" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <MultiSelect :modelValue="field.value" @update:modelValue="field.onChange" :options="postOptions" optionLabel="name" optionValue="value" filter display="chip" :placeholder="$t('admin.page.post.form.relatedPlaceholder')" class="rounded py-[1px] w-100" size="small" />
+            <Field name="relateds" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
+              <MultiSelect :modelValue="field.value" @update:modelValue="field.onChange" :options="postOptions" optionLabel="name" optionValue="id" filter display="chip" :placeholder="$t('admin.page.post.form.relatedPlaceholder')" class="rounded py-[1px] w-100" size="small" />
               <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
             </Field>
           </div>
@@ -190,32 +190,30 @@
         </div>
         <div class="card-body">
           <div class="mb-3">
-                <label class="form-label" for="publishedAt">
-                  {{ $t("admin.page.post.form.publishedAt") }}
-                </label>
-                <Field name="publishedAt" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-                  <input v-bind="field" id="publishedAt" type="date" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
-                  <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
-                </Field>
-              </div>
+            <label class="form-label" for="publishedAt">
+              {{ $t("admin.page.post.form.publishedAt") }}
+            </label>
+            <Field name="publishedAt" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
+              <input v-bind="field" id="publishedAt" type="datetime-local" class="form-control rounded py-[1px] w-100" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
+              <small v-if="errorMessage && meta.touched" class="text-danger">
+                {{ $t(errorMessage) }}
+              </small>
+            </Field>
+          </div>
           <div class="mb-3">
             <div class="form-check d-flex align-items-center gap-2 ps-0">
               <Field name="isHot" v-slot="{ field }">
-                <AppCheckbox v-model="field.value" inputId="is_hot" class="scale-125" />
+                <AppCheckbox :modelValue="field.value" @update:modelValue="field.onChange" inputId="is_hot" class="scale-125" />
               </Field>
-              <label for="is_hot" class="mb-0">
-                {{ $t("admin.page.post.form.isHot") }}
-              </label>
+              <label for="is_hot" class="mb-0">{{ $t("admin.page.post.form.isHot") }}</label>
             </div>
           </div>
           <div class="mb-3">
             <div class="form-check d-flex align-items-center gap-2 ps-0">
               <Field name="tableOfContent" v-slot="{ field }">
-                <AppCheckbox v-model="field.value" inputId="table_of_content" class="scale-125" />
+                <AppCheckbox :modelValue="field.value" @update:modelValue="field.onChange" inputId="table_of_content" class="scale-125" />
               </Field>
-              <label for="table_of_content" class="mb-0">
-                {{ $t("admin.page.post.form.tableOfContent") }}
-              </label>
+              <label for="table_of_content" class="mb-0">{{ $t("admin.page.post.form.tableOfContent") }}</label>
             </div>
           </div>
           <div class="mb-3">
@@ -246,23 +244,23 @@ import AppCheckbox from "~/components/admin/custom/AppCheckbox.vue";
 import SeoPreview from "~/components/admin/custom/SeoPreview.vue";
 
 const { isLoading, tagOptions, postCatalogueOptions, postOptions, config, slug, show, handleUpdate, setValues, values } = usePost(undefined, "update");
-const currentImageUrl = ref<string | null>(null);
 const id = Number(useRoute().params.id);
 const { data } = await show(id);
+const currentImageUrl = ref<string | null>(null);
 currentImageUrl.value = data?.image?.path ? data?.image?.url || null : null;
 
 setValues({
   name: data.name,
   description: data.description,
   content: data.content,
-  image: data.image,
   tableOfContent: data.tableOfContent,
   order: data.order,
   isHot: data.isHot,
   viewCount: data.viewCount,
-  postCatalogues: data.postCatalogues,
-  // postTags: data.postTags,
-  posts: data.posts,
+  // ép kiểu để load data & phù hợp với Interface
+  postCatalogues: (data?.postCatalogues as { id: number; name: string }[] | undefined)?.map((c) => c.id) ?? [],
+  postTags: (data?.tags as { id: number; name: string }[] | undefined)?.map((t) => t.id) ?? [],
+  relateds: (data?.relateds as { id: number; name: string }[] | undefined)?.map((r) => r.id) ?? [],
   publish: data.publish || 0,
   metaTitle: data.metaTitle,
   metaKeyword: data.metaKeyword,
