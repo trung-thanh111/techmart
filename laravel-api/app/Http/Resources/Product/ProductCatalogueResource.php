@@ -23,7 +23,10 @@ class ProductCatalogueResource extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug,
             'description' => $this->description,
-            'image' => $this->image,
+            'image' => [
+                'path' => $this->image ?? null,
+                'url' => asset("/storage/{$this->image}") ?? null,
+            ],
             'icon' => $this->icon,
             'order' => $this->order,
             'publish' => $this->publish,

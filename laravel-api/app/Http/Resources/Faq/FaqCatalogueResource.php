@@ -19,7 +19,10 @@ class FaqCatalogueResource extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug,
             'description' => $this->description,
-            'image' => $this->image,
+            'image' => [
+                'path' => $this->image ?? null,
+                'url' => asset("/storage/{$this->image}") ?? null,
+            ],
             'is_featured' => $this->is_featured,
             'publish' => $this->publish,
             'faqs' => FaqResource::collection($this->faqs),

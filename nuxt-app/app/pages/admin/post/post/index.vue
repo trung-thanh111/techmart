@@ -56,10 +56,10 @@ definePageMeta({
       </div>
       <FilterBar @search="search">
         <div class="min-w-[200px]">
-          <Select v-model="filters.post_catalogue_id" :options="postCatalogueOptions" option-label="name" option-value="value" filter showClear :placeholder="$t('admin.page.post.filterGroup')" class="w-full text-sm" />
+          <Select v-model="filters.post_catalogue_id" :options="postCatalogueOptions" option-label="name" option-value="id" filter showClear :placeholder="$t('admin.page.post.filterGroup')" class="w-full text-sm" />
         </div>
         <div class="min-w-[200px]">
-          <Select v-model="filters.tag_id" :options="tagOptions" option-label="name" option-value="value" filter showClear :placeholder="$t('admin.page.post.filterTag')" class="w-full text-sm" />
+          <Select v-model="filters.tag_id" :options="tagOptions" option-label="name" option-value="id" filter showClear :placeholder="$t('admin.page.post.filterTag')" class="w-full text-sm" />
         </div>
       </FilterBar>
       <div class="table-responsive">

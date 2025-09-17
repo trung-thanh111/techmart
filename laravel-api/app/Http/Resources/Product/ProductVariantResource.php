@@ -15,7 +15,10 @@ class ProductVariantResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'image' => $this->image,
+            'image' => [
+                'path' => $this->image ?? null,
+                'url' => asset("/storage/{$this->image}") ?? null,
+            ],
             'album' => $this->album,
             'code' => $this->code,
             'stock' => $this->stock,

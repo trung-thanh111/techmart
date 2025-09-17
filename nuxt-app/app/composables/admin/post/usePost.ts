@@ -22,9 +22,9 @@ export const usePost = (initialFilters?: PostPayloadFilter, mode: "create" | "up
   const isLoading = ref(false);
   const selectedIds = ref<number[]>([]);
   const selectedItem = ref<IPost | null>(null);
-  const tagOptions = ref<Array<{ name: string; value: number }>>([]);
-  const postOptions = ref<Array<{ name: string; value: number }>>([]);
-  const postCatalogueOptions = ref<Array<{ name: string; value: number }>>([]);
+  const tagOptions = ref<Array<{ name: string; id: number }>>([]);
+  const postOptions = ref<Array<{ name: string; id: number }>>([]);
+  const postCatalogueOptions = ref<Array<{ name: string; id: number }>>([]);
   const showPassword = ref(false);
   const slug = computed(() => slugify(values.name || ""));
 
@@ -35,19 +35,19 @@ export const usePost = (initialFilters?: PostPayloadFilter, mode: "create" | "up
     image: z.any().optional().refine((file) => !file || file.size <= MAX_FILE_SIZE, 'admin.common.maxFileSize').refine((file) => !file || ACCEPTED_IMAGE_TYPES.includes(file.type), 'admin.common.acceptedImageTypes'),
     tableOfContent: z.boolean().default(false).optional(),
     order: z.number().int().nonnegative().default(0),
-    isHot: z.boolean().default(false),
+    isHot: z.boolean().default(false).optional(),
     viewCount: z.number().int().nonnegative().default(0),
     postCatalogues: z.array(z.number()).min(1, "admin.validation.postCatalogueRequired"),
     postTags: z.array(z.number()).nullable().optional(),
-    posts: z.array(z.number()).nullable().optional(),
+    relateds: z.array(z.number()).nullable().optional(),
     publish: z.number({ required_error: "admin.validation.statusRequired" }).refine((val) => [0, 1, 2].includes(val), { message: "admin.validation.statusInvalid" }),
     metaTitle: z.string().max(255, "admin.validation.metaTitleMaxLength").nullable().optional(),
     metaKeyword: z.string().max(255, "admin.validation.metaKeywordMaxLength").nullable().optional(),
     metaDescription: z.string().max(255, "admin.validation.metaDescriptionMaxLength").nullable().optional(),
-    publishedAt: z.string().nullable().optional(),
+    publishedAt: z.any().nullable().optional(),
   };
-  const createSchema = z.object({...schema});
-  const updateSchema = z.object({...schema});
+  const createSchema = z.object({ ...schema });
+  const updateSchema = z.object({ ...schema });
   type TPostCreate = z.infer<typeof createSchema>;
   type TPostUpdate = z.infer<typeof updateSchema>;
 
@@ -56,7 +56,6 @@ export const usePost = (initialFilters?: PostPayloadFilter, mode: "create" | "up
   });
 
   const handleStore = handleSubmit(async (payload: TPostCreate | TPostUpdate) => {
-    console.log("payload", payload);
     isLoading.value = true;
     try {
       const response = await postService.store(payload as Partial<IPost>);
@@ -176,10 +175,10 @@ export const usePost = (initialFilters?: PostPayloadFilter, mode: "create" | "up
       const response = await postCatalogueService.all();
       const rows = response?.data ?? [];
       postCatalogueOptions.value = (Array.isArray(rows) ? rows : [rows])
-        .map((item: any) => ({ name: item.name, value: Number(item.id) }))
-        .filter((opt: any) => opt.name && !Number.isNaN(opt.value));
+        .map((item: any) => ({ id: Number(item.id), name: item.name }))
+        .filter((opt: any) => opt.name && !Number.isNaN(opt.id));
     } catch (error) {
-      console.error("Lỗi! khi tải dữ liệu post catalogue all :", error);
+      console.error("Lỗi khi tải dữ liệu post catalogue:", error);
     }
   };
 
@@ -188,22 +187,22 @@ export const usePost = (initialFilters?: PostPayloadFilter, mode: "create" | "up
       const response = await postTagService.all();
       const rows = response?.data ?? [];
       tagOptions.value = (Array.isArray(rows) ? rows : [rows])
-        .map((item: any) => ({ name: item.name, value: Number(item.id) }))
-        .filter((opt: any) => opt.name && !Number.isNaN(opt.value));
+        .map((item: any) => ({ id: Number(item.id), name: item.name }))
+        .filter((opt: any) => opt.name && !Number.isNaN(opt.id));
     } catch (error) {
-      console.error("Lỗi! khi tải dữ liệu post tag all :", error);
+      console.error("Lỗi khi tải dữ liệu tag:", error);
     }
   };
-  
+
   const loadPost = async () => {
     try {
       const response = await postService.all();
       const rows = response?.data ?? [];
       postOptions.value = (Array.isArray(rows) ? rows : [rows])
-        .map((item: any) => ({ name: item.name, value: Number(item.id) }))
-        .filter((opt: any) => opt.name && !Number.isNaN(opt.value));
+        .map((item: any) => ({ id: Number(item.id), name: item.name }))
+        .filter((opt: any) => opt.name && !Number.isNaN(opt.id));
     } catch (error) {
-      console.error("Lỗi! khi tải dữ liệu post tag all :", error);
+      console.error("Lỗi khi tải dữ liệu post:", error);
     }
   };
 

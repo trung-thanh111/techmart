@@ -46,8 +46,9 @@ class Post extends Model
      */
     public $relationable = [
         'post_catalogues',
-        'posts',
-        'post_tags'
+        'relateds',
+        'post_tags',
+        'users'
     ];
 
     public function post_catalogues(): BelongsToMany
@@ -65,7 +66,7 @@ class Post extends Model
         return $this->belongsToMany(PostTag::class, 'post_tag_post', 'post_id', 'post_tag_id');
     }
 
-    public function posts(): BelongsToMany
+    public function relateds(): BelongsToMany
     {
         return $this->belongsToMany(Post::class, 'related_posts', 'post_id', 'related_post_id');
     }
