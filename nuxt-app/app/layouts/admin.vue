@@ -43,3 +43,8 @@ useHead({
   ]
 })
 </script>
+<style>
+.jvm-tooltip {
+  display: none !important;
+}
+</style>

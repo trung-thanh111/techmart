@@ -124,8 +124,16 @@ abstract class BaseService implements BaseServiceInterface
             foreach ($filters as $val) {
                 // nếu mà có value gửi lên thì mới xử lý
                 if ($request->has($val)) {
-                    // add nó vào $conditions
-                    $conditions[$val] = $request->{$val};
+                    // chuẩn hóa dữ liệu: nếu là chuỗi JSON thì decode, nếu là scalar thì wrap về mảng
+                    $input = $request->input($val);
+                    if (is_string($input)) {
+                        $decoded = json_decode($input, true);
+                        if (json_last_error() === JSON_ERROR_NONE) {
+                            $input = $decoded;
+                        }
+                    }
+                    // add vào $conditions
+                    $conditions[$val] = $input;
                 }
             }
         }
@@ -198,8 +206,8 @@ abstract class BaseService implements BaseServiceInterface
         // nếu mà cache có data thì lấy trong cache ra còn không thì mới lấy từ database
         $this->model = Cache::lock($lockKey, 5)->block(5, function () use ($cacheKey, $id) {
             return Cache::remember($cacheKey, $this->cacheTTL, function () use ($id) {
-                // nếu mà k có data thì lấy trong model ra (db)
-                return $this->repository->findById($id);
+                // nếu mà k có data thì lấy trong model ra (db) với quan hệ
+                return $this->repository->findById($id, $this->with);
             });
         });
 

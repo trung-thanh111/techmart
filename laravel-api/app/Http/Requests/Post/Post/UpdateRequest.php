@@ -33,11 +33,13 @@ class UpdateRequest extends BaseRequest
     {
         $method = $this->getMethod();
         $sometime = ($method === 'PATCH') ? 'sometimes' : '';
+        $mimes = implode(',', config('upload.image.allowed_type'));
+        $max_size = config('upload.image.max_size');
         return [
             "name" => "{$sometime}|required|string|max:255",
             "description" => "{$sometime}|nullable|string|max:500",
             "content" => "{$sometime}|nullable|string",
-            "image" => "{$sometime}|nullable|string|max:255",
+            "image" => "nullable|{$sometime}|mimes:{$mimes}|max:{$max_size}",
             "table_of_content" => "{$sometime}|nullable|boolean",
             "is_hot" => "{$sometime}|nullable|boolean",
             "order" => "{$sometime}|nullable|integer|min:0",

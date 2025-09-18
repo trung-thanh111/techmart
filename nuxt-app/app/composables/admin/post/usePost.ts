@@ -1,7 +1,7 @@
 import z from "zod";
 import { useI18n } from "vue-i18n";
 import { useForm } from "vee-validate";
-import { errorToField, slugify } from "~/utils/helpers";
+import { errorToField, slugify, buildRelationParams } from "~/utils/helpers";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useAppToast } from "~/composables/useAppToast";
 import { postService } from "~/services/post/post.service";
@@ -51,8 +51,9 @@ export const usePost = (initialFilters?: PostPayloadFilter, mode: "create" | "up
   type TPostCreate = z.infer<typeof createSchema>;
   type TPostUpdate = z.infer<typeof updateSchema>;
 
-  const { handleSubmit, values, errors, setValues, resetForm, setFieldError } = useForm<TPostCreate | TPostUpdate>({
+  const { handleSubmit, values, errors, setValues, setFieldError } = useForm<TPostCreate | TPostUpdate>({
     validationSchema: toTypedSchema(mode === "create" ? createSchema : updateSchema),
+    keepValuesOnUnmount: true,
   });
 
   const handleStore = handleSubmit(async (payload: TPostCreate | TPostUpdate) => {
@@ -60,7 +61,6 @@ export const usePost = (initialFilters?: PostPayloadFilter, mode: "create" | "up
     try {
       const response = await postService.store(payload as Partial<IPost>);
       toast.success(response?.message || t("admin.messages.createSuccess"));
-      resetForm();
       return navigateTo(POSTINDEX);
     } catch (error: any) {
       if (error?.data?.isValidationError) {
@@ -157,8 +157,13 @@ export const usePost = (initialFilters?: PostPayloadFilter, mode: "create" | "up
   const fetchData = async () => {
     isLoading.value = true;
     try {
+      const { post_catalogue_id, tag_id, ...rest } = (filters.value as any) || {};
       const response = await postService.pagination({
-        ...filters.value,
+        ...rest,
+        ...buildRelationParams({
+          post_catalogues: post_catalogue_id,
+          post_tags: tag_id,
+        }),
         page: page.value,
       });
       data.value = response;
