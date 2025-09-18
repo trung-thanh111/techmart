@@ -75,8 +75,7 @@ const finalClass = computed(() => {
 
 const onClick = async (event: MouseEvent) => {
   if (props.to) {
-    const router = useRouter();
-    await router.push(props.to);
+    await navigateTo(props.to);
   }
   emit("click", event);
 };
