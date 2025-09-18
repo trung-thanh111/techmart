@@ -26,7 +26,7 @@ class AgencyResource extends JsonResource
             'address' => $this->address ?? null,
             'iframeMap' => $this->iframe_map ?? null,
             'agencyWorkingHour' => AgencyWorkingHourResource::collection($this->agency_working_hours),
-            'publish' => $this->publish,
+            'publish' => (int) $this->publish,
             'creator' => $this->whenLoaded('users', [
                 'id' => $this->users->id,
                 'name' => $this->users->name,

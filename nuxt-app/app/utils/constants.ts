@@ -30,5 +30,9 @@ export const POSTINDEX = "/admin/post/post";
 export const POSTCREATE = "/admin/post/post/create";
 export const POSTUPDATE = "/admin/post/post/update";
 
+export const FAQCATALOGUEINDEX = "/admin/faq/catalogue";
+export const FAQCATALOGUECREATE = "/admin/faq/catalogue/create";
+export const FAQCATALOGUEUPDATE = "/admin/faq/catalogue/update";
+
 export const MAX_FILE_SIZE = 5 * 1024 * 1024;
 export const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/jpg"];

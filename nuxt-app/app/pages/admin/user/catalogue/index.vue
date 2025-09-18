@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import FilterBar from "~/components/admin/navigation/FilterBar.vue";
+import { closeModal } from "#imports";
 import Breadcrumb from "~/components/admin/navigation/Breadcrumb.vue";
 import Pagination from "~/components/admin/navigation/AppPagination.vue";
 import AppCheckbox from "~/components/admin/custom/AppCheckbox.vue";

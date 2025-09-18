@@ -20,12 +20,15 @@ class FaqCatalogue extends Model
         'slug',
         'description',
         'image',
-        'is_featured',
+        'is_hot',
+        'order',
         'user_id',
         'publish'
     ];
 
-    protected $casts = [];
+    protected $casts = [
+        'is_hot' => 'boolean',
+    ];
 
     /**
      * Biến này đăng ký quan hệ được phép bắn lên từ client
@@ -34,6 +37,7 @@ class FaqCatalogue extends Model
      */
     public $relationable = [
         'faq_catalogues',
+        'faqs'
     ];
 
     public function users(): BelongsTo

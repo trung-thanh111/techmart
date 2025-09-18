@@ -29,7 +29,7 @@ class ProductCatalogueResource extends JsonResource
             ],
             'icon' => $this->icon,
             'order' => $this->order,
-            'publish' => $this->publish,
+            'publish' => (int) $this->publish,
             'publish_text' => $this->publish === 2 ? 'Đã xuất bản' : 'Chưa xuất bản',
             'meta_title' => $this->meta_title,
             'meta_keyword' => $this->meta_keyword,

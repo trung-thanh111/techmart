@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Faq;
 
+use App\Http\Resources\Post\PostCatalogueResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -23,9 +24,13 @@ class FaqCatalogueResource extends JsonResource
                 'path' => $this->image ?? null,
                 'url' => asset("/storage/{$this->image}") ?? null,
             ],
-            'is_featured' => $this->is_featured,
-            'publish' => $this->publish,
+            'isHot' => (bool) $this->is_hot,
+            'order' => (int) $this->order,
+            'publish' => (int) $this->publish,
             'faqs' => FaqResource::collection($this->faqs),
+            'faqCatalogues' => $this->whenLoaded('faq_catalogues', function () {
+                return PostCatalogueResource::collection($this->faq_catalogues);
+            }),
             'creator' => $this->whenLoaded('users', [
                 'id' => $this->users->id,
                 'name' => $this->users->name,

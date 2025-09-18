@@ -6,26 +6,31 @@ use App\Services\Impl\BaseService;
 use Illuminate\Database\Eloquent\Model;
 use App\Repositories\Faq\FaqCatalogueRepository;
 use App\Http\Resources\Faq\FaqCatalogueResource;
+use App\Services\Impl\ImageService;
 use App\Services\Interfaces\Faq\FaqCatalogueServiceInterface;
 
 class FaqCatalogueService extends BaseService implements FaqCatalogueServiceInterface {
 
 protected $repository;
+private const PIPELINE = 'default';
 
 protected $complexFilter = ['id'];
 
-protected $with = [];
+protected $with = ['faq_catalogues', 'faqs'];
 protected $relationFilter = [];
 
 protected $cacheKeyPrefix = 'faq_catalogues';
 protected $cacheTags = ['faq_catalogues:collection'];
 
 protected $useUpload = true;
+protected $imageService;
 
     public function __construct(
-        FaqCatalogueRepository $repository
+        FaqCatalogueRepository $repository,
+        ImageService $imageService
     ) {
         $this->repository = $repository;
+        $this->imageService = $imageService;
     }
 
     protected function getRepository(){
@@ -38,7 +43,8 @@ protected $useUpload = true;
      */
     protected function prepareModelData(Request $request): self {
 
-        return $this->initializeBasicModelData($request);
+        return $this->initializeBasicModelData($request)
+            ->uploadImage($request, 'image', self::PIPELINE, 'image');
     }
 
     protected function initializeBasicModelData(Request $request): self {
