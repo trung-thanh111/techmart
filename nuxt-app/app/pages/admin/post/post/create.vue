@@ -129,8 +129,8 @@
           </div>
         </div>
       </div>
-      <div class="flex justify-end gap-3 mt-4">
-        <Button variant="cancel" :loading="false" :to="POSTINDEX" />
+      <div class="flex justify-end gap-3 mt-4 position-sticky bottom-5 z-20">
+        <Button variant="cancel" :to="POSTINDEX" />
         <Button variant="success" :loading="isLoading" />
       </div>
     </div>
@@ -156,7 +156,7 @@
               <span class="text-danger">*</span>
             </label>
             <Field name="postCatalogues" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <MultiSelect :modelValue="field.value" @update:modelValue="field.onChange" :options="postCatalogueOptions" optionLabel="name" optionValue="value" filter display="chip" :placeholder="$t('admin.page.post.form.postCataloguePlaceholder')" class="w-100" />
+              <MultiSelect :modelValue="field.value" @update:modelValue="field.onChange" :options="postCatalogueOptions" optionLabel="name" optionValue="id" filter display="chip" :placeholder="$t('admin.page.post.form.postCataloguePlaceholder')" class="w-100" />
               <small v-if="errorMessage && meta.touched" class="text-danger">
                 {{ $t(errorMessage) }}
               </small>
@@ -167,7 +167,7 @@
               {{ $t("admin.page.post.form.tag") }}
             </label>
             <Field name="postTags" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <MultiSelect :modelValue="field.value" @update:modelValue="field.onChange" :options="tagOptions" optionLabel="name" optionValue="value" filter display="chip" :placeholder="$t('admin.page.post.form.tagPlaceholder')" class="rounded py-[1px] w-100" />
+              <MultiSelect :modelValue="field.value" @update:modelValue="field.onChange" :options="tagOptions" optionLabel="name" optionValue="id" filter display="chip" :placeholder="$t('admin.page.post.form.tagPlaceholder')" class="rounded py-[1px] w-100" />
               <small v-if="errorMessage && meta.touched" class="text-danger">
                 {{ $t(errorMessage) }}
               </small>
@@ -178,7 +178,7 @@
               {{ $t("admin.page.post.form.related") }}
             </label>
             <Field name="relateds" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <MultiSelect :modelValue="field.value" @update:modelValue="field.onChange" :options="postOptions" optionLabel="name" optionValue="value" filter display="chip" :placeholder="$t('admin.page.post.form.relatedPlaceholder')" class="rounded py-[1px] w-100" size="small" />
+              <MultiSelect :modelValue="field.value" @update:modelValue="field.onChange" :options="postOptions" optionLabel="name" optionValue="id" filter display="chip" :placeholder="$t('admin.page.post.form.relatedPlaceholder')" class="rounded py-[1px] w-100" size="small" />
               <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
             </Field>
           </div>

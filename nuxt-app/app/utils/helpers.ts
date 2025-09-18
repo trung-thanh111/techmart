@@ -52,3 +52,22 @@ export const errorToField = (
     }
   }
 };
+
+// Build relation filters (dynamic) for HasQuery.
+// Example:
+// buildRelationParams({ post_catalogues: 1, post_tags: [2,4] }) →
+// { post_catalogues: '{"post_catalogues.id":{"eq":1}}', post_tags: '{"post_tags.id":{"in":"2,4"}}' }
+export function buildRelationParams(
+  relationToIds: Record<string, number | number[] | null | undefined>,
+  fieldName: string = 'id'
+): Record<string, string> {
+  const result: Record<string, string> = {};
+  for (const relationKey of Object.keys(relationToIds)) {
+    const value = relationToIds[relationKey];
+    if (!value || (Array.isArray(value) && value.length === 0)) continue;
+    const op = Array.isArray(value) ? { in: value.join(',') } : { eq: value };
+    const payload = { [`${relationKey}.${fieldName}`]: op } as Record<string, any>;
+    result[relationKey] = JSON.stringify(payload);
+  }
+  return result;
+}
