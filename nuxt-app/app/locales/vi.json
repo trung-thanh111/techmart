@@ -97,6 +97,10 @@
       "postCatalogue": "Nhóm bài viết",
       "postList": "Danh sách",
       "postCreate": "Thêm mới",
+      "faqs": "Câu hỏi thường gặp",
+      "faqCatalogue": "Nhóm câu hỏi thường gặp",
+      "faqList": "Danh sách",
+      "faqCreate": "Thêm mới",
       "addressOrder": "Địa chỉ nhận hàng",
       "configuration": "Cấu hình",
       "interface": "Giao diện",
@@ -240,6 +244,24 @@
         "title": "Sản phẩm",
         "description": "Sản phẩm",
         "keywords": "Sản phẩm"
+      },
+      "faqCatalogue": {
+        "title": "Quản lý nhóm câu hỏi thường gặp",
+        "breadcrumb": "Quản lý nhóm câu hỏi thường gặp",
+        "groupInfo": "Thông tin",
+        "form": {
+          "name": "Tên",
+          "namePlaceholder": "Nhập tên cho bản ghi",
+          "description": "Mô tả",
+          "descriptionPlaceholder": "Nhập mô tả",
+          "order": "Thứ tự",
+          "orderPlaceholder": "Nhập thứ tự",
+          "urlTooltip": "URL của bản ghi",
+          "isHot": "Nổi bật",
+          "isHotPlaceholder": "Chọn nổi bật",
+          "related": "Liên quan",
+          "relatedPlaceholder": "Chọn nhóm câu hỏi"
+        }
       },
       "postCatalogue": {
         "title": "Quản lý nhóm bài viết",

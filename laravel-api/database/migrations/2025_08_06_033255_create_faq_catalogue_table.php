@@ -17,7 +17,8 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->text('description')->nullable();
             $table->string('image')->nullable();
-            $table->boolean('is_featured')->default(false);
+            $table->boolean('is_hot')->default(false);
+            $table->integer('order')->default(0)->nullable();
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
             $table->tinyInteger('publish')->default(0)->comment('0: draft, 1: private, 2: publish');
             $table->timestamps();

@@ -30,7 +30,7 @@ class AddressOrderResource extends JsonResource
                 'name' => $this->users->name,
             ]),
             'isDefault' => $this->is_default,
-            'publish' => $this->publish,
+            'publish' => (int) $this->publish,
             'createdAt' => $this->created_at ?? null,
             'updatedAt' => $this->updated_at ?? null,
         ];

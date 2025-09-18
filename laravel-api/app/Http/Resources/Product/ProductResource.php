@@ -39,7 +39,7 @@ class ProductResource extends JsonResource
             'index' => $this->index,
             'scheme' => $this->scheme,
             'iframe' => $this->iframe,
-            'publish' => $this->publish,
+            'publish' => (int) $this->publish,
             'creator' => $this->whenLoaded('users', [
                 'id' => $this->users->id,
                 'name' => $this->users->name,

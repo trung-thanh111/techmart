@@ -41,7 +41,7 @@ class ProductVariantResource extends JsonResource
                     ];
                 })->values();
             }),
-            'publish' => $this->publish,
+            'publish' => (int) $this->publish,
             'createdAt' => $this->created_at ?? null,
             'updatedAt' => $this->updated_at ?? null,
         ];

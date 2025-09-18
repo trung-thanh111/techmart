@@ -130,6 +130,35 @@
               </ul>
             </div>
           </li>
+          <li class="nav-item">
+            <a class="nav-link menu-link" href="#sidebarfaqs" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarfaqs">
+              <i class="ri-news-line"></i>
+              <span data-key="t-faq-pages">{{ $t("admin.sidebar.faqs") }}</span>
+            </a>
+            <div class="collapse menu-dropdown" id="sidebarfaqs">
+              <ul class="nav nav-sm flex-column">
+                <li class="nav-item">
+                  <a href="#sidebarfaq" class="nav-link menu-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarfaq" data-key="t-faq">{{ $t("admin.sidebar.faqs") }}</a>
+                  <div class="collapse menu-dropdown" id="sidebarfaq">
+                    <ul class="nav nav-sm flex-column">
+                      <li class="nav-item">
+                        <NuxtLink to="/admin/faq/faq" class="nav-link" data-key="t-faq-list">{{ $t("admin.sidebar.faqList") }}</NuxtLink>
+                      </li>
+                      <li class="nav-item">
+                        <NuxtLink to="/admin/faq/faq/create" class="nav-link" data-key="t-faq-create">{{ $t("admin.sidebar.faqCreate") }}</NuxtLink>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+                <li class="nav-item">
+                  <NuxtLink to="/admin/faq/catalogue" class="nav-link" data-key="t-faq-catelogue">{{ $t("admin.sidebar.faqCatalogue") }}</NuxtLink>
+                </li>
+                <li class="nav-item">
+                  <NuxtLink to="/admin/faq/tag" class="nav-link" data-key="t-faq-tag">{{ $t("admin.sidebar.tags") }}</NuxtLink>
+                </li>
+              </ul>
+            </div>
+          </li>
           <li class="menu-title">
             <i class="ri-more-fill"></i>
             <span class="text-light">{{ $t("admin.sidebar.configuration") }}</span>
@@ -233,7 +262,6 @@
           </li>
         </ul>
       </div>
-      <!-- Sidebar -->
     </div>
 
     <div class="sidebar-background"></div>
