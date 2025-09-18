@@ -1,7 +1,8 @@
 {
   "admin": {
     "common": {
-      "noteUploadImage": "Chấp nhận các định dạng: jpg, jpeg, png, webp.",
+      "noteUploadImage": "jpg, jpeg, png, webp (tối đa 5MB)",
+      "clickToUpload": "Click để tải lên",
       "upload": "Tải lên",
       "image": "Hình ảnh",
       "maxFileSize": "Ảnh phải nhỏ hơn hoặc bằng 5MB",
