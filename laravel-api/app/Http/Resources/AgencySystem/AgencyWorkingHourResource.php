@@ -17,8 +17,8 @@ class AgencyWorkingHourResource extends JsonResource
         return [
             'id' => $this->id,
             'dayOfWeek' => $this->day_of_week ?? null,
-            'openTime' => $this->open_time ?? null,
-            'closeTime' => $this->close_time ?? null,
+            'openTime' => $this->open_time?->format('H:i'),
+            'closeTime' => $this->close_time?->format('H:i'),
             'publish' => (int) $this->publish ?? null,
             // 'createdAt' => $this->created_at ?? null,
             // 'updatedAt' => $this->updated_at ?? null,

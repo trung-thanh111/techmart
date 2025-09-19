@@ -1,5 +1,5 @@
 <template>
-  <div class="app-menu navbar-menu bg-sidebar-dark">
+  <div class="app-menu navbar-menu bg-sidebar-dark" id="sidebar-admin">
     <div class="navbar-brand-box" style="margin: 10px 0">
       <NuxtLink to="/admin/dashboard" class="logo logo-dark">
         <span class="logo-sm"><nuxt-img src="/shared/images/logo/logo-website.png" loading="lazy" alt="logo-sm" /></span>
@@ -11,7 +11,7 @@
         <i class="ri-record-circle-line"></i>
       </button>
     </div>
-    <div id="scrollbar">
+    <div id="scrollbar" data-simplebar style="max-height: 100%; width: 100%;">
       <div class="container-fluid px-0">
         <ul class="navbar-nav" id="navbar-nav">
           <li class="menu-title">
@@ -178,6 +178,32 @@
                 </li>
                 <li class="nav-item">
                   <NuxtLink to="/admin/attribute/catalogue" class="nav-link" data-key="t-attribute-catelogue">{{ $t("admin.sidebar.attributeCatalogue") }}</NuxtLink>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link menu-link" href="#sidebaragencys" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebaragencys">
+              <i class="ri-news-line"></i>
+              <span data-key="t-agency-pages">{{ $t("admin.sidebar.agencys") }}</span>
+            </a>
+            <div class="collapse menu-dropdown" id="sidebaragencys">
+              <ul class="nav nav-sm flex-column">
+                <li class="nav-item">
+                  <a href="#sidebaragency" class="nav-link menu-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebaragency" data-key="t-agency">{{ $t("admin.sidebar.agencys") }}</a>
+                  <div class="collapse menu-dropdown" id="sidebaragency">
+                    <ul class="nav nav-sm flex-column">
+                      <li class="nav-item">
+                        <NuxtLink to="/admin/agency/agency" class="nav-link" data-key="t-agency-list">{{ $t("admin.sidebar.agencyList") }}</NuxtLink>
+                      </li>
+                      <li class="nav-item">
+                        <NuxtLink to="/admin/agency/agency/create" class="nav-link" data-key="t-agency-create">{{ $t("admin.sidebar.agencyCreate") }}</NuxtLink>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+                <li class="nav-item">
+                  <NuxtLink to="/admin/agency/working_hour" class="nav-link" data-key="t-agency-catelogue">{{ $t("admin.sidebar.agencyWorkingHour") }}</NuxtLink>
                 </li>
               </ul>
             </div>

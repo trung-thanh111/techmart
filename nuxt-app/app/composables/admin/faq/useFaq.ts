@@ -27,7 +27,7 @@ export const useFaq = (initialFilters?: FaqPayloadFilter, mode: "create" | "upda
 
   const schema = {
     question: z.string({ required_error: "admin.validation.questionRequired" }).trim().min(1, "admin.validation.questionRequired").max(255, "admin.validation.questionMaxLength"),
-    answer: z.string({ required_error: "admin.validation.questionRequired" }).trim().min(1, "admin.validation.questionRequired"),
+    answer: z.string({ required_error: "admin.validation.answerRequired" }).trim().min(1, "admin.validation.answerRequired"),
     order: z.number().int().nonnegative().default(0),
     isHot: z.boolean().default(false).optional(),
     faqCatalogueId: z.number({required_error: "admin.validation.faqCatalogueIdRequired"}).min(1, "admin.validation.faqCatalogueIdRequired"),
