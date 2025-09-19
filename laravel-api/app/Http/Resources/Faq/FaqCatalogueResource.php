@@ -8,6 +8,12 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class FaqCatalogueResource extends JsonResource
 {
+    protected bool $withFaqs;
+    public function __construct($resource, $withFaqs = true)
+    {
+        parent::__construct($resource);
+        $this->withFaqs = $withFaqs;
+    }
     /**
      * Transform the resource into an array.
      *
@@ -27,7 +33,11 @@ class FaqCatalogueResource extends JsonResource
             'isHot' => (bool) $this->is_hot,
             'order' => (int) $this->order,
             'publish' => (int) $this->publish,
-            'faqs' => FaqResource::collection($this->faqs),
+            'faqs' => $this->when(
+                $this->withFaqs,
+                fn() => FaqResource::collection($this->faqs)
+            ),
+
             'faqCatalogues' => $this->whenLoaded('faq_catalogues', function () {
                 return PostCatalogueResource::collection($this->faq_catalogues);
             }),

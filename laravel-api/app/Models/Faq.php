@@ -17,21 +17,25 @@ class Faq extends Model
         'question',
         'slug',
         'answer',
-        'sort_order',
-        'is_featured',
+        'order',
+        'is_hot',
         'faq_catalogue_id',
         'user_id',
         'publish'
     ];
 
-    protected $casts = [];
+    protected $casts = [
+        'is_hot' => 'boolean'
+    ];
 
     /**
      * Biến này đăng ký quan hệ được phép bắn lên từ client
      *
      * @var array
      */
-    public $relationable = [];
+    public $relationable = [
+        'faq_catalogues'
+    ];
 
     public function users(): BelongsTo
     {

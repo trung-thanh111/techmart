@@ -23,10 +23,10 @@ class StoreRequest extends BaseRequest
     {
         return [
             "question" => "required|string|max:255",
-             "slug" => "required|string|max:255|unique:faqs,slug",
+            "slug" => "required|string|max:255|unique:faqs,slug",
             "answer" => "required|string",
-            "sort_order" => "nullable|integer|min:0",
-            "is_featured" => "nullable|boolean",
+            "order" => "nullable|integer|min:0",
+            "is_hot" => "nullable|boolean",
             "faq_catalogue_id" => "required|integer|exists:faq_catalogues,id",
             "publish" => "required|integer|in:0,1,2",
         ];
