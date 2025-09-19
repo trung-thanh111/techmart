@@ -36,18 +36,13 @@ class UpdateRequest extends BaseRequest
         $sometime = ($method === 'PATCH') ? 'sometimes' : '';
         return [
             'day_of_week' => "required|string|max:255|{$sometime}",
-            'open_time' => "nullable|{$sometime}",
-            'close_time' => "nullable|{$sometime}",
+            'open_time' => "required|{$sometime}",
+            'close_time' => "required|{$sometime}",
             'publish' => "required|integer|in:0,1,2|{$sometime}",
         ];
     }
 
-    public function prepareForValidation()
-    {
-        // $this->merge([
-        //    ...($this->has('name') && !$this->has('slug') ? ['slug' => Str::slug($this->name)] : [])
-        // ]);
-    }
+    public function prepareForValidation() {}
 
     public function messages()
     {

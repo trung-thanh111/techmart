@@ -23,17 +23,13 @@ class StoreRequest extends BaseRequest
     {
         return [
             'day_of_week' => 'required|string|max:255',
-            'open_time' => 'nullable',
-            'close_time' => 'nullable',
+            'open_time' => 'required',
+            'close_time' => 'required',
             'publish' => 'required|integer|in:0,1,2',
         ];
     }
 
     public function prepareForValidation(){
-        // $this->merge([
-        //     'slug' => generate_slug($this->name),
-        //     'user_id' => auth(Common::API)->user()->id,
-        // ]);
     }
 
     public function messages(){

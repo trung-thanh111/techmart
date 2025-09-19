@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Agency extends Model
 {
-    use HasQuery;
+    use HasQuery, HasUpload;
 
     protected $table = 'agencies';
 

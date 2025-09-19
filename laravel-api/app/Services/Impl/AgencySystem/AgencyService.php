@@ -7,27 +7,31 @@ use App\Services\Impl\BaseService;
 use Illuminate\Database\Eloquent\Model;
 use App\Repositories\AgencySystem\AgencyRepository;
 use App\Http\Resources\AgencySystem\AgencyResource;
+use App\Services\Interfaces\ImageServiceInterface as ImageService;
 use App\Services\Interfaces\AgencySystem\AgencyServiceInterface;
 
 class AgencyService extends BaseService implements AgencyServiceInterface
 {
-
+    private const PIPELINE = 'default';
     protected $repository;
 
     protected $complexFilter = ['id'];
 
-    protected $with = [];
+    protected $with = ['agency_working_hours'];
     protected $relationFilter = [];
 
     protected $cacheKeyPrefix = 'agencies';
     protected $cacheTags = ['agencies:collection'];
 
-    protected $useUpload = true;
+    protected $imageService;
+
 
     public function __construct(
-        AgencyRepository $repository
+        AgencyRepository $repository,
+        ImageService $imageService
     ) {
         $this->repository = $repository;
+        $this->imageService = $imageService;
     }
 
     protected function getRepository()
@@ -41,7 +45,8 @@ class AgencyService extends BaseService implements AgencyServiceInterface
      */
     protected function prepareModelData(Request $request): self
     {
-        return $this->initializeBasicModelData($request);
+        return $this->initializeBasicModelData($request)
+        ->uploadImage($request, 'image', self::PIPELINE, 'logo');
     }
 
     protected function initializeBasicModelData(Request $request): self

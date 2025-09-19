@@ -28,6 +28,10 @@
       "draft": "Nháp",
       "hidden": "Ẩn",
       "record": "Bản ghi",
+      "website": "Trang web",
+      "phone": "Điện thoại",
+      "openTime": "Giờ mở cửa",
+      "closeTime": "Giờ đóng cửa",
       "hot": "Nổi bật",
       "selectedRecords": "Danh sách bản ghi được chọn",
       "deleteRecord": "Xóa bản ghi",
@@ -88,6 +92,10 @@
       "attributeCatalogue": "Nhóm thuộc tính",
       "attributeList": "Danh sách",
       "attributeCreate": "Thêm mới",
+      "agencys": "Hệ thống đại lý",
+      "agencyWorkingHour": "Giờ làm việc",
+      "agencyList": "Danh sách",
+      "agencyCreate": "Thêm mới",
       "brands": "Thương hiệu",
       "tags": "Tag",
       "customers": "Khách hàng",
@@ -283,6 +291,47 @@
           "isHotPlaceholder": "Chọn nổi bật",
           "faqCatalogue": "Nhóm câu hỏi",
           "faqCataloguePlaceholder": "Chọn nhóm câu hỏi"
+        }
+      },
+      "agency": {
+        "title": "Quản lý đại lý",
+        "breadcrumb": "Quản lý đại lý",
+        "groupInfo": "Thông tin",
+        "filterGroup": "Bộ lọc",
+        "form": {
+          "name": "Tên đại lý",
+          "namePlaceholder": "Nhập tên đại lý",
+          "description": "Mô tả",
+          "descriptionPlaceholder": "Nhập mô tả",
+          "iframeMap": "Bản đồ nhúng (Iframe)",
+          "iframeMapPlaceholder": "Dán mã iframe bản đồ",
+          "email": "Email",
+          "emailPlaceholder": "Nhập email",
+          "phone": "Số điện thoại",
+          "phonePlaceholder": "Nhập số điện thoại",
+          "website": "Website",
+          "websitePlaceholder": "Nhập website",
+          "address": "Địa chỉ",
+          "addressPlaceholder": "Nhập địa chỉ",
+          "urlTooltip": "URL của bản ghi",
+          "isHot": "Nổi bật",
+          "isHotPlaceholder": "Chọn nổi bật",
+          "workingHour": "Giờ làm việc",
+          "relatedPlaceholder": "Chọn giờ làm việc",
+          "publish": "Trạng thái",
+          "logo": "Logo",
+          "logoNote": "Chỉ chấp nhận ảnh JPG, PNG, WEBP, dung lượng tối đa 2MB"
+        }
+      },
+      "agencyWorkingHour": {
+        "title": "Giờ làm việc đại lý",
+        "breadcrumb": "Giờ làm việc",
+        "groupInfo": "Thông tin",
+        "form": {
+          "dayOfWeek": "Thứ trong tuần",
+          "dayOfWeekPlaceholder": "VD: Thứ 2, Thứ 3...",
+          "openTime": "Giờ mở cửa",
+          "closeTime": "Giờ đóng cửa"
         }
       },
       "attributeCatalogue": {
@@ -521,7 +570,13 @@
       "metaTitleMaxLength": "Tiêu đề SEO vượt quá 255 ký tự",
       "metaDescriptionMaxLength": "Mô tả SEO vượt quá 255 ký tự",
       "metaKeywordsMaxLength": "Từ khóa SEO vượt quá 255 ký tự",
-      "orderMin": "Giá trị tối thiểu là 1"
+      "orderMin": "Giá trị tối thiểu là 1",
+      "dayOfWeekRequired": "Bạn chưa nhập thứ trong tuần",
+      "dayOfWeekMaxLength": "Thứ trong tuần vượt quá 255 ký tự",
+      "openTimeMaxLength": "Giờ mở cửa vượt quá 255 ký tự",
+      "closeTimeMaxLength": "Giờ đóng cửa vượt quá 255 ký tự",
+      "websiteMaxLength": "Website vượt quá 500 ký tự",
+      "agencyWorkingHourRequired": "Bạn chưa chọn giờ làm việc"
     },
     "messages": {
       "createSuccess": "Thêm mới thành công",

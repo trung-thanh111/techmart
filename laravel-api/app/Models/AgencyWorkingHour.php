@@ -18,14 +18,19 @@ class AgencyWorkingHour extends Model
         'publish'
     ];
 
-    protected $casts = [];
+    protected $casts = [
+        'open_time' => 'datetime:H:i', 
+        'close_time' => 'datetime:H:i', 
+    ];
 
     /**
      * Biến này đăng ký quan hệ được phép bắn lên từ client
      *
      * @var array
      */
-    public $relationable = [];
+    public $relationable = [
+        'agencies'
+    ];
 
     public function agencies(): BelongsToMany
     {

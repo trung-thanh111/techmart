@@ -46,5 +46,13 @@ export const ATTRIBUTECATALOGUEINDEX = "/admin/attribute/catalogue";
 export const ATTRIBUTECATALOGUECREATE = "/admin/attribute/catalogue/create";
 export const ATTRIBUTECATALOGUEUPDATE = "/admin/attribute/catalogue/update";
 
+export const AGENCYINDEX = "/admin/agency/agency";
+export const AGENCYCREATE = "/admin/agency/agency/create";
+export const AGENCYUPDATE = "/admin/agency/agency/update";
+
+export const AGENCYWORKINGHOURINDEX = "/admin/agency/working_hour";
+export const AGENCYWORKINGHOURCREATE = "/admin/agency/working_hour/create";
+export const AGENCYWORKINGHOURUPDATE = "/admin/agency/working_hour/update";
+
 export const MAX_FILE_SIZE = 5 * 1024 * 1024;
 export const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
