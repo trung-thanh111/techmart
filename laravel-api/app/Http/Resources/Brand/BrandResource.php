@@ -19,21 +19,23 @@ class BrandResource extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug,
             'description' => $this->description,
-            'logo' => $this->logo,
-            'logoUrl' => $this->logo ? asset($this->logo) : '',
+            'logo' => [
+                'path' => $this->logo ?? null,
+                'url' => asset("/storage/{$this->logo}") ?? null,
+            ],
             'website' => $this->website,
             'country' => $this->country,
             'order' => (int) $this->order,
             'publish' => (int) $this->publish,
-            'creator' => $this->whenLoaded('users', [
-                'id' => $this->users->id,
-                'name' => $this->users->name,
-            ]),
-            'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
-            'updatedAt' => $this->updated_at?->format('Y-m-d H:i:s'),
-            'deletedAt' => $this->deleted_at?->format('Y-m-d H:i:s'),
-            'createdAtHuman' => $this->created_at?->diffForHumans(),
-            'updatedAtHuman' => $this->updated_at?->diffForHumans(),
+            // 'creator' => $this->whenLoaded('users', [
+            //     'id' => $this->users->id,
+            //     'name' => $this->users->name,
+            // ]),
+            // 'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
+            // 'updatedAt' => $this->updated_at?->format('Y-m-d H:i:s'),
+            // 'deletedAt' => $this->deleted_at?->format('Y-m-d H:i:s'),
+            // 'createdAtHuman' => $this->created_at?->diffForHumans(),
+            // 'updatedAtHuman' => $this->updated_at?->diffForHumans(),
         ];
     }
 }

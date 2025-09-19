@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Traits\HasQuery;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class AttributeCatalogue extends Model
 {
@@ -29,15 +29,16 @@ class AttributeCatalogue extends Model
      *
      * @var array
      */
-    public $relationable = [];
+    public $relationable = [
+        'attributes'
+    ];
 
     public function users(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function attribute_catalogues()
-    {
-        return $this->belongsTo(AttributeCatalogue::class, 'attribute_catalogue_id', 'id');
+    public function attributes(): HasMany{
+        return $this->hasMany(Attribute::class, 'attribute_catalogue_id', 'id');
     }
 }

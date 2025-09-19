@@ -146,23 +146,13 @@ import PublishSelect from "~/components/admin/custom/PublishSelect.vue";
 import Button from "~/components/admin/custom/Button.vue";
 import Breadcrumb from "~/components/admin/navigation/Breadcrumb.vue";
 import { usePostCatalogue } from "~/composables/admin/post/usePostCatalogue";
-import { slugify } from "~/utils/helpers";
 import AppCheckbox from "~/components/admin/custom/AppCheckbox.vue";
 import SingleImageUpload from "~/components/admin/custom/SingleImageUpload.vue";
 
-const { config, isLoading, postCatalogueOptions, values, show, handleUpdate, setValues } = usePostCatalogue(undefined, "update");
+const { config, isLoading, postCatalogueOptions, values, slug, show, handleUpdate, setValues } = usePostCatalogue(undefined, "update");
 
 const id = Number(useRoute().params.id);
 const { data } = await show(id);
-const slug = ref(data.slug);
-watch(
-  () => values.name,
-  (valName) => {
-    if (valName) {
-      slug.value = slugify(valName);
-    }
-  }
-);
 setValues({
   name: data.name,
   description: data.description,

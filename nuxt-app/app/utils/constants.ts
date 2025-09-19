@@ -38,5 +38,13 @@ export const FAQCATALOGUEINDEX = "/admin/faq/catalogue";
 export const FAQCATALOGUECREATE = "/admin/faq/catalogue/create";
 export const FAQCATALOGUEUPDATE = "/admin/faq/catalogue/update";
 
+export const ATTRIBUTEINDEX = "/admin/attribute/attribute";
+export const ATTRIBUTECREATE = "/admin/attribute/attribute/create";
+export const ATTRIBUTEUPDATE = "/admin/attribute/attribute/update";
+
+export const ATTRIBUTECATALOGUEINDEX = "/admin/attribute/catalogue";
+export const ATTRIBUTECATALOGUECREATE = "/admin/attribute/catalogue/create";
+export const ATTRIBUTECATALOGUEUPDATE = "/admin/attribute/catalogue/update";
+
 export const MAX_FILE_SIZE = 5 * 1024 * 1024;
 export const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/jpg"];

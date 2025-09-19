@@ -21,17 +21,14 @@ class AttributeResource extends JsonResource
             'description' => $this->description,
             'order' => (int) $this->order,
             'publish' => (int) $this->publish,
-            'publishText' => $this->publish ? 'Đã xuất bản' : 'Nháp',
             'attributeCatalogueId' => (int) $this->attribute_catalogue_id,
-            'creator' => $this->whenLoaded('users', [
-                'id' => $this->users->id,
-                'name' => $this->users->name,
-            ]),
-            'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
-            'updatedAt' => $this->updated_at?->format('Y-m-d H:i:s'),
-            'deletedAt' => $this->deleted_at?->format('Y-m-d H:i:s'),
-            'createdAtHuman' => $this->created_at?->diffForHumans(),
-            'updatedAtHuman' => $this->updated_at?->diffForHumans(),
+            // 'attributeCatalogues' => AttributeCatalogueResource::collection($this->attribute_catalogues),
+            // 'creator' => $this->whenLoaded('users', [
+            //     'id' => $this->users->id,
+            //     'name' => $this->users->name,
+            // ]),
+            // 'createdAtHuman' => $this->created_at?->diffForHumans(),
+            // 'updatedAtHuman' => $this->updated_at?->diffForHumans(),
         ];
     }
 }

@@ -169,24 +169,12 @@ import { Field } from "vee-validate";
 import PublishSelect from "~/components/admin/custom/PublishSelect.vue";
 import Button from "~/components/admin/custom/Button.vue";
 import Breadcrumb from "~/components/admin/navigation/Breadcrumb.vue";
-import { slugify } from "~/utils/helpers";
 import { useAddressOrder } from "~/composables/admin/user/useAddressOrder";
 
-const { config, isLoading, show, handleUpdate, values, setValues } = useAddressOrder(undefined, "update");
+const { config, isLoading, slug, show, handleUpdate, values, setValues } = useAddressOrder(undefined, "update");
 
 const id = Number(useRoute().params.id);
 const { data } = await show(id);
-console.info(data);
-
-const slug = ref(data.slug);
-watch(
-  () => values.title,
-  (val) => {
-    if (val) {
-      slug.value = slugify(val);
-    }
-  }
-);
 setValues({
   title: data.title,
   fullName: data.fullName,

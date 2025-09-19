@@ -21,16 +21,10 @@ class AttributeCatalogueResource extends JsonResource
             'description' => $this->description,
             'order' => (int) $this->order,
             'publish' => (int) $this->publish,
-            'userId' => $this->user_id,
-            'creator' => $this->whenLoaded('users', [
-                'id' => $this->users->id,
-                'name' => $this->users->name,
-            ]),
-            'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
-            'updatedAt' => $this->updated_at?->format('Y-m-d H:i:s'),
-            'deletedAt' => $this->deleted_at?->format('Y-m-d H:i:s'),
-            'createdAtHuman' => $this->created_at?->diffForHumans(),
-            'updatedAtHuman' => $this->updated_at?->diffForHumans(),
+            // 'creator' => $this->whenLoaded('users', [
+            //     'id' => $this->users->id,
+            //     'name' => $this->users->name,
+            // ]),
         ];
     }
 }

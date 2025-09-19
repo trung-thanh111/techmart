@@ -37,7 +37,6 @@ class FaqCatalogueResource extends JsonResource
                 $this->withFaqs,
                 fn() => FaqResource::collection($this->faqs)
             ),
-
             'faqCatalogues' => $this->whenLoaded('faq_catalogues', function () {
                 return PostCatalogueResource::collection($this->faq_catalogues);
             }),
@@ -45,8 +44,8 @@ class FaqCatalogueResource extends JsonResource
                 'id' => $this->users->id,
                 'name' => $this->users->name,
             ]),
-            'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
-            'updated_at' => $this->updated_at?->format('Y-m-d H:i:s'),
+            // 'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
+            // 'updated_at' => $this->updated_at?->format('Y-m-d H:i:s'),
         ];
     }
 }

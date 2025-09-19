@@ -24,10 +24,10 @@ class FaqResource extends JsonResource
             'faqCatalogueId' => (int) $this->faq_catalogue_id,
             'publish' => (int) $this->publish,
             'faqCatalogues' => new FaqCatalogueResource($this->whenLoaded('faq_catalogues'), false),
-            'creator' => $this->whenLoaded('users', [
-                'id' => $this->users->id,
-                'name' => $this->users->name,
-            ]),
+            // 'creator' => $this->whenLoaded('users', [
+            //     'id' => $this->users->id,
+            //     'name' => $this->users->name,
+            // ]),
             'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
             'updated_at' => $this->updated_at?->format('Y-m-d H:i:s'),
         ];

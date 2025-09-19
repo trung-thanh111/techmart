@@ -86,7 +86,8 @@
       "productCreate": "Thêm mới",
       "attributes": "Thuộc tính",
       "attributeCatalogue": "Nhóm thuộc tính",
-      "attributeList": "Thuộc tính",
+      "attributeList": "Danh sách",
+      "attributeCreate": "Thêm mới",
       "brands": "Thương hiệu",
       "tags": "Tag",
       "customers": "Khách hàng",
@@ -282,6 +283,37 @@
           "isHotPlaceholder": "Chọn nổi bật",
           "faqCatalogue": "Nhóm câu hỏi",
           "faqCataloguePlaceholder": "Chọn nhóm câu hỏi"
+        }
+      },
+      "attributeCatalogue": {
+        "title": "Quản lý nhóm thuộc tính",
+        "breadcrumb": "Quản lý nhóm thuộc tính",
+        "groupInfo": "Thông tin",
+        "form": {
+          "name": "Tên",
+          "namePlaceholder": "Nhập tên cho bản ghi",
+          "description": "Mô tả",
+          "descriptionPlaceholder": "Nhập mô tả",
+          "order": "Thứ tự",
+          "orderPlaceholder": "Nhập thứ tự",
+          "urlTooltip": "URL của bản ghi"
+        }
+      },
+      "attribute": {
+        "title": "Quản lý thuộc tính",
+        "breadcrumb": "Quản lý thuộc tính",
+        "groupInfo": "Thông tin",
+        "filterGroup": "Nhóm thuộc tính",
+        "form": {
+          "name": "Tên",
+          "namePlaceholder": "Nhập tên thuộc tính",
+          "description": "Mô tả",
+          "descriptionPlaceholder": "Nhập mô tả",
+          "order": "Thứ tự",
+          "orderPlaceholder": "Nhập thứ tự",
+          "urlTooltip": "URL của bản ghi",
+          "attributeCatalogue": "Nhóm thuộc tính",
+          "attributeCataloguePlaceholder": "Chọn nhóm thuộc tính"
         }
       },
       "postCatalogue": {

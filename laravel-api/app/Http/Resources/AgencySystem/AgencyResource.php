@@ -27,12 +27,12 @@ class AgencyResource extends JsonResource
             'iframeMap' => $this->iframe_map ?? null,
             'agencyWorkingHour' => AgencyWorkingHourResource::collection($this->agency_working_hours),
             'publish' => (int) $this->publish,
-            'creator' => $this->whenLoaded('users', [
-                'id' => $this->users->id,
-                'name' => $this->users->name,
-            ]),
             'createdAt' => $this->created_at ?? null,
             'updatedAt' => $this->updated_at ?? null,
+            // 'creator' => $this->whenLoaded('users', [
+            //     'id' => $this->users->id,
+            //     'name' => $this->users->name,
+            // ]),
         ];
     }
 }

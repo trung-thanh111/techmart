@@ -153,8 +153,31 @@
                 <li class="nav-item">
                   <NuxtLink to="/admin/faq/catalogue" class="nav-link" data-key="t-faq-catelogue">{{ $t("admin.sidebar.faqCatalogue") }}</NuxtLink>
                 </li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link menu-link" href="#sidebarattributes" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarattributes">
+              <i class="ri-news-line"></i>
+              <span data-key="t-attribute-pages">{{ $t("admin.sidebar.attributes") }}</span>
+            </a>
+            <div class="collapse menu-dropdown" id="sidebarattributes">
+              <ul class="nav nav-sm flex-column">
                 <li class="nav-item">
-                  <NuxtLink to="/admin/faq/tag" class="nav-link" data-key="t-faq-tag">{{ $t("admin.sidebar.tags") }}</NuxtLink>
+                  <a href="#sidebarattribute" class="nav-link menu-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarattribute" data-key="t-attribute">{{ $t("admin.sidebar.attributes") }}</a>
+                  <div class="collapse menu-dropdown" id="sidebarattribute">
+                    <ul class="nav nav-sm flex-column">
+                      <li class="nav-item">
+                        <NuxtLink to="/admin/attribute/attribute" class="nav-link" data-key="t-attribute-list">{{ $t("admin.sidebar.attributeList") }}</NuxtLink>
+                      </li>
+                      <li class="nav-item">
+                        <NuxtLink to="/admin/attribute/attribute/create" class="nav-link" data-key="t-attribute-create">{{ $t("admin.sidebar.attributeCreate") }}</NuxtLink>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+                <li class="nav-item">
+                  <NuxtLink to="/admin/attribute/catalogue" class="nav-link" data-key="t-attribute-catelogue">{{ $t("admin.sidebar.attributeCatalogue") }}</NuxtLink>
                 </li>
               </ul>
             </div>
