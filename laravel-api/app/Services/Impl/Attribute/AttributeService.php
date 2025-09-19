@@ -15,8 +15,9 @@ class AttributeService extends BaseService implements AttributeServiceInterface
     protected $repository;
 
     protected $complexFilter = ['id'];
+    protected $simpleFilter = ['publish', 'attribute_catalogue_id'];
 
-    protected $with = [];
+    protected $with = ['attribute_catalogues'];
     protected $relationFilter = [];
 
     protected $cacheKeyPrefix = 'attributes';

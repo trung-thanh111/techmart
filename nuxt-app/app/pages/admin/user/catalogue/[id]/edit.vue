@@ -84,22 +84,11 @@ import PublishSelect from "~/components/admin/custom/PublishSelect.vue";
 import Button from "~/components/admin/custom/Button.vue";
 import Breadcrumb from "~/components/admin/navigation/Breadcrumb.vue";
 import { useUserCatalogue } from "~/composables/admin/user/useUserCatalogue";
-import { slugify } from "~/utils/helpers";
 
-const { config, isLoading, show, handleUpdate, values, setValues } = useUserCatalogue(undefined, "update");
+const { config, isLoading, slug, show, handleUpdate, values, setValues } = useUserCatalogue(undefined, "update");
 
 const id = Number(useRoute().params.id);
 const { data } = await show(id);
-
-const slug = ref(data.slug);
-watch(
-  () => values.name,
-  (valName) => {
-    if (valName) {
-      slug.value = slugify(valName);
-    }
-  }
-);
 setValues({
   name: data.name,
   description: data.description,

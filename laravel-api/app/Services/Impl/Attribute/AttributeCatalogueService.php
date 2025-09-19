@@ -14,7 +14,7 @@ protected $repository;
 
 protected $complexFilter = ['id'];
 
-protected $with = [];
+protected $with = ['attributes'];
 protected $relationFilter = [];
 
 protected $cacheKeyPrefix = 'attribute_catalogues';

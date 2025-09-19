@@ -25,16 +25,15 @@ class PromotionCatalogueResource extends JsonResource
             'icon' => $this->icon,
             'order' => $this->order,
             'publish' => (int) $this->publish,
-            'publish_text' => $this->publish === 2 ? 'Đã xuất bản' : 'Chưa xuất bản',
-            'creator' => $this->whenLoaded('users', [
-                'id' => $this->users->id,
-                'name' => $this->users->name,
-            ]),
-            'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
-            'updatedAt' => $this->updated_at?->format('Y-m-d H:i:s'),
-            'deletedAt' => $this->deleted_at?->format('Y-m-d H:i:s'),
-            'createdAtHuman' => $this->created_at?->diffForHumans(),
-            'updatedAtHuman' => $this->updated_at?->diffForHumans(),
+            // 'creator' => $this->whenLoaded('users', [
+            //     'id' => $this->users->id,
+            //     'name' => $this->users->name,
+            // ]),
+            // 'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
+            // 'updatedAt' => $this->updated_at?->format('Y-m-d H:i:s'),
+            // 'deletedAt' => $this->deleted_at?->format('Y-m-d H:i:s'),
+            // 'createdAtHuman' => $this->created_at?->diffForHumans(),
+            // 'updatedAtHuman' => $this->updated_at?->diffForHumans(),
         ];
     }
 }

@@ -18,11 +18,11 @@ class PermissionResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'publish' => (int) $this->publish,
-            'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
-            'updatedAt' => $this->updated_at?->format('Y-m-d H:i:s'),
-            'deletedAt' => $this->deleted_at?->format('Y-m-d H:i:s'),
-            'createdAtHuman' => $this->created_at?->diffForHumans(),
-            'updatedAtHuman' => $this->updated_at?->diffForHumans(),
+            // 'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
+            // 'updatedAt' => $this->updated_at?->format('Y-m-d H:i:s'),
+            // 'deletedAt' => $this->deleted_at?->format('Y-m-d H:i:s'),
+            // 'createdAtHuman' => $this->created_at?->diffForHumans(),
+            // 'updatedAtHuman' => $this->updated_at?->diffForHumans(),
         ];
     }
 }

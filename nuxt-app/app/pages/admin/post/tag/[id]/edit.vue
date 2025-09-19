@@ -105,19 +105,10 @@ import { usePostTag } from "~/composables/admin/post/usePostTag";
 import { slugify } from "~/utils/helpers";
 import AppCheckbox from "~/components/admin/custom/AppCheckbox.vue";
 
-const { config, isLoading, values, show, handleUpdate, setValues } = usePostTag(undefined, "update");
+const { config, isLoading, values, slug, show, handleUpdate, setValues } = usePostTag(undefined, "update");
 
 const id = Number(useRoute().params.id);
 const { data } = await show(id);
-const slug = ref(data.slug);
-watch(
-  () => values.name,
-  (valName) => {
-    if (valName) {
-      slug.value = slugify(valName);
-    }
-  }
-);
 setValues({
   name: data.name,
   description: data.description,

@@ -29,7 +29,6 @@ class UpdateRequest extends BaseRequest
             "description" => "{$sometime}|nullable|string|max:255",
             "order" => "{$sometime}|nullable|integer|min:0",
             "publish" => "{$sometime}|required|integer|in:0,1,2",
-            "description" => "{$sometime}|nullable|string|max:255",
             "slug" => [
                 "{$sometime}",
                 "required",

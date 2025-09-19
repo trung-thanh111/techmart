@@ -20,8 +20,8 @@ class AgencyWorkingHourResource extends JsonResource
             'openTime' => $this->open_time ?? null,
             'closeTime' => $this->close_time ?? null,
             'publish' => (int) $this->publish ?? null,
-            'createdAt' => $this->created_at ?? null,
-            'updatedAt' => $this->updated_at ?? null,
+            // 'createdAt' => $this->created_at ?? null,
+            // 'updatedAt' => $this->updated_at ?? null,
         ];
     }
 }

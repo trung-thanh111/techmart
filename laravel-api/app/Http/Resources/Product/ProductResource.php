@@ -26,7 +26,7 @@ class ProductResource extends JsonResource
                 'url' => asset("/storage/{$this->image}") ?? null,
             ],
             'price' => price_to_string($this->price),
-            'made_in' => $this->made_in,
+            'madeIn' => $this->made_in,
             'icon' => $this->icon,
             'album' => $this->album,
             'extraAlbum' => $this->extra_album,
@@ -37,8 +37,8 @@ class ProductResource extends JsonResource
             'metaKeyword' => $this->meta_keyword,
             'metaDescription' => $this->meta_description,
             'index' => $this->index,
-            'scheme' => $this->scheme,
-            'iframe' => $this->iframe,
+            // 'scheme' => $this->scheme,
+            // 'iframe' => $this->iframe,
             'publish' => (int) $this->publish,
             'creator' => $this->whenLoaded('users', [
                 'id' => $this->users->id,
@@ -47,7 +47,6 @@ class ProductResource extends JsonResource
             'productVariant' => ProductVariantResource::collection($this->product_variants),
             'productCatalogue' => ProductCatalogueResource::collection($this->product_catalogues),
             'brand' => new BrandResource($this->brands), // quan hệ 1-1 belongSto
-
             'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
             'updatedAt' => $this->updated_at?->format('Y-m-d H:i:s'),
             'deletedAt' => $this->deleted_at?->format('Y-m-d H:i:s'),

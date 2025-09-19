@@ -31,8 +31,8 @@ class AddressOrderResource extends JsonResource
             ]),
             'isDefault' => $this->is_default,
             'publish' => (int) $this->publish,
-            'createdAt' => $this->created_at ?? null,
-            'updatedAt' => $this->updated_at ?? null,
+            // 'createdAt' => $this->created_at ?? null,
+            // 'updatedAt' => $this->updated_at ?? null,
         ];
     }
 }

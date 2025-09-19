@@ -30,13 +30,13 @@ class BannerResource extends JsonResource
             'sort_order' => $this->sort_order,
             'link_url' => $this->link_url,
             'extra_data' => $this->extra_data,
-            'creator' => $this->whenLoaded('users', [
-                'id' => $this->users->id,
-                'name' => $this->users->name,
-            ]),
             'publish' => (int) $this->publish,
-            'createdAt' => $this->created_at ?? null,
-            'updatedAt' => $this->updated_at ?? null,
+            // 'creator' => $this->whenLoaded('users', [
+            //     'id' => $this->users->id,
+            //     'name' => $this->users->name,
+            // ]),
+            // 'createdAt' => $this->created_at ?? null,
+            // 'updatedAt' => $this->updated_at ?? null,
         ];
     }
 }

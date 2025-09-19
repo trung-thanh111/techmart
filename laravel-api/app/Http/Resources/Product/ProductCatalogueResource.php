@@ -16,7 +16,7 @@ class ProductCatalogueResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'parent_id' => $this->parent_id,
+            'parentId' => $this->parent_id,
             'lft' => (int) $this->lft,
             'rgt' => (int) $this->rgt,
             'level' => (int) $this->level,
@@ -30,24 +30,21 @@ class ProductCatalogueResource extends JsonResource
             'icon' => $this->icon,
             'order' => $this->order,
             'publish' => (int) $this->publish,
-            'publish_text' => $this->publish === 2 ? 'Đã xuất bản' : 'Chưa xuất bản',
-            'meta_title' => $this->meta_title,
-            'meta_keyword' => $this->meta_keyword,
-            'meta_description' => $this->meta_description,
-            'index' => $this->index,
-            'scheme' => $this->scheme,
-            'iframe' => $this->iframe,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'creator' => $this->whenLoaded('users', [
-                'id' => $this->users->id,
-                'name' => $this->users->name,
-            ]),
-            'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
-            'updatedAt' => $this->updated_at?->format('Y-m-d H:i:s'),
-            'deletedAt' => $this->deleted_at?->format('Y-m-d H:i:s'),
-            'createdAtHuman' => $this->created_at?->diffForHumans(),
-            'updatedAtHuman' => $this->updated_at?->diffForHumans(),
+            'metaTitle' => $this->meta_title,
+            'metaTeyword' => $this->meta_keyword,
+            'metaDescription' => $this->meta_description,
+            // 'index' => $this->index,
+            // 'scheme' => $this->scheme,
+            // 'iframe' => $this->iframe,
+            // 'creator' => $this->whenLoaded('users', [
+            //     'id' => $this->users->id,
+            //     'name' => $this->users->name,
+            // ]),
+            // 'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
+            // 'updatedAt' => $this->updated_at?->format('Y-m-d H:i:s'),
+            // 'deletedAt' => $this->deleted_at?->format('Y-m-d H:i:s'),
+            // 'createdAtHuman' => $this->created_at?->diffForHumans(),
+            // 'updatedAtHuman' => $this->updated_at?->diffForHumans(),
         ];
     }
 }
