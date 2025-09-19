@@ -263,6 +263,27 @@
           "relatedPlaceholder": "Chọn nhóm câu hỏi"
         }
       },
+      "faq": {
+        "title": "Quản lý câu hỏi thường gặp",
+        "breadcrumb": "Quản lý câu hỏi thường gặp",
+        "groupInfo": "Thông tin",
+        "filterGroup": "Nhóm câu hỏi",
+        "form": {
+          "question": "Câu hỏi",
+          "answer": "Câu trả lời",
+          "questionPlaceholder": "Nhập câu hỏi",
+          "answerPlaceholder": "Nhập câu trả lời",
+          "description": "Mô tả",
+          "descriptionPlaceholder": "Nhập mô tả",
+          "order": "Thứ tự",
+          "orderPlaceholder": "Nhập thứ tự",
+          "urlTooltip": "URL của bản ghi",
+          "isHot": "Nổi bật",
+          "isHotPlaceholder": "Chọn nổi bật",
+          "faqCatalogue": "Nhóm câu hỏi",
+          "faqCataloguePlaceholder": "Chọn nhóm câu hỏi"
+        }
+      },
       "postCatalogue": {
         "title": "Quản lý nhóm bài viết",
         "breadcrumb": "Quản lý nhóm bài viết",
@@ -432,12 +453,16 @@
     },
     "validation": {
       "nameRequired": "Bạn chưa nhập tên cho bản ghi",
+      "questionRequired": "Bạn chưa nhập câu hỏi",
+      "faqCatalogueIdRequired": "Bạn chưa chọn nhóm câu hỏi",
+      "answerRequired": "Bạn chưa nhập câu trả lời",
       "postCatalogueRequired": "Danh mục bài viết là bắt buộc",
       "contentRequired": "Nội dung bài viết là bắt buộc",
       "recordExists": "Bản ghi đã tồn tại!",
       "emailRequired": "Bạn chưa nhập email cho bản ghi",
       "passwordRequired": "Bạn chưa nhập mật khẩu cho bản ghi",
       "nameMaxLength": "Tên đã vượt quá 255 ký tự",
+      "questionMaxLength": "Câu hỏi đã vượt quá 255 ký tự",
       "statusRequired": "Bạn chưa chọn trạng thái",
       "statusInvalid": "Trạng thái không hợp lệ",
       "titleMaxLength": "Tiêu đề vượt quá 255 ký tự",

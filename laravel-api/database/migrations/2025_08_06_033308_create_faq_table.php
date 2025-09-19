@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('question');
             $table->string('slug')->unique();
             $table->text('answer');
-            $table->integer('sort_order')->default(0);
-            $table->boolean('is_featured')->default(false);
+            $table->integer('order')->default(0);
+            $table->boolean('is_hot')->default(false);
             $table->foreignId('faq_catalogue_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
             $table->tinyInteger('publish')->default(0)->comment('0: draft, 1: private, 2: publish');

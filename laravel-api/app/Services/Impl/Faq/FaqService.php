@@ -13,8 +13,9 @@ class FaqService extends BaseService implements FaqServiceInterface {
 protected $repository;
 
 protected $complexFilter = ['id'];
+protected $simpleFilter = ['publish', 'faq_catalogue_id'];
 
-protected $with = [];
+protected $with = ['faq_catalogues'];
 protected $relationFilter = [];
 
 protected $cacheKeyPrefix = 'faqs';

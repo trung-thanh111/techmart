@@ -30,6 +30,10 @@ export const POSTINDEX = "/admin/post/post";
 export const POSTCREATE = "/admin/post/post/create";
 export const POSTUPDATE = "/admin/post/post/update";
 
+export const FAQINDEX = "/admin/faq/faq";
+export const FAQCREATE = "/admin/faq/faq/create";
+export const FAQUPDATE = "/admin/faq/faq/update";
+
 export const FAQCATALOGUEINDEX = "/admin/faq/catalogue";
 export const FAQCATALOGUECREATE = "/admin/faq/catalogue/create";
 export const FAQCATALOGUEUPDATE = "/admin/faq/catalogue/update";
