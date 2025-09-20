@@ -25,7 +25,6 @@ export const usePost = (initialFilters?: PostPayloadFilter, mode: "create" | "up
   const tagOptions = ref<Array<{ name: string; id: number }>>([]);
   const postOptions = ref<Array<{ name: string; id: number }>>([]);
   const postCatalogueOptions = ref<Array<{ name: string; id: number }>>([]);
-  const showPassword = ref(false);
   const slug = computed(() => slugify(values.name || ""));
 
   const schema = {
@@ -246,7 +245,6 @@ export const usePost = (initialFilters?: PostPayloadFilter, mode: "create" | "up
   return {
     data,
     isLoading,
-    showPassword,
     filters,
     config,
     page,

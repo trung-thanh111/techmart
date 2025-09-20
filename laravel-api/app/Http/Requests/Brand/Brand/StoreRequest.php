@@ -23,11 +23,13 @@ class StoreRequest extends BaseRequest
      */
     public function rules(): array
     {
+        $mimes = implode(',', config('upload.image.allowed_type'));
+        $max_size = config('upload.image.max_size');
         return [
             "name" => "required|string|max:255",
-             "slug" => "required|string|max:255|unique:brands,slug",
+            "slug" => "required|string|max:255|unique:brands,slug",
             "description" => "nullable|string",
-            "logo" => "nullable",
+            "logo" => "nullable|sometimes|mimes:{$mimes}|max:{$max_size}",
             "website" => "nullable|url|max:255",
             "country" => "nullable|string|max:100",
             "order" => "nullable|integer|min:0",
