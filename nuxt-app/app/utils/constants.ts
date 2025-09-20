@@ -46,6 +46,10 @@ export const ATTRIBUTECATALOGUEINDEX = "/admin/attribute/catalogue";
 export const ATTRIBUTECATALOGUECREATE = "/admin/attribute/catalogue/create";
 export const ATTRIBUTECATALOGUEUPDATE = "/admin/attribute/catalogue/update";
 
+export const BRANDINDEX = "/admin/agency/agency";
+export const BRANDCREATE = "/admin/agency/agency/create";
+export const BRANDUPDATE = "/admin/agency/agency/update";
+
 export const AGENCYINDEX = "/admin/agency/agency";
 export const AGENCYCREATE = "/admin/agency/agency/create";
 export const AGENCYUPDATE = "/admin/agency/agency/update";

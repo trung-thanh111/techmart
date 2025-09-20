@@ -28,6 +28,7 @@
       "draft": "Nháp",
       "hidden": "Ẩn",
       "record": "Bản ghi",
+      "country": "Quốc gia",
       "website": "Trang web",
       "phone": "Điện thoại",
       "openTime": "Giờ mở cửa",
@@ -96,7 +97,9 @@
       "agencyWorkingHour": "Giờ làm việc",
       "agencyList": "Danh sách",
       "agencyCreate": "Thêm mới",
-      "brands": "Thương hiệu",
+      "brands": "Thương hiệu & đối tác",
+      "brandList": "Danh sách",
+      "brandCreate": "Thêm mới",
       "tags": "Tag",
       "customers": "Khách hàng",
       "customerCatalogue": "Nhóm khách hàng",
@@ -291,6 +294,40 @@
           "isHotPlaceholder": "Chọn nổi bật",
           "faqCatalogue": "Nhóm câu hỏi",
           "faqCataloguePlaceholder": "Chọn nhóm câu hỏi"
+        }
+      },
+      "brand": {
+        "title": "Quản lý thương hiệu",
+        "breadcrumb": "Quản lý thương hiệu",
+        "groupInfo": "Thông tin",
+        "filterGroup": "Bộ lọc",
+        "form": {
+          "name": "Tên",
+          "namePlaceholder": "Nhập tên",
+          "description": "Mô tả",
+          "descriptionPlaceholder": "Nhập mô tả",
+          "iframeMap": "Bản đồ nhúng (Iframe)",
+          "iframeMapPlaceholder": "Dán mã iframe bản đồ",
+          "email": "Email",
+          "emailPlaceholder": "Nhập email",
+          "phone": "Số điện thoại",
+          "phonePlaceholder": "Nhập số điện thoại",
+          "website": "Website",
+          "websitePlaceholder": "Nhập website",
+          "country": "Quốc gia",
+          "countryPlaceholder": "Nhập Việt Nam (VN)",
+          "order": "Thứ tự",
+          "orderPlaceholder": "Nhập thứ tự",
+          "address": "Địa chỉ",
+          "addressPlaceholder": "Nhập địa chỉ",
+          "urlTooltip": "URL của bản ghi",
+          "isHot": "Nổi bật",
+          "isHotPlaceholder": "Chọn nổi bật",
+          "workingHour": "Giờ làm việc",
+          "relatedPlaceholder": "Chọn giờ làm việc",
+          "publish": "Trạng thái",
+          "logo": "Logo",
+          "logoNote": "Chỉ chấp nhận ảnh JPG, PNG, WEBP, dung lượng tối đa 2MB"
         }
       },
       "agency": {
@@ -576,7 +613,10 @@
       "openTimeMaxLength": "Giờ mở cửa vượt quá 255 ký tự",
       "closeTimeMaxLength": "Giờ đóng cửa vượt quá 255 ký tự",
       "websiteMaxLength": "Website vượt quá 500 ký tự",
-      "agencyWorkingHourRequired": "Bạn chưa chọn giờ làm việc"
+      "agencyWorkingHourRequired": "Bạn chưa chọn giờ làm việc",
+      "websiteInvalid": "Website không hợp lệ",
+      "logoMaxFileSize": "Kích thước file logo vượt quá giới hạn cho phép",
+      "logoAcceptedImageTypes": "Định dạng file logo không hợp lệ"
     },
     "messages": {
       "createSuccess": "Thêm mới thành công",

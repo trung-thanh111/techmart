@@ -22,7 +22,6 @@ export const useAttribute = (initialFilters?: AttributePayloadFilter, mode: "cre
   const selectedIds = ref<number[]>([]);
   const selectedItem = ref<IAttribute | null>(null);
   const attributeCatalogueOptions = ref<Array<{ name: string; id: number }>>([]);
-  const showPassword = ref(false);
   const slug = computed(() => slugify(values.name || ""));
 
   const schema = {
@@ -191,7 +190,6 @@ export const useAttribute = (initialFilters?: AttributePayloadFilter, mode: "cre
   return {
     data,
     isLoading,
-    showPassword,
     filters,
     config,
     page,

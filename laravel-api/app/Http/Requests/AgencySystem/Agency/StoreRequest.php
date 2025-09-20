@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Requests\AgencySystem\Agency;
 
 use App\Enums\Common;
@@ -21,11 +22,13 @@ class StoreRequest extends BaseRequest
      */
     public function rules(): array
     {
+        $mimes = implode(',', config('upload.image.allowed_type'));
+        $max_size = config('upload.image.max_size');
         return [
             "name" => "required|string|max:255",
             "slug" => "required|string|max:255|unique:agencies,slug",
             "description" => "nullable|string|max:255",
-            "logo" => "nullable|max:255",
+            "logo" => "nullable|sometimes|mimes:{$mimes}|max:{$max_size}",
             "website" => "nullable|string|max:255",
             "email" => "nullable|string|email|max:255",
             "phone" => "nullable|string|max:20",
@@ -35,14 +38,16 @@ class StoreRequest extends BaseRequest
         ];
     }
 
-    public function prepareForValidation(){
+    public function prepareForValidation()
+    {
         $this->merge([
             'slug' => generate_slug($this->name),
             'user_id' => auth(Common::API)->user()->id,
         ]);
     }
 
-    public function messages(){
+    public function messages()
+    {
         return [];
     }
 }

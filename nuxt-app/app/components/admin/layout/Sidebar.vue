@@ -208,6 +208,29 @@
               </ul>
             </div>
           </li>
+          <li class="nav-item">
+            <a class="nav-link menu-link" href="#sidebarbrands" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarbrands">
+              <i class="ri-news-line"></i>
+              <span data-key="t-brand-pages">{{ $t("admin.sidebar.brands") }}</span>
+            </a>
+            <div class="collapse menu-dropdown" id="sidebarbrands">
+              <ul class="nav nav-sm flex-column">
+                <li class="nav-item">
+                  <a href="#sidebarbrand" class="nav-link menu-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarbrand" data-key="t-brand">{{ $t("admin.sidebar.brands") }}</a>
+                  <div class="collapse menu-dropdown" id="sidebarbrand">
+                    <ul class="nav nav-sm flex-column">
+                      <li class="nav-item">
+                        <NuxtLink to="/admin/brand/brand" class="nav-link" data-key="t-brand-list">{{ $t("admin.sidebar.brandList") }}</NuxtLink>
+                      </li>
+                      <li class="nav-item">
+                        <NuxtLink to="/admin/brand/brand/create" class="nav-link" data-key="t-brand-create">{{ $t("admin.sidebar.brandCreate") }}</NuxtLink>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </li>
           <li class="menu-title">
             <i class="ri-more-fill"></i>
             <span class="text-light">{{ $t("admin.sidebar.configuration") }}</span>
@@ -244,65 +267,6 @@
                     </li>
                     <li class="nav-item">
                       <a href="ui-grid.html" class="nav-link" data-key="t-grid">{{ $t("admin.sidebar.grid") }}</a>
-                    </li>
-                  </ul>
-                </div>
-                <div class="col-lg-4">
-                  <ul class="nav nav-sm flex-column">
-                    <li class="nav-item">
-                      <a href="ui-images.html" class="nav-link" data-key="t-images">{{ $t("admin.sidebar.images") }}</a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="ui-tabs.html" class="nav-link" data-key="t-tabs">{{ $t("admin.sidebar.tabs") }}</a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="ui-accordions.html" class="nav-link" data-key="t-accordion-collapse">{{ $t("admin.sidebar.accordion") }}</a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="ui-modals.html" class="nav-link" data-key="t-modals">{{ $t("admin.sidebar.modals") }}</a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="ui-offcanvas.html" class="nav-link" data-key="t-offcanvas">{{ $t("admin.sidebar.offcanvas") }}</a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="ui-placeholders.html" class="nav-link" data-key="t-placeholders">{{ $t("admin.sidebar.placeholders") }}</a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="ui-progress.html" class="nav-link" data-key="t-progress">{{ $t("admin.sidebar.progress") }}</a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="ui-notifications.html" class="nav-link" data-key="t-notifications">{{ $t("admin.sidebar.notifications") }}</a>
-                    </li>
-                  </ul>
-                </div>
-                <div class="col-lg-4">
-                  <ul class="nav nav-sm flex-column">
-                    <li class="nav-item">
-                      <a href="ui-media.html" class="nav-link" data-key="t-media-object">{{ $t("admin.sidebar.mediaObject") }}</a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="ui-embed-video.html" class="nav-link" data-key="t-embed-video">{{ $t("admin.sidebar.embedVideo") }}</a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="ui-typography.html" class="nav-link" data-key="t-typography">{{ $t("admin.sidebar.typography") }}</a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="ui-lists.html" class="nav-link" data-key="t-lists">{{ $t("admin.sidebar.lists") }}</a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="ui-links.html" class="nav-link">
-                        <span data-key="t-links">{{ $t("admin.sidebar.links") }}</span>
-                        <span class="badge badge-pill bg-success" data-key="t-new">{{ $t("admin.sidebar.new") }}</span>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="ui-general.html" class="nav-link" data-key="t-general">{{ $t("admin.sidebar.general") }}</a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="ui-ribbons.html" class="nav-link" data-key="t-ribbons">{{ $t("admin.sidebar.ribbons") }}</a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="ui-utilities.html" class="nav-link" data-key="t-utilities">{{ $t("admin.sidebar.utilities") }}</a>
                     </li>
                   </ul>
                 </div>

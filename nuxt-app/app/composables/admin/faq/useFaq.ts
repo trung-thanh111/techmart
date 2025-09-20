@@ -22,7 +22,6 @@ export const useFaq = (initialFilters?: FaqPayloadFilter, mode: "create" | "upda
   const selectedIds = ref<number[]>([]);
   const selectedItem = ref<IFaq | null>(null);
   const faqCatalogueOptions = ref<Array<{ name: string; id: number }>>([]);
-  const showPassword = ref(false);
   const slug = computed(() => slugify(values.question || ""));
 
   const schema = {
@@ -202,7 +201,6 @@ export const useFaq = (initialFilters?: FaqPayloadFilter, mode: "create" | "upda
   return {
     data,
     isLoading,
-    showPassword,
     filters,
     config,
     page,
