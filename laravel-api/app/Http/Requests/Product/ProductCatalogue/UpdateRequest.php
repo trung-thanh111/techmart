@@ -65,6 +65,7 @@ class UpdateRequest extends BaseRequest
     {
         $this->merge([
             'user_id' => auth(Common::API)->user()->id,
+            'updated_at' => now(),
             ...($this->has('name') && !$this->has('slug') ? ['slug' => Str::slug($this->name)] : [])
         ]);
     }

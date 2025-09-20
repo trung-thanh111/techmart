@@ -231,6 +231,29 @@
               </ul>
             </div>
           </li>
+          <li class="nav-item">
+            <a class="nav-link menu-link" href="#sidebarbanners" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarbanners">
+              <i class="ri-news-line"></i>
+              <span data-key="t-banner-pages">{{ $t("admin.sidebar.banners") }}</span>
+            </a>
+            <div class="collapse menu-dropdown" id="sidebarbanners">
+              <ul class="nav nav-sm flex-column">
+                <li class="nav-item">
+                  <a href="#sidebarbanner" class="nav-link menu-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarbanner" data-key="t-banner">{{ $t("admin.sidebar.banners") }}</a>
+                  <div class="collapse menu-dropdown" id="sidebarbanner">
+                    <ul class="nav nav-sm flex-column">
+                      <li class="nav-item">
+                        <NuxtLink to="/admin/banner/banner" class="nav-link" data-key="t-banner-list">{{ $t("admin.sidebar.bannerList") }}</NuxtLink>
+                      </li>
+                      <li class="nav-item">
+                        <NuxtLink to="/admin/banner/banner/create" class="nav-link" data-key="t-banner-create">{{ $t("admin.sidebar.bannerCreate") }}</NuxtLink>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </li>
           <li class="menu-title">
             <i class="ri-more-fill"></i>
             <span class="text-light">{{ $t("admin.sidebar.configuration") }}</span>

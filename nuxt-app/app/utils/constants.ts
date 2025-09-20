@@ -54,6 +54,10 @@ export const AGENCYINDEX = "/admin/agency/agency";
 export const AGENCYCREATE = "/admin/agency/agency/create";
 export const AGENCYUPDATE = "/admin/agency/agency/update";
 
+export const BANNERINDEX = "/admin/banner/banner";
+export const BANNERCREATE = "/admin/banner/banner/create";
+export const BANNERUPDATE = "/admin/banner/banner/update";
+
 export const AGENCYWORKINGHOURINDEX = "/admin/agency/working_hour";
 export const AGENCYWORKINGHOURCREATE = "/admin/agency/working_hour/create";
 export const AGENCYWORKINGHOURUPDATE = "/admin/agency/working_hour/update";

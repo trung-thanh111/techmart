@@ -20,7 +20,7 @@ protected $relationFilter = [];
 protected $cacheKeyPrefix = 'banners';
 protected $cacheTags = ['banners:collection'];
 
-protected $useUpload = false;
+protected $useUpload = true;
 
     public function __construct(
         BannerRepository $repository

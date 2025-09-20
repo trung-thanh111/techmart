@@ -58,6 +58,7 @@ class UpdateRequest extends BaseRequest
     public function prepareForValidation()
     {
         $this->merge([
+            'updated_at' => now(),
             'user_id' => auth(Common::API)->user()->id,
             ...($this->has('name') && !$this->has('slug') ? ['slug' => Str::slug($this->name)] : [])
         ]);

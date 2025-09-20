@@ -25,21 +25,14 @@ class StoreRequest extends BaseRequest
         return [
             'name' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:banners,slug',
-            'slug' => 'nullable|string|max:255',
             'image' => 'nullable|string|max:255',
             'type' => 'required|in:homepage,category,flash_sale,popup,custom',
             'position' => 'required|string|max:100',
-            'device' => 'required|in:all,desktop,tablet,mobile',
-            'display_mode' => 'required|in:permanent,scheduled',
             'start_at' => 'nullable|date',
             'end_at' => 'nullable|date|after_or_equal:start_at',
-            'sort_order' => 'nullable|integer',
+            'order' => 'nullable|integer',
             'link_url' => 'nullable|string|max:255',
-            'width' => 'nullable|string|max:50',
-            'height' => 'nullable|string|max:50',
-            'alt' => 'nullable|string|max:255',
-            'class' => 'nullable|string|max:255',
-            'loading' => 'nullable|in:lazy,eager,auto',
+            'is_hot' => 'nullable|boolean',
             'publish' => 'required|integer|in:0,1,2',
         ];
     }
