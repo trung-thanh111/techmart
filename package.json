@@ -2,10 +2,20 @@
   "name": "fullstack-app",
   "version": "1.0.0",
   "scripts": {
-    "start": "npm run start:tabs",
-    "start:tabs": "start cmd /k \"cd laravel-api && php artisan serve\" && start cmd /k \"cd nuxt-app && npm run dev\"",
+    "start": "npm run dev",
+    "dev": "concurrently \"npm run start:api\" \"npm run start:client:fast\"",
+    "dev:fast": "concurrently \"npm run start:api\" \"npm run start:client:turbo\"",
+    "dev:clean": "concurrently \"npm run start:api\" \"npm run start:client:clean\"",
+    "start:tabs": "start cmd /k \"cd laravel-api && php artisan serve\" && start cmd /k \"cd nuxt-app && npm run dev:fast\"",
     "start:api": "cd laravel-api && php artisan serve",
-    "start:client": "cd nuxt-app && npm run dev"
+    "start:client": "cd nuxt-app && npm run dev",
+    "start:client:fast": "cd nuxt-app && set NODE_OPTIONS=--max-old-space-size=8192 && npm run dev",
+    "start:client:turbo": "cd nuxt-app && set NODE_OPTIONS=--max-old-space-size=8192 && npm run dev:fast",
+    "start:client:clean": "cd nuxt-app && rmdir /s /q .nuxt 2>nul && set NODE_OPTIONS=--max-old-space-size=8192 && npm run dev:fast",
+    "build": "cd nuxt-app && npm run build",
+    "build:api": "cd laravel-api && php artisan config:cache && php artisan route:cache",
+    "install:all": "cd laravel-api && composer install && cd ../nuxt-app && npm install",
+    "fresh": "npm run install:all && npm run dev:clean"
   },
   "devDependencies": {
     "concurrently": "^7.6.0"

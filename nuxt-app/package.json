@@ -5,6 +5,9 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
+    "dev:fast": "nuxt dev",
+    "dev:turbo": "nuxt dev",
+    "dev:clean": "rimraf .nuxt && nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
@@ -37,6 +40,8 @@
     "embeddedLanguageFormatting": "auto"
   },
   "devDependencies": {
-    "@primevue/nuxt-module": "^4.3.7"
+    "@primevue/nuxt-module": "^4.3.7",
+    "cross-env": "^7.0.3",
+    "rimraf": "^5.0.5"
   }
 }
