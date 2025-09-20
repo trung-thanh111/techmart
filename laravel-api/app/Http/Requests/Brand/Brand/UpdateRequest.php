@@ -59,6 +59,7 @@ class UpdateRequest extends BaseRequest
         // Tự động tạo slug từ name nếu slug không được cung cấp
         $this->merge([
             'user_id' => auth(Common::API)->user()->id,
+            'updated_at' => now(),
             ...($this->has('name') && !$this->has('slug') ? ['slug' => Str::slug($this->name)] : [])
         ]);
     }

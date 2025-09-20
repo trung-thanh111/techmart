@@ -55,7 +55,11 @@ class UpdateRequest extends BaseRequest
         ];
     }
 
-    public function prepareForValidation() {}
+    public function prepareForValidation() {
+        $this->merge([
+            'updated_at' => now(),
+        ]);
+    }
 
     public function messages()
     {

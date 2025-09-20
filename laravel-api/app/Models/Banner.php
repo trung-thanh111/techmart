@@ -18,17 +18,11 @@ class Banner extends Model
         'image',
         'type',
         'position',
-        'device',
-        'display_mode',
         'start_at',
         'end_at',
-        'sort_order',
+        'order',
         'link_url',
-        'width',
-        'height',
-        'alt',
-        'class',
-        'loading',
+        'is_hot',
         'publish',
         'user_id'
     ];
@@ -36,8 +30,7 @@ class Banner extends Model
     protected $casts = [
         'start_at' => 'datetime',
         'end_at' => 'datetime',
-        'publish' => 'integer',
-        'sort_order' => 'integer',
+        'is_hot' => 'boolean',
     ];
 
     /**
