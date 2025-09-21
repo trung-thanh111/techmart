@@ -84,20 +84,20 @@
           </div>
         </div>
       </div>
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">{{ $t("admin.common.image") }}</h5>
+        </div>
+        <div class="card-body">
+          <MultipleImageUpload v-model="albumData" field-name="album" :max-files="15" @change="onAlbumChange" />
+        </div>
+      </div>
       <div class="flex justify-end gap-3 mt-4 position-sticky bottom-5 z-20">
         <Button variant="cancel" :to="BANNERINDEX" />
         <Button variant="success" :loading="isLoading" />
       </div>
     </div>
     <div class="col-lg-4 mt-0">
-      <div class="card">
-        <div class="card-body p-4">
-          <label class="form-label">{{ $t("admin.common.image") }}</label>
-          <div class="text-center">
-            <SingleImageUpload :initial-url="null" :note="$t('admin.common.noteUploadImage')" @selected="(f)=> setValues({ ...(values as any), logo: f } as any)" />
-          </div>
-        </div>
-      </div>
       <div class="card">
         <div class="card-header">
           <h5 class="card-title mb-0">{{ $t("admin.common.setting") }}</h5>
@@ -151,10 +151,16 @@ import Button from "~/components/admin/custom/Button.vue";
 import Breadcrumb from "~/components/admin/navigation/Breadcrumb.vue";
 import PublishSelect from "~/components/admin/custom/PublishSelect.vue";
 import { useBanner } from "~/composables/admin/banner/useBanner";
-import SingleImageUpload from "~/components/admin/custom/SingleImageUpload.vue";
+import MultipleImageUpload from "~/components/admin/custom/MultipleImageUpload.vue";
 import AppCheckbox from "~/components/admin/custom/AppCheckbox.vue";
+import type { AlbumItem } from "~/interfaces/upload/image.interface";
 
 const { handleStore, setValues, values, isLoading, config, slug, typeOptions, positionOptions } = useBanner();
+
+const albumData = ref<AlbumItem[] | null>(null);
+const onAlbumChange = () => {
+  setValues({ ...values, album: albumData.value });
+};
 
 definePageMeta({
   layout: "admin",

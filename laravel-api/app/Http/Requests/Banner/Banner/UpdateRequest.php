@@ -43,7 +43,7 @@ class UpdateRequest extends BaseRequest
                 "max:255",
                 Rule::unique("banners", "slug")->ignore($this->route("banner")),
             ],
-            'image' => "nullable|string|max:255|{$sometime}",
+            "album" => "nullable|sometimes|array",
             'type' => "required|in:homepage,category,flash_sale,popup,custom|{$sometime}",
             'position' => "required|string|max:100|{$sometime}",
             'start_at' => "nullable|date|{$sometime}",

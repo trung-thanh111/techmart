@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Traits\HasQuery;
+use App\Traits\HasTransaction;
+use App\Traits\HasUpload;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -15,7 +17,7 @@ class Banner extends Model
     protected $fillable = [
         'name',
         'slug',
-        'image',
+        'album',
         'type',
         'position',
         'start_at',
@@ -31,6 +33,7 @@ class Banner extends Model
         'start_at' => 'datetime',
         'end_at' => 'datetime',
         'is_hot' => 'boolean',
+        'album' => 'array',
     ];
 
     /**

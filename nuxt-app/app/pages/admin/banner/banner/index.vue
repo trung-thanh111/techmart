@@ -7,7 +7,7 @@ import AppCheckbox from "~/components/admin/custom/AppCheckbox.vue";
 import Button from "~/components/admin/custom/Button.vue";
 import { useBanner } from "~/composables/admin/banner/useBanner";
 
-const { data, isLoading, selectedIds, selectedItem, search, setPage, handleDeleteMultiple, setSelectedItem, confirmDelete, updateSelectedIds, getTotalItems, getAllItemIds, handleToggleIsHot } = useBanner();
+const { data, config, isLoading, selectedIds, selectedItem, search, setPage, handleDeleteMultiple, setSelectedItem, confirmDelete, updateSelectedIds, getTotalItems, getAllItemIds, handleToggleIsHot } = useBanner();
 
 provide("getTotalItems", getTotalItems);
 provide("getAllItemIds", getAllItemIds);
@@ -89,10 +89,23 @@ definePageMeta({
                 </td>
                 <td>
                   <NuxtLink class="hover:text-teal-500 flex items-center gap-2" :to="`/admin/banner/banner/${item.id}/edit`">
-                    <NuxtImg :src="item.image?.path ? item.image?.url ?? '' : '/shared/images/defaults/record.jpg'" alt="image-record" class="rounded-md w-[120px] h-[70px] object-cover" loading="lazy" />
+                    <div :id="`carousel-${item.id}`" class="carousel slide carousel-fade w-[120px] h-[70px] rounded-md overflow-hidden" data-bs-ride="carousel">
+                      <div class="carousel-inner">
+                        <div v-for="(img, idx) in item.album?.length ? item.album : [{ path: '/shared/images/defaults/record.jpg' }]" :key="idx" class="carousel-item" :class="{ active: idx === 0 }">
+                          <NuxtImg :src="img.path.startsWith('uploads') ? `${config.public.baseUrl}/storage/${img.path}` : img.path" alt="banner-image" class="w-[120px] h-[70px] object-cover" loading="lazy" />
+                        </div>
+                      </div>
+                      <button v-if="item.album?.length > 1" class="carousel-control-prev" type="button" :data-bs-target="`#carousel-${item.id}`" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                      </button>
+                      <button v-if="item.album?.length > 1" class="carousel-control-next" type="button" :data-bs-target="`#carousel-${item.id}`" data-bs-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                      </button>
+                    </div>
                     {{ item.name }}
                   </NuxtLink>
                 </td>
+
                 <td class="text-center">
                   <ToggleSwitch v-model="item.isHot" @update:modelValue="() => handleToggleIsHot(item)" class="scale-75" />
                 </td>
