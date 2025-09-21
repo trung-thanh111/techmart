@@ -1,9 +1,21 @@
-export interface UploadedFile {
-    url: string;
-    path: string;
+export interface AlbumItem {
+  path: string;
 }
 
-export interface TempUploadResponse {
-    id: string;
-    files: UploadedFile[];
+export interface ImageItem {
+  id: string;
+  url: string;
+  path: string;
+  file?: File;
 }
+
+export interface UploadResponseFile {
+  url: string;
+  path: string;
+}
+
+export interface UploadResponse {
+  id: string;
+  files: UploadResponseFile[];
+}
+

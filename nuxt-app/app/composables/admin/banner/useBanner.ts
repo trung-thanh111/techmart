@@ -24,7 +24,7 @@ export const useBanner = (initialFilters?: BannerPayloadFilter, mode: "create" |
 
   const schema = {
     name: z.string({ required_error: "admin.validation.nameRequired" }).trim().min(1, "admin.validation.nameRequired").max(255, "admin.validation.nameMaxLength"),
-    image: z.string().max(255, "admin.validation.imageMaxLength").nullable().optional(),
+    album: z.array(z.object({ path: z.string() })).nullable().optional(),
     type: z.enum(["homepage", "category", "flash_sale", "popup", "custom"], { errorMap: () => ({ message: "admin.validation.typeInvalid" }) }),
     position: z.enum(["main_slider", "homepage_top_ads", "homepage_middle_ads", "homepage_bottom_ads", "category_top_banner", "category_sidebar_banner", "category_bottom_banner", "flash_sale_header", "flash_sale_footer", "popup_center", "popup_bottom_right", "custom_html", "custom_slot"], { errorMap: () => ({ message: "admin.validation.positionInvalid" }) }),
     startAt: z.string().nullable().optional(),

@@ -17,10 +17,7 @@ class BannerResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'image' => [
-                'path' => $this->image ?? null,
-                'url' => asset("/storage/{$this->image}") ?? null,
-            ],
+            'album' => $this->album,
             'type' => $this->type,
             'position' => $this->position,
             'startAt' => $this->start_at?->format('Y-m-d H:i:s'),

@@ -4,7 +4,7 @@ export interface IBanner {
   id: number;
   name?: string;
   slug?: string;
-  image: { path: string | null; url: string | null };
+  album: { path: string }[];
   type?: string;
   position?: string;
   startAt?: string;

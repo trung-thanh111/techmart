@@ -17,7 +17,7 @@ export const bannerService = {
     const { privateFetch } = useApi();
     return await privateFetch<IApiOk<IBanner>>(`${ENDPOINT}/banners`, {
       method: "POST",
-      body: formData(payload),
+      body: payload,
     });
   },
 
@@ -32,7 +32,7 @@ export const bannerService = {
     const { privateFetch } = useApi();
     return await privateFetch<IApiOk<IBanner>>(`${ENDPOINT}/banners/${id}`, {
       method: "POST",
-      body: formData(payload),
+      body: payload,
       params: { _method: "PATCH" },
     });
   },
