@@ -1,24 +1,24 @@
 <template>
   <div>
     <div v-if="!defaultImage" class="text-center">
-      <div class="w-100 d-flex flex-column align-items-center justify-content-center text-center rounded border border-dashed p-4" style="min-height: 160px; background: #fff; color: #6c757d; cursor: pointer" @click="trigger">
-        <div class="d-flex align-items-center justify-content-center rounded-circle" style="width: 40px; height: 40px; background: rgba(0, 0, 0, 0.05)">
-          <i class="ri-upload-cloud-2-line" :class="'text-success'" style="font-size: 20px"></i>
+      <div class="w-full flex flex-col items-center justify-center text-center rounded border border-dashed p-4 min-h-[160px] bg-white text-gray-500 cursor-pointer" @click="trigger">
+        <div class="flex items-center justify-center rounded-full w-10 h-10 bg-black/5">
+          <i class="fa-solid fa-cloud-arrow-up text-green-600 text-xl"></i>
         </div>
-        <div class="mt-2 fw-semibold text-dark">
+        <div class="mt-2 font-semibold text-gray-800">
           {{ $t("admin.common.clickToUpload") }}
         </div>
-        <div class="mt-1 small text-muted">{{ extsLabel }} (max. {{ maxSizeLabel }})</div>
-        <input ref="inputRef" type="file" class="d-none" :accept="accept" @change="onChange" />
+        <div class="mt-1 text-xs text-gray-400">{{ extsLabel }} (max. {{ maxSizeLabel }})</div>
+        <input ref="inputRef" type="file" class="hidden" :accept="accept" @change="onChange" />
       </div>
     </div>
-    <div v-else class="text-center position-relative d-inline-block">
-      <button type="button" class="btn btn-sm btn-link text-danger position-absolute" style="top: -8px; right: -8px" @click.stop="clearImage" aria-label="clear">
-        <i class="ri-close-circle-fill" style="font-size: 20px"></i>
+    <div v-else class="text-center relative inline-block">
+      <button type="button" class="absolute -top-2 -right-1 text-red-500 hover:text-red-600" @click.stop="clearImage" aria-label="clear">
+        <i class="fa-solid fa-circle-xmark text-xl"></i>
       </button>
-      <NuxtImg :src="defaultImage" class="rounded material-shadow d-block mx-auto cursor-pointer" width="260" height="120" alt="preview" loading="lazy" @click="trigger" />
-      <input ref="inputRef" type="file" class="d-none" :accept="accept" @change="onChange" />
-      <div class="mt-1 small text-muted">{{ extsLabel }} (max. {{ maxSizeLabel }})</div>
+      <NuxtImg :src="defaultImage" class="rounded shadow-md block mx-auto cursor-pointer" width="260" height="120" alt="preview" loading="lazy" @click="trigger" />
+      <input ref="inputRef" type="file" class="hidden" :accept="accept" @change="onChange" />
+      <div class="mt-1 text-xs text-gray-400">{{ extsLabel }} (max. {{ maxSizeLabel }})</div>
     </div>
   </div>
 </template>

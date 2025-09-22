@@ -45,9 +45,9 @@ class UpdateRequest extends BaseRequest
             "publish" => "required|integer|in:0,1,2|{$sometime}",
             "email" => [
                 "{$sometime}",
-                'required',
-                'email',
-                Rule::unique('users')->ignore($this->route('user'))
+                "required",
+                "email",
+                Rule::unique("users")->ignore($this->route("user"))
             ],
             "password" => "string|min:8|{$sometime}",
             // "user_catalogues" => "required|array|{$sometime}",

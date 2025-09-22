@@ -9,6 +9,7 @@ import type { IUser, UserPayloadFilter } from "~/interfaces/user/user.interface"
 import type { BasePayloadFilter } from "~/interfaces/base.interface";
 import { USERINDEX, MAX_FILE_SIZE, ACCEPTED_IMAGE_TYPES } from "~/utils/constants";
 import { userCatalogueService } from "~/services/user/catalogue.service";
+import { useAuthStore } from "~/stores/auth/auth";
 
 export const useUser = (
   initialFilters?: UserPayloadFilter,
@@ -98,6 +99,23 @@ export const useUser = (
       isLoading.value = false;
     }
   });
+
+  const handleUpdateProfile = handleSubmit(async (payload: TUserUpdate) => {
+    isLoading.value = true;
+    try {
+      const authStore = useAuthStore();
+      const id = authStore.user?.id;
+      if (!id) return false;
+      await useUserService.update(id, payload as Partial<IUser>);
+      toast.success(t('admin.messages.updateSuccess'));
+    } catch (error: any) {
+      console.error("Cập nhật thất bại:", error);
+      toast.error(error?.response?.data?.message || t('admin.messages.updateFailed'));
+    } finally {
+      isLoading.value = false;
+    }
+  });
+  
 
   const handleDelete = async (id: number) => {
     isLoading.value = true;
@@ -218,6 +236,7 @@ export const useUser = (
     show,
     handleStore,
     handleUpdate,
+    handleUpdateProfile,
     handleDelete,
     handleDeleteMultiple,
     loadUserCatalogue,
