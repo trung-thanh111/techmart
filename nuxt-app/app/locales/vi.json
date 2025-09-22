@@ -120,6 +120,8 @@
       "attributeCatalogue": "Nhóm thuộc tính",
       "attributeList": "Danh sách",
       "attributeCreate": "Thêm mới",
+      "productCatalogueList": "Danh sách",
+      "productCatalogueCreate": "Thêm mới",
       "agencys": "Hệ thống đại lý",
       "agencyWorkingHour": "Giờ làm việc",
       "agencyList": "Danh sách",
@@ -458,6 +460,25 @@
           "urlTooltip": "URL của bản ghi",
           "attributeCatalogue": "Nhóm thuộc tính",
           "attributeCataloguePlaceholder": "Chọn nhóm thuộc tính"
+        }
+      },
+      "productCatalogue": {
+        "title": "Quản lý nhóm sản phẩm",
+        "breadcrumb": "Quản lý nhóm sản phẩm",
+        "groupInfo": "Thông tin",
+        "form": {
+          "name": "Tên",
+          "namePlaceholder": "Nhập tên cho bản ghi",
+          "description": "Mô tả",
+          "descriptionPlaceholder": "Nhập mô tả",
+          "order": "Thứ tự",
+          "orderPlaceholder": "Nhập thứ tự",
+          "urlTooltip": "URL của bản ghi",
+          "isHot": "Nổi bật",
+          "isHotPlaceholder": "Chọn nổi bật",
+          "publishedAt": "Ngày đăng",
+          "parant": "Danh mục cha",
+          "postCataloguePlaceholder": "Chọn danh mục cha"
         }
       },
       "postCatalogue": {

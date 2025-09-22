@@ -21,18 +21,19 @@ return new class extends Migration
             $table->string('slug', 255)->unique();
             $table->string('description')->nullable();
             $table->string('image')->nullable();
-            $table->string('icon')->nullable();
             $table->integer('order')->nullable();
+            $table->boolean('is_hot')->default(false);
             $table->tinyInteger('publish')->default(2);
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
             $table->string('meta_title', 255)->nullable();
             $table->string('meta_keyword', 255)->nullable();
             $table->string('meta_description', 500)->nullable();
-            $table->tinyInteger('index')->default(2); // cho phép index phục vụ SEO
-            $table->text('scheme')->nullable();
-            $table->text('iframe')->nullable();
             $table->softDeletes();
             $table->timestamps();
+            // $table->string('icon')->nullable();
+            // $table->text('scheme')->nullable();
+            // $table->text('iframe')->nullable();
+
             // Indexes
             $table->index(['parent_id', 'lft', 'rgt', 'level']);
             $table->index('slug');

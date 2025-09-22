@@ -94,43 +94,9 @@
           </div>
         </div>
       </div>
-      <div class="card mt-4">
-        <div class="card-header">
-          <h5 class="card-title mb-0">{{ $t("admin.common.seo") }}</h5>
-        </div>
-        <div class="card-body">
-          <SeoPreview :metaTitle="values.metaTitle" :name="values.name" :metaDescription="values.metaDescription" :description="values.description" />
-          <div class="mb-3">
-            <label class="form-label" for="metaTitle">{{ $t("admin.common.metaTitle") }}</label>
-            <Field name="metaTitle" v-slot="{ field, errorMessage, meta }">
-              <input v-bind="field" id="metaTitle" type="text" class="form-control" />
-              <small v-if="errorMessage && meta.touched" class="text-danger">
-                {{ $t(errorMessage) }}
-              </small>
-            </Field>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">{{ $t("admin.common.metaKeyword") }}</label>
-            <Field name="metaKeyword" v-slot="{ field, errorMessage, meta }">
-              <textarea v-bind="field" rows="2" class="form-control" />
-              <small v-if="errorMessage && meta.touched" class="text-danger">
-                {{ $t(errorMessage) }}
-              </small>
-            </Field>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">{{ $t("admin.common.metaDescription") }}</label>
-            <Field name="metaDescription" v-slot="{ field, errorMessage, meta }">
-              <textarea v-bind="field" rows="3" class="form-control" />
-              <small v-if="errorMessage && meta.touched" class="text-danger">
-                {{ $t(errorMessage) }}
-              </small>
-            </Field>
-          </div>
-        </div>
-      </div>
+      <SEO :values="values"/>
       <div class="flex justify-end gap-3 mt-4 position-sticky bottom-5 z-20">
-        <Button variant="cancel" :to="POSTINDEX" />
+        <Button type="button" variant="cancel" :to="POSTINDEX" />
         <Button variant="success" :loading="isLoading" />
       </div>
     </div>
@@ -241,7 +207,7 @@ import { usePost } from "~/composables/admin/post/usePost";
 import SingleImageUpload from "~/components/admin/custom/SingleImageUpload.vue";
 import CKEditor from "~/components/admin/custom/CKEditor.vue";
 import AppCheckbox from "~/components/admin/custom/AppCheckbox.vue";
-import SeoPreview from "~/components/admin/custom/SeoPreview.vue";
+import SEO from "~/components/admin/custom/SEO.vue";
 
 const { isLoading, values, tagOptions, postCatalogueOptions, postOptions, config, slug, setValues, handleStore } = usePost();
 

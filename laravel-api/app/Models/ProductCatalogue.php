@@ -15,23 +15,17 @@ class ProductCatalogue extends Model
 
     protected $fillable = [
         'parent_id',
-        'lft',
-        'rgt',
-        'level',
         'name',
         'slug',
         'description',
         'image',
-        'icon',
         'order',
+        'is_hot',
         'publish',
         'user_id',
         'meta_title',
         'meta_keyword',
         'meta_description',
-        'index',
-        'scheme',
-        'iframe',
     ];
 
     /**
@@ -44,7 +38,7 @@ class ProductCatalogue extends Model
     ];
 
     protected $casts = [
-        'album' => 'json',
+        'is_hot' => 'boolean'
     ];
 
     public function users(): BelongsTo

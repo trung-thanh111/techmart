@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Requests\Product\ProductCatalogue;
 
 use App\Enums\Common;
@@ -33,12 +34,11 @@ class UpdateRequest extends BaseRequest
     {
         $method = $this->getMethod();
         $sometime = ($method === 'PATCH') ? 'sometimes' : '';
+        $mimes = implode(',', config('upload.image.allowed_type'));
+        $max_size = config('upload.image.max_size');
         return [
-            "parent_id" => "{$sometime}|nullable|integer|exists:product_catalogues,id",
-            "lft" => "{$sometime}|nullable|integer",
-            "rgt" => "{$sometime}|nullable|integer",
-            "level" => "{$sometime}|nullable|integer|min:0",
             "name" => "{$sometime}|required|string|max:255",
+            "parent_id" => "{$sometime}|nullable|integer|exists:product_catalogues,id",
             "slug" => [
                 "{$sometime}",
                 "required",
@@ -47,17 +47,13 @@ class UpdateRequest extends BaseRequest
                 Rule::unique("product_catalogues", "slug")->ignore($this->route('product_catalogue'))
             ],
             "description" => "{$sometime}|nullable|string",
-            "image" => "{$sometime}|nullable|string|max:255",
-            "icon" => "{$sometime}|nullable|string|max:255",
+            "image" => "sometimes|mimes:{$mimes}|max:{$max_size}",
             "order" => "{$sometime}|nullable|integer",
+            "is_hot" => "nullable|boolean|{$sometime}",
             "publish" => "{$sometime}|nullable|integer|in:1,2",
-            "user_id" => "{$sometime}|nullable|integer|exists:users,id",
             "meta_title" => "{$sometime}|nullable|string|max:255",
             "meta_keyword" => "{$sometime}|nullable|string|max:255",
             "meta_description" => "{$sometime}|nullable|string|max:500",
-            "index" => "{$sometime}|nullable|integer|in:1,2",
-            "scheme" => "{$sometime}|nullable|string",
-            "iframe" => "{$sometime}|nullable|string",
         ];
     }
 

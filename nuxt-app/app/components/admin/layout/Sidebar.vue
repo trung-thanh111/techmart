@@ -11,7 +11,7 @@
         <i class="ri-record-circle-line"></i>
       </button>
     </div>
-    <div id="scrollbar" data-simplebar style="max-height: 100%; width: 100%;">
+    <div id="scrollbar" data-simplebar style="max-height: 100%; width: 100%">
       <div class="container-fluid px-0">
         <ul class="navbar-nav" id="navbar-nav">
           <li class="menu-title">
@@ -35,7 +35,7 @@
             <div class="collapse menu-dropdown" id="sidebarProducts">
               <ul class="nav nav-sm flex-column">
                 <li class="nav-item">
-                  <a href="#" class="nav-link" data-key="t-product-catelogue">{{ $t("admin.sidebar.productCatalogue") }}</a>
+                  <NuxtLink to="/admin/product/catalogue" class="nav-link" data-key="t-product-catelogue">{{ $t("admin.sidebar.productCatalogue") }}</NuxtLink>
                 </li>
                 <li class="nav-item">
                   <a href="#sidebarProduct" class="nav-link menu-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProduct" data-key="t-profile">{{ $t("admin.sidebar.products") }}</a>
@@ -55,19 +55,19 @@
                   <div class="collapse menu-dropdown" id="sidebarAttribute">
                     <ul class="nav nav-sm flex-column">
                       <li class="nav-item">
-                        <a href="#" class="nav-link" data-key="t-attribute-catalogue">{{ $t("admin.sidebar.attributeCatalogue") }}</a>
+                        <NuxtLink to="/admin/attribute/catalogue" class="nav-link" data-key="t-attribute-catelogue">{{ $t("admin.sidebar.attributeCatalogue") }}</NuxtLink>
                       </li>
                       <li class="nav-item">
-                        <a href="#" class="nav-link" data-key="t-attribute-list">{{ $t("admin.sidebar.attributeList") }}</a>
+                        <NuxtLink to="/admin/attribute/attribute" class="nav-link" data-key="t-attribute-list">{{ $t("admin.sidebar.attributeList") }}</NuxtLink>
                       </li>
                     </ul>
                   </div>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link" data-key="t-product-brand">{{ $t("admin.sidebar.brands") }}</a>
+                  <NuxtLink to="/admin/brand/brand" class="nav-link" data-key="t-brand-list">{{ $t("admin.sidebar.brands") }}</NuxtLink>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link" data-key="t-product-attribute">{{ $t("admin.sidebar.tags") }}</a>
+                  <a href="#" class="nav-link" data-key="t-product-tag">{{ $t("admin.sidebar.tags") }}</a>
                 </li>
               </ul>
             </div>
@@ -157,32 +157,6 @@
             </div>
           </li>
           <li class="nav-item">
-            <a class="nav-link menu-link" href="#sidebarattributes" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarattributes">
-              <i class="ri-news-line"></i>
-              <span data-key="t-attribute-pages">{{ $t("admin.sidebar.attributes") }}</span>
-            </a>
-            <div class="collapse menu-dropdown" id="sidebarattributes">
-              <ul class="nav nav-sm flex-column">
-                <li class="nav-item">
-                  <a href="#sidebarattribute" class="nav-link menu-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarattribute" data-key="t-attribute">{{ $t("admin.sidebar.attributes") }}</a>
-                  <div class="collapse menu-dropdown" id="sidebarattribute">
-                    <ul class="nav nav-sm flex-column">
-                      <li class="nav-item">
-                        <NuxtLink to="/admin/attribute/attribute" class="nav-link" data-key="t-attribute-list">{{ $t("admin.sidebar.attributeList") }}</NuxtLink>
-                      </li>
-                      <li class="nav-item">
-                        <NuxtLink to="/admin/attribute/attribute/create" class="nav-link" data-key="t-attribute-create">{{ $t("admin.sidebar.attributeCreate") }}</NuxtLink>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-                <li class="nav-item">
-                  <NuxtLink to="/admin/attribute/catalogue" class="nav-link" data-key="t-attribute-catelogue">{{ $t("admin.sidebar.attributeCatalogue") }}</NuxtLink>
-                </li>
-              </ul>
-            </div>
-          </li>
-          <li class="nav-item">
             <a class="nav-link menu-link" href="#sidebaragencys" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebaragencys">
               <i class="ri-news-line"></i>
               <span data-key="t-agency-pages">{{ $t("admin.sidebar.agencys") }}</span>
@@ -204,29 +178,6 @@
                 </li>
                 <li class="nav-item">
                   <NuxtLink to="/admin/agency/working_hour" class="nav-link" data-key="t-agency-catelogue">{{ $t("admin.sidebar.agencyWorkingHour") }}</NuxtLink>
-                </li>
-              </ul>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link menu-link" href="#sidebarbrands" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarbrands">
-              <i class="ri-news-line"></i>
-              <span data-key="t-brand-pages">{{ $t("admin.sidebar.brands") }}</span>
-            </a>
-            <div class="collapse menu-dropdown" id="sidebarbrands">
-              <ul class="nav nav-sm flex-column">
-                <li class="nav-item">
-                  <a href="#sidebarbrand" class="nav-link menu-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarbrand" data-key="t-brand">{{ $t("admin.sidebar.brands") }}</a>
-                  <div class="collapse menu-dropdown" id="sidebarbrand">
-                    <ul class="nav nav-sm flex-column">
-                      <li class="nav-item">
-                        <NuxtLink to="/admin/brand/brand" class="nav-link" data-key="t-brand-list">{{ $t("admin.sidebar.brandList") }}</NuxtLink>
-                      </li>
-                      <li class="nav-item">
-                        <NuxtLink to="/admin/brand/brand/create" class="nav-link" data-key="t-brand-create">{{ $t("admin.sidebar.brandCreate") }}</NuxtLink>
-                      </li>
-                    </ul>
-                  </div>
                 </li>
               </ul>
             </div>

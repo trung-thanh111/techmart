@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\Impl\Product;
 
 use Illuminate\Http\Request;
@@ -6,30 +7,38 @@ use App\Services\Impl\BaseService;
 use Illuminate\Database\Eloquent\Model;
 use App\Repositories\Product\ProductCatalogueRepository;
 use App\Http\Resources\Product\ProductCatalogueResource;
+use App\Services\Interfaces\ImageServiceInterface as ImageService;
 use App\Services\Interfaces\Product\ProductCatalogueServiceInterface;
 
-class ProductCatalogueService extends BaseService implements ProductCatalogueServiceInterface {
+class ProductCatalogueService extends BaseService implements ProductCatalogueServiceInterface
+{
 
-protected $repository;
 
-protected $complexFilter = ['id'];
+    protected $repository;
 
-protected $with = ['users'];
-protected $relationFilter = [];
+    private const PIPELINE ='default';
+    protected $complexFilter = ['id'];
 
-protected $cacheKeyPrefix = 'product_catalogues';
-protected $cacheTags = ['product_catalogues:collection'];
+    protected $with = ['users'];
+    protected $relationFilter = [];
 
-protected $useNestedSet = true;
-protected $useUpload = true;
+    protected $cacheKeyPrefix = 'product_catalogues';
+    protected $cacheTags = ['product_catalogues:collection'];
+
+    protected $useNestedSet = true;
+    protected $imageService;
+
 
     public function __construct(
-        ProductCatalogueRepository $repository
+        ProductCatalogueRepository $repository,
+        ImageService $imageService
     ) {
         $this->repository = $repository;
+        $this->imageService = $imageService;
     }
 
-    protected function getRepository(){
+    protected function getRepository()
+    {
         return $this->repository;
     }
 
@@ -37,19 +46,22 @@ protected $useUpload = true;
      * nhiệm vụ bắt data từ client post lên (dạng thô, chuỗi, file, ....)
      *
      */
-    protected function prepareModelData(Request $request): self {
+    protected function prepareModelData(Request $request): self
+    {
 
-        return $this->initializeBasicModelData($request);
+        return $this->initializeBasicModelData($request)
+            ->uploadImage($request, 'image', self::PIPELINE, 'image');
     }
 
-    protected function initializeBasicModelData(Request $request): self {
+    protected function initializeBasicModelData(Request $request): self
+    {
         $fillable = $this->repository->getFillable();
         $this->modelData = $request->only($fillable);
         return $this;
     }
 
-    protected function getResource(Model $resource){
+    protected function getResource(Model $resource)
+    {
         return new ProductCatalogueResource($resource);
     }
-
 }

@@ -44,37 +44,9 @@
           </div>
         </div>
       </div>
-      <div class="card mt-4">
-        <div class="card-header">
-          <h5 class="card-title mb-0">{{ $t("admin.common.seo") }}</h5>
-        </div>
-        <div class="card-body">
-          <SeoPreview :metaTitle="values.metaTitle" :name="values.name" :metaDescription="values.metaDescription" :description="values.description" />
-          <div class="mb-3">
-            <label class="form-label" for="metaTitle">{{ $t("admin.common.metaTitle") }}</label>
-            <Field name="metaTitle" v-slot="{ field, errorMessage, meta }">
-              <input v-bind="field" id="metaTitle" type="text" class="form-control" />
-              <small v-if="errorMessage && meta.touched" class="text-danger">
-                {{ $t(errorMessage) }}
-              </small>
-            </Field>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">{{ $t("admin.common.metaKeyword") }}</label>
-            <Field name="metaKeyword" v-slot="{ field }">
-              <textarea v-bind="field" rows="2" class="form-control" />
-            </Field>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">{{ $t("admin.common.metaDescription") }}</label>
-            <Field name="metaDescription" v-slot="{ field }">
-              <textarea v-bind="field" rows="3" class="form-control" />
-            </Field>
-          </div>
-        </div>
-      </div>
+      <SEO :values="values" />
       <div class="flex justify-end gap-3 mt-4 position-sticky bottom-5 z-20">
-        <Button variant="cancel" :to="POSTCATALOGUEINDEX" />
+        <Button type="button" variant="cancel" :to="POSTCATALOGUEINDEX" />
         <Button variant="success" :loading="isLoading" />
       </div>
     </div>
@@ -95,7 +67,7 @@
           <div class="mb-3">
             <label class="form-label">{{ $t("admin.page.postCatalogue.form.parant") }}</label>
             <Field name="parentId" v-slot="{ field }" :validate-on-input="true">
-              <Select :modelValue="field.value" @update:modelValue="field.onChange" :options="postCatalogueOptions" optionLabel="name" optionValue="value" filter :placeholder="$t('admin.page.user.form.userCataloguePlaceholder')" class="rounded py-[1px] w-100" size="small" />
+              <Select :modelValue="field.value" @update:modelValue="field.onChange" :options="postCatalogueOptions" optionLabel="name" optionValue="value" filter showClear :placeholder="$t('admin.page.user.form.userCataloguePlaceholder')" class="rounded py-[1px] w-100" size="small" />
             </Field>
           </div>
           <div class="mb-3">
@@ -132,7 +104,7 @@ import Breadcrumb from "~/components/admin/navigation/Breadcrumb.vue";
 import PublishSelect from "~/components/admin/custom/PublishSelect.vue";
 import { usePostCatalogue } from "~/composables/admin/post/usePostCatalogue";
 import SingleImageUpload from "~/components/admin/custom/SingleImageUpload.vue";
-import SeoPreview from "~/components/admin/custom/SeoPreview.vue";
+import SEO from "~/components/admin/custom/SEO.vue";
 
 const { handleStore, setValues, postCatalogueOptions, values, isLoading, config, slug } = usePostCatalogue();
 
