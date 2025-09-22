@@ -4,22 +4,22 @@ import { useI18n } from "vue-i18n";
 import { errorToField, slugify } from "~/utils/helpers";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useAppToast } from "~/composables/useAppToast";
-import { postTagService } from "~/services/post/tag.service";
+import { productTagService } from "~/services/product/tag.service";
 import type { BasePayloadFilter, IApiOk, IPaginate } from "~/interfaces/base.interface";
-import type { IPostTag, TagPayloadFilter } from "~/interfaces/post/tag.interface";
-import { POSTTAGINDEX } from "~/utils/constants";
+import type { IProductTag, TagPayloadFilter } from "~/interfaces/product/tag.interface";
+import { PRODUCTTAGINDEX } from "~/utils/constants";
 
-export const usePostTag = (initialFilters?: TagPayloadFilter, mode: "create" | "update" = "create") => {
+export const useProductTag = (initialFilters?: TagPayloadFilter, mode: "create" | "update" = "create") => {
   const { t } = useI18n();
   const config = useRuntimeConfig();
   const toast = useAppToast();
 
-  const data = ref<IApiOk<IPaginate<IPostTag>>>();
+  const data = ref<IApiOk<IPaginate<IProductTag>>>();
   const filters = ref<TagPayloadFilter>(initialFilters ?? { keyword: "", perpage: 10, publish: null });
   const page = ref(1);
   const isLoading = ref(false);
   const selectedIds = ref<number[]>([]);
-  const selectedItem = ref<IPostTag | null>(null);
+  const selectedItem = ref<IProductTag | null>(null);
   const slug = computed(() => slugify(values.name || ""));
 
   const schema = {
@@ -31,21 +31,21 @@ export const usePostTag = (initialFilters?: TagPayloadFilter, mode: "create" | "
   };
   const createSchema = z.object({ ...schema });
   const updateSchema = z.object({ ...schema });
-  type TPostTagCreate = z.infer<typeof createSchema>;
-  type TPostTagUpdate = z.infer<typeof updateSchema>;
+  type TProductTagCreate = z.infer<typeof createSchema>;
+  type TProductTagUpdate = z.infer<typeof updateSchema>;
 
-  const { handleSubmit, values, errors, setValues, resetForm, setFieldError } = useForm<TPostTagCreate | TPostTagUpdate>({
+  const { handleSubmit, values, errors, setValues, resetForm, setFieldError } = useForm<TProductTagCreate | TProductTagUpdate>({
     validationSchema: toTypedSchema(mode === "create" ? createSchema : updateSchema),
   });
 
   // store
-  const handleStore = handleSubmit(async (payload: TPostTagCreate | TPostTagUpdate) => {
+  const handleStore = handleSubmit(async (payload: TProductTagCreate | TProductTagUpdate) => {
     isLoading.value = true;
     try {
-      const response = await postTagService.store(payload as Partial<IPostTag>);
+      const response = await productTagService.store(payload as Partial<IProductTag>);
       toast.success(response?.message || t("admin.messages.createSuccess"));
       resetForm();
-      return navigateTo(POSTTAGINDEX);
+      return navigateTo(PRODUCTTAGINDEX);
     } catch (error: any) {
       if (error?.data?.isValidationError) {
         errorToField(setFieldError, error?.data?.errors, t, "name");
@@ -61,7 +61,7 @@ export const usePostTag = (initialFilters?: TagPayloadFilter, mode: "create" | "
 
   const show = async (id: number) => {
     try {
-      const response = await postTagService.show(id);
+      const response = await productTagService.show(id);
       return response;
     } catch (error: any) {
       console.error("Lỗi! Không tìm thấy bản ghi: ", error);
@@ -70,13 +70,13 @@ export const usePostTag = (initialFilters?: TagPayloadFilter, mode: "create" | "
     }
   };
 
-  const handleUpdate = handleSubmit(async (payload: TPostTagUpdate) => {
+  const handleUpdate = handleSubmit(async (payload: TProductTagUpdate) => {
     isLoading.value = true;
     try {
       const id = Number(useRoute().params.id);
-      await postTagService.update(id, payload as Partial<IPostTag>);
+      await productTagService.update(id, payload as Partial<IProductTag>);
       toast.success(t("admin.messages.updateSuccess"));
-      return navigateTo(POSTTAGINDEX);
+      return navigateTo(PRODUCTTAGINDEX);
     } catch (error: any) {
       if (error?.data?.isValidationError) {
         errorToField(setFieldError, error?.data?.errors, t, "name");
@@ -92,7 +92,7 @@ export const usePostTag = (initialFilters?: TagPayloadFilter, mode: "create" | "
   const handleDelete = async (id: number) => {
     isLoading.value = true;
     try {
-      await postTagService.delete(id);
+      await productTagService.delete(id);
       toast.success(t("admin.messages.deleteSuccess"));
       await fetchData();
     } catch (error: any) {
@@ -106,7 +106,7 @@ export const usePostTag = (initialFilters?: TagPayloadFilter, mode: "create" | "
     if (selectedIds.value.length === 0) return;
     isLoading.value = true;
     try {
-      await postTagService.deleteMultiple(selectedIds.value);
+      await productTagService.deleteMultiple(selectedIds.value);
       toast.success(t("admin.messages.deleteMultipleSuccess", { count: selectedIds.value.length }));
       selectedIds.value = [];
       await fetchData();
@@ -119,7 +119,7 @@ export const usePostTag = (initialFilters?: TagPayloadFilter, mode: "create" | "
 
   const handleToggleIsHot = async (item: any) => {
     try {
-      const res = await postTagService.update(item.id, { isHot: item.isHot });
+      const res = await productTagService.update(item.id, { isHot: item.isHot });
       toast.success(t("admin.messages.updateSuccess"));
     } catch (error: any) {
       toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
@@ -127,7 +127,7 @@ export const usePostTag = (initialFilters?: TagPayloadFilter, mode: "create" | "
     }
   };
 
-  const setSelectedItem = (item: IPostTag) => {
+  const setSelectedItem = (item: IProductTag) => {
     selectedItem.value = item;
   };
 
@@ -141,7 +141,7 @@ export const usePostTag = (initialFilters?: TagPayloadFilter, mode: "create" | "
   const fetchData = async () => {
     isLoading.value = true;
     try {
-      const response = await postTagService.pagination({
+      const response = await productTagService.pagination({
         ...filters.value,
         page: page.value,
       });
@@ -212,5 +212,5 @@ export const usePostTag = (initialFilters?: TagPayloadFilter, mode: "create" | "
   };
 };
 
-export type TPostTagCreate = Partial<IPostTag>;
-export type TPostTagUpdate = TPostTagCreate;
+export type TProductTagCreate = Partial<IProductTag>;
+export type TProductTagUpdate = TProductTagCreate;

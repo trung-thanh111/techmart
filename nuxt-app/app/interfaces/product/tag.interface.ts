@@ -1,6 +1,6 @@
 import type { BasePayloadFilter } from "../base.interface";
 
-export interface IPostTag {
+export interface IProductTag {
   id: number;
   name?: string;
   slug?: string;

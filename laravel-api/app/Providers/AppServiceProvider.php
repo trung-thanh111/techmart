@@ -2,6 +2,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Services\Interfaces\Product\ProductTagServiceInterface;
+use App\Services\Impl\Product\ProductTagService;
 use App\Services\Interfaces\Banner\BannerServiceInterface;
 use App\Services\Impl\Banner\BannerService;
 use App\Services\Interfaces\User\AddressOrderServiceInterface;
@@ -72,6 +74,7 @@ class AppServiceProvider extends ServiceProvider
         FaqServiceInterface::class => FaqService::class,
         AddressOrderServiceInterface::class => AddressOrderService::class,
         BannerServiceInterface::class => BannerService::class,
+        ProductTagServiceInterface::class => ProductTagService::class,
     ];
 
     /**

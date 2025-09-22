@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\Product\ProductTagController;
 use App\Http\Controllers\ExcelController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\User\UserController;
@@ -285,6 +286,17 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
             Route::patch('bulkUpdate', [BannerController::class, 'bulkUpdate']);
         });
         Route::resource('banners', BannerController::class)->except($routeExcept);
+
+        // This is route ProductTag
+        Route::group(['prefix' => 'product_tags'], function() {
+            Route::post('bulkStore', [ProductTagController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [ProductTagController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [ProductTagController::class, 'bulkUpdate']);
+            Route::delete('bulkDelete', [ProductTagController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [ProductTagController::class, 'attach']);
+            Route::delete('{id}/detach', [ProductTagController::class, 'detach']);
+        });
+        Route::resource('product_tags', ProductTagController::class)->except($routeExcept);
 
         // generate route
 

@@ -50,6 +50,7 @@ class Product extends Model
      */
     public $relationable = [
         'product_catalogues',
+        'product_tags'
     ];
 
     public function product_catalogues(): BelongsToMany
@@ -69,5 +70,10 @@ class Product extends Model
 
     public function product_variants(): HasMany {
         return $this->hasMany(ProductVariant::class);
+    }
+
+    public function product_tags(): BelongsToMany
+    {
+        return $this->belongsToMany(ProductTag::class, 'product_tag_product', 'product_id', 'product_tag_id');
     }
 }

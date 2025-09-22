@@ -148,7 +148,7 @@ definePageMeta({
           </div>
         </div>
         <div class="modal-footer">
-          <Button variant="cancel" data-bs-dismiss="modal" />
+          <Button type="button" variant="cancel" data-bs-dismiss="modal" />
           <Button variant="delete" :loading="isLoading" :label="$t('admin.common.delete')" :disabled="!selectedItem" @click="handleConfirmDeleteSingle" />
         </div>
       </div>
@@ -178,7 +178,7 @@ definePageMeta({
           </div>
         </div>
         <div class="modal-footer">
-          <Button variant="cancel" data-bs-dismiss="modal" />
+          <Button type="button" variant="cancel" data-bs-dismiss="modal" />
           <Button variant="delete" :loading="isLoading" :label="$t('admin.common.deleteAll')" :disabled="selectedIds.length === 0" @click="handleConfirmDeleteMultiple" />
         </div>
       </div>

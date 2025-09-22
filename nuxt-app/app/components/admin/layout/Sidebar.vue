@@ -67,7 +67,7 @@
                   <NuxtLink to="/admin/brand/brand" class="nav-link" data-key="t-brand-list">{{ $t("admin.sidebar.brands") }}</NuxtLink>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link" data-key="t-product-tag">{{ $t("admin.sidebar.tags") }}</a>
+                  <NuxtLink to="/admin/product/tag" class="nav-link" data-key="t-product-list">{{ $t("admin.sidebar.tags") }}</NuxtLink>
                 </li>
               </ul>
             </div>
