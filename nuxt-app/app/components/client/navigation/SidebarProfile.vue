@@ -1,68 +1,68 @@
 <template>
   <div>
-    <button class="md:hidden bg-white shadow rounded-full p-2 flex items-center justify-center" v-if="!isSidebarOpen" @click="isSidebarOpen = true" aria-label="Mở menu">
-      <svg class="md:w-5 md:h-5 h-4 w-4 text-gray-600" fill="currentColor" viewBox="0 0 448 512"><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zm448 160c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z" /></svg>
+    <button v-if="!isSidebarOpen" class="md:hidden bg-white shadow rounded-full p-2 flex items-center justify-center" @click="isSidebarOpen = true" aria-label="Mở menu">
+      <svg class="md:w-5 md:h-5 h-4 w-4 text-gray-600" fill="currentColor" viewBox="0 0 448 512">
+        <path
+          d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 
+          32 14.3 32 32s-14.3 32-32 32H32C14.3 
+          128 0 113.7 0 96zM0 256c0-17.7 
+          14.3-32 32-32H416c17.7 0 32 
+          14.3 32 32s-14.3 32-32 
+          32H32c-17.7 0-32-14.3-32-32zm448 
+          160c0 17.7-14.3 32-32 
+          32H32c-17.7 0-32-14.3-32-32s14.3-32 
+          32-32H416c17.7 0 32 14.3 32 32z"
+        />
+      </svg>
     </button>
-    <div v-if="isSidebarOpen" class="fixed inset-0 bg-black/30 z-40 md:hidden" @click="isSidebarOpen = false"></div>
-    <aside :class="['transition-all duration-300 bg-white border-r border-gray-200 sticky md:static top-0 flex-shrink-0', isSidebarOpen ? 'fixed z-50 top-0 left-0 h-full md:relative md:translate-x-0' : 'md:relative', !isSidebarOpen && 'md:block hidden', isSidebarCollapsed ? 'w-16 md:w-20 p-2' : 'w-[95vw] md:w-64 p-4']" v-show="isSidebarOpen || isDesktop">
-      <button class="hidden md:flex items-center justify-end w-full mb-2 text-gray-500 hover:text-sky-600 focus:outline-none" @click="isSidebarCollapsed = !isSidebarCollapsed" aria-label="Thu gọn/mở rộng sidebar">
-        <svg v-if="!isSidebarCollapsed" class="md:w-4 md:h-4 h-3 w-3" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
-          <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z" />
+    <div v-if="isSidebarOpen && !isDesktop" class="fixed inset-0 bg-black/30 z-40" @click="isSidebarOpen = false" />
+    <aside :class="['transition-all duration-300 bg-white border-r border-gray-200 sticky md:static top-0 flex-shrink-0', isSidebarOpen ? 'fixed z-50 top-0 left-0 h-full md:relative' : 'hidden md:block', isSidebarCollapsed ? 'w-16 md:w-20 p-2' : 'w-[95vw] md:w-64 p-4']">
+      <button class="hidden md:flex items-center justify-end w-full mb-2 text-gray-500 hover:text-sky-600" @click="isSidebarCollapsed = !isSidebarCollapsed" aria-label="Thu gọn/mở rộng sidebar">
+        <svg v-if="!isSidebarCollapsed" class="md:w-4 md:h-4 h-3 w-3" fill="currentColor" viewBox="0 0 320 512">
+          <path
+            d="M9.4 233.4c-12.5 12.5-12.5 
+            32.8 0 45.3l192 192c12.5 
+            12.5 32.8 12.5 45.3 
+            0s12.5-32.8 
+            0-45.3L77.3 256 
+            246.6 86.6c12.5-12.5 
+            12.5-32.8 
+            0-45.3s-32.8-12.5-45.3 
+            0l-192 192z"
+          />
         </svg>
-        <svg v-else class="md:w-4 md:h-4 h-3 w-3 flex justify-center mx-auto" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-          <path d="M0 96C0 78.3 14.3 64 32 64l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 128C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 288c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32L32 448c-17.7 0-32-14.3-32-32s14.3-32 32-32l384 0c17.7 0 32 14.3 32 32z" />
+        <svg v-else class="md:w-4 md:h-4 h-3 w-3" fill="currentColor" viewBox="0 0 448 512">
+          <path
+            d="M0 96C0 78.3 14.3 64 
+            32 64l384 0c17.7 0 32 
+            14.3 32 32s-14.3 32-32 
+            32L32 128C14.3 128 0 
+            113.7 0 96zM0 256c0-17.7 
+            14.3-32 32-32l384 0c17.7 
+            0 32 14.3 32 32s-14.3 32-32 
+            32L32 288c-17.7 0-32-14.3-32-32zM448 
+            416c0 17.7-14.3 32-32 
+            32L32 448c-17.7 0-32-14.3-32-32s14.3-32 
+            32-32l384 0c17.7 0 32 14.3 32 32z"
+          />
         </svg>
       </button>
       <div v-if="!isSidebarCollapsed">
-        <!-- Nội dung sidebar đầy đủ (icon + text) -->
-        <div class="mb-4 md:mb-8">
-          <p class="text-xs font-medium text-gray-800 uppercase mb-2">Cá nhân</p>
+        <div v-for="section in sidebarSections" :key="section.title" class="mb-6">
+          <p class="text-xs font-medium text-gray-800 uppercase mb-2">
+            {{ section.title }}
+          </p>
           <nav class="space-y-1">
-            <NuxtLink to="/profile" class="flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-md bg-sky-50 text-sky-600">Thông tin</NuxtLink>
-            <NuxtLink to="/change-password" class="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-sky-600 rounded-md">Đổi mật khẩu</NuxtLink>
-            <NuxtLink to="/address" class="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-sky-600 rounded-md">Địa chỉ nhận hàng</NuxtLink>
-            <NuxtLink to="/orders" class="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-sky-600 rounded-md">Đơn hàng của tôi</NuxtLink>
-            <NuxtLink to="/wishlists" class="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-sky-600 rounded-md">Danh sách yêu thích</NuxtLink>
-            <NuxtLink to="/vouchers" class="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-sky-600 rounded-md">Khuyến mãi của tôi</NuxtLink>
-          </nav>
-        </div>
-        <div class="mb-4 md:mb-8">
-          <p class="text-xs font-medium text-gray-800 uppercase mb-2">Cài đặt</p>
-          <nav class="space-y-1">
-            <NuxtLink to="#" class="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-sky-600 rounded-md">API Keys</NuxtLink>
-            <NuxtLink to="#" class="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-sky-600 rounded-md">Thông báo</NuxtLink>
-            <NuxtLink to="#" class="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-sky-600 rounded-md">Bảo mật tài khoản</NuxtLink>
-            <NuxtLink to="#" class="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-sky-600 rounded-md">Lịch sử hoạt động</NuxtLink>
-          </nav>
-        </div>
-        <div>
-          <p class="text-xs font-medium text-gray-800 uppercase mb-2">Hỗ trợ</p>
-          <nav class="space-y-1">
-            <NuxtLink to="#" class="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-sky-600 rounded-md">Trung tâm hỗ trợ</NuxtLink>
-            <NuxtLink to="#" class="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-sky-600 rounded-md">Chính sách bảo mật</NuxtLink>
-            <NuxtLink to="#" class="flex items-center gap-2 px-3 py-2 text-sm text-red-500 hover:bg-red-50 rounded-md">Đăng xuất</NuxtLink>
+            <NuxtLink v-for="item in section.items" :key="item.to" :to="item.to" :prefetch="false" class="flex items-center gap-2 px-3 py-2 text-sm rounded-md" :class="getLinkClass(item.to, item.class)">
+              {{ item.label }}
+            </NuxtLink>
           </nav>
         </div>
       </div>
       <div v-else>
         <nav class="flex flex-col items-center gap-4 mt-8">
-          <NuxtLink to="/profile" class="flex items-center justify-center w-10 h-10 rounded-full text-gray-500 hover:bg-sky-50 hover:text-sky-600">
-            <svg class="md:w-4 md:h-4 h-3 w-3" fill="currentColor" viewBox="0 0 448 512"><path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.7-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z" /></svg>
-          </NuxtLink>
-          <NuxtLink to="/change-password" class="flex items-center justify-center w-10 h-10 rounded-full text-gray-500 hover:bg-sky-50 hover:text-sky-600">
-            <svg class="md:w-4 md:h-4 h-3 w-3" fill="currentColor" viewBox="0 0 512 512"><path d="M512 176c0 97.2-78.8 176-176 176-16.1 0-31.7-2.2-46.5-6.2l-99.7 99.7c-12.5 12.5-32.8 12.5-45.3 0l-45.3-45.3c-12.5-12.5-12.5-32.8 0-45.3l99.7-99.7C82.2 271.7 80 256.1 80 240c0-97.2 78.8-176 176-176s176 78.8 176 176z" /></svg>
-          </NuxtLink>
-          <NuxtLink to="/address" class="flex items-center justify-center w-10 h-10 rounded-full text-gray-500 hover:bg-sky-50 hover:text-sky-600">
-            <svg class="md:w-4 md:h-4 h-3 w-3" fill="currentColor" viewBox="0 0 384 512"><path d="M168 0C75.1 0 0 75.1 0 168c0 87.2 135.1 303.7 146.6 320.6 6 9.2 20.8 9.2 26.8 0C248.9 471.7 384 255.2 384 168 384 75.1 308.9 0 216 0zm0 240c-39.8 0-72-32.2-72-72s32.2-72 72-72 72 32.2 72 72-32.2 72-72 72z" /></svg>
-          </NuxtLink>
-          <NuxtLink to="/orders" class="flex items-center justify-center w-10 h-10 rounded-full text-gray-500 hover:bg-sky-50 hover:text-sky-600">
-            <svg class="md:w-4 md:h-4 h-3 w-3" fill="currentColor" viewBox="0 0 512 512"><path d="M512 128v256c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128c0-35.3 28.7-64 64-64h384c35.3 0 64 28.7 64 64z" /></svg>
-          </NuxtLink>
-          <NuxtLink to="/wishlists" class="flex items-center justify-center w-10 h-10 rounded-full text-gray-500 hover:bg-sky-50 hover:text-sky-600">
-            <svg class="md:w-4 md:h-4 h-3 w-3" fill="currentColor" viewBox="0 0 512 512"><path d="M462.3 62.7C407 7.6 324.8-10.6 256 48.6 187.2-10.6 105-7.6 49.7 62.7c-55.2 70.3-43.6 181.3 23.7 248.6l175.1 175.1c12.5 12.5 32.8 12.5 45.3 0l175.1-175.1c67.3-67.3 78.9-178.3 23.7-248.6z" /></svg>
-          </NuxtLink>
-          <NuxtLink to="/vouchers" class="flex items-center justify-center w-10 h-10 rounded-full text-gray-500 hover:bg-sky-50 hover:text-sky-600">
-            <svg class="md:w-4 md:h-4 h-3 w-3" fill="currentColor" viewBox="0 0 576 512"><path d="M0 160c0-17.7 14.3-32 32-32h512c17.7 0 32 14.3 32 32v32c-17.7 0-32 14.3-32 32s14.3 32 32 32v32c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32v-32c17.7 0 32-14.3 32-32S17.7 192 0 192v-32z" /></svg>
+          <NuxtLink v-for="item in collapsedMenu" :key="item.to" :to="item.to" :prefetch="false" class="flex items-center justify-center w-10 h-10 rounded-full" :class="getIconLinkClass(item.to)">
+            <component :is="item.icon" class="md:w-4 md:h-4 h-3 w-3" />
           </NuxtLink>
         </nav>
       </div>
@@ -71,27 +71,90 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, h } from "vue";
+import { useRoute } from "vue-router";
 
 const isSidebarOpen = ref(false);
 const isSidebarCollapsed = ref(false);
 const isDesktop = ref(false);
+const route = useRoute();
+
+const isActive = (path: string) => route.path === path;
+const getLinkClass = (path: string, extra?: string) => (isActive(path) ? "font-medium bg-sky-50 text-sky-600" : extra || "text-gray-700 hover:bg-gray-100 hover:text-sky-600");
+const getIconLinkClass = (path: string) => (isActive(path) ? "bg-sky-50 text-sky-600" : "text-gray-500 hover:bg-sky-50 hover:text-sky-600");
 
 const handleResize = () => {
   isDesktop.value = window.innerWidth >= 768;
-  if (isDesktop.value) {
-    isSidebarOpen.value = true;
-  } else {
-    isSidebarOpen.value = false;
-    isSidebarCollapsed.value = false;
-  }
+  isSidebarOpen.value = isDesktop.value;
+  if (!isDesktop.value) isSidebarCollapsed.value = false;
 };
+
+const sidebarSections = [
+  {
+    title: "Cá nhân",
+    items: [
+      { label: "Thông tin", to: "/profile" },
+      { label: "Đổi mật khẩu", to: "/profile/change-password" },
+      { label: "Địa chỉ nhận hàng", to: "/profile/address" },
+      { label: "Đơn hàng của tôi", to: "/profile/orders" },
+      { label: "Danh sách yêu thích", to: "/profile/wishlists" },
+      { label: "Khuyến mãi của tôi", to: "/profile/vouchers" },
+    ],
+  },
+  {
+    title: "Cài đặt",
+    items: [
+      { label: "API Keys", to: "#" },
+      { label: "Thông báo", to: "#" },
+      { label: "Bảo mật tài khoản", to: "#" },
+      { label: "Lịch sử hoạt động", to: "#" },
+    ],
+  },
+  {
+    title: "Hỗ trợ",
+    items: [
+      { label: "Trung tâm hỗ trợ", to: "#" },
+      { label: "Chính sách bảo mật", to: "#" },
+      {
+        label: "Đăng xuất",
+        to: "#",
+        class: "text-red-500 hover:bg-red-50 rounded-md",
+      },
+    ],
+  },
+];
+
+const collapsedMenu = [
+  {
+    to: "/profile",
+    icon: () => h("svg", { fill: "currentColor", viewBox: "0 0 448 512" }, [h("path", { d: "M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.7-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z" })]),
+  },
+  {
+    to: "/profile/change-password",
+    icon: () => h("svg", { fill: "currentColor", viewBox: "0 0 512 512" }, [h("path", { d: "M512 176c0 97.2-78.8 176-176 176-16.1 0-31.7-2.2-46.5-6.2l-99.7 99.7c-12.5 12.5-32.8 12.5-45.3 0l-45.3-45.3c-12.5-12.5-12.5-32.8 0-45.3l99.7-99.7C82.2 271.7 80 256.1 80 240c0-97.2 78.8-176 176-176s176 78.8 176 176z" })]),
+  },
+  {
+    to: "/profile/address",
+    icon: () => h("svg", { fill: "currentColor", viewBox: "0 0 384 512" }, [h("path", { d: "M168 0C75.1 0 0 75.1 0 168c0 87.2 135.1 303.7 146.6 320.6 6 9.2 20.8 9.2 26.8 0C248.9 471.7 384 255.2 384 168 384 75.1 308.9 0 216 0zm0 240c-39.8 0-72-32.2-72-72s32.2-72 72-72 72 32.2 72 72-32.2 72-72 72z" })]),
+  },
+  {
+    to: "/profile/orders",
+    icon: () => h("svg", { fill: "currentColor", viewBox: "0 0 512 512" }, [h("path", { d: "M512 128v256c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128c0-35.3 28.7-64 64-64h384c35.3 0 64 28.7 64 64z" })]),
+  },
+  {
+    to: "/profile/wishlists",
+    icon: () => h("svg", { fill: "currentColor", viewBox: "0 0 512 512" }, [h("path", { d: "M462.3 62.7C407 7.6 324.8-10.6 256 48.6 187.2-10.6 105-7.6 49.7 62.7c-55.2 70.3-43.6 181.3 23.7 248.6l175.1 175.1c12.5 12.5 32.8 12.5 45.3 0l175.1-175.1c67.3-67.3 78.9-178.3 23.7-248.6z" })]),
+  },
+  {
+    to: "/profile/vouchers",
+    icon: () => h("svg", { fill: "currentColor", viewBox: "0 0 576 512" }, [h("path", { d: "M0 160c0-17.7 14.3-32 32-32h512c17.7 0 32 14.3 32 32v32c-17.7 0-32 14.3-32 32s14.3 32 32 32v32c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32v-32c17.7 0 32-14.3 32-32S17.7 192 0 192v-32z" })]),
+  },
+];
 
 onMounted(() => {
   handleResize();
   window.addEventListener("resize", handleResize);
 });
-
 onUnmounted(() => {
   window.removeEventListener("resize", handleResize);
 });

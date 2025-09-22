@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\Comment\PostCommentController;
 use App\Http\Controllers\Api\V1\Product\ProductTagController;
 use App\Http\Controllers\ExcelController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
@@ -297,6 +298,17 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
             Route::delete('{id}/detach', [ProductTagController::class, 'detach']);
         });
         Route::resource('product_tags', ProductTagController::class)->except($routeExcept);
+
+        // This is route PostComment
+        Route::group(['prefix' => 'post_comments'], function() {
+            Route::post('bulkStore', [PostCommentController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [PostCommentController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [PostCommentController::class, 'bulkUpdate']);
+            Route::delete('bulkDelete', [PostCommentController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [PostCommentController::class, 'attach']);
+            Route::delete('{id}/detach', [PostCommentController::class, 'detach']);
+        });
+        Route::resource('post_comments', PostCommentController::class)->except($routeExcept);
 
         // generate route
 

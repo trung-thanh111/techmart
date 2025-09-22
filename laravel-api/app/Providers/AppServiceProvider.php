@@ -2,6 +2,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Services\Interfaces\Comment\PostCommentServiceInterface;
+use App\Services\Impl\Comment\PostCommentService;
 use App\Services\Interfaces\Product\ProductTagServiceInterface;
 use App\Services\Impl\Product\ProductTagService;
 use App\Services\Interfaces\Banner\BannerServiceInterface;
@@ -75,6 +77,7 @@ class AppServiceProvider extends ServiceProvider
         AddressOrderServiceInterface::class => AddressOrderService::class,
         BannerServiceInterface::class => BannerService::class,
         ProductTagServiceInterface::class => ProductTagService::class,
+        PostCommentServiceInterface::class => PostCommentService::class,
     ];
 
     /**

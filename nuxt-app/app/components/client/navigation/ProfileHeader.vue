@@ -1,9 +1,9 @@
 <template>
   <div class="relative rounded-lg overflow-hidden mx-auto mb-5">
-    <img src="/client/images/slide/banner-category-1.jpg" alt="Cover" class="w-full h-48 md:h-64 object-cover blur-[0.5px]" loading="lazy" />
+    <NuxtImg src="/client/images/slide/banner-category-1.jpg" alt="Cover" class="w-full h-48 md:h-64 object-cover blur-[0.5px]" loading="lazy" />
     <div class="absolute bottom-0 left-0 w-full flex items-center px-4 md:px-6 pb-3 md:pb-4 bg-[#eef2f6] shadow-md">
       <div class="relative">
-        <img :src="user?.image?.url || '/shared/images/defaults/avatar.jpg'" :alt="'Avatar ' + user?.name" class="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 md:border-4 border-sky-500 -mt-12 md:-mt-15 shadow-lg" loading="lazy" />
+        <NuxtImg :src="avatar" :alt="'Avatar ' + user?.name" class="w-16 h-16 md:w-20 md:h-20 rounded-full border-1 md:border-4 border-sky-500 -mt-12 md:-mt-15 shadow-lg object-cover" loading="lazy" />
       </div>
       <div class="flex-1 ml-3 md:ml-4 -mt-8 md:-mt-9 h-16 md:h-20">
         <h2 class="text-lg md:text-2xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] my-1">{{ user?.name }}</h2>
@@ -15,7 +15,7 @@
             {{ user?.userCatalogueId === 1 ? "Khách hàng" : "Quản trị viên" }}
           </span>
           <span class="text-xs text-gray-500">từ ngày</span>
-          <a href="#" class="text-sky-500 text-xs hover:underline flex items-center">{{ user?.createdAt }}</a>
+          <span class="text-sky-500 text-xs hover:underline flex items-center">{{ formattedJoinedAt }}</span>
         </div>
       </div>
     </div>
@@ -23,25 +23,26 @@
 </template>
 
 <script setup>
-// import { useAuthStore } from "@/store/modules/authStore";
-// import { formatDateVN } from "@/utils/formatters";
-// import { useUser } from "@/composables/useUser";
-// import { watch } from "vue";
+import { computed } from "vue";
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "@/stores/auth/auth";
+import { formatDate } from "@/utils/helpers";
 
-// const authStore = useAuthStore();
-// const { user, getUser } = useUser(); // ban đầu user là null
+const authStore = useAuthStore();
+const { user } = storeToRefs(authStore);
 
-// const loadUserData = async (userId) => {
-//   if (!userId) return;
-//   await getUser(userId); // sau khi getUser thành công, user sẽ có giá trị -> đổ data - biến user
-// };
+const DEFAULT_AVATAR = "/shared/images/defaults/avatar.jpg";
 
-// // Watch authStore.user?.id để tự động load user khi id có giá trị
-// watch(
-//   () => authStore.user?.id,
-//   (id) => {
-//     if (id) loadUserData(id);
-//   },
-//   { immediate: true }
-// );
+const avatar = computed(() => {
+  const img = user.value?.image;
+  if (img && img.path) return img.url || DEFAULT_AVATAR;
+  return DEFAULT_AVATAR;
+});
+
+const formattedJoinedAt = computed(() => {
+  const createdAt = user.value?.createdAt;
+  if (!createdAt) return "";
+  const d = new Date(createdAt);
+  return isNaN(d.getTime()) ? "" : formatDate(d);
+});
 </script>

@@ -41,6 +41,7 @@ class PostCatalogue extends Model
         'album' => 'json',
         'is_hot' => 'boolean',
     ];
+    
     public function users(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'id');

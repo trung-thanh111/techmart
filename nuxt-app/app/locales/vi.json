@@ -2,7 +2,7 @@
   "admin": {
     "common": {
       "noteUploadImage": "jpg, jpeg, png, webp (tối đa 5MB)",
-      "clickToUpload": "Click để tải lên",
+      "clickToUpload": "Click ảnh để tải lên",
       "upload": "Tải lên",
       "image": "Hình ảnh",
       "maxFileSize": "Ảnh phải nhỏ hơn hoặc bằng 5MB",

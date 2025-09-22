@@ -6,6 +6,7 @@ use App\Traits\HasQuery;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Post extends Model
 {
@@ -69,5 +70,10 @@ class Post extends Model
     public function relateds(): BelongsToMany
     {
         return $this->belongsToMany(Post::class, 'related_posts', 'post_id', 'related_post_id');
+    }
+
+    public function post_comments(): HasMany
+    {
+        return $this->hasMany(PostComment::class, 'post_id', 'id');
     }
 }
