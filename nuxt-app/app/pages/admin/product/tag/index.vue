@@ -5,9 +5,9 @@ import Breadcrumb from "~/components/admin/navigation/Breadcrumb.vue";
 import Pagination from "~/components/admin/navigation/AppPagination.vue";
 import AppCheckbox from "~/components/admin/custom/AppCheckbox.vue";
 import Button from "~/components/admin/custom/Button.vue";
-import { usePostTag } from "~/composables/admin/post/usePostTag";
+import { useProductTag } from "~/composables/admin/product/useProductTag";
 
-const { data, isLoading, selectedIds, selectedItem, handleToggleIsHot, search, setPage, handleDeleteMultiple, setSelectedItem, confirmDelete, updateSelectedIds, getTotalItems, getAllItemIds } = usePostTag();
+const { data, isLoading, selectedIds, selectedItem, handleToggleIsHot, search, setPage, handleDeleteMultiple, setSelectedItem, confirmDelete, updateSelectedIds, getTotalItems, getAllItemIds } = useProductTag();
 
 provide("getTotalItems", getTotalItems);
 provide("getAllItemIds", getAllItemIds);
@@ -40,8 +40,8 @@ definePageMeta({
 
 <template>
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h5 class="mb-0 text-uppercase fw-bold">{{ $t("admin.page.postTag.title") }}</h5>
-    <Breadcrumb :crumbs="[{ label: $t('admin.page.postTag.breadcrumb') }]" />
+    <h5 class="mb-0 text-uppercase fw-bold">{{ $t("admin.page.productTag.title") }}</h5>
+    <Breadcrumb :crumbs="[{ label: $t('admin.page.productTag.breadcrumb') }]" />
   </div>
   <div class="card shadow-sm">
     <div class="card-body">
@@ -51,7 +51,7 @@ definePageMeta({
           <Button variant="cancel" :loading="isLoading" :disabled="!hasSelectedItems" @click="updateSelectedIds([])" />
         </div>
         <div class="d-flex align-items-center gap-2">
-          <NuxtLink to="/admin/post/tag/create" class="btn btn-success">
+          <NuxtLink to="/admin/product/tag/create" class="btn btn-success">
             <i class="ri-add-line me-1"></i>
             {{ $t("admin.common.create") }}
           </NuxtLink>
@@ -72,7 +72,7 @@ definePageMeta({
               <th style="width: 50px">
                 <AppCheckbox :model-value="selectedIds" :is-select-all="true" @update:model-value="handleSelectedIdsChange" />
               </th>
-              <th>{{ $t("admin.page.postCatalogue.groupInfo") }}</th>
+              <th>{{ $t("admin.page.productCatalogue.groupInfo") }}</th>
               <th class="text-center">{{ $t("admin.common.hot") }}</th>
               <th class="text-center">{{ $t("admin.common.status") }}</th>
               <th class="text-end">{{ $t("admin.common.actions") }}</th>
@@ -88,7 +88,7 @@ definePageMeta({
                   <AppCheckbox :model-value="selectedIds" :value="item.id" @update:model-value="handleSelectedIdsChange" />
                 </td>
                 <td>
-                  <NuxtLink class="hover:text-teal-500 flex items-center gap-2" :to="`/admin/post/tag/${item.id}/edit`">
+                  <NuxtLink class="hover:text-teal-500 flex items-center gap-2" :to="`/admin/product/tag/${item.id}/edit`">
                     {{ item.name }}
                   </NuxtLink>
                 </td>
@@ -107,7 +107,7 @@ definePageMeta({
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
                       <li>
-                        <NuxtLink class="dropdown-item text-info" :to="`/admin/post/tag/${item.id}/edit`">
+                        <NuxtLink class="dropdown-item text-info" :to="`/admin/product/tag/${item.id}/edit`">
                           <i class="ri-edit-box-line me-1"></i>
                           {{ $t("admin.common.edit") }}
                         </NuxtLink>
@@ -148,7 +148,7 @@ definePageMeta({
           </div>
         </div>
         <div class="modal-footer">
-          <Button variant="cancel" data-bs-dismiss="modal" />
+          <Button type="button" variant="cancel" data-bs-dismiss="modal" />
           <Button variant="delete" :loading="isLoading" :label="$t('admin.common.delete')" :disabled="!selectedItem" @click="handleConfirmDeleteSingle" />
         </div>
       </div>
@@ -178,7 +178,7 @@ definePageMeta({
           </div>
         </div>
         <div class="modal-footer">
-          <Button variant="cancel" data-bs-dismiss="modal" />
+          <Button type="button" variant="cancel" data-bs-dismiss="modal" />
           <Button variant="delete" :loading="isLoading" :label="$t('admin.common.deleteAll')" :disabled="selectedIds.length === 0" @click="handleConfirmDeleteMultiple" />
         </div>
       </div>

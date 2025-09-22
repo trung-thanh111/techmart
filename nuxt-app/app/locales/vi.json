@@ -516,6 +516,22 @@
           "colorNote": "Nếu không chọn, hệ thống sẽ tự động gán màu mặc định."
         }
       },
+      "productTag": {
+        "title": "Quản lý tags",
+        "breadcrumb": "Quản lý tags",
+        "groupInfo": "Thông tin",
+        "form": {
+          "name": "Tên",
+          "namePlaceholder": "Nhập tên cho bản ghi",
+          "description": "Mô tả",
+          "descriptionPlaceholder": "Nhập mô tả",
+          "isHot": "Nổi bật",
+          "isHotPlaceholder": "Chọn nổi bật",
+          "urlTooltip": "URL của bản ghi",
+          "color": "Màu sắc",
+          "colorNote": "Nếu không chọn, hệ thống sẽ tự động gán màu mặc định."
+        }
+      },
       "post": {
         "title": "Quản lý bài viết",
         "breadcrumb": "Quản lý bài viết",

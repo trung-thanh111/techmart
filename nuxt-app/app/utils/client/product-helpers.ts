@@ -1,1 +1,0 @@
-// product-helpers.ts - placeholder 

@@ -4,7 +4,7 @@
       <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
         <h4 class="mb-sm-0">{{ $t("admin.common.create") }}</h4>
         <div class="page-title-right">
-          <Breadcrumb :crumbs="[{ label: $t('admin.page.postTag.breadcrumb'), to: '/admin/post/tag' }, { label: $t('admin.common.create') }]" />
+          <Breadcrumb :crumbs="[{ label: $t('admin.page.productTag.breadcrumb'), to: '/admin/product/tag' }, { label: $t('admin.common.create') }]" />
         </div>
       </div>
     </div>
@@ -15,28 +15,28 @@
         <div class="card-body">
           <div class="mb-3">
             <label class="form-label" for="name">
-              {{ $t("admin.page.postTag.form.name") }}:
+              {{ $t("admin.page.productTag.form.name") }}:
               <span class="text-danger">*</span>
             </label>
             <Field name="name" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <input v-bind="field" id="name" type="text" :placeholder="$t('admin.page.postTag.form.namePlaceholder')" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
+              <input v-bind="field" id="name" type="text" :placeholder="$t('admin.page.productTag.form.namePlaceholder')" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
               <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
             </Field>
             <div class="d-flex gap-2 text-info mt-1 underline cursor-pointer">
               <span class="mdi mdi-link-variant"></span>
-              <p class="genrate_slug_to_name w-full pr-2" v-tooltip.bottom="$t('admin.page.postTag.form.urlTooltip')">{{ config.public.baseUrl }}/{{ slug }}</p>
+              <p class="genrate_slug_to_name w-full pr-2" v-tooltip.bottom="$t('admin.page.productTag.form.urlTooltip')">{{ config.public.baseUrl }}/{{ slug }}</p>
             </div>
           </div>
           <div class="mb-3">
-            <label class="form-label">{{ $t("admin.page.postTag.form.description") }}</label>
+            <label class="form-label">{{ $t("admin.page.productTag.form.description") }}</label>
             <Field name="description" v-slot="{ field }">
-              <textarea v-bind="field" rows="4" class="form-control" :placeholder="$t('admin.page.postTag.form.descriptionPlaceholder')" />
+              <textarea v-bind="field" rows="4" class="form-control" :placeholder="$t('admin.page.productTag.form.descriptionPlaceholder')" />
             </Field>
           </div>
         </div>
       </div>
       <div class="flex justify-end gap-3 mt-4 position-sticky bottom-5 z-20">
-        <Button type="button" variant="cancel" :to="POSTTAGINDEX" />
+        <Button type="button" variant="cancel" :to="PRODUCTTAGINDEX" />
         <Button variant="success" :loading="isLoading" />
       </div>
     </div>
@@ -49,11 +49,11 @@
           <div class="mb-3">
             <div class="form-check d-flex align-items-center gap-2 ps-0">
               <div class="form-group">
-                <label for="color">{{ $t("admin.page.postTag.form.color") }}</label>
+                <label for="color">{{ $t("admin.page.productTag.form.color") }}</label>
                 <Field name="color" v-slot="{ field, meta, errorMessage }">
                   <ColorPicker v-model="field.value" :format="'hex'" inputId="color" class="w-full" @update:modelValue="(val) => field.onChange(val?.startsWith('#') ? val : `#${val}`)" :showInput="true" default-color="#7dd3fc" />
                   <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
-                  <small v-else class="text-muted">{{ $t("admin.page.postTag.form.colorNote") }}</small>
+                  <small v-else class="text-muted">{{ $t("admin.page.productTag.form.colorNote") }}</small>
                 </Field>
               </div>
             </div>
@@ -63,7 +63,7 @@
               <Field name="isHot" v-slot="{ field }">
                 <AppCheckbox :modelValue="field.value" @update:modelValue="field.onChange" inputId="is_hot" class="scale-125" />
               </Field>
-              <label for="is_hot" class="mb-0">{{ $t("admin.page.postTag.form.isHot") }}</label>
+              <label for="is_hot" class="mb-0">{{ $t("admin.page.productTag.form.isHot") }}</label>
             </div>
           </div>
           <div class="mb-3">
@@ -81,14 +81,14 @@
 
 <script setup lang="ts">
 import { Field } from "vee-validate";
-import { POSTTAGINDEX } from "~/utils/constants";
+import { PRODUCTTAGINDEX } from "~/utils/constants";
 import Button from "~/components/admin/custom/Button.vue";
 import AppCheckbox from "~/components/admin/custom/AppCheckbox.vue";
 import Breadcrumb from "~/components/admin/navigation/Breadcrumb.vue";
 import PublishSelect from "~/components/admin/custom/PublishSelect.vue";
-import { usePostTag } from "~/composables/admin/post/usePostTag";
+import { useProductTag } from "~/composables/admin/product/useProductTag";
 
-const { handleStore, isLoading, config, slug } = usePostTag();
+const { handleStore, isLoading, config, slug } = useProductTag();
 
 definePageMeta({
   layout: "admin",
