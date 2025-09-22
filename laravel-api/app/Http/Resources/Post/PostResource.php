@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Post;
 
+use App\Http\Resources\Comment\PostCommentResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Post\PostCatalogueResource;
@@ -41,6 +42,9 @@ class PostResource extends JsonResource
             'tags' => TagResource::collection($this->whenLoaded('post_tags')),
             'relateds' => $this->whenLoaded('relateds', function () {
                 return PostResource::collection($this->relateds);
+            }),
+            'comments' => $this->whenLoaded('post_comments', function () {
+                return PostCommentResource::collection($this->post_comments);
             }),
             'metaTitle' => $this->meta_title,
             'metaKeyword' => $this->meta_keyword,
