@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Product\ProductCatalogue;
 
 use App\Enums\Common;
-use Illuminate\Support\Str;
 use App\Http\Requests\BaseRequest;
 
 class StoreRequest extends BaseRequest
@@ -23,24 +22,20 @@ class StoreRequest extends BaseRequest
      */
     public function rules(): array
     {
+        $mimes = implode(',', config('upload.image.allowed_type'));
+        $max_size = config('upload.image.max_size');
         return [
-            'parent_id' => 'nullable|integer',
-            'lft' => 'nullable|integer',
-            'rgt' => 'nullable|integer',
-            'level' => 'nullable|integer|min:0',
             'name' => 'required|string|max:255',
+            "parent_id" => "nullable|integer|min:0",
             'slug' => 'nullable|string|max:255|unique:product_catalogues,slug',
             'description' => 'nullable|string',
-            'image' => 'nullable|string|max:255',
-            'icon' => 'nullable|string|max:255',
+            "image" => "sometimes|mimes:{$mimes}|max:{$max_size}",
             'order' => 'nullable|integer',
             'publish' => 'nullable|integer|in:1,2',
+            "is_hot" => "nullable|boolean",
             'meta_title' => 'nullable|string|max:255',
             'meta_keyword' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:500',
-            'index' => 'nullable|integer|in:1,2',
-            'scheme' => 'nullable|string',
-            'iframe' => 'nullable|string',
         ];
     }
 

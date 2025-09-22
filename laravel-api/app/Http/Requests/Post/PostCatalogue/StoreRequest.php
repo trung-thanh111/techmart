@@ -26,7 +26,7 @@ class StoreRequest extends BaseRequest
         $max_size = config('upload.image.max_size');
         return [
             "name" => "nullable|string|max:255",
-             "slug" => "required|string|max:255|unique:post_catalogues,slug",
+            "slug" => "required|string|max:255|unique:post_catalogues,slug",
             "parent_id" => "nullable|integer|min:0",
             "description" => "nullable|string|max:500",
             "content" => "nullable|string",

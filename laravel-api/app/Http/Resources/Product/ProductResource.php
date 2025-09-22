@@ -37,8 +37,6 @@ class ProductResource extends JsonResource
             'metaKeyword' => $this->meta_keyword,
             'metaDescription' => $this->meta_description,
             'index' => $this->index,
-            // 'scheme' => $this->scheme,
-            // 'iframe' => $this->iframe,
             'publish' => (int) $this->publish,
             'creator' => $this->whenLoaded('users', [
                 'id' => $this->users->id,
@@ -49,9 +47,11 @@ class ProductResource extends JsonResource
             'brand' => new BrandResource($this->brands), // quan hệ 1-1 belongSto
             'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
             'updatedAt' => $this->updated_at?->format('Y-m-d H:i:s'),
-            'deletedAt' => $this->deleted_at?->format('Y-m-d H:i:s'),
             'createdAtHuman' => $this->created_at?->diffForHumans(),
             'updatedAtHuman' => $this->updated_at?->diffForHumans(),
+            // 'deletedAt' => $this->deleted_at?->format('Y-m-d H:i:s'),
+            // 'scheme' => $this->scheme,
+            // 'iframe' => $this->iframe,
         ];
     }
 }

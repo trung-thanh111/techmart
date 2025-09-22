@@ -1,0 +1,59 @@
+import type { IApiOk, IApiMessage, IPaginate } from "~/interfaces/base.interface";
+import type { IPost } from "~/interfaces/post/post.interface";
+import { useApi } from "~/composables/useApi";
+import { formData } from "~/utils/formData";
+
+const ENDPOINT = "/api/v1";
+
+export const postService = {
+  pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IPost>>> => {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiOk<IPaginate<IPost>>>(`${ENDPOINT}/posts`, {
+      params,
+    });
+  },
+
+  store: async (payload: Partial<IPost>): Promise<IApiOk<IPost>> => {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiOk<IPost>>(`${ENDPOINT}/posts`, {
+      method: "POST",
+      body: formData(payload),
+    });
+  },
+
+  show: async (id: number | string): Promise<IApiOk<IPost>> => {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiOk<IPost>>(
+      `${ENDPOINT}/posts/${id}`
+    );
+  },
+
+  update: async (id: number, payload: Partial<IPost>): Promise<IApiOk<IPost>> => {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiOk<IPost>>(`${ENDPOINT}/posts/${id}`, {
+      method: "POST",
+      body: formData(payload),
+      params: { _method: "PATCH" },
+    });
+  },
+
+  delete: async (id: number): Promise<IApiMessage> => {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiMessage>(`${ENDPOINT}/posts/${id}`, {
+      method: "DELETE"
+    });
+  },
+
+  deleteMultiple: async (ids: number[]): Promise<IApiMessage> => {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiMessage>(`${ENDPOINT}/posts/bulkDelete`, {
+      body: { ids },
+      method: "DELETE"
+    });
+  },
+
+  all: async (): Promise<IApiOk<IPost>> => {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiOk<IPost>>(`${ENDPOINT}/posts?type=all`);
+  },
+};

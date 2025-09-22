@@ -60,7 +60,7 @@
         </div>
       </div>
       <div class="flex justify-end gap-3 mt-4 position-sticky bottom-5 z-20">
-        <Button variant="cancel" :to="FAQINDEX" />
+        <Button type="button" variant="cancel" :to="FAQINDEX" />
         <Button variant="success" :loading="isLoading" />
       </div>
     </div>
