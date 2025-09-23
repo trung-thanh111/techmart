@@ -137,7 +137,7 @@
                       {{ user?.userCatalogueId === 1 ? "Khách hàng" : "Quản trị viên" }}
                     </span>
                   </span>
-                  <img class="rounded-full w-9 h-9" :src="user?.image.url || '/shared/images/defaults/avatar.jpg'" :alt="'Avatar ' + user?.name" />
+                  <img class="rounded-full w-9 h-9" :src="avatar" :alt="'Avatar ' + user?.name" />
                 </span>
               </button>
               <div class="absolute top-full right-0 w-full h-3 group-hover:block hidden z-0"></div>
@@ -145,7 +145,7 @@
                 <div class="w-full bg-white rounded-md border-0 shadow-xl font-normal ring-black/10 divide-y divide-gray-100">
                   <div class="px-4 py-2 text-sm text-gray-500 font-semibold">Xin chào! {{ user?.name }}.</div>
                   <div class="py-1">
-                    <NuxtLink to="/client/profile" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    <NuxtLink to="/profile" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-gray-400 mr-2">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                         <circle cx="12" cy="7" r="4" />
@@ -662,6 +662,7 @@ import { useAuth } from "~/composables/auth/useAuth";
 
 const auth = useAuthStore();
 const user = auth.$state.user;
+const avatar = user?.image.path ? user?.image.url : '/shared/images/defaults/avatar.jpg';
 
 const { handleLogout } = useAuth();
 

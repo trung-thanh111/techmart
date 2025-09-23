@@ -32,7 +32,7 @@ class StoreRequest extends BaseRequest
             "postal_code" => "required|string|max:20",
             "country_code" => "nullable|string|max:2",
             "is_default" => "boolean",
-            "publish" => "required|integer|in:0,1,2",
+            "publish" => "required|sometimes|integer|in:0,1,2",
         ];
     }
 

@@ -12,12 +12,12 @@ import { slugify } from "#imports";
 
 export const useAddressOrder = (
   initialFilters?: AddressOrderPayloadFilter,
-  mode: "create" | "update" = "create"
+  mode: "create" | "update" = "create",
+  options?: { redirectPath?: string }
 ) => {
   const { t } = useI18n();
   const config = useRuntimeConfig();
   const toast = useAppToast();
-
   const data = ref<IApiOk<IPaginate<IAddressOrder>>>();
   const filters = ref<AddressOrderPayloadFilter>(initialFilters ?? { keyword: "", perpage: 10, publish: null, user_id: null });
   const page = ref(1);
@@ -28,16 +28,16 @@ export const useAddressOrder = (
   const slug = computed(() => slugify(values.title || ""));
 
   const schema = {
-    title: z.string({ required_error: 'admin.validation.titleRequired' }).max(255, 'admin.validation.titleMaxLength').trim().min(1, 'admin.validation.titleRequired').max(255, 'admin.validation.titleMaxLength'),
-    fullName: z.string({ required_error: 'admin.validation.fullNameRequired' }).trim().min(1, 'admin.validation.fullNameRequired').max(255, 'admin.validation.fullNameMaxLength'),
-    phone: z.string({ required_error: 'admin.validation.phoneRequired' }).trim().min(1, 'admin.validation.phoneRequired').max(20, 'admin.validation.phoneMaxLength'),
-    email: z.string().email('admin.validation.emailInvalid').max(255, 'admin.validation.emailMaxLength').nullable().optional(),
-    address: z.string({ required_error: 'admin.validation.addressRequired' }).trim().min(1, 'admin.validation.addressRequired').max(255, 'admin.validation.addressMaxLength'),
-    state: z.string().max(100, 'admin.validation.stateMaxLength').nullable().optional(),
-    postalCode: z.string({ required_error: 'admin.validation.postalCodeRequired' }).trim().min(1, 'admin.validation.postalCodeRequired').max(20, 'admin.validation.postalCodeMaxLength'),
-    countryCode: z.string().max(2, 'admin.validation.countryCodeMaxLength').nullable().optional(),
+    title: z.string({ required_error: "admin.validation.titleRequired" }).max(255, "admin.validation.titleMaxLength").trim().min(1, "admin.validation.titleRequired").max(255, "admin.validation.titleMaxLength"),
+    fullName: z.string({ required_error: "admin.validation.fullNameRequired" }).trim().min(1, "admin.validation.fullNameRequired").max(255, "admin.validation.fullNameMaxLength"),
+    phone: z.string({ required_error: "admin.validation.phoneRequired" }).trim().min(1, "admin.validation.phoneRequired").max(20, "admin.validation.phoneMaxLength"),
+    email: z.string().email("admin.validation.emailInvalid").max(255, "admin.validation.emailMaxLength").nullable().optional(),
+    address: z.string({ required_error: "admin.validation.addressRequired" }).trim().min(1, "admin.validation.addressRequired").max(255, "admin.validation.addressMaxLength"),
+    state: z.string().max(100, "admin.validation.stateMaxLength").nullable().optional(),
+    postalCode: z.string({ required_error: "admin.validation.postalCodeRequired" }).trim().min(1, "admin.validation.postalCodeRequired").max(20, "admin.validation.postalCodeMaxLength"),
+    countryCode: z.string().max(2, "admin.validation.countryCodeMaxLength").nullable().optional(),
     isDefault: z.boolean().optional(),
-    publish: z.number({ required_error: 'admin.validation.statusRequired' }).refine((val) => [0, 1, 2].includes(val), { message: 'admin.validation.statusInvalid' }),
+    publish: z.number({ required_error: "admin.validation.statusRequired" }).refine((val) => [0, 1, 2].includes(val), { message: "admin.validation.statusInvalid" }).optional(),
   };
   const createSchema = z.object({ ...schema });
   const updateSchema = z.object({ ...schema });
@@ -49,15 +49,16 @@ export const useAddressOrder = (
   });
 
   const handleStore = handleSubmit(async (payload: TAddressOrderCreate) => {
+    console.info("payload:", payload);
     isLoading.value = true;
     try {
       const response = await useAddressOrderService.store(payload as Partial<IAddressOrder>);
-      toast.success(response?.message || t('admin.messages.createSuccess'));
+      toast.success(response?.message || t("admin.messages.createSuccess"));
       resetForm();
-      return navigateTo(ADDRESSORDERINDEX);
+      return navigateTo(options?.redirectPath ?? ADDRESSORDERINDEX);
     } catch (error: any) {
       console.error("Thêm mới thất bại:", error);
-      toast.error(error?.response?.data?.message || t('admin.messages.createFailed'));
+      toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
       throw error;
     } finally {
       isLoading.value = false;
@@ -70,7 +71,7 @@ export const useAddressOrder = (
       return response;
     } catch (error: any) {
       console.error("Lỗi! Không tìm thấy bản ghi: ", error);
-      toast.error(error?.response?.data?.message || t('admin.messages.createFailed'));
+      toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
       throw error;
     }
   };
@@ -80,11 +81,11 @@ export const useAddressOrder = (
     try {
       const id = Number(useRoute().params.id);
       await useAddressOrderService.update(id, payload as Partial<IAddressOrder>);
-      toast.success(t('admin.messages.updateSuccess'));
-      return navigateTo(ADDRESSORDERINDEX);
+      toast.success(t("admin.messages.updateSuccess"));
+      return navigateTo(options?.redirectPath ?? ADDRESSORDERINDEX);
     } catch (error: any) {
       console.error("Cập nhật thất bại:", error);
-      toast.error(error?.response?.data?.message || t('admin.messages.updateFailed'));
+      toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
     } finally {
       isLoading.value = false;
     }
@@ -94,10 +95,10 @@ export const useAddressOrder = (
     isLoading.value = true;
     try {
       await useAddressOrderService.delete(id);
-      toast.success(t('admin.messages.deleteSuccess'));
+      toast.success(t("admin.messages.deleteSuccess"));
       await fetchData();
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || t('admin.messages.deleteFailed'));
+      toast.error(error?.response?.data?.message || t("admin.messages.deleteFailed"));
     } finally {
       isLoading.value = false;
     }
@@ -108,11 +109,11 @@ export const useAddressOrder = (
     isLoading.value = true;
     try {
       await useAddressOrderService.deleteMultiple(selectedIds.value);
-      toast.success(t('admin.messages.deleteMultipleSuccess', { count: selectedIds.value.length }));
+      toast.success(t("admin.messages.deleteMultipleSuccess", { count: selectedIds.value.length }));
       selectedIds.value = [];
       await fetchData();
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || t('admin.messages.deleteFailed'));
+      toast.error(error?.response?.data?.message || t("admin.messages.deleteFailed"));
     } finally {
       isLoading.value = false;
     }
@@ -138,10 +139,44 @@ export const useAddressOrder = (
       });
       data.value = response;
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || t('admin.messages.loadDataError'));
+      toast.error(err?.response?.data?.message || t("admin.messages.loadDataError"));
       console.error("Lỗi! Không tải được dữ liệu:", err);
     } finally {
       isLoading.value = false;
+    }
+  };
+
+  const loadAddressesByUserId = async (userId: number) => {
+    if (!userId) return false;
+    
+    isLoading.value = true;
+    try {
+      const response = await useAddressOrderService.addressUserById(userId);
+      data.value = { data: response.data } as any;
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || t("admin.messages.loadDataError"));
+      console.error("Failed to load addresses:", err);
+    } finally {
+      isLoading.value = false;
+    }
+  };
+  const addressUserById = loadAddressesByUserId;
+
+  const handleToggleIsDefault = async (item: IAddressOrder) => {
+    const originalValue = item.isDefault;
+    
+    try {
+      await useAddressOrderService.update(item.id, { isDefault: item.isDefault });
+      toast.success(t("admin.messages.updateSuccess"));
+      const addresses = data.value?.data;
+      if (Array.isArray(addresses)) {
+        addresses.forEach((address: IAddressOrder) => {
+          address.isDefault = address.id === item.id ? item.isDefault : false;
+        });
+      }
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
+      item.isDefault = originalValue;
     }
   };
 
@@ -149,9 +184,7 @@ export const useAddressOrder = (
     try {
       const response = await useUserService.all();
       const rows = response?.data ?? [];
-      userOptions.value = (Array.isArray(rows) ? rows : [rows])
-        .map((item: any) => ({ name: item.name, value: Number(item.id) }))
-        .filter((opt: any) => opt.name && !Number.isNaN(opt.value));
+      userOptions.value = (Array.isArray(rows) ? rows : [rows]).map((item: any) => ({ name: item.name, value: Number(item.id) })).filter((opt: any) => opt.name && !Number.isNaN(opt.value));
     } catch (error) {
       console.error("Lỗi! khi tải dữ liệu user all :", error);
     }
@@ -183,8 +216,8 @@ export const useAddressOrder = (
   };
 
   onMounted(() => {
-    fetchData()
-    loadUser()
+    fetchData();
+    loadUser();
   });
 
   return {
@@ -204,6 +237,8 @@ export const useAddressOrder = (
     handleStore,
     handleUpdate,
     handleDelete,
+    handleToggleIsDefault,
+    addressUserById,
     handleDeleteMultiple,
     setSelectedItem,
     confirmDelete,
@@ -219,4 +254,3 @@ export const useAddressOrder = (
 
 export type TAddressOrderCreate = Partial<IAddressOrder>;
 export type TAddressOrderUpdate = TAddressOrderCreate;
-

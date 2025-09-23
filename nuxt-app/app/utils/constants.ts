@@ -72,3 +72,9 @@ export const AGENCYWORKINGHOURUPDATE = "/admin/agency/working_hour/update";
 
 export const MAX_FILE_SIZE = 5 * 1024 * 1024;
 export const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
+
+
+// FE
+export const PROFILEADRESSORDERINDEX = "/profile/address_order";
+export const PROFILEADRESSORDERCREATE = "/profile/address_order/create";
+export const PROFILEADRESSORDERUPDATE = "/profile/address_order/update";
