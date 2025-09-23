@@ -36,13 +36,6 @@ class UpdateRequest extends BaseRequest
         $sometime = ($method === 'PATCH') ? 'sometimes' : '';
         return [
             "title" => "nullable|string|max:255|{$sometime}",
-            "slug" => [
-                "{$sometime}",
-                "required",
-                "string",
-                "max:255",
-                Rule::unique('address_orders', 'slug')->ignore($this->route('address_order')),
-            ],
             "full_name" => "required|string|max:255|{$sometime}",
             "phone" => "required|string|max:20|{$sometime}",
             "email" => "nullable|email|max:255|{$sometime}",

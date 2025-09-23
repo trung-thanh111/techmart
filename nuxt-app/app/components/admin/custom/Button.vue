@@ -81,5 +81,7 @@ const onClick = async (event: MouseEvent) => {
 </script>
 
 <template>
-  <Button :type="type" :label="finalLabel" :severity="finalSeverity" :loading="loading" :icon="icon" :iconPos="iconPos" :class="finalClass" :pt="{ loadingicon: 'w-4 h-4 mr-0.5' }" @click="onClick" />
+  <div>
+    <Button :type="type" :label="finalLabel" :severity="finalSeverity" :loading="loading" :icon="icon" :iconPos="iconPos" :class="finalClass" :pt="{ loadingicon: 'w-4 h-4 mr-0.5' }" @click="onClick" />
+  </div>
 </template>

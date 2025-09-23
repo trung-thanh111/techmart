@@ -49,5 +49,10 @@ export const useAddressOrderService = {
       method: "DELETE"
     });
   },
+
+  addressUserById: async (id: number): Promise<IApiOk<IAddressOrder[]>> => {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiOk<IAddressOrder[]>>(`${ENDPOINT}/address_orders?type=all&user_id=${id}`);
+  },
   
 };

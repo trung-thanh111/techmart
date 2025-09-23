@@ -1,7 +1,7 @@
 <template>
   <div class="w-100">
-    <h1 class="text-xl md:text-2xl font-semibold text-gray-900 mb-1">Thông tin tài khoản</h1>
-    <p class="text-sm text-gray-500 mb-5 md:mb-10">Cập nhật hồ sơ và chi tiết cá nhân của bạn tại đây</p>
+    <h1 class="text-xl md:text-2xl font-semibold text-gray-800 mb-1">Thông tin tài khoản</h1>
+    <p class="text-xs text-gray-500 mb-5 md:mb-10">Cập nhật hồ sơ và chi tiết cá nhân của bạn tại đây</p>
     <form @submit.prevent="handleUpdateProfile" class="grid grid-cols-1 md:grid-cols-12 gap-6 mb-6 md:mb-10" enctype="multipart/form-data">
       <div class="col-span-1 md:col-span-9 space-y-6">
         <h2 class="text-sm font-semibold text-gray-700">Hồ sơ</h2>

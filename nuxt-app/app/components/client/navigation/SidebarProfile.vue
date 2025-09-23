@@ -53,7 +53,7 @@
             {{ section.title }}
           </p>
           <nav class="space-y-1">
-            <NuxtLink v-for="item in section.items" :key="item.to" :to="item.to" :prefetch="false" class="flex items-center gap-2 px-3 py-2 text-sm rounded-md" :class="getLinkClass(item.to, item.class)">
+            <NuxtLink v-for="item in section.items" :key="item.to" :to="item.to" :prefetch="false" class="flex items-center gap-2 px-3 py-2 text-sm rounded-md text-[12px]" :class="getLinkClass(item.to, item.class)">
               {{ item.label }}
             </NuxtLink>
           </nav>
@@ -80,7 +80,7 @@ const isDesktop = ref(false);
 const route = useRoute();
 
 const isActive = (path: string) => route.path === path;
-const getLinkClass = (path: string, extra?: string) => (isActive(path) ? "font-medium bg-sky-50 text-sky-600" : extra || "text-gray-700 hover:bg-gray-100 hover:text-sky-600");
+const getLinkClass = (path: string, extra?: string) => (isActive(path) ? "font-medium bg-sky-50 text-sky-600" : extra || "text-gray-500 hover:bg-gray-100 hover:text-sky-600");
 const getIconLinkClass = (path: string) => (isActive(path) ? "bg-sky-50 text-sky-600" : "text-gray-500 hover:bg-sky-50 hover:text-sky-600");
 
 const handleResize = () => {
@@ -95,7 +95,7 @@ const sidebarSections = [
     items: [
       { label: "Thông tin", to: "/profile" },
       { label: "Đổi mật khẩu", to: "/profile/change-password" },
-      { label: "Địa chỉ nhận hàng", to: "/profile/address" },
+      { label: "Địa chỉ nhận hàng", to: "/profile/address_order" },
       { label: "Đơn hàng của tôi", to: "/profile/orders" },
       { label: "Danh sách yêu thích", to: "/profile/wishlists" },
       { label: "Khuyến mãi của tôi", to: "/profile/vouchers" },
