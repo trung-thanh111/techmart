@@ -79,9 +79,14 @@ const isSidebarCollapsed = ref(false);
 const isDesktop = ref(false);
 const route = useRoute();
 
-const isActive = (path: string) => route.path === path;
-const getLinkClass = (path: string, extra?: string) => (isActive(path) ? "font-medium bg-sky-50 text-sky-600" : extra || "text-gray-500 hover:bg-gray-100 hover:text-sky-600");
-const getIconLinkClass = (path: string) => (isActive(path) ? "bg-sky-50 text-sky-600" : "text-gray-500 hover:bg-sky-50 hover:text-sky-600");
+const isActivePath = (basePath: string) => {
+  const current = route.path.replace(/\/+$/, "");
+  const base = basePath.replace(/\/+$/, "");
+  if (base === "/profile") return current === base;
+  return current === base || current.startsWith(base + "/");
+};
+const getLinkClass = (path: string, extra?: string) => (isActivePath(path) ? "font-medium bg-sky-50 text-sky-600" : extra || "text-gray-500 hover:bg-gray-100 hover:text-sky-600");
+const getIconLinkClass = (path: string) => (isActivePath(path) ? "bg-sky-50 text-sky-600" : "text-gray-500 hover:bg-sky-50 hover:text-sky-600");
 
 const handleResize = () => {
   isDesktop.value = window.innerWidth >= 768;

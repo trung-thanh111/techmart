@@ -52,10 +52,10 @@ export const postCatalogueService = {
     });
   },
 
-  all: async (): Promise<IApiOk<IPostCatalogue>> => {
+  all: async (): Promise<IApiOk<IPostCatalogue[]>> => {
     const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPostCatalogue>>(
-      `${ENDPOINT}/post_catalogues?type=all`
+    return await privateFetch<IApiOk<IPostCatalogue[]>>(
+      `${ENDPOINT}/post_catalogues?type=all&publish=2`
     );
   },
 };

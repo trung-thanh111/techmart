@@ -75,6 +75,9 @@ export const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "i
 
 
 // FE
+
+export const IMAGEDEFAULT = "/shared/images/defaults/record.jpg";
+
 export const PROFILEADRESSORDERINDEX = "/profile/address_order";
 export const PROFILEADRESSORDERCREATE = "/profile/address_order/create";
 export const PROFILEADRESSORDERUPDATE = "/profile/address_order/update";

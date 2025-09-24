@@ -36,6 +36,7 @@ class PostResource extends JsonResource
             'tagId' => (int) $this->tag_id,
             'creator' => $this->whenLoaded('users', [
                 'id' => $this->users->id,
+                'avatar' => asset("/storage/{$this->users->image}") ?? null,
                 'name' => $this->users->name,
             ]),
             'postCatalogues' => PostCatalogueResource::collection($this->whenLoaded('post_catalogues')),

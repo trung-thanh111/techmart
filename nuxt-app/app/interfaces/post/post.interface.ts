@@ -21,6 +21,15 @@ export interface IPost {
   metaKeyword?: string;
   metaDescription?: string;
   publishedAt?: string | null;
+  creator?: ICreator;
+  createdAtHuman?: string;
+  updatedAtHuman?: string;
+}
+
+export interface ICreator {
+  id: number;
+  avatar: string;
+  name: string;
 }
 
 export interface Option {
@@ -28,8 +37,8 @@ export interface Option {
   value: string | null;
 }
 
-export interface PostPayloadFilter extends BasePayloadFilter{
+export interface PostPayloadFilter extends BasePayloadFilter {
   tag_id?: number | null;
   post_catalogue_id?: number | null;
-
+  sort?: string | null;
 }

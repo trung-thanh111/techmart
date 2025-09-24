@@ -2,10 +2,8 @@
   <div class="w-100">
     <h1 class="text-xl md:text-2xl font-semibold text-gray-800 mb-1">Thêm mới địa chỉ</h1>
     <p class="text-xs text-gray-500 mb-5 md:mb-10">Vui lòng nhập thông tin địa chỉ nhận hàng của bạn.</p>
-
     <form @submit.prevent="handleStore" class="space-y-4">
       <h2 class="text-sm font-semibold text-gray-700">Thông tin</h2>
-
       <div class="bg-white rounded-md">
         <div class="mb-3">
           <label class="block text-sm text-gray-700 mb-1">
@@ -17,7 +15,6 @@
             <small v-if="errorMessage && meta.touched" class="text-red-500 text-xs">{{ $t(errorMessage) }}</small>
           </Field>
         </div>
-
         <div class="mb-3">
           <label class="block text-sm text-gray-700 mb-1">
             Họ và tên
@@ -28,7 +25,6 @@
             <small v-if="errorMessage && meta.touched" class="text-red-500 text-xs">{{ $t(errorMessage) }}</small>
           </Field>
         </div>
-
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
           <div>
             <label class="block text-sm text-gray-700 mb-1">Email</label>
@@ -48,7 +44,6 @@
             </Field>
           </div>
         </div>
-
         <div class="mb-3">
           <label class="block text-sm text-gray-700 mb-1">
             Địa chỉ
@@ -59,7 +54,6 @@
             <small v-if="errorMessage && meta.touched" class="text-red-500 text-xs">{{ $t(errorMessage) }}</small>
           </Field>
         </div>
-
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
           <div>
             <label class="block text-sm text-gray-700 mb-1">Mã quốc gia</label>
@@ -84,7 +78,6 @@
             </Field>
           </div>
         </div>
-
         <div class="flex items-end gap-2 mb-3">
           <Field name="isDefault" v-slot="{ field }">
             <AppCheckbox :modelValue="field.value" @update:modelValue="field.onChange" inputId="defaultAddress" :class="'scale-125'" binary />
@@ -92,7 +85,6 @@
           <label for="defaultAddress" class="text-sm text-gray-700 select-none">Địa chỉ mặc định</label>
         </div>
       </div>
-
       <div class="flex justify-end gap-3 sticky bottom-5 z-50">
         <Button type="button" variant="cancel" :to="PROFILEADRESSORDERINDEX" />
         <Button variant="success" :loading="isLoading" />
@@ -102,6 +94,7 @@
 </template>
 
 <script setup lang="ts">
+import { PROFILEADRESSORDERINDEX } from "~/utils/constants";
 import { Field } from "vee-validate";
 import AppCheckbox from "~/components/admin/custom/AppCheckbox.vue";
 import Button from "~/components/admin/custom/Button.vue";
@@ -112,7 +105,6 @@ const { isLoading, handleStore, addressUserById, data } = useAddressOrder(undefi
 const authStore = useAuthStore();
 const userId = authStore.user?.id || 0;
 
-// Chặn truy cập trang create nếu đã có >= 3 địa chỉ
 onMounted(async () => {
   if (!userId) return;
   await addressUserById(userId);
