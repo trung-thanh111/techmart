@@ -102,6 +102,8 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
 
         // Post routes
         Route::group(['prefix' => 'posts'], function () {
+            Route::get('{id}', [PostController::class, 'show']);
+            Route::get('{slug}', [PostController::class, 'showBySlug']);
             Route::delete('bulkDelete', [PostController::class, 'bulkDelete']);
             Route::post('{id}/attach', [PostController::class, 'attach']);
             Route::delete('{id}/detach', [PostController::class, 'detach']);

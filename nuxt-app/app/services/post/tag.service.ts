@@ -49,8 +49,8 @@ export const postTagService = {
     });
   },
 
-  all: async (): Promise<IApiOk<IPostTag>> => {
+  all: async (): Promise<IApiOk<IPostTag[]>> => {
     const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPostTag>>(`${ENDPOINT}/post_tags?type=all`);
+    return await privateFetch<IApiOk<IPostTag[]>>(`${ENDPOINT}/post_tags?type=all&publish=2`);
   },
 };

@@ -1,6 +1,7 @@
 <?php
 namespace App\Providers;
 
+use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
 use App\Services\Interfaces\Comment\PostCommentServiceInterface;
 use App\Services\Impl\Comment\PostCommentService;
@@ -95,6 +96,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Carbon::setLocale(config('app.locale'));
     }
 }
