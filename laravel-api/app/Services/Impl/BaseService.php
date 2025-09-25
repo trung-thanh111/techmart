@@ -160,6 +160,7 @@ abstract class BaseService implements BaseServiceInterface
                 ->saveModel($id) // lưu dữ liệu
                 ->afterSave($request, $id) // sau khi save lấy data từ đâu trả về chẳng hạn or cache data
                 ->handleRelation($request) // xử lý quan hệ nế
+                ->afterHandleRelation($request) // cache lại data sau khi handle relation
                 ->commit()
                 ->getResult();
         } catch (\Throwable $th) {
@@ -286,7 +287,7 @@ abstract class BaseService implements BaseServiceInterface
         $lockKey = "lock:{$cacheKey}";
         $this->model = Cache::lock($lockKey, 5)->block(5, function () use ($cacheKey, $field, $value) {
             return Cache::tags($this->cacheTags)->remember($cacheKey, $this->cacheTTL, function () use ($field, $value) {
-                return $this->repository->findByField($field, $value);
+                return $this->repository->findByField($field, $value, $this->with);
             });
         });
 
@@ -305,5 +306,15 @@ abstract class BaseService implements BaseServiceInterface
         ]);
         $this->nested->rebuild(); // rebiuld lại các node trong tree
         return $this;
+    }
+
+    protected function afterHandleRelation(Request $request): self
+    {
+        // Reload model với relations mới sau khi handle relation
+        $this->model = $this->repository->findById($this->model->getKey(), $this->with);
+        $this->result = $this->model;
+        
+        // Cache lại data sau khi đã handle relation để đảm bảo data mới được cache
+        return $this->cacheSingleRecord();
     }
 }

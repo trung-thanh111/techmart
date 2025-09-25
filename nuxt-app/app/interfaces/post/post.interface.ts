@@ -22,6 +22,7 @@ export interface IPost {
   metaDescription?: string;
   publishedAt?: string | null;
   creator?: ICreator;
+  publishedAtHuman?: string;
   createdAtHuman?: string;
   updatedAtHuman?: string;
 }
