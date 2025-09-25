@@ -52,7 +52,8 @@ trait HasTransaction
         if ($this->useUpload) {
             $this->moveImage($request, $this->cacheKeyPrefix);
         }
-        return $this->clearCacheById()->cacheSingleRecord()->clearCacheByTags();
+        // Chỉ clear cache cũ, chưa cache mới vì relation chưa được handle
+        return $this->clearCacheById()->clearCacheByTags();
     }
 
     protected function handleRelation(Request $request): self
@@ -66,6 +67,12 @@ trait HasTransaction
             }
         }
         return $this;
+    }
+
+    protected function afterHandleRelation(Request $request): self
+    {
+        // Cache lại data sau khi đã handle relation để đảm bảo data mới được cache
+        return $this->cacheSingleRecord();
     }
     // các trường hợp trả data và format lại data theo resource mong muốn
     protected function getResult(): mixed

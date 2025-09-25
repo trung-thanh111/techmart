@@ -56,20 +56,24 @@ export function usePostSlider() {
     },
   };
 
-  const postRelatedOptions: any = {
-    type: "loop",
-    perPage: 4,
-    perMove: 1,
-    autoplay: true,
-    interval: 3000,
-    arrows: true,
-    pagination: true,
-    breakpoints: {
-      1024: { perPage: 3 },
-      768: { perPage: 2 },
-      640: { perPage: 1 },
-    },
-  };
+  const postRelatedOptions = (total: number) => {
+    const isLoop = total > 4
+    return {
+      type: isLoop ? "loop" : "slide",
+      perPage: 4,
+      perMove: 1,
+      trimSpace: false,
+      autoplay: isLoop,
+      interval: 3000,
+      arrows: isLoop,
+      pagination: isLoop,
+      breakpoints: {
+        1024: { perPage: 3 },
+        768:  { perPage: 2 },
+        640:  { perPage: 1 },
+      },
+    }
+  }
 
   return {
     postSlideHotOptions,

@@ -50,10 +50,11 @@ class PostResource extends JsonResource
             'metaTitle' => $this->meta_title,
             'metaKeyword' => $this->meta_keyword,
             'metaDescription' => $this->meta_description,
-            'publishedAt' => $this->published_at,
             'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
             'updatedAt' => $this->updated_at?->format('Y-m-d H:i:s'),
             // 'deletedAt' => $this->deleted_at?->format('Y-m-d H:i:s'),
+            'publishedAt' => $this->published_at ? \Carbon\Carbon::parse($this->published_at)->format('Y-m-d H:i:s') : null,
+            'publishedAtHuman' => $this->published_at ? \Carbon\Carbon::parse($this->published_at)->diffForHumans() : null,
             'createdAtHuman' => $this->created_at?->diffForHumans(),
             'updatedAtHuman' => $this->updated_at?->diffForHumans(),
         ];

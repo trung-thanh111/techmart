@@ -90,7 +90,7 @@ export default defineNuxtConfig({
 
   experimental: {
     payloadExtraction: false,
-    viewTransition: true,
+    viewTransition: false,
   },
 
   routeRules: {

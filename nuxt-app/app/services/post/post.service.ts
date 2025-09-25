@@ -99,7 +99,6 @@ export const postService = {
 
   showBySlug: async (slug: string): Promise<IApiOk<IPost>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IPost>>(`${ENDPOINT}/posts/${slug}`);
+    return await publicFetch<IApiOk<IPost>>(`${ENDPOINT}/post/${slug}`);
   },
-
 };

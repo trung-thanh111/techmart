@@ -114,9 +114,9 @@ class BaseRepository
         return $this->model->orderBy('id', $sort)->limit($limit)->get();
     }
 
-    public function findByField(string $field = '', mixed $value = null)
+    public function findByField(string $field = '', mixed $value = null, array $relation = [], array $column = ['*'])
     {
-        return $this->model->where($field, $value)->first();
+        return $this->model->select($column)->with($relation)->where($field, $value)->first();
     }
 
     public function restoreById($id)

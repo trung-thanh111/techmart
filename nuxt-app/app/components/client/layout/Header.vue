@@ -47,7 +47,6 @@
       <!-- Main Header -->
       <div class="bg-gradient-to-r from-[#00b88c] to-[#007c8b] px-2 pt-3">
         <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
-          <!-- Desktop: Logo, Search, Actions ... giữ nguyên ... -->
           <div class="hidden md:flex items-center gap-6">
             <NuxtLink to="/" class="h-15 w-40 rounded flex items-center justify-center">
               <img :src="logo" loading="lazy" alt="logo" />
@@ -137,7 +136,7 @@
                       {{ user?.userCatalogueId === 1 ? "Khách hàng" : "Quản trị viên" }}
                     </span>
                   </span>
-                  <img class="rounded-full w-9 h-9" :src="avatar" :alt="'Avatar ' + user?.name" />
+                  <img class="rounded-full w-9 h-9" :src="avatar" :alt="'Avatar ' + user?.name" loading="lazy" />
                 </span>
               </button>
               <div class="absolute top-full right-0 w-full h-3 group-hover:block hidden z-0"></div>
@@ -224,7 +223,7 @@
                   <div class="w-full max-w-md rounded-lg shadow-lg overflow-hidden text-sm">
                     <div class="px-4 py-2 bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-white font-medium">Xem nhanh</div>
                     <div class="flex items-start px-4 py-3 border-b border-gray-100">
-                      <img :src="iphoneImage" alt="Ấm Điện" class="w-14 h-14 object-cover rounded mr-3" />
+                        <img :src="iphoneImage" alt="Ấm Điện" class="w-14 h-14 object-cover rounded mr-3" loading="lazy" />
                       <div class="flex-1">
                         <div class="font-semibold text-gray-800 leading-snug text-sm">Ấm Điện Siêu Tốc 1.7L RD-AST17 P1</div>
                         <div class="flex items-center justify-between mt-1">
@@ -360,7 +359,7 @@
                     <div class="w-full max-w-md rounded-lg shadow-lg overflow-hidden text-sm">
                       <div class="px-4 py-2 bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-white font-medium">Sản phẩm mới thêm</div>
                       <div class="flex items-start px-4 py-3 border-b border-gray-100">
-                        <img :src="iphoneImage" alt="Ấm Điện" class="w-14 h-14 object-cover rounded mr-3" />
+                        <img :src="iphoneImage" alt="Ấm Điện" class="w-14 h-14 object-cover rounded mr-3" loading="lazy" />
                         <div class="flex-1">
                           <div class="font-semibold text-gray-800 leading-snug text-sm">Ấm Điện Siêu Tốc 1.7L RD-AST17 P1</div>
                           <div class="flex items-center justify-between mt-1">
@@ -430,9 +429,9 @@
                     <li><a href="#" class="block w-full px-3 py-2 rounded hover:bg-gray-100 hover:text-sky-500">Đèn bảng trắng</a></li>
                   </ul>
                 </div>
-                <div class="flex-shrink-0 hidden md:flex items-start justify-center w-[250px] p-4">
-                  <img :src="logoWebsite" class="h-12 object-contain" loading="lazy" alt="Logo" />
-                </div>
+                  <div class="flex-shrink-0 hidden md:flex items-start justify-center w-[250px] p-4">
+                    <img :src="logoWebsite" class="h-12 object-contain" alt="Logo" loading="lazy" />
+                  </div>
               </div>
             </div>
             <div class="flex items-center justify-center cursor-pointer hover:bg-white/10 transition-colors rounded px-2 py-2">
@@ -443,7 +442,7 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5 text-md"><polyline points="6,9 12,15 18,9" /></svg>
             </div>
             <div class="flex items-center justify-center gap-1 cursor-pointer hover:bg-white/10 transition-colors rounded px-2 py-2">
-              <span>Phụ kiện</span>
+              <NuxtLink :to="'/post'">Bài viết</NuxtLink>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5 text-md"><polyline points="6,9 12,15 18,9" /></svg>
             </div>
             <div class="flex items-center justify-center bg-gradient-to-r from-[#a8d444] to-[#b7e354] text-[#005a63] hover:opacity-90 cursor-pointer h-10 px-3 rounded transition-opacity">
@@ -652,7 +651,7 @@
   </div>
 </template>
 <script setup>
-import { ref, watch, computed, onMounted } from "vue";
+import { ref, computed } from "vue";
 import logo from "~/assets/shared/images/logo/logo-website.png";
 import codImage from "~/assets/shared/images/logo/cod.png";
 import iphoneImage from "~/assets/client/images/products/iphone-16-pro-max.webp";
