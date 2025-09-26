@@ -56,4 +56,17 @@ export const agencyService = {
     const { privateFetch } = useApi();
     return await privateFetch<IApiOk<IAgency>>(`${ENDPOINT}/agencies?type=all`);
   },
+
+  // FE
+  paginationPublic: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IAgency>>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPaginate<IAgency>>>(`${ENDPOINT}/agencies`, {
+      params,
+    });
+  },
+
+  showBySlug: async (slug: string): Promise<IApiOk<IAgency>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IAgency>>(`${ENDPOINT}/agency/${slug}`);
+  },
 };
