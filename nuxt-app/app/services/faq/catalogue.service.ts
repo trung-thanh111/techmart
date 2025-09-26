@@ -23,9 +23,7 @@ export const faqCatalogueService = {
 
   show: async (id: number | string): Promise<IApiOk<IFaqCatalogue>> => {
     const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IFaqCatalogue>>(
-      `${ENDPOINT}/faq_catalogues/${id}`
-    );
+    return await privateFetch<IApiOk<IFaqCatalogue>>(`${ENDPOINT}/faq_catalogues/${id}`);
   },
 
   update: async (id: number, payload: Partial<IFaqCatalogue>): Promise<IApiOk<IFaqCatalogue>> => {
@@ -40,7 +38,7 @@ export const faqCatalogueService = {
   delete: async (id: number): Promise<IApiMessage> => {
     const { privateFetch } = useApi();
     return await privateFetch<IApiMessage>(`${ENDPOINT}/faq_catalogues/${id}`, {
-      method: "DELETE"
+      method: "DELETE",
     });
   },
 
@@ -48,14 +46,25 @@ export const faqCatalogueService = {
     const { privateFetch } = useApi();
     return await privateFetch<IApiMessage>(`${ENDPOINT}/faq_catalogues/bulkDelete`, {
       body: { ids },
-      method: "DELETE"
+      method: "DELETE",
     });
   },
 
   all: async (): Promise<IApiOk<IFaqCatalogue>> => {
     const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IFaqCatalogue>>(
-      `${ENDPOINT}/faq_catalogues?type=all`
-    );
+    return await privateFetch<IApiOk<IFaqCatalogue>>(`${ENDPOINT}/faq_catalogues?type=all`);
+  },
+
+  // FE
+  paginationPublic: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IFaqCatalogue>>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPaginate<IFaqCatalogue>>>(`${ENDPOINT}/faq_catalogues`, {
+      params,
+    });
+  },
+
+  showBySlug: async (slug: string): Promise<IApiOk<IFaqCatalogue>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IFaqCatalogue>>(`${ENDPOINT}/faq-catalogue/${slug}`);
   },
 };

@@ -64,7 +64,17 @@ export function buildRelationParams(relationToIds: Record<string, number | numbe
 
 export const resolveImageUrl = (input?: any, fallback: string = IMAGEDEFAULT): string => {
   const obj = input || {};
-  return obj?.logo?.url || obj?.logo?.path || obj?.image?.url || obj?.image?.path || fallback;
+  const logo = obj?.logo;
+  const image = obj?.image;
+  const hasPath = (val: any) => typeof val === "string" && val.trim().length > 0;
+
+  if (logo && hasPath(logo?.path)) {
+    return logo?.url || logo.path;
+  }
+  if (image && hasPath(image?.path)) {
+    return image?.url || image.path;
+  }
+  return fallback;
 };
 
 export const formatPhoneVN = (phone?: string | null): string => {

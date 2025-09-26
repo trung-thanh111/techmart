@@ -13,6 +13,14 @@ export const faqService = {
     });
   },
 
+  // FE public
+  paginationPublic: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IFaq>>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPaginate<IFaq>>>(`${ENDPOINT}/faqs`, {
+      params,
+    });
+  },
+
   store: async (payload: Partial<IFaq>): Promise<IApiOk<IFaq>> => {
     const { privateFetch } = useApi();
     return await privateFetch<IApiOk<IFaq>>(`${ENDPOINT}/faqs`, {
@@ -55,5 +63,10 @@ export const faqService = {
   all: async (): Promise<IApiOk<IFaq>> => {
     const { privateFetch } = useApi();
     return await privateFetch<IApiOk<IFaq>>(`${ENDPOINT}/faqs?type=all`);
+  },
+
+  showBySlug: async (slug: string): Promise<IApiOk<IFaq>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IFaq>>(`${ENDPOINT}/faq/${slug}`);
   },
 };

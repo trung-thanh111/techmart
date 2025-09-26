@@ -106,7 +106,7 @@ definePageMeta({ layout: "client" });
       <form id="searchHome" class="flex rounded overflow-hidden bg-white shadow-sm" @submit.prevent="onSearch">
         <InputGroup>
           <InputText v-model="filters.keyword" placeholder="Tìm sản phẩm, danh mục mong muốn..." class="flex-1" size="small" />
-          <button type="submit" class="bg-[#74c043] px-4 hover:bg-[#68a83d] transition-colors">
+          <button type="submit" class="bg-sky-600 px-3 md:px-4 transition-all hover:bg-sky-700">
             <svg aria-hidden="true" focusable="false" class="md:w-4 md:h-4 h-3 w-3 text-white" fill="currentColor" viewBox="0 0 512 512">
               <path d="M505 442.7L405.3 343c28.4-34.9 45.5-79 45.5-127C450.8 96.5 354.3 0 232.9 0S15 96.5 15 216.1s96.5 216.1 216.1 216.1c48 0 92.1-17.1 127-45.5l99.7 99.7c10 10 26.2 10 36.2 0l11.3-11.3c10-10 10-26.2 0-36.2zM232.9 368.1c-83.9 0-152-68.1-152-152s68.1-152 152-152 152 68.1 152 152-68.1 152-152 152z" />
             </svg>
