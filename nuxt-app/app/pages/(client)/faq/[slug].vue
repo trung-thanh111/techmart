@@ -3,10 +3,10 @@
     <Breadcrumb :crumbs="breadcrumbs" />
     <section class="bg-gradient-to-r from-sky-700 via-cyan-600 to-green-500 text-white py-3 md:py-6 lg:py-12 px-3 md:px-6 mb-4 md:mb-8 rounded-md shadow-md">
       <div class="max-w-3xl mx-auto text-center">
-        <h2 class="text-2xl md:text-4xl font-bold mb-2">Bạn đang gặp thắc mắc</h2>
-        <p class="mb-4 md:mb-6 text-xs md:text-base">Hãy chia sẻ cho chúng tôi, cùng nhau giải quyết vấn thắc mắc nhé!</p>
+        <h2 class="text-2xl md:text-4xl font-bold mb-2">{{ $t('client.faq.havingQuestions') }}</h2>
+        <p class="mb-4 md:mb-6 text-xs md:text-base">{{ $t('client.faq.shareWithUs') }}</p>
         <form id="searchFaq" class="flex rounded overflow-hidden bg-white shadow-sm mx-auto max-w-xl" @submit.prevent>
-          <input v-model="keyword" type="text" name="keyword" placeholder="Vấn đề, thắc mắc mà bạn đang găp phải " class="flex-1 px-3 md:px-4 py-1 md:py-2 text-gray-600 focus:outline-none" />
+          <input v-model="keyword" type="text" name="keyword" :placeholder="$t('client.faq.searchPlaceholder')" class="flex-1 px-3 md:px-4 py-1 md:py-2 text-gray-600 focus:outline-none" />
           <button type="button" class="bg-sky-600 px-3 md:px-4 transition-all hover:bg-sky-700">
             <i class="fas fa-search text-white"></i>
           </button>
@@ -16,14 +16,14 @@
     <section class="mx-auto px-4 bg-white shadow-md rounded-md sm:py-3 md:py-6 sm:px-3 md:px-6 md:mb-8 sm:mb-4">
       <div class="col-span-full mb-5">
         <h2 class="text-xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f]">{{ title }}</h2>
-        <p class="mt-1.5 text-gray-600 text-sm md:text-base">Tổng hợp các câu hỏi thuộc nhóm này</p>
+        <p class="mt-1.5 text-gray-600 text-sm md:text-base">{{ $t('client.faq.groupDescription') }}</p>
       </div>
       <div class="mx-auto max-w-4xl">
         <template v-if="isLoading">
-          <div class="text-center text-gray-400 py-8">Đang tải...</div>
+          <div class="text-center text-gray-400 py-8">{{ $t('client.faq.loading') }}</div>
         </template>
         <template v-else-if="!faqs.length">
-          <div class="text-center text-gray-400 py-8">Chưa có câu hỏi</div>
+          <div class="text-center text-gray-400 py-8">{{ $t('client.faq.noQuestions') }}</div>
         </template>
         <template v-else>
           <div v-for="(item, idx) in faqs" :key="item.id" class="bg-white rounded-md border border-gray-100 hover:border-cyan-500 shadow transition hover:shadow-lg overflow-hidden lg:mb-3 md:mb-2 mb-1">
@@ -103,7 +103,7 @@ onMounted(async () => {
 });
 
 const breadcrumbs = computed(() => [
-  { label: "Câu hỏi", href: "/faq" },
+  { label: $t('client.faq.breadcrumbDetail'), href: "/faq" },
   { label: title.value || slug.value, href: `/faq/${slug.value}` },
 ]);
 </script>

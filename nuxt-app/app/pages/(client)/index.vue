@@ -48,16 +48,16 @@
       <div class="mb-4 md:mb-8">
         <div class="flex justify-between items-center space-x-2">
           <div class="head-section-product">
-            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-xl md:text-3xl font-bold">Thời đại công nghệ mới</h2>
+            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-xl md:text-3xl font-bold">{{ $t('client.home.eraOfTech') }}</h2>
             <div class="h-1 max-w-64 md:my-2 my-1 relative">
               <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-white via-green-300 to-green-300"></div>
             </div>
           </div>
           <div class="group flex items-center space-x-2">
-            <a href="#" class="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] font-medium after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#007c8b] after:to-[#00b88c] after:transition-all after:duration-300 group-hover:after:w-full md:text-base text-sm">Xem tất cả</a>
+            <a href="#" class="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] font-medium after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#007c8b] after:to-[#00b88c] after:transition-all after:duration-300 group-hover:after:w-full md:text-base text-sm">{{ $t('client.home.viewAll') }}</a>
           </div>
         </div>
-        <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">Các thiết bị chiếu sáng được ưa chuộng nhất tại Tech mart Store, nâng cao trải nghiệm sống của hàng ngàn khách hàng.</p>
+        <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t('client.home.popularLightingDesc') }}</p>
       </div>
       <div class="max-w-7xl mx-auto">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -105,7 +105,7 @@
       <div class="mb-4 md:mb-8">
         <div class="flex justify-between items-center space-x-2">
           <div>
-            <h2 class="text-white text-xl sm:text-3xl font-bold">Siêu Sales</h2>
+            <h2 class="text-white text-xl sm:text-3xl font-bold">{{ $t('client.home.superSale') }}</h2>
             <div class="h-1 max-w-48 md:my-2 my-1 relative">
               <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-white via-green-300 to-green-300"></div>
             </div>
@@ -123,13 +123,7 @@
           </div>
         </div>
         <div class="flex justify-between items-center">
-          <p class="text-white/90 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">
-            Các thiết bị chiếu sáng được ưa chuộng nhất tại Tech mart Store, nâng cao trải nghiệm sống của hàng ngàn khách hàng.
-            <!-- </p>
-            <span class="text-white text-2xl font-medium whitespace-nowrap">
-              ⏰ Sẽ Kết thúc
-            </span> -->
-          </p>
+          <p class="text-white/90 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t('client.home.popularLightingDesc') }}</p>
         </div>
       </div>
 
@@ -143,7 +137,7 @@
       <div class="mb-4 md:mb-8">
         <div class="flex justify-between items-center space-x-2">
           <div class="head-section-product">
-            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-xl md:text-3xl font-bold">Bán chạy nhất</h2>
+            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-xl md:text-3xl font-bold">{{ $t('client.home.bestSellers') }}</h2>
             <div class="h-1 max-w-48 my-1 md:my-2 relative">
               <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-white via-green-300 to-green-300"></div>
             </div>
@@ -184,7 +178,7 @@
             </div>
           </div>
         </div>
-        <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">Các thiết bị chiếu sáng được ưa chuộng nhất tại Tech mart Store, nâng cao trải nghiệm sống của hàng ngàn khách hàng.</p>
+        <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t('client.home.popularLightingDesc') }}</p>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -197,13 +191,13 @@
       <div class="mb-4 md:mb-8">
         <div class="flex justify-between items-center space-x-2">
           <div class="head-section-product">
-            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-xl md:text-3xl font-bold">Cấu hình gamming</h2>
+            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-xl md:text-3xl font-bold">{{ $t('client.home.gamingSetup') }}</h2>
             <div class="h-1 max-w-48 my-1 md:my-2 relative">
               <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-white via-green-300 to-green-300"></div>
             </div>
           </div>
         </div>
-        <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">Các thiết bị chiếu sáng được ưa chuộng nhất tại Tech mart Store, nâng cao trải nghiệm sống của hàng ngàn khách hàng.</p>
+        <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t('client.home.popularLightingDesc') }}</p>
       </div>
       <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 md:gap-4 gap-2">
         <!-- Left column -->
@@ -271,7 +265,7 @@
               <p class="text-xs">Vào Trận mọi lúc</p>
             </div>
             <div class="text-right">
-              <a href="#" class="text-xs sm:text-sm font-medium inline-block hover:text-sky-500 underline">Khám phá ngay</a>
+              <a href="#" class="text-xs sm:text-sm font-medium inline-block hover:text-sky-500 underline">{{ $t('client.home.viewNow') }}</a>
             </div>
           </div>
         </div>
@@ -343,7 +337,7 @@
             </div>
           </div>
         </div>
-        <p class="text-white/90 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">Các thiết bị chiếu sáng được ưa chuộng nhất tại Tech mart Store, nâng cao trải nghiệm sống của hàng ngàn khách hàng.</p>
+        <p class="text-white/90 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t('client.home.popularLightingDesc') }}</p>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         <ProductCard v-for="product in 10" :key="product.id" :product="product" />
@@ -355,7 +349,7 @@
       <div class="mb-4 md:mb-8">
         <div class="flex justify-between items-center space-x-2">
           <div class="head-section-product">
-            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-xl md:text-3xl font-bold">Tích hợp AI</h2>
+            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-xl md:text-3xl font-bold">{{ $t('client.home.integrateAI') }}</h2>
             <div class="h-1 max-w-48 my-1 md:my-2 relative">
               <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-white via-green-300 to-green-300"></div>
             </div>
@@ -423,7 +417,7 @@
             </div>
           </div>
         </div>
-        <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">Các thiết bị chiếu sáng được ưa chuộng nhất tại Tech mart Store, nâng cao trải nghiệm sống của hàng ngàn khách hàng.</p>
+        <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t('client.home.popularLightingDesc') }}</p>
       </div>
       <div class="flex flex-col lg:flex-row justify-between items-start gap-4">
         <div class="w-full lg:w-1/5 h-[150px] lg:h-[858px] md:-mx-3 lg:mx-0">
@@ -439,7 +433,7 @@
                     <span class="absolute top-0 right-0 w-5 h-5 rotate-45 translate-x-1/2 -translate-y-1/2 bg-white"></span>
                   </span>
                   <span class="absolute bottom-0 left-0 w-full h-full transition-all duration-500 ease-in-out delay-200 -translate-x-full bg-sky-600 rounded-md group-hover:translate-x-0"></span>
-                  <span class="relative text-center text-white transition-colors duration-200 ease-in-out group-hover:text-white drop-shadow">Khám phá</span>
+              <span class="relative text-center text-white transition-colors duration-200 ease-in-out group-hover:text-white drop-shadow">{{ $t('client.home.explore') }}</span>
                 </a>
               </div>
             </div>
@@ -456,30 +450,30 @@
     <section class="bg-gradient-to-b from-white to-sky-50 relative rounded-md py-3 md:py-6 px-3 md:px-6 md:mb-8 mb-4">
       <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 items-center gap-6 md:gap-12">
         <div class="space-y-3 md:space-y-6">
-          <span class="inline-block bg-sky-100 text-sky-600 font-semibold text-xs md:px-3 px-3 py-1 rounded-full uppercase tracking-wide">Trải nghiệm mới</span>
+          <span class="inline-block bg-sky-100 text-sky-600 font-semibold text-xs md:px-3 px-3 py-1 rounded-full uppercase tracking-wide">{{ $t('client.home.newExperience') }}</span>
           <h2 class="text-xl md:text-3xl font-extrabold text-gray-800 leading-tight">
-            Mua Sắm Công Nghệ
+            {{ $t('client.home.smartShopping') }}
             <br class="" />
-            <span class="text-sky-600">Thông Minh, Tiện Lợi</span>
+            <span class="text-sky-600">{{ $t('client.home.smartConvenient') }}</span>
             💡
           </h2>
-          <p class="text-gray-600 text-sm md:text-base leading-relaxed max-w-md">Khám phá hàng nghìn sản phẩm công nghệ chính hãng từ các thương hiệu uy tín. Giao nhanh, thanh toán tiện lợi, bảo hành rõ ràng.</p>
+          <p class="text-gray-600 text-sm md:text-base leading-relaxed max-w-md">{{ $t('client.home.discoverThousands') }}</p>
           <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-gray-700 mt-2 md:mt-4">
             <li class="flex items-center gap-2">
               <i class="fas fa-shipping-fast text-sky-500"></i>
-              Giao nhanh 2h nội thành
+              {{ $t('client.home.fast2h') }}
             </li>
             <li class="flex items-center gap-2">
               <i class="fas fa-shield-alt text-emerald-500"></i>
-              Bảo hành toàn quốc
+              {{ $t('client.home.nationwideWarranty') }}
             </li>
             <li class="flex items-center gap-2">
               <i class="fas fa-credit-card text-purple-500"></i>
-              Trả góp 0% lãi suất
+              {{ $t('client.home.installment0') }}
             </li>
             <li class="flex items-center gap-2">
               <i class="fas fa-headset text-pink-500"></i>
-              Hỗ trợ 24/7
+              {{ $t('client.home.support247') }}
             </li>
           </ul>
           <div class="max-w-[120px] md:max-w-[180px]">
@@ -491,7 +485,7 @@
                 <span class="absolute top-0 right-0 w-5 h-5 rotate-45 translate-x-1/2 -translate-y-1/2 bg-white"></span>
               </span>
               <span class="absolute bottom-0 left-0 w-full h-full transition-all duration-500 ease-in-out delay-200 -translate-x-full bg-sky-600 rounded-md group-hover:translate-x-0"></span>
-              <span class="relative text-center text-white transition-colors duration-200 ease-in-out group-hover:text-white drop-shadow text-sm md:text-base">Khám phá</span>
+              <span class="relative text-center text-white transition-colors duration-200 ease-in-out group-hover:text-white drop-shadow text-sm md:text-base">{{ $t('client.home.explore') }}</span>
             </a>
           </div>
         </div>
@@ -624,11 +618,11 @@
     <section class="relative bg-white shadow-md rounded-md py-3 md:py-6 px-3 md:px-6 md:mb-8 mb-4">
       <div class="text-center md:mb-8 mb-4 relative">
         <div class="inline-block md:mb-4 mb-2">
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#8dc63f] via-[#0097cc] to-[rgba(43,57,144,0.91)] text-sm font-semibold tracking-wider uppercase">Lợi thế cạnh tranh</span>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#8dc63f] via-[#0097cc] to-[rgba(43,57,144,0.91)] text-sm font-semibold tracking-wider uppercase">{{ $t('client.home.competitiveAdvantage') }}</span>
         </div>
         <h2 class="text-2xl md:text-4xl font-black text-gray-700 mb-2 leading-tight">
-          Tại Sao Nên Chọn
-          <a href="#" class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] animate-glow">Chúng Tôi</a>
+          {{ $t('client.home.whyChooseUs') }}
+          <a href="#" class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] animate-glow">{{ $t('client.home.us') }}</a>
           <span class="text-2xl md:text-4xl">?</span>
         </h2>
         <p class="text-sm text-gray-600 max-w-3xl mx-auto leading-relaxed">Trải nghiệm sự khác biệt với những giải pháp công nghệ tiên tiến nhất, được thiết kế để biến tầm nhìn thương mại điện tử của bạn thành hiện thực</p>
@@ -705,7 +699,7 @@
           <a href="#" class="relative inline-flex items-center md:px-6 md:py-2 px-3 py-1 text-white font-bold text-sm md:text-base rounded-full hover:shadow-xl transition-all duration-500 transform hover:scale-110 group overflow-hidden">
             <span class="absolute inset-0 bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
             <span class="relative flex items-center">
-              Mua Sắm Ngay
+              {{ $t('client.home.shopNow') }}
               <i class="fas fa-arrow-right ml-3 group-hover:translate-x-2 transition-transform duration-300"></i>
             </span>
           </a>
@@ -731,16 +725,16 @@
       <div class="mb-4 md:mb-8">
         <div class="flex justify-between items-center space-x-2">
           <div class="head-section-product">
-            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-xl md:text-3xl font-bold">Sự kiện nổi bật</h2>
+            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-xl md:text-3xl font-bold">{{ $t('client.home.featuredEvents') }}</h2>
             <div class="h-1 max-w-48 my-1 md:my-2 relative">
               <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-white via-green-300 to-green-300"></div>
             </div>
           </div>
           <div class="group flex items-center space-x-2">
-            <a href="#" class="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] font-medium text-sm md:text-base after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#007c8b] after:to-[#00b88c] after:transition-all after:duration-300 group-hover:after:w-full">Xem tất cả</a>
+            <a href="#" class="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] font-medium text-sm md:text-base after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#007c8b] after:to-[#00b88c] after:transition-all after:duration-300 group-hover:after:w-full">{{ $t('client.home.viewAll') }}</a>
           </div>
         </div>
-        <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">Các thiết bị chiếu sáng được ưa chuộng nhất tại Tech mart Store, nâng cao trải nghiệm sống của hàng ngàn khách hàng.</p>
+        <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t('client.home.popularLightingDesc') }}</p>
       </div>
       <div class="grid grid-cols-1 lg:grid-cols-2 md:gap-6 gap-4">
         <Splide :options="postFeaturedOptions" id="featured-posts">
@@ -752,7 +746,7 @@
                 <h3 class="text-lg md:text-xl font-bold text-gray-800 hover:text-cyan-600 transition-colors md:mb-2 mb-1 line-clamp-1">{{ item.title }}</h3>
                 <p class="text-gray-600 hover:text-gray-500 transition-colors text-sm md:mb-4 mb-2 line-clamp-2">{{ item.description }}</p>
                 <div class="text-right hover:scale-105 transition-transform duration-300">
-                  <a href="#" class="text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] font-medium text-sm md:text-base">đọc thêm →</a>
+                  <a href="#" class="text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] font-medium text-sm md:text-base">{{ $t('client.home.readMore') }}</a>
                 </div>
               </div>
             </a>

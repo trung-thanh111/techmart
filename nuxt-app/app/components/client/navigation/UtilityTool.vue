@@ -20,7 +20,7 @@
         </defs>
         <path fill="url(#chatGradient)" d="M881.1,720.5H434.7L173.3,941V720.5h-54.4C58.8,720.5,10,671.1,10,610.2v-441C10,108.4,58.8,59,118.9,59h762.2C941.2,59,990,108.4,990,169.3v441C990,671.1,941.2,720.5,881.1,720.5L881.1,720.5z M935.6,169.3c0-30.4-24.4-55.2-54.5-55.2H118.9c-30.1,0-54.5,24.7-54.5,55.2v441c0,30.4,24.4,55.1,54.5,55.1h54.4h54.4v110.3l163.3-110.2H500h381.1c30.1,0,54.5-24.7,54.5-55.1V169.3L935.6,169.3z M717.8,444.8c-30.1,0-54.4-24.7-54.4-55.1c0-30.4,24.3-55.2,54.4-55.2c30.1,0,54.5,24.7,54.5,55.2C772.2,420.2,747.8,444.8,717.8,444.8L717.8,444.8z M500,444.8c-30.1,0-54.4-24.7-54.4-55.1c0-30.4,24.3-55.2,54.4-55.2c30.1,0,54.4,24.7,54.4,55.2C554.4,420.2,530.1,444.8,500,444.8L500,444.8z M282.2,444.8c-30.1,0-54.5-24.7-54.5-55.1c0-30.4,24.4-55.2,54.5-55.2c30.1,0,54.4,24.7,54.4,55.2C336.7,420.2,312.3,444.8,282.2,444.8L282.2,444.8z" />
       </svg>
-      <span class="absolute -top-10 px-3 py-1 rounded-md text-white text-sm bg-orange-400 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none font-medium">Chat</span>
+      <span class="absolute -top-10 px-3 py-1 rounded-md text-white text-sm bg-orange-400 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none font-medium">{{ $t('client.utilityTool.chat') }}</span>
     </button>
 
     <!-- Modal -->
@@ -32,7 +32,7 @@
       <div class="bg-white w-full max-w-xl rounded-lg overflow-hidden shadow-2xl relative animate-slide-up">
         <!-- Header -->
         <div class="bg-gradient-to-r from-blue-500 to-green-400 text-white text-center py-4 text-2xl font-bold relative">
-          Ưu đãi
+          {{ $t('client.utilityTool.offers') }}
           <button class="btn-close-modal absolute top-2.5 right-4 text-gray-600 bg-white bg-opacity-70 w-10 h-10 rounded-full flex items-center justify-center text-2xl font-bold hover:bg-opacity-90 transition-all duration-200">✕</button>
         </div>
 
@@ -45,18 +45,18 @@
               </div>
               <div class="w-[2px] h-[90px] border-l border-dashed border-gray-300 mx-3"></div>
               <div class="flex-1">
-                <h3 class="voucher-title font-semibold text-gray-600 text-lg mb-2">Tặng mã giảm 10% trên đơn hàng</h3>
+                <h3 class="voucher-title font-semibold text-gray-600 text-lg mb-2">{{ $t('client.utilityTool.giftCode') }}</h3>
                 <div class="grid grid-cols-3 gap-2 items-center mb-2">
                   <div class="voucher-code-box col-span-2 flex items-center bg-gray-100 px-2 py-[6px] rounded border border-gray-300">
                     <span class="text-sky-600 mr-2">📋</span>
                     <span class="voucher-code font-mono text-sm text-gray-700">AMTRAN10</span>
                   </div>
-                  <button @click="toggleCondition(index)" class="btn-copy-code bg-gradient-to-r from-sky-700 to-sky-600 hover:from-sky-600 hover:to-sky-500 text-white py-2 px-3 rounded text-sm font-medium">Sao chép</button>
+                  <button @click="toggleCondition(index)" class="btn-copy-code bg-gradient-to-r from-sky-700 to-sky-600 hover:from-sky-600 hover:to-sky-500 text-white py-2 px-3 rounded text-sm font-medium">{{ $t('client.utilityTool.copy') }}</button>
                 </div>
 
                 <div class="flex justify-between items-center text-xs">
-                  <div class="text-gray-500">HSD: 04/09/2024 - 30/09/2025</div>
-                  <button class="btn-toggle-condition text-sky-500 font-medium underline flex items-center cursor-pointer">{{ showConditions[index] ? "Ẩn điều kiện" : "Điều kiện" }}</button>
+                  <div class="text-gray-500">{{ $t('client.utilityTool.expiryDate') }}</div>
+                  <button class="btn-toggle-condition text-sky-500 font-medium underline flex items-center cursor-pointer">{{ showConditions[index] ? $t('client.utilityTool.hideConditions') : $t('client.utilityTool.conditions') }}</button>
                 </div>
               </div>
             </div>
@@ -86,7 +86,7 @@
             <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 18 18">
               <path d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10ZM17 13h-2v-2a1 1 0 0 0-2 0v2h-2a1 1 0 0 0 0 2h2v2a1 1 0 0 0 2 0v-2h2a1 1 0 0 0 0-2Z" />
             </svg>
-            So sánh sản phẩm
+            {{ $t('client.utilityTool.compareProducts') }}
           </h5>
           <button @click="closeDrawer" class="absolute right-4 top-4 text-gray-400 hover:text-gray-600 transition-colors">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -104,7 +104,7 @@
                 <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z" />
               </svg>
             </div>
-            <div class="text-center text-sm text-gray-600 font-medium">Biểu đồ</div>
+            <div class="text-center text-sm text-gray-600 font-medium">{{ $t('client.utilityTool.chart') }}</div>
           </div>
 
           <div class="p-4 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
@@ -113,7 +113,7 @@
                 <path d="M18 0H2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2ZM9 6v2H2V6h7Zm2 0h7v2h-7V6Zm-9 4h7v2H2v-2Zm9 2v-2h7v2h-7Z" />
               </svg>
             </div>
-            <div class="text-center text-sm text-gray-600 font-medium">Bảng</div>
+            <div class="text-center text-sm text-gray-600 font-medium">{{ $t('client.utilityTool.table') }}</div>
           </div>
 
           <div class="p-4 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
@@ -122,7 +122,7 @@
                 <path d="M13.383.076a1 1 0 0 0-1.09.217L11 1.586 9.707.293a1 1 0 0 0-1.414 0L7 1.586 5.707.293a1 1 0 0 0-1.414 0L3 1.586 1.707.293A1 1 0 0 0 0 1v18a1 1 0 0 0 1.707.707L3 18.414l1.293 1.293a1 1 0 0 0 1.414 0L7 18.414l1.293 1.293a1 1 0 0 0 1.414 0L11 18.414l1.293 1.293A1 1 0 0 0 14 19V1a1 1 0 0 0-.617-.924ZM10 15H4a1 1 0 1 1 0-2h6a1 1 0 0 1 0 2Z" />
               </svg>
             </div>
-            <div class="text-center text-sm text-gray-600 font-medium">Vé</div>
+            <div class="text-center text-sm text-gray-600 font-medium">{{ $t('client.utilityTool.ticket') }}</div>
           </div>
 
           <!-- Thêm thêm các tiện ích khác nếu cần -->
@@ -133,7 +133,7 @@
                 <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
               </svg>
             </div>
-            <div class="text-center text-sm text-gray-600 font-medium">Xem</div>
+            <div class="text-center text-sm text-gray-600 font-medium">{{ $t('client.utilityTool.view') }}</div>
           </div>
         </div>
       </div>
@@ -145,10 +145,10 @@
         <div class="max-w-7xl mx-auto flex items-center">
           <span class="font-medium text-gray-700">
             <span class="text-teal-500">{{ compareList.length }}</span>
-            /3 sản phẩm được so sánh
+            /3 {{ $t('client.utilityTool.productsCompared') }}
           </span>
           <button class="ml-auto text-sky-500 font-normal flex items-center gap-1" @click="openCompareModal">
-            Hiện
+            {{ $t('client.utilityTool.show') }}
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" /></svg>
           </button>
         </div>
@@ -160,9 +160,9 @@
       <div v-if="showCompareModal" class="fixed inset-0 z-50 flex flex-col bg-black/30">
         <div class="bg-white rounded-t-lg shadow-lg w-full max-w-full mt-auto p-4">
           <div class="flex items-center mb-4">
-            <span class="font-semibold text-gray-700">{{ compareList.length }}/3 sản phẩm được so sánh</span>
+            <span class="font-semibold text-gray-700">{{ compareList.length }}/3 {{ $t('client.utilityTool.productsCompared') }}</span>
             <button class="ml-auto text-sky-500 flex items-center gap-1" @click="closeCompareModal">
-              Ẩn
+              {{ $t('client.utilityTool.hide') }}
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
             </button>
           </div>
@@ -176,12 +176,12 @@
                 </div>
                 <div v-else :key="'empty-' + idx" class="border-dashed border-1 border-gray-400 rounded flex flex-col items-center justify-center h-32 cursor-pointer min-h-[180px]" @click="openSearchPopup">
                   <span class="text-3xl text-gray-400">+</span>
-                  <span class="text-xs text-gray-500 mt-1">Thêm sản phẩm</span>
+                  <span class="text-xs text-gray-500 mt-1">{{ $t('client.utilityTool.addProduct') }}</span>
                 </div>
               </template>
               <div class="ml-auto mt-4 gap-2">
-                <button class="bg-gradient-to-r from-sky-500 to-cyan-400 text-white px-6 py-2 rounded font-bold">So sánh ngay</button>
-                <button class="text-sky-500 underline" @click="clearAll">Xóa tất cả sản phẩm</button>
+                <button class="bg-gradient-to-r from-sky-500 to-cyan-400 text-white px-6 py-2 rounded font-bold">{{ $t('client.utilityTool.compareNow') }}</button>
+                <button class="text-sky-500 underline" @click="clearAll">{{ $t('client.utilityTool.clearAllProducts') }}</button>
               </div>
             </div>
           </div>
@@ -195,7 +195,7 @@
         <div class="bg-white rounded-xl shadow-lg w-full max-w-md mx-2 flex flex-col">
           <!-- Header -->
           <div class="flex items-center justify-between px-4 py-3 border-b">
-            <h3 class="text-base font-semibold text-gray-700">Tìm kiếm sản phẩm</h3>
+            <h3 class="text-base font-semibold text-gray-700">{{ $t('client.utilityTool.searchProduct') }}</h3>
             <button class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-500 hover:text-gray-700 transition" @click="closeSearchPopup">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -205,7 +205,7 @@
           <!-- Form tìm kiếm + suggestion -->
           <div class="px-4 py-3 flex flex-col gap-3">
             <form class="flex rounded-lg overflow-hidden border border-gray-200 bg-white">
-              <input v-model="searchQuery" type="text" placeholder="Tìm sản phẩm, danh mục..." class="flex-1 px-4 py-2 text-gray-700 bg-transparent focus:outline-none text-sm" />
+              <input v-model="searchQuery" type="text" :placeholder="$t('client.utilityTool.searchPlaceholder')" class="flex-1 px-4 py-2 text-gray-700 bg-transparent focus:outline-none text-sm" />
               <button type="submit" class="bg-sky-500 px-4 flex items-center justify-center hover:bg-sky-600">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5 text-white"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z" /></svg>
               </button>
@@ -213,7 +213,7 @@
             <!-- Suggestion list -->
             <div class="space-y-2">
               <div>
-                <div class="text-xs font-semibold text-gray-500 mb-1">Tìm kiếm gần đây</div>
+                <div class="text-xs font-semibold text-gray-500 mb-1">{{ $t('client.utilityTool.recentSearches') }}</div>
                 <div class="flex flex-col gap-1">
                   <div class="flex items-center gap-2 p-2 rounded hover:bg-gray-100 cursor-pointer">
                     <img src="/shared/images/logo/cod.png" alt="" class="w-8 h-8 object-cover rounded" />
@@ -222,7 +222,7 @@
                 </div>
               </div>
               <div>
-                <div class="text-xs font-semibold text-gray-500 mb-1">Sản phẩm nổi bật</div>
+                <div class="text-xs font-semibold text-gray-500 mb-1">{{ $t('client.utilityTool.featuredProducts') }}</div>
                 <div class="flex flex-col gap-1">
                   <div class="flex items-center gap-2 p-2 rounded hover:bg-gray-100 cursor-pointer">
                     <img src="/shared/images/logo/cod.png" alt="" class="w-8 h-8 object-cover rounded" />

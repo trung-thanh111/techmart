@@ -1,17 +1,17 @@
 <template>
   <div class="w-100">
-    <h1 class="text-xl md:text-2xl font-semibold text-gray-800 mb-1">Thông tin tài khoản</h1>
-    <p class="text-xs text-gray-500 mb-5 md:mb-10">Cập nhật hồ sơ và chi tiết cá nhân của bạn tại đây</p>
+    <h1 class="text-xl md:text-2xl font-semibold text-gray-800 mb-1">{{ $t('client.profile.accountInfo') }}</h1>
+    <p class="text-xs text-gray-500 mb-5 md:mb-10">{{ $t('client.profile.accountInfoDesc') }}</p>
     <form @submit.prevent="handleUpdateProfile" class="grid grid-cols-1 md:grid-cols-12 gap-6 mb-6 md:mb-10" enctype="multipart/form-data">
       <div class="col-span-1 md:col-span-9 space-y-6">
-        <h2 class="text-sm font-semibold text-gray-700">Hồ sơ</h2>
+        <h2 class="text-sm font-semibold text-gray-700">{{ $t('client.profile.profile') }}</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label for="firstName" class="block text-sm text-gray-600 mb-1">
-              {{ $t("admin.page.user.form.firstName") }}
+              {{ $t("admin.common.form.firstName") }}
             </label>
             <Field name="firstName" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <input v-bind="field" id="firstName" type="text" :placeholder="$t('admin.page.user.form.firstNamePlaceholder')" class="base-input" :class="errorMessage && meta.touched ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''" />
+              <input v-bind="field" id="firstName" type="text" :placeholder="$t('admin.common.form.firstNamePlaceholder')" class="base-input" :class="errorMessage && meta.touched ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''" />
               <small v-if="errorMessage && meta.touched" class="text-red-500 text-xs">
                 {{ $t(errorMessage) }}
               </small>
@@ -19,10 +19,10 @@
           </div>
           <div>
             <label for="lastName" class="block text-sm text-gray-600 mb-1">
-              {{ $t("admin.page.user.form.lastName") }}
+              {{ $t("admin.common.form.lastName") }}
             </label>
             <Field name="lastName" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <input v-bind="field" id="lastName" type="text" :placeholder="$t('admin.page.user.form.lastNamePlaceholder')" class="base-input" :class="errorMessage && meta.touched ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''" />
+              <input v-bind="field" id="lastName" type="text" :placeholder="$t('admin.common.form.lastNamePlaceholder')" class="base-input" :class="errorMessage && meta.touched ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''" />
               <small v-if="errorMessage && meta.touched" class="text-red-500 text-xs">
                 {{ $t(errorMessage) }}
               </small>
@@ -31,10 +31,10 @@
         </div>
         <div>
           <label for="name" class="block text-sm text-gray-600 mb-1">
-            {{ $t("admin.page.user.form.name") }}
+            {{ $t("admin.common.form.fullName") }}
           </label>
           <Field name="name" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-            <input v-bind="field" id="name" type="text" :placeholder="$t('admin.page.user.form.namePlaceholder')" class="base-input" :class="errorMessage && meta.touched ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''" />
+            <input v-bind="field" id="name" type="text" :placeholder="$t('admin.common.form.fullNamePlaceholder')" class="base-input" :class="errorMessage && meta.touched ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''" />
             <small v-if="errorMessage && meta.touched" class="text-red-500 text-xs">
               {{ $t(errorMessage) }}
             </small>
@@ -42,10 +42,10 @@
         </div>
         <div>
           <label for="email" class="block text-sm text-gray-600 mb-1">
-            {{ $t("admin.page.user.form.email") }}
+            {{ $t("admin.common.form.email") }}
           </label>
           <Field name="email" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-            <input v-bind="field" id="email" type="email" :placeholder="$t('admin.page.user.form.emailPlaceholder')" class="base-input" :class="errorMessage && meta.touched ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''" readonly />
+            <input v-bind="field" id="email" type="email" :placeholder="$t('admin.common.form.emailPlaceholder')" class="base-input" :class="errorMessage && meta.touched ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''" readonly />
             <small v-if="errorMessage && meta.touched" class="text-red-500 text-xs">
               {{ $t(errorMessage) }}
             </small>
@@ -53,10 +53,10 @@
         </div>
         <div>
           <label for="phone" class="block text-sm text-gray-600 mb-1">
-            {{ $t("admin.page.user.form.phone") }}
+            {{ $t("admin.common.form.phone") }}
           </label>
           <Field name="phone" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-            <input v-bind="field" id="phone" type="text" :placeholder="$t('admin.page.user.form.phonePlaceholder')" class="base-input" :class="errorMessage && meta.touched ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''" />
+            <input v-bind="field" id="phone" type="text" :placeholder="$t('admin.common.form.phonePlaceholder')" class="base-input" :class="errorMessage && meta.touched ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''" />
             <small v-if="errorMessage && meta.touched" class="text-red-500 text-xs">
               {{ $t(errorMessage) }}
             </small>
@@ -65,7 +65,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label for="birthday" class="block text-sm text-gray-600 mb-1">
-              {{ $t("admin.page.user.form.birthday") }}
+              {{ $t("admin.common.form.birthday") }}
             </label>
             <Field name="birthday" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
               <input v-bind="field" id="birthday" type="date" class="base-input" :class="errorMessage && meta.touched ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''" />
@@ -76,10 +76,10 @@
           </div>
           <div>
             <label for="gender" class="block text-sm text-gray-600 mb-1">
-              {{ $t("admin.page.user.form.gender") }}
+              {{ $t("admin.common.form.gender") }}
             </label>
             <Field name="gender" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <Select :modelValue="field.value" @update:modelValue="field.onChange" :options="genderOptions" checkmark optionLabel="name" optionValue="value" :placeholder="$t('admin.page.user.form.genderPlaceholder')" class="w-full border border-gray-300 rounded text-sm h-[40px]" />
+              <Select :modelValue="field.value" @update:modelValue="field.onChange" :options="genderOptions" checkmark optionLabel="name" optionValue="value" :placeholder="$t('admin.common.form.genderPlaceholder')" class="w-full border border-gray-300 rounded text-sm h-[40px]" />
               <small v-if="errorMessage && meta.touched" class="text-red-500 text-xs">
                 {{ $t(errorMessage) }}
               </small>

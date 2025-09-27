@@ -5,8 +5,8 @@
         <i :class="item.icon" />
       </div>
       <div>
-        <h3 class="text-sm font-semibold mb-1">{{ item.title }}</h3>
-        <p class="text-xs text-gray-500">{{ item.desc }}</p>
+        <h3 class="text-sm font-semibold mb-1">{{ $t(item.title) }}</h3>
+        <p class="text-xs text-gray-500">{{ $t(item.desc) }}</p>
       </div>
     </div>
   </div>
@@ -14,31 +14,11 @@
 
 <script setup>
 const commitments = [
-  {
-    title: "Cam kết chất lượng",
-    desc: "Sản phẩm được kiểm định chất lượng trước khi giao",
-    icon: "fas fa-certificate",
-  },
-  {
-    title: "Bảo hành chính hãng",
-    desc: "Tất cả sản phẩm đều có bảo hành chính hãng",
-    icon: "fas fa-shield-alt",
-  },
-  {
-    title: "Kiểm tra hàng",
-    desc: "Cho phép mở kiểm tra trước khi thanh toán",
-    icon: "fas fa-box-open",
-  },
-  {
-    title: "Đổi trả miễn phí",
-    desc: "Đổi trả trong vòng 30 ngày không cần lý do",
-    icon: "fas fa-exchange-alt",
-  },
-  {
-    title: "Hoàn trả 100%",
-    desc: "Hoàn tiền nếu sản phẩm lỗi kỹ thuật trong 7 ngày",
-    icon: "fas fa-undo",
-  },
+  { title: "client.commitment.quality.title", desc: "client.commitment.quality.desc", icon: "fas fa-certificate" },
+  { title: "client.commitment.warranty.title", desc: "client.commitment.warranty.desc", icon: "fas fa-shield-alt" },
+  { title: "client.commitment.inspect.title", desc: "client.commitment.inspect.desc", icon: "fas fa-box-open" },
+  { title: "client.commitment.return.title", desc: "client.commitment.return.desc", icon: "fas fa-exchange-alt" },
+  { title: "client.commitment.refund.title", desc: "client.commitment.refund.desc", icon: "fas fa-undo" },
 ];
 </script>
 

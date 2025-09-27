@@ -23,11 +23,11 @@
       <div class="h-full flex flex-col relative overflow-hidden z-10">
         <div class="absolute inset-0 z-10 group-hover:backdrop-blur-sm group-hover:bg-white/30 transition-all duration-300 pointer-events-none rounded-lg"></div>
         <div class="relative h-[260px] overflow-hidden z-0">
-          <img :src="product_main" loading="lazy" alt="Ảnh chính" class="w-full h-full object-contain transition-opacity duration-300 group-hover:opacity-0" />
-          <img :src="product_sub" loading="lazy" alt="Ảnh phụ" class="w-full h-full object-contain absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <img :src="product_main" loading="lazy" :alt="$t('client.productCard.mainImage')" class="w-full h-full object-contain transition-opacity duration-300 group-hover:opacity-0" />
+          <img :src="product_sub" loading="lazy" :alt="$t('client.productCard.subImage')" class="w-full h-full object-contain absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </div>
         <div class="px-2 flex-grow flex flex-col justify-between z-0">
-          <h3 class="text-base font-semibold text-gray-500 h-10 overflow-hidden leading-5 line-clamp-2">Tên sản phẩm mẫu rất dài để test chiều cao cố định giới hạn 2 dòng</h3>
+          <h3 class="text-base font-semibold text-gray-500 h-10 overflow-hidden leading-5 line-clamp-2">{{ $t('client.productCard.sampleProductName') }}</h3>
           <div class="flex items-center gap-2 mt-2">
             <span class="text-red-600 font-bold text-md">250.800 ₫</span>
             <span class="text-gray-400 line-through text-xs">418.000 ₫</span>
@@ -35,19 +35,19 @@
           <div class="flex items-center justify-between space-x-4 text-[12px] py-2 text-gray-200">
             <div class="flex items-center space-x-1 text-emerald-400">
               <i class="fas fa-award"></i>
-              <span class="hidden md:inline lg:inline text-xs">Bán chạy</span>
+              <span class="hidden md:inline lg:inline text-xs">{{ $t('client.productCard.bestSeller') }}</span>
             </div>
             <div class="flex items-center space-x-1 text-sky-400">
               <i class="fas fa-wallet"></i>
-              <span class="hidden md:inline lg:inline text-xs">Giá tốt</span>
+              <span class="hidden md:inline lg:inline text-xs">{{ $t('client.productCard.goodPrice') }}</span>
             </div>
             <div class="flex items-center space-x-1 text-yellow-400">
               <i class="fas fa-fire"></i>
-              <span class="hidden md:inline lg:inline text-xs">Cháy hàng</span>
+              <span class="hidden md:inline lg:inline text-xs">{{ $t('client.productCard.hotSale') }}</span>
             </div>
           </div>
           <div class="py-2">
-            <span class="inline-flex items-center bg-sky-50 rounded-sm px-2 py-1 text-xs text-sky-700">Bảo hành 12 tháng tại các cơ sở</span>
+            <span class="inline-flex items-center bg-sky-50 rounded-sm px-2 py-1 text-xs text-sky-700">{{ $t('client.productCard.warranty12Months') }}</span>
           </div>
           <div class="w-full max-w-8xl mx-auto">
             <div class="h-px w-full bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>

@@ -17,7 +17,7 @@ import Sidebar from "~/components/client/navigation/SidebarProfile.vue";
 import ProfileHeader from "~/components/client/navigation/ProfileHeader.vue";
 
 const breadcrumbs = [
-  { label: 'Quản lý tài khoản', href: '/profile' },
+  { label: $t('client.profile.breadcrumb'), href: '/profile' },
 ];
 
 definePageMeta({

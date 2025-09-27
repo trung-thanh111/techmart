@@ -32,35 +32,35 @@
         <div class="card-body">
           <div class="mb-3">
             <label class="form-label" for="name">
-              {{ $t("admin.page.brand.form.name") }}:
+              {{ $t("admin.common.form.name") }}:
               <span class="text-danger">*</span>
             </label>
             <Field name="name" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <input v-bind="field" id="name" type="text" :placeholder="$t('admin.page.brand.form.namePlaceholder')" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
+              <input v-bind="field" id="name" type="text" :placeholder="$t('admin.common.form.namePlaceholder')" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
               <small v-if="errorMessage && meta.touched" class="text-danger">
                 {{ $t(errorMessage) }}
               </small>
             </Field>
             <div class="d-flex gap-2 text-info mt-1 underline cursor-pointer">
               <span class="mdi mdi-link-variant"></span>
-              <p class="genrate_slug_to_name w-full pr-2" v-tooltip.bottom="$t('admin.page.brand.form.urlTooltip')">{{ config.public.baseUrl }}/{{ slug }}</p>
+              <p class="genrate_slug_to_name w-full pr-2" v-tooltip.bottom="$t('admin.common.form.urlTooltip')">{{ config.public.baseUrl }}/{{ slug }}</p>
             </div>
           </div>
           <div class="mb-3">
-            <label class="form-label">{{ $t("admin.page.brand.form.description") }}</label>
+            <label class="form-label">{{ $t("admin.common.form.description") }}</label>
             <Field name="description" v-slot="{ field }">
-              <textarea v-bind="field" rows="4" class="form-control" :placeholder="$t('admin.page.brand.form.descriptionPlaceholder')" />
+              <textarea v-bind="field" rows="4" class="form-control" :placeholder="$t('admin.common.form.descriptionPlaceholder')" />
             </Field>
           </div>
           <div class="row">
             <div class="col-md-6">
               <div class="mb-3">
                 <label class="form-label" for="email">
-                  {{ $t("admin.page.brand.form.email") }}:
+                  {{ $t("admin.common.form.email") }}:
                   <span class="text-danger">*</span>
                 </label>
                 <Field name="email" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-                  <input v-bind="field" id="email" type="email" :placeholder="$t('admin.page.brand.form.emailPlaceholder')" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
+                  <input v-bind="field" id="email" type="email" :placeholder="$t('admin.common.form.emailPlaceholder')" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
                   <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
                 </Field>
               </div>
@@ -68,10 +68,10 @@
             <div class="col-md-6">
               <div class="mb-3">
                 <label class="form-label" for="website">
-                  {{ $t("admin.page.brand.form.website") }}
+                  {{ $t("admin.common.form.website") }}
                 </label>
                 <Field name="website" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-                  <input v-bind="field" id="website" type="text" :placeholder="$t('admin.page.brand.form.websitePlaceholder')" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
+                  <input v-bind="field" id="website" type="text" :placeholder="$t('admin.common.form.websitePlaceholder')" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
                   <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
                 </Field>
               </div>
@@ -81,17 +81,17 @@
             <div class="col-md-6">
               <div class="mb-3">
                 <label class="form-label" for="country">
-                  {{ $t("admin.page.brand.form.country") }}
+                  {{ $t("admin.common.form.country") }}
                 </label>
                 <Field name="country" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-                  <input v-bind="field" id="country" type="text" :placeholder="$t('admin.page.brand.form.countryPlaceholder')" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
+                  <input v-bind="field" id="country" type="text" :placeholder="$t('admin.common.form.countryPlaceholder')" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
                   <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
                 </Field>
               </div>
             </div>
             <div class="col-md-6">
               <div class="mb-3">
-                <label class="form-label" for="order">{{ $t("admin.page.brand.form.order") }}:</label>
+                <label class="form-label" for="order">{{ $t("admin.common.form.order") }}:</label>
                 <Field name="order" v-slot="{ field, errorMessage, meta }">
                   <InputNumber :modelValue="field.value" @update:modelValue="field.onChange" :min="1" showButtons class="w-full" input-class="!rounded py-[7px] w-full" size="small" />
                   <small v-if="errorMessage && meta.touched" class="text-danger">
