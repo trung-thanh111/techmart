@@ -86,8 +86,28 @@
             </Field>
           </div>
         </div>
-        <div class="flex justify-end gap-3 mt-4 sticky bottom-5 z-20">
-          <Button variant="success" :loading="isLoading"  />
+        <div>
+          <label for="description" class="block text-sm text-gray-600 mb-1">
+            {{ $t("admin.common.form.description") }}
+          </label>
+          <Field name="description" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
+            <Textarea v-bind="field" id="description" rows="4" :placeholder="$t('admin.common.form.descriptionPlaceholder')" class="base-input"></Textarea>
+            <small v-if="errorMessage && meta.touched" class="text-red-500 text-xs">
+              {{ $t(errorMessage) }}
+            </small>
+          </Field>
+        </div>
+        <div class="flex justify-end gap-3 mt-4 sticky bottom-6 z-50">
+          <Button
+            type="submit"
+            :label="$t('admin.common.confirm')"
+            :loading="isLoading"
+            unstyled
+            class="max-w-[160px] text-sm flex justify-center py-1.5 px-4 rounded shadow-sm text-white bg-teal-500 hover:bg-teal-600 focus:outline-none mt-5 disabled:opacity-50"
+            :pt="{
+              loadingicon: 'w-3 h-3 mr-2 mt-1',
+            }"
+          />
         </div>
       </div>
       <div class="col-span-1 md:col-span-3 text-center">
@@ -132,7 +152,7 @@ setValues({
 <style scoped>
 .base-input {
   @apply w-full border border-gray-300 rounded px-3 py-2 text-sm
-         focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500
+         focus:outline-none focus:ring-1 focus:ring-sky-500 focus:border-sky-500
          transition h-[40];
 }
 :deep(.p-button) {

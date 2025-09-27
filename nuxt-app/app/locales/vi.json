@@ -296,8 +296,8 @@
     "page": {
       "dashboard": {
         "title": "Bảng điều khiển",
-        "description": "Bảng điều khiển",
-        "keywords": "Bảng điều khiển",
+        "dashboard": "Bảng điều khiển",
+        "keywords": "Từ khóa",
         "welcome": "Chào buổi sáng, Anna!",
         "subtitle": "Đây là những gì đang diễn ra với cửa hàng của bạn hôm nay.",
         "dateRange": "Chọn khoảng ngày",

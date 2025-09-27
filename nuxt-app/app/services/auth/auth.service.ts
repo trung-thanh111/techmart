@@ -1,5 +1,5 @@
 import type { IApiOk, IApiMessage } from "~/interfaces/base.interface";
-import type { TAuthRequest } from "~/composables/auth/useAuth";
+import type { TAuthRequest, TRegisterRequest } from "~/composables/auth/useAuth";
 import type { IAuthSuccessResponse } from "~/interfaces/user/user.interface";
 import { useApi } from "~/composables/useApi";
 
@@ -14,6 +14,14 @@ export const authService = {
   login: async (payload: TAuthRequest): Promise<IApiOk<IAuthSuccessResponse>> => {
     const { publicFetch } = useApi();
     return await publicFetch<IApiOk<IAuthSuccessResponse>>(`${ENDPOINT}/login`, {
+      method: "POST",
+      body: payload,
+    });
+  },
+
+  register: async (payload: TRegisterRequest): Promise<IApiOk<IAuthSuccessResponse>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IAuthSuccessResponse>>(`${ENDPOINT}/register`, {
       method: "POST",
       body: payload,
     });

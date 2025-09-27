@@ -44,7 +44,7 @@ export const useAddressOrder = (
   type TAddressOrderCreate = z.infer<typeof createSchema>;
   type TAddressOrderUpdate = z.infer<typeof updateSchema>;
 
-  const { handleSubmit, values, errors, setValues, resetForm } = useForm<TAddressOrderCreate | TAddressOrderUpdate>({
+  const { handleSubmit, values, errors, setValues } = useForm<TAddressOrderCreate | TAddressOrderUpdate>({
     validationSchema: toTypedSchema(mode === "create" ? createSchema : updateSchema),
   });
 
@@ -54,8 +54,8 @@ export const useAddressOrder = (
     try {
       const response = await useAddressOrderService.store(payload as Partial<IAddressOrder>);
       toast.success(response?.message || t("admin.messages.createSuccess"));
-      resetForm();
-      return navigateTo(options?.redirectPath ?? ADDRESSORDERINDEX);
+      await navigateTo(options?.redirectPath ?? ADDRESSORDERINDEX);
+      await fetchData();
     } catch (error: any) {
       console.error("Thêm mới thất bại:", error);
       toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
@@ -82,7 +82,8 @@ export const useAddressOrder = (
       const id = Number(useRoute().params.id);
       await useAddressOrderService.update(id, payload as Partial<IAddressOrder>);
       toast.success(t("admin.messages.updateSuccess"));
-      return navigateTo(options?.redirectPath ?? ADDRESSORDERINDEX);
+      await navigateTo(options?.redirectPath ?? ADDRESSORDERINDEX);
+      await fetchData();
     } catch (error: any) {
       console.error("Cập nhật thất bại:", error);
       toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));

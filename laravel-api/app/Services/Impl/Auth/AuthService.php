@@ -77,6 +77,10 @@ class AuthService implements AuthServiceInterface
         $rememberMe = $request->boolean('remember_me', false);
         try {
             return $this->beginTransaction()
+                ->createNewUser($request)
+                ->generateAccessToken($request, $rememberMe)
+                ->generateRefreshToken($rememberMe)
+                ->generateCsrfToken()
                 ->commit()
                 ->authResponse();
         } catch (\Throwable $th) {
@@ -85,21 +89,49 @@ class AuthService implements AuthServiceInterface
         }
     }
 
-    // trả về self
-    private function generateAccessToken(AuthRequest $request, bool $rememberMe = false): self
+    /**
+     * Tạo user mới và set vào auth guard
+     */
+    private function createNewUser(RegisterRequest $request): self
     {
-        $credentials = [
+        $userData = [
+            'name' => $request->string('name'),
             'email' => $request->string('email'),
-            'password' => $request->string('password')
+            'password' => $request->string('password'),
         ];
+
+        if (!$user = $this->userRepository->create($userData)) {
+            throw new ModelNotFoundException(Lang::get('message.model_not_found'));
+        }
+        
+        // Set user vào auth guard để generateAccessToken có thể sử dụng
+        $this->auth->setUser($user->refresh());
+        return $this;
+    }
+
+    // trả về self - dùng chung cho cả login và register
+    private function generateAccessToken($request, bool $rememberMe = false): self
+    {
         $ttl = $rememberMe ? self::ACCESS_TOKEN_TIME_TO_LIVE_REMEMBER : self::ACCESS_TOKEN_TIME_TO_LIVE;
         $this->auth->setTTL($ttl); // set thời gian sống token theo phút
         $this->auth->claims(['guard' => Common::API]); // phân biệt loại auth api đăng nhập như admin, vv..
 
-        if (!$accessToken = $this->auth->attempt($credentials)) {
-            throw new AuthenticationException(Lang::get('message.auth_failed'));
+        // Nếu là register, user đã được set trong createNewUser
+        if ($request instanceof RegisterRequest) {
+            $this->accessToken = $this->auth->fromUser($this->auth->user());
+        } else {
+            // Nếu là login, sử dụng attempt
+            $credentials = [
+                'email' => $request->string('email'),
+                'password' => $request->string('password')
+            ];
+            
+            if (!$accessToken = $this->auth->attempt($credentials)) {
+                throw new AuthenticationException(Lang::get('message.auth_failed'));
+            }
+            $this->accessToken = $accessToken;
         }
-        $this->accessToken = $accessToken; // gán acccesToken
+        
         return $this; // return chính nó
     }
 
