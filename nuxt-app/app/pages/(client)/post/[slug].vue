@@ -330,17 +330,22 @@ const breadcrumbs = computed(() => [
   { label: postDetail.value?.name || slug.value, href: `/post/${slug.value}` },
 ]);
 
-useHead(() => ({
-  title: postDetail.value?.metaTitle || postDetail.value?.name || "Bài viết",
-  meta: [
-    { name: "description", content: postDetail.value?.metaDescription || postDetail.value?.description || "" },
-    { name: "keywords", content: postDetail.value?.metaKeyword || "" },
-    { property: "og:title", content: postDetail.value?.name || "Bài viết" },
-    { property: "og:description", content: postDetail.value?.description || "" },
-    { property: "og:image", content: postDetail.value?.image?.url || "" },
-    { property: "og:type", content: "article" },
-  ],
-}));
+// Dynamic SEO for post
+const { setPageSeo } = useSeo()
+
+watchEffect(() => {
+  if (postDetail.value) {
+    setPageSeo({
+      title: postDetail.value?.metaTitle || postDetail.value?.name || "Bài viết",
+      description: postDetail.value?.metaDescription || postDetail.value?.description || "",
+      keywords: postDetail.value?.metaKeyword || "",
+      ogTitle: postDetail.value?.name || "Bài viết",
+      ogDescription: postDetail.value?.description || "",
+      ogImage: postDetail.value?.image?.url || "",
+      ogType: "article"
+    })
+  }
+})
 
 definePageMeta({
   layout: "client",

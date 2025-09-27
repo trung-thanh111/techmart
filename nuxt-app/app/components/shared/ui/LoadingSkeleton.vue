@@ -33,19 +33,12 @@
         </div>
       </div>
     </div>
-
-    <!-- Main Content Skeleton -->
     <div class="container main-content">
-      <!-- Banner Skeleton -->
       <div v-if="showBanner" class="banner-skeleton">
         <Skeleton width="100%" height="20rem" borderRadius="0.75rem"></Skeleton>
       </div>
-
-      <!-- Content Grid -->
       <div class="content-grid">
-        <!-- Main Content Area -->
         <div class="main-area">
-          <!-- Feature Cards -->
           <div class="feature-cards">
             <Skeleton width="12rem" height="1.5rem" class="mb-4"></Skeleton>
             <div class="cards-grid">
@@ -57,8 +50,6 @@
               </div>
             </div>
           </div>
-
-          <!-- Product Grid -->
           <div class="product-section">
             <Skeleton width="14rem" height="2rem" class="mb-6"></Skeleton>
             <div class="product-grid">
@@ -73,8 +64,6 @@
               </div>
             </div>
           </div>
-
-          <!-- Additional Content Sections -->
           <div class="additional-sections">
             <div v-for="section in 2" :key="section" class="section-skeleton">
               <Skeleton width="10rem" height="1.75rem" class="mb-4"></Skeleton>
@@ -90,8 +79,6 @@
               </div>
             </div>
           </div>
-
-          <!-- News/Blog Section -->
           <div class="news-section">
             <Skeleton width="8rem" height="1.75rem" class="mb-4"></Skeleton>
             <div class="news-grid">
@@ -103,8 +90,6 @@
               </div>
             </div>
           </div>
-
-          <!-- Category Section -->
           <div class="category-section">
             <Skeleton width="12rem" height="1.75rem" class="mb-4"></Skeleton>
             <div class="category-grid">
@@ -115,15 +100,10 @@
             </div>
           </div>
         </div>
-
-        <!-- Sidebar -->
         <div v-if="showSidebar" class="sidebar">
-          <!-- Promo Widgets -->
           <div v-for="widget in 3" :key="widget" class="widget-skeleton">
             <Skeleton width="100%" height="16rem" borderRadius="0.75rem"></Skeleton>
           </div>
-
-          <!-- List Widget -->
           <div class="list-widget">
             <Skeleton width="8rem" height="1.5rem" class="mb-4"></Skeleton>
             <div class="list-items">
@@ -138,14 +118,10 @@
           </div>
         </div>
       </div>
-
-      <!-- Bottom Banner -->
       <div class="bottom-banner">
         <Skeleton width="100%" height="8rem" borderRadius="0.75rem"></Skeleton>
       </div>
     </div>
-
-    <!-- Footer Skeleton -->
     <div v-if="showFooter" class="footer-skeleton">
       <div class="container">
         <div class="footer-content">
@@ -156,8 +132,6 @@
             </div>
           </div>
         </div>
-
-        <!-- Newsletter Section -->
         <div class="newsletter-section">
           <Skeleton width="12rem" height="1.5rem" class="mb-3"></Skeleton>
           <div class="newsletter-form">
@@ -165,7 +139,6 @@
             <Skeleton width="6rem" height="2.5rem"></Skeleton>
           </div>
         </div>
-
         <div class="footer-bottom">
           <Skeleton width="16rem" height="1rem"></Skeleton>
           <div class="social-icons">
@@ -178,13 +151,8 @@
 </template>
 
 <script>
-import Skeleton from "primevue/skeleton";
-
 export default {
   name: "LoadingSkeleton",
-  components: {
-    Skeleton,
-  },
   props: {
     showHeader: {
       type: Boolean,

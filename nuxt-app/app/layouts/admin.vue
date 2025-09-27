@@ -21,6 +21,7 @@ import Head from "~/components/admin/layout/Head.vue";
 import Header from "~/components/admin/layout/Header.vue";
 import Footer from "~/components/admin/layout/Footer.vue";
 import Sidebar from "~/components/admin/layout/Sidebar.vue";
+// Admin assets
 useHead({
   link: [
     { rel: "stylesheet", href: "/admin/css/bootstrap.min.css" },

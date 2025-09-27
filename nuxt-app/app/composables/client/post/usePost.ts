@@ -36,7 +36,7 @@ export const usePost = () => {
   const fetchPaginate = async (filters: PostPayloadFilter, page = 1, perPage = 10) => {
     isLoading.value = true;
     try {
-      const response = await postService.pagination({
+      const response = await postService.paginationPublic({
         ...filters,
         publish: 2,
         page,
@@ -162,7 +162,7 @@ export const usePost = () => {
     hotQuickLoading.value = true;
     try {
       const relation = buildRelationParams({ post_catalogues: 1 }, "is_hot");
-      const res = await postService.pagination({
+      const res = await postService.paginationPublic({
         publish: 2,
         sort: "id,desc",
         ...relation,

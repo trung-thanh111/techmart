@@ -50,7 +50,14 @@ export const postTagService = {
   },
 
   all: async (): Promise<IApiOk<IPostTag[]>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPostTag[]>>(`${ENDPOINT}/post_tags?type=all&publish=2`);
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPostTag[]>>(`${ENDPOINT}/post_tags?type=all&publish=2`);
+  },
+
+  paginationPublic: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IPostTag>>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPaginate<IPostTag>>>(`${ENDPOINT}/post_tags`, {
+      params,
+    });
   },
 };

@@ -141,7 +141,7 @@ export const usePostTag = (initialFilters?: TagPayloadFilter, mode: "create" | "
   const fetchData = async () => {
     isLoading.value = true;
     try {
-      const response = await postTagService.pagination({
+      const response = await postTagService.paginationPublic({
         ...filters.value,
         page: page.value,
       });

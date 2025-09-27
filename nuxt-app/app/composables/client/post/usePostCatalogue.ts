@@ -162,7 +162,7 @@ export const usePostCatalogue = (
   const fetchData = async () => {
     isLoading.value = true;
     try {
-      const response = await postCatalogueService.pagination({
+      const response = await postCatalogueService.paginationPublic({
         ...filters.value,
         page: page.value,
       });

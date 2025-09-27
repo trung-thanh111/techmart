@@ -45,10 +45,10 @@ definePageMeta({ layout: "client" });
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div class="col-span-full text-center mb-4 md:mb-6">
           <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f]">{{ $t('client.faq.faqTitle') }}</h2>
-          <p class="mt-1.5 text-gray-600 text-xs md:text-sm flex gap-1 justify-center">
+          <div class="mt-1.5 text-gray-600 text-xs md:text-sm flex gap-1 justify-center">
             {{ $t('client.faq.faqDescription') }}
-            <p for="formContact" class="text-sky-500 underline hover:text-sky-600">{{ $t('client.faq.contactNow') }}</p>
-          </p>
+            <span for="formContact" class="text-sky-500 underline hover:text-sky-600 cursor-pointer">{{ $t('client.faq.contactNow') }}</span>
+          </div>
         </div>
         <template v-if="isLoading">
           <div class="col-span-full text-center text-gray-400 py-8">{{ $t('client.faq.loading') }}</div>

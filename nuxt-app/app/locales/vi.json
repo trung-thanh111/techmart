@@ -1,4 +1,12 @@
 {
+  "user": {
+    "taskboard": "Bảng công việc",
+    "help": "Trợ giúp",
+    "balance": "Số dư",
+    "settings": "Cài đặt",
+    "home": "Trang chủ",
+    "logout": "Đăng xuất"
+  },
   "admin": {
     "common": {
       "noteUploadImage": "jpg, jpeg, png, webp (tối đa 5MB)",
@@ -791,7 +799,25 @@
       "changePasswordContent": "Nội dung trang đổi mật khẩu...",
       "accountInfo": "Thông tin tài khoản",
       "accountInfoDesc": "Cập nhật hồ sơ và chi tiết cá nhân của bạn tại đây",
-      "profile": "Hồ sơ"
+      "profile": "Hồ sơ",
+      "form": {
+        "firstName": "Tên",
+        "firstNamePlaceholder": "Nhập tên",
+        "lastName": "Họ",
+        "lastNamePlaceholder": "Nhập họ",
+        "fullName": "Họ tên",
+        "fullNamePlaceholder": "Nhập họ tên",
+        "email": "Email",
+        "emailPlaceholder": "Nhập email",
+        "phone": "Số điện thoại",
+        "phonePlaceholder": "Nhập số điện thoại",
+        "birthday": "Ngày sinh",
+        "gender": "Giới tính",
+        "genderPlaceholder": "Chọn giới tính",
+        "image": "Hình ảnh",
+        "imageNote": "Chỉ chấp nhận ảnh JPG, PNG, WEBP, dung lượng tối đa 5MB",
+        "clickToUpload": "Click ảnh để tải lên"
+      }
     },
     "postDetail": {
       "loadingPost": "Đang tải bài viết...",
@@ -926,6 +952,15 @@
       "title": "Đăng ký",
       "description": "Đăng ký",
       "keywords": "Đăng ký"
+    },
+    "form": {
+      "email": "Email",
+      "emailPlaceholder": "Nhập email",
+      "password": "Mật khẩu",
+      "passwordPlaceholder": "Nhập mật khẩu",
+      "remember": "Ghi nhớ",
+      "forgot": "Quên mật khẩu",
+      "submit": "Đăng nhập"
     }
   }
 }
