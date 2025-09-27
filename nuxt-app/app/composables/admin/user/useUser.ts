@@ -106,7 +106,11 @@ export const useUser = (
       const authStore = useAuthStore();
       const id = authStore.user?.id;
       if (!id) return false;
-      await useUserService.update(id, payload as Partial<IUser>);
+      const response = await useUserService.update(id, payload as Partial<IUser>);
+      if (response?.data) {
+        authStore.user = { ...authStore.user, ...response.data };
+      }
+      
       toast.success(t('admin.messages.updateSuccess'));
     } catch (error: any) {
       console.error("Cập nhật thất bại:", error);

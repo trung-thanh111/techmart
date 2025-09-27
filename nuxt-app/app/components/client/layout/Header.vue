@@ -128,11 +128,11 @@
                 <span class="flex items-center gap-1">
                   <span class="text-right">
                     <span class="hidden xl:inline-block font-medium">{{ user?.name }}</span>
-                    <span class="hidden xl:block font-normal text-xs">
+                    <span class="hidden xl:block font-normal text-[10px]">
                       {{ user?.userCatalogueId === 1 ? "Khách hàng" : "Quản trị viên" }}
                     </span>
                   </span>
-                  <img class="rounded-full w-9 h-9" :src="avatar" :alt="'Avatar ' + user?.name" loading="lazy" />
+                  <NuxtImg class="rounded-full w-9 h-9 object-cover" :src="avatar" :alt="'Avatar ' + user?.name" loading="lazy" />
                 </span>
               </button>
               <div class="absolute top-full right-0 w-full h-3 group-hover:block hidden z-0"></div>
@@ -186,7 +186,7 @@
                       <span>{{ $t('client.header.settings') }}</span>
                       <span class="absolute right-4 top-1/2 transform -translate-y-1/2 text-xs bg-green-100 text-green-600 px-2 py-0.5 rounded-full">{{ $t('client.header.new') }}</span>
                     </NuxtLink>
-                    <NuxtLink to="/admin/dashboard" class="flex items-center px-4 py-2 text-sm text-gray-500 hover:bg-gray-100">
+                    <NuxtLink v-if="authStore.user?.isAdmin" to="/admin/dashboard" class="flex items-center px-4 py-2 text-sm text-gray-500 hover:bg-gray-100">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" fill="currentColor" class="w-4 h-4 mr-2">
                         <path d="M256.1 161.1L256.1 210.7L256.6 211.2C263.1 128.8 332 64 416.1 64C436.2 64 455.5 67.7 473.2 74.5C483.2 78.3 485 91 477.5 98.6L388.8 187.3C385.8 190.3 384.1 194.4 384.1 198.6L384.1 240C384.1 248.8 391.3 256 400.1 256L441.5 256C445.7 256 449.8 254.3 452.8 251.3L541.5 162.6C549.1 155 561.8 156.9 565.6 166.9C572.4 184.6 576.1 203.9 576.1 224C576.1 284.6 542.4 337.4 492.6 364.5L574.1 446C592.8 464.7 592.8 495.1 574.1 513.9L514 574C495.3 592.7 464.9 592.7 446.1 574L320.1 448C292.7 420.6 286.5 380.1 301.6 346.7L210.9 256L161.3 256C150.6 256 140.6 250.7 134.7 241.8L55.4 122.9C51.2 116.6 52 108.1 57.4 102.7L102.8 57.3C108.2 51.9 116.6 51.1 123 55.3L241.9 134.5C250.8 140.4 256.1 150.4 256.1 161.1zM247.6 360.6C241.3 397.6 250 436.7 274 468L179 562.9C150.9 591 105.3 591 77.2 562.9C49.1 534.8 49.1 489.2 77.2 461.1L212.6 325.7L247.6 360.7z" />
                       </svg>
@@ -648,6 +648,7 @@
 </template>
 <script setup>
 import { ref, computed } from "vue";
+import { storeToRefs } from "pinia";
 import logo from "~/assets/shared/images/logo/logo-website.png";
 import codImage from "~/assets/shared/images/logo/cod.png";
 import iphoneImage from "~/assets/client/images/products/iphone-16-pro-max.webp";
@@ -655,9 +656,14 @@ import logoWebsite from "~/assets/shared/images/logo/logo-website.png";
 import { useAuthStore } from "~/stores/auth/auth";
 import { useAuth } from "~/composables/auth/useAuth";
 
-const auth = useAuthStore();
-const user = auth.$state.user;
-const avatar = user?.image.path ? user?.image.url : "/shared/images/defaults/avatar.jpg";
+const authStore = useAuthStore();
+const { user } = storeToRefs(authStore);
+
+const avatar = computed(() => {
+  const img = user.value?.image;
+  if (img && img.path) return img.url || "/shared/images/defaults/avatar.jpg";
+  return "/shared/images/defaults/avatar.jpg";
+});
 
 const { handleLogout } = useAuth();
 

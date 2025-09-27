@@ -12,7 +12,7 @@
               <div class="flex-grow"></div>
               <i class="fas fa-quote-left text-4xl text-teal-500 mb-2"></i>
               <div class="overflow-blur-content absolute bottom-0 left-0 w-full h-full max-h-40 transparent-img bg-gradient-to-t from-gray-500"></div>
-              <Splide :options="loginOptions" class="w-full">
+              <Splide :options="authOptions" class="w-full">
                 <SplideSlide v-for="(item, index) in loginItems" :key="index">
                   <div class="italic text-lg text-white text-center min-h-[60px] flex items-center justify-center">"{{ item.title }}"</div>
                 </SplideSlide>
@@ -87,7 +87,7 @@
 
             <p class="mt-6 text-center text-sm text-gray-600">
               Chưa có tài khoản?
-              <NuxtLink to="/signup" class="text-cyan-600 hover:underline">Đăng ký</NuxtLink>
+              <NuxtLink to="/auth/register" class="text-cyan-600 hover:underline">Đăng ký</NuxtLink>
             </p>
           </div>
         </div>
@@ -99,7 +99,7 @@
 <script setup lang="ts">
 import { Field } from "vee-validate";
 import { useAuth } from "~/composables/auth/useAuth";
-import { useLoginSlider } from "~/composables/useLoginSlider";
+import { useAuthSlider } from "~/composables/useAuthSlider";
 
 definePageMeta({
   middleware: "auth-redirect",
@@ -108,7 +108,7 @@ definePageMeta({
 
 // States
 const showPassword = ref(false);
-const { loginOptions, loginItems } = useLoginSlider();
+const { authOptions, loginItems } = useAuthSlider();
 
 const { handleLogin, isLoading } = useAuth();
 </script>

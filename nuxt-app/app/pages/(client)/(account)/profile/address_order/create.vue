@@ -118,5 +118,3 @@ definePageMeta({
   middleware: ["auth-required"],
 });
 </script>
-
-<style scoped></style>

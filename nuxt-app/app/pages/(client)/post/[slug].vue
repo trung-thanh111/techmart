@@ -3,15 +3,15 @@
     <div v-if="postDetailLoading" class="flex items-center justify-center min-h-[400px]">
       <div class="text-center">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-        <p class="text-gray-600">{{ $t('client.postDetail.loadingPost') }}</p>
+        <p class="text-gray-600">{{ $t("client.postDetail.loadingPost") }}</p>
       </div>
     </div>
     <div v-else-if="postDetailError" class="flex items-center justify-center min-h-[400px]">
       <div class="text-center">
         <div class="text-red-500 text-6xl mb-4">⚠️</div>
-        <h2 class="text-xl font-semibold text-gray-800 mb-2">{{ $t('client.postDetail.cannotLoadPost') }}</h2>
+        <h2 class="text-xl font-semibold text-gray-800 mb-2">{{ $t("client.postDetail.cannotLoadPost") }}</h2>
         <p class="text-gray-600 mb-4">{{ postDetailError }}</p>
-        <NuxtLink to="/post" class="inline-block bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">{{ $t('client.postDetail.backToList') }}</NuxtLink>
+        <NuxtLink to="/post" class="inline-block bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">{{ $t("client.postDetail.backToList") }}</NuxtLink>
       </div>
     </div>
     <div v-else-if="postDetail">
@@ -36,7 +36,7 @@
                 <div class="flex items-center text-sm text-gray-500 mb-6">
                   <NuxtImg :src="postDetail?.creator?.avatar || '/public/images/social/zalo.png'" :alt="postDetail?.creator?.name || 'Author'" class="w-8 h-8 rounded-full mr-3 border border-gray-300" loading="lazy" />
                   <div>
-                    <p class="text-red-600 font-semibold">{{ postDetail?.creator?.name || $t('client.postDetail.author') }}</p>
+                    <p class="text-red-600 font-semibold">{{ postDetail?.creator?.name || $t("client.postDetail.author") }}</p>
                     <div class="flex items-center text-gray-400">
                       <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M6 2a1 1 0 0 0-1 1v1H5a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3h-.01V3a1 1 0 1 0-2 0v1H8V3a1 1 0 0 0-1-1H6z" /></svg>
                       <span>{{ postDetail?.publishedAtHuman }}</span>
@@ -45,7 +45,7 @@
                 </div>
                 <div v-if="toc.length" class="mb-5 bg-sky-50 border-l-4 border-sky-400 rounded-md">
                   <div class="flex items-center justify-between w-full px-5 py-3 cursor-pointer" @click="isTocOpen = !isTocOpen">
-                    <p class="font-semibold text-sky-700 text-lg">{{ $t('client.postDetail.tableOfContent') }}</p>
+                    <p class="font-semibold text-sky-700 text-lg">{{ $t("client.postDetail.tableOfContent") }}</p>
                     <svg class="w-4 h-4 shrink-0 transition-transform" :class="isTocOpen ? 'rotate-180' : ''" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                     </svg>
@@ -63,15 +63,15 @@
                   </transition>
                 </div>
                 <div v-if="contentWithIds" class="text-gray-700 space-y-3 sm:space-y-4 text-base leading-relaxed break-words prose prose-lg max-w-none" v-html="contentWithIds"></div>
-                <div v-else-if="postDetailLoading" class="text-gray-500 italic">{{ $t('client.postDetail.loadingContent') }}</div>
-                <div v-else class="text-gray-500 italic">{{ $t('client.postDetail.noContent') }}</div>
+                <div v-else-if="postDetailLoading" class="text-gray-500 italic">{{ $t("client.postDetail.loadingContent") }}</div>
+                <div v-else class="text-gray-500 italic">{{ $t("client.postDetail.noContent") }}</div>
                 <div class="flex flex-wrap items-center justify-between mt-3 gap-1 sm:gap-0">
                   <div class="flex items-center space-x-1 text-gray-500 cursor-pointer">
                     <svg class="w-4 h-4 sm:w-5 sm:h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8l0-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5l0 3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20-.1-.1s0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5l0 3.3c0 28.5 11.9 55.8 32.8 75.2L256 430.7 431.2 268c20.9-19.4 32.8-46.7 32.8-75.2l0-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z" /></svg>
-                    <span class="text-xs sm:text-sm">{{ $t('client.postDetail.likes') }}</span>
+                    <span class="text-xs sm:text-sm">{{ $t("client.postDetail.likes") }}</span>
                   </div>
                   <div class="flex items-center space-x-1 sm:space-x-2 md:space-x-3">
-                    <span class="caption font-medium text-gray-500 mr-2 md:mr-3 hidden sm:block text-xs sm:text-sm">{{ $t('client.postDetail.share') }}</span>
+                    <span class="caption font-medium text-gray-500 mr-2 md:mr-3 hidden sm:block text-xs sm:text-sm">{{ $t("client.postDetail.share") }}</span>
                     <NuxtLink aria-label="message-share" class="hover:opacity-70">
                       <img src="/assets/client/images/social/messenger.png" alt="facebook message" class="object-cover w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" loading="lazy" />
                     </NuxtLink>
@@ -92,7 +92,7 @@
                         </span>
                       </div>
                       <input id="input-copy" type="hidden" />
-                      <div class="absolute top-0 bg-green-300 text-white duration-300 py-1 px-3 w-max left-[160%] hidden">{{ $t('client.postDetail.copiedLink') }}</div>
+                      <div class="absolute top-0 bg-green-300 text-white duration-300 py-1 px-3 w-max left-[160%] hidden">{{ $t("client.postDetail.copiedLink") }}</div>
                     </div>
                   </div>
                 </div>
@@ -100,7 +100,7 @@
                   <div class="h-[2px] w-full bg-gradient-to-r from-transparent via-[rgba(32,141,128,0.3)] to-transparent"></div>
                 </div>
                 <div class="max-w-2xl mt-5">
-                  <h1 class="text-2xl font-bold text-gray-600 mb-4 tracking-wide">{{ $t('client.postDetail.yourThoughts') }}</h1>
+                  <h1 class="text-2xl font-bold text-gray-600 mb-4 tracking-wide">{{ $t("client.postDetail.yourThoughts") }}</h1>
                   <form class="rounded-md bg-gray-100 overflow-hidden shadow-md">
                     <textarea class="w-full p-4 text-gray-600 placeholder-gray-500 focus:outline-none resize-none bg-gray-100" rows="4" :placeholder="$t('client.postDetail.whatAreYouThinking')" required></textarea>
                     <div class="flex items-center justify-between bg-gray-300 px-4 py-2">
@@ -116,7 +116,7 @@
                   </form>
                 </div>
                 <div class="max-w-2xl mx-auto space-y-4 mt-5">
-                  <h1 class="text-xl font-bold text-gray-500 mb-4">{{ $t('client.postDetail.comments') }} (23)</h1>
+                  <h1 class="text-xl font-bold text-gray-500 mb-4">{{ $t("client.postDetail.comments") }} (23)</h1>
                   <div v-for="product_reviews in 5" :key="product_reviews" class="bg-white border border-gray-200 p-4 rounded-lg shadow-sm">
                     <div class="flex items-center justify-between mb-2">
                       <div class="flex items-center space-x-3">
@@ -168,7 +168,7 @@
                         <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8l0-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5l0 3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20-.1-.1s0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5l0 3.3c0 28.5 11.9 55.8 32.8 75.2L256 430.7 431.2 268c20.9-19.4 32.8-46.7 32.8-75.2l0-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z" /></svg>
                         <span>11 thích</span>
                       </span>
-                      <button class="hover:underline hover:text-sky-500">{{ $t('client.postDetail.reply') }}</button>
+                      <button class="hover:underline hover:text-sky-500">{{ $t("client.postDetail.reply") }}</button>
                     </div>
                   </div>
                   <div class="ml-8 bg-white border border-gray-200 p-4 rounded-lg shadow-sm">
@@ -222,7 +222,7 @@
                         <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8l0-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5l0 3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20-.1-.1s0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5l0 3.3c0 28.5 11.9 55.8 32.8 75.2L256 430.7 431.2 268c20.9-19.4 32.8-46.7 32.8-75.2l0-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z" /></svg>
                         <span>11 thích</span>
                       </span>
-                      <button class="hover:underline hover:text-sky-500">{{ $t('client.postDetail.reply') }}</button>
+                      <button class="hover:underline hover:text-sky-500">{{ $t("client.postDetail.reply") }}</button>
                     </div>
                   </div>
                 </div>
@@ -232,7 +232,7 @@
           <!-- Sidebar -->
           <div class="col-span-12 lg:col-span-3">
             <div class="bg-white rounded-lg p-3 md:p-4 border border-gray-200 mb-3 md:mb-5">
-              <h2 class="text-base md:text-lg font-semibold text-gray-800 mb-2 md:mb-4">{{ $t('client.postDetail.quickView') }}</h2>
+              <h2 class="text-base md:text-lg font-semibold text-gray-800 mb-2 md:mb-4">{{ $t("client.postDetail.quickView") }}</h2>
               <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-2 gap-2 mb-3 md:mb-4">
                 <NuxtLink v-for="post in (hotQuickItems || []).slice(0, 6)" :key="post.id" :to="`/post/${post.slug}`" class="group space-y-1 block">
                   <NuxtImg :src="post.image?.url || '/public/images/posts/post-home-5.jpg'" :alt="post.name" class="rounded-md object-cover w-full h-16 md:w-[145px] md:h-[80px]" loading="lazy" />
@@ -241,12 +241,12 @@
                   </span>
                 </NuxtLink>
               </div>
-              <NuxtLink to="/post" class="block w-full text-center text-xs md:text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 rounded py-2 transition">{{ $t('client.postDetail.viewAll') }} ({{ (hotQuickItems || []).length }})</NuxtLink>
+              <NuxtLink to="/post" class="block w-full text-center text-xs md:text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 rounded py-2 transition">{{ $t("client.postDetail.viewAll") }} ({{ (hotQuickItems || []).length }})</NuxtLink>
             </div>
             <div class="bg-white rounded-lg p-3 md:p-4 border border-gray-200">
               <h2 class="text-base md:text-lg font-semibold text-gray-800 mb-2 md:mb-4">
                 <span class="text-sky-600">#</span>
-                {{ $t('client.postDetail.tags') }}
+                {{ $t("client.postDetail.tags") }}
               </h2>
               <div class="flex flex-wrap gap-2">
                 <NuxtLink v-for="tag in tagList || []" :key="tag.id" :to="`/post?tag=${tag.slug}`" class="px-2 md:px-3 py-1 text-xs md:text-[12px] bg-[#d9dfe3] max-w-max rounded font-semibold text-[#7281a3] hover:bg-[#c8d1d9] transition-colors">#{{ tag.name }}</NuxtLink>
@@ -256,7 +256,7 @@
         </div>
       </section>
       <section v-if="relateds.length > 0" class="mx-auto bg-white rounded-md shadow sm:py-1 mb-2 md:py-2 px-1 sm:px-3 md:px-6 md:mb-6 sm:mb-3">
-        <h2 class="inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] text-lg sm:text-xl md:text-2xl font-bold mb-4">{{ $t('client.postDetail.relatedPosts') }}</h2>
+        <h2 class="inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] text-lg sm:text-xl md:text-2xl font-bold mb-4">{{ $t("client.postDetail.relatedPosts") }}</h2>
         <Splide :options="postRelatedOptions(relateds.length)" id="post-related-slide">
           <SplideSlide v-for="relatedItem in relateds" :key="relatedItem.id">
             <NuxtLink :to="`/post/${encodeURIComponent(relatedItem.slug)}`">
@@ -264,18 +264,18 @@
                 <div class="relative overflow-hidden aspect-[16/9] w-full">
                   <NuxtImg :src="relatedItem.image?.url || '/public/images/posts/post-home-3.jpg'" :alt="relatedItem.name" class="w-full h-full object-cover object-center rounded-t-xl" loading="lazy" />
                   <div v-if="relatedItem.isHot" class="absolute top-2 left-2 bg-white/10 backdrop-blur-sm rounded-lg px-2 py-1">
-                    <span class="text-red-500 font-bold text-xs">{{ $t('client.postDetail.hot') }}</span>
+                    <span class="text-red-500 font-bold text-xs">{{ $t("client.postDetail.hot") }}</span>
                   </div>
                 </div>
                 <div class="p-3 sm:p-4 flex flex-col flex-1">
-                  <h3 class="text-base sm:text-lg md:text-xl font-bold text-gray-700 mb-2 sm:mb-3 hover:text-cyan-600 transition-colors line-clamp-2 break-words">
+                  <h3 class="text-base sm:text-lg md:text-xl font-bold text-gray-700 mb-2 sm:mb-1 hover:text-cyan-600 transition-colors line-clamp-2 break-words">
                     {{ relatedItem.name }}
                   </h3>
-                  <p class="text-gray-600 text-xs sm:text-sm mb-2 sm:mb-4 leading-relaxed line-clamp-2 break-words">
+                  <p class="text-gray-600 text-xs sm:text-sm mb-2 sm:mb-1 leading-relaxed line-clamp-2 break-words">
                     {{ relatedItem.description }}
                   </p>
                   <div class="flex items-center justify-between text-xs sm:text-sm text-gray-500 mt-auto">
-                    <span>{{ relatedItem.creator?.name }}</span>
+                    <span class="font-semibold">{{ relatedItem.creator?.name }}</span>
                     <span>{{ relatedItem.publishedAtHumen }}</span>
                   </div>
                 </div>
@@ -301,7 +301,6 @@ const contentWithIds = ref<string>("");
 const toc = ref<TocItem[]>([]);
 
 const slug = computed(() => String(useRoute().params.slug || ""));
-
 const relateds = computed(() => (Array.isArray((postDetail.value as any)?.relateds) ? (postDetail.value as any).relateds : []));
 
 onMounted(async () => {
@@ -326,12 +325,12 @@ watch(
 );
 
 const breadcrumbs = computed(() => [
-  { label: $t('client.post.breadcrumb'), href: "/post" },
+  { label: $t("client.post.breadcrumb"), href: "/post" },
   { label: postDetail.value?.name || slug.value, href: `/post/${slug.value}` },
 ]);
 
 // Dynamic SEO for post
-const { setPageSeo } = useSeo()
+const { setPageSeo } = useSeo();
 
 watchEffect(() => {
   if (postDetail.value) {
@@ -342,10 +341,10 @@ watchEffect(() => {
       ogTitle: postDetail.value?.name || "Bài viết",
       ogDescription: postDetail.value?.description || "",
       ogImage: postDetail.value?.image?.url || "",
-      ogType: "article"
-    })
+      ogType: "article",
+    });
   }
-})
+});
 
 definePageMeta({
   layout: "client",
