@@ -52,8 +52,8 @@ export const postService = {
   },
 
   all: async (): Promise<IApiOk<IPost[]>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPost[]>>(`${ENDPOINT}/posts?type=all&publish=2`);
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPost[]>>(`${ENDPOINT}/posts?type=all&publish=2`);
   },
 
   getFeatured: async (): Promise<IApiOk<IPost[]>> => {
@@ -94,6 +94,13 @@ export const postService = {
         sort: "id,desc",
         ...relationParams,
       },
+    });
+  },
+
+  paginationPublic: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IPost>>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPaginate<IPost>>>(`${ENDPOINT}/posts`, {
+      params,
     });
   },
 

@@ -1,4 +1,3 @@
-// nuxt.config.ts - Fixed cho Nuxt 4
 import { resolve } from "path";
 import { defineNuxtConfig } from "nuxt/config";
 import Aura from "@primevue/themes/aura";
@@ -10,10 +9,8 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-08-23",
   srcDir: "app/",
 
-  // === MODULES OPTIMIZATION ===
   modules: ["@nuxtjs/tailwindcss", "@primevue/nuxt-module", "@nuxt/image", "@pinia/nuxt", "pinia-plugin-persistedstate/nuxt", "@nuxtjs/i18n"],
 
-  // === PRIMEVUE - Giữ nguyên ===
   primevue: {
     autoImport: true,
     options: {
@@ -27,18 +24,15 @@ export default defineNuxtConfig({
     },
   },
 
-  // === DEV TOOLS - Tối ưu ===
   devtools: {
-    enabled: false, // Tắt để reload nhanh hơn
+    enabled: false,
   },
 
-  // === ALIAS - Giữ nguyên ===
   alias: {
     "@": resolve(__dirname, "./app"),
     "~": resolve(__dirname, "./app"),
   },
 
-  // === RUNTIME CONFIG ===
   runtimeConfig: {
     public: {
       baseUrl: process.env.BASE_URL,
@@ -46,7 +40,6 @@ export default defineNuxtConfig({
     },
   },
 
-  // === I18N - Tối ưu ===
   i18n: {
     locales: [
       { code: "vi", name: "Tiếng Việt", file: "vi.json" },
@@ -122,7 +115,7 @@ export default defineNuxtConfig({
       chunkSizeWarningLimit: 1000,
     },
   },
-  debug: true,
+  // debug: true,
 
   // === BUILD OPTIMIZATION ===
   build: {

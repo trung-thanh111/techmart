@@ -53,9 +53,16 @@ export const postCatalogueService = {
   },
 
   all: async (): Promise<IApiOk<IPostCatalogue[]>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPostCatalogue[]>>(
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPostCatalogue[]>>(
       `${ENDPOINT}/post_catalogues?type=all&publish=2`
     );
+  },
+
+  paginationPublic: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IPostCatalogue>>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPaginate<IPostCatalogue>>>(`${ENDPOINT}/post_catalogues`, {
+      params,
+    });
   },
 };
