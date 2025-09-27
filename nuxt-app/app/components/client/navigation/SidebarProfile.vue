@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button v-if="!isSidebarOpen" class="md:hidden bg-white shadow rounded-full p-2 flex items-center justify-center" @click="isSidebarOpen = true" aria-label="Mở menu">
+    <button v-if="!isSidebarOpen" class="md:hidden bg-white shadow rounded-full p-2 flex items-center justify-center" @click="isSidebarOpen = true" :aria-label="$t('client.sidebar.openMenu')">
       <svg class="md:w-5 md:h-5 h-4 w-4 text-gray-600" fill="currentColor" viewBox="0 0 448 512">
         <path
           d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 
@@ -17,7 +17,7 @@
     </button>
     <div v-if="isSidebarOpen && !isDesktop" class="fixed inset-0 bg-black/30 z-40" @click="isSidebarOpen = false" />
     <aside :class="['transition-all duration-300 bg-white border-r border-gray-200 sticky md:static top-0 flex-shrink-0', isSidebarOpen ? 'fixed z-50 top-0 left-0 h-full md:relative' : 'hidden md:block', isSidebarCollapsed ? 'w-16 md:w-20 p-2' : 'w-[95vw] md:w-64 p-4']">
-      <button class="hidden md:flex items-center justify-end w-full mb-2 text-gray-500 hover:text-sky-600" @click="isSidebarCollapsed = !isSidebarCollapsed" aria-label="Thu gọn/mở rộng sidebar">
+      <button class="hidden md:flex items-center justify-end w-full mb-2 text-gray-500 hover:text-sky-600" @click="isSidebarCollapsed = !isSidebarCollapsed" :aria-label="$t('client.sidebar.collapseExpand')">
         <svg v-if="!isSidebarCollapsed" class="md:w-4 md:h-4 h-3 w-3" fill="currentColor" viewBox="0 0 320 512">
           <path
             d="M9.4 233.4c-12.5 12.5-12.5 
@@ -96,32 +96,32 @@ const handleResize = () => {
 
 const sidebarSections = [
   {
-    title: "Cá nhân",
+    title: $t('client.sidebar.personal'),
     items: [
-      { label: "Thông tin", to: "/profile" },
-      { label: "Đổi mật khẩu", to: "/profile/change-password" },
-      { label: "Địa chỉ nhận hàng", to: "/profile/address_order" },
-      { label: "Đơn hàng của tôi", to: "/profile/orders" },
-      { label: "Danh sách yêu thích", to: "/profile/wishlists" },
-      { label: "Khuyến mãi của tôi", to: "/profile/vouchers" },
+      { label: $t('client.sidebar.information'), to: "/profile" },
+      { label: $t('client.sidebar.changePassword'), to: "/profile/change-password" },
+      { label: $t('client.sidebar.addressOrder'), to: "/profile/address_order" },
+      { label: $t('client.sidebar.myOrders'), to: "/profile/orders" },
+      { label: $t('client.sidebar.wishlists'), to: "/profile/wishlists" },
+      { label: $t('client.sidebar.myVouchers'), to: "/profile/vouchers" },
     ],
   },
   {
-    title: "Cài đặt",
+    title: $t('client.sidebar.settings'),
     items: [
-      { label: "API Keys", to: "#" },
-      { label: "Thông báo", to: "#" },
-      { label: "Bảo mật tài khoản", to: "#" },
-      { label: "Lịch sử hoạt động", to: "#" },
+      { label: $t('client.sidebar.apiKeys'), to: "#" },
+      { label: $t('client.sidebar.notifications'), to: "#" },
+      { label: $t('client.sidebar.accountSecurity'), to: "#" },
+      { label: $t('client.sidebar.activityHistory'), to: "#" },
     ],
   },
   {
-    title: "Hỗ trợ",
+    title: $t('client.sidebar.support'),
     items: [
-      { label: "Trung tâm hỗ trợ", to: "#" },
-      { label: "Chính sách bảo mật", to: "#" },
+      { label: $t('client.sidebar.supportCenter'), to: "#" },
+      { label: $t('client.sidebar.privacyPolicy'), to: "#" },
       {
-        label: "Đăng xuất",
+        label: $t('client.sidebar.logout'),
         to: "#",
         class: "text-red-500 hover:bg-red-50 rounded-md",
       },

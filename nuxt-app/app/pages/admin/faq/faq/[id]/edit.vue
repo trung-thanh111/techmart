@@ -32,21 +32,21 @@
         <div class="card-body">
           <div class="">
             <label class="form-label" for="question">
-              {{ $t("admin.page.faq.form.question") }}:
+              {{ $t("admin.common.form.question") }}:
               <span class="text-danger">*</span>
             </label>
             <Field name="question" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <input v-bind="field" id="question" type="text" :placeholder="$t('admin.page.faq.form.questionPlaceholder')" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
+              <input v-bind="field" id="question" type="text" :placeholder="$t('admin.common.form.questionPlaceholder')" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
               <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
             </Field>
             <div class="d-flex gap-2 text-info mt-1 underline cursor-pointer">
               <span class="mdi mdi-link-variant"></span>
-              <p class="genrate_slug_to_name w-full pr-2" v-tooltip.bottom="$t('admin.page.faqCatalogue.form.urlTooltip')">{{ config.public.baseUrl }}/{{ slug }}</p>
+              <p class="genrate_slug_to_name w-full pr-2" v-tooltip.bottom="$t('admin.common.form.urlTooltip')">{{ config.public.baseUrl }}/{{ slug }}</p>
             </div>
           </div>
           <div class="mb-3">
             <label class="form-label" for="answer">
-              {{ $t("admin.page.faq.form.answer") }}
+              {{ $t("admin.common.form.answer") }}
             </label>
             <Field name="answer" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
               <div class="w-full">
@@ -72,11 +72,11 @@
         <div class="card-body">
           <div class="mb-3">
             <label class="form-label">
-              {{ $t("admin.page.faq.form.faqCatalogue") }}:
+              {{ $t("admin.common.form.faqCatalogue") }}:
               <span class="text-danger">*</span>
             </label>
             <Field name="faqCatalogueId" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <Select :modelValue="field.value" @update:modelValue="field.onChange" :options="faqCatalogueOptions" optionLabel="name" optionValue="id" filter display="chip" :placeholder="$t('admin.page.faq.form.faqCataloguePlaceholder')" class="w-100" />
+              <Select :modelValue="field.value" @update:modelValue="field.onChange" :options="faqCatalogueOptions" optionLabel="name" optionValue="id" filter display="chip" :placeholder="$t('admin.common.form.faqCataloguePlaceholder')" class="w-100" />
               <small v-if="errorMessage && meta.touched" class="text-danger">
                 {{ $t(errorMessage) }}
               </small>
@@ -90,7 +90,7 @@
         </div>
         <div class="card-body">
           <div class="mb-3">
-            <label class="form-label" for="order">{{ $t("admin.page.faq.form.order") }}:</label>
+            <label class="form-label" for="order">{{ $t("admin.common.form.order") }}:</label>
             <Field name="order" v-slot="{ field, errorMessage, meta }">
               <InputNumber :modelValue="field.value" @update:modelValue="field.onChange" :min="1" showButtons class="w-full" input-class="!rounded py-[7px] w-full" size="small" />
               <small v-if="errorMessage && meta.touched" class="text-danger">
@@ -103,7 +103,7 @@
               <Field name="isHot" v-slot="{ field }">
                 <AppCheckbox :modelValue="field.value" @update:modelValue="field.onChange" inputId="is_hot" class="scale-125" />
               </Field>
-              <label for="is_hot" class="mb-0">{{ $t("admin.page.faq.form.isHot") }}</label>
+              <label for="is_hot" class="mb-0">{{ $t("admin.common.form.isHot") }}</label>
             </div>
           </div>
           <div class="mb-3">

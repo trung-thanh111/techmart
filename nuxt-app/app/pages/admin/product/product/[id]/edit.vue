@@ -32,21 +32,21 @@
         <div class="card-body">
           <div class="">
             <label class="form-label" for="name">
-              {{ $t("admin.page.post.form.name") }}:
+              {{ $t("admin.common.form.title") }}:
               <span class="text-danger">*</span>
             </label>
             <Field name="name" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <input v-bind="field" id="name" type="text" :placeholder="$t('admin.page.post.form.namePlaceholder')" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
+              <input v-bind="field" id="name" type="text" :placeholder="$t('admin.common.form.titlePlaceholder')" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
               <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
             </Field>
             <div class="d-flex gap-2 text-info mt-1 underline cursor-pointer">
               <span class="mdi mdi-link-variant"></span>
-              <p class="genrate_slug_to_name w-full pr-2" v-tooltip.bottom="$t('admin.page.postCatalogue.form.urlTooltip')">{{ config.public.baseUrl }}/{{ slug }}</p>
+              <p class="genrate_slug_to_name w-full pr-2" v-tooltip.bottom="$t('admin.common.form.urlTooltip')">{{ config.public.baseUrl }}/{{ slug }}</p>
             </div>
           </div>
           <div class="mb-3">
             <label class="form-label" for="content">
-              {{ $t("admin.page.post.form.content") }}
+              {{ $t("admin.common.form.content") }}
             </label>
             <Field name="content" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
               <div class="w-full">
@@ -59,17 +59,17 @@
           </div>
           <div class="mb-3">
             <label class="form-label" for="description">
-              {{ $t("admin.page.post.form.description") }}
+              {{ $t("admin.common.form.description") }}
             </label>
             <Field name="description" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <textarea v-bind="field" id="description" rows="3" :placeholder="$t('admin.page.post.form.descriptionPlaceholder')" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
+              <textarea v-bind="field" id="description" rows="3" :placeholder="$t('admin.common.form.descriptionPlaceholder')" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
               <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
             </Field>
           </div>
           <div class="row">
             <div class="col-md-6">
               <div class="mb-3">
-                <label class="form-label" for="order">{{ $t("admin.page.post.form.order") }}:</label>
+                <label class="form-label" for="order">{{ $t("admin.common.form.order") }}:</label>
                 <Field name="order" v-slot="{ field, errorMessage, meta }">
                   <InputNumber :modelValue="field.value" @update:modelValue="field.onChange" :min="1" showButtons class="w-full" input-class="!rounded py-[7px] w-full" size="small" />
                   <small v-if="errorMessage && meta.touched" class="text-danger">
@@ -81,7 +81,7 @@
             <div class="col-md-6">
               <div class="mb-3">
                 <label class="form-label" for="viewCount">
-                  {{ $t("admin.page.post.form.viewCount") }}
+                  {{ $t("admin.common.form.viewCount") }}
                 </label>
                 <Field name="viewCount" v-slot="{ field, errorMessage, meta }">
                   <InputNumber :modelValue="field.value" @update:modelValue="field.onChange" :min="1" showButtons class="w-full" input-class="!rounded py-[7px] w-full" size="small" />
@@ -118,11 +118,11 @@
         <div class="card-body">
           <div class="mb-3">
             <label class="form-label">
-              {{ $t("admin.page.post.form.postCatalogue") }}:
+              {{ $t("admin.common.form.postCatalogue") }}:
               <span class="text-danger">*</span>
             </label>
             <Field name="postCatalogues" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <MultiSelect :modelValue="field.value" @update:modelValue="field.onChange" :options="postCatalogueOptions" optionLabel="name" optionValue="id" filter display="chip" :placeholder="$t('admin.page.post.form.postCataloguePlaceholder')" class="w-100" />
+              <MultiSelect :modelValue="field.value" @update:modelValue="field.onChange" :options="postCatalogueOptions" optionLabel="name" optionValue="id" filter display="chip" :placeholder="$t('admin.common.form.postCataloguePlaceholder')" class="w-100" />
               <small v-if="errorMessage && meta.touched" class="text-danger">
                 {{ $t(errorMessage) }}
               </small>
@@ -130,10 +130,10 @@
           </div>
           <div class="mb-3">
             <label class="form-label">
-              {{ $t("admin.page.post.form.tag") }}
+              {{ $t("admin.common.form.tag") }}
             </label>
             <Field name="postTags" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <MultiSelect :modelValue="field.value" @update:modelValue="field.onChange" :options="tagOptions" optionLabel="name" optionValue="id" filter display="chip" :placeholder="$t('admin.page.post.form.tagPlaceholder')" class="rounded py-[1px] w-100" />
+              <MultiSelect :modelValue="field.value" @update:modelValue="field.onChange" :options="tagOptions" optionLabel="name" optionValue="id" filter display="chip" :placeholder="$t('admin.common.form.tagPlaceholder')" class="rounded py-[1px] w-100" />
               <small v-if="errorMessage && meta.touched" class="text-danger">
                 {{ $t(errorMessage) }}
               </small>
@@ -141,10 +141,10 @@
           </div>
           <div class="mb-3">
             <label class="form-label">
-              {{ $t("admin.page.post.form.related") }}
+              {{ $t("admin.common.form.related") }}
             </label>
             <Field name="relateds" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <MultiSelect :modelValue="field.value" @update:modelValue="field.onChange" :options="postOptions" optionLabel="name" optionValue="id" filter display="chip" :placeholder="$t('admin.page.post.form.relatedPlaceholder')" class="rounded py-[1px] w-100" size="small" />
+              <MultiSelect :modelValue="field.value" @update:modelValue="field.onChange" :options="postOptions" optionLabel="name" optionValue="id" filter display="chip" :placeholder="$t('admin.common.form.relatedPlaceholder')" class="rounded py-[1px] w-100" size="small" />
               <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
             </Field>
           </div>
@@ -157,7 +157,7 @@
         <div class="card-body">
           <div class="mb-3">
             <label class="form-label" for="publishedAt">
-              {{ $t("admin.page.post.form.publishedAt") }}
+              {{ $t("admin.common.form.publishedAt") }}
             </label>
             <Field name="publishedAt" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
               <input v-bind="field" id="publishedAt" type="datetime-local" class="form-control rounded py-[1px] w-100" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
@@ -171,7 +171,7 @@
               <Field name="isHot" v-slot="{ field }">
                 <AppCheckbox :modelValue="field.value" @update:modelValue="field.onChange" inputId="is_hot" class="scale-125" />
               </Field>
-              <label for="is_hot" class="mb-0">{{ $t("admin.page.post.form.isHot") }}</label>
+              <label for="is_hot" class="mb-0">{{ $t("admin.common.form.isHot") }}</label>
             </div>
           </div>
           <div class="mb-3">
@@ -179,7 +179,7 @@
               <Field name="tableOfContent" v-slot="{ field }">
                 <AppCheckbox :modelValue="field.value" @update:modelValue="field.onChange" inputId="table_of_content" class="scale-125" />
               </Field>
-              <label for="table_of_content" class="mb-0">{{ $t("admin.page.post.form.tableOfContent") }}</label>
+              <label for="table_of_content" class="mb-0">{{ $t("admin.common.form.tableOfContent") }}</label>
             </div>
           </div>
           <div class="mb-3">

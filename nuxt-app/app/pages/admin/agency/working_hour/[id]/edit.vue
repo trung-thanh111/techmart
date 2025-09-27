@@ -32,11 +32,11 @@
         <div class="card-body">
           <div class="mb-3">
             <label class="form-label" for="dayOfWeek">
-              {{ $t("admin.page.agencyWorkingHour.form.dayOfWeek") }}:
+              {{ $t("admin.common.form.dayOfWeek") }}:
               <span class="text-danger">*</span>
             </label>
             <Field name="dayOfWeek" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <input v-bind="field" id="dayOfWeek" type="text" :placeholder="$t('admin.page.agencyWorkingHour.form.dayOfWeekPlaceholder')" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
+              <input v-bind="field" id="dayOfWeek" type="text" :placeholder="$t('admin.common.form.dayOfWeekPlaceholder')" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
               <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
             </Field>
           </div>
@@ -44,7 +44,7 @@
             <div class="col-md-6">
               <div class="mb-3">
                 <label class="form-label" for="openTime">
-                  {{ $t("admin.page.agencyWorkingHour.form.openTime") }}:
+                  {{ $t("admin.common.form.openTime") }}:
                   <span class="text-danger">*</span>
                 </label>
                 <Field name="openTime" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
@@ -58,7 +58,7 @@
             <div class="col-md-6">
               <div class="mb-3">
                 <label class="form-label" for="closeTime">
-                  {{ $t("admin.page.agencyWorkingHour.form.closeTime") }}:
+                  {{ $t("admin.common.form.closeTime") }}:
                   <span class="text-danger">*</span>
                 </label>
                 <Field name="closeTime" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">

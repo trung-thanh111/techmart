@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h1 class="text-xl md:text-2xl font-semibold text-gray-900 mb-4">Khuyến mãi của tôi</h1>
-    <p class="text-sm text-gray-600">Nội dung trang voucher...</p>
+    <h1 class="text-xl md:text-2xl font-semibold text-gray-900 mb-4">{{ $t('client.profile.myVouchers') }}</h1>
+    <p class="text-sm text-gray-600">{{ $t('client.profile.voucherContent') }}</p>
   </div>
 </template>
 

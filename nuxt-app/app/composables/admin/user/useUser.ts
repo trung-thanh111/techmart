@@ -210,9 +210,9 @@ export const useUser = (
   };
 
   const genderOptions = computed(() => ([
-    { name: t("admin.page.user.form.genderMale"), value: "male" },
-    { name: t("admin.page.user.form.genderFemale"), value: "female" },
-    { name: t("admin.page.user.form.genderOther"), value: "other" },
+    { name: t("admin.common.form.genderMale"), value: "male" },
+    { name: t("admin.common.form.genderFemale"), value: "female" },
+    { name: t("admin.common.form.genderOther"), value: "other" },
   ]));
 
   onMounted(() => {
