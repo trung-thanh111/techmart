@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use App\Traits\HasQuery;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PostComment extends Model
 {
-    use HasQuery;
+    use HasQuery, SoftDeletes;
 
     protected $table = 'post_comments';
 

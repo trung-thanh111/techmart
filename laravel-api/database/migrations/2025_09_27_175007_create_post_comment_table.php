@@ -25,6 +25,7 @@ return new class extends Migration
             $table->tinyInteger('publish')->default(0)->comment('0: draft, 1: private, 2: publish');
             $table->index(['parent_id', 'lft', 'rgt', 'level']);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

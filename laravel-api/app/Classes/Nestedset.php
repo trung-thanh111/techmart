@@ -23,8 +23,9 @@ class Nestedset
     public function get()
     {
         $this->data = DB::table($this->params['table'])
-            ->select(['id', 'name', 'slug', 'parent_id', 'lft', 'rgt', 'level'])
+            ->select(['id', 'parent_id', 'lft', 'rgt', 'level']) //->select(['id', 'name', 'slug', 'parent_id', 'lft', 'rgt', 'level'])
             ->whereNull('deleted_at')
+            ->where('publish', 2) // Chỉ lấy comment đã publish (không bị ẩn)
             ->orderBy('id', 'asc') // Sắp xếp theo ID thay vì lft
             ->get()->toArray();
     }
@@ -69,7 +70,6 @@ class Nestedset
                 'lft' => $lft,
                 'rgt' => $rgt,
                 'level' => $level,
-                'user_id' => $this->auth->user()->id ?? null
             ]);
     }
 
@@ -84,4 +84,44 @@ class Nestedset
         return true;
     }
 
+    // Rebuild chỉ cho comment cụ thể và các comment con của nó
+    public function rebuildForComment($commentId)
+    {
+        // Lấy comment hiện tại
+        $comment = DB::table($this->params['table'])
+            ->where('id', $commentId)
+            ->whereNull('deleted_at')
+            ->first();
+
+        if (!$comment) {
+            return false;
+        }
+
+        // Nếu comment bị ẩn, chỉ cập nhật lại cấu trúc tree cho các comment con
+        if ($comment->publish == 0) {
+            $this->updateChildrenStructure($commentId);
+        } else {
+            // Nếu comment được hiện lại, rebuild toàn bộ
+            $this->rebuild();
+        }
+
+        return true;
+    }
+
+    // Cập nhật cấu trúc cho các comment con
+    private function updateChildrenStructure($parentId)
+    {
+        // Lấy tất cả comment con (kể cả bị ẩn)
+        $children = DB::table($this->params['table'])
+            ->where('parent_id', $parentId)
+            ->whereNull('deleted_at')
+            ->get();
+
+        foreach ($children as $child) {
+            // Nếu comment con cũng bị ẩn, tiếp tục xử lý các con của nó
+            if ($child->publish == 0) {
+                $this->updateChildrenStructure($child->id);
+            }
+        }
+    }
 }
