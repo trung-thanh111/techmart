@@ -44,9 +44,9 @@ class PostResource extends JsonResource
             'relateds' => $this->whenLoaded('relateds', function () {
                 return PostResource::collection($this->relateds);
             }),
-            'comments' => $this->whenLoaded('post_comments', function () {
-                return PostCommentResource::collection($this->post_comments);
-            }),
+            // 'comments' => $this->whenLoaded('post_comments', function () {
+            //     return PostCommentResource::collection($this->post_comments);
+            // }),
             'metaTitle' => $this->meta_title,
             'metaKeyword' => $this->meta_keyword,
             'metaDescription' => $this->meta_description,

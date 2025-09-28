@@ -70,28 +70,16 @@ export const postCommentService = {
 
   ///
 
-  getByPostId: async (postId: number): Promise<IApiOk<IPostComment[]>> => {
+  allByPostId: async (postId: number): Promise<IApiOk<IPostComment[]>> => {
     const { publicFetch } = useApi();
     return await publicFetch<IApiOk<IPostComment[]>>(`${ENDPOINT}/post_comments`, {
       params: {
         post_id: postId,
         publish: 2,
-        type: 'all'
+        type: 'all',
+        sort: 'id,desc',
       }
     });
   },
 
-  like: async (commentId: number): Promise<IApiOk<any>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<any>>(`${ENDPOINT}/post_comments/${commentId}/like`, {
-      method: 'POST'
-    });
-  },
-
-  unlike: async (commentId: number): Promise<IApiOk<any>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<any>>(`${ENDPOINT}/post_comments/${commentId}/unlike`, {
-      method: 'DELETE'
-    });
-  },
 };

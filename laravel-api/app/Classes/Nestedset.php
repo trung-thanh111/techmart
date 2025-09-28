@@ -23,8 +23,9 @@ class Nestedset
     public function get()
     {
         $this->data = DB::table($this->params['table'])
-            ->select(['id', 'name', 'slug', 'parent_id', 'lft', 'rgt', 'level'])
+            ->select(['id', 'parent_id', 'lft', 'rgt', 'level']) //->select(['id', 'name', 'slug', 'parent_id', 'lft', 'rgt', 'level'])
             ->whereNull('deleted_at')
+            ->where('publish', 2) // Chỉ lấy comment đã publish (không bị ẩn)
             ->orderBy('id', 'asc') // Sắp xếp theo ID thay vì lft
             ->get()->toArray();
     }
@@ -69,7 +70,6 @@ class Nestedset
                 'lft' => $lft,
                 'rgt' => $rgt,
                 'level' => $level,
-                'user_id' => $this->auth->user()->id ?? null
             ]);
     }
 

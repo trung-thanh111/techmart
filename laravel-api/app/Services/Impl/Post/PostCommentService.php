@@ -23,7 +23,7 @@ class PostCommentService extends BaseService implements PostCommentServiceInterf
     protected $cacheKeyPrefix = 'post_comments';
     protected $cacheTags = ['post_comments:collection'];
 
-    protected $useUpload = false;
+    protected $useNestedSet = true;
 
     public function __construct(
         PostCommentRepository $repository
@@ -56,5 +56,17 @@ class PostCommentService extends BaseService implements PostCommentServiceInterf
     protected function getResource(Model $resource)
     {
         return new PostCommentResource($resource);
+    }
+
+    // Override afterSave để xử lý nested set riêng cho comment
+    protected function afterSave(Request $request, ?int $id = null): self
+    {
+        // Luôn rebuild toàn bộ để đảm bảo tính nhất quán
+        // Vì comment tree thường không quá lớn, rebuild toàn bộ vẫn hiệu quả
+        if ($this->useNestedSet) {
+            $this->initializeNestedset();
+        }
+        
+        return parent::afterSave($request, $id);
     }
 }

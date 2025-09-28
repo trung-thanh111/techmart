@@ -29,6 +29,8 @@ class PostCommentResource extends JsonResource
                 ],
             ]),
             'replies' => PostCommentResource::collection($this->whenLoaded('replies')),
+            'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
+            'createdAtHuman' => $this->created_at?->diffForHumans(),
             // 'likes'   => PostCommentLikeResource::collection($this->whenLoaded('likes')),
         ];
     }
