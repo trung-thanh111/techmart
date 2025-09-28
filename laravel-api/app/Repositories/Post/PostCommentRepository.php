@@ -1,5 +1,5 @@
 <?php
-namespace App\Repositories\Comment;
+namespace App\Repositories\Post;
 
 use App\Models\PostComment;
 use App\Repositories\BaseRepository;

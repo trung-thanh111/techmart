@@ -13,20 +13,18 @@ return new class extends Migration
     {
         Schema::create('post_comments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('parent_id')->nullable()->constrained('post_comments')->onDelete('cascade');
-            $table->unsignedInteger('lft')->nullable();
-            $table->unsignedInteger('rgt')->nullable();
-            $table->unsignedInteger('level')->default(0);
+            $table->integer('parent_id')->default(0);
+            $table->integer('lft')->nullable();
+            $table->integer('rgt')->nullable();
+            $table->integer('level')->default(0);
             $table->longText('content')->nullable();
-            $table->boolean('is_hot')->default(false);
+            $table->integer('like_count')->default(0);
+            $table->integer('comment_count')->default(0);
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
-            $table->foreignId('post_id')->nullable()->constrained()->onDelete('set null');
-            $table->tinyInteger('publish')->default(2);
-            $table->softDeletes();
-            $table->timestamps();
-            // Indexes
+            $table->foreignId('post_id')->nullable()->constrained()->onDelete('cascade');
+            $table->tinyInteger('publish')->default(0)->comment('0: draft, 1: private, 2: publish');
             $table->index(['parent_id', 'lft', 'rgt', 'level']);
-            $table->index('publish');
+            $table->timestamps();
         });
     }
 

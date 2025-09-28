@@ -1,15 +1,15 @@
 <?php
-namespace App\Http\Controllers\Api\V1\Comment;
+namespace App\Http\Controllers\Api\V1\Post;
 
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\RestoreRequest;
 use App\Http\Requests\RelationRequest;
 use App\Http\Controllers\Api\V1\BaseController;
-use App\Http\Requests\Comment\PostComment\BulkStoreRequest;
-use App\Http\Requests\Comment\PostComment\BulkUpdateRequest;
-use App\Http\Requests\Comment\PostComment\StoreRequest;
-use App\Http\Requests\Comment\PostComment\UpdateRequest;
-use App\Services\Interfaces\Comment\PostCommentServiceInterface as PostCommentService;
+use App\Http\Requests\Post\PostComment\BulkStoreRequest;
+use App\Http\Requests\Post\PostComment\BulkUpdateRequest;
+use App\Http\Requests\Post\PostComment\StoreRequest;
+use App\Http\Requests\Post\PostComment\UpdateRequest;
+use App\Services\Interfaces\Post\PostCommentServiceInterface as PostCommentService;
 
 class PostCommentController extends BaseController
 {

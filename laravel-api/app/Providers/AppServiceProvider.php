@@ -3,8 +3,8 @@ namespace App\Providers;
 
 use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
-use App\Services\Interfaces\Comment\PostCommentServiceInterface;
-use App\Services\Impl\Comment\PostCommentService;
+use App\Services\Interfaces\Post\PostCommentServiceInterface;
+use App\Services\Impl\Post\PostCommentService;
 use App\Services\Interfaces\Product\ProductTagServiceInterface;
 use App\Services\Impl\Product\ProductTagService;
 use App\Services\Interfaces\Banner\BannerServiceInterface;
