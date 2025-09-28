@@ -1,4 +1,3 @@
-
 <template>
   <div class="main-content rounded-lg h-screen overflow-hidden">
     <div class="relative w-full h-full">
@@ -128,7 +127,7 @@
 <script setup lang="ts">
 import { Field } from "vee-validate";
 import { useAuthSlider } from "~/composables/useAuthSlider";
-import { useAuth } from "~/composables/auth/useAuth";
+import { useRegister } from "~/composables/auth/useRegister";
 
 definePageMeta({
   middleware: "auth-redirect",
@@ -140,7 +139,7 @@ const showPassword = ref(false);
 const showConfirmPassword = ref(false);
 
 const { authOptions, registerItems } = useAuthSlider();
-const { registerForm, handleRegister, isLoading } = useAuth();
+const { handleRegister, isLoading } = useRegister();
 </script>
 
 <style>

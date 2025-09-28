@@ -1,10 +1,8 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\V1\Comment\PostCommentController;
+use App\Http\Controllers\Api\V1\Post\PostCommentController;
 use App\Http\Controllers\Api\V1\Product\ProductTagController;
-use App\Http\Controllers\ExcelController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\User\UserController;
 use App\Http\Controllers\Api\V1\User\UserCatalogueController;

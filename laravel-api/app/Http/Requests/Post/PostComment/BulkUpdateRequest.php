@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Requests\Comment\PostComment;
+namespace App\Http\Requests\Post\PostComment;
 
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;

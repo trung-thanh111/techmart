@@ -115,117 +115,7 @@
                     </div>
                   </form>
                 </div>
-                <div class="max-w-2xl mx-auto space-y-4 mt-5">
-                  <h1 class="text-xl font-bold text-gray-500 mb-4">{{ $t("client.postDetail.comments") }} (23)</h1>
-                  <div v-for="product_reviews in 5" :key="product_reviews" class="bg-white border border-gray-200 p-4 rounded-lg shadow-sm">
-                    <div class="flex items-center justify-between mb-2">
-                      <div class="flex items-center space-x-3">
-                        <img class="w-8 h-8 rounded-full" src="https://i.pravatar.cc/40" alt="avatar" loading="lazy" />
-                        <div>
-                          <p class="text-sm font-semibold text-gray-800">Michael Gough</p>
-                          <p class="text-xs text-gray-500">Feb. 8, 2022</p>
-                        </div>
-                      </div>
-                      <div class="relative inline-block text-left group">
-                        <button class="text-gray-400">
-                          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M6 10a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm6-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm4-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z" /></svg>
-                        </button>
-                        <div class="absolute top-full right-0 w-full h-3 group-hover:block hidden z-0"></div>
-                        <div class="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 hidden group-hover:block transition-all duration-300 ease-in-out">
-                          <div class="w-full bg-white rounded-md border-0 shadow-xl font-normal ring-black/10 divide-y divide-gray-100">
-                            <div class="py-1">
-                              <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                <i class="fa-regular fa-user text-gray-400 text-md mr-2"></i>
-                                <span>Profile</span>
-                              </a>
-                              <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                <i class="fa-regular fa-comment-dots text-gray-400 text-md mr-2"></i>
-                                <span>Messages</span>
-                              </a>
-                              <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                <i class="fa-regular fa-calendar-check text-gray-400 text-md mr-2"></i>
-                                <span>Taskboard</span>
-                              </a>
-                              <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                <i class="fa-solid fa-life-ring text-gray-400 text-md mr-2"></i>
-                                <span>Help</span>
-                              </a>
-                            </div>
-                            <div class="border-t border-gray-200"></div>
-                            <div class="py-1">
-                              <a href="#" class="flex items-center px-4 py-2 text-sm text-red-700 hover:bg-red-100">
-                                <i class="fa-solid fa-arrow-right-from-bracket text-md mr-2"></i>
-                                <span>Logout</span>
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <p class="text-gray-700 text-sm mb-3">Very straight-to-point article. Really worth time reading. Thank you! But tools are just the instruments for the UX designers...</p>
-                    <div class="flex items-center space-x-6 text-gray-500 text-xs">
-                      <span class="flex items-center space-x-1">
-                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8l0-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5l0 3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20-.1-.1s0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5l0 3.3c0 28.5 11.9 55.8 32.8 75.2L256 430.7 431.2 268c20.9-19.4 32.8-46.7 32.8-75.2l0-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z" /></svg>
-                        <span>11 thích</span>
-                      </span>
-                      <button class="hover:underline hover:text-sky-500">{{ $t("client.postDetail.reply") }}</button>
-                    </div>
-                  </div>
-                  <div class="ml-8 bg-white border border-gray-200 p-4 rounded-lg shadow-sm">
-                    <div class="flex items-center justify-between mb-2">
-                      <div class="flex items-center space-x-3">
-                        <img class="w-8 h-8 rounded-full" src="https://i.pravatar.cc/40?img=2" alt="avatar" loading="lazy" />
-                        <div>
-                          <p class="text-sm font-semibold text-gray-800">Jese Leos</p>
-                          <p class="text-xs text-gray-500">Feb. 12, 2022</p>
-                        </div>
-                      </div>
-                      <div class="relative inline-block text-left group">
-                        <button class="text-gray-400">
-                          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M6 10a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm6-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm4-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z" /></svg>
-                        </button>
-                        <div class="absolute top-full right-0 w-full h-3 group-hover:block hidden z-0"></div>
-                        <div class="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 hidden group-hover:block transition-all duration-300 ease-in-out">
-                          <div class="w-full bg-white rounded-md border-0 shadow-xl font-normal ring-black/10 divide-y divide-gray-100">
-                            <div class="py-1">
-                              <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                <i class="fa-regular fa-user text-gray-400 text-md mr-2"></i>
-                                <span>Profile</span>
-                              </a>
-                              <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                <i class="fa-regular fa-comment-dots text-gray-400 text-md mr-2"></i>
-                                <span>Messages</span>
-                              </a>
-                              <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                <i class="fa-regular fa-calendar-check text-gray-400 text-md mr-2"></i>
-                                <span>Taskboard</span>
-                              </a>
-                              <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                <i class="fa-solid fa-life-ring text-gray-400 text-md mr-2"></i>
-                                <span>Help</span>
-                              </a>
-                            </div>
-                            <div class="border-t border-gray-200"></div>
-                            <div class="py-1">
-                              <a href="#" class="flex items-center px-4 py-2 text-sm text-red-700 hover:bg-red-100">
-                                <i class="fa-solid fa-arrow-right-from-bracket text-md mr-2"></i>
-                                <span>Logout</span>
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <p class="text-gray-700 text-sm mb-3">Much appreciated! Glad you liked it 😊</p>
-                    <div class="flex items-center space-x-6 text-gray-500 text-xs">
-                      <span class="flex items-center space-x-1">
-                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8l0-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5l0 3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20-.1-.1s0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5l0 3.3c0 28.5 11.9 55.8 32.8 75.2L256 430.7 431.2 268c20.9-19.4 32.8-46.7 32.8-75.2l0-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z" /></svg>
-                        <span>11 thích</span>
-                      </span>
-                      <button class="hover:underline hover:text-sky-500">{{ $t("client.postDetail.reply") }}</button>
-                    </div>
-                  </div>
-                </div>
+                <PostCommentSection v-if="postDetail" :post-id="postDetail.id" />
               </div>
             </div>
           </div>
@@ -284,11 +174,17 @@
           </SplideSlide>
         </Splide>
       </section>
+      
+      <!-- Comments Section -->
+      <section v-if="postDetail" class="mt-8">
+        <PostComment :post-id="postDetail.id" />
+      </section>
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import Breadcrumb from "~/components/shared/navigation/Breadcrumb.vue";
+import PostCommentSection from "~/components/PostCommentSection.vue";
 import { usePost } from "~/composables/client/post/usePost";
 import { buildToc, type TocItem } from "~/composables/useToc";
 import { usePostSlider } from "~/composables/usePostSlider";

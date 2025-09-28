@@ -98,7 +98,7 @@
 
 <script setup lang="ts">
 import { Field } from "vee-validate";
-import { useAuth } from "~/composables/auth/useAuth";
+import { useLogin } from "~/composables/auth/useLogin";
 import { useAuthSlider } from "~/composables/useAuthSlider";
 
 definePageMeta({
@@ -110,7 +110,7 @@ definePageMeta({
 const showPassword = ref(false);
 const { authOptions, loginItems } = useAuthSlider();
 
-const { handleLogin, isLoading } = useAuth();
+const { handleLogin, isLoading } = useLogin();
 </script>
 
 <style>

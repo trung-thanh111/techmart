@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Requests\Comment\PostComment;
+namespace App\Http\Requests\Post\PostComment;
 
 use App\Enums\Common;
 use App\Http\Requests\BaseRequest;
@@ -22,12 +22,10 @@ class StoreRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'parent_id'   => 'nullable|exists:post_comments,id',
-            'content'     => 'nullable|string',                   // longText
-            'is_hot'      => 'nullable|boolean',
-            'user_id'     => 'nullable|exists:users,id',
-            'post_id'     => 'nullable|exists:posts,id',
-            'publish'     => 'required|integer|in:0,1,2',
+            'post_id'   => 'required|exists:posts,id',
+            'parent_id' => 'nullable|integer|min:0',
+            'content'   => 'required|string|max:5000',
+            'publish'   => 'required|integer|in:0,1,2',
         ];
     }
 

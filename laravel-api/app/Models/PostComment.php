@@ -15,10 +15,12 @@ class PostComment extends Model
 
     protected $fillable = [
         'parent_id',
-        'name',
-        'slug',
+        'lft',
+        'rgt',
+        'level',
         'content',
-        'is_hot',
+        'like_count',
+        'comment_count',
         'user_id',
         'post_id',
         'publish',
@@ -26,7 +28,8 @@ class PostComment extends Model
 
     // Nếu cần casting các field
     protected $casts = [
-        'is_hot' => 'boolean',
+        'published_at' => 'datetime',
+        'publish' => 'integer',
     ];
 
     /**
@@ -39,7 +42,7 @@ class PostComment extends Model
         'post',
         'parent',
         'replies',
-        'votes',
+        'likes',
     ];
     
     public function posts(): BelongsTo
@@ -64,9 +67,12 @@ class PostComment extends Model
         return $this->hasMany(PostComment::class, 'parent_id');
     }
 
-    // public function votes(): HasMany
-    // {
-    //     return $this->hasMany(PostCommentVote::class, 'comment_id', 'id');
-    // }
+    /**
+     * Get the likes for the comment.
+     */
+    public function likes(): HasMany
+    {
+        return $this->hasMany(PostCommentLike::class, 'comment_id', 'id');
+    }
 
 }
