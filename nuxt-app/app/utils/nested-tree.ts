@@ -65,7 +65,7 @@ export function buildTree<T extends NestedSetNodeBase>(
     }
     const parent = nodeById.get(parentId)
     if (parent) (parent as any)[childrenKey].push(node)
-    else roots.push(node) // orphan safeguard
+    else roots.push(node)
   }
 
   return roots

@@ -99,23 +99,43 @@
                 <div class="w-full max-w-8xl mx-auto my-5">
                   <div class="h-[2px] w-full bg-gradient-to-r from-transparent via-[rgba(32,141,128,0.3)] to-transparent"></div>
                 </div>
-                <div class="max-w-2xl mt-5">
+                <div id="comment-form" class="max-w-full mt-5">
                   <h1 class="text-2xl font-bold text-gray-600 mb-4 tracking-wide">{{ $t("client.postDetail.yourThoughts") }}</h1>
-                  <form class="rounded-md bg-gray-100 overflow-hidden shadow-md">
-                    <textarea class="w-full p-4 text-gray-600 placeholder-gray-500 focus:outline-none resize-none bg-gray-100" rows="4" :placeholder="$t('client.postDetail.whatAreYouThinking')" required></textarea>
-                    <div class="flex items-center justify-between bg-gray-300 px-4 py-2">
+                  <form @submit.prevent="handleSubmitComment" class="rounded-md bg-gray-100 overflow-hidden shadow-md">
+                    <div class="relative">
+                      <Field name="content" as="textarea" class="w-full p-4 text-gray-600 placeholder-gray-500 focus:outline-none resize-none bg-gray-100" :class="{ 'border-red-500': false }" rows="4" :placeholder="replyToId ? `Trả lời ${replyToUser}...` : $t('client.postDetail.whatAreYouThinking')" />
+                    </div>
+                    <div class="flex items-center justify-between bg-gray-200 px-4 py-2">
                       <div class="flex items-center space-x-4 text-gray-600">
                         <button type="button">
                           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5h18v14H3V5zm3 8l3 3 4-4 5 5H5z" /></svg>
                         </button>
+                        <span v-if="replyToId" class="text-sm text-sky-600">Đang trả lời {{ replyToUser }}</span>
                       </div>
-                      <button class="flex items-center justify-center ml-3 text-white rounded-md h-9 w-14 bg-sky-500 hover:bg-sky-600 xl:ml-5">
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.98481 2.44399C3.11333 1.57147 1.15325 3.46979 1.96543 5.36824L3.82086 9.70527C3.90146 9.89367 3.90146 10.1069 3.82086 10.2953L1.96543 14.6323C1.15326 16.5307 3.11332 18.4291 4.98481 17.5565L16.8184 12.0395C18.5508 11.2319 18.5508 8.76865 16.8184 7.961L4.98481 2.44399ZM3.34453 4.77824C3.0738 4.14543 3.72716 3.51266 4.35099 3.80349L16.1846 9.32051C16.762 9.58973 16.762 10.4108 16.1846 10.68L4.35098 16.197C3.72716 16.4879 3.0738 15.8551 3.34453 15.2223L5.19996 10.8853C5.21944 10.8397 5.23735 10.7937 5.2537 10.7473L9.11784 10.7473C9.53206 10.7473 9.86784 10.4115 9.86784 9.99726C9.86784 9.58304 9.53206 9.24726 9.11784 9.24726L5.25157 9.24726C5.2358 9.20287 5.2186 9.15885 5.19996 9.11528L3.34453 4.77824Z" fill="white"></path></svg>
-                      </button>
+                      <div class="flex items-center space-x-2">
+                        <button v-if="replyToId" type="button" @click="cancelReply" class="px-3 py-1 text-xs text-gray-600 hover:text-gray-800">Hủy</button>
+                        <button type="submit" :disabled="isSubmitting" class="flex items-center justify-center ml-3 text-white rounded-md h-9 w-14 bg-sky-500 hover:bg-sky-600 disabled:opacity-50 xl:ml-5">
+                          <svg v-if="!isSubmitting" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.98481 2.44399C3.11333 1.57147 1.15325 3.46979 1.96543 5.36824L3.82086 9.70527C3.90146 9.89367 3.90146 10.1069 3.82086 10.2953L1.96543 14.6323C1.15326 16.5307 3.11332 18.4291 4.98481 17.5565L16.8184 12.0395C18.5508 11.2319 18.5508 8.76865 16.8184 7.961L4.98481 2.44399ZM3.34453 4.77824C3.0738 4.14543 3.72716 3.51266 4.35099 3.80349L16.1846 9.32051C16.762 9.58973 16.762 10.4108 16.1846 10.68L4.35098 16.197C3.72716 16.4879 3.0738 15.8551 3.34453 15.2223L5.19996 10.8853C5.21944 10.8397 5.23735 10.7937 5.2537 10.7473L9.11784 10.7473C9.53206 10.7473 9.86784 10.4115 9.86784 9.99726C9.86784 9.58304 9.53206 9.24726 9.11784 9.24726L5.25157 9.24726C5.2358 9.20287 5.2186 9.15885 5.19996 9.11528L3.34453 4.77824Z" fill="white"></path></svg>
+                          <div v-else class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                        </button>
+                      </div>
                     </div>
                   </form>
                 </div>
-                <PostCommentSection v-if="postDetail" :post-id="postDetail.id" />
+                <!-- Comment List -->
+                <div class="max-w-full mx-auto space-y-4 mt-5">
+                  <h1 class="text-xl font-bold text-gray-500 mb-4">Bình luận ({{ totalComments }})</h1>
+                  <div v-if="isLoading" class="text-center py-8">
+                    <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                    <p class="mt-2 text-gray-500">Đang tải...</p>
+                  </div>
+                  <div v-else-if="rootComments.length === 0" class="text-center py-8 text-gray-500">
+                    <p>Chưa có bình luận nào. Hãy là người đầu tiên bình luận!</p>
+                  </div>
+                  <div v-else class="space-y-4">
+                    <CommentNode v-for="comment in rootComments" :key="comment.id" :node="comment" @refresh="handleRefresh" @reply="handleReply" />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -174,23 +194,23 @@
           </SplideSlide>
         </Splide>
       </section>
-      
-      <!-- Comments Section -->
-      <section v-if="postDetail" class="mt-8">
-        <PostComment :post-id="postDetail.id" />
-      </section>
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import Breadcrumb from "~/components/shared/navigation/Breadcrumb.vue";
-import PostCommentSection from "~/components/PostCommentSection.vue";
+import CommentNode from "~/components/post/CommentNode.vue";
 import { usePost } from "~/composables/client/post/usePost";
+import { usePostComment } from "~/composables/client/post/usePostComment";
 import { buildToc, type TocItem } from "~/composables/useToc";
 import { usePostSlider } from "~/composables/usePostSlider";
+import { Field, ErrorMessage } from "vee-validate";
 
 const { fetchDetailBySlug, postDetail, postDetailLoading, postDetailError, fetchTags, loadHotQuick, tagList, hotQuickItems } = usePost();
 const { postRelatedOptions } = usePostSlider();
+
+// Comments
+const { rootComments, totalComments, isLoading, isSubmitting, commentForm, createComment, resetForm, loadComments } = usePostComment();
 
 const isTocOpen = ref(true);
 const contentWithIds = ref<string>("");
@@ -203,6 +223,10 @@ onMounted(async () => {
   if (!slug.value) return;
   await fetchDetailBySlug(slug.value);
   await Promise.all([fetchTags(), loadHotQuick()]);
+  //post comment
+  if (postDetail.value?.id) {
+    await loadComments(postDetail.value.id);
+  }
 });
 
 watch(
@@ -224,6 +248,57 @@ const breadcrumbs = computed(() => [
   { label: $t("client.post.breadcrumb"), href: "/post" },
   { label: postDetail.value?.name || slug.value, href: `/post/${slug.value}` },
 ]);
+
+const replyToId = ref<number | null>(null);
+const replyToUser = ref<string | null>(null);
+
+const handleRefresh = async () => {
+  if (postDetail.value?.id) {
+    await loadComments(postDetail.value.id);
+  }
+};
+
+const handleReply = (parentId: number) => {
+  replyToId.value = parentId;
+
+  // Find the user name from the comment
+  const findCommentUser = (comments: any[], targetId: number): string | null => {
+    for (const comment of comments) {
+      if (comment.id === targetId) {
+        return comment.author?.name || "Người dùng";
+      }
+      if (comment.replies && comment.replies.length > 0) {
+        const found = findCommentUser(comment.replies, targetId);
+        if (found) return found;
+      }
+    }
+    return null;
+  };
+
+  replyToUser.value = findCommentUser(rootComments.value, parentId) || "Người dùng";
+
+  nextTick(() => {
+    document.getElementById("comment-form")?.scrollIntoView({ behavior: "smooth" });
+  });
+};
+
+// Cancel reply
+const cancelReply = () => {
+  replyToId.value = null;
+  replyToUser.value = null;
+  resetForm();
+};
+
+// Submit comment
+const handleSubmitComment = async () => {
+  if (!postDetail.value?.id) return;
+
+  const success = await createComment(postDetail.value.id, replyToId.value || undefined);
+  if (success) {
+    replyToId.value = null;
+    replyToUser.value = null;
+  }
+};
 
 // Dynamic SEO for post
 const { setPageSeo } = useSeo();

@@ -11,6 +11,7 @@ export interface IPostComment {
   author?: ICreator;
   replies?: IPostComment[];
   createdAt?: string;
+  createdAtHumen?: string;
   updatedAt?: string;
 }
 
