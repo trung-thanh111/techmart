@@ -61,12 +61,9 @@ class PostCommentService extends BaseService implements PostCommentServiceInterf
     // Override afterSave để xử lý nested set riêng cho comment
     protected function afterSave(Request $request, ?int $id = null): self
     {
-        // Nếu là update (ẩn/hiện comment)
-        if ($id) {
-            $this->initializeNestedset();
-            $this->nested->rebuildForComment($id);
-        } else {
-            // Nếu là tạo mới, rebuild toàn bộ
+        // Luôn rebuild toàn bộ để đảm bảo tính nhất quán
+        // Vì comment tree thường không quá lớn, rebuild toàn bộ vẫn hiệu quả
+        if ($this->useNestedSet) {
             $this->initializeNestedset();
         }
         
