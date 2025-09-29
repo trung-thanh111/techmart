@@ -52,12 +52,16 @@
         </svg>
         <span>{{ state.likeCount }} thích</span>
       </button>
-      <span v-if="replyCount > 0" class="text-gray-500">bình luận ({{ replyCount }})</span>
+      <span v-if="!isRoot && replyCount > 0" class="text-gray-500">bình luận ({{ replyCount }})</span>
+      <button v-if="isRoot && replyCount > 0" @click="isExpanded = !isExpanded" class="hover:underline hover:text-sky-600">
+        <span v-if="!isExpanded">Hiển thị {{ replyCount }} phản hồi</span>
+        <span v-else>Ẩn phản hồi</span>
+      </button>
       <button @click="replyToComment" class="hover:underline hover:text-sky-500">trả lời</button>
     </div>
 
     <!-- đệ quy chính nó -> hiển thị cmt reply -->
-    <div v-if="node.replies && node.replies.length" class="ml-8 space-y-4 mt-4">
+    <div v-if="node.replies && node.replies.length && (!isRoot || isExpanded)" class="ml-8 space-y-4 mt-4">
       <CommentTree v-for="child in node.replies" :key="child.id" :node="child" @refresh="emit('refresh')" @reply="emit('reply', $event)" />
     </div>
 
@@ -97,13 +101,15 @@ import { postCommentService } from "~/services/post/comment.service";
 import { useAppToast } from "~/composables/useAppToast";
 import { usePostCommentLike } from "~/composables/client/post/usePostCommentLike";
 
-const props = defineProps<{ node: any }>();
+const props = defineProps<{ node: any; isRoot?: boolean }>();
 const { isAdmin, user } = useAuth();
 const toast = useAppToast();
 
 const showDeleteModal = ref(false);
 const { commentLikeState, getStatus, toggle, resetFor } = usePostCommentLike();
 const state = computed(() => commentLikeState[props.node.id] || { isLiked: false, likeCount: props.node.like_count || 0, currentLikeId: null });
+const isRoot = computed(() => !!props.isRoot);
+const isExpanded = ref(false);
 const DEFAULT = "/shared/images/defaults/avatar.jpg";
 const avatar = props.node.author?.avatar?.path ? props.node.author?.avatar?.url : DEFAULT;
 

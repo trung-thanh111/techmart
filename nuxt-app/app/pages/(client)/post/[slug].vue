@@ -142,7 +142,7 @@
                     <p>Chưa có bình luận nào. Hãy là người đầu tiên bình luận!</p>
                   </div>
                   <div v-else class="space-y-4">
-                    <CommentTree v-for="comment in rootComments" :key="comment.id" :node="comment" @refresh="handleRefresh" @reply="handleReply" />
+                    <CommentTree v-for="comment in rootComments" :key="comment.id" :node="comment" :is-root="true" @refresh="handleRefresh" @reply="handleReply" />
                   </div>
                 </div>
               </div>
