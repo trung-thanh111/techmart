@@ -16,18 +16,19 @@
         <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 hidden group-hover:block transition-all duration-300 ease-in-out">
           <div class="w-full bg-white rounded-md border-0 shadow-xl font-normal ring-black/10 divide-y divide-gray-100">
             <div class="py-1">
-              <!-- Hide comment (admin only) -->
+              <button @click="replyToComment" class="flex items-center w-full px-4 py-2 text-xs text-gray-700 hover:bg-gray-100">
+                <i class="fa-solid fa-reply text-gray-400 text-sm mr-2"></i>
+                <span>Trả lời</span>
+              </button>
               <button v-if="canHide" @click="hideComment" class="flex items-center w-full px-4 py-2 text-xs text-gray-700 hover:bg-gray-100">
                 <i class="fas fa-eye-slash text-gray-400 text-sm mr-2"></i>
                 <span>Ẩn bình luận</span>
               </button>
-              <!-- Report (all users) -->
               <button class="flex items-center w-full px-4 py-2 text-xs text-gray-700 hover:bg-gray-100">
                 <i class="fa-solid fa-circle-exclamation text-gray-400 text-sm mr-2"></i>
                 <span>Báo cáo</span>
               </button>
             </div>
-            <!-- Delete (admin or author) -->
             <div v-if="canDelete" class="border-t border-gray-200">
               <div class="py-1">
                 <button @click="openDeleteModal" class="flex items-center w-full px-4 py-2 text-xs text-red-700 hover:bg-red-100">
@@ -42,25 +43,28 @@
     </div>
     <p class="text-gray-700 text-sm mb-3">{{ node.content }}</p>
     <div class="flex items-center space-x-6 text-gray-500 text-xs">
-      <button @click="toggleLike" class="flex items-center space-x-1 hover:text-red-500 transition-colors">
-        <svg v-if="isLiked" class="w-4 h-4 text-red-500" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
-          <path d="M305 151.1L320 171.8L335 151.1C360 116.5 400.2 96 442.9 96C516.4 96 576 155.6 576 229.1L576 231.7C576 343.9 436.1 474.2 363.1 529.9C350.7 539.3 335.5 544 320 544C304.5 544 289.2 539.4 276.9 529.9C203.9 474.2 64 343.9 64 231.7L64 229.1C64 155.6 123.6 96 197.1 96C239.8 96 280 116.5 305 151.1z" />
+      <button @click="onToggleLike" class="flex items-center space-x-1 hover:text-red-500 transition-colors">
+        <svg v-if="state.isLiked" class="w-4 h-4 text-red-500" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
         </svg>
         <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
         </svg>
-        <span>{{ likeCount }} thích</span>
+        <span>{{ state.likeCount }} thích</span>
       </button>
-      <span v-if="replyCount > 0" class="text-gray-500">bình luận ({{ replyCount }})</span>
+      <span v-if="!isRoot && replyCount > 0" class="text-gray-500">bình luận ({{ replyCount }})</span>
+      <button v-if="isRoot && replyCount > 0" @click="isExpanded = !isExpanded" class="hover:underline hover:text-sky-600">
+        <span v-if="!isExpanded">Hiển thị {{ replyCount }} phản hồi</span>
+        <span v-else>Ẩn phản hồi</span>
+      </button>
       <button @click="replyToComment" class="hover:underline hover:text-sky-500">trả lời</button>
     </div>
 
-    <!-- Replies -->
-    <div v-if="node.replies && node.replies.length" class="ml-8 space-y-4 mt-4">
-      <CommentNode v-for="child in node.replies" :key="child.id" :node="child" @refresh="emit('refresh')" @reply="emit('reply', $event)" />
+    <!-- đệ quy chính nó -> hiển thị cmt reply -->
+    <div v-if="node.replies && node.replies.length && (!isRoot || isExpanded)" class="ml-8 space-y-4 mt-4">
+      <CommentTree v-for="child in node.replies" :key="child.id" :node="child" @refresh="emit('refresh')" @reply="emit('reply', $event)" />
     </div>
 
-    <!-- Delete Modal -->
     <div v-if="showDeleteModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div class="absolute inset-0 bg-black/50" @click="closeDeleteModal"></div>
       <div class="relative bg-white rounded-lg shadow-lg w-full max-w-xl">
@@ -95,11 +99,17 @@ import { defineProps } from "vue";
 import { useAuth } from "~/composables/auth/useAuth";
 import { postCommentService } from "~/services/post/comment.service";
 import { useAppToast } from "~/composables/useAppToast";
+import { usePostCommentLike } from "~/composables/client/post/usePostCommentLike";
 
-const props = defineProps<{ node: any }>();
+const props = defineProps<{ node: any; isRoot?: boolean }>();
 const { isAdmin, user } = useAuth();
 const toast = useAppToast();
 
+const showDeleteModal = ref(false);
+const { commentLikeState, getStatus, toggle, resetFor } = usePostCommentLike();
+const state = computed(() => commentLikeState[props.node.id] || { isLiked: false, likeCount: props.node.like_count || 0, currentLikeId: null });
+const isRoot = computed(() => !!props.isRoot);
+const isExpanded = ref(false);
 const DEFAULT = "/shared/images/defaults/avatar.jpg";
 const avatar = props.node.author?.avatar?.path ? props.node.author?.avatar?.url : DEFAULT;
 
@@ -114,21 +124,13 @@ const hideComment = async () => {
   try {
     await postCommentService.update(props.node.id, { publish: 0 });
     toast.success("Đã ẩn bình luận");
-    // Emit event to parent to refresh comments
-    emit("refresh");
+    emit("refresh"); // lăng nghe sk refresh báo cho cha biết reload lại cmt
   } catch (error) {
     toast.error("Không thể ẩn bình luận");
   }
 };
 
-// Modal state
-const showDeleteModal = ref(false);
-
-// Like state
-const isLiked = ref(false);
-const likeCount = ref(props.node.like_count || 0);
-
-// Count replies
+// đếm reply
 const replyCount = computed(() => {
   const countReplies = (node: any): number => {
     if (!node.replies || !Array.isArray(node.replies)) return 0;
@@ -141,46 +143,32 @@ const replyCount = computed(() => {
   return countReplies(props.node);
 });
 
-// Open delete modal
 const openDeleteModal = () => {
   showDeleteModal.value = true;
 };
 
-// Close delete modal
 const closeDeleteModal = () => {
   showDeleteModal.value = false;
 };
 
-// Delete comment action
 const deleteComment = async () => {
   try {
     await postCommentService.delete(props.node.id);
     toast.success("Đã xóa bình luận");
     closeDeleteModal();
-    // Emit event to parent to refresh comments
     emit("refresh");
   } catch (error) {
     toast.error("Không thể xóa bình luận");
   }
 };
 
-// Toggle like
-const toggleLike = async () => {
-  try {
-    if (isLiked.value) {
-      // Unlike logic here
-      likeCount.value--;
-    } else {
-      // Like logic here
-      likeCount.value++;
-    }
-    isLiked.value = !isLiked.value;
-  } catch (error) {
+const onToggleLike = async () => {
+  const ok = await toggle(props.node.id);
+  if (!ok) {
     toast.error("Không thể thực hiện thao tác");
   }
 };
 
-// Reply to comment
 const replyToComment = () => {
   emit("reply", props.node.id);
 };
@@ -189,4 +177,18 @@ const emit = defineEmits<{
   refresh: [];
   reply: [parentId: number];
 }>();
+
+onMounted(async () => {
+  resetFor(props.node.id);
+  await getStatus(props.node.id);
+});
+
+watch(
+  () => props.node.id,
+  async (id) => {
+    if (!id) return;
+    resetFor(id);
+    await getStatus(id);
+  }
+);
 </script>

@@ -198,6 +198,19 @@ export const usePost = () => {
     }
   };
 
+  const trackView = async (postId: number): Promise<void> => {
+    try {
+      const currentViewCount = postDetail.value?.viewCount || 0;
+      const newViewCount = currentViewCount + 1;
+      await postService.update(postId, { viewCount: newViewCount });
+      if (postDetail.value) {
+        postDetail.value.viewCount = newViewCount;
+      }
+    } catch (error) {
+      console.log('Error tracking view:', error);
+    }
+  };
+
   return {
     isLoading,
     paginate,
@@ -228,5 +241,6 @@ export const usePost = () => {
     fetchPostCatalogues,
     fetchHotCataloguePosts,
     fetchPostsByCatalogueId,
+    trackView,
   };
 };

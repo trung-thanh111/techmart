@@ -24,6 +24,7 @@ class Post extends Model
         'order',
         'is_hot',
         'view_count',
+        'like_count',
         'post_catalogue_id',
         'tag_id',
         'publish',

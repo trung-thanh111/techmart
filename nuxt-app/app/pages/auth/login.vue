@@ -87,7 +87,7 @@
 
             <p class="mt-6 text-center text-sm text-gray-600">
               Chưa có tài khoản?
-              <NuxtLink to="/auth/register" class="text-cyan-600 hover:underline">Đăng ký</NuxtLink>
+              <NuxtLink :to="TOREGISTER" class="text-cyan-600 hover:underline">Đăng ký</NuxtLink>
             </p>
           </div>
         </div>
@@ -98,6 +98,7 @@
 
 <script setup lang="ts">
 import { Field } from "vee-validate";
+import { TOREGISTER } from "~/utils/constants";
 import { useLogin } from "~/composables/auth/useLogin";
 import { useAuthSlider } from "~/composables/useAuthSlider";
 

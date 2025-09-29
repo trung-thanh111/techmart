@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\Post\PostCommentLikeController;
+use App\Http\Controllers\Api\V1\Post\PostLikeController;
 use App\Http\Controllers\Api\V1\Post\PostCommentController;
 use App\Http\Controllers\Api\V1\Product\ProductTagController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
@@ -309,6 +311,28 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
             Route::delete('{id}/detach', [PostCommentController::class, 'detach']);
         });
         Route::resource('post_comments', PostCommentController::class)->except($routeExcept);
+
+        // This is route PostLike
+        Route::group(['prefix' => 'post_likes'], function() {
+            Route::post('bulkStore', [PostLikeController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [PostLikeController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [PostLikeController::class, 'bulkUpdate']);
+            Route::delete('bulkDelete', [PostLikeController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [PostLikeController::class, 'attach']);
+            Route::delete('{id}/detach', [PostLikeController::class, 'detach']);
+        });
+        Route::resource('post_likes', PostLikeController::class)->except($routeExcept);
+
+        // This is route PostCommentLike
+        Route::group(['prefix' => 'post_comment_likes'], function() {
+            Route::post('bulkStore', [PostCommentLikeController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [PostCommentLikeController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [PostCommentLikeController::class, 'bulkUpdate']);
+            Route::delete('bulkDelete', [PostCommentLikeController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [PostCommentLikeController::class, 'attach']);
+            Route::delete('{id}/detach', [PostCommentLikeController::class, 'detach']);
+        });
+        Route::resource('post_comment_likes', PostCommentLikeController::class)->except($routeExcept);
 
         // generate route
 
