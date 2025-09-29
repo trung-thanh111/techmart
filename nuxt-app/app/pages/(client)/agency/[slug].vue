@@ -94,7 +94,6 @@ import { useAgency } from "~/composables/client/agency/useAgency";
 const { fetchBySlug, agency, isLoading, getCoverUrl, getSafeWebsite, getWorkingHours, getMapEmbedSrcFromAddress, getExternalMapLinkFromAddress, formatPhone } = useAgency();
 
 const slug = computed(() => String(useRoute().params.slug || ""));
-const relateds = computed(() => (Array.isArray((agency.value as any)?.relateds) ? (agency.value as any).relateds : []));
 
 const coverUrl = computed(() => getCoverUrl());
 
