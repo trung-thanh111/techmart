@@ -62,6 +62,7 @@ export function usePostSlider() {
       type: isLoop ? "loop" : "slide",
       perPage: 4,
       perMove: 1,
+      gap: 4,
       trimSpace: false,
       autoplay: isLoop,
       interval: 3000,

@@ -2,18 +2,27 @@
 
 namespace App\Models;
 
+use App\Traits\HasQuery;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PostCommentLike extends Model
 {
-    use HasFactory;
+    use HasQuery, HasFactory;
 
+    
     protected $fillable = [
         'user_id',
         'comment_id',
     ];
+
+    protected $casts = [];
+    
+    /**
+     * Các quan hệ cho phép client yêu cầu load kèm (an toàn)
+     */
+    public $relationable = [];
 
     /**
      * Get the user that liked the comment.

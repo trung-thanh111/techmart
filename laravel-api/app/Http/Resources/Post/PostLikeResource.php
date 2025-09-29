@@ -15,7 +15,7 @@ class PostLikeResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'postId' => $this->post_id,
+            'postId' => (int) $this->post_id,
             'userId' => (int) $this->user_id,
         ];
     }

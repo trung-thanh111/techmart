@@ -3,6 +3,8 @@ namespace App\Providers;
 
 use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
+use App\Services\Interfaces\Post\PostCommentLikeServiceInterface;
+use App\Services\Impl\Post\PostCommentLikeService;
 use App\Services\Interfaces\Post\PostLikeServiceInterface;
 use App\Services\Impl\Post\PostLikeService;
 use App\Services\Interfaces\Post\PostCommentServiceInterface;
@@ -82,6 +84,7 @@ class AppServiceProvider extends ServiceProvider
         ProductTagServiceInterface::class => ProductTagService::class,
         PostCommentServiceInterface::class => PostCommentService::class,
         PostLikeServiceInterface::class => PostLikeService::class,
+        PostCommentLikeServiceInterface::class => PostCommentLikeService::class,
     ];
 
     /**

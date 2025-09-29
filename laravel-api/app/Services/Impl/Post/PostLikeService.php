@@ -13,7 +13,7 @@ class PostLikeService extends BaseService implements PostLikeServiceInterface {
 protected $repository;
 
 protected $complexFilter = ['id'];
-
+protected $simpleFilter = ['user_id', 'post_id'];
 protected $with = [];
 protected $relationFilter = [];
 

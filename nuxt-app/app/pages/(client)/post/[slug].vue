@@ -67,13 +67,7 @@
                 <div v-else class="text-gray-500 italic">{{ $t("client.postDetail.noContent") }}</div>
                 <div class="flex flex-wrap items-center justify-between mt-3 gap-1 sm:gap-0">
                   <div class="flex items-center gap-5">
-                    <PostLikeButton 
-                      :post-id="postDetail.id"
-                      :is-liked="isLiked"
-                      :like-count="likeCount"
-                      :is-loading="isLikeLoading"
-                      @toggle="handleToggleLike"
-                    />
+                    <PostLikeButton :post-id="postDetail.id" :is-liked="isLiked" :like-count="likeCount" :is-loading="isLikeLoading" @toggle="handleToggleLike" />
                     <div class="flex items-center space-x-1 text-gray-500">
                       <svg class="w-5 h-5 sm:w-4 sm:h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
                         <path d="M320 96C239.2 96 174.5 132.8 127.4 176.6C80.6 220.1 49.3 272 34.4 307.7C31.1 315.6 31.1 324.4 34.4 332.3C49.3 368 80.6 420 127.4 463.4C174.5 507.1 239.2 544 320 544C400.8 544 465.5 507.2 512.6 463.4C559.4 419.9 590.7 368 605.6 332.3C608.9 324.4 608.9 315.6 605.6 307.7C590.7 272 559.4 220 512.6 176.6C465.5 132.9 400.8 96 320 96zM176 320C176 240.5 240.5 176 320 176C399.5 176 464 240.5 464 320C464 399.5 399.5 464 320 464C240.5 464 176 399.5 176 320zM320 256C320 291.3 291.3 320 256 320C244.5 320 233.7 317 224.3 311.6C223.3 322.5 224.2 333.7 227.2 344.8C240.9 396 293.6 426.4 344.8 412.7C396 399 426.4 346.3 412.7 295.1C400.5 249.4 357.2 220.3 311.6 224.3C316.9 233.6 320 244.4 320 256z" />
@@ -222,6 +216,7 @@ import { usePostSlider } from "~/composables/usePostSlider";
 import { usePost } from "~/composables/client/post/usePost";
 import { usePostComment } from "~/composables/client/post/usePostComment";
 import { usePostLike } from "~/composables/client/post/usePostLike";
+import { usePostCommentLike } from "~/composables/client/post/usePostCommentLike";
 import { useAuthStore } from "~/stores/auth/auth";
 import { useSeo } from "~/composables/useSeo";
 import { TOLOGIN } from "~/utils/constants";
@@ -230,7 +225,8 @@ const { setPageSeo } = useSeo();
 const { postRelatedOptions } = usePostSlider();
 const { rootComments, totalComments, isLoading: isCommentLoading, isSubmitting, createComment, resetForm, loadComments } = usePostComment();
 const { tagList, hotQuickItems, postDetail, postDetailLoading, postDetailError, fetchTags, loadHotQuick, fetchDetailBySlug, trackView } = usePost();
-const { isLiked, likeCount, isLoading: isLikeLoading, toggleLike, getLikeStatus } = usePostLike();
+const { isLiked, likeCount, isLoading: isLikeLoading, toggleLike, getLikeStatus, setCurrent, resetAll: resetPostLikes } = usePostLike();
+const { resetAll: resetCommentLikes } = usePostCommentLike();
 
 const auth = useAuthStore();
 const isTocOpen = ref(true);
@@ -243,17 +239,22 @@ const replyToUser = ref<string | null>(null);
 const slug = computed(() => String(useRoute().params.slug || ""));
 const relateds = computed(() => (Array.isArray((postDetail.value as any)?.relateds) ? (postDetail.value as any).relateds : []));
 
-onMounted(async () => {
-  if (!slug.value) return;
-  await fetchDetailBySlug(slug.value);
-  await Promise.all([fetchTags(), loadHotQuick()]);
-  //post comment
-  if (postDetail.value?.id) {
-    await loadComments(postDetail.value.id);
-    // Load like status
-    await getLikeStatus(postDetail.value.id);
-  }
-});
+let loadToken = 0;
+
+const initForSlug = async (targetSlug: string) => {
+  if (!targetSlug) return;
+  const token = ++loadToken;
+  resetPostLikes();
+  resetCommentLikes();
+  const common = Promise.all([fetchTags(), loadHotQuick()]);
+  await fetchDetailBySlug(targetSlug);
+  await common;
+  if (token !== loadToken) return;
+  const id = postDetail.value?.id;
+  if (!id) return;
+  setCurrent(id);
+  await Promise.all([loadComments(id), getLikeStatus(id)]);
+};
 
 onBeforeRouteUpdate((to, from, next) => {
   if (to.params.slug && to.params.slug !== from.params.slug) {
@@ -275,6 +276,15 @@ watch(
       toc.value = [];
       contentWithIds.value = "";
     }
+  },
+  { immediate: true }
+);
+
+watch(
+  () => slug.value,
+  async (newSlug, oldSlug) => {
+    if (!newSlug || newSlug === oldSlug) return;
+    await initForSlug(newSlug);
   },
   { immediate: true }
 );
@@ -332,7 +342,7 @@ const handleSubmitComment = async () => {
 
 const handleToggleLike = async () => {
   if (!postDetail.value?.id) return;
-  
+
   await toggleLike(postDetail.value.id);
 };
 
