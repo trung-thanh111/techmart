@@ -116,7 +116,7 @@
             </form>
             <p class="mt-4 text-center text-sm text-gray-600">
               Đã có tài khoản?
-              <NuxtLink to="/auth/login" class="text-cyan-600 hover:underline">Đăng nhập</NuxtLink>
+              <NuxtLink :to="TOLOGIN" class="text-cyan-600 hover:underline">Đăng nhập</NuxtLink>
             </p>
           </div>
         </div>
@@ -126,6 +126,7 @@
 </template>
 <script setup lang="ts">
 import { Field } from "vee-validate";
+import { TOLOGIN } from "~/utils/constants";
 import { useAuthSlider } from "~/composables/useAuthSlider";
 import { useRegister } from "~/composables/auth/useRegister";
 

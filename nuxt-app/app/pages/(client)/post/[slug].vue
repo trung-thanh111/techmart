@@ -66,9 +66,17 @@
                 <div v-else-if="postDetailLoading" class="text-gray-500 italic">{{ $t("client.postDetail.loadingContent") }}</div>
                 <div v-else class="text-gray-500 italic">{{ $t("client.postDetail.noContent") }}</div>
                 <div class="flex flex-wrap items-center justify-between mt-3 gap-1 sm:gap-0">
-                  <div class="flex items-center space-x-1 text-gray-500 cursor-pointer">
-                    <svg class="w-4 h-4 sm:w-5 sm:h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8l0-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5l0 3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20-.1-.1s0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5l0 3.3c0 28.5 11.9 55.8 32.8 75.2L256 430.7 431.2 268c20.9-19.4 32.8-46.7 32.8-75.2l0-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z" /></svg>
-                    <span class="text-xs sm:text-sm">{{ $t("client.postDetail.likes") }}</span>
+                  <div class="flex items-center gap-5">
+                    <div class="flex items-center space-x-1 text-gray-500">
+                      <svg class="w-5 h-5 sm:w-4 sm:h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8l0-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5l0 3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20-.1-.1s0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5l0 3.3c0 28.5 11.9 55.8 32.8 75.2L256 430.7 431.2 268c20.9-19.4 32.8-46.7 32.8-75.2l0-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z" /></svg>
+                      <span class="text-xs sm:text-sm">{{ $t("client.postDetail.likes") }}</span>
+                    </div>
+                    <div class="flex items-center space-x-1 text-gray-500">
+                      <svg class="w-5 h-5 sm:w-4 sm:h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+                        <path d="M320 96C239.2 96 174.5 132.8 127.4 176.6C80.6 220.1 49.3 272 34.4 307.7C31.1 315.6 31.1 324.4 34.4 332.3C49.3 368 80.6 420 127.4 463.4C174.5 507.1 239.2 544 320 544C400.8 544 465.5 507.2 512.6 463.4C559.4 419.9 590.7 368 605.6 332.3C608.9 324.4 608.9 315.6 605.6 307.7C590.7 272 559.4 220 512.6 176.6C465.5 132.9 400.8 96 320 96zM176 320C176 240.5 240.5 176 320 176C399.5 176 464 240.5 464 320C464 399.5 399.5 464 320 464C240.5 464 176 399.5 176 320zM320 256C320 291.3 291.3 320 256 320C244.5 320 233.7 317 224.3 311.6C223.3 322.5 224.2 333.7 227.2 344.8C240.9 396 293.6 426.4 344.8 412.7C396 399 426.4 346.3 412.7 295.1C400.5 249.4 357.2 220.3 311.6 224.3C316.9 233.6 320 244.4 320 256z" />
+                      </svg>
+                      <span class="text-xs sm:text-sm">{{ postDetail.viewCount }} {{ $t("client.postDetail.views") }}</span>
+                    </div>
                   </div>
                   <div class="flex items-center space-x-1 sm:space-x-2 md:space-x-3">
                     <span class="caption font-medium text-gray-500 mr-2 md:mr-3 hidden sm:block text-xs sm:text-sm">{{ $t("client.postDetail.share") }}</span>
@@ -103,11 +111,11 @@
                   <h1 class="text-2xl font-bold text-gray-600 mb-4 tracking-wide">{{ $t("client.postDetail.yourThoughts") }}</h1>
                   <form @submit.prevent="handleSubmitComment" class="rounded-md bg-gray-100 overflow-hidden shadow-md">
                     <div class="relative">
-                      <Field name="content" as="textarea" class="w-full p-4 text-gray-600 placeholder-gray-500 focus:outline-none resize-none bg-gray-100" :class="{ 'border-red-500': false }" rows="4" :placeholder="replyToId ? `Trả lời ${replyToUser}...` : $t('client.postDetail.whatAreYouThinking')" />
+                      <Field name="content" as="textarea" class="w-full p-2 text-gray-600 placeholder-gray-500 focus:outline-none resize-none bg-gray-100" :class="{ 'border-red-500': false }" rows="4" :placeholder="replyToId ? `Trả lời ${replyToUser}...` : $t('client.postDetail.whatAreYouThinking')" />
                     </div>
                     <div class="flex items-center justify-between bg-gray-200 px-4 py-2">
                       <div class="flex items-center space-x-4 text-gray-600">
-                        <button type="button">
+                        <button type="button" class="hidden">
                           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5h18v14H3V5zm3 8l3 3 4-4 5 5H5z" /></svg>
                         </button>
                         <span v-if="replyToId" class="text-sm text-sky-600">Đang trả lời {{ replyToUser }}</span>
@@ -121,19 +129,23 @@
                       </div>
                     </div>
                   </form>
+                  <div v-if="auth.isAuthenticated === false" class="flex justify-center text-sm gap-1 py-2 text-gray-600">
+                    <p>Hey guy, hãy đăng nhập để sử dụng chức năng</p>
+                    <NuxtLink :to="TOLOGIN" class="text-sky-500 hover:text-underline">đăng nhập</NuxtLink>
+                  </div>
                 </div>
-                <!-- Comment List -->
+                <!-- list cmt -->
                 <div class="max-w-full mx-auto space-y-4 mt-5">
-                  <h1 class="text-xl font-bold text-gray-500 mb-4">Bình luận ({{ totalComments }})</h1>
+                  <h1 v-if="totalComments > 0" class="text-xl font-bold text-gray-500 mb-4">Bình luận ({{ totalComments }})</h1>
                   <div v-if="isLoading" class="text-center py-8">
                     <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
                     <p class="mt-2 text-gray-500">Đang tải...</p>
                   </div>
-                  <div v-else-if="rootComments.length === 0" class="text-center py-8 text-gray-500">
+                  <div v-else-if="rootComments.length === 0" class="text-center py-8 text-sm text-gray-500">
                     <p>Chưa có bình luận nào. Hãy là người đầu tiên bình luận!</p>
                   </div>
                   <div v-else class="space-y-4">
-                    <CommentNode v-for="comment in rootComments" :key="comment.id" :node="comment" @refresh="handleRefresh" @reply="handleReply" />
+                    <CommentTree v-for="comment in rootComments" :key="comment.id" :node="comment" @refresh="handleRefresh" @reply="handleReply" />
                   </div>
                 </div>
               </div>
@@ -198,23 +210,29 @@
   </div>
 </template>
 <script setup lang="ts">
+import { Field } from "vee-validate";
 import Breadcrumb from "~/components/shared/navigation/Breadcrumb.vue";
-import CommentNode from "~/components/post/CommentNode.vue";
-import { usePost } from "~/composables/client/post/usePost";
-import { usePostComment } from "~/composables/client/post/usePostComment";
+import CommentTree from "~/components/post/CommentTree.vue";
 import { buildToc, type TocItem } from "~/composables/useToc";
 import { usePostSlider } from "~/composables/usePostSlider";
-import { Field, ErrorMessage } from "vee-validate";
+import { usePost } from "~/composables/client/post/usePost";
+import { usePostComment } from "~/composables/client/post/usePostComment";
+import { useAuthStore } from "~/stores/auth/auth";
+import { useSeo } from "~/composables/useSeo";
+import { TOLOGIN } from "~/utils/constants";
 
-const { fetchDetailBySlug, postDetail, postDetailLoading, postDetailError, fetchTags, loadHotQuick, tagList, hotQuickItems } = usePost();
+const { setPageSeo } = useSeo();
 const { postRelatedOptions } = usePostSlider();
+const { rootComments, totalComments, isLoading, isSubmitting, createComment, resetForm, loadComments } = usePostComment();
+const { tagList, hotQuickItems, postDetail, postDetailLoading, postDetailError, fetchTags, loadHotQuick, fetchDetailBySlug, trackView } = usePost();
 
-// Comments
-const { rootComments, totalComments, isLoading, isSubmitting, commentForm, createComment, resetForm, loadComments } = usePostComment();
-
+const auth = useAuthStore();
 const isTocOpen = ref(true);
 const contentWithIds = ref<string>("");
 const toc = ref<TocItem[]>([]);
+
+const replyToId = ref<number | null>(null);
+const replyToUser = ref<string | null>(null);
 
 const slug = computed(() => String(useRoute().params.slug || ""));
 const relateds = computed(() => (Array.isArray((postDetail.value as any)?.relateds) ? (postDetail.value as any).relateds : []));
@@ -227,6 +245,15 @@ onMounted(async () => {
   if (postDetail.value?.id) {
     await loadComments(postDetail.value.id);
   }
+});
+
+onBeforeRouteUpdate((to, from, next) => {
+  if (to.params.slug && to.params.slug !== from.params.slug) {
+    if (from.name) {
+      trackView(postDetail.value?.id || 0);
+    }
+  }
+  next();
 });
 
 watch(
@@ -249,9 +276,6 @@ const breadcrumbs = computed(() => [
   { label: postDetail.value?.name || slug.value, href: `/post/${slug.value}` },
 ]);
 
-const replyToId = ref<number | null>(null);
-const replyToUser = ref<string | null>(null);
-
 const handleRefresh = async () => {
   if (postDetail.value?.id) {
     await loadComments(postDetail.value.id);
@@ -260,8 +284,7 @@ const handleRefresh = async () => {
 
 const handleReply = (parentId: number) => {
   replyToId.value = parentId;
-
-  // Find the user name from the comment
+  // tìm tên ng dùng cần reply
   const findCommentUser = (comments: any[], targetId: number): string | null => {
     for (const comment of comments) {
       if (comment.id === targetId) {
@@ -275,21 +298,20 @@ const handleReply = (parentId: number) => {
     return null;
   };
 
-  replyToUser.value = findCommentUser(rootComments.value, parentId) || "Người dùng";
+  replyToUser.value = findCommentUser(rootComments.value, parentId);
 
   nextTick(() => {
     document.getElementById("comment-form")?.scrollIntoView({ behavior: "smooth" });
   });
 };
 
-// Cancel reply
+// cancel reply
 const cancelReply = () => {
   replyToId.value = null;
   replyToUser.value = null;
   resetForm();
 };
 
-// Submit comment
 const handleSubmitComment = async () => {
   if (!postDetail.value?.id) return;
 
@@ -299,9 +321,6 @@ const handleSubmitComment = async () => {
     replyToUser.value = null;
   }
 };
-
-// Dynamic SEO for post
-const { setPageSeo } = useSeo();
 
 watchEffect(() => {
   if (postDetail.value) {

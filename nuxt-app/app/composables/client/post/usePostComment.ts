@@ -6,13 +6,12 @@ import type { IPostComment } from "~/interfaces/post/comment.interface";
 import { postCommentService } from "~/services/post/comment.service";
 import { buildTree, type TreeNode } from "~/utils/nested-tree";
 
-// Validation schema for comment creation
-const commentSchema = z.object({
+const schema = z.object({
   content: z.string({ required_error: "Bạn chưa nhập nội dung bình luận" }).min(1, "Nội dung bình luận không được để trống"),
 });
 
-export type TCommentCreate = z.infer<typeof commentSchema>;
-export const commentValidationSchema = toTypedSchema(commentSchema);
+export type TCommentRequest = z.infer<typeof schema>;
+export const commentValidationSchema = toTypedSchema(schema);
 
 export const usePostComment = () => {
   const comments = ref<IPostComment[]>([]);
@@ -20,20 +19,19 @@ export const usePostComment = () => {
   const isLoading = ref(false);
   const isSubmitting = ref(false);
 
-  // Form handling
   const {
     handleSubmit,
     values: commentForm,
     resetForm,
-  } = useForm<TCommentCreate>({
-    validationSchema: toTypedSchema(commentSchema),
+  } = useForm<TCommentRequest>({
+    validationSchema: toTypedSchema(schema),
   });
 
-  // Computed
+  // analytic
   const totalComments = computed(() => comments.value.length);
   const rootComments = computed(() => commentTree.value);
 
-  // Load comments for a post
+  // Load comments for post: flattan -> tree
   const loadComments = async (postId: number) => {
     isLoading.value = true;
     try {
@@ -59,9 +57,9 @@ export const usePostComment = () => {
     });
   };
 
-  // Create new comment
+  // create cmt
   const createComment = async (postId: number, parentId?: number) => {
-    return handleSubmit(async (payload: TCommentCreate) => {
+    return handleSubmit(async (payload: TCommentRequest) => {
       isSubmitting.value = true;
       try {
         const commentData = {
@@ -72,17 +70,12 @@ export const usePostComment = () => {
         };
 
         await postCommentService.store(commentData);
-        
-        // Reload comments after successful creation
         await loadComments(postId);
-        
-        // Reset form
         resetForm();
-        
+
         return true;
       } catch (error: any) {
-        console.error("Error creating comment:", error);
-        throw error; // Re-throw để component có thể handle
+        throw error;
       } finally {
         isSubmitting.value = false;
       }
@@ -90,21 +83,14 @@ export const usePostComment = () => {
   };
 
   return {
-    // State
     comments: readonly(comments),
     commentTree: readonly(commentTree),
     isLoading: readonly(isLoading),
     isSubmitting: readonly(isSubmitting),
-
-    // Form
     commentForm,
     commentValidationSchema,
-
-    // Computed
     totalComments,
     rootComments,
-
-    // Methods
     loadComments,
     createComment,
     resetForm,

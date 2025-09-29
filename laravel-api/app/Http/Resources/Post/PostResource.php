@@ -32,6 +32,7 @@ class PostResource extends JsonResource
             'order' => (int) $this->order,
             'publish' => (int) $this->publish,
             'viewCount' => (int) $this->view_count,
+            'likeCount' => (int) $this->like_count,
             'postCatalogueId' => (int) $this->post_catalogue_id,
             'tagId' => (int) $this->tag_id,
             'creator' => $this->whenLoaded('users', [
@@ -44,15 +45,11 @@ class PostResource extends JsonResource
             'relateds' => $this->whenLoaded('relateds', function () {
                 return PostResource::collection($this->relateds);
             }),
-            // 'comments' => $this->whenLoaded('post_comments', function () {
-            //     return PostCommentResource::collection($this->post_comments);
-            // }),
             'metaTitle' => $this->meta_title,
             'metaKeyword' => $this->meta_keyword,
             'metaDescription' => $this->meta_description,
             'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
             'updatedAt' => $this->updated_at?->format('Y-m-d H:i:s'),
-            // 'deletedAt' => $this->deleted_at?->format('Y-m-d H:i:s'),
             'publishedAt' => $this->published_at ? \Carbon\Carbon::parse($this->published_at)->format('Y-m-d H:i:s') : null,
             'publishedAtHuman' => $this->published_at ? \Carbon\Carbon::parse($this->published_at)->diffForHumans() : null,
             'createdAtHuman' => $this->created_at?->diffForHumans(),

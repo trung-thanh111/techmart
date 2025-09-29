@@ -27,6 +27,7 @@ return new class extends Migration
             $table->integer('post_catalogue_id')->default(0)->nullable();
             $table->integer('tag_id')->default(0)->nullable();
             $table->integer('view_count')->default(0);
+            $table->integer('like_count')->default(0);
             $table->tinyInteger('publish')->default(2);
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
             $table->string('meta_title', 255)->nullable();

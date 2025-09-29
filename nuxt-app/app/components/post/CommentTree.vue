@@ -16,18 +16,15 @@
         <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 hidden group-hover:block transition-all duration-300 ease-in-out">
           <div class="w-full bg-white rounded-md border-0 shadow-xl font-normal ring-black/10 divide-y divide-gray-100">
             <div class="py-1">
-              <!-- Hide comment (admin only) -->
               <button v-if="canHide" @click="hideComment" class="flex items-center w-full px-4 py-2 text-xs text-gray-700 hover:bg-gray-100">
                 <i class="fas fa-eye-slash text-gray-400 text-sm mr-2"></i>
                 <span>Ẩn bình luận</span>
               </button>
-              <!-- Report (all users) -->
               <button class="flex items-center w-full px-4 py-2 text-xs text-gray-700 hover:bg-gray-100">
                 <i class="fa-solid fa-circle-exclamation text-gray-400 text-sm mr-2"></i>
                 <span>Báo cáo</span>
               </button>
             </div>
-            <!-- Delete (admin or author) -->
             <div v-if="canDelete" class="border-t border-gray-200">
               <div class="py-1">
                 <button @click="openDeleteModal" class="flex items-center w-full px-4 py-2 text-xs text-red-700 hover:bg-red-100">
@@ -55,12 +52,11 @@
       <button @click="replyToComment" class="hover:underline hover:text-sky-500">trả lời</button>
     </div>
 
-    <!-- Replies -->
+    <!-- đệ quy chính nó -> hiển thị cmt reply -->
     <div v-if="node.replies && node.replies.length" class="ml-8 space-y-4 mt-4">
-      <CommentNode v-for="child in node.replies" :key="child.id" :node="child" @refresh="emit('refresh')" @reply="emit('reply', $event)" />
+      <CommentTree v-for="child in node.replies" :key="child.id" :node="child" @refresh="emit('refresh')" @reply="emit('reply', $event)" />
     </div>
 
-    <!-- Delete Modal -->
     <div v-if="showDeleteModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div class="absolute inset-0 bg-black/50" @click="closeDeleteModal"></div>
       <div class="relative bg-white rounded-lg shadow-lg w-full max-w-xl">
@@ -100,6 +96,9 @@ const props = defineProps<{ node: any }>();
 const { isAdmin, user } = useAuth();
 const toast = useAppToast();
 
+const showDeleteModal = ref(false);
+const isLiked = ref(false);
+const likeCount = ref(props.node.like_count || 0);
 const DEFAULT = "/shared/images/defaults/avatar.jpg";
 const avatar = props.node.author?.avatar?.path ? props.node.author?.avatar?.url : DEFAULT;
 
@@ -114,21 +113,13 @@ const hideComment = async () => {
   try {
     await postCommentService.update(props.node.id, { publish: 0 });
     toast.success("Đã ẩn bình luận");
-    // Emit event to parent to refresh comments
-    emit("refresh");
+    emit("refresh"); // lăng nghe sk refresh báo cho cha biết reload lại cmt
   } catch (error) {
     toast.error("Không thể ẩn bình luận");
   }
 };
 
-// Modal state
-const showDeleteModal = ref(false);
-
-// Like state
-const isLiked = ref(false);
-const likeCount = ref(props.node.like_count || 0);
-
-// Count replies
+// đếm reply
 const replyCount = computed(() => {
   const countReplies = (node: any): number => {
     if (!node.replies || !Array.isArray(node.replies)) return 0;
@@ -141,37 +132,30 @@ const replyCount = computed(() => {
   return countReplies(props.node);
 });
 
-// Open delete modal
 const openDeleteModal = () => {
   showDeleteModal.value = true;
 };
 
-// Close delete modal
 const closeDeleteModal = () => {
   showDeleteModal.value = false;
 };
 
-// Delete comment action
 const deleteComment = async () => {
   try {
     await postCommentService.delete(props.node.id);
     toast.success("Đã xóa bình luận");
     closeDeleteModal();
-    // Emit event to parent to refresh comments
     emit("refresh");
   } catch (error) {
     toast.error("Không thể xóa bình luận");
   }
 };
 
-// Toggle like
 const toggleLike = async () => {
   try {
     if (isLiked.value) {
-      // Unlike logic here
       likeCount.value--;
     } else {
-      // Like logic here
       likeCount.value++;
     }
     isLiked.value = !isLiked.value;
@@ -180,7 +164,6 @@ const toggleLike = async () => {
   }
 };
 
-// Reply to comment
 const replyToComment = () => {
   emit("reply", props.node.id);
 };
