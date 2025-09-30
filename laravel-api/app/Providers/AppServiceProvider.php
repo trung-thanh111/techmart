@@ -53,6 +53,10 @@ use App\Services\Impl\User\UserCatalogueService;
 use App\Services\Interfaces\Auth\AuthServiceInterface;
 use App\Services\Interfaces\ImageServiceInterface;
 use App\Services\Interfaces\User\UserCatalogueServiceInterface;
+use App\Services\Interfaces\Mail\MailServiceInterface;
+use App\Services\Impl\Mail\MailService;
+use App\Services\Interfaces\EmailVerification\EmailVerificationServiceInterface;
+use App\Services\Impl\EmailVerification\EmailVerificationService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -85,6 +89,8 @@ class AppServiceProvider extends ServiceProvider
         PostCommentServiceInterface::class => PostCommentService::class,
         PostLikeServiceInterface::class => PostLikeService::class,
         PostCommentLikeServiceInterface::class => PostCommentLikeService::class,
+        MailServiceInterface::class => MailService::class,
+        EmailVerificationServiceInterface::class => EmailVerificationService::class,
     ];
 
     /**

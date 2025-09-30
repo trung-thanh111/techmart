@@ -92,7 +92,11 @@
                   <a href="#" class="text-sky-500 hover:underline">điều khoản & chính sách</a>
                 </label>
               </div>
-
+              <div class="flex justify-center">
+                <span v-if="verifyNotice" class="inline-flex items-center rounded bg-teal-100 text-teal-700 text-[10px] px-2 py-0.5 shadow border border-teal-200 select-none">
+                  {{ verifyNotice }}
+                </span>
+              </div>
               <Button
                 type="submit"
                 label="Đăng ký"
@@ -140,7 +144,7 @@ const showPassword = ref(false);
 const showConfirmPassword = ref(false);
 
 const { authOptions, registerItems } = useAuthSlider();
-const { handleRegister, isLoading } = useRegister();
+const { handleRegister, isLoading, verifyNotice } = useRegister();
 </script>
 
 <style>

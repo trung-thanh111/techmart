@@ -45,7 +45,7 @@ const opened = ref<Record<number, boolean>>({});
 const title = ref<string>("");
 const faqs = ref<any[]>([]);
 
-const { fetchBySlug, isLoading } = useFaq(undefined, false);
+const { fetchBySlug, isLoading } = useFaq();
 
 const toggle = (idx: number) => {
   opened.value[idx] = !opened.value[idx];

@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tymon\JWTAuth\Exceptions\UserNotDefinedException;
 use App\Repositories\User\UserRepository;
+use App\Services\Interfaces\EmailVerification\EmailVerificationServiceInterface;
 
 class AuthService implements AuthServiceInterface
 {
@@ -39,12 +40,14 @@ class AuthService implements AuthServiceInterface
     private $csrfTokenRepository;
     private $userRepository;
     private $refreshTokenModel;
+    private $emailVerificationService;
 
 
     public function __construct(
         RefreshTokenRepository $refreshTokenRepository,
         CsrfTokenRepository $csrfTokenRepository,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        EmailVerificationServiceInterface $emailVerificationService
     ) {
         /**
          * @var \Tymon\JwtAuth\JwtGuard // khai báo php doc cho setTTL()
@@ -54,6 +57,7 @@ class AuthService implements AuthServiceInterface
         $this->refreshTokenRepository = $refreshTokenRepository;
         $this->csrfTokenRepository = $csrfTokenRepository;
         $this->userRepository = $userRepository;
+        $this->emailVerificationService = $emailVerificationService;
     }
 
     public function authenticate(AuthRequest $request)
@@ -74,38 +78,31 @@ class AuthService implements AuthServiceInterface
 
     public function register(RegisterRequest $request)
     {
-        $rememberMe = $request->boolean('remember_me', false);
         try {
             return $this->beginTransaction()
-                ->createNewUser($request)
-                ->generateAccessToken($request, $rememberMe)
-                ->generateRefreshToken($rememberMe)
-                ->generateCsrfToken()
+                ->prepareVerification($request)
                 ->commit()
-                ->authResponse();
+                ->registerResponse();
         } catch (\Throwable $th) {
             $this->rollback();
             throw $th;
         }
     }
 
-    /**
-     * Tạo user mới và set vào auth guard
-     */
-    private function createNewUser(RegisterRequest $request): self
+    private function prepareVerification(RegisterRequest $request): self
     {
-        $userData = [
-            'name' => $request->string('name'),
-            'email' => $request->string('email'),
-            'password' => $request->string('password'),
+        $payload = [
+            'name' => (string)$request->string('name'),
+            'password' => (string)$request->string('password'),
         ];
-
-        if (!$user = $this->userRepository->create($userData)) {
-            throw new ModelNotFoundException(Lang::get('message.model_not_found'));
+        $result = $this->emailVerificationService->sendVerificationEmail(
+            (string)$request->string('email'),
+            (string)$request->string('name'),
+            $payload
+        );
+        if (!$result['success']) {
+            throw new \Exception($result['message']);
         }
-        
-        // Set user vào auth guard để generateAccessToken có thể sử dụng
-        $this->auth->setUser($user->refresh());
         return $this;
     }
 
@@ -178,6 +175,19 @@ class AuthService implements AuthServiceInterface
                 'user' => new UserResource($this->auth->user()),
             ],
             'authCookie' => Cookie::make('refreshToken', $this->refreshToken, self::REFRESH_TOKEN_TIME_TO_LIVE * 24 * 60, '/', null, null, true, false, 'Lax'),
+        ];
+    }
+
+    /**
+     * Response cho đăng ký (chưa xác thực email)
+     */
+    private function registerResponse(): array
+    {
+        return [
+            'data' => [
+                'message' => 'Xác thực thông tin. Vui lòng kiểm tra hộp thư mail!',
+                'email_verification_required' => true
+            ]
         ];
     }
 

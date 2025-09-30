@@ -27,6 +27,7 @@ use App\Http\Controllers\Api\V1\Permission\PermissionController;
 use App\Http\Controllers\Api\V1\Mail\MailController;
 use App\Http\Controllers\Api\V1\User\AddressOrderController;
 use App\Http\Controllers\Api\V1\Banner\BannerController;
+use App\Http\Controllers\Api\V1\EmailVerification\EmailVerificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,6 +48,13 @@ Route::group(['prefix' => 'v1/auth'], function () {
         Route::get('me', [AuthController::class, 'me']);
         Route::post('logout', [AuthController::class, 'logout']);
     });
+});
+
+// Email verification routes (public)
+Route::group(['prefix' => 'v1/email-verification'], function () {
+    Route::post('verify', [EmailVerificationController::class, 'verify']);
+    Route::post('resend', [EmailVerificationController::class, 'resend']);
+    Route::get('status', [EmailVerificationController::class, 'status']);
 });
 
 // Upload routes

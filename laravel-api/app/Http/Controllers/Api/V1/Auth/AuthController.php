@@ -43,7 +43,7 @@ class AuthController extends Controller
     {
         try {
             $response = $this->authService->register($request);
-            return ApiResource::ok($response['data'], Lang::get('message.register_success'))->withCookie($response['authCookie']);
+            return ApiResource::ok($response['data'], Lang::get('message.register_success'));
 
         } catch (ModelNotFoundException $e) {
             return ApiResource::message($e->getMessage(), Response::HTTP_NOT_FOUND);
