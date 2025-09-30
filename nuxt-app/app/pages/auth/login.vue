@@ -44,7 +44,7 @@
                     {{ $t("auth.form.password") }}:
                     <span class="text-red-500">*</span>
                   </label>
-                  <a class="text-right font-normal text-xs text-gray-600 hover:underline hover:text-sky-500" href="#" tabindex="-1">{{ $t("auth.form.forgot") }}</a>
+                  <NuxtLink to="/forgot-password" class="text-right font-normal text-xs text-gray-600 hover:underline hover:text-sky-500" tabindex="-1">{{ $t("auth.form.forgot") }}</NuxtLink>
                 </div>
                 <Field v-slot="{ field, errorMessage, meta }" name="password" :validate-on-input="true">
                   <div class="relative">

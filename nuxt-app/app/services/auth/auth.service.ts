@@ -6,6 +6,7 @@ import { useApi } from "~/composables/useApi";
 
 const ENDPOINT = "/api/v1/auth";
 const VERIFY_ENDPOINT = "/api/v1/email-verification";
+const FORGOT_ENDPOINT = "/api/v1/password/forgot";
 
 export const authService = {
   me: async (): Promise<IApiOk<IAuthSuccessResponse>> => {
@@ -41,5 +42,38 @@ export const authService = {
   verifyStatus: async (email: string): Promise<{ data: { verified: boolean } }> => {
     const { publicFetch } = useApi();
     return await publicFetch<any>(`${VERIFY_ENDPOINT}/status?email=${encodeURIComponent(email)}`);
+  },
+  
+  // Forgot password flow
+  forgotRequest: async (email: string): Promise<any> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<any>(`${FORGOT_ENDPOINT}/request`, {
+      method: "POST",
+      body: { email },
+    });
+  },
+
+  forgotResend: async (email: string): Promise<any> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<any>(`${FORGOT_ENDPOINT}/resend`, {
+      method: "POST",
+      body: { email },
+    });
+  },
+
+  forgotVerify: async (payload: { email: string; code: string }): Promise<any> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<any>(`${FORGOT_ENDPOINT}/verify`, {
+      method: "POST",
+      body: payload,
+    });
+  },
+
+  forgotReset: async (payload: { email: string; code: string; password: string; passwordConfirmation: string }): Promise<any> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<any>(`${FORGOT_ENDPOINT}/reset`, {
+      method: "POST",
+      body: payload,
+    });
   },
 };
