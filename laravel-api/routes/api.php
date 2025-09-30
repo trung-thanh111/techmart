@@ -28,6 +28,7 @@ use App\Http\Controllers\Api\V1\Mail\MailController;
 use App\Http\Controllers\Api\V1\User\AddressOrderController;
 use App\Http\Controllers\Api\V1\Banner\BannerController;
 use App\Http\Controllers\Api\V1\EmailVerification\EmailVerificationController;
+use App\Http\Controllers\Api\V1\Auth\ForgotPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,6 +56,14 @@ Route::group(['prefix' => 'v1/email-verification'], function () {
     Route::post('verify', [EmailVerificationController::class, 'verify']);
     Route::post('resend', [EmailVerificationController::class, 'resend']);
     Route::get('status', [EmailVerificationController::class, 'status']);
+});
+
+// Forgot password routes (public)
+Route::group(['prefix' => 'v1/password/forgot'], function () {
+    Route::post('request', [ForgotPasswordController::class, 'request']);
+    Route::post('resend', [ForgotPasswordController::class, 'resend']);
+    Route::post('verify', [ForgotPasswordController::class, 'verify']);
+    Route::post('reset', [ForgotPasswordController::class, 'reset']);
 });
 
 // Upload routes
