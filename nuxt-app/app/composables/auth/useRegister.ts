@@ -25,6 +25,7 @@ export const useRegister = () => {
   const toast = useAppToast();
   const auth = useAuthStore();
   const isLoading = ref(false);
+  const verifyNotice = ref<string | null>(null);
 
   const {
     handleSubmit,
@@ -35,20 +36,18 @@ export const useRegister = () => {
   });
 
   const handleRegister = handleSubmit(async (payload: TRegisterRequest) => {
-    console.log('Register form submitted with payload:', payload);
     isLoading.value = true;
     try {
       const res = await authService.register(payload);
-      auth.setAuth(res.data.user, {
-        accessToken: res.data.accessToken,
-        refreshToken: null,
-        csrfToken: res.data.csrfToken,
-        expireAt: res.data.expireAt,
-      });
-      toast.success("Đăng ký thành công");
-      return navigateTo(auth.isAdmin ? TODASHBOARD : TOHOME);
+      const needVerify = (res as any)?.data?.email_verification_required === true || (res as any)?.data?.data?.email_verification_required === true;
+      if (needVerify) {
+        const pendingEmail = (res as any)?.data?.user?.email || (res as any)?.data?.data?.user?.email || payload.email;
+        if (pendingEmail) localStorage.setItem("pendingEmailVerification", pendingEmail);
+        verifyNotice.value = res?.data?.message;
+        return;
+      }
     } catch (e: any) {
-      toast.error(e?.response?.data?.message || "Đăng ký thất bại");
+      verifyNotice.value = e?.response?.data?.message || "Đăng ký thất bại";
     } finally {
       isLoading.value = false;
     }
@@ -59,5 +58,6 @@ export const useRegister = () => {
     handleRegister,
     resetForm,
     isLoading,
+    verifyNotice,
   };
 };
