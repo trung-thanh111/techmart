@@ -29,6 +29,7 @@ use App\Http\Controllers\Api\V1\User\AddressOrderController;
 use App\Http\Controllers\Api\V1\Banner\BannerController;
 use App\Http\Controllers\Api\V1\EmailVerification\EmailVerificationController;
 use App\Http\Controllers\Api\V1\Auth\ForgotPasswordController;
+use App\Http\Controllers\Api\V1\Auth\ChangePasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,6 +65,11 @@ Route::group(['prefix' => 'v1/password/forgot'], function () {
     Route::post('resend', [ForgotPasswordController::class, 'resend']);
     Route::post('verify', [ForgotPasswordController::class, 'verify']);
     Route::post('reset', [ForgotPasswordController::class, 'reset']);
+});
+
+// Change password routes (protected)
+Route::middleware(['jwt:api', 'convert'])->group(function () {
+    Route::post('v1/password/change', [ChangePasswordController::class, 'changePassword']);
 });
 
 // Upload routes

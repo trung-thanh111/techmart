@@ -13,14 +13,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ForgotPasswordController extends Controller
 {
-    public function __construct(private PasswordResetServiceInterface $service)
-    {
-    }
+    public function __construct(private PasswordResetServiceInterface $service) {}
 
     public function request(ForgotPasswordRequest $request): JsonResponse
     {
         try {
-            $res = $this->service->request($request->input('email'));
+            $res = $this->service->request($request);
             if ($res['success']) {
                 return ApiResource::ok([], $res['message']);
             }
@@ -38,7 +36,7 @@ class ForgotPasswordController extends Controller
     public function verify(VerifyForgotCodeRequest $request): JsonResponse
     {
         try {
-            $res = $this->service->verify($request->input('email'), $request->input('code'));
+            $res = $this->service->verify($request);
             if ($res['success']) {
                 return ApiResource::ok([], $res['message']);
             }
@@ -51,7 +49,7 @@ class ForgotPasswordController extends Controller
     public function reset(ResetPasswordRequest $request): JsonResponse
     {
         try {
-            $res = $this->service->reset($request->input('email'), $request->input('code'), $request->input('password'));
+            $res = $this->service->reset($request);
             if ($res['success']) {
                 return ApiResource::ok([], $res['message']);
             }
@@ -61,5 +59,3 @@ class ForgotPasswordController extends Controller
         }
     }
 }
-
-

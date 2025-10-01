@@ -59,6 +59,8 @@ use App\Services\Interfaces\EmailVerification\EmailVerificationServiceInterface;
 use App\Services\Impl\EmailVerification\EmailVerificationService;
 use App\Services\Interfaces\PasswordReset\PasswordResetServiceInterface;
 use App\Services\Impl\PasswordReset\PasswordResetService;
+use App\Services\Interfaces\Auth\ChangePasswordServiceInterface;
+use App\Services\Impl\Auth\ChangePasswordService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -94,6 +96,7 @@ class AppServiceProvider extends ServiceProvider
         MailServiceInterface::class => MailService::class,
         EmailVerificationServiceInterface::class => EmailVerificationService::class,
         PasswordResetServiceInterface::class => PasswordResetService::class,
+        ChangePasswordServiceInterface::class => ChangePasswordService::class,
     ];
 
     /**

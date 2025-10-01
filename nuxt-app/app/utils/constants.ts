@@ -1,11 +1,6 @@
-export const TOLOGIN = "/auth/login";
-export const TOREGISTER = "/auth/register";
-export const TODASHBOARD = "/admin/dashboard";
-export const TOHOME = "/";
-// export const TOFORBIDDEN = "/forbidden";
-// export const TO404 = "/404";
-// export const TO500 = "/500";
 // admin route
+export const TODASHBOARD = "/admin/dashboard";
+
 export const USERCATALOGUEINDEX = "/admin/user/catalogue";
 export const USERCATALOGUECREATE = "/admin/user/catalogue/create";
 export const USERCATALOGUEUPDATE = "/admin/user/catalogue/update";
@@ -74,10 +69,35 @@ export const MAX_FILE_SIZE = 5 * 1024 * 1024;
 export const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
 
 
-// FE
+// auth 
+export const TOLOGIN = "/auth/login";
+export const TOREGISTER = "/auth/register";
+// forgot password (client)
+export const TOFORGOT = "/forgot-password";
+export const TOFORGOTOTP = "/forgot-password/otp";
+export const TOFORGOTRESET = "/forgot-password/reset";
 
+
+// FE
 export const IMAGEDEFAULT = "/shared/images/defaults/record.jpg";
+export const TOHOME = "/";
+// Profile routes
+export const PROFILEINDEX = "/profile";
+export const PROFILECHANGEPASSWORD = "/profile/change-password";
+export const PROFILEADDRESSORDER = "/profile/address_order";
+export const PROFILEORDERS = "/profile/orders";
+export const PROFILEWISHLISTS = "/profile/wishlists";
+export const PROFILEVOUCHERS = "/profile/vouchers";
+
+// Client routes
+export const TOAGENCY = "/agency";
+export const TOFAQ = "/faq";
+export const TOPOST = "/post";
+export const TOPROFILEADDRESSORDERCREATE = "/profile/address_order/create";
 
 export const PROFILEADRESSORDERINDEX = "/profile/address_order";
 export const PROFILEADRESSORDERCREATE = "/profile/address_order/create";
 export const PROFILEADRESSORDERUPDATE = "/profile/address_order/update";
+// export const TOFORBIDDEN = "/forbidden";
+// export const TO404 = "/404";
+// export const TO500 = "/500";

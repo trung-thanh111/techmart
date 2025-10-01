@@ -3,6 +3,7 @@ import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useRouter } from "vue-router";
 import { authService } from "~/services/auth/auth.service";
+import { TOLOGIN } from "~/utils/constants";
 import { useAppToast } from "~/composables/useAppToast";
 
 const resetSchema = z
@@ -46,7 +47,7 @@ export const useForgotReset = () => {
       isLoading.value = true;
       const res = await authService.forgotReset(payload);
       toast.success(res?.data?.message || "Đặt lại mật khẩu thành công");
-      await router.push({ path: "/auth/login" });
+      await router.push({ path: TOLOGIN });
     } catch (e: any) {
       toast.error(e?.response?.data?.message || "Đặt lại mật khẩu thất bại");
     } finally {

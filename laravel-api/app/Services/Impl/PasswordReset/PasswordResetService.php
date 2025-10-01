@@ -9,6 +9,7 @@ use App\Traits\HasTransaction;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ResetPasswordOtpMail;
+use Illuminate\Http\Request;
 
 class PasswordResetService implements PasswordResetServiceInterface
 {
@@ -20,8 +21,9 @@ class PasswordResetService implements PasswordResetServiceInterface
     ) {
     }
 
-    public function request(string $email): array
+    public function request(Request $request): array
     {
+        $email = $request->input('email');
         $user = $this->userRepo->findByField('email', $email);
         if (!$user) {
             return ['success' => false, 'message' => 'Email không tồn tại'];
@@ -35,13 +37,16 @@ class PasswordResetService implements PasswordResetServiceInterface
         return ['success' => true, 'message' => 'Đã gửi mã OTP tới email'];
     }
 
-    public function resend(string $email): array
+    public function resend(Request $request): array
     {
-        return $this->request($email);
+        return $this->request($request);
     }
 
-    public function verify(string $email, string $code): array
+    public function verify(Request $request): array
     {
+        $email = $request->input('email');
+        $code = $request->input('code');
+        
         $model = $this->resetRepo->findValid($email, $code);
         if (!$model) {
             return ['success' => false, 'message' => 'Mã OTP không hợp lệ hoặc đã hết hạn'];
@@ -49,10 +54,14 @@ class PasswordResetService implements PasswordResetServiceInterface
         return ['success' => true, 'message' => 'Mã OTP hợp lệ'];
     }
 
-    public function reset(string $email, string $code, string $password): array
+    public function reset(Request $request): array
     {
         try {
             $this->beginTransaction();
+
+            $email = $request->input('email');
+            $code = $request->input('code');
+            $password = $request->input('password');
 
             $model = $this->resetRepo->findValid($email, $code);
             if (!$model) {

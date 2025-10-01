@@ -2,12 +2,14 @@
 
 namespace App\Services\Interfaces\PasswordReset;
 
+use Illuminate\Http\Request;
+
 interface PasswordResetServiceInterface
 {
-    public function request(string $email): array;
-    public function resend(string $email): array;
-    public function verify(string $email, string $code): array;
-    public function reset(string $email, string $code, string $password): array;
+    public function request(Request $request): array;
+    public function resend(Request $request): array;
+    public function verify(Request $request): array;
+    public function reset(Request $request): array;
 }
 
 

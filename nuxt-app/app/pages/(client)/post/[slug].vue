@@ -11,7 +11,7 @@
         <div class="text-red-500 text-6xl mb-4">⚠️</div>
         <h2 class="text-xl font-semibold text-gray-800 mb-2">{{ $t("client.postDetail.cannotLoadPost") }}</h2>
         <p class="text-gray-600 mb-4">{{ postDetailError }}</p>
-        <NuxtLink to="/post" class="inline-block bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">{{ $t("client.postDetail.backToList") }}</NuxtLink>
+        <NuxtLink :to="TOPOST" class="inline-block bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">{{ $t("client.postDetail.backToList") }}</NuxtLink>
       </div>
     </div>
     <div v-else-if="postDetail">
@@ -160,7 +160,7 @@
                   </span>
                 </NuxtLink>
               </div>
-              <NuxtLink to="/post" class="block w-full text-center text-xs md:text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 rounded py-2 transition">{{ $t("client.postDetail.viewAll") }} ({{ (hotQuickItems || []).length }})</NuxtLink>
+              <NuxtLink :to="TOPOST" class="block w-full text-center text-xs md:text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 rounded py-2 transition">{{ $t("client.postDetail.viewAll") }} ({{ (hotQuickItems || []).length }})</NuxtLink>
             </div>
             <div class="bg-white rounded-lg p-3 md:p-4 border border-gray-200">
               <h2 class="text-base md:text-lg font-semibold text-gray-800 mb-2 md:mb-4">
@@ -208,6 +208,7 @@
 </template>
 <script setup lang="ts">
 import { Field } from "vee-validate";
+import { TOPOST } from "~/utils/constants";
 import Breadcrumb from "~/components/shared/navigation/Breadcrumb.vue";
 import CommentTree from "~/components/post/CommentTree.vue";
 import PostLikeButton from "~/components/post/PostLikeButton.vue";
