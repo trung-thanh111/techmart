@@ -74,7 +74,7 @@
         </div>
       </TransitionGroup>
       <div v-if="addresses.length < 3" class="md:mb-4 mb-2">
-        <NuxtLink to="/profile/address_order/create" class="block border-1 border-dashed border-gray-300 rounded-lg p-3 text-center hover:border-sky-400 hover:bg-sky-50 transition-colors">
+        <NuxtLink :to="TOPROFILEADDRESSORDERCREATE" class="block border-1 border-dashed border-gray-300 rounded-lg p-3 text-center hover:border-sky-400 hover:bg-sky-50 transition-colors">
           <div class="flex items-center justify-center gap-2 text-sky-600">
             <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 0 0 144c0 17.7-14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z" /></svg>
             <span class="text-sm">{{ $t('client.profile.addAddress') }}</span>
@@ -87,6 +87,7 @@
 
 <script setup lang="ts">
 import { useAddressOrder } from "~/composables/admin/user/useAddressOrder";
+import { TOPROFILEADDRESSORDERCREATE } from "~/utils/constants";
 import { useAuthStore } from "~/stores/auth/auth";
 import type { IAddressOrder } from "~/interfaces/user/address_order.interface";
 

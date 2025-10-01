@@ -73,6 +73,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, h } from "vue";
 import { useRoute } from "vue-router";
+import { PROFILEINDEX, PROFILECHANGEPASSWORD, PROFILEADDRESSORDER, PROFILEORDERS, PROFILEWISHLISTS, PROFILEVOUCHERS } from "~/utils/constants";
 
 const isSidebarOpen = ref(false);
 const isSidebarCollapsed = ref(false);
@@ -96,32 +97,32 @@ const handleResize = () => {
 
 const sidebarSections = [
   {
-    title: $t('client.sidebar.personal'),
+    title: $t("client.sidebar.personal"),
     items: [
-      { label: $t('client.sidebar.information'), to: "/profile" },
-      { label: $t('client.sidebar.changePassword'), to: "/profile/change-password" },
-      { label: $t('client.sidebar.addressOrder'), to: "/profile/address_order" },
-      { label: $t('client.sidebar.myOrders'), to: "/profile/orders" },
-      { label: $t('client.sidebar.wishlists'), to: "/profile/wishlists" },
-      { label: $t('client.sidebar.myVouchers'), to: "/profile/vouchers" },
+      { label: $t("client.sidebar.information"), to: PROFILEINDEX },
+      { label: $t("client.sidebar.changePassword"), to: PROFILECHANGEPASSWORD },
+      { label: $t("client.sidebar.addressOrder"), to: PROFILEADDRESSORDER },
+      { label: $t("client.sidebar.myOrders"), to: PROFILEORDERS },
+      { label: $t("client.sidebar.wishlists"), to: PROFILEWISHLISTS },
+      { label: $t("client.sidebar.myVouchers"), to: PROFILEVOUCHERS },
     ],
   },
   {
-    title: $t('client.sidebar.settings'),
+    title: $t("client.sidebar.settings"),
     items: [
-      { label: $t('client.sidebar.apiKeys'), to: "#" },
-      { label: $t('client.sidebar.notifications'), to: "#" },
-      { label: $t('client.sidebar.accountSecurity'), to: "#" },
-      { label: $t('client.sidebar.activityHistory'), to: "#" },
+      { label: $t("client.sidebar.apiKeys"), to: "#" },
+      { label: $t("client.sidebar.notifications"), to: "#" },
+      { label: $t("client.sidebar.accountSecurity"), to: "#" },
+      { label: $t("client.sidebar.activityHistory"), to: "#" },
     ],
   },
   {
-    title: $t('client.sidebar.support'),
+    title: $t("client.sidebar.support"),
     items: [
-      { label: $t('client.sidebar.supportCenter'), to: "#" },
-      { label: $t('client.sidebar.privacyPolicy'), to: "#" },
+      { label: $t("client.sidebar.supportCenter"), to: "#" },
+      { label: $t("client.sidebar.privacyPolicy"), to: "#" },
       {
-        label: $t('client.sidebar.logout'),
+        label: $t("client.sidebar.logout"),
         to: "#",
         class: "text-red-500 hover:bg-red-50 rounded-md",
       },
@@ -131,27 +132,27 @@ const sidebarSections = [
 
 const collapsedMenu = [
   {
-    to: "/profile",
+    to: PROFILEINDEX,
     icon: () => h("svg", { fill: "currentColor", viewBox: "0 0 448 512" }, [h("path", { d: "M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.7-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z" })]),
   },
   {
-    to: "/profile/change-password",
+    to: PROFILECHANGEPASSWORD,
     icon: () => h("svg", { fill: "currentColor", viewBox: "0 0 512 512" }, [h("path", { d: "M512 176c0 97.2-78.8 176-176 176-16.1 0-31.7-2.2-46.5-6.2l-99.7 99.7c-12.5 12.5-32.8 12.5-45.3 0l-45.3-45.3c-12.5-12.5-12.5-32.8 0-45.3l99.7-99.7C82.2 271.7 80 256.1 80 240c0-97.2 78.8-176 176-176s176 78.8 176 176z" })]),
   },
   {
-    to: "/profile/address",
+    to: PROFILEADDRESSORDER,
     icon: () => h("svg", { fill: "currentColor", viewBox: "0 0 384 512" }, [h("path", { d: "M168 0C75.1 0 0 75.1 0 168c0 87.2 135.1 303.7 146.6 320.6 6 9.2 20.8 9.2 26.8 0C248.9 471.7 384 255.2 384 168 384 75.1 308.9 0 216 0zm0 240c-39.8 0-72-32.2-72-72s32.2-72 72-72 72 32.2 72 72-32.2 72-72 72z" })]),
   },
   {
-    to: "/profile/orders",
+    to: PROFILEORDERS,
     icon: () => h("svg", { fill: "currentColor", viewBox: "0 0 512 512" }, [h("path", { d: "M512 128v256c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128c0-35.3 28.7-64 64-64h384c35.3 0 64 28.7 64 64z" })]),
   },
   {
-    to: "/profile/wishlists",
+    to: PROFILEWISHLISTS,
     icon: () => h("svg", { fill: "currentColor", viewBox: "0 0 512 512" }, [h("path", { d: "M462.3 62.7C407 7.6 324.8-10.6 256 48.6 187.2-10.6 105-7.6 49.7 62.7c-55.2 70.3-43.6 181.3 23.7 248.6l175.1 175.1c12.5 12.5 32.8 12.5 45.3 0l175.1-175.1c67.3-67.3 78.9-178.3 23.7-248.6z" })]),
   },
   {
-    to: "/profile/vouchers",
+    to: PROFILEVOUCHERS,
     icon: () => h("svg", { fill: "currentColor", viewBox: "0 0 576 512" }, [h("path", { d: "M0 160c0-17.7 14.3-32 32-32h512c17.7 0 32 14.3 32 32v32c-17.7 0-32 14.3-32 32s14.3 32 32 32v32c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32v-32c17.7 0 32-14.3 32-32S17.7 192 0 192v-32z" })]),
   },
 ];

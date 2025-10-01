@@ -37,7 +37,7 @@
 
               <p class="mt-6 text-center text-sm text-gray-600">
                 Chờ đã, tôi đã mật khẩu?
-                <a href="/login" class="text-cyan-600 hover:underline">Tại đây</a>
+                <NuxtLink :to="TOLOGIN" class="text-cyan-600 hover:underline">Tại đây</NuxtLink>
               </p>
             </div>
           </div>
@@ -49,6 +49,7 @@
 <script setup lang="ts">
 import { Field } from "vee-validate";
 import { useForgot } from "~/composables/auth/useForgot";
+import { TOLOGIN } from "~/utils/constants";
 
 definePageMeta({
   layout: "client",

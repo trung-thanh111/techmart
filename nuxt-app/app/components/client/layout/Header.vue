@@ -13,13 +13,13 @@
                 <NuxtLink to="#" class="hover:text-gray-300 transition-colors">0898109810</NuxtLink>
               </div>
             </div>
-            <NuxtLink to="/agency" class="flex items-center gap-1 hover:text-gray-300 transition-colors">
+            <NuxtLink :to="TOAGENCY" class="flex items-center gap-1 hover:text-gray-300 transition-colors">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4"><path d="M3 9l1-5h16l1 5M5 22V12H19V22M2 9h20" /></svg>
               <span>{{ $t('client.header.dealerSystem') }}</span>
             </NuxtLink>
           </div>
           <div class="hidden md:flex items-center gap-4">
-            <NuxtLink to="/faq" class="flex items-center gap-1 hover:text-gray-300 transition-colors">
+            <NuxtLink :to="TOFAQ" class="flex items-center gap-1 hover:text-gray-300 transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="w-4 h-4">
                 <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM169.8 165.3c7.9-22.3 29.1-37.3 52.8-37.3l58.3 0c34.9 0 63.1 28.3 63.1 63.1c0 22.6-12.1 43.5-31.7 54.8L280 264.4c-.2 13-10.9 23.6-24 23.6c-13.3 0-24-10.7-24-24l0-13.5c0-8.6 4.6-16.5 12.1-20.8l44.3-25.4c4.7-2.7 7.6-7.7 7.6-13.1c0-8.4-6.8-15.1-15.1-15.1l-58.3 0c-3.4 0-6.4 2.1-7.5 5.3l-.4 1.2c-4.4 12.5-18.2 19-30.6 14.6s-19-18.2-14.6-30.6l.4-1.2zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z" />
               </svg>
@@ -140,12 +140,12 @@
                 <div class="w-full bg-white rounded-md border-0 shadow-xl font-normal ring-black/10 divide-y divide-gray-100">
                   <div class="px-4 py-2 text-sm text-gray-500 font-semibold">{{ $t('client.header.hello', { name: user?.name }) }}</div>
                   <div class="py-1">
-                    <NuxtLink to="/profile" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    <NuxtLink :to="PROFILEINDEX" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-gray-400 mr-2">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                         <circle cx="12" cy="7" r="4" />
                       </svg>
-                      <span>{{ $t('client.header.personalInfo') }}</span>
+                      <span>{{ $t('client.header.info') }}</span>
                     </NuxtLink>
                     <NuxtLink to="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-gray-400 mr-2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
@@ -187,7 +187,7 @@
                       <span class="absolute right-4 top-1/2 transform -translate-y-1/2 text-xs bg-green-100 text-green-600 px-2 py-0.5 rounded-full">{{ $t('client.header.new') }}</span>
                     </NuxtLink>
 
-                    <NuxtLink v-if="authStore.isAdmin" to="/admin/dashboard" class="flex items-center px-4 py-2 text-sm text-gray-500 hover:bg-gray-100">
+                    <NuxtLink v-if="authStore.isAdmin" :to="TODASHBOARD" class="flex items-center px-4 py-2 text-sm text-gray-500 hover:bg-gray-100">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" fill="currentColor" class="w-4 h-4 mr-2">
                         <path d="M256.1 161.1L256.1 210.7L256.6 211.2C263.1 128.8 332 64 416.1 64C436.2 64 455.5 67.7 473.2 74.5C483.2 78.3 485 91 477.5 98.6L388.8 187.3C385.8 190.3 384.1 194.4 384.1 198.6L384.1 240C384.1 248.8 391.3 256 400.1 256L441.5 256C445.7 256 449.8 254.3 452.8 251.3L541.5 162.6C549.1 155 561.8 156.9 565.6 166.9C572.4 184.6 576.1 203.9 576.1 224C576.1 284.6 542.4 337.4 492.6 364.5L574.1 446C592.8 464.7 592.8 495.1 574.1 513.9L514 574C495.3 592.7 464.9 592.7 446.1 574L320.1 448C292.7 420.6 286.5 380.1 301.6 346.7L210.9 256L161.3 256C150.6 256 140.6 250.7 134.7 241.8L55.4 122.9C51.2 116.6 52 108.1 57.4 102.7L102.8 57.3C108.2 51.9 116.6 51.1 123 55.3L241.9 134.5C250.8 140.4 256.1 150.4 256.1 161.1zM247.6 360.6C241.3 397.6 250 436.7 274 468L179 562.9C150.9 591 105.3 591 77.2 562.9C49.1 534.8 49.1 489.2 77.2 461.1L212.6 325.7L247.6 360.7z" />
                       </svg>
@@ -650,7 +650,7 @@
 <script setup>
 import { ref, computed } from "vue";
 import { storeToRefs } from "pinia";
-import { TOLOGIN } from "~/utils/constants";
+import { TOLOGIN, TOAGENCY, TOFAQ, PROFILEINDEX, TODASHBOARD } from "~/utils/constants";
 import logo from "~/assets/shared/images/logo/logo-website.png";
 import codImage from "~/assets/shared/images/logo/cod.png";
 import iphoneImage from "~/assets/client/images/products/iphone-16-pro-max.webp";

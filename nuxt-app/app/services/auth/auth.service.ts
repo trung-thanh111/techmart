@@ -7,6 +7,7 @@ import { useApi } from "~/composables/useApi";
 const ENDPOINT = "/api/v1/auth";
 const VERIFY_ENDPOINT = "/api/v1/email-verification";
 const FORGOT_ENDPOINT = "/api/v1/password/forgot";
+const CHANGE_PASSWORD_ENDPOINT = "/api/v1/password/change";
 
 export const authService = {
   me: async (): Promise<IApiOk<IAuthSuccessResponse>> => {
@@ -72,6 +73,15 @@ export const authService = {
   forgotReset: async (payload: { email: string; code: string; password: string; passwordConfirmation: string }): Promise<any> => {
     const { publicFetch } = useApi();
     return await publicFetch<any>(`${FORGOT_ENDPOINT}/reset`, {
+      method: "POST",
+      body: payload,
+    });
+  },
+
+  // Change password
+  changePassword: async (payload: { passwordOld: string; password: string; passwordConfirmation: string }): Promise<any> => {
+    const { privateFetch } = useApi();
+    return await privateFetch<any>(`${CHANGE_PASSWORD_ENDPOINT}`, {
       method: "POST",
       body: payload,
     });

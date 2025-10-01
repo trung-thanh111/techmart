@@ -44,7 +44,7 @@
                     {{ $t("auth.form.password") }}:
                     <span class="text-red-500">*</span>
                   </label>
-                  <NuxtLink to="/forgot-password" class="text-right font-normal text-xs text-gray-600 hover:underline hover:text-sky-500" tabindex="-1">{{ $t("auth.form.forgot") }}</NuxtLink>
+                  <NuxtLink :to="TOFORGOT" class="text-right font-normal text-xs text-gray-600 hover:underline hover:text-sky-500" tabindex="-1">{{ $t("auth.form.forgot") }}</NuxtLink>
                 </div>
                 <Field v-slot="{ field, errorMessage, meta }" name="password" :validate-on-input="true">
                   <div class="relative">
@@ -98,7 +98,7 @@
 
 <script setup lang="ts">
 import { Field } from "vee-validate";
-import { TOREGISTER } from "~/utils/constants";
+import { TOREGISTER, TOFORGOT } from "~/utils/constants";
 import { useLogin } from "~/composables/auth/useLogin";
 import { useAuthSlider } from "~/composables/useAuthSlider";
 

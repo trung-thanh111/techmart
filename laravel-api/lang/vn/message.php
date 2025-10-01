@@ -34,4 +34,7 @@ return [
     'user_undefined' => "Không thể xác định người dùng",
     'user_permission_not_granted' => "Người dùng chưa được cấp quyền truy cập vào tài nguyên này",
     'existing_image' => 'Ảnh đã tồn tại: ',
+    'user_not_logged_in' => 'Người dùng chưa đăng nhập',
+    'change_password_success' => 'Đổi mật khẩu thành công',
+    'change_password_error' => 'Có lỗi xảy ra khi đổi mật khẩu',
 ];

@@ -1,16 +1,142 @@
 <template>
-  <div>
-    <h1 class="text-xl md:text-2xl font-semibold text-gray-900 mb-4">{{ $t('client.profile.changePassword') }}</h1>
-    <!-- TODO: form đổi mật khẩu thực tế của bạn -->
-    <p class="text-sm text-gray-600">{{ $t('client.profile.changePasswordContent') }}</p>
+  <div class="w-full">
+    <h2 class="text-xl md:text-2xl font-semibold text-gray-600 mb-1">Thay đổi mật khẩu!</h2>
+    <p class="text-xs text-gray-500 md:mb-10">Hãy đảm bảo rằng mật khẩu của bạn đủ dài và không tiết lộ với bất kì ai.</p>
+    <form class="space-y-4 md:space-y-6" @submit.prevent.stop="onSubmit">
+      <div class="grid grid-cols-1 lg:grid-cols-10 gap-4">
+        <div class="lg:col-span-6 space-y-4">
+          <div class="relative">
+            <label for="passwordOld" class="block text-sm font-medium text-gray-700 mb-2">
+              Mật khẩu cũ:
+              <span class="text-red-500">*</span>
+            </label>
+            <Field v-slot="{ field, errorMessage, meta }" name="passwordOld" :validate-on-input="true">
+              <div class="relative">
+                <input v-bind="field" id="passwordOld" :type="showPasswordOld ? 'text' : 'password'" placeholder="Nhập mật khẩu cũ" :class="['w-full border rounded px-3 py-2 text-sm focus:outline-none pr-10 transition-colors', errorMessage && meta.touched ? 'border-red-500 focus:border-red-500' : 'border-gray-300 focus:border-sky-500']" />
+                <button type="button" class="absolute right-3 top-2 text-sm text-gray-500 hover:text-gray-700" @click="showPasswordOld = !showPasswordOld" tabindex="-1">
+                  <i :class="showPasswordOld ? 'fas fa-eye-slash' : 'fas fa-eye'" class="w-4 h-4"></i>
+                </button>
+              </div>
+              <small v-if="errorMessage && meta.touched" class="error-message">
+                {{ errorMessage }}
+              </small>
+            </Field>
+          </div>
+          <div class="relative">
+            <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+              Mật khẩu:
+              <span class="text-red-500">*</span>
+            </label>
+            <Field v-slot="{ field, errorMessage, meta }" name="password" :validate-on-input="true">
+              <div class="relative">
+                <input v-bind="field" id="password" :type="showPassword ? 'text' : 'password'" placeholder="Nhập mật khẩu mới" :class="['w-full border rounded px-3 py-2 text-sm focus:outline-none pr-10 transition-colors', errorMessage && meta.touched ? 'border-red-500 focus:border-red-500' : 'border-gray-300 focus:border-sky-500']" />
+                <button type="button" class="absolute right-3 top-2 text-sm text-gray-500 hover:text-gray-700" @click="showPassword = !showPassword" tabindex="-1">
+                  <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'" class="w-4 h-4"></i>
+                </button>
+              </div>
+              <small v-if="errorMessage && meta.touched" class="error-message">
+                {{ errorMessage }}
+              </small>
+            </Field>
+          </div>
+          <div class="relative">
+            <label for="passwordConfirmation" class="block text-sm font-medium text-gray-700 mb-2">
+              Xác nhận mật khẩu:
+              <span class="text-red-500">*</span>
+            </label>
+            <Field v-slot="{ field, errorMessage, meta }" name="passwordConfirmation" :validate-on-input="true">
+              <div class="relative">
+                <input v-bind="field" id="passwordConfirmation" :type="showConfirmPassword ? 'text' : 'password'" placeholder="Xác nhận mật khẩu mới" :class="['w-full border rounded px-3 py-2 text-sm focus:outline-none pr-10 transition-colors', errorMessage && meta.touched ? 'border-red-500 focus:border-red-500' : 'border-gray-300 focus:border-sky-500']" />
+                <button type="button" class="absolute right-3 top-2 text-sm text-gray-500 hover:text-gray-700" @click="showConfirmPassword = !showConfirmPassword" tabindex="-1">
+                  <i :class="showConfirmPassword ? 'fas fa-eye-slash' : 'fas fa-eye'" class="w-4 h-4"></i>
+                </button>
+              </div>
+              <small v-if="errorMessage && meta.touched" class="error-message">
+                {{ errorMessage }}
+              </small>
+            </Field>
+          </div>
+          <div class="flex justify-end gap-3 mt-4 sticky bottom-6 z-50">
+            <Button
+              type="submit"
+              label="Xác nhận"
+              :loading="isSubmitting"
+              unstyled
+              class="max-w-[160px] text-sm py-1.5 px-4 rounded shadow-sm text-white bg-teal-500 hover:bg-teal-600 focus:outline-none mt-5 disabled:opacity-50"
+              :pt="{
+                loadingicon: 'w-3 h-3 mr-2 mt-1',
+              }"
+            />
+          </div>
+          <p class="mt-6 text-center text-sm text-gray-600">
+            O my god, tôi quê mật khẩu rồi?
+              <NuxtLink :to="TOFORGOT" class="text-cyan-600 hover:underline">Tại đây</NuxtLink>
+          </p>
+        </div>
+        <div class="lg:col-span-4 bg-gray-100 rounded-lg p-4 space-y-2 text-sm">
+          <p class="text-gray-700 font-normal">Mật khẩu nên có:</p>
+          <ul class="space-y-1">
+            <li class="flex items-center gap-2" :class="hasLen ? 'text-emerald-600' : 'text-[#f06548]'">
+              <span class="w-4 text-center">{{ hasLen ? "✔" : "✖" }}</span>
+              Tối thiểu
+              <span class="font-medium">8 ký tự</span>
+            </li>
+            <li class="flex items-center gap-2" :class="hasLower ? 'text-emerald-600' : 'text-[#f06548]'">
+              <span class="w-4 text-center">{{ hasLower ? "✔" : "✖" }}</span>
+              Ít nhất
+              <span class="font-medium">1 chữ thường</span>
+              (a-z)
+            </li>
+            <li class="flex items-center gap-2" :class="hasUpper ? 'text-emerald-600' : 'text-[#f06548]'">
+              <span class="w-4 text-center">{{ hasUpper ? "✔" : "✖" }}</span>
+              Ít nhất
+              <span class="font-medium">1 chữ hoa</span>
+              (A-Z)
+            </li>
+            <li class="flex items-center gap-2" :class="hasDigit ? 'text-emerald-600' : 'text-[#f06548]'">
+              <span class="w-4 text-center">{{ hasDigit ? "✔" : "✖" }}</span>
+              Ít nhất
+              <span class="font-medium">1 số</span>
+              (0-9)
+            </li>
+          </ul>
+        </div>
+      </div>
+    </form>
   </div>
 </template>
-
 <script setup lang="ts">
-// kế thừa layout + middleware từ parent /profile
+import { Field } from "vee-validate";
+import { useChangePassword } from "~/composables/auth/useChangePassword";
+import { TOFORGOT } from "~/utils/constants";
+
+definePageMeta({
+  layout: "client",
+});
+
+const showPasswordOld = ref(false);
+const showPassword = ref(false);
+const showConfirmPassword = ref(false);
+const { onSubmit, isSubmitting, values } = useChangePassword();
+
+const passwordValue = computed(() => values.password || "");
+
+const hasLen = computed(() => passwordValue.value.length >= 8);
+const hasLower = computed(() => /[a-z]/.test(passwordValue.value));
+const hasUpper = computed(() => /[A-Z]/.test(passwordValue.value));
+const hasDigit = computed(() => /\d/.test(passwordValue.value));
 </script>
 
-<style scoped>
+<style>
+.error-message {
+  color: red;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.transition-colors {
+  transition-property: color, background-color, border-color;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
 </style>
-
-

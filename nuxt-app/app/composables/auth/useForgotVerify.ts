@@ -3,6 +3,7 @@ import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useRouter } from "vue-router";
 import { authService } from "~/services/auth/auth.service";
+import { TOFORGOTRESET } from "~/utils/constants";
 import { useAppToast } from "~/composables/useAppToast";
 
 const verifySchema = z.object({
@@ -51,7 +52,7 @@ export const useForgotVerify = () => {
       isLoading.value = true;
       const res = await authService.forgotVerify(payload);
       toast.success(res?.data?.message || "Xác thực thành công");
-      await router.push({ path: "/forgot-password/reset", query: { email: payload.email, code: payload.code } });
+          await router.push({ path: TOFORGOTRESET, query: { email: payload.email, code: payload.code } });
     } catch (e: any) {
       toast.error(e?.response?.data?.message || "Mã OTP không hợp lệ");
     } finally {
