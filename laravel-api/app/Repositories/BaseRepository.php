@@ -24,8 +24,13 @@ class BaseRepository
 
     public function paginate(array $specs = []): Collection | LengthAwarePaginator | null
     {
-        return $this->model
-            ->orderBy($specs['sort'][0], $specs['sort'][1]) // mảng sort thứ o là cột, thứ 1 là kiểu sort
+        $query = $this->model;
+        for ($i = 0; $i < count($specs['sort']); $i += 2) {
+            if (isset($specs['sort'][$i]) && isset($specs['sort'][$i + 1])) {
+                $query = $query->orderBy($specs['sort'][$i], $specs['sort'][$i + 1]);
+            }
+        }
+        return $query
             ->withRelation($specs['with']) // được định nghĩa trong hasQuery
             ->keyword($specs['keyword'])
             ->simple($specs['filters']['simple'])

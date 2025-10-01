@@ -108,4 +108,9 @@ export const postService = {
     const { publicFetch } = useApi();
     return await publicFetch<IApiOk<IPost>>(`${ENDPOINT}/post/${slug}`);
   },
+
+  getMostLiked: async (): Promise<IApiOk<IPost[]>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPost[]>>(`${ENDPOINT}/posts?type=all&publish=2&sort=like_count,desc&limit=6`);
+  },
 };

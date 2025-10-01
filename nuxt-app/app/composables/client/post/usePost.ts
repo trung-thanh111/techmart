@@ -145,7 +145,7 @@ export const usePost = () => {
     if (latestLoading.value) return;
     latestLoading.value = true;
     try {
-      const res = await fetchPaginate({ keyword: "", perpage: 5, publish: null, sort: "published_at,desc" }, latestPage.value, 5);
+      const res = await fetchPaginate({ keyword: "", perpage: 5, publish: 2, sort: "published_at,desc" }, latestPage.value, 5);
       const pg = res?.data;
       if (pg) {
         latestItems.value = [...latestItems.value, ...pg.data];
@@ -211,6 +211,23 @@ export const usePost = () => {
     }
   };
 
+  const mostLikedItems = ref<IPost[]>([]);
+  const mostLikedLoading = ref(false);
+
+  const fetchMostLiked = async (): Promise<IPost[]> => {
+    mostLikedLoading.value = true;
+    try {
+      const response = await postService.getMostLiked();
+      mostLikedItems.value = response.data ?? [];
+      return mostLikedItems.value;
+    } catch (error: any) {
+      console.error("Lỗi khi load most liked posts:", error);
+      throw error;
+    } finally {
+      mostLikedLoading.value = false;
+    }
+  };
+
   return {
     isLoading,
     paginate,
@@ -232,6 +249,8 @@ export const usePost = () => {
     postDetail,
     postDetailLoading,
     postDetailError,
+    mostLikedItems,
+    mostLikedLoading,
     fetchPaginate,
     fetchList,
     fetchTags,
@@ -241,6 +260,7 @@ export const usePost = () => {
     fetchPostCatalogues,
     fetchHotCataloguePosts,
     fetchPostsByCatalogueId,
+    fetchMostLiked,
     trackView,
   };
 };

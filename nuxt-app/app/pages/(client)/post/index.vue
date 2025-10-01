@@ -9,7 +9,7 @@
               <div class="absolute inset-0 bg-white"></div>
               <div class="relative p-4 md:p-8 flex flex-col md:flex-row items-center">
                 <div class="flex-1 text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] animate-glow mb-6 md:mb-0 md:pr-8">
-                  <span class="inline-block px-3 py-1 bg-gray-200 text-red-500 rounded-full text-xs md:text-sm font-medium mb-3 md:mb-4">{{ $t('client.post.featured') }}</span>
+                  <span class="inline-block px-3 py-1 bg-gray-200 text-red-500 rounded-full text-xs md:text-sm font-medium mb-3 md:mb-4">{{ $t("client.post.featured") }}</span>
                   <h3 class="text-2xl md:text-4xl font-bold mb-3 md:mb-4 leading-tight">
                     {{ featuredPostItem.name }}
                   </h3>
@@ -17,7 +17,7 @@
                     {{ featuredPostItem.description }}
                   </p>
                   <div class="flex items-center text-gray-600 gap-2">
-                    <span class="text-xs md:text-sm">{{ $t('client.post.author') }}: {{ featuredPostItem.creator?.name }}</span>
+                    <span class="text-xs md:text-sm">{{ $t("client.post.author") }}: {{ featuredPostItem.creator?.name }}</span>
                     <span class="mx-1 md:mx-2">•</span>
                     <span class="text-xs md:text-sm">
                       {{ featuredPostItem.createdAtHuman }}
@@ -77,27 +77,27 @@
       <div class="mb-4 md:mb-8">
         <div class="flex flex-wrap justify-between items-center gap-2">
           <div>
-            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-lg md:text-2xl font-bold">{{ $t('client.post.categories') }}</h2>
+            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-lg md:text-2xl font-bold">{{ $t("client.post.categories") }}</h2>
             <div class="h-1 max-w-64 my-2 relative">
               <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-white via-green-300 to-green-300"></div>
             </div>
           </div>
           <div class="group flex items-center gap-2">
-            <a href="#" class="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] font-medium after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#007c8b] after:to-[#00b88c] after:transition-all after:duration-300 group-hover:after:w-full">{{ $t('client.post.viewAll') }}</a>
+            <NuxtLink to="#" class="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] font-medium after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#007c8b] after:to-[#00b88c] after:transition-all after:duration-300 group-hover:after:w-full">{{ $t("client.post.viewAll") }}</NuxtLink>
           </div>
         </div>
-        <p class="text-gray-600 mt-1 md:mt-2 max-w-2xl text-xs md:text-sm">{{ $t('client.post.categoriesDesc') }}</p>
+        <p class="text-gray-600 mt-1 md:mt-2 max-w-2xl text-xs md:text-sm">{{ $t("client.post.categoriesDesc") }}</p>
       </div>
       <Splide :options="miniCategoryOptions" id="mini-category-slider">
         <SplideSlide v-for="postCatalogueItem in postCatalogueList" :key="postCatalogueItem.id" class="shadow-lg">
-          <a href="#" class="block">
+          <NuxtLink :to="`/post/category/${postCatalogueItem.slug}`" class="block">
             <div class="mini-category-item" style="height: 180px; width: 120px">
               <NuxtImg :src="postCatalogueItem.image?.path ? postCatalogueItem.image?.url ?? '' : IMAGEDEFAULT" loading="lazy" class="rounded-md" alt="{{ postCatalogueItem.name }}" />
               <div class="mini-category-text">
                 <span class="line-clamp-2">{{ postCatalogueItem.name }}</span>
               </div>
             </div>
-          </a>
+          </NuxtLink>
         </SplideSlide>
       </Splide>
     </section>
@@ -106,29 +106,27 @@
       <div class="mb-4 md:mb-5">
         <div class="flex justify-between items-center gap-2">
           <div>
-            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-lg md:text-2xl font-bold">{{ $t('client.post.favorites') }}</h2>
+            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-lg md:text-2xl font-bold">{{ $t("client.post.favorites") }}</h2>
           </div>
         </div>
       </div>
-      <Splide :options="postHotOptions" id="post-hot-slider">
-        <SplideSlide>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-            <a v-for="id in 4" :key="id" href="#" class="flex items-center gap-2 md:gap-3 p-2 md:p-3 rounded-md hover:bg-gray-50 transition">
-              <div class="text-2xl md:text-4xl font-bold text-gray-500">#{{ id }}</div>
-              <div class="flex-1">
-                <p class="text-sm md:text-lg font-medium text-gray-800 leading-snug hover:text-cyan-600 transition line-clamp-2">Toshiba lần đầu ra mắt máy rửa chén tại Việt Nam: Có 3 model, sấy khí nóng, tự hé cửa và gõ để mở</p>
-                <p class="text-xs md:text-sm text-gray-500 mt-1">Anh Tú.</p>
-              </div>
-            </a>
+      <div v-if="mostLikedLoading" class="text-sm text-gray-500 p-2">{{ $t("client.post.loading") }}</div>
+      <div v-else-if="!mostLikedItems || mostLikedItems.length === 0" class="text-sm text-gray-500 p-2">{{ $t("client.post.noPosts") }}</div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+        <NuxtLink v-for="(post, index) in mostLikedItems" :key="post.id" :to="`/post/${post.slug}`" class="flex items-center gap-2 md:gap-3 p-2 md:p-3 rounded-md hover:bg-gray-50 transition">
+          <div class="text-2xl md:text-4xl font-bold text-gray-500">#{{ index + 1 }}</div>
+          <div class="flex-1">
+            <p class="text-sm md:text-lg font-medium text-gray-800 leading-snug hover:text-cyan-600 transition line-clamp-2">{{ post.name }}</p>
+            <p class="text-xs md:text-sm text-gray-500 mt-1">{{ post.creator?.name }}</p>
           </div>
-        </SplideSlide>
-      </Splide>
+        </NuxtLink>
+      </div>
     </section>
 
     <section class="max-w-[1440px] mx-auto p-2 md:p-4 bg-white rounded-md shadow mb-2 md:mb-6">
-      <h2 class="inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] text-lg md:text-2xl font-bold mb-3 md:mb-4">{{ $t('client.post.productPosts') }}</h2>
-      <div v-if="byCatalogueLoading[3]" class="text-sm text-gray-500 p-2">{{ $t('client.post.loading') }}</div>
-      <div v-else-if="!byCatalogueCache[3] || byCatalogueCache[3].length === 0" class="text-sm text-gray-500 p-2">{{ $t('client.post.noPosts') }}</div>
+      <h2 class="inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] text-lg md:text-2xl font-bold mb-3 md:mb-4">{{ $t("client.post.productPosts") }}</h2>
+      <div v-if="byCatalogueLoading[3]" class="text-sm text-gray-500 p-2">{{ $t("client.post.loading") }}</div>
+      <div v-else-if="!byCatalogueCache[3] || byCatalogueCache[3].length === 0" class="text-sm text-gray-500 p-2">{{ $t("client.post.noPosts") }}</div>
       <Splide v-else :options="postProductOptions" id="post-product-slider">
         <SplideSlide v-for="post in byCatalogueCache[3]" :key="post.id">
           <NuxtLink :to="`/post/${post.slug}`" class="relative rounded-xl overflow-hidden border border-gray-100 hover:border-cyan-200 hover:shadow-xl transition-all block">
@@ -144,7 +142,7 @@
     </section>
 
     <section class="bg-white shadow-md rounded-md py-2 md:py-3 px-2 md:px-6 mb-2 md:mb-6">
-      <h2 class="inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] text-lg md:text-2xl font-bold mb-3 md:mb-4">{{ $t('client.post.dailyNews') }}</h2>
+      <h2 class="inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] text-lg md:text-2xl font-bold mb-3 md:mb-4">{{ $t("client.post.dailyNews") }}</h2>
       <div class="grid grid-cols-12 gap-3 md:gap-4">
         <div class="col-span-12 lg:col-span-9">
           <div class="space-y-4 md:space-y-6">
@@ -165,13 +163,13 @@
           </div>
           <div class="mt-3 md:mt-5 flex justify-center">
             <button v-if="latestPage <= latestLastPage" class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 text-xs md:text-sm disabled:opacity-60" :disabled="isLoading || latestLoading" @click="loadLatest()">
-              {{ latestLoading ? $t('client.post.loadingMore') : $t('client.post.loadMore') }}
+              {{ latestLoading ? $t("client.post.loadingMore") : $t("client.post.loadMore") }}
             </button>
           </div>
         </div>
         <div class="col-span-12 lg:col-span-3">
           <div class="bg-white rounded-lg p-3 md:p-4 border border-gray-200 mb-3 md:mb-5">
-            <h2 class="text-base md:text-lg font-semibold text-gray-800 mb-2 md:mb-4">{{ $t('client.post.quickView') }}</h2>
+            <h2 class="text-base md:text-lg font-semibold text-gray-800 mb-2 md:mb-4">{{ $t("client.post.quickView") }}</h2>
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-2 gap-2 mb-3 md:mb-4">
               <NuxtLink v-for="post in hotQuickItems" :key="post.id" :to="`/post/${post.slug}`" class="group block">
                 <NuxtImg :src="post.image?.path ? post.image?.url ?? '' : IMAGEDEFAULT" :alt="post.name" class="rounded-md object-cover w-full h-16 md:w-[145px] md:h-[80px]" loading="lazy" />
@@ -180,14 +178,14 @@
             </div>
             <div class="flex justify-center">
               <button v-if="hotQuickPage <= hotQuickLastPage" class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 text-xs md:text-sm disabled:opacity-60" :disabled="isLoading || hotQuickLoading" @click="loadHotQuick()">
-                {{ hotQuickLoading ? $t('client.post.loadingMore') : $t('client.post.loadMore') }}
+                {{ hotQuickLoading ? $t("client.post.loadingMore") : $t("client.post.loadMore") }}
               </button>
             </div>
           </div>
           <div class="bg-white rounded-lg p-3 md:p-4 border border-gray-200">
             <h2 class="text-base md:text-lg font-semibold text-gray-800 mb-2 md:mb-4">
               <span class="text-sky-600">#</span>
-              {{ $t('client.post.tags') }}
+              {{ $t("client.post.tags") }}
             </h2>
             <div class="flex flex-wrap gap-2">
               <NuxtLink to="" v-for="tagItem in tagList" :key="tagItem.id" class="px-2 md:px-3 py-1 text-xs md:text-[12px] bg-[#d9dfe3] max-w-max rounded font-semibold text-[#7281a3]">#{{ tagItem.name }}</NuxtLink>
@@ -203,18 +201,13 @@ import { usePostSlider } from "~/composables/usePostSlider";
 import { usePost } from "~/composables/client/post/usePost";
 import Breadcrumb from "~/components/shared/navigation/Breadcrumb.vue";
 
-const { isLoading, fetchList, loadLatest, latestItems, latestPage, latestLastPage, latestLoading, loadHotQuick, hotQuickItems, hotQuickPage, hotQuickLastPage, hotQuickLoading, tagList, fetchTags, fetchPostCatalogues, postCatalogueList, fetchHotCataloguePosts, hotCataloguePosts, fetchPostsByCatalogueId, byCatalogueCache, byCatalogueLoading } = usePost();
-const { postSlideHotOptions, miniCategoryOptions, postHotOptions, postProductOptions } = usePostSlider();
+const { isLoading, fetchList, loadLatest, latestItems, latestPage, latestLastPage, latestLoading, loadHotQuick, hotQuickItems, hotQuickPage, hotQuickLastPage, hotQuickLoading, tagList, fetchTags, fetchPostCatalogues, postCatalogueList, fetchHotCataloguePosts, fetchPostsByCatalogueId, byCatalogueCache, byCatalogueLoading, mostLikedItems, mostLikedLoading, fetchMostLiked } = usePost();
+const { postSlideHotOptions, miniCategoryOptions, postProductOptions } = usePostSlider();
 const featuredPosts = await fetchList("featured");
 const featuredPostLimits = await fetchList("featuredLimit");
-await fetchTags();
-await fetchPostCatalogues();
-await fetchHotCataloguePosts();
-await fetchPostsByCatalogueId(3);
-await loadLatest();
-await loadHotQuick();
+await Promise.all([fetchTags(), fetchPostCatalogues(), fetchHotCataloguePosts(), fetchPostsByCatalogueId(3), loadLatest(), loadHotQuick(), fetchMostLiked()]);
 
-const breadcrumbs = [{ label: $t('client.post.breadcrumb'), href: "/post" }];
+const breadcrumbs = [{ label: $t("client.post.breadcrumb"), href: "/post" }];
 definePageMeta({
   layout: "client",
 });

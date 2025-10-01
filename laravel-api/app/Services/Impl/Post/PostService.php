@@ -16,8 +16,9 @@ class PostService extends BaseService implements PostServiceInterface
     protected $repository;
     private const PIPELINE = 'default';
 
-    protected $simpleFilter = ['publish'];
+    protected $simpleFilter = ['publish', 'post_catalogue_id', 'tag_id'];
     protected $complexFilter = ['id'];
+    protected $sort = ['like_count', 'desc', 'id', 'desc'];
 
     protected $with = ['post_catalogues', 'post_tags', 'relateds'];
     protected $relationFilter = ['post_catalogues', 'post_tags'];
