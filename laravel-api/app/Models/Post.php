@@ -53,6 +53,16 @@ class Post extends Model
         'users'
     ];
 
+    /**
+     * Booted events
+     */
+    protected static function booted(): void
+    {
+        static::created(function (Post $post) {
+            Post::where('id', $post->post_id)->increment('like_count');
+        });
+    }
+
     public function post_catalogues(): BelongsToMany
     {
         return $this->belongsToMany(PostCatalogue::class, 'post_catalogue_post');
@@ -76,5 +86,10 @@ class Post extends Model
     public function post_comments(): HasMany
     {
         return $this->hasMany(PostComment::class, 'post_id', 'id');
+    }
+
+    public function post_likes(): HasMany
+    {
+        return $this->hasMany(PostLike::class, 'post_id', 'id');
     }
 }

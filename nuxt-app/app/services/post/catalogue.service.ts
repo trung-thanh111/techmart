@@ -65,4 +65,9 @@ export const postCatalogueService = {
       params,
     });
   },
+
+  showBySlug: async (slug: string): Promise<IApiOk<IPostCatalogue>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPostCatalogue>>(`${ENDPOINT}/post/category/${slug}`);
+  },
 };
