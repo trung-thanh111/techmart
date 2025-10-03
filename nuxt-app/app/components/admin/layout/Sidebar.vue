@@ -73,6 +73,32 @@
             </div>
           </li>
           <li class="nav-item">
+            <a class="nav-link menu-link" href="#sidebarPromotions" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarPromotions">
+              <i class="ri-pages-line"></i>
+              <span data-key="t-product-pages">{{ $t("admin.sidebar.promotions") }}</span>
+            </a>
+            <div class="collapse menu-dropdown" id="sidebarPromotions">
+              <ul class="nav nav-sm flex-column">
+                <li class="nav-item">
+                  <NuxtLink to="/admin/promotion/catalogue" class="nav-link" data-key="t-promotion-catelogue">{{ $t("admin.sidebar.promotionCatalogue") }}</NuxtLink>
+                </li>
+                <li class="nav-item">
+                  <a href="#sidebarPromotion" class="nav-link menu-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarPromotion" data-key="t-profile">{{ $t("admin.sidebar.promotions") }}</a>
+                  <div class="collapse menu-dropdown" id="sidebarPromotion">
+                    <ul class="nav nav-sm flex-column">
+                      <li class="nav-item">
+                        <a href="#" class="nav-link" data-key="t-promotion-list">{{ $t("admin.sidebar.promotionList") }}</a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="#" class="nav-link" data-key="t-promotion-create">{{ $t("admin.sidebar.promotionCreate") }}</a>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
             <a class="nav-link menu-link" href="#sidebarusers" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarusers">
               <i class="ri-group-line"></i>
               <span data-key="t-user-pages">{{ $t("admin.sidebar.customers") }}</span>

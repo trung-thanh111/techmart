@@ -45,6 +45,10 @@ export const PRODUCTCATALOGUEINDEX = "/admin/product/catalogue";
 export const PRODUCTCATALOGUECREATE = "/admin/product/catalogue/create";
 export const PRODUCTCATALOGUEUPDATE = "/admin/product/catalogue/update";
 
+export const PROMOTIONCATALOGUEINDEX = "/admin/promotion/catalogue";
+export const PROMOTIONCATALOGUECREATE = "/admin/promotion/catalogue/create";
+export const PROMOTIONCATALOGUEUPDATE = "/admin/promotion/catalogue/update";
+
 export const PRODUCTTAGINDEX = "/admin/product/tag";
 export const PRODUCTTAGCREATE = "/admin/product/tag/create";
 export const PRODUCTTAGUPDATE = "/admin/product/tag/update";

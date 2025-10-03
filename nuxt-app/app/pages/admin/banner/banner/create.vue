@@ -4,7 +4,7 @@
       <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
         <h4 class="mb-sm-0">{{ $t("admin.common.create") }}</h4>
         <div class="page-title-right">
-          <Breadcrumb :crumbs="[{ label: $t('admin.page.banner.breadcrumb'), to: '/admin/banner/banner' }, { label: $t('admin.common.create') }]" />
+          <Breadcrumb :crumbs="[{ label: $t('admin.page.banner.breadcrumb'), to: BANNERINDEX }, { label: $t('admin.common.create') }]" />
         </div>
       </div>
     </div>

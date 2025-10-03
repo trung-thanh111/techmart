@@ -4,7 +4,7 @@
       <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
         <h4 class="mb-sm-0">{{ $t("admin.common.create") }}</h4>
         <div class="page-title-right">
-          <Breadcrumb :crumbs="[{ label: $t('admin.page.userCatalogue.breadcrumb'), to: '/admin/user/catalogue' }, { label: $t('admin.common.create') }]" />
+          <Breadcrumb :crumbs="[{ label: $t('admin.page.userCatalogue.breadcrumb'), to: USERCATALOGUEINDEX }, { label: $t('admin.common.create') }]" />
         </div>
       </div>
     </div>
@@ -84,6 +84,7 @@ import PublishSelect from "~/components/admin/custom/PublishSelect.vue";
 import Button from "~/components/admin/custom/Button.vue";
 import Breadcrumb from "~/components/admin/navigation/Breadcrumb.vue";
 import { useUserCatalogue } from "~/composables/admin/user/useUserCatalogue";
+import { USERCATALOGUEINDEX } from "~/utils/constants";
 
 const { values, handleStore, isLoading, config, slug } = useUserCatalogue();
 
