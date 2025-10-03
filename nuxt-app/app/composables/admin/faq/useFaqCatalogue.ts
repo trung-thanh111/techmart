@@ -1,4 +1,3 @@
-// composables/useUserCatalogue.ts
 import z from "zod";
 import { useForm } from "vee-validate";
 import { errorToField, slugify } from "~/utils/helpers";

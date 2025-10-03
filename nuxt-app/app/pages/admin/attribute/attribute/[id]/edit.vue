@@ -4,7 +4,7 @@
       <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
         <h4 class="mb-sm-0">{{ $t("admin.common.edit") }}</h4>
         <div class="page-title-right">
-          <Breadcrumb :crumbs="[{ label: $t('admin.page.attribute.breadcrumb'), to: '/admin/attribute/attribute' }, { label: $t('admin.common.edit') }]" />
+          <Breadcrumb :crumbs="[{ label: $t('admin.page.attribute.breadcrumb'), to: ATTRIBUTEINDEX }, { label: $t('admin.common.edit') }]" />
         </div>
       </div>
     </div>

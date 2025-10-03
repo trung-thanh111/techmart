@@ -17,7 +17,6 @@ class PromotionCatalogue extends Model
         'slug',
         'description',
         'image',
-        'icon',
         'order',
         'publish',
         'user_id',

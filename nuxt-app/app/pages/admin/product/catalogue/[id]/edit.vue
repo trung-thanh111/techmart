@@ -4,7 +4,7 @@
       <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
         <h4 class="mb-sm-0">{{ $t("admin.common.edit") }}</h4>
         <div class="page-title-right">
-          <Breadcrumb :crumbs="[{ label: $t('admin.page.productCatalogue.breadcrumb'), to: '/admin/user/catalogue' }, { label: $t('admin.common.edit') }]" />
+          <Breadcrumb :crumbs="[{ label: $t('admin.page.productCatalogue.breadcrumb'), to: PRODUCTCATALOGUEINDEX }, { label: $t('admin.common.edit') }]" />
         </div>
       </div>
     </div>
@@ -115,6 +115,7 @@
 <script setup lang="ts">
 import { Field } from "vee-validate";
 import PublishSelect from "~/components/admin/custom/PublishSelect.vue";
+import { PRODUCTCATALOGUEINDEX } from "~/utils/constants";
 import Button from "~/components/admin/custom/Button.vue";
 import Breadcrumb from "~/components/admin/navigation/Breadcrumb.vue";
 import { useProductCatalogue } from "~/composables/admin/product/useProductCatalogue";

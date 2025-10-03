@@ -4,7 +4,7 @@
       <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
         <h4 class="mb-sm-0">{{ $t("admin.common.create") }}</h4>
         <div class="page-title-right">
-          <Breadcrumb :crumbs="[{ label: $t('admin.page.productCatalogue.breadcrumb'), to: '/admin/product/catalogue' }, { label: $t('admin.common.create') }]" />
+          <Breadcrumb :crumbs="[{ label: $t('admin.page.productCatalogue.breadcrumb'), to: PRODUCTCATALOGUEINDEX }, { label: $t('admin.common.create') }]" />
         </div>
       </div>
     </div>
@@ -46,7 +46,7 @@
       </div>
       <SEO :values="values" />
       <div class="flex justify-end gap-3 mt-4 position-sticky bottom-5 z-20">
-        <Button type="button" variant="cancel" :to="POSTCATALOGUEINDEX" />
+        <Button type="button" variant="cancel" :to="PRODUCTCATALOGUEINDEX" />
         <Button variant="success" :loading="isLoading" />
       </div>
     </div>
@@ -97,7 +97,7 @@
 
 <script setup lang="ts">
 import { Field } from "vee-validate";
-import { POSTCATALOGUEINDEX } from "~/utils/constants";
+import { PRODUCTCATALOGUEINDEX } from "~/utils/constants";
 import Button from "~/components/admin/custom/Button.vue";
 import AppCheckbox from "~/components/admin/custom/AppCheckbox.vue";
 import Breadcrumb from "~/components/admin/navigation/Breadcrumb.vue";

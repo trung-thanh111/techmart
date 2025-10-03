@@ -228,6 +228,8 @@
       "management": "Quản lý",
       "products": "Sản phẩm",
       "productCatalogue": "Nhóm sản phẩm",
+      "promotions": "Khuyến mãi",
+      "promotionCatalogue": "Nhóm khuyến mãi",
       "productList": "Danh sách",
       "productCreate": "Thêm mới",
       "attributes": "Thuộc tính",
@@ -406,6 +408,11 @@
       "faqCatalogue": {
         "title": "nhóm câu hỏi thường gặp",
         "breadcrumb": "Quản lý nhóm câu hỏi thường gặp",
+        "groupInfo": "Thông tin"
+      },
+      "promotionCatalogue": {
+        "title": "nhóm khuyến mãi",
+        "breadcrumb": "Quản lý nhóm khuyến mãi",
         "groupInfo": "Thông tin"
       },
       "faq": {

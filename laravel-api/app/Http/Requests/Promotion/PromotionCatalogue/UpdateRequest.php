@@ -34,6 +34,8 @@ class UpdateRequest extends BaseRequest
     {
         $method = $this->getMethod();
         $sometime = ($method === 'PATCH') ? 'sometimes' : '';
+        $mimes = implode(',', config('upload.image.allowed_type'));
+        $max_size = config('upload.image.max_size');
         return [
             "name" => "{$sometime}|required|string|max:255",
             "slug" => [
@@ -41,14 +43,12 @@ class UpdateRequest extends BaseRequest
                 "required",
                 "string",
                 "max:255",
-                Rule::unique("promotion_catalogues", "slug")->ignore($this->route('promotion'))
+                Rule::unique("promotion_catalogues", "slug")->ignore($this->route('promotion_catalogue'))
             ],
             "description" => "{$sometime}|nullable|string",
-            "image" => "{$sometime}|nullable|string|max:255",
-            "icon" => "{$sometime}|nullable|string|max:255",
+            "image" => "sometimes|mimes:{$mimes}|max:{$max_size}",
             "order" => "{$sometime}|nullable|integer",
             "publish" => "{$sometime}|nullable|integer|in:1,2",
-            "user_id" => "{$sometime}|nullable|integer|exists:users,id",
         ];
     }
 

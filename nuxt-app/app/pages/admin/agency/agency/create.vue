@@ -4,7 +4,7 @@
       <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
         <h4 class="mb-sm-0">{{ $t("admin.common.create") }}</h4>
         <div class="page-title-right">
-          <Breadcrumb :crumbs="[{ label: $t('admin.page.agency.breadcrumb'), to: '/admin/agency/catalogue' }, { label: $t('admin.common.create') }]" />
+          <Breadcrumb :crumbs="[{ label: $t('admin.page.agency.breadcrumb'), to: FAQCATALOGUEINDEX }, { label: $t('admin.common.create') }]" />
         </div>
       </div>
     </div>
@@ -150,7 +150,6 @@
 import { Field } from "vee-validate";
 import { FAQCATALOGUEINDEX } from "~/utils/constants";
 import Button from "~/components/admin/custom/Button.vue";
-import AppCheckbox from "~/components/admin/custom/AppCheckbox.vue";
 import Breadcrumb from "~/components/admin/navigation/Breadcrumb.vue";
 import PublishSelect from "~/components/admin/custom/PublishSelect.vue";
 import { useAgency } from "~/composables/admin/agency/useAgency";
