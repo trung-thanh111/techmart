@@ -3,6 +3,8 @@ namespace App\Providers;
 
 use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
+use App\Services\Interfaces\Promotion\PromotionServiceInterface;
+use App\Services\Impl\Promotion\PromotionService;
 use App\Services\Interfaces\Post\PostCommentLikeServiceInterface;
 use App\Services\Impl\Post\PostCommentLikeService;
 use App\Services\Interfaces\Post\PostLikeServiceInterface;
@@ -97,6 +99,7 @@ class AppServiceProvider extends ServiceProvider
         EmailVerificationServiceInterface::class => EmailVerificationService::class,
         PasswordResetServiceInterface::class => PasswordResetService::class,
         ChangePasswordServiceInterface::class => ChangePasswordService::class,
+        PromotionServiceInterface::class => PromotionService::class,
     ];
 
     /**

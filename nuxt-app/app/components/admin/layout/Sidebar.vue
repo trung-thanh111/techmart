@@ -29,7 +29,7 @@
           </li>
           <li class="nav-item">
             <a class="nav-link menu-link" href="#sidebarProducts" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProducts">
-              <i class="ri-pages-line"></i>
+              <i class="ri-shopping-bag-3-line"></i>
               <span data-key="t-product-pages">{{ $t("admin.sidebar.products") }}</span>
             </a>
             <div class="collapse menu-dropdown" id="sidebarProducts">
@@ -74,7 +74,7 @@
           </li>
           <li class="nav-item">
             <a class="nav-link menu-link" href="#sidebarPromotions" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarPromotions">
-              <i class="ri-pages-line"></i>
+              <i class="ri-discount-percent-line"></i>
               <span data-key="t-product-pages">{{ $t("admin.sidebar.promotions") }}</span>
             </a>
             <div class="collapse menu-dropdown" id="sidebarPromotions">
@@ -158,7 +158,7 @@
           </li>
           <li class="nav-item">
             <a class="nav-link menu-link" href="#sidebarfaqs" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarfaqs">
-              <i class="ri-news-line"></i>
+              <i class="ri-questionnaire-line"></i>
               <span data-key="t-faq-pages">{{ $t("admin.sidebar.faqs") }}</span>
             </a>
             <div class="collapse menu-dropdown" id="sidebarfaqs">
@@ -184,7 +184,7 @@
           </li>
           <li class="nav-item">
             <a class="nav-link menu-link" href="#sidebaragencys" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebaragencys">
-              <i class="ri-news-line"></i>
+              <i class="ri-store-2-line"></i>
               <span data-key="t-agency-pages">{{ $t("admin.sidebar.agencys") }}</span>
             </a>
             <div class="collapse menu-dropdown" id="sidebaragencys">
@@ -210,7 +210,7 @@
           </li>
           <li class="nav-item">
             <a class="nav-link menu-link" href="#sidebarbanners" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarbanners">
-              <i class="ri-news-line"></i>
+              <i class="ri-image-2-line"></i>
               <span data-key="t-banner-pages">{{ $t("admin.sidebar.banners") }}</span>
             </a>
             <div class="collapse menu-dropdown" id="sidebarbanners">
