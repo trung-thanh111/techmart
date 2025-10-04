@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\Promotion\PromotionController;
 use App\Http\Controllers\Api\V1\Post\PostCommentLikeController;
 use App\Http\Controllers\Api\V1\Post\PostLikeController;
 use App\Http\Controllers\Api\V1\Post\PostCommentController;
@@ -356,6 +357,17 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
             Route::delete('{id}/detach', [PostCommentLikeController::class, 'detach']);
         });
         Route::resource('post_comment_likes', PostCommentLikeController::class)->except($routeExcept);
+
+        // This is route Promotion
+        Route::group(['prefix' => 'promotions'], function() {
+            Route::post('bulkStore', [PromotionController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [PromotionController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [PromotionController::class, 'bulkUpdate']);
+            Route::delete('bulkDelete', [PromotionController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [PromotionController::class, 'attach']);
+            Route::delete('{id}/detach', [PromotionController::class, 'detach']);
+        });
+        Route::resource('promotions', PromotionController::class)->except($routeExcept);
 
         // generate route
 
