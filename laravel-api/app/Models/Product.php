@@ -17,30 +17,29 @@ class Product extends Model
     protected $fillable = [
         'name',
         'slug',
+        'sku',
         'description',
         'content',
-        'image',
-        'price',
-        'made_in',
-        'icon',
+        'price_origin',
         'album',
-        'extra_album',
-        'order',
+        'sort_order',
         'product_catalogue_id',
         'brand_id',
+        'faq_id',
+        'tag_id',
+        'is_hot',
+        'like_count',
         'user_id',
-        'publish',
         'meta_title',
         'meta_keyword',
         'meta_description',
-        'index',
-        'scheme',
-        'iframe',
+        'publish',
     ];
 
     protected $casts = [
-        'album' => 'json',
-        'extra_album' => 'json'
+        'album' => 'array',
+        'is_hot' => 'boolean',
+        'price_origin' => 'decimal:2',
     ];
 
     /**
@@ -50,8 +49,21 @@ class Product extends Model
      */
     public $relationable = [
         'product_catalogues',
-        'product_tags'
+        'product_tags',
+        'brands',
+        'users'
     ];
+
+    protected static function booted(): void
+    {
+        // creating đến gán trước khi insert tối ưu thay vì dùng created 2 lần insert & update
+        static::creating(function (Product $product) {
+            if (!empty($product->product_catalogues) && is_array($product->product_catalogues)) {
+                $product->product_catalogue_id = $product->product_catalogues[0];
+            }
+        });
+    }
+
 
     public function product_catalogues(): BelongsToMany
     {
@@ -68,7 +80,8 @@ class Product extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function product_variants(): HasMany {
+    public function product_variants(): HasMany
+    {
         return $this->hasMany(ProductVariant::class);
     }
 

@@ -20,7 +20,8 @@ class ProductService extends BaseService implements ProductServiceInterface
     protected $with = [
         'product_catalogues',
         'brands',
-        'product_variants.variant_attributes',
+        'product_variants',
+        'product_tags',
     ];
     protected $relationFilter = [];
 

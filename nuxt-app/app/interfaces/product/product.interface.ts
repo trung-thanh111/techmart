@@ -1,6 +1,6 @@
 import type { BasePayloadFilter } from "../base.interface";
 
-export interface IPost {
+export interface IProduct {
   id: number;
   name?: string;
   slug?: string;
@@ -12,8 +12,8 @@ export interface IPost {
   tableOfContent?: boolean;
   viewCount?: number;
   tagId?: number;
-  postCatalogueId?: number;
-  postCatalogues?: number[];
+  productCatalogueId?: number;
+  productCatalogues?: number[];
   tags?: number[];
   relateds?: number[];
   publish?: number;
@@ -28,8 +28,8 @@ export interface Option {
   value: string | null;
 }
 
-export interface PostPayloadFilter extends BasePayloadFilter{
+export interface ProductPayloadFilter extends BasePayloadFilter{
   tag_id?: number | null;
-  post_catalogue_id?: number | null;
+  product_catalogue_id?: number | null;
 
 }

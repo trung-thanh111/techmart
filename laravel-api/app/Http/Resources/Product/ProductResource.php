@@ -3,6 +3,9 @@
 namespace App\Http\Resources\Product;
 
 use App\Http\Resources\Brand\BrandResource;
+use App\Http\Resources\Product\ProductCatalogueResource;
+use App\Http\Resources\Product\ProductTagResource;
+use App\Http\Resources\Product\ProductVariantResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -19,39 +22,33 @@ class ProductResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'slug' => $this->slug,
+            'sku' => $this->sku,
             'description' => $this->description,
             'content' => $this->content,
-            'image' => [
-                'path' => $this->image ?? null,
-                'url' => asset("/storage/{$this->image}") ?? null,
-            ],
-            'price' => price_to_string($this->price),
-            'madeIn' => $this->made_in,
-            'icon' => $this->icon,
+            'priceOrigin' => $this->price_origin,
             'album' => $this->album,
-            'extraAlbum' => $this->extra_album,
-            'order' => $this->order,
-            'productCatalogueId' => $this->product_catalogue_id,
-            'brandId' => $this->brand_id,
-            'metaTitle' => $this->meta_title,
-            'metaKeyword' => $this->meta_keyword,
-            'metaDescription' => $this->meta_description,
-            'index' => $this->index,
+            'sortOrder' => (int) $this->sort_order,
+            'isHot' => (bool) $this->is_hot,
+            'likeCount' => (int) $this->like_count,
+            'productCatalogueId' => (int) $this->product_catalogue_id,
+            'brandId' => (int) $this->brand_id,
+            'faqId' => (int) $this->faq_id,
+            'tagId' => (int) $this->tag_id,
             'publish' => (int) $this->publish,
             'creator' => $this->whenLoaded('users', [
                 'id' => $this->users->id,
+                'avatar' => asset("/storage/{$this->users->image}") ?? null,
                 'name' => $this->users->name,
             ]),
-            'productVariant' => ProductVariantResource::collection($this->product_variants),
-            'productCatalogue' => ProductCatalogueResource::collection($this->product_catalogues),
-            'brand' => new BrandResource($this->brands), // quan hệ 1-1 belongSto
-            'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
-            'updatedAt' => $this->updated_at?->format('Y-m-d H:i:s'),
-            'createdAtHuman' => $this->created_at?->diffForHumans(),
-            'updatedAtHuman' => $this->updated_at?->diffForHumans(),
-            // 'deletedAt' => $this->deleted_at?->format('Y-m-d H:i:s'),
-            // 'scheme' => $this->scheme,
-            // 'iframe' => $this->iframe,
+            'productCatalogues' => ProductCatalogueResource::collection($this->whenLoaded('product_catalogues')),
+            'brand' => $this->whenLoaded('brands', function () {
+                return new BrandResource($this->brands);
+            }),
+            'productTags' => ProductTagResource::collection($this->whenLoaded('product_tags')),
+            'productVariants' => ProductVariantResource::collection($this->whenLoaded('product_variants')),
+            'metaTitle' => $this->meta_title,
+            'metaKeyword' => $this->meta_keyword,
+            'metaDescription' => $this->meta_description,
         ];
     }
 }

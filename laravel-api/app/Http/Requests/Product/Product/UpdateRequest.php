@@ -36,24 +36,34 @@ class UpdateRequest extends BaseRequest
         $sometime = ($method === 'PATCH') ? 'sometimes' : '';
         return [
             "name" => "{$sometime}|required|string|max:255",
-            "slug" => "{$sometime}|nullable|string|max:255|unique:products,slug",
-            "description" => "{$sometime}|nullable|string|max:255",
+            "description" => "{$sometime}|nullable|string|max:500",
             "content" => "{$sometime}|nullable|string",
-            "made_in" => "{$sometime}|nullable|string",
-            "image" => "{$sometime}|nullable|string|max:255",
-            "icon" => "{$sometime}|nullable|string|max:255",
+            "price_origin" => "{$sometime}|required|numeric|min:0",
             "album" => "{$sometime}|nullable|string",
-            "extra_album" => "{$sometime}|nullable|string",
-            "price" => "{$sometime}|required|integer|min:0",
-            "order" => "{$sometime}|nullable|integer|min:0",
+            "sort_order" => "{$sometime}|nullable|integer|min:0",
             "product_catalogue_id" => "{$sometime}|nullable|integer|min:0",
             "brand_id" => "{$sometime}|nullable|integer|min:0",
-            "publish" => "{$sometime}|required|integer|in:0,1,2",
+            "faq_id" => "{$sometime}|nullable|integer|min:0",
+            "tag_id" => "{$sometime}|nullable|integer|min:0",
+            "is_hot" => "{$sometime}|nullable|boolean",
+            "like_count" => "{$sometime}|nullable|integer|min:0",
+            "publish" => "{$sometime}|nullable|integer|in:0,1,2",
+            "user_id" => "{$sometime}|nullable|integer|exists:users,id",
+            "meta_title" => "{$sometime}|nullable|string|max:255",
+            "meta_keyword" => "{$sometime}|nullable|string|max:255",
+            "meta_description" => "{$sometime}|nullable|string|max:1000",
             "slug" => [
                 "{$sometime}",
                 "required",
                 "string",
                 "max:255",
+                Rule::unique('products')->ignore($this->route('product')),
+            ],
+            "sku" => [
+                "{$sometime}",
+                "required",
+                "string",
+                "max:100",
                 Rule::unique('products')->ignore($this->route('product')),
             ],
         ];
@@ -62,8 +72,9 @@ class UpdateRequest extends BaseRequest
     public function prepareForValidation()
     {
         $this->merge([
+            'user_id' => auth(Common::API)->user()->id,
             'updated_at' => now(),
-           ...($this->has('name') && !$this->has('slug') ? ['slug' => Str::slug($this->name)] : [])
+            ...($this->has('name') && !$this->has('slug') ? ['slug' => Str::slug($this->name)] : [])
         ]);
     }
 
