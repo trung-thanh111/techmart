@@ -28,7 +28,6 @@ class StoreRequest extends BaseRequest
             "stock" => "required|integer|min:0",
             "sku" => "required|string|max:255",
             "price" => "required|integer|min:0",
-            "weight" => "nullable|integer|min:0",
             "barcode" => "nullable|integer|min:0",
             "product_id" => "nullable|integer",
             "publish" => "required|integer|in:0,1,2",

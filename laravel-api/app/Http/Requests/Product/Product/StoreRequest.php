@@ -22,28 +22,33 @@ class StoreRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            "name" => "required|string|max:255",
-             "slug" => "required|string|max:255|unique:products,slug",
-            "description" => "nullable|string|max:255",
-            "content" => "nullable|string",
-            "made_in" => "nullable|string",
-            "image" => "nullable|string|max:255",
-            "icon" => "nullable|string|max:255",
-            "album" => "nullable|string",
-            "extra_album" => "nullable|string",
-            "price" => "required|integer|min:0",
-            "order" => "nullable|integer|min:0",
-            "product_catalogue_id" => "nullable|integer|min:0",
-            "brand_id" => "nullable|integer|min:0",
-            "publish" => "required|integer|in:0,1,2",
+            'name' => 'required|string|max:255',
+            'slug' => 'nullable|string|max:255|unique:products,slug',
+            'sku' => 'required|string|max:100|unique:products,sku',
+            'description' => 'nullable|string|max:500',
+            'content' => 'nullable|string',
+            'price_origin' => 'required|numeric|min:0',
+            'album' => 'nullable|string',
+            'sort_order' => 'nullable|integer|min:0',
+            'product_catalogue_id' => 'nullable|integer|min:0',
+            'brand_id' => 'nullable|integer|min:0',
+            'faq_id' => 'nullable|integer|min:0',
+            'tag_id' => 'nullable|integer|min:0',
+            'is_hot' => 'nullable|boolean',
+            'like_count' => 'nullable|integer|min:0',
+            'publish' => 'nullable|integer|in:0,1,2',
+            'user_id' => 'nullable|integer|exists:users,id',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_keyword' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string|max:1000',
         ];
     }
 
-    public function prepareForValidation(){
+    public function prepareForValidation()
+    {
         $this->merge([
             'slug' => generate_slug($this->name),
             'user_id' => auth(Common::API)->user()->id,
-            'published_at' => ($this->publish === 2) ? now() : '',
         ]);
     }
 

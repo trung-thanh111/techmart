@@ -4,42 +4,51 @@ import { useForm } from "vee-validate";
 import { errorToField, slugify, buildRelationParams } from "~/utils/helpers";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useAppToast } from "~/composables/useAppToast";
-import { postService } from "~/services/post/post.service";
+import { productService } from "~/services/product/product.service";
 import type { IApiOk, IPaginate } from "~/interfaces/base.interface";
-import type { IPost, PostPayloadFilter } from "~/interfaces/post/post.interface";
+import type { IProduct, ProductPayloadFilter } from "~/interfaces/product/product.interface";
 import type { BasePayloadFilter } from "~/interfaces/base.interface";
-import { POSTINDEX, MAX_FILE_SIZE, ACCEPTED_IMAGE_TYPES } from "~/utils/constants";
-import { postCatalogueService } from "~/services/post/catalogue.service";
-import { postTagService } from "~/services/post/tag.service";
+import { PRODUCTINDEX, MAX_FILE_SIZE, ACCEPTED_IMAGE_TYPES } from "~/utils/constants";
+import { productCatalogueService } from "~/services/product/catalogue.service";
+import { productTagService } from "~/services/product/tag.service";
 
-export const usePost = (initialFilters?: PostPayloadFilter, mode: "create" | "update" = "create") => {
+export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create" | "update" = "create") => {
   const { t } = useI18n();
   const config = useRuntimeConfig();
   const toast = useAppToast();
-  const data = ref<IApiOk<IPaginate<IPost>>>();
-  const filters = ref<PostPayloadFilter>(initialFilters ?? { keyword: "", perpage: 10, publish: null, post_catalogue_id: null, tag_id: null });
+  const data = ref<IApiOk<IPaginate<IProduct>>>();
+  const filters = ref<ProductPayloadFilter>(initialFilters ?? { keyword: "", perpage: 10, publish: null, product_catalogue_id: null, tag_id: null });
   const page = ref(1);
   const isLoading = ref(false);
   const selectedIds = ref<number[]>([]);
-  const selectedItem = ref<IPost | null>(null);
+  const selectedItem = ref<IProduct | null>(null);
   const tagOptions = ref<Array<{ name: string; id: number }>>([]);
-  const postOptions = ref<Array<{ name: string; id: number }>>([]);
-  const postCatalogueOptions = ref<Array<{ name: string; id: number }>>([]);
+  const productOptions = ref<Array<{ name: string; id: number }>>([]);
+  const productCatalogueOptions = ref<Array<{ name: string; id: number }>>([]);
   const slug = computed(() => slugify(values.name || ""));
 
   const schema = {
     name: z.string({ required_error: "admin.validation.nameRequired" }).trim().min(1, "admin.validation.nameRequired").max(255, "admin.validation.nameMaxLength"),
+    sku: z.string({ required_error: "admin.validation.skuRequired" }).trim().min(1, "admin.validation.skuRequired").max(100, "admin.validation.skuMaxLength"),
     description: z.string().max(500, "admin.validation.descriptionMaxLength").nullable().optional(),
-    content: z.string({ required_error: "admin.validation.contentRequired" }).trim().min(1, "admin.validation.contentRequired"),
-    image: z.any().optional().refine((file) => !file || file.size <= MAX_FILE_SIZE, 'admin.common.maxFileSize').refine((file) => !file || ACCEPTED_IMAGE_TYPES.includes(file.type), 'admin.common.acceptedImageTypes'),
-    tableOfContent: z.boolean().default(false).optional(),
-    order: z.number().int().nonnegative().default(0),
-    isHot: z.boolean().default(false).optional(),
-    viewCount: z.number().int().nonnegative().default(0),
-    postCatalogues: z.array(z.number()).min(1, "admin.validation.postCatalogueRequired"),
-    postTags: z.array(z.number()).nullable().optional(),
-    relateds: z.array(z.number()).nullable().optional(),
-    publish: z.number({ required_error: "admin.validation.statusRequired" }).refine((val) => [0, 1, 2].includes(val), { message: "admin.validation.statusInvalid" }),
+    content: z.string().nullable().optional(),
+    priceOrigin: z.number({ required_error: "admin.validation.priceOriginRequired" }).nonnegative({ message: "admin.validation.minValue" }),
+    album: z.string().nullable().optional(),
+    sortOrder: z.number().int().nonnegative().nullable().optional(),
+    productCatalogueId: z.number().int().nonnegative().nullable().optional(),
+    brandId: z.number().int().nonnegative().nullable().optional(),
+    faqId: z.number().int().nonnegative().nullable().optional(),
+    tagId: z.number().int().nonnegative().nullable().optional(),
+    isHot: z.boolean().nullable().optional(),
+    likecount: z.number().int().nonnegative().nullable().optional(),
+    publish: z
+      .number()
+      .refine((val) => val === null || val === undefined || [0, 1, 2].includes(val), {
+        message: "admin.validation.statusInvalid",
+      })
+      .nullable()
+      .optional(),
+    userId: z.number().int().nullable().optional(),
     metaTitle: z.string().max(255, "admin.validation.metaTitleMaxLength").nullable().optional(),
     metaKeyword: z.string().max(255, "admin.validation.metaKeywordMaxLength").nullable().optional(),
     metaDescription: z.string().max(255, "admin.validation.metaDescriptionMaxLength").nullable().optional(),
@@ -47,20 +56,20 @@ export const usePost = (initialFilters?: PostPayloadFilter, mode: "create" | "up
   };
   const createSchema = z.object({ ...schema });
   const updateSchema = z.object({ ...schema });
-  type TPostCreate = z.infer<typeof createSchema>;
-  type TPostUpdate = z.infer<typeof updateSchema>;
+  type TProductCreate = z.infer<typeof createSchema>;
+  type TProductUpdate = z.infer<typeof updateSchema>;
 
-  const { handleSubmit, values, errors, setValues, setFieldError } = useForm<TPostCreate | TPostUpdate>({
+  const { handleSubmit, values, errors, setValues, setFieldError } = useForm<TProductCreate | TProductUpdate>({
     validationSchema: toTypedSchema(mode === "create" ? createSchema : updateSchema),
     keepValuesOnUnmount: true,
   });
 
-  const handleStore = handleSubmit(async (payload: TPostCreate | TPostUpdate) => {
+  const handleStore = handleSubmit(async (payload: TProductCreate | TProductUpdate) => {
     isLoading.value = true;
     try {
-      const response = await postService.store(payload as Partial<IPost>);
+      const response = await productService.store(payload as Partial<IProduct>);
       toast.success(response?.message || t("admin.messages.createSuccess"));
-      return navigateTo(POSTINDEX);
+      return navigateTo(PRODUCTINDEX);
     } catch (error: any) {
       if (error?.data?.isValidationError) {
         errorToField(setFieldError, error?.data?.errors, t, "name");
@@ -76,7 +85,7 @@ export const usePost = (initialFilters?: PostPayloadFilter, mode: "create" | "up
 
   const show = async (id: number) => {
     try {
-      const response = await postService.show(id);
+      const response = await productService.show(id);
       return response;
     } catch (error: any) {
       console.error("Lỗi! Không tìm thấy bản ghi: ", error);
@@ -85,13 +94,13 @@ export const usePost = (initialFilters?: PostPayloadFilter, mode: "create" | "up
     }
   };
 
-  const handleUpdate = handleSubmit(async (payload: TPostUpdate) => {
+  const handleUpdate = handleSubmit(async (payload: TProductUpdate) => {
     isLoading.value = true;
     try {
       const id = Number(useRoute().params.id);
-      await postService.update(id, payload as Partial<IPost>);
+      await productService.update(id, payload as Partial<IProduct>);
       toast.success(t("admin.messages.updateSuccess"));
-      return navigateTo(POSTINDEX);
+      return navigateTo(PRODUCTINDEX);
     } catch (error: any) {
       if (error?.data?.isValidationError) {
         errorToField(setFieldError, error?.data?.errors, t, "name");
@@ -106,7 +115,7 @@ export const usePost = (initialFilters?: PostPayloadFilter, mode: "create" | "up
 
   const handleToggleIsHot = async (item: any) => {
     try {
-      await postService.update(item.id, { isHot: item.isHot });
+      await productService.update(item.id, { isHot: item.isHot });
       toast.success(t("admin.messages.updateSuccess"));
     } catch (error: any) {
       toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
@@ -117,7 +126,7 @@ export const usePost = (initialFilters?: PostPayloadFilter, mode: "create" | "up
   const handleDelete = async (id: number) => {
     isLoading.value = true;
     try {
-      await postService.delete(id);
+      await productService.delete(id);
       toast.success(t("admin.messages.deleteSuccess"));
       await fetchData();
     } catch (error: any) {
@@ -131,7 +140,7 @@ export const usePost = (initialFilters?: PostPayloadFilter, mode: "create" | "up
     if (selectedIds.value.length === 0) return;
     isLoading.value = true;
     try {
-      await postService.deleteMultiple(selectedIds.value);
+      await productService.deleteMultiple(selectedIds.value);
       toast.success(t("admin.messages.deleteMultipleSuccess", { count: selectedIds.value.length }));
       selectedIds.value = [];
       await fetchData();
@@ -142,7 +151,7 @@ export const usePost = (initialFilters?: PostPayloadFilter, mode: "create" | "up
     }
   };
 
-  const setSelectedItem = (item: IPost) => {
+  const setSelectedItem = (item: IProduct) => {
     selectedItem.value = item;
   };
 
@@ -156,12 +165,12 @@ export const usePost = (initialFilters?: PostPayloadFilter, mode: "create" | "up
   const fetchData = async () => {
     isLoading.value = true;
     try {
-      const { post_catalogue_id, tag_id, ...rest } = (filters.value as any) || {};
-      const response = await postService.pagination({
+      const { product_catalogue_id, tag_id, ...rest } = (filters.value as any) || {};
+      const response = await productService.pagination({
         ...rest,
         ...buildRelationParams({
-          post_catalogues: post_catalogue_id,
-          post_tags: tag_id,
+          product_catalogues: product_catalogue_id,
+          product_tags: tag_id,
         }),
         page: page.value,
       });
@@ -174,39 +183,33 @@ export const usePost = (initialFilters?: PostPayloadFilter, mode: "create" | "up
     }
   };
 
-  const loadPostCatalogue = async () => {
+  const loadProductCatalogue = async () => {
     try {
-      const response = await postCatalogueService.all();
+      const response = await productCatalogueService.all();
       const rows = response?.data ?? [];
-      postCatalogueOptions.value = (Array.isArray(rows) ? rows : [rows])
-        .map((item: any) => ({ id: Number(item.id), name: item.name }))
-        .filter((opt: any) => opt.name && !Number.isNaN(opt.id));
+      productCatalogueOptions.value = (Array.isArray(rows) ? rows : [rows]).map((item: any) => ({ id: Number(item.id), name: item.name })).filter((opt: any) => opt.name && !Number.isNaN(opt.id));
     } catch (error) {
-      console.error("Lỗi khi tải dữ liệu post catalogue:", error);
+      console.error("Lỗi khi tải dữ liệu product catalogue:", error);
     }
   };
 
   const loadTag = async () => {
     try {
-      const response = await postTagService.all();
+      const response = await productTagService.all();
       const rows = response?.data ?? [];
-      tagOptions.value = (Array.isArray(rows) ? rows : [rows])
-        .map((item: any) => ({ id: Number(item.id), name: item.name }))
-        .filter((opt: any) => opt.name && !Number.isNaN(opt.id));
+      tagOptions.value = (Array.isArray(rows) ? rows : [rows]).map((item: any) => ({ id: Number(item.id), name: item.name })).filter((opt: any) => opt.name && !Number.isNaN(opt.id));
     } catch (error) {
       console.error("Lỗi khi tải dữ liệu tag:", error);
     }
   };
 
-  const loadPost = async () => {
+  const loadProduct = async () => {
     try {
-      const response = await postService.all();
+      const response = await productService.all();
       const rows = response?.data ?? [];
-      postOptions.value = (Array.isArray(rows) ? rows : [rows])
-        .map((item: any) => ({ id: Number(item.id), name: item.name }))
-        .filter((opt: any) => opt.name && !Number.isNaN(opt.id));
+      productOptions.value = (Array.isArray(rows) ? rows : [rows]).map((item: any) => ({ id: Number(item.id), name: item.name })).filter((opt: any) => opt.name && !Number.isNaN(opt.id));
     } catch (error) {
-      console.error("Lỗi khi tải dữ liệu post:", error);
+      console.error("Lỗi khi tải dữ liệu product:", error);
     }
   };
 
@@ -237,9 +240,9 @@ export const usePost = (initialFilters?: PostPayloadFilter, mode: "create" | "up
 
   onMounted(() => {
     fetchData();
-    loadPostCatalogue();
+    loadProductCatalogue();
     loadTag();
-    loadPost();
+    loadProduct();
   });
 
   return {
@@ -252,9 +255,9 @@ export const usePost = (initialFilters?: PostPayloadFilter, mode: "create" | "up
     errors,
     selectedIds,
     selectedItem,
-    postCatalogueOptions,
+    productCatalogueOptions,
     tagOptions,
-    postOptions,
+    productOptions,
     slug,
     setValues,
     show,
@@ -263,7 +266,7 @@ export const usePost = (initialFilters?: PostPayloadFilter, mode: "create" | "up
     handleDelete,
     handleDeleteMultiple,
     handleToggleIsHot,
-    loadPostCatalogue,
+    loadProductCatalogue,
     setSelectedItem,
     confirmDelete,
     fetchData,
@@ -275,5 +278,5 @@ export const usePost = (initialFilters?: PostPayloadFilter, mode: "create" | "up
   };
 };
 
-export type TPostCreate = Partial<IPost>;
-export type TPostUpdate = TPostCreate;
+export type TProductCreate = Partial<IProduct>;
+export type TProductUpdate = TProductCreate;

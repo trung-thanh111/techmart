@@ -1,36 +1,34 @@
 import type { IApiOk, IApiMessage, IPaginate } from "~/interfaces/base.interface";
-import type { IPost } from "~/interfaces/post/post.interface";
+import type { IProduct } from "~/interfaces/product/product.interface";
 import { useApi } from "~/composables/useApi";
 import { formData } from "~/utils/formData";
 
 const ENDPOINT = "/api/v1";
 
-export const postService = {
-  pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IPost>>> => {
+export const productService = {
+  pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IProduct>>> => {
     const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPaginate<IPost>>>(`${ENDPOINT}/posts`, {
+    return await privateFetch<IApiOk<IPaginate<IProduct>>>(`${ENDPOINT}/products`, {
       params,
     });
   },
 
-  store: async (payload: Partial<IPost>): Promise<IApiOk<IPost>> => {
+  store: async (payload: Partial<IProduct>): Promise<IApiOk<IProduct>> => {
     const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPost>>(`${ENDPOINT}/posts`, {
+    return await privateFetch<IApiOk<IProduct>>(`${ENDPOINT}/products`, {
       method: "POST",
       body: formData(payload),
     });
   },
 
-  show: async (id: number | string): Promise<IApiOk<IPost>> => {
+  show: async (id: number | string): Promise<IApiOk<IProduct>> => {
     const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPost>>(
-      `${ENDPOINT}/posts/${id}`
-    );
+    return await privateFetch<IApiOk<IProduct>>(`${ENDPOINT}/products/${id}`);
   },
 
-  update: async (id: number, payload: Partial<IPost>): Promise<IApiOk<IPost>> => {
+  update: async (id: number, payload: Partial<IProduct>): Promise<IApiOk<IProduct>> => {
     const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPost>>(`${ENDPOINT}/posts/${id}`, {
+    return await privateFetch<IApiOk<IProduct>>(`${ENDPOINT}/products/${id}`, {
       method: "POST",
       body: formData(payload),
       params: { _method: "PATCH" },
@@ -39,21 +37,21 @@ export const postService = {
 
   delete: async (id: number): Promise<IApiMessage> => {
     const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/posts/${id}`, {
-      method: "DELETE"
+    return await privateFetch<IApiMessage>(`${ENDPOINT}/products/${id}`, {
+      method: "DELETE",
     });
   },
 
   deleteMultiple: async (ids: number[]): Promise<IApiMessage> => {
     const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/posts/bulkDelete`, {
+    return await privateFetch<IApiMessage>(`${ENDPOINT}/products/bulkDelete`, {
       body: { ids },
-      method: "DELETE"
+      method: "DELETE",
     });
   },
 
-  all: async (): Promise<IApiOk<IPost>> => {
+  all: async (): Promise<IApiOk<IProduct>> => {
     const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPost>>(`${ENDPOINT}/posts?type=all`);
+    return await privateFetch<IApiOk<IProduct>>(`${ENDPOINT}/products?type=all`);
   },
 };

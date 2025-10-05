@@ -23,15 +23,15 @@ class PostLike extends Model
      */
     protected static function booted(): void
     {
-        // Khi tạo mới like -> tăng like_count
-        static::created(function (PostLike $postLike) {
-            Post::where('id', $postLike->post_id)->increment('like_count');
-        });
+        static::created(
+            fn(PostLike $postLike) =>
+            $postLike->posts()->increment('like_count')
+        );
 
-        // Khi xóa like -> giảm like_count
-        static::deleted(function (PostLike $postLike) {
-            Post::where('id', $postLike->post_id)->decrement('like_count');
-        });
+        static::deleted(
+            fn(PostLike $postLike) =>
+            $postLike->posts()->where('like_count', '>', 0)->decrement('like_count')
+        );
     }
 
     public function users(): BelongsTo

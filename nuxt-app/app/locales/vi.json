@@ -403,7 +403,10 @@
       "product": {
         "title": "Sản phẩm",
         "description": "Sản phẩm",
-        "keywords": "Sản phẩm"
+        "keywords": "Sản phẩm",
+        "filterGroup": "Nhóm sản phẩm",
+        "filterTag": "Tag sản phẩm",
+        "groupInfo": "Thông tin"
       },
       "faqCatalogue": {
         "title": "nhóm câu hỏi thường gặp",

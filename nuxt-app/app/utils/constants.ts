@@ -41,6 +41,10 @@ export const ATTRIBUTECATALOGUEINDEX = "/admin/attribute/catalogue";
 export const ATTRIBUTECATALOGUECREATE = "/admin/attribute/catalogue/create";
 export const ATTRIBUTECATALOGUEUPDATE = "/admin/attribute/catalogue/update";
 
+export const PRODUCTINDEX = "/admin/product/product";
+export const PRODUCTCREATE = "/admin/product/create";
+export const PRODUCTUPDATE = "/admin/product/update";
+
 export const PRODUCTCATALOGUEINDEX = "/admin/product/catalogue";
 export const PRODUCTCATALOGUECREATE = "/admin/product/catalogue/create";
 export const PRODUCTCATALOGUEUPDATE = "/admin/product/catalogue/update";
@@ -72,15 +76,13 @@ export const AGENCYWORKINGHOURUPDATE = "/admin/agency/working_hour/update";
 export const MAX_FILE_SIZE = 5 * 1024 * 1024;
 export const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
 
-
-// auth 
+// auth
 export const TOLOGIN = "/auth/login";
 export const TOREGISTER = "/auth/register";
 // forgot password (client)
 export const TOFORGOT = "/forgot-password";
 export const TOFORGOTOTP = "/forgot-password/otp";
 export const TOFORGOTRESET = "/forgot-password/reset";
-
 
 // FE
 export const IMAGEDEFAULT = "/shared/images/defaults/record.jpg";

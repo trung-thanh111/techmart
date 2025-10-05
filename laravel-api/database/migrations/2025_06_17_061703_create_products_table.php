@@ -15,32 +15,28 @@ return new class extends Migration
             $table->id();
             $table->string('name', 255);
             $table->string('slug', 255)->unique();
-            $table->string('description')->nullable();
+            $table->string('sku', 100)->unique();
+            $table->text('description')->nullable();
             $table->longText('content')->nullable();
-            $table->string('image')->nullable();
-            $table->integer('price')->default(0);
-            $table->string('made_in')->default(0);
-            $table->string('icon')->nullable();
+            $table->decimal('price_origin', 15, 2)->default(0);
             $table->text('album')->nullable();
-            $table->text('extra_album')->nullable();
-            $table->integer('order')->nullable();
+            $table->integer('sort_order')->nullable();
             $table->integer('product_catalogue_id')->default(0);
-            $table->integer('brand_id')->default(0);
+            $table->integer('faq_id')->default(0)->comment('thực chất là liên kết với nhóm lấy ra thông tin ds faq');
+            $table->integer('tag_id')->default(0);
+            $table->boolean('is_hot')->default(false);
+            $table->integer('like_count')->default(0);
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
+            $table->foreignId('brand_id')->nullable()->constrained()->onDelete('set null');
             $table->string('meta_title', 255)->nullable();
             $table->string('meta_keyword', 255)->nullable();
-            $table->string('meta_description', 500)->nullable();
-            $table->tinyInteger('index')->default(2); // cho phép index phục vụ SEO
-            $table->text('scheme')->nullable();
-            $table->text('iframe')->nullable();
+            $table->string('meta_description', 1000)->nullable();
             $table->tinyInteger('publish')->default(2);
-            $table->timestamp('published_at')->nullable();
             $table->softDeletes();
             $table->timestamps();
             // Indexes
-            $table->index('slug');
+            $table->index(['slug', 'sku', 'price_origin']);
             $table->index('publish');
-            $table->index('published_at');
         });
     }
 

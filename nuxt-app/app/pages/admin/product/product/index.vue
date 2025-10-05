@@ -5,9 +5,9 @@ import Breadcrumb from "~/components/admin/navigation/Breadcrumb.vue";
 import Pagination from "~/components/admin/navigation/AppPagination.vue";
 import AppCheckbox from "~/components/admin/custom/AppCheckbox.vue";
 import Button from "~/components/admin/custom/Button.vue";
-import { usePost } from "~/composables/admin/post/usePost";
+import { useProduct } from "~/composables/admin/product/useProduct";
 
-const { data, isLoading, selectedIds, selectedItem, postCatalogueOptions, tagOptions, filters, search, setPage, handleDeleteMultiple, handleToggleIsHot, setSelectedItem, confirmDelete, updateSelectedIds, getTotalItems, getAllItemIds } = usePost();
+const { data, isLoading, selectedIds, selectedItem, productCatalogueOptions, tagOptions, filters, search, setPage, handleDeleteMultiple, handleToggleIsHot, setSelectedItem, confirmDelete, updateSelectedIds, getTotalItems, getAllItemIds } = useProduct();
 
 provide("getTotalItems", getTotalItems);
 provide("getAllItemIds", getAllItemIds);
@@ -40,8 +40,8 @@ definePageMeta({
 
 <template>
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h5 class="mb-0 text-uppercase fw-bold">{{ $t("admin.page.post.title") }}</h5>
-    <Breadcrumb :crumbs="[{ label: $t('admin.page.post.breadcrumb') }]" />
+    <h5 class="mb-0 text-uppercase fw-bold">{{ $t("admin.page.product.title") }}</h5>
+    <Breadcrumb :crumbs="[{ label: $t('admin.page.product.breadcrumb') }]" />
   </div>
   <div class="card shadow-sm">
     <div class="card-body">
@@ -50,17 +50,17 @@ definePageMeta({
           <Button variant="delete" type="button" :label="`${$t('admin.common.delete')} (${selectedIds.length})`" :loading="isLoading" :disabled="!hasSelectedItems" data-bs-toggle="modal" data-bs-target="#deleteMultipleRecord" />
           <Button variant="cancel" :loading="isLoading" :disabled="!hasSelectedItems" @click="updateSelectedIds([])" />
         </div>
-        <NuxtLink to="/admin/post/post/create" class="btn btn-success">
+        <NuxtLink to="/admin/product/product/create" class="btn btn-success">
           <i class="ri-add-line me-1"></i>
           {{ $t("admin.common.create") }}
         </NuxtLink>
       </div>
       <FilterBar @search="search">
         <div class="min-w-[200px]">
-          <Select v-model="filters.post_catalogue_id" :options="postCatalogueOptions" option-label="name" option-value="id" filter showClear :placeholder="$t('admin.page.post.filterGroup')" class="w-full text-sm" />
+          <Select v-model="filters.product_catalogue_id" :options="productCatalogueOptions" option-label="name" option-value="id" filter showClear :placeholder="$t('admin.page.product.filterGroup')" class="w-full text-sm" />
         </div>
         <div class="min-w-[200px]">
-          <Select v-model="filters.tag_id" :options="tagOptions" option-label="name" option-value="id" filter showClear :placeholder="$t('admin.page.post.filterTag')" class="w-full text-sm" />
+          <Select v-model="filters.tag_id" :options="tagOptions" option-label="name" option-value="id" filter showClear :placeholder="$t('admin.page.product.filterTag')" class="w-full text-sm" />
         </div>
       </FilterBar>
       <div class="table-responsive">
@@ -77,7 +77,7 @@ definePageMeta({
               <th style="width: 50px">
                 <AppCheckbox :model-value="selectedIds" :is-select-all="true" @update:model-value="handleSelectedIdsChange" />
               </th>
-              <th>{{ $t("admin.page.post.groupInfo") }}</th>
+              <th>{{ $t("admin.page.product.groupInfo") }}</th>
               <th class="text-center">{{ $t("admin.common.hot") }}</th>
               <th class="text-center">{{ $t("admin.common.status") }}</th>
               <th class="text-end">{{ $t("admin.common.actions") }}</th>
@@ -93,7 +93,7 @@ definePageMeta({
                   <AppCheckbox :model-value="selectedIds" :value="item.id" @update:model-value="handleSelectedIdsChange" />
                 </td>
                 <td>
-                  <NuxtLink class="hover:text-teal-500 flex items-center gap-2" :to="`/admin/post/post/${item.id}/edit`">
+                  <NuxtLink class="hover:text-teal-500 flex items-center gap-2" :to="`/admin/product/product/${item.id}/edit`">
                     <NuxtImg :src="item.image?.path ? item.image?.url ?? '' : '/shared/images/defaults/record.jpg'" alt="image-record" class="rounded-md w-[120px] h-[70px] object-cover" loading="lazy" />
                     {{ item.name }}
                   </NuxtLink>
@@ -113,7 +113,7 @@ definePageMeta({
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
                       <li>
-                        <NuxtLink class="dropdown-item text-info" :to="`/admin/post/post/${item.id}/edit`">
+                        <NuxtLink class="dropdown-item text-info" :to="`/admin/product/product/${item.id}/edit`">
                           <i class="ri-edit-box-line me-1"></i>
                           {{ $t("admin.common.edit") }}
                         </NuxtLink>
