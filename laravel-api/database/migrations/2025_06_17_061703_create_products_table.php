@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->longText('content')->nullable();
             $table->decimal('price_origin', 15, 2)->default(0);
-            $table->text('album')->nullable();
+            $table->json('album')->nullable();
             $table->integer('sort_order')->nullable();
             $table->integer('product_catalogue_id')->default(0);
             $table->integer('faq_id')->default(0)->comment('thực chất là liên kết với nhóm lấy ra thông tin ds faq');

@@ -51,7 +51,7 @@ const handleSearch = () => {
 
 <template>
   <div class="my-4">
-    <form @submit.prevent="handleSearch" class="flex flex-nowrap justify-end gap-3 overflow-x-auto">
+    <form @submit.prevent="handleSearch" class="flex flex-nowrap justify-end gap-3 overflow-x-scroll w-full">
       <div class="min-w-[200px]">
         <IconField>
           <InputIcon class="fa-solid fa-magnifying-glass" role="button" tabindex="0" @click.prevent="handleSearch" @keydown.enter.prevent="handleSearch" />

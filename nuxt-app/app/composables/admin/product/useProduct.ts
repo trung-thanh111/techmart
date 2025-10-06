@@ -11,6 +11,7 @@ import type { BasePayloadFilter } from "~/interfaces/base.interface";
 import { PRODUCTINDEX, MAX_FILE_SIZE, ACCEPTED_IMAGE_TYPES } from "~/utils/constants";
 import { productCatalogueService } from "~/services/product/catalogue.service";
 import { productTagService } from "~/services/product/tag.service";
+import { brandService } from "~/services/brand/brand.service";
 
 export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create" | "update" = "create") => {
   const { t } = useI18n();
@@ -23,6 +24,7 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
   const selectedIds = ref<number[]>([]);
   const selectedItem = ref<IProduct | null>(null);
   const tagOptions = ref<Array<{ name: string; id: number }>>([]);
+  const brandOptions = ref<Array<{ name: string; id: number }>>([]);
   const productOptions = ref<Array<{ name: string; id: number }>>([]);
   const productCatalogueOptions = ref<Array<{ name: string; id: number }>>([]);
   const slug = computed(() => slugify(values.name || ""));
@@ -33,14 +35,14 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
     description: z.string().max(500, "admin.validation.descriptionMaxLength").nullable().optional(),
     content: z.string().nullable().optional(),
     priceOrigin: z.number({ required_error: "admin.validation.priceOriginRequired" }).nonnegative({ message: "admin.validation.minValue" }),
-    album: z.string().nullable().optional(),
+    album: z.array(z.object({ path: z.string() })).nullable().optional(),
     sortOrder: z.number().int().nonnegative().nullable().optional(),
-    productCatalogueId: z.number().int().nonnegative().nullable().optional(),
-    brandId: z.number().int().nonnegative().nullable().optional(),
-    faqId: z.number().int().nonnegative().nullable().optional(),
-    tagId: z.number().int().nonnegative().nullable().optional(),
+    productCatalogues: z.array(z.number()).min(1, "admin.validation.productCatalogueRequired"),
+    brandId: z.number().int().positive("admin.validation.brandRequired").nullable().optional(),
+    productTags: z.array(z.number()).nullable().optional(),
+    relateds: z.array(z.number()).nullable().optional(),
     isHot: z.boolean().nullable().optional(),
-    likecount: z.number().int().nonnegative().nullable().optional(),
+    likeCount: z.number().int().nonnegative().nullable().optional(),
     publish: z
       .number()
       .refine((val) => val === null || val === undefined || [0, 1, 2].includes(val), {
@@ -65,6 +67,7 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
   });
 
   const handleStore = handleSubmit(async (payload: TProductCreate | TProductUpdate) => {
+    console.info('payload: ', payload)
     isLoading.value = true;
     try {
       const response = await productService.store(payload as Partial<IProduct>);
@@ -165,12 +168,13 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
   const fetchData = async () => {
     isLoading.value = true;
     try {
-      const { product_catalogue_id, tag_id, ...rest } = (filters.value as any) || {};
+      const { product_catalogue_id, tag_id, brand_id, ...rest } = (filters.value as any) || {};
       const response = await productService.pagination({
         ...rest,
         ...buildRelationParams({
           product_catalogues: product_catalogue_id,
           product_tags: tag_id,
+          brands: brand_id,
         }),
         page: page.value,
       });
@@ -200,6 +204,16 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
       tagOptions.value = (Array.isArray(rows) ? rows : [rows]).map((item: any) => ({ id: Number(item.id), name: item.name })).filter((opt: any) => opt.name && !Number.isNaN(opt.id));
     } catch (error) {
       console.error("Lỗi khi tải dữ liệu tag:", error);
+    }
+  };
+  
+  const loadBrand = async () => {
+    try {
+      const response = await brandService.all();
+      const rows = response?.data ?? [];
+      brandOptions.value = (Array.isArray(rows) ? rows : [rows]).map((item: any) => ({ id: Number(item.id), name: item.name })).filter((opt: any) => opt.name && !Number.isNaN(opt.id));
+    } catch (error) {
+      console.error("Lỗi khi tải dữ liệu brand:", error);
     }
   };
 
@@ -243,6 +257,7 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
     loadProductCatalogue();
     loadTag();
     loadProduct();
+    loadBrand();
   });
 
   return {
@@ -257,6 +272,7 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
     selectedItem,
     productCatalogueOptions,
     tagOptions,
+    brandOptions,
     productOptions,
     slug,
     setValues,

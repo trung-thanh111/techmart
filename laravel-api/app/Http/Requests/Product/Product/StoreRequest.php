@@ -28,7 +28,7 @@ class StoreRequest extends BaseRequest
             'description' => 'nullable|string|max:500',
             'content' => 'nullable|string',
             'price_origin' => 'required|numeric|min:0',
-            'album' => 'nullable|string',
+            "album" => "nullable|sometimes|array",
             'sort_order' => 'nullable|integer|min:0',
             'product_catalogue_id' => 'nullable|integer|min:0',
             'brand_id' => 'nullable|integer|min:0',

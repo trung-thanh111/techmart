@@ -7,7 +7,7 @@ import AppCheckbox from "~/components/admin/custom/AppCheckbox.vue";
 import Button from "~/components/admin/custom/Button.vue";
 import { useProduct } from "~/composables/admin/product/useProduct";
 
-const { data, isLoading, selectedIds, selectedItem, productCatalogueOptions, tagOptions, filters, search, setPage, handleDeleteMultiple, handleToggleIsHot, setSelectedItem, confirmDelete, updateSelectedIds, getTotalItems, getAllItemIds } = useProduct();
+const { data, isLoading, selectedIds, selectedItem, productCatalogueOptions, tagOptions, brandOptions, filters, search, setPage, handleDeleteMultiple, handleToggleIsHot, setSelectedItem, confirmDelete, updateSelectedIds, getTotalItems, getAllItemIds } = useProduct();
 
 provide("getTotalItems", getTotalItems);
 provide("getAllItemIds", getAllItemIds);
@@ -61,6 +61,9 @@ definePageMeta({
         </div>
         <div class="min-w-[200px]">
           <Select v-model="filters.tag_id" :options="tagOptions" option-label="name" option-value="id" filter showClear :placeholder="$t('admin.page.product.filterTag')" class="w-full text-sm" />
+        </div>
+        <div class="min-w-[200px]">
+          <Select v-model="filters.brand_id" :options="brandOptions" option-label="name" option-value="id" filter showClear :placeholder="$t('admin.page.product.filterBrand')" class="w-full text-sm" />
         </div>
       </FilterBar>
       <div class="table-responsive">

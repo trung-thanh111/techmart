@@ -22,8 +22,13 @@ class ProductService extends BaseService implements ProductServiceInterface
         'brands',
         'product_variants',
         'product_tags',
+        'relateds',
     ];
-    protected $relationFilter = [];
+    protected $relationFilter = [
+        'product_catalogues',
+        'brands',
+        'product_tags',
+    ];
 
     protected $cacheKeyPrefix = 'products';
     protected $cacheTags = ['products:collection'];
@@ -58,7 +63,7 @@ class ProductService extends BaseService implements ProductServiceInterface
         return $this;
     }
 
-    // override
+    // override lại xử lý thêm variant
     protected function handleRelation(Request $request): self
     {
         $relations = $this->repository->getRelationable();

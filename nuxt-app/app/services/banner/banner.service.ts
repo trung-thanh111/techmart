@@ -1,7 +1,6 @@
 import type { IApiOk, IApiMessage, IPaginate } from "~/interfaces/base.interface";
 import type { IBanner } from "~/interfaces/banner/banner.interface";
 import { useApi } from "~/composables/useApi";
-import { formData } from "~/utils/formData";
 
 const ENDPOINT = "/api/v1";
 

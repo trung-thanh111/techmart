@@ -4,23 +4,27 @@ export interface IProduct {
   id: number;
   name?: string;
   slug?: string;
-  image: { path: string | null; url: string | null };
-  order?: number;
+  sku?: string;
+  sortOrder?: number;
   isHot?: boolean;
   description?: string;
   content?: string;
-  tableOfContent?: boolean;
+  priceOrigin?: number;
+  album: { path: string }[];
   viewCount?: number;
+  likeCount?: number;
   tagId?: number;
   productCatalogueId?: number;
+  brandId?: number;
+  faqId?: number;
+  userId?: number;
   productCatalogues?: number[];
-  tags?: number[];
+  productTags?: number[];
   relateds?: number[];
   publish?: number;
   metaTitle?: string;
   metaKeyword?: string;
   metaDescription?: string;
-  publishedAt?: string | null;
 }
 
 export interface Option {
@@ -31,5 +35,6 @@ export interface Option {
 export interface ProductPayloadFilter extends BasePayloadFilter{
   tag_id?: number | null;
   product_catalogue_id?: number | null;
+  brand_id?: number | null
 
 }
