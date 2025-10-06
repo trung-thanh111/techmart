@@ -182,7 +182,24 @@
         "postCatalogue": "Danh mục",
         "postCataloguePlaceholder": "Chọn danh mục",
         "productCatalogue": "Nhóm sản phẩm",
-        "productCataloguePlaceholder": "Chọn nhóm sản phẩm"
+        "productCataloguePlaceholder": "Chọn nhóm sản phẩm",
+        "sku": "Mã SKU",
+        "skuPlaceholder": "Nhập mã SKU",
+        "price": "Giá gốc",
+        "pricePlaceholder": "Nhập giá gốc",
+        "likeCount": "Số lượt thích",
+        "likeCountPlaceholder": "Nhập số lượt thích",
+        "brand": "Thương hiệu",
+        "brandPlaceholder": "Chọn thương hiệu",
+        "customize": "Tùy chỉnh",
+        "productVariants": "Phiên bản sản phẩm",
+        "addVariant": "Thêm phiên bản",
+        "noVariants": "Chưa có phiên bản nào",
+        "variant": "Phiên bản",
+        "variantName": "Tên phiên bản",
+        "variantNamePlaceholder": "Nhập tên phiên bản",
+        "stock": "Tồn kho",
+        "stockPlaceholder": "Nhập số lượng tồn kho"
       }
     },
     "header": {
@@ -405,7 +422,8 @@
         "description": "Sản phẩm",
         "keywords": "Sản phẩm",
         "filterGroup": "Nhóm sản phẩm",
-        "filterTag": "Tag sản phẩm",
+        "filterTag": "Tag",
+        "filterBrand": "Thương hiệu",
         "groupInfo": "Thông tin"
       },
       "faqCatalogue": {
@@ -578,7 +596,13 @@
       "orderInteger": "Thứ tự phải là số nguyên",
       "linkUrlMaxLength": "Đường dẫn vượt quá 255 ký tự",
       "isHotBoolean": "Giá trị nổi bật phải là kiểu boolean",
-      "positionInvalid": "Vị trí không hợp lệ"
+      "positionInvalid": "Vị trí không hợp lệ",
+      "skuRequired": "Mã SKU là bắt buộc",
+      "skuMaxLength": "Mã SKU vượt quá 100 ký tự",
+      "priceOriginRequired": "Giá gốc là bắt buộc",
+      "minValue": "Giá trị phải lớn hơn hoặc bằng 0",
+      "brandRequired": "Bạn chưa chọn thương hiệu",
+      "productCatalogueRequired": "Bạn chưa chọn nhóm sản phẩm"
     },
     "messages": {
       "createSuccess": "Thêm mới thành công",

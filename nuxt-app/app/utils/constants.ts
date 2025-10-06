@@ -42,8 +42,8 @@ export const ATTRIBUTECATALOGUECREATE = "/admin/attribute/catalogue/create";
 export const ATTRIBUTECATALOGUEUPDATE = "/admin/attribute/catalogue/update";
 
 export const PRODUCTINDEX = "/admin/product/product";
-export const PRODUCTCREATE = "/admin/product/create";
-export const PRODUCTUPDATE = "/admin/product/update";
+export const PRODUCTCREATE = "/admin/product/product/create";
+export const PRODUCTUPDATE = "/admin/product/product/update";
 
 export const PRODUCTCATALOGUEINDEX = "/admin/product/catalogue";
 export const PRODUCTCATALOGUECREATE = "/admin/product/catalogue/create";

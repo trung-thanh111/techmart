@@ -17,7 +17,7 @@ export const productService = {
     const { privateFetch } = useApi();
     return await privateFetch<IApiOk<IProduct>>(`${ENDPOINT}/products`, {
       method: "POST",
-      body: formData(payload),
+      body: payload,
     });
   },
 
@@ -30,7 +30,7 @@ export const productService = {
     const { privateFetch } = useApi();
     return await privateFetch<IApiOk<IProduct>>(`${ENDPOINT}/products/${id}`, {
       method: "POST",
-      body: formData(payload),
+      body: payload,
       params: { _method: "PATCH" },
     });
   },

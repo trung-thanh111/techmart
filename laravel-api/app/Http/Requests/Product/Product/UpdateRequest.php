@@ -39,7 +39,7 @@ class UpdateRequest extends BaseRequest
             "description" => "{$sometime}|nullable|string|max:500",
             "content" => "{$sometime}|nullable|string",
             "price_origin" => "{$sometime}|required|numeric|min:0",
-            "album" => "{$sometime}|nullable|string",
+            "album" => "{$sometime}|nullable|sometimes|array",
             "sort_order" => "{$sometime}|nullable|integer|min:0",
             "product_catalogue_id" => "{$sometime}|nullable|integer|min:0",
             "brand_id" => "{$sometime}|nullable|integer|min:0",

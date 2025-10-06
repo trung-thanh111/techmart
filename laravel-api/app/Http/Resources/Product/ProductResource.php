@@ -35,14 +35,17 @@ class ProductResource extends JsonResource
             'faqId' => (int) $this->faq_id,
             'tagId' => (int) $this->tag_id,
             'publish' => (int) $this->publish,
-            'creator' => $this->whenLoaded('users', [
-                'id' => $this->users->id,
-                'avatar' => asset("/storage/{$this->users->image}") ?? null,
-                'name' => $this->users->name,
-            ]),
+            // 'creator' => $this->whenLoaded('users', [
+            //     'id' => $this->users->id,
+            //     'avatar' => asset("/storage/{$this->users->image}") ?? null,
+            //     'name' => $this->users->name,
+            // ]),
             'productCatalogues' => ProductCatalogueResource::collection($this->whenLoaded('product_catalogues')),
             'brand' => $this->whenLoaded('brands', function () {
                 return new BrandResource($this->brands);
+            }),
+            'relateds' => $this->whenLoaded('relateds', function () {
+                return ProductResource::collection($this->relateds);
             }),
             'productTags' => ProductTagResource::collection($this->whenLoaded('product_tags')),
             'productVariants' => ProductVariantResource::collection($this->whenLoaded('product_variants')),

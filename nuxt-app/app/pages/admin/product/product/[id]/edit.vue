@@ -4,7 +4,7 @@
       <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
         <h4 class="mb-sm-0">{{ $t("admin.common.edit") }}</h4>
         <div class="page-title-right">
-          <Breadcrumb :crumbs="[{ label: $t('admin.page.post.breadcrumb'), to: '/admin/post/post' }, { label: $t('admin.common.edit') }]" />
+          <Breadcrumb :crumbs="[{ label: $t('admin.page.product.breadcrumb'), to: '/admin/product/product' }, { label: $t('admin.common.edit') }]" />
         </div>
       </div>
     </div>
@@ -45,10 +45,10 @@
             </div>
           </div>
           <div class="mb-3">
-            <label class="form-label" for="content">
-              {{ $t("admin.common.form.content") }}
+            <label class="form-label" for="description">
+              {{ $t("admin.common.form.description") }}
             </label>
-            <Field name="content" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
+            <Field name="description" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
               <div class="w-full">
                 <CKEditor v-model="field.value" @update:modelValue="field.onChange" class="h-64" />
                 <small v-if="errorMessage && meta.touched" class="text-danger">
@@ -57,14 +57,13 @@
               </div>
             </Field>
           </div>
-          <div class="mb-3">
-            <label class="form-label" for="description">
-              {{ $t("admin.common.form.description") }}
-            </label>
-            <Field name="description" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <textarea v-bind="field" id="description" rows="3" :placeholder="$t('admin.common.form.descriptionPlaceholder')" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
-              <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
-            </Field>
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">{{ $t("admin.common.image") }}</h5>
+            </div>
+            <div class="card-body">
+              <MultipleImageUpload v-model="albumData" field-name="album" :max-files="15" @change="onAlbumChange" />
+            </div>
           </div>
           <div class="row">
             <div class="col-md-6">
@@ -80,11 +79,11 @@
             </div>
             <div class="col-md-6">
               <div class="mb-3">
-                <label class="form-label" for="viewCount">
-                  {{ $t("admin.common.form.viewCount") }}
+                <label class="form-label" for="likeCount">
+                  {{ $t("admin.common.form.likeCount") }}
                 </label>
-                <Field name="viewCount" v-slot="{ field, errorMessage, meta }">
-                  <InputNumber :modelValue="field.value" @update:modelValue="field.onChange" :min="1" showButtons class="w-full" input-class="!rounded py-[7px] w-full" size="small" />
+                <Field name="likeCount" v-slot="{ field, errorMessage, meta }">
+                  <InputNumber :modelValue="field.value" @update:modelValue="field.onChange" :min="0" showButtons class="w-full" input-class="!rounded py-[7px] w-full" size="small" />
                   <small v-if="errorMessage && meta.touched" class="text-danger">
                     {{ $t(errorMessage) }}
                   </small>
@@ -94,20 +93,37 @@
           </div>
         </div>
       </div>
-      <SEO :values="values"/>
+      <SEO :values="values" />
       <div class="flex justify-end gap-3 mt-4 position-sticky bottom-5 z-20">
-        <Button type="button" variant="cancel" :to="POSTINDEX" />
+        <Button type="button" variant="cancel" :to="PRODUCTINDEX" />
         <Button variant="success" :loading="isLoading" />
       </div>
     </div>
     <div class="col-lg-4 mt-0">
       <div class="card">
         <div class="card-header">
-          <h5 class="card-title mb-0">{{ $t("admin.common.image") }}</h5>
+          <h5 class="card-title mb-0">{{ $t("admin.common.customize") }}</h5>
         </div>
-        <div class="card-body p-4">
-          <div class="text-center">
-            <SingleImageUpload :initial-url="currentImageUrl" :note="$t('admin.common.noteUploadImage')" @selected="(f)=> setValues({ ...(values as any), image: f } as any)" />
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label">
+              {{ $t("admin.common.form.price") }}:
+              <span class="text-danger">*</span>
+            </label>
+            <Field name="priceOrigin" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
+              <InputNumber :modelValue="field.value" @update:modelValue="field.onChange" :min="0" :maxFractionDigits="2" showButtons class="w-full" input-class="!rounded py-[7px] w-full" size="small" />
+              <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
+            </Field>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">
+              {{ $t("admin.common.form.sku") }}:
+              <span class="text-danger">*</span>
+            </label>
+            <Field name="sku" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
+              <input v-bind="field" id="sku" type="text" :placeholder="$t('admin.common.form.skuPlaceholder')" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
+              <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
+            </Field>
           </div>
         </div>
       </div>
@@ -118,11 +134,11 @@
         <div class="card-body">
           <div class="mb-3">
             <label class="form-label">
-              {{ $t("admin.common.form.postCatalogue") }}:
+              {{ $t("admin.common.form.productCatalogue") }}:
               <span class="text-danger">*</span>
             </label>
-            <Field name="postCatalogues" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <MultiSelect :modelValue="field.value" @update:modelValue="field.onChange" :options="postCatalogueOptions" optionLabel="name" optionValue="id" filter display="chip" :placeholder="$t('admin.common.form.postCataloguePlaceholder')" class="w-100" />
+            <Field name="productCatalogues" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
+              <MultiSelect :modelValue="field.value" @update:modelValue="field.onChange" :options="productCatalogueOptions" optionLabel="name" optionValue="id" filter display="chip" :placeholder="$t('admin.common.form.productCataloguePlaceholder')" class="w-100" />
               <small v-if="errorMessage && meta.touched" class="text-danger">
                 {{ $t(errorMessage) }}
               </small>
@@ -132,8 +148,19 @@
             <label class="form-label">
               {{ $t("admin.common.form.tag") }}
             </label>
-            <Field name="postTags" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
+            <Field name="productTags" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
               <MultiSelect :modelValue="field.value" @update:modelValue="field.onChange" :options="tagOptions" optionLabel="name" optionValue="id" filter display="chip" :placeholder="$t('admin.common.form.tagPlaceholder')" class="rounded py-[1px] w-100" />
+              <small v-if="errorMessage && meta.touched" class="text-danger">
+                {{ $t(errorMessage) }}
+              </small>
+            </Field>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">
+              {{ $t("admin.common.form.brand") }}
+            </label>
+            <Field name="brandId" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
+              <Select :modelValue="field.value" @update:modelValue="field.onChange" :options="brandOptions" optionLabel="name" optionValue="id" filter :placeholder="$t('admin.common.form.brandPlaceholder')" class="w-100" showClear checkmark />
               <small v-if="errorMessage && meta.touched" class="text-danger">
                 {{ $t(errorMessage) }}
               </small>
@@ -144,7 +171,7 @@
               {{ $t("admin.common.form.related") }}
             </label>
             <Field name="relateds" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <MultiSelect :modelValue="field.value" @update:modelValue="field.onChange" :options="postOptions" optionLabel="name" optionValue="id" filter display="chip" :placeholder="$t('admin.common.form.relatedPlaceholder')" class="rounded py-[1px] w-100" size="small" />
+              <MultiSelect :modelValue="field.value" @update:modelValue="field.onChange" :options="productOptions" optionLabel="name" optionValue="id" filter display="chip" :placeholder="$t('admin.common.form.relatedPlaceholder')" class="rounded py-[1px] w-100" size="small" />
               <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
             </Field>
           </div>
@@ -156,30 +183,11 @@
         </div>
         <div class="card-body">
           <div class="mb-3">
-            <label class="form-label" for="publishedAt">
-              {{ $t("admin.common.form.publishedAt") }}
-            </label>
-            <Field name="publishedAt" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <input v-bind="field" id="publishedAt" type="datetime-local" class="form-control rounded py-[1px] w-100" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
-              <small v-if="errorMessage && meta.touched" class="text-danger">
-                {{ $t(errorMessage) }}
-              </small>
-            </Field>
-          </div>
-          <div class="mb-3">
             <div class="form-check d-flex align-items-center gap-2 ps-0">
               <Field name="isHot" v-slot="{ field }">
                 <AppCheckbox :modelValue="field.value" @update:modelValue="field.onChange" inputId="is_hot" class="scale-125" />
               </Field>
               <label for="is_hot" class="mb-0">{{ $t("admin.common.form.isHot") }}</label>
-            </div>
-          </div>
-          <div class="mb-3">
-            <div class="form-check d-flex align-items-center gap-2 ps-0">
-              <Field name="tableOfContent" v-slot="{ field }">
-                <AppCheckbox :modelValue="field.value" @update:modelValue="field.onChange" inputId="table_of_content" class="scale-125" />
-              </Field>
-              <label for="table_of_content" class="mb-0">{{ $t("admin.common.form.tableOfContent") }}</label>
             </div>
           </div>
           <div class="mb-3">
@@ -199,40 +207,63 @@
 
 <script setup lang="ts">
 import { Field } from "vee-validate";
-import PublishSelect from "~/components/admin/custom/PublishSelect.vue";
 import Button from "~/components/admin/custom/Button.vue";
+import PublishSelect from "~/components/admin/custom/PublishSelect.vue";
 import Breadcrumb from "~/components/admin/navigation/Breadcrumb.vue";
-import { usePost } from "~/composables/admin/post/usePost";
-import { POSTINDEX } from "~/utils/constants";
-import SingleImageUpload from "~/components/admin/custom/SingleImageUpload.vue";
+import { PRODUCTINDEX } from "~/utils/constants";
+import { useProduct } from "~/composables/admin/product/useProduct";
 import CKEditor from "~/components/admin/custom/CKEditor.vue";
 import AppCheckbox from "~/components/admin/custom/AppCheckbox.vue";
 import SEO from "~/components/admin/custom/SEO.vue";
+import MultipleImageUpload from "~/components/admin/custom/MultipleImageUpload.vue";
+import type { AlbumItem } from "~/interfaces/upload/image.interface";
+import { generateSKU } from "~/utils/helpers";
 
-const { isLoading, tagOptions, postCatalogueOptions, postOptions, config, slug, show, handleUpdate, setValues, values } = usePost(undefined, "update");
+const { isLoading, values, tagOptions, productCatalogueOptions, productOptions, brandOptions, config, slug, show, setValues, handleUpdate } = useProduct(undefined, "update");
 const id = Number(useRoute().params.id);
 const { data } = await show(id);
-const currentImageUrl = ref<string | null>(null);
-currentImageUrl.value = data?.image?.path ? data?.image?.url || null : null;
+
+const albumData = ref<AlbumItem[] | null>(null);
+
+const onAlbumChange = () => {
+  setValues({ ...values, album: albumData.value });
+};
+albumData.value = data?.album ?? null;
 
 setValues({
-  name: data.name,
-  description: data.description,
-  content: data.content,
-  tableOfContent: data.tableOfContent,
-  order: data.order,
-  isHot: data.isHot,
-  viewCount: data.viewCount,
-  // ép kiểu để load data & phù hợp với Interface
-  postCatalogues: (data?.postCatalogues as { id: number; name: string }[] | undefined)?.map((c) => c.id) ?? [],
-  postTags: (data?.tags as { id: number; name: string }[] | undefined)?.map((t) => t.id) ?? [],
-  relateds: (data?.relateds as { id: number; name: string }[] | undefined)?.map((r) => r.id) ?? [],
-  publish: data.publish || 0,
-  metaTitle: data.metaTitle,
-  metaKeyword: data.metaKeyword,
-  metaDescription: data.metaDescription,
-  publishedAt: data.publishedAt,
+  name: data?.name,
+  description: data?.description,
+  content: data?.content,
+  album: data?.album ?? null,
+  priceOrigin: Number(data?.priceOrigin ?? 0),
+  sku: data?.sku,
+  sortOrder: data?.sortOrder ?? null,
+  isHot: Boolean(data?.isHot ?? false),
+  likeCount: Number(data?.likeCount ?? 0),
+  productCatalogues: (data?.productCatalogues as Array<{ id: number; name: string }> | undefined)?.map((c) => c.id) ?? [],
+  productTags: (data?.productTags as Array<{ id: number; name: string }> | undefined)?.map((t) => t.id) ?? [],
+  brandId: (data as any)?.brandId ?? (data as any)?.brand?.id ?? null,
+  relateds: (data?.relateds as Array<{ id: number; name: string }> | undefined)?.map((r) => r.id) ?? [],
+  publish: (data as any)?.publish ?? 0,
+  metaTitle: (data as any)?.metaTitle ?? null,
+  metaKeyword: (data as any)?.metaKeyword ?? null,
+  metaDescription: (data as any)?.metaDescription ?? null,
 });
+
+onMounted(() => {
+  if (!values.sku) {
+    const sku = generateSKU(false);
+    setValues({ ...values, sku });
+  }
+});
+
+watch(
+  albumData,
+  (val) => {
+    setValues({ ...values, album: val } as any);
+  },
+  { immediate: false, deep: true }
+);
 
 definePageMeta({
   layout: "admin",

@@ -82,3 +82,19 @@ export const formatPhoneVN = (phone?: string | null): string => {
   const cleaned = String(phone).trim();
   return `(+84) ${cleaned.replace(/^0/, "")}`;
 };
+
+/**
+ * Generate SKU
+ * @param isVariant - true nếu là phiên bản, false nếu là sản phẩm gốc
+ * @returns Generated SKU string
+ */
+export const generateSKU = (isVariant: boolean = false): string => {
+  const prefix = isVariant ? "VRA-" : "PD-";
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  let randomLetters = "";
+  for (let i = 0; i < 6; i++) {
+    randomLetters += letters.charAt(Math.floor(Math.random() * letters.length));
+  }
+  const randomNumbers = Math.floor(1000 + Math.random() * 9000).toString();
+  return prefix + randomLetters + randomNumbers;
+};

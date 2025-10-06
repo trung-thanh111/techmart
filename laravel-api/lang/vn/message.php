@@ -20,6 +20,7 @@ return [
     'permission_denied' => 'Bạn không có quyền truy cập vào tài nguyên này',
     'refresh_token_reused' => 'Phát hiện refresToken sử dụng lại',
     'logout_success' => 'Đăng xuất thành công',
+    'data_successfully' => 'Lưu dữ liệu thành công',
     'save_data_successfully' => 'Lưu dữ liệu thành công',
     'update_data_successfully' => 'Cập nhật dữ liệu thành công',
     'record_not_found' => 'Không tìm thấy bản ghi hợp lệ',

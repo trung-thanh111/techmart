@@ -50,20 +50,19 @@ class Product extends Model
     public $relationable = [
         'product_catalogues',
         'product_tags',
-        'brands',
-        'users'
+        'relateds'
     ];
 
     protected static function booted(): void
     {
         // creating đến gán trước khi insert tối ưu thay vì dùng created 2 lần insert & update
         static::creating(function (Product $product) {
-            if (!empty($product->product_catalogues) && is_array($product->product_catalogues)) {
-                $product->product_catalogue_id = $product->product_catalogues[0];
+            // Xử lý productCatalogues từ frontend (camelCase) - fallback nếu Service chưa xử lý
+            if (!empty($product->productCatalogues) && is_array($product->productCatalogues)) {
+                $product->product_catalogue_id = $product->productCatalogues[0];
             }
         });
     }
-
 
     public function product_catalogues(): BelongsToMany
     {
@@ -88,5 +87,10 @@ class Product extends Model
     public function product_tags(): BelongsToMany
     {
         return $this->belongsToMany(ProductTag::class, 'product_tag_product', 'product_id', 'product_tag_id');
+    }
+
+    public function relateds(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class, 'related_products', 'product_id', 'related_product_id');
     }
 }
