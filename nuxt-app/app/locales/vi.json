@@ -419,6 +419,7 @@
       },
       "product": {
         "title": "Sản phẩm",
+        "breadcrumb": "Quản lý sản phẩm",
         "description": "Sản phẩm",
         "keywords": "Sản phẩm",
         "filterGroup": "Nhóm sản phẩm",

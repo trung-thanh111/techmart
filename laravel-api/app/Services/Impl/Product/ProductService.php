@@ -81,16 +81,34 @@ class ProductService extends BaseService implements ProductServiceInterface
 
     private function handleProductVariant(Request $request): self
     {
-        if (!$request->has('product_variants') || !is_array($request->input('product_variants'))) return $this;
-        $variants = [];
-        foreach ($request->product_variants as $variantData) {
-            $variant = $this->model->product_variants()->create([
-                ...$variantData,
-                'price' => string_to_price($variantData['price']),
+        if (!$request->has('productVariants') || !is_array($request->input('productVariants'))) return $this;
+        
+        $variants = $request->input('productVariants');
+        
+        // Delete existing variants if updating
+        if ($this->model->exists) {
+            $this->model->product_variants()->delete();
+        }
+        
+        foreach ($variants as $variantData) {
+            // Convert camelCase to snake_case for database
+            $variantAttributes = [
+                'album' => $variantData['album'] ?? [],
+                'code' => $variantData['code'],
+                'stock' => $variantData['stock'],
+                'sku' => $variantData['sku'],
+                'price' => $variantData['price'] ? string_to_price($variantData['price']) : null,
+                'barcode' => $variantData['barcode'] ?? null,
+                'attribute_data' => $variantData['attributeData'] ?? [],
+                'publish' => $variantData['publish'],
                 'user_id' => auth(Common::API)->user()->id,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ]);
+            ];
+            
+            $variant = $this->model->product_variants()->create($variantAttributes);
+            
+            // Attach attributes to pivot table
             if (isset($variantData['attributes']) && is_array($variantData['attributes'])) {
                 $variant->variant_attributes()->attach($variantData['attributes']);
             }
@@ -103,4 +121,5 @@ class ProductService extends BaseService implements ProductServiceInterface
     {
         return new ProductResource($resource);
     }
+
 }

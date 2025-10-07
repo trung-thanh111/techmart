@@ -94,7 +94,7 @@
         </div>
       </div>
       <SEO :values="values" />
-      <ProductVariantManager v-model="productVariants" />
+      <ProductVariant :product-sku="values.sku" />
       <div class="flex justify-end gap-3 mt-4 position-sticky bottom-5 z-20">
         <Button type="button" variant="cancel" :to="PRODUCTINDEX" />
         <Button variant="success" :loading="isLoading" />
@@ -219,11 +219,11 @@ import SEO from "~/components/admin/custom/SEO.vue";
 import MultipleImageUpload from "~/components/admin/custom/MultipleImageUpload.vue";
 import type { AlbumItem } from "~/interfaces/upload/image.interface";
 import { generateSKU } from "~/utils/helpers";
+import ProductVariant from '~/components/admin/product/ProductVariant.vue'
 
 const { isLoading, values, tagOptions, productCatalogueOptions, productOptions, brandOptions, config, slug, setValues, handleStore } = useProduct();
 
 const albumData = ref<AlbumItem[] | null>(null);
-const productVariants = ref<any[]>([]);
 
 const onAlbumChange = () => {
   setValues({ ...values, album: albumData.value });
