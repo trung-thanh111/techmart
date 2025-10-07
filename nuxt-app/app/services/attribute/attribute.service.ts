@@ -56,4 +56,10 @@ export const attributeService = {
     const { privateFetch } = useApi();
     return await privateFetch<IApiOk<IAttribute>>(`${ENDPOINT}/attributes?type=all`);
   },
+
+  getAttributesByCatalogue: async (catalogueId: number): Promise<IApiOk<any>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IAttribute>>(`${ENDPOINT}/attributes?type=all&attribute_catalogue_id=${catalogueId}`);
+
+  },
 };

@@ -14,19 +14,19 @@ class ProductVariant extends Model
 
     protected $fillable = [
         'album',
-        'image',
         'code',
         'stock',
         'sku',
         'price',
         'barcode',
+        'attribute_data',
         'product_id',
         'user_id',
         'publish'
     ];
 
     protected $casts = [
-        'album' => 'json'
+        'album' => 'array'
     ];
 
     /**

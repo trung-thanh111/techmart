@@ -10,6 +10,8 @@ use App\Http\Requests\Product\Product\BulkUpdateRequest;
 use App\Http\Requests\Product\Product\StoreRequest;
 use App\Http\Requests\Product\Product\UpdateRequest;
 use App\Services\Interfaces\Product\ProductServiceInterface as ProductService;
+use App\Http\Resources\ApiResource;
+use Illuminate\Support\Facades\Lang;
 
 class ProductController extends BaseController
 {
@@ -50,6 +52,7 @@ class ProductController extends BaseController
     public function restore(RestoreRequest $request, int $id = 0): JsonResponse{
         return $this->baseRestore($request, $id);
     }
+
 
     protected function getService(){
         return $this->service;
