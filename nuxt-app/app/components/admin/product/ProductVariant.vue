@@ -7,78 +7,98 @@
         <p class="text-xs text-gray-500 mt-1">Quản lý các biến thể khác nhau như màu sắc, kích thước, dung lượng...</p>
       </div>
     </div>
+
     <div class="flex items-center gap-2">
       <Checkbox input-id="has-variants" v-model="hasVariants" :binary="true" />
       <label for="has-variants" class="text-sm cursor-pointer text-gray-600 mb-0">Kích hoạt biến thể</label>
     </div>
+
     <div v-if="hasVariants" class="space-y-5">
       <h3 class="text-sm font-medium text-gray-800">Thuộc tính</h3>
-
       <div class="space-y-3">
-        <div v-for="(row, idx) in groupRows" :key="row.uid" class="flex items-center gap-3 hover:border-blue-300 transition">
-          <Select class="w-1/3 h-[42px]" :options="attributeCatalogues" option-label="name" option-value="id" v-model="row.catalogueId" placeholder="Nhóm thuộc tính" :option-disabled="(opt) => isCatalogueOptionDisabled(opt.id, row.uid)" checkmark @update:model-value="onSelectGroup(row)" />
-          <MultiSelect class="flex-1 h-[42px] text-[16px]" :options="getAttributesForRow(row)" option-label="name" option-value="id" v-model="row.attributeIds" placeholder="Thuộc tính" display="chip" filter showClear :disabled="!row.catalogueId" @update:model-value="onSelectAttributes(row)" />
-
-          <Button icon="ri-delete-bin-line" size="small" severity="danger" text rounded @click="removeRow(idx)" />
+        <div v-for="(row, idx) in groupRows" :key="row.uid" class="flex items-center gap-3">
+          <Select class="w-1/3 h-[38px] text-sm" :options="attributeCatalogues" option-label="name" option-value="id" v-model="row.catalogueId" placeholder="Nhóm thuộc tính" :option-disabled="(opt) => isCatalogueOptionDisabled(opt.id, row.uid)" checkmark @update:model-value="onSelectGroup(row)" />
+          <MultiSelect class="flex-1 h-[38px] text-[14px]" :options="getAttributesForRow(row)" option-label="name" option-value="id" v-model="row.attributeIds" placeholder="Thuộc tính" display="chip" filter showClear :disabled="!row.catalogueId" @update:model-value="onSelectAttributes(row)" />
         </div>
       </div>
-      <Button label="Thêm mới" class="rounded" size="small" icon="ri-add-line" outlined @click="addRow" />
-
-      <!-- Tag nhóm đã chọn -->
-      <div v-if="variantGroups.length" class="pt-3 border-t border-gray-100">
-        <div class="text-xs text-gray-500 mb-2">Đã chọn:</div>
-        <div class="flex flex-wrap gap-2">
-          <Tag v-for="group in variantGroups" :key="group.catalogueId" :value="`${group.catalogueName} (${group.attributes.length})`" severity="info" class="text-xs" />
-        </div>
-      </div>
+      <Button label="Thêm mới" class="rounded font-light text-sm" size="small" icon="ri-add-line" outlined @click="addRow" />
     </div>
 
     <!-- Variant Table -->
     <div v-if="variants.length" class="pt-4 border-t border-gray-100">
       <div class="flex justify-between items-center mb-3">
-        <h4 class="text-sm font-medium text-gray-800">Danh sách biến thể ({{ variants.length }})</h4>
-        <div class="flex gap-2">
-          <Button @click="autoGenerateSkus" size="small" icon="ri-barcode-line" severity="secondary" label="Tự động tạo SKU" />
-        </div>
+        <h4 class="text-sm font-medium text-gray-800">Biến thể ({{ variants.length }})</h4>
       </div>
 
-      <DataTable :value="variants" class="p-datatable-sm border border-gray-100 rounded-lg" :paginator="true" :rows="10" rowHover>
-        <Column field="sku" header="SKU" />
-        <Column field="code" header="Mã" />
-        <Column field="attributeData" header="Thuộc tính">
-          <template #body="{ data }">
-            <div class="flex flex-wrap gap-1">
-              <Tag v-for="(attr, group) in data.attributeData" :key="group" :value="`${group}: ${attr.name}`" severity="secondary" class="text-[11px]" />
+      <div class="overflow-x-auto border border-gray-100 rounded-lg">
+        <DataTable :value="variants" dataKey="id" :expandedRows="expandedRows" @row-toggle="expandedRows = $event.data" class="p-datatable-sm auto-width-table" rowHover>
+          <Column expander class="p-0 w-[1rem]" />
+          <Column field="sku" header="SKU" class="auto-width-column" />
+          <Column field="name" header="Tên" class="auto-width-column" />
+          <Column field="stock" header="Tồn kho" class="auto-width-column">
+            <template #body="{ data }">
+              <span>{{ data.stock ?? 0 }}</span>
+            </template>
+          </Column>
+          <Column field="price" header="Giá" class="auto-width-column">
+            <template #body="{ data }">
+              <span>{{ data.price?.toLocaleString("vi-VN") || "0" }} ₫</span>
+            </template>
+          </Column>
+
+          <template #expansion="{ data, index }" class="p-0">
+            <div class="p-2 bg-gray-50 space-y-4">
+              <input type="hidden" :name="`variants[${index}][code]`" v-model="data.code" />
+              <input type="hidden" :name="`variants[${index}][attributeData]`" :value="JSON.stringify(data.attributeData)" />
+
+              <div class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div class="flex flex-col gap-1">
+                    <label class="text-xs font-medium text-gray-600">SKU</label>
+                    <InputText v-model="data.sku" class="w-full !h-[38px] text-sm" disabled />
+                  </div>
+                  <div class="flex flex-col gap-1">
+                    <label class="text-xs font-medium text-gray-600">Tên biến thể</label>
+                    <InputText v-model="data.name" class="w-full !h-[38px] text-sm" />
+                  </div>
+                  <div class="flex flex-col gap-1">
+                    <label class="text-xs font-medium text-gray-600">Mã vạch</label>
+                    <InputText v-model="data.barcode" class="w-full !h-[38px] text-sm" />
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+                  <div class="flex flex-col gap-1">
+                    <label class="text-xs font-medium text-gray-600">Giá (VNĐ)</label>
+                    <InputNumber v-model="data.price" input-class="!h-[38px] text-sm" mode="currency" currency="VND" locale="vi-VN" class="w-full" />
+                  </div>
+                  <div class="flex flex-col gap-1">
+                    <label class="text-xs font-medium text-gray-600">Tồn kho</label>
+                    <InputNumber v-model="data.stock" mode="decimal" input-class="!h-[38px] text-sm" showButtons :min="0" fluid class="w-full" />
+                  </div>
+                </div>
+
+                <div class="flex flex-col gap-1">
+                  <label class="text-xs font-medium text-gray-600">Đường dẫn</label>
+                  <InputText v-model="data.url" class="w-full !h-[38px] text-sm font-mono" placeholder="https://domain/san-pham?variant=..." />
+                </div>
+
+                <div class="flex items-center justify-start py-1">
+                  <ToggleSwitch v-model="data.publish" @update:modelValue="" class="scale-75" />
+                  <label class="text-xs font-medium text-gray-600 m-0">Trạng thái</label>
+                </div>
+              </div>
+
+              <div class="flex justify-end gap-2">
+                <Button size="small" label="Hủy" outlined class="rounded" severity="secondary" @click="cancelEditVariant(index)" />
+                <Button size="small" label="Lưu" class="!px-4 rounded" @click="saveVariant(index)" />
+              </div>
             </div>
           </template>
-        </Column>
-
-        <Column field="price" header="Giá">
-          <template #body="{ data }">
-            <InputNumber v-model="data.price" input-class="!h-[34px]" mode="currency" currency="VND" locale="vi-VN" class="w-[140px]" />
-          </template>
-        </Column>
-
-        <Column field="stock" header="Tồn kho">
-          <template #body="{ data }">
-            <InputNumber v-model="data.stock" input-class="!h-[34px]" show-buttons class="w-[100px]" />
-          </template>
-        </Column>
-
-        <Column>
-          <template #body="{ index }">
-            <Button icon="ri-delete-bin-line" size="small" severity="danger" text rounded @click="removeVariant(index)" />
-          </template>
-        </Column>
-      </DataTable>
+        </DataTable>
+      </div>
     </div>
 
-    <!-- Save button -->
-    <div v-if="variants.length" class="pt-4 border-t border-gray-100 flex justify-end">
-      <Button label="Lưu các phiên bản" icon="ri-save-3-line" class="!h-10 !px-6" :loading="saving" @click="saveVariants" />
-    </div>
-
-    <!-- Empty state -->
     <div v-else-if="hasVariants" class="text-center py-6">
       <h4 class="text-base font-medium text-gray-700 mb-1">Chưa có biến thể nào</h4>
       <p class="text-sm text-gray-500">Thêm nhóm và giá trị thuộc tính để tạo biến thể</p>
@@ -89,31 +109,8 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from "vue";
 import { useToast } from "primevue/usetoast";
-import DataTable from "primevue/datatable";
-import Column from "primevue/column";
-import Button from "primevue/button";
-import InputText from "primevue/inputtext";
-import InputNumber from "primevue/inputnumber";
-import Checkbox from "primevue/checkbox";
-import Dropdown from "primevue/dropdown";
-import MultiSelect from "primevue/multiselect";
-import Tag from "primevue/tag";
-import Dialog from "primevue/dialog";
-import type { IAttributeCatalogue, IAttribute, IProductVariant } from "~/interfaces/product/variant.interface";
-import { generateDefaultSku } from "~/utils/variantHelpers";
+import type { IProductVariant } from "~/interfaces/product/variant.interface";
 import { useProductVariantStore } from "~/stores/product/variant.store";
-
-// Props
-interface Props {
-  productId?: number;
-  productSku?: string;
-  initialVariants?: IProductVariant[];
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  productSku: "",
-  initialVariants: () => [],
-});
 
 // Composables
 const toast = useToast();
@@ -123,33 +120,34 @@ const variantStore = useProductVariantStore();
 const hasVariants = ref(false);
 type GroupRow = { uid: string; catalogueId: number | null; attributeIds: number[]; lockGroup: boolean };
 const groupRows = ref<GroupRow[]>([]);
-const saving = ref(false);
-const showWarningDialog = ref(false);
-const warningMessage = ref("");
-const pendingRegenerate = ref(false);
 
-// Computed
-const productId = computed(() => props.productId);
-const selectedCatalogue = computed(() => variantStore.selectedCatalogue);
-const canAddGroup = computed(() => variantStore.canAddGroup);
 const attributeCatalogues = computed(() => variantStore.attributeCatalogues);
-const selectedCatalogueId = computed(() => variantStore.selectedCatalogueId);
-const selectedAttributes = computed(() => variantStore.selectedAttributes);
 const variantGroups = computed(() => variantStore.variantGroups);
 const variants = computed(() => variantStore.variants);
+const config = useRuntimeConfig();
+const expandedRows = ref<any[]>([]);
+
+// Props
+interface Props {
+  productId?: number;
+  productSku?: string;
+  initialVariants?: IProductVariant[];
+  productSlug?: string;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  productSku: "",
+  initialVariants: () => [],
+  productSlug: "",
+});
 
 // Methods
 const addRow = () => {
   groupRows.value.push({ uid: cryptoRandom(), catalogueId: null, attributeIds: [], lockGroup: false });
 };
 
-const removeRow = (idx: number) => {
-  groupRows.value.splice(idx, 1);
-  syncGroupsFromRows();
-};
-
 const onSelectGroup = async (row: GroupRow) => {
-  row.lockGroup = !!row.catalogueId; // khóa chọn group sau khi đã chọn
+  row.lockGroup = !!row.catalogueId;
   row.attributeIds = [];
   if (row.catalogueId) {
     const found = attributeCatalogues.value.find((c) => c.id === row.catalogueId);
@@ -170,7 +168,6 @@ const getAttributesForRow = (row: GroupRow) => {
 };
 
 const syncGroupsFromRows = () => {
-  // Build variantGroups from rows
   variantStore.variantGroups = groupRows.value
     .filter((r) => r.catalogueId && r.attributeIds.length > 0)
     .map((r) => {
@@ -181,9 +178,36 @@ const syncGroupsFromRows = () => {
   generateVariants();
 };
 
+// Khi đã có variants trong store, chủ động suy ra nhóm & thuộc tính đang chọn để sinh biến thể ngay
+const initializeGroupsFromExistingVariants = async () => {
+  if (variants.value.length === 0) return;
+  const groupNameToAttrIds = new Map<string, Set<number>>();
+  for (const v of variants.value as any[]) {
+    const ad = v.attributeData || {};
+    for (const [groupName, attr] of Object.entries(ad) as any) {
+      if (!groupNameToAttrIds.has(groupName)) groupNameToAttrIds.set(groupName, new Set<number>());
+      const set = groupNameToAttrIds.get(groupName)!;
+      if (attr?.id) set.add(Number(attr.id));
+    }
+  }
+
+  groupRows.value = [];
+  for (const [groupName, idSet] of groupNameToAttrIds.entries()) {
+    const catalogue = attributeCatalogues.value.find((c) => c.name === groupName);
+    if (!catalogue) continue;
+    if (!catalogue.attributes) {
+      await variantStore.loadAttributesByCatalogue(catalogue.id);
+    }
+    const attributeIds = (catalogue.attributes || []).filter((a) => idSet.has(a.id)).map((a) => a.id);
+    if (attributeIds.length) {
+      groupRows.value.push({ uid: cryptoRandom(), catalogueId: catalogue.id, attributeIds, lockGroup: true });
+    }
+  }
+  syncGroupsFromRows();
+};
+
 const cryptoRandom = () => Math.random().toString(36).slice(2);
 
-// Disable catalogue options already chosen in other rows
 const isCatalogueChosen = (catalogueId: number, currentUid?: string) => {
   return groupRows.value.some((r) => r.catalogueId === catalogueId && r.uid !== currentUid);
 };
@@ -203,34 +227,16 @@ const loadAttributeCatalogues = async () => {
     });
   }
 };
-    
-const selectCatalogue = async (catalogue: IAttributeCatalogue) => {
-  await variantStore.selectCatalogue(catalogue);
-};
-
-const isCatalogueDisabled = (catalogueId: number) => {
-  return variantStore.isCatalogueDisabled(catalogueId);
-};
-
-const isAttributeSelected = (attributeId: number) => {
-  return selectedAttributes.value.includes(attributeId);
-};
-
-const toggleAttribute = (attribute: IAttribute) => {
-  variantStore.toggleAttribute(attribute);
-};
-
-const addGroupToVariants = () => {
-  // Deprecated in step UI; rows drive groups
-};
-
-const removeGroup = (catalogueId: number) => {
-  // Deprecated in step UI
-};
 
 const generateVariants = () => {
   try {
     variantStore.generateVariants();
+    if (variants.value.length > 0 && props.productSku) {
+      autoGenerateSkus();
+      generateVariantName();
+      generateVariantBarcodes();
+      variants.value.forEach((v) => ((v as any).url = buildVariantLink(v)));
+    }
   } catch (error: any) {
     toast.add({
       severity: "warn",
@@ -241,108 +247,89 @@ const generateVariants = () => {
   }
 };
 
-const regenerateVariants = () => {
-  if (variants.value.length > 0) {
-    // Check if any variants have been modified
-    const hasModifiedVariants = variants.value.some((v) => v.sku !== generateDefaultSku(props.productSku || "", v.code) || v.price !== null || v.stock !== 0 || v.barcode !== null || v.album.length > 0);
-
-    if (hasModifiedVariants) {
-      warningMessage.value = "Việc tạo lại biến thể sẽ xóa tất cả dữ liệu đã chỉnh sửa. Bạn có chắc chắn?";
-      pendingRegenerate.value = true;
-      showWarningDialog.value = true;
-      return;
-    }
-  }
-
-  generateVariants();
-};
-
-const confirmRegenerate = () => {
-  showWarningDialog.value = false;
-  if (pendingRegenerate.value) {
-    generateVariants();
-    pendingRegenerate.value = false;
-  }
-};
-
 const autoGenerateSkus = () => {
   if (!props.productSku) return;
-
   variantStore.autoGenerateSkus(props.productSku);
-
-  toast.add({
-    severity: "success",
-    summary: "Thành công",
-    detail: "Đã tự động tạo SKU cho tất cả biến thể",
+  variants.value.forEach((variant) => {
+    if (variant.sku) {
+      variant.sku = variant.sku.replace(/_/g, "-");
+    }
   });
 };
 
-const onCellEditComplete = (event: any) => {
-  const { data, field, newValue } = event;
-  data[field] = newValue;
-};
+const generateVariantName = () => {
+  variants.value.forEach((variant) => {
+    if (variant.attributeData && !(variant as any).name) {
+      const attributeNames = Object.entries(variant.attributeData)
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([groupName, attr]) => attr.name)
+        .join(" ");
 
-const removeVariant = (index: number) => {
-  variantStore.removeVariant(index);
-};
-
-const saveVariants = async () => {
-  if (variants.value.length === 0) return;
-
-  if (!props.productId) {
-    toast.add({
-      severity: "warn",
-      summary: "Cảnh báo",
-      detail: "Vui lòng lưu sản phẩm trước khi tạo biến thể",
-    });
-    return;
-  }
-
-  saving.value = true;
-
-  try {
-    await variantStore.saveVariants(props.productId, props.productSku || "");
-
-    toast.add({
-      severity: "success",
-      summary: "Thành công",
-      detail: `Đã lưu ${variants.value.length} biến thể`,
-    });
-  } catch (error: any) {
-    console.error("Error saving variants:", error);
-
-    let errorMessage = "Không thể lưu biến thể";
-    if (error.status === 409) {
-      errorMessage = "SKU đã tồn tại trong hệ thống";
-    } else if (error.data?.message) {
-      errorMessage = error.data.message;
+      (variant as any).name = attributeNames;
     }
+  });
+};
 
-    toast.add({
-      severity: "error",
-      summary: "Lỗi",
-      detail: errorMessage,
-    });
-  } finally {
-    saving.value = false;
+// Tạo mã vạch EAN-13 đơn giản
+const computeEAN13Checksum = (digits12: string) => {
+  let sum = 0;
+  for (let i = 0; i < 12; i++) {
+    const n = Number(digits12[i]);
+    sum += i % 2 === 0 ? n : n * 3;
+  }
+  const mod = sum % 10;
+  return mod === 0 ? 0 : 10 - mod;
+};
+
+const generateVariantBarcodes = () => {
+  const nowSeed = Date.now().toString();
+  variants.value.forEach((variant, idx) => {
+    if (!(variant as any).barcode) {
+      const base12 = (nowSeed + String(idx)).replace(/\D/g, "").slice(-12).padStart(12, "0");
+      const checksum = computeEAN13Checksum(base12);
+      (variant as any).barcode = `${base12}${checksum}`;
+    }
+  });
+};
+
+const buildVariantLink = (variant: any) => {
+  const base = `${config.public.baseUrl}/${props.productSlug || "san-pham"}`.replace(/\/$/, "");
+  const params = new URLSearchParams();
+  params.set("variant", String(variant?.id ?? variant?.code ?? "..."));
+  Object.entries(variant.attributeData || {}).forEach(([groupName, attr]: any) => {
+    params.set(slugify(groupName), String(attr?.id ?? ""));
+  });
+
+  const qs = params.toString();
+  return qs ? `${base}?${qs}` : base;
+};
+
+const cancelEditVariant = (index: number) => {
+  const expandedIndex = expandedRows.value.findIndex((row) => row === variants.value[index]);
+  if (expandedIndex !== -1) {
+    expandedRows.value.splice(expandedIndex, 1);
   }
 };
 
-const handleImageError = (event: Event) => {
-  const img = event.target as HTMLImageElement;
-  img.style.display = "none";
+const saveVariant = (index: number) => {
+  const variant = variants.value[index];
+  cancelEditVariant(index);
 };
 
-// Lifecycle
-onMounted(() => {
-  loadAttributeCatalogues();
+onMounted(async () => {
+  await loadAttributeCatalogues();
 
   if (props.initialVariants.length > 0) {
     variantStore.setVariants([...props.initialVariants]);
   }
+
+  // Nếu store đã có biến thể, bật biến thể và khởi tạo nhóm/thuộc tính đang chọn
+  if ((variantStore.variants?.length || 0) > 0 || props.initialVariants.length > 0) {
+    hasVariants.value = true;
+    await initializeGroupsFromExistingVariants();
+  }
 });
 
-// Watch for changes
 watch(
   variantGroups,
   () => {
@@ -351,7 +338,6 @@ watch(
   { deep: true }
 );
 
-// Khi chọn nhóm -> load attributes ngay (behaviour requested)
 watch(
   groupRows,
   async (rows) => {
@@ -380,23 +366,43 @@ watch(hasVariants, (enabled) => {
 </script>
 
 <style scoped>
-.product-variant-manager {
-  @apply space-y-4;
-}
-
 :deep(.p-datatable .p-datatable-tbody > tr > td) {
-  padding: 0.5rem;
+  padding: 0.9rem 0.75rem;
 }
 
 :deep(.p-datatable .p-datatable-thead > tr > th) {
-  padding: 0.75rem 0.5rem;
-  font-size: 0.75rem;
+  padding: 0.75rem 0.75rem;
+  background-color: rgb(243 244 246) !important;
+  font-size: 0.8rem;
   font-weight: 600;
 }
 
 :deep(.p-datatable .p-datatable-tbody > tr > td .p-inputtext),
 :deep(.p-datatable .p-datatable-tbody > tr > td .p-inputnumber) {
   font-size: 0.75rem;
-  padding: 0.25rem 0.5rem;
+}
+
+.auto-width-table {
+  table-layout: auto !important;
+  width: 100% !important;
+}
+
+.auto-width-table :deep(.p-datatable-table) {
+  table-layout: auto !important;
+  width: 100% !important;
+}
+
+.auto-width-column {
+  width: auto !important;
+  min-width: fit-content !important;
+  white-space: nowrap;
+}
+
+.auto-width-column :deep(th),
+.auto-width-column :deep(td) {
+  width: auto !important;
+  min-width: fit-content !important;
+  white-space: nowrap;
+  padding: 0.5rem 0.75rem;
 }
 </style>

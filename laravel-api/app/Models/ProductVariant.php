@@ -13,7 +13,8 @@ class ProductVariant extends Model
     protected $table = 'product_variants';
 
     protected $fillable = [
-        'album',
+        'name',
+        'url',
         'code',
         'stock',
         'sku',
@@ -22,7 +23,7 @@ class ProductVariant extends Model
         'attribute_data',
         'product_id',
         'user_id',
-        'publish'
+        'publish',
     ];
 
     protected $casts = [

@@ -88,8 +88,8 @@ export const formatPhoneVN = (phone?: string | null): string => {
  * @param isVariant - true nếu là phiên bản, false nếu là sản phẩm gốc
  * @returns Generated SKU string
  */
-export const generateSKU = (isVariant: boolean = false): string => {
-  const prefix = isVariant ? "VRA-" : "PD-";
+export const generateSKU = (): string => {
+  const prefix = "PD-";
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   let randomLetters = "";
   for (let i = 0; i < 6; i++) {

@@ -9,6 +9,7 @@
   },
   "admin": {
     "common": {
+      "customize": "Tùy chỉnh",
       "noteUploadImage": "jpg, jpeg, png, webp (tối đa 5MB)",
       "clickToUpload": "Click ảnh để tải lên",
       "upload": "Tải lên",

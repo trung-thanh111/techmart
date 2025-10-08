@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('product_variants', function (Blueprint $table) {
             $table->id();
-            $table->json('album')->nullable();
+            $table->string('name');
+            $table->text('url')->nullable();
             $table->string('code')->nullable()-> comment('data example 1_2..');
             $table->integer('stock')->nullable();
             $table->string('sku')->nullable();
-            $table->deciaml('price', 15, 2)->default(0);
+            $table->decimal('price', 15, 2)->default(0);
             $table->string('barcode')->nullable();
             $table->json('attribute_data')->nullable();
             $table->foreignId('product_id')->nullable()->constrained()->onDelete('set null');
