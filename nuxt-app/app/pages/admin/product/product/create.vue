@@ -219,7 +219,7 @@ import SEO from "~/components/admin/custom/SEO.vue";
 import MultipleImageUpload from "~/components/admin/custom/MultipleImageUpload.vue";
 import type { AlbumItem } from "~/interfaces/upload/image.interface";
 import { generateSKU } from "~/utils/helpers";
-import ProductVariant from '~/components/admin/product/ProductVariant.vue'
+import ProductVariant from "~/components/admin/product/ProductVariant.vue";
 
 const { isLoading, values, tagOptions, productCatalogueOptions, productOptions, brandOptions, config, slug, setValues, handleStore } = useProduct();
 
@@ -229,10 +229,9 @@ const onAlbumChange = () => {
   setValues({ ...values, album: albumData.value });
 };
 
-// Auto generate SKU when component mounts
 onMounted(() => {
   if (!values.sku) {
-    const sku = generateSKU(false); // false = sản phẩm gốc
+    const sku = generateSKU();
     setValues({ ...values, sku });
   }
 });
