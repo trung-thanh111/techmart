@@ -69,7 +69,7 @@
             <div class="col-md-6">
               <div class="mb-3">
                 <label class="form-label" for="order">{{ $t("admin.common.form.order") }}:</label>
-                <Field name="order" v-slot="{ field, errorMessage, meta }">
+                <Field name="sortOrder" v-slot="{ field, errorMessage, meta }">
                   <InputNumber :modelValue="field.value" @update:modelValue="field.onChange" :min="1" showButtons class="w-full" input-class="!rounded py-[7px] w-full" size="small" />
                   <small v-if="errorMessage && meta.touched" class="text-danger">
                     {{ $t(errorMessage) }}
@@ -93,8 +93,13 @@
           </div>
         </div>
       </div>
+      <Field name="productVariants" v-slot="{ field, errorMessage, meta }">
+        <VariantManager :product-sku="values.sku" :product-slug="slug" :model-value="field.value" @update:model-value="field.onChange" />
+        <small v-if="errorMessage && meta.touched" class="text-danger">
+          {{ $t(errorMessage) }}
+        </small>
+      </Field>
       <SEO :values="values" />
-      <ProductVariant :product-sku="values.sku" />
       <div class="flex justify-end gap-3 mt-4 position-sticky bottom-5 z-20">
         <Button type="button" variant="cancel" :to="PRODUCTINDEX" />
         <Button variant="success" :loading="isLoading" />
@@ -122,7 +127,7 @@
               <span class="text-danger">*</span>
             </label>
             <Field name="sku" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <input v-bind="field" id="sku" type="text" :placeholder="$t('admin.common.form.skuPlaceholder')" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
+              <input v-bind="field" id="sku" type="text" :placeholder="$t('admin.common.form.skuPlaceholder')" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" disabled />
               <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
             </Field>
           </div>
@@ -219,7 +224,7 @@ import SEO from "~/components/admin/custom/SEO.vue";
 import MultipleImageUpload from "~/components/admin/custom/MultipleImageUpload.vue";
 import type { AlbumItem } from "~/interfaces/upload/image.interface";
 import { generateSKU } from "~/utils/helpers";
-import ProductVariant from "~/components/admin/product/ProductVariant.vue";
+import VariantManager from "~/components/admin/custom/VariantManager.vue";
 
 const { isLoading, values, tagOptions, productCatalogueOptions, productOptions, brandOptions, config, slug, setValues, handleStore } = useProduct();
 

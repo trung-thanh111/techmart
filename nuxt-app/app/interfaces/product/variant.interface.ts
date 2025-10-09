@@ -1,16 +1,17 @@
 export interface IProductVariant {
   id?: number;
-  album: string[];
-  code: string;
-  stock: number;
-  sku: string;
-  price: number | null;
-  barcode: string | null;
-  attributeData: Record<string, { id: number; name: string }>;
-  attributes: number[];
-  publish: number;
-  productId?: number;
-  userId?: number;
+  name?: string;
+  url?: string | null;
+  code?: string | null;
+  stock?: number | null;
+  sku?: string | null;
+  price?: number | null;
+  barcode?: string | null;
+  attributeData?: Record<string, any> | null;
+  attributes?: number[];
+  productId?: number | null;
+  userId?: number | null;
+  publish?: number | null;
 }
 
 export interface IAttribute {

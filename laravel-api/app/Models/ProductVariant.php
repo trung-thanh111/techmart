@@ -22,12 +22,11 @@ class ProductVariant extends Model
         'barcode',
         'attribute_data',
         'product_id',
-        'user_id',
         'publish',
     ];
 
     protected $casts = [
-        'album' => 'array'
+        'attribute_data' => 'array',
     ];
 
     /**
@@ -35,12 +34,9 @@ class ProductVariant extends Model
      *
      * @var array
      */
-    public $relationable = [];
-
-    public function users(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'user_id', 'id');
-    }
+    public $relationable = [
+        'variant_attributes'
+    ];
 
     public function products(): BelongsTo {
         return $this->belongsTo(Product::class);

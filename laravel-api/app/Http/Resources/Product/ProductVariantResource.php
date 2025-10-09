@@ -15,12 +15,15 @@ class ProductVariantResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'album' => $this->album,
+            'name' => $this->name,
+            'url' => $this->url,
+            'code' => $this->code,
             'sku' => $this->sku,
             'stock' => (int) $this->stock,
             'sku' => $this->sku,
             'price' => (double) $this->price,
             'barcode' => $this->barcode,
+            'attributeData' => $this->attribute_data,
             'productId' => $this->product_id,
             'attributes' => $this->whenLoaded('variant_attributes', [
                 'id' => $this->variant_attributes->pluck('id')->toArray()
@@ -38,8 +41,6 @@ class ProductVariantResource extends JsonResource
             //     })->values();
             // }),
             'publish' => (int) $this->publish,
-            'createdAt' => $this->created_at ?? null,
-            'updatedAt' => $this->updated_at ?? null,
         ];
     }
 }

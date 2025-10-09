@@ -1,7 +1,8 @@
 import type { BasePayloadFilter } from "../base.interface";
+import type { IProductVariant } from "./variant.interface";
 
 export interface IProduct {
-  id: number;
+  id?: number;
   name?: string;
   slug?: string;
   sku?: string;
@@ -10,7 +11,7 @@ export interface IProduct {
   description?: string;
   content?: string;
   priceOrigin?: number;
-  album: { path: string }[];
+  album?: { path: string }[];
   viewCount?: number;
   likeCount?: number;
   tagId?: number;
@@ -19,6 +20,7 @@ export interface IProduct {
   faqId?: number;
   userId?: number;
   productCatalogues?: number[];
+  productVariants?: IProductVariant[];
   productTags?: number[];
   relateds?: number[];
   publish?: number;
