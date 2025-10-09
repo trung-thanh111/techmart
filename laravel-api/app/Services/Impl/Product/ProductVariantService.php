@@ -15,14 +15,14 @@ protected $repository;
 protected $complexFilter = ['id'];
 
 protected $with = [
-    'products'
+    'products',
+    'variant_attributes'
 ];
 protected $relationFilter = [];
 
 protected $cacheKeyPrefix = 'product_variants';
 protected $cacheTags = ['product_variants:collection'];
 
-protected $useUpload = true;
 
     public function __construct(
         ProductVariantRepository $repository

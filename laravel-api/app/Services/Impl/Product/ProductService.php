@@ -81,35 +81,46 @@ class ProductService extends BaseService implements ProductServiceInterface
 
     private function handleProductVariant(Request $request): self
     {
-        if (!$request->has('productVariants') || !is_array($request->input('productVariants'))) return $this;
-        
-        $variants = $request->input('productVariants');
-        
-        // Delete existing variants if updating
+        $variants = $request->input('product_variants');
+        if (!is_array($variants) || empty($variants)) return $this;
+
         if ($this->model->exists) {
             $this->model->product_variants()->delete();
         }
-        
+
         foreach ($variants as $variantData) {
-            // Convert camelCase to snake_case for database
+            $priceRaw = $variantData['price'] ?? null;
+            $price = is_null($priceRaw) ? null : (is_string($priceRaw) ? string_to_price($priceRaw) : (float)$priceRaw);
+            $stockRaw = $variantData['stock'] ?? null;
+            $stock = is_null($stockRaw) ? null : (int)$stockRaw;
+            $publishRaw = $variantData['publish'] ?? 2;
+            $publish = is_bool($publishRaw) ? ($publishRaw ? 1 : 0) : (int)$publishRaw;
+
+            $attributeData = $variantData['attributeData'] ?? null;
+            if (is_string($attributeData)) {
+                $decoded = json_decode($attributeData, true);
+                $attributeData = is_array($decoded) ? $decoded : [];
+            } elseif (!is_array($attributeData)) {
+                $attributeData = [];
+            }
+
             $variantAttributes = [
-                'album' => $variantData['album'] ?? [],
-                'code' => $variantData['code'],
-                'stock' => $variantData['stock'],
-                'sku' => $variantData['sku'],
-                'price' => $variantData['price'] ? string_to_price($variantData['price']) : null,
+                'name' => $variantData['name'] ?? null,
+                'code' => $variantData['code'] ?? null,
+                'stock' => $stock,
+                'sku' => $variantData['sku'] ?? null,
+                'price' => $price,
+                'url' => $variantData['url'] ?? null,
                 'barcode' => $variantData['barcode'] ?? null,
-                'attribute_data' => $variantData['attributeData'] ?? [],
-                'publish' => $variantData['publish'],
-                'user_id' => auth(Common::API)->user()->id,
+                'attribute_data' => $attributeData,
+                'publish' => $publish ?? 2,
                 'created_at' => now(),
-                'updated_at' => now(),
             ];
-            
+
             $variant = $this->model->product_variants()->create($variantAttributes);
-            
+
             // Attach attributes to pivot table
-            if (isset($variantData['attributes']) && is_array($variantData['attributes'])) {
+            if (isset($variantData['attributes']) && is_array($variantData['attributes']) && count($variantData['attributes'])) {
                 $variant->variant_attributes()->attach($variantData['attributes']);
             }
         }
@@ -121,5 +132,4 @@ class ProductService extends BaseService implements ProductServiceInterface
     {
         return new ProductResource($resource);
     }
-
 }

@@ -93,6 +93,12 @@
           </div>
         </div>
       </div>
+      <Field name="productVariants" v-slot="{ field, errorMessage, meta }">
+        <VariantManager :product-sku="values.sku" :product-slug="slug" :model-value="field.value" @update:model-value="field.onChange" />
+        <small v-if="errorMessage && meta.touched" class="text-danger">
+          {{ $t(errorMessage) }}
+        </small>
+      </Field>
       <SEO :values="values" />
       <div class="flex justify-end gap-3 mt-4 position-sticky bottom-5 z-20">
         <Button type="button" variant="cancel" :to="PRODUCTINDEX" />
@@ -218,6 +224,8 @@ import SEO from "~/components/admin/custom/SEO.vue";
 import MultipleImageUpload from "~/components/admin/custom/MultipleImageUpload.vue";
 import type { AlbumItem } from "~/interfaces/upload/image.interface";
 import { generateSKU } from "~/utils/helpers";
+import VariantManager from "~/components/admin/custom/VariantManager.vue";
+
 
 const { isLoading, values, tagOptions, productCatalogueOptions, productOptions, brandOptions, config, slug, show, setValues, handleUpdate } = useProduct(undefined, "update");
 const id = Number(useRoute().params.id);

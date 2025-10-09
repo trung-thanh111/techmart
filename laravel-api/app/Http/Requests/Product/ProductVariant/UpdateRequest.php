@@ -34,14 +34,15 @@ class UpdateRequest extends BaseRequest
         $method = $this->getMethod();
         $sometime = ($method === 'PATCH') ? 'sometimes' : '';
         return [
-            "image" => "{$sometime}|nullable|string|max:255",
-            "album" => "{$sometime}|nullable|string",
+            "name" => "{$sometime}|required|string|max:255",
+            "url" => "{$sometime}|nullable|string",
             "code" => "{$sometime}|required|string|max:255",
             "stock" => "{$sometime}|required|integer|min:0",
             "sku" => "{$sometime}|required|string|max:255",
             "price" => "{$sometime}|required|integer|min:0",
-            "weight" => "{$sometime}|nullable|integer|min:0",
             "barcode" => "{$sometime}|nullable|integer|min:0",
+            "attribute_data" => "{$sometime}|required|array",
+            "attributes" => "{$sometime}|required|array",
             "product_id" => "{$sometime}|nullable|integer",
             "publish" => "{$sometime}|required|integer|in:0,1,2",
         ];
@@ -49,7 +50,7 @@ class UpdateRequest extends BaseRequest
 
     public function prepareForValidation(){
         $this->merge([
-            'user_id' => auth(Common::API)->user()->id,
+            'updated_at' => now(),
         ]);
     }
 

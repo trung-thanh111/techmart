@@ -37,24 +37,33 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
     priceOrigin: z.number({ required_error: "admin.validation.priceOriginRequired" }).nonnegative({ message: "admin.validation.minValue" }),
     album: z.array(z.object({ path: z.string() })).nullable().optional(),
     sortOrder: z.number().int().nonnegative().nullable().optional(),
-    productCatalogues: z.array(z.number()).min(1, "admin.validation.productCatalogueRequired"),
-    brandId: z.number().int().positive("admin.validation.brandRequired").nullable().optional(),
+    productCatalogues: z.array(z.number(), { required_error: "admin.validation.productCatalogueRequired" }).min(1, "admin.validation.productCatalogueRequired"),
+    brandId: z.number({required_error: "admin.validation.brandRequired", invalid_type_error: "admin.validation.brandRequired",}).int().positive("admin.validation.brandRequired"),
     productTags: z.array(z.number()).nullable().optional(),
     relateds: z.array(z.number()).nullable().optional(),
     isHot: z.boolean().nullable().optional(),
     likeCount: z.number().int().nonnegative().nullable().optional(),
-    publish: z
-      .number()
-      .refine((val) => val === null || val === undefined || [0, 1, 2].includes(val), {
-        message: "admin.validation.statusInvalid",
-      })
-      .nullable()
-      .optional(),
-    userId: z.number().int().nullable().optional(),
+    publish: z.number({ required_error: "admin.validation.statusRequired" }).refine((val) => [0, 1, 2].includes(val), { message: "admin.validation.statusInvalid" }),
     metaTitle: z.string().max(255, "admin.validation.metaTitleMaxLength").nullable().optional(),
     metaKeyword: z.string().max(255, "admin.validation.metaKeywordMaxLength").nullable().optional(),
     metaDescription: z.string().max(255, "admin.validation.metaDescriptionMaxLength").nullable().optional(),
-    publishedAt: z.any().nullable().optional(),
+    productVariants: z
+      .array(
+        z.object({
+          code: z.string().nullable().optional(),
+          url: z.string().nullable().optional(),
+          name: z.string(),
+          stock: z.number().nullable().optional(),
+          sku: z.string(),
+          price: z.number().nullable().optional(),
+          barcode: z.string().nullable().optional(),
+          publish: z.number().nullable().optional(),
+          attributeData: z.record(z.any()).nullable().optional(),
+          attributes: z.array(z.number()).optional(),
+        })
+      )
+      .nullable()
+      .optional(),
   };
   const createSchema = z.object({ ...schema });
   const updateSchema = z.object({ ...schema });
@@ -64,10 +73,12 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
   const { handleSubmit, values, errors, setValues, setFieldError } = useForm<TProductCreate | TProductUpdate>({
     validationSchema: toTypedSchema(mode === "create" ? createSchema : updateSchema),
     keepValuesOnUnmount: true,
+    initialValues: {
+      productVariants: [],
+    },
   });
 
   const handleStore = handleSubmit(async (payload: TProductCreate | TProductUpdate) => {
-    console.info('payload: ', payload)
     isLoading.value = true;
     try {
       const response = await productService.store(payload as Partial<IProduct>);
@@ -76,6 +87,7 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
     } catch (error: any) {
       if (error?.data?.isValidationError) {
         errorToField(setFieldError, error?.data?.errors, t, "name");
+        errorToField(setFieldError, error?.data?.errors, t, "sku");
         return;
       }
       console.error("Thêm mới thất bại:", error);
@@ -159,7 +171,7 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
   };
 
   const confirmDelete = async () => {
-    if (!selectedItem.value) return;
+    if (!selectedItem.value || !selectedItem.value.id) return;
     await handleDelete(selectedItem.value.id);
     selectedItem.value = null;
   };
@@ -206,7 +218,7 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
       console.error("Lỗi khi tải dữ liệu tag:", error);
     }
   };
-  
+
   const loadBrand = async () => {
     try {
       const response = await brandService.all();

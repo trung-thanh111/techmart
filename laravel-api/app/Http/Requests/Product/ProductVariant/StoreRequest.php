@@ -22,21 +22,22 @@ class StoreRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            "image" => "nullable|string|max:255",
-            "album" => "nullable|string",
-            "code" => "required|string|max:255",
-            "stock" => "required|integer|min:0",
-            "sku" => "required|string|max:255",
-            "price" => "required|integer|min:0",
-            "barcode" => "nullable|integer|min:0",
-            "product_id" => "nullable|integer",
-            "publish" => "required|integer|in:0,1,2",
+            "name" => "required|string|max:255",
+            "url" => "nullable|string",
+            "code" => "nullable|string|max:255",
+            "stock" => "nullable|integer|min:0",
+            "sku" => "nullable|string|max:255",
+            "price" => "nullable|numeric|min:0",
+            "barcode" => "nullable|string|max:255",
+            "attribute_data" => "nullable|array",
+            "attributes" => "nullable|array",
+            "publish" => "nullable|integer|in:0,1,2",
         ];
     }
 
     public function prepareForValidation(){
         $this->merge([
-            'user_id' => auth(Common::API)->user()->id,
+            'publish' => $this->publish ?? 2,
             'created_at' => now(),
             'updated_at' => now(),
         ]);

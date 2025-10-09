@@ -1,6 +1,5 @@
 <template>
   <div class="bg-white rounded border border-gray-200 shadow-sm p-4 space-y-4">
-    <!-- Header -->
     <div class="flex justify-between items-center border-b border-gray-100">
       <div>
         <h2 class="text-base font-semibold text-gray-900">Phiên bản sản phẩm</h2>
@@ -18,13 +17,13 @@
       <div class="space-y-3">
         <div v-for="(row, idx) in groupRows" :key="row.uid" class="flex items-center gap-3">
           <Select class="w-1/3 h-[38px] text-sm" :options="attributeCatalogues" option-label="name" option-value="id" v-model="row.catalogueId" placeholder="Nhóm thuộc tính" :option-disabled="(opt) => isCatalogueOptionDisabled(opt.id, row.uid)" checkmark @update:model-value="onSelectGroup(row)" />
-          <MultiSelect class="flex-1 h-[38px] text-[14px]" :options="getAttributesForRow(row)" option-label="name" option-value="id" v-model="row.attributeIds" placeholder="Thuộc tính" display="chip" filter showClear :disabled="!row.catalogueId" @update:model-value="onSelectAttributes(row)" />
+          <MultiSelect class="flex-1 h-[38px] text[14px]" :options="getAttributesForRow(row)" option-label="name" option-value="id" v-model="row.attributeIds" placeholder="Thuộc tính" display="chip" filter showClear :disabled="!row.catalogueId" @update:model-value="onSelectAttributes(row)" />
+          <Button icon="ri-delete-bin-line" severity="danger" size="small" outlined rounded @click="removeRow(row.uid)" :disabled="groupRows.length <= 1" v-tooltip.bottom="'Xóa dòng'" />
         </div>
       </div>
       <Button label="Thêm mới" class="rounded font-light text-sm" size="small" icon="ri-add-line" outlined @click="addRow" />
     </div>
 
-    <!-- Variant Table -->
     <div v-if="variants.length" class="pt-4 border-t border-gray-100">
       <div class="flex justify-between items-center mb-3">
         <h4 class="text-sm font-medium text-gray-800">Biến thể ({{ variants.length }})</h4>
@@ -48,50 +47,76 @@
 
           <template #expansion="{ data, index }" class="p-0">
             <div class="p-2 bg-gray-50 space-y-4">
-              <input type="hidden" :name="`variants[${index}][code]`" v-model="data.code" />
-              <input type="hidden" :name="`variants[${index}][attributeData]`" :value="JSON.stringify(data.attributeData)" />
+              <Field :name="`productVariants.${index}.code`" v-slot="{ field }">
+                <input type="hidden" v-bind="field" />
+              </Field>
+              <Field :name="`productVariants.${index}.attributeData`" v-slot="{ field }">
+                <input type="hidden" :value="JSON.stringify(data.attributeData)" v-bind="field" />
+              </Field>
+              <Field :name="`productVariants.${index}.attributes`" v-slot="{ field }">
+                <input type="hidden" :value="JSON.stringify(data.attributes)" v-bind="field" />
+              </Field>
 
               <div class="space-y-4">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   <div class="flex flex-col gap-1">
                     <label class="text-xs font-medium text-gray-600">SKU</label>
-                    <InputText v-model="data.sku" class="w-full !h-[38px] text-sm" disabled />
+                    <Field :name="`productVariants.${index}.sku`" v-slot="{ field }">
+                      <InputText v-bind="field" class="w-full !h-[38px] text-sm" disabled />
+                    </Field>
                   </div>
                   <div class="flex flex-col gap-1">
                     <label class="text-xs font-medium text-gray-600">Tên biến thể</label>
-                    <InputText v-model="data.name" class="w-full !h-[38px] text-sm" />
+                    <InputText :modelValue="data.name || ''" @update:modelValue="(v)=> updateVariantAt(index, { name: v as any })" class="w-full !h-[38px] text-sm" />
                   </div>
                   <div class="flex flex-col gap-1">
                     <label class="text-xs font-medium text-gray-600">Mã vạch</label>
-                    <InputText v-model="data.barcode" class="w-full !h-[38px] text-sm" />
+                    <InputText :modelValue="data.barcode || ''" @update:modelValue="(v)=> updateVariantAt(index, { barcode: v as any })" class="w-full !h-[38px] text-sm" />
                   </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
                   <div class="flex flex-col gap-1">
                     <label class="text-xs font-medium text-gray-600">Giá (VNĐ)</label>
-                    <InputNumber v-model="data.price" input-class="!h-[38px] text-sm" mode="currency" currency="VND" locale="vi-VN" class="w-full" />
+                    <InputNumber
+                      :modelValue="Number(data.price ?? 0)"
+                      @update:modelValue="
+                        (val) => {
+                          data.price = Number(val ?? 0);
+                          emitVariantUpdate();
+                        }
+                      "
+                      input-class="!h-[38px] text-sm"
+                      mode="currency"
+                      currency="VND"
+                      locale="vi-VN"
+                      class="w-full"
+                    />
                   </div>
                   <div class="flex flex-col gap-1">
                     <label class="text-xs font-medium text-gray-600">Tồn kho</label>
-                    <InputNumber v-model="data.stock" mode="decimal" input-class="!h-[38px] text-sm" showButtons :min="0" fluid class="w-full" />
+                    <InputNumber
+                      :modelValue="Number(data.stock ?? 0)"
+                      @update:modelValue="
+                        (val) => {
+                          data.stock = Number(val ?? 0);
+                          emitVariantUpdate();
+                        }
+                      "
+                      mode="decimal"
+                      input-class="!h-[38px] text-sm"
+                      showButtons
+                      :min="0"
+                      fluid
+                      class="w-full"
+                    />
                   </div>
                 </div>
 
                 <div class="flex flex-col gap-1">
                   <label class="text-xs font-medium text-gray-600">Đường dẫn</label>
-                  <InputText v-model="data.url" class="w-full !h-[38px] text-sm font-mono" placeholder="https://domain/san-pham?variant=..." />
+                  <InputText :modelValue="data.url || ''" @update:modelValue="(v)=> updateVariantAt(index, { url: v as any })" class="w-full !h-[38px] text-sm font-mono" placeholder="https://domain/san-pham?variant=..." />
                 </div>
-
-                <div class="flex items-center justify-start py-1">
-                  <ToggleSwitch v-model="data.publish" @update:modelValue="" class="scale-75" />
-                  <label class="text-xs font-medium text-gray-600 m-0">Trạng thái</label>
-                </div>
-              </div>
-
-              <div class="flex justify-end gap-2">
-                <Button size="small" label="Hủy" outlined class="rounded" severity="secondary" @click="cancelEditVariant(index)" />
-                <Button size="small" label="Lưu" class="!px-4 rounded" @click="saveVariant(index)" />
               </div>
             </div>
           </template>
@@ -109,10 +134,10 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from "vue";
 import { useToast } from "primevue/usetoast";
+import { Field } from "vee-validate";
 import type { IProductVariant } from "~/interfaces/product/variant.interface";
 import { useProductVariantStore } from "~/stores/product/variant.store";
 
-// Composables
 const toast = useToast();
 const variantStore = useProductVariantStore();
 
@@ -123,27 +148,43 @@ const groupRows = ref<GroupRow[]>([]);
 
 const attributeCatalogues = computed(() => variantStore.attributeCatalogues);
 const variantGroups = computed(() => variantStore.variantGroups);
-const variants = computed(() => variantStore.variants);
+const variants = computed(() => props.modelValue || []);
 const config = useRuntimeConfig();
 const expandedRows = ref<any[]>([]);
 
-// Props
 interface Props {
   productId?: number;
   productSku?: string;
   initialVariants?: IProductVariant[];
   productSlug?: string;
+  modelValue?: IProductVariant[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
   productSku: "",
   initialVariants: () => [],
   productSlug: "",
+  modelValue: () => [],
 });
 
-// Methods
+const emit = defineEmits<{
+  "update:modelValue": [value: IProductVariant[]];
+}>();
+
 const addRow = () => {
   groupRows.value.push({ uid: cryptoRandom(), catalogueId: null, attributeIds: [], lockGroup: false });
+};
+
+const removeRow = (uid: string) => {
+  const idx = groupRows.value.findIndex((r) => r.uid === uid);
+  if (idx === -1) return;
+  groupRows.value.splice(idx, 1);
+  syncGroupsFromRows();
+};
+
+const updateVariantAt = (index: number, changes: Partial<IProductVariant>) => {
+  const next = (variants.value as IProductVariant[]).map((v, i) => (i === index ? { ...v, ...changes } : v));
+  emit("update:modelValue", normalizeVariants(next as any));
 };
 
 const onSelectGroup = async (row: GroupRow) => {
@@ -178,7 +219,7 @@ const syncGroupsFromRows = () => {
   generateVariants();
 };
 
-// Khi đã có variants trong store, chủ động suy ra nhóm & thuộc tính đang chọn để sinh biến thể ngay
+// Khi đã có variants trong store, lấy ra nhóm & thuộc tính đang chọn để sinh biến thể ngay
 const initializeGroupsFromExistingVariants = async () => {
   if (variants.value.length === 0) return;
   const groupNameToAttrIds = new Map<string, Set<number>>();
@@ -231,12 +272,21 @@ const loadAttributeCatalogues = async () => {
 const generateVariants = () => {
   try {
     variantStore.generateVariants();
-    if (variants.value.length > 0 && props.productSku) {
-      autoGenerateSkus();
-      generateVariantName();
-      generateVariantBarcodes();
-      variants.value.forEach((v) => ((v as any).url = buildVariantLink(v)));
+    const newVariants = variantStore.variants;
+
+    if (newVariants.length > 0 && props.productSku) {
+      // Auto generate SKUs
+      autoGenerateSkus(newVariants);
+      generateVariantName(newVariants);
+      generateVariantBarcodes(newVariants);
+      newVariants.forEach((v) => ((v as any).url = buildVariantLink(v)));
     }
+
+    // Auto expand all rows
+    expandedRows.value = [...newVariants];
+
+    // Emit variants to parent (normalize numeric fields at emit time)
+    emit("update:modelValue", normalizeVariants(newVariants as any));
   } catch (error: any) {
     toast.add({
       severity: "warn",
@@ -247,18 +297,20 @@ const generateVariants = () => {
   }
 };
 
-const autoGenerateSkus = () => {
+const autoGenerateSkus = (variantsList?: IProductVariant[]) => {
   if (!props.productSku) return;
+  const targetVariants = variantsList || variants.value;
   variantStore.autoGenerateSkus(props.productSku);
-  variants.value.forEach((variant) => {
+  targetVariants.forEach((variant) => {
     if (variant.sku) {
       variant.sku = variant.sku.replace(/_/g, "-");
     }
   });
 };
 
-const generateVariantName = () => {
-  variants.value.forEach((variant) => {
+const generateVariantName = (variantsList?: IProductVariant[]) => {
+  const targetVariants = variantsList || variants.value;
+  targetVariants.forEach((variant) => {
     if (variant.attributeData && !(variant as any).name) {
       const attributeNames = Object.entries(variant.attributeData)
         .sort(([a], [b]) => a.localeCompare(b))
@@ -281,9 +333,10 @@ const computeEAN13Checksum = (digits12: string) => {
   return mod === 0 ? 0 : 10 - mod;
 };
 
-const generateVariantBarcodes = () => {
+const generateVariantBarcodes = (variantsList?: IProductVariant[]) => {
   const nowSeed = Date.now().toString();
-  variants.value.forEach((variant, idx) => {
+  const targetVariants = variantsList || variants.value;
+  targetVariants.forEach((variant, idx) => {
     if (!(variant as any).barcode) {
       const base12 = (nowSeed + String(idx)).replace(/\D/g, "").slice(-12).padStart(12, "0");
       const checksum = computeEAN13Checksum(base12);
@@ -304,27 +357,31 @@ const buildVariantLink = (variant: any) => {
   return qs ? `${base}?${qs}` : base;
 };
 
-const cancelEditVariant = (index: number) => {
-  const expandedIndex = expandedRows.value.findIndex((row) => row === variants.value[index]);
-  if (expandedIndex !== -1) {
-    expandedRows.value.splice(expandedIndex, 1);
-  }
+const emitVariantUpdate = () => {
+  emit("update:modelValue", normalizeVariants([...variants.value] as any));
 };
 
-const saveVariant = (index: number) => {
-  const variant = variants.value[index];
-  cancelEditVariant(index);
+const normalizeVariants = (list: IProductVariant[]) => {
+  return (list as any[]).map((v) => {
+    const p = { ...v } as any;
+    p.price = Number(p.price ?? 0);
+    p.stock = Number(p.stock ?? 0);
+    // loại bỏ publish theo yêu cầu
+    if ("publish" in p) delete p.publish;
+    return p as IProductVariant;
+  });
 };
 
 onMounted(async () => {
   await loadAttributeCatalogues();
 
-  if (props.initialVariants.length > 0) {
+  // Sử dụng modelValue thay vì initialVariants
+  if (props.modelValue && props.modelValue.length > 0) {
+    variantStore.setVariants([...props.modelValue]);
+    hasVariants.value = true;
+    await initializeGroupsFromExistingVariants();
+  } else if (props.initialVariants.length > 0) {
     variantStore.setVariants([...props.initialVariants]);
-  }
-
-  // Nếu store đã có biến thể, bật biến thể và khởi tạo nhóm/thuộc tính đang chọn
-  if ((variantStore.variants?.length || 0) > 0 || props.initialVariants.length > 0) {
     hasVariants.value = true;
     await initializeGroupsFromExistingVariants();
   }
@@ -353,7 +410,6 @@ watch(
   { deep: true }
 );
 
-// Khi bật biến thể, đảm bảo có ít nhất 1 dòng mặc định
 watch(hasVariants, (enabled) => {
   if (enabled) {
     if (groupRows.value.length === 0) addRow();
@@ -361,8 +417,12 @@ watch(hasVariants, (enabled) => {
     groupRows.value = [];
     variantStore.variantGroups = [] as any;
     variantStore.setVariants([] as any);
+    emit("update:modelValue", []);
   }
 });
+
+// Không cần watch variants.value để tránh vòng lặp vô hạn
+// Emit được thực hiện trực tiếp trong các function cần thiết
 </script>
 
 <style scoped>
