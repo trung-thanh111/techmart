@@ -117,7 +117,7 @@
               <span class="text-danger">*</span>
             </label>
             <Field name="priceOrigin" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <InputNumber :modelValue="field.value" @update:modelValue="field.onChange" :min="0" :maxFractionDigits="2" showButtons class="w-full" input-class="!rounded py-[7px] w-full" size="small" />
+              <InputNumber :modelValue="field.value" @update:modelValue="field.onChange" :min="0" :maxFractionDigits="2" showButtons class="w-full" input-class="!rounded py-[7px] w-full" size="small" mode="currency" currency="VND" locale="vi-VN" />
               <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
             </Field>
           </div>

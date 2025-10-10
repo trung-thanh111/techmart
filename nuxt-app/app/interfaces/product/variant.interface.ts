@@ -10,7 +10,6 @@ export interface IProductVariant {
   attributeData?: Record<string, any> | null;
   attributes?: number[];
   productId?: number | null;
-  userId?: number | null;
   publish?: number | null;
 }
 
