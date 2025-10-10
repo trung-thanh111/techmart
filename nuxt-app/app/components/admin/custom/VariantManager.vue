@@ -141,7 +141,6 @@ import { useProductVariantStore } from "~/stores/product/variant.store";
 const toast = useToast();
 const variantStore = useProductVariantStore();
 
-// Reactive state
 const hasVariants = ref(false);
 type GroupRow = { uid: string; catalogueId: number | null; attributeIds: number[]; lockGroup: boolean };
 const groupRows = ref<GroupRow[]>([]);
@@ -219,7 +218,6 @@ const syncGroupsFromRows = () => {
   generateVariants();
 };
 
-// Khi đã có variants trong store, lấy ra nhóm & thuộc tính đang chọn để sinh biến thể ngay
 const initializeGroupsFromExistingVariants = async () => {
   if (variants.value.length === 0) return;
   const groupNameToAttrIds = new Map<string, Set<number>>();
@@ -260,7 +258,6 @@ const loadAttributeCatalogues = async () => {
   try {
     await variantStore.loadAttributeCatalogues();
   } catch (error) {
-    console.error("Error loading attribute catalogues:", error);
     toast.add({
       severity: "error",
       summary: "Lỗi",
@@ -271,22 +268,103 @@ const loadAttributeCatalogues = async () => {
 
 const generateVariants = () => {
   try {
+    const existingVariants = [...variants.value];
+
     variantStore.generateVariants();
     const newVariants = variantStore.variants;
 
-    if (newVariants.length > 0 && props.productSku) {
-      // Auto generate SKUs
-      autoGenerateSkus(newVariants);
-      generateVariantName(newVariants);
-      generateVariantBarcodes(newVariants);
-      newVariants.forEach((v) => ((v as any).url = buildVariantLink(v)));
+    const oldGroupNames = new Set<string>();
+    existingVariants.forEach((variant) => {
+      if (variant.attributeData) {
+        Object.keys(variant.attributeData).forEach((groupName) => {
+          oldGroupNames.add(groupName);
+        });
+      }
+    });
+
+    const newGroupNames = new Set<string>();
+    newVariants.forEach((variant) => {
+      if (variant.attributeData) {
+        Object.keys(variant.attributeData).forEach((groupName) => {
+          newGroupNames.add(groupName);
+        });
+      }
+    });
+
+    const commonGroupNames = new Set([...oldGroupNames].filter((name) => newGroupNames.has(name)));
+    const addedGroups = Array.from(newGroupNames).filter((name) => !oldGroupNames.has(name));
+
+    const mergedVariants: IProductVariant[] = [];
+
+    if (existingVariants.length > 0 && addedGroups.length > 0) {
+      existingVariants.forEach((oldVariant) => {
+        if (!oldVariant.attributeData) {
+          mergedVariants.push(oldVariant);
+          return;
+        }
+
+        const newGroupAttributes: Record<string, any[]> = {};
+        addedGroups.forEach((groupName) => {
+          const groupAttrs = variantGroups.value.find((g) => g.catalogueName === groupName)?.attributes || [];
+          newGroupAttributes[groupName] = groupAttrs;
+        });
+
+        const newAttributeCombinations = generateAttributeCombinations(newGroupAttributes);
+
+        newAttributeCombinations.forEach((combination) => {
+          const newAttributeData = {
+            ...oldVariant.attributeData,
+            ...combination,
+          };
+
+          const preservedPrice = Number(oldVariant.price) || 0;
+          const preservedStock = Number(oldVariant.stock) || 0;
+
+          const newVariant = {
+            code: oldVariant.code,
+            attributeData: JSON.parse(JSON.stringify(newAttributeData)),
+            attributes: oldVariant.attributes ? JSON.parse(JSON.stringify(oldVariant.attributes)) : undefined,
+            name: generateVariantNameFromAttributes(newAttributeData),
+            sku: generateNewSku(oldVariant.sku as string, combination),
+            barcode: oldVariant.barcode || generateNewBarcode(),
+            price: preservedPrice,
+            stock: preservedStock,
+            url: buildVariantLink({ attributeData: newAttributeData }),
+            id: undefined,
+          };
+
+          mergedVariants.push(newVariant);
+        });
+      });
+    } else {
+      newVariants.forEach((newVariant) => {
+        if (!newVariant.attributeData) {
+          mergedVariants.push(newVariant);
+          return;
+        }
+
+        const matchingOldVariant = existingVariants.find((oldVariant) => {
+          if (!oldVariant.attributeData) return false;
+          return JSON.stringify(oldVariant.attributeData) === JSON.stringify(newVariant.attributeData);
+        });
+
+        if (matchingOldVariant) {
+          mergedVariants.push(matchingOldVariant);
+        } else {
+          if (props.productSku) {
+            autoGenerateSkus([newVariant]);
+            generateVariantName([newVariant]);
+            generateVariantBarcodes([newVariant]);
+            (newVariant as any).url = buildVariantLink(newVariant);
+          }
+          mergedVariants.push(newVariant);
+        }
+      });
     }
 
-    // Auto expand all rows
-    expandedRows.value = [...newVariants];
+    expandedRows.value = [...mergedVariants];
 
-    // Emit variants to parent (normalize numeric fields at emit time)
-    emit("update:modelValue", normalizeVariants(newVariants as any));
+    emit("update:modelValue", normalizeVariants(mergedVariants as any));
   } catch (error: any) {
     toast.add({
       severity: "warn",
@@ -295,6 +373,61 @@ const generateVariants = () => {
       life: 3000,
     });
   }
+};
+
+const generateAttributeCombinations = (groupAttributes: Record<string, any[]>) => {
+  const groups = Object.keys(groupAttributes);
+  if (groups.length === 0) return [{}];
+
+  const validGroups = groups.filter((group) => groupAttributes[group] && groupAttributes[group].length > 0);
+
+  if (validGroups.length === 0) return [{}];
+
+  const combinations: Record<string, any>[] = [];
+
+  const generateCombinations = (current: Record<string, any>, remainingGroups: string[]) => {
+    if (remainingGroups.length === 0) {
+      combinations.push({ ...current });
+      return;
+    }
+
+    const currentGroup = remainingGroups[0];
+    const attributes = groupAttributes[currentGroup];
+
+    if (attributes && attributes.length > 0) {
+      attributes.forEach((attr) => {
+        generateCombinations({ ...current, [currentGroup]: attr }, remainingGroups.slice(1));
+      });
+    }
+  };
+
+  generateCombinations({}, validGroups);
+  return combinations;
+};
+
+const generateVariantNameFromAttributes = (attributeData: Record<string, any>) => {
+  const attributeNames = Object.entries(attributeData)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([groupName, attr]) => attr.name)
+    .join(" ");
+  return attributeNames;
+};
+
+const generateNewSku = (oldSku: string, combination: Record<string, any>) => {
+  if (!oldSku) return "";
+
+  const baseSku = oldSku.split("-").slice(0, -1).join("-");
+  const newAttrIds = Object.values(combination)
+    .map((attr: any) => attr.id)
+    .join("-");
+  return `${baseSku}-${newAttrIds}`;
+};
+
+const generateNewBarcode = () => {
+  const nowSeed = Date.now().toString();
+  const base12 = nowSeed.replace(/\D/g, "").slice(-12).padStart(12, "0");
+  const checksum = computeEAN13Checksum(base12);
+  return `${base12}${checksum}`;
 };
 
 const autoGenerateSkus = (variantsList?: IProductVariant[]) => {
@@ -322,7 +455,6 @@ const generateVariantName = (variantsList?: IProductVariant[]) => {
   });
 };
 
-// Tạo mã vạch EAN-13 đơn giản
 const computeEAN13Checksum = (digits12: string) => {
   let sum = 0;
   for (let i = 0; i < 12; i++) {
@@ -366,7 +498,6 @@ const normalizeVariants = (list: IProductVariant[]) => {
     const p = { ...v } as any;
     p.price = Number(p.price ?? 0);
     p.stock = Number(p.stock ?? 0);
-    // loại bỏ publish theo yêu cầu
     if ("publish" in p) delete p.publish;
     return p as IProductVariant;
   });
@@ -375,7 +506,6 @@ const normalizeVariants = (list: IProductVariant[]) => {
 onMounted(async () => {
   await loadAttributeCatalogues();
 
-  // Sử dụng modelValue thay vì initialVariants
   if (props.modelValue && props.modelValue.length > 0) {
     variantStore.setVariants([...props.modelValue]);
     hasVariants.value = true;
@@ -420,9 +550,6 @@ watch(hasVariants, (enabled) => {
     emit("update:modelValue", []);
   }
 });
-
-// Không cần watch variants.value để tránh vòng lặp vô hạn
-// Emit được thực hiện trực tiếp trong các function cần thiết
 </script>
 
 <style scoped>

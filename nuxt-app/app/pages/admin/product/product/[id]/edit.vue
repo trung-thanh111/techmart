@@ -250,6 +250,7 @@ setValues({
   likeCount: Number(data?.likeCount ?? 0),
   productCatalogues: (data?.productCatalogues as Array<{ id: number; name: string }> | undefined)?.map((c) => c.id) ?? [],
   productTags: (data?.productTags as Array<{ id: number; name: string }> | undefined)?.map((t) => t.id) ?? [],
+  productVariants: (data?.productVariants as Array<any> | undefined) ?? [],
   brandId: (data as any)?.brandId ?? (data as any)?.brand?.id ?? null,
   relateds: (data?.relateds as Array<{ id: number; name: string }> | undefined)?.map((r) => r.id) ?? [],
   publish: (data as any)?.publish ?? 0,
@@ -260,7 +261,7 @@ setValues({
 
 onMounted(() => {
   if (!values.sku) {
-    const sku = generateSKU(false);
+    const sku = generateSKU();
     setValues({ ...values, sku });
   }
 });

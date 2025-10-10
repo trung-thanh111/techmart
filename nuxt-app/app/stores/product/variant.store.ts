@@ -20,18 +20,14 @@ export const useProductVariantStore = defineStore("productVariant", () => {
   const loading = ref(false);
   const error = ref<string | null>(null);
 
-  // Computed
   const selectedCatalogue = computed(() => {
     return attributeCatalogues.value.find((c) => c.id === selectedCatalogueId.value);
   });
-
   const canAddGroup = computed(() => {
     return selectedCatalogueId.value && selectedAttributes.value.length > 0;
   });
-
   const totalVariants = computed(() => variants.value.length);
 
-  // Actions
   const loadAttributeCatalogues = async () => {
     loading.value = true;
     error.value = null;
@@ -53,7 +49,6 @@ export const useProductVariantStore = defineStore("productVariant", () => {
       const payload = response.data as any;
       const list = Array.isArray(payload) ? payload : payload?.data || [];
       const attributes = list.filter((attr: any) => (attr.attributeCatalogueId == null ? true : attr.attributeCatalogueId === catalogueId));
-
       const catalogue = attributeCatalogues.value.find((c) => c.id === catalogueId);
       if (catalogue) {
         catalogue.attributes = attributes;
@@ -91,9 +86,7 @@ export const useProductVariantStore = defineStore("productVariant", () => {
 
   const addGroupToVariants = () => {
     if (!selectedCatalogue.value || selectedAttributes.value.length === 0) return;
-
     const selectedAttrs = selectedCatalogue.value.attributes?.filter((attr) => selectedAttributes.value.includes(attr.id)) || [];
-
     const group: IVariantGroup = {
       catalogueId: selectedCatalogue.value.id,
       catalogueName: selectedCatalogue.value.name,
@@ -101,8 +94,6 @@ export const useProductVariantStore = defineStore("productVariant", () => {
     };
 
     variantGroups.value.push(group);
-
-    // Clear selection
     selectedCatalogueId.value = null;
     selectedAttributes.value = [];
   };
@@ -133,7 +124,6 @@ export const useProductVariantStore = defineStore("productVariant", () => {
   const saveVariants = async (productId: number, productSku: string) => {
     loading.value = true;
     error.value = null;
-
     try {
       const payload = {
         productVariants: variants.value.map((variant) => ({
@@ -141,7 +131,6 @@ export const useProductVariantStore = defineStore("productVariant", () => {
           productId,
         })),
       };
-
       const response = await productVariantService.updateProductWithVariants(productId, payload);
       return response;
     } catch (err: any) {
@@ -157,28 +146,95 @@ export const useProductVariantStore = defineStore("productVariant", () => {
       variants.value = [];
       return;
     }
-
-    // Validate combination limit
     const validation = validateCombinationLimit(variantGroups.value);
     if (!validation.isValid) {
       throw new Error(validation.message);
     }
-
+    const existingVariants = JSON.parse(JSON.stringify(variants.value || []));
     const newVariants = cartesianProduct(variantGroups.value);
+    const oldGroupNames = new Set<string>();
 
-    // Generate SKUs - will be handled by parent component
-    // newVariants.forEach(variant => {
-    //   if (!variant.sku && productSku) {
-    //     variant.sku = generateDefaultSku(productSku, variant.code)
-    //   }
-    // })
+    existingVariants.forEach((v: any) => {
+      if (v.attributeData) {
+        Object.keys(v.attributeData).forEach((groupName) => oldGroupNames.add(groupName));
+      }
+    });
 
-    variants.value = newVariants;
+    const newGroupNames = new Set<string>();
+    newVariants.forEach((v) => {
+      if (v.attributeData) {
+        Object.keys(v.attributeData).forEach((groupName) => newGroupNames.add(groupName));
+      }
+    });
+
+    const commonGroupNames = new Set([...oldGroupNames].filter((n) => newGroupNames.has(n)));
+    const addedGroups = Array.from(newGroupNames).filter((n) => !oldGroupNames.has(n));
+    const removedGroups = Array.from(oldGroupNames).filter((n) => !newGroupNames.has(n));
+
+    if (existingVariants.length > 0 && addedGroups.length > 0) {
+      const expandedVariants: IProductVariant[] = [];
+      existingVariants.forEach((oldVariant: any) => {
+        if (!oldVariant.attributeData) {
+          expandedVariants.push(oldVariant);
+          return;
+        }
+        const matchingNewVariants = newVariants.filter((newV) => {
+          if (!newV.attributeData) return false;
+          for (const groupName of commonGroupNames) {
+            const oldAttr = oldVariant.attributeData[groupName];
+            const newAttr = newV.attributeData[groupName];
+            if (oldAttr?.id !== newAttr?.id) return false;
+          }
+          return true;
+        });
+        if (matchingNewVariants.length === 0) {
+          expandedVariants.push(oldVariant);
+          return;
+        }
+        matchingNewVariants.forEach((matchingNew) => {
+          expandedVariants.push({
+            ...matchingNew,
+            price: Number(oldVariant?.price ?? 0),
+            stock: Number(oldVariant?.stock ?? 0),
+            barcode: oldVariant.barcode || matchingNew.barcode,
+            id: undefined,
+          });
+        });
+      });
+      variants.value = expandedVariants;
+      return;
+    }
+    const mergedVariants: IProductVariant[] = [];
+    newVariants.forEach((newVariant) => {
+      const matchingOld = existingVariants.find((oldVariant: any) => {
+        if (!oldVariant.attributeData || !newVariant.attributeData) return false;
+        return JSON.stringify(oldVariant.attributeData) === JSON.stringify(newVariant.attributeData);
+      });
+
+      if (matchingOld) {
+        mergedVariants.push({
+          ...newVariant,
+          price: Number(matchingOld?.price ?? 0),
+          stock: Number(matchingOld?.stock ?? 0),
+          barcode: matchingOld.barcode || newVariant.barcode,
+          id: matchingOld.id,
+        });
+      } else {
+        const defaultPrice = Number(existingVariants[0]?.price ?? 0);
+        const defaultStock = Number(existingVariants[0]?.stock ?? 0);
+
+        mergedVariants.push({
+          ...newVariant,
+          price: defaultPrice,
+          stock: defaultStock,
+        });
+      }
+    });
+    variants.value = mergedVariants;
   };
 
   const autoGenerateSkus = (productSku: string) => {
     const existingSkus = variants.value.map((v) => v.sku).filter(Boolean);
-
     variants.value.forEach((variant) => {
       if (!variant.sku) {
         variant.sku = generateUniqueVariantCode(existingSkus, generateDefaultSku(productSku, variant.code));
