@@ -59,9 +59,9 @@ definePageMeta({
         <div class="min-w-[200px]">
           <Select v-model="filters.product_catalogue_id" :options="productCatalogueOptions" option-label="name" option-value="id" filter showClear :placeholder="$t('admin.page.product.filterGroup')" class="w-full text-sm" />
         </div>
-        <div class="min-w-[200px]">
-          <Select v-model="filters.tag_id" :options="tagOptions" option-label="name" option-value="id" filter showClear :placeholder="$t('admin.page.product.filterTag')" class="w-full text-sm" />
-        </div>
+        <!-- <div class="min-w-[200px]">
+            <Select v-model="filters.tag_id" :options="tagOptions" option-label="name" option-value="id" filter showClear :placeholder="$t('admin.page.product.filterTag')" class="w-full text-sm" />
+          </div> -->
         <div class="min-w-[200px]">
           <Select v-model="filters.brand_id" :options="brandOptions" option-label="name" option-value="id" filter showClear :placeholder="$t('admin.page.product.filterBrand')" class="w-full text-sm" />
         </div>
@@ -176,7 +176,7 @@ definePageMeta({
             <p class="text-muted fz-[12px] mb-2">{{ $t("admin.common.selectedRecords") }} ({{ selectedIds.length }}):</p>
             <div class="border rounded p-3 bg-light max-h-[300px] overflow-y-auto">
               <ul class="list-unstyled mb-0">
-                <li v-for="item in data?.data?.data?.filter((i) => selectedIds.includes(i.id))" :key="item.id" class="py-1">
+                <li v-for="item in data?.data?.data?.filter((i) => selectedIds.includes(i.id as any))" :key="item.id" class="py-1">
                   <div class="d-flex align-items-center">
                     <AppCheckbox :model-value="selectedIds" :value="item.id" @update:model-value="handleSelectedIdsChange" class="me-2" />
                     <span class="text-danger">{{ item.name }}</span>

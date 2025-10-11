@@ -82,10 +82,15 @@ class ProductService extends BaseService implements ProductServiceInterface
     private function handleProductVariant(Request $request): self
     {
         $variants = $request->input('product_variants');
-        if (!is_array($variants) || empty($variants)) return $this;
-
-        if ($this->model->exists) {
-            $this->model->product_variants()->delete();
+        if ($request->has('product_variants')) {
+            if ($this->model->exists) {
+                $this->model->product_variants()->delete();
+            }
+            if (!is_array($variants) || empty($variants)) {
+                return $this;
+            }
+        } else {
+            return $this;
         }
 
         foreach ($variants as $variantData) {

@@ -57,9 +57,9 @@ export const PRODUCTTAGINDEX = "/admin/product/tag";
 export const PRODUCTTAGCREATE = "/admin/product/tag/create";
 export const PRODUCTTAGUPDATE = "/admin/product/tag/update";
 
-export const BRANDINDEX = "/admin/agency/agency";
-export const BRANDCREATE = "/admin/agency/agency/create";
-export const BRANDUPDATE = "/admin/agency/agency/update";
+export const BRANDINDEX = "/admin/brand/brand";
+export const BRANDCREATE = "/admin/brand/brand/create";
+export const BRANDUPDATE = "/admin/brand/brand/update";
 
 export const AGENCYINDEX = "/admin/agency/agency";
 export const AGENCYCREATE = "/admin/agency/agency/create";

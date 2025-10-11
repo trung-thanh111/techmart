@@ -36,7 +36,7 @@ class UpdateRequest extends BaseRequest
         $sometime = ($method === 'PATCH') ? 'sometimes' : '';
         return [
             "name" => "{$sometime}|required|string|max:255",
-            "description" => "{$sometime}|nullable|string|max:500",
+            "description" => "{$sometime}|nullable|string",
             "content" => "{$sometime}|nullable|string",
             "price_origin" => "{$sometime}|required|numeric|min:0",
             "album" => "{$sometime}|nullable|sometimes|array",
@@ -66,17 +66,6 @@ class UpdateRequest extends BaseRequest
                 "max:100",
                 Rule::unique('products')->ignore($this->route('product')),
             ],
-            "productVariants" => "{$sometime}|nullable|array",
-            "productVariants.*.album" => "{$sometime}|nullable|array",
-            "productVariants.*.code" => "{$sometime}|required|string|max:100",
-            "productVariants.*.stock" => "{$sometime}|required|integer|min:0",
-            "productVariants.*.sku" => "{$sometime}|required|string|max:100",
-            "productVariants.*.price" => "{$sometime}|nullable|numeric|min:0",
-            "productVariants.*.barcode" => "{$sometime}|nullable|string|max:100",
-            "productVariants.*.attributeData" => "{$sometime}|required|array",
-            "productVariants.*.attributes" => "{$sometime}|required|array",
-            "productVariants.*.attributes.*" => "{$sometime}|required|integer|exists:attributes,id",
-            "productVariants.*.publish" => "{$sometime}|required|integer|in:0,1,2",
         ];
     }
 

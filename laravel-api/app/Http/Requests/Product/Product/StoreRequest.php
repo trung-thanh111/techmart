@@ -25,7 +25,7 @@ class StoreRequest extends BaseRequest
             'name' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:products,slug',
             'sku' => 'required|string|max:100|unique:products,sku',
-            'description' => 'nullable|string|max:500',
+            'description' => 'nullable|string',
             'content' => 'nullable|string',
             'price_origin' => 'required|numeric|min:0',
             "album" => "nullable|sometimes|array",

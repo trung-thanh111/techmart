@@ -17,9 +17,7 @@
             <h5>{{ $t("admin.common.titleNote") }}</h5>
             <span>
               {{ $t("admin.common.note") }}
-              <p class="fst-italic">
-                {{ $t("admin.common.required") }}
-              </p>
+              <p class="fst-italic">{{ $t("admin.common.required") }}</p>
             </span>
           </div>
         </div>
@@ -45,15 +43,11 @@
             </div>
           </div>
           <div class="mb-3">
-            <label class="form-label" for="description">
-              {{ $t("admin.common.form.description") }}
-            </label>
+            <label class="form-label" for="description">{{ $t("admin.common.form.description") }}</label>
             <Field name="description" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
               <div class="w-full">
                 <CKEditor v-model="field.value" @update:modelValue="field.onChange" class="h-64" />
-                <small v-if="errorMessage && meta.touched" class="text-danger">
-                  {{ $t(errorMessage) }}
-                </small>
+                <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
               </div>
             </Field>
           </div>
@@ -71,22 +65,16 @@
                 <label class="form-label" for="order">{{ $t("admin.common.form.order") }}:</label>
                 <Field name="sortOrder" v-slot="{ field, errorMessage, meta }">
                   <InputNumber :modelValue="field.value" @update:modelValue="field.onChange" :min="1" showButtons class="w-full" input-class="!rounded py-[7px] w-full" size="small" />
-                  <small v-if="errorMessage && meta.touched" class="text-danger">
-                    {{ $t(errorMessage) }}
-                  </small>
+                  <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
                 </Field>
               </div>
             </div>
             <div class="col-md-6">
               <div class="mb-3">
-                <label class="form-label" for="likeCount">
-                  {{ $t("admin.common.form.likeCount") }}
-                </label>
+                <label class="form-label" for="likeCount">{{ $t("admin.common.form.likeCount") }}</label>
                 <Field name="likeCount" v-slot="{ field, errorMessage, meta }">
                   <InputNumber :modelValue="field.value" @update:modelValue="field.onChange" :min="0" showButtons class="w-full" input-class="!rounded py-[7px] w-full" size="small" />
-                  <small v-if="errorMessage && meta.touched" class="text-danger">
-                    {{ $t(errorMessage) }}
-                  </small>
+                  <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
                 </Field>
               </div>
             </div>
@@ -95,9 +83,7 @@
       </div>
       <Field name="productVariants" v-slot="{ field, errorMessage, meta }">
         <VariantManager :product-sku="values.sku" :product-slug="slug" :model-value="field.value" @update:model-value="field.onChange" />
-        <small v-if="errorMessage && meta.touched" class="text-danger">
-          {{ $t(errorMessage) }}
-        </small>
+        <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
       </Field>
       <SEO :values="values" />
       <div class="flex justify-end gap-3 mt-4 position-sticky bottom-5 z-20">
@@ -144,38 +130,50 @@
               <span class="text-danger">*</span>
             </label>
             <Field name="productCatalogues" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <MultiSelect :modelValue="field.value" @update:modelValue="field.onChange" :options="productCatalogueOptions" optionLabel="name" optionValue="id" filter display="chip" :placeholder="$t('admin.common.form.productCataloguePlaceholder')" class="w-100" />
-              <small v-if="errorMessage && meta.touched" class="text-danger">
-                {{ $t(errorMessage) }}
-              </small>
+              <MultiSelect :modelValue="field.value" @update:modelValue="field.onChange" :options="productCatalogueOptions" optionLabel="name" optionValue="id" filter display="chip" :placeholder="$t('admin.common.form.productCataloguePlaceholder')" class="w-100">
+                <template #header>
+                  <div class="inline-flex items-center justify-center p-2">
+                    <span class="font-medium whitespace-nowrap">{{ $t("admin.common.form.productCatalogue") }}</span>
+                  </div>
+                </template>
+                <template #footer>
+                  <div class="p-3 cursor-pointer flex items-center justify-end font-light text-xs text-emerald-600 gap-1">
+                    <i class="ri-add-line text-emerald-600"></i>
+                    <span @click="showCreateModal = true">Thêm mới</span>
+                  </div>
+                </template>
+              </MultiSelect>
+              <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
             </Field>
           </div>
           <div class="mb-3">
-            <label class="form-label">
-              {{ $t("admin.common.form.tag") }}
-            </label>
+            <label class="form-label">{{ $t("admin.common.form.tag") }}</label>
             <Field name="productTags" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <MultiSelect :modelValue="field.value" @update:modelValue="field.onChange" :options="tagOptions" optionLabel="name" optionValue="id" filter display="chip" :placeholder="$t('admin.common.form.tagPlaceholder')" class="rounded py-[1px] w-100" />
-              <small v-if="errorMessage && meta.touched" class="text-danger">
-                {{ $t(errorMessage) }}
-              </small>
+              <MultiSelect :modelValue="field.value" @update:modelValue="field.onChange" :options="tagOptions" optionLabel="name" optionValue="id" filter display="chip" :placeholder="$t('admin.common.form.tagPlaceholder')" class="rounded py-[1px] w-100">
+                <template #header>
+                  <div class="inline-flex items-center justify-center p-2">
+                    <span class="font-medium whitespace-nowrap">{{ $t("admin.common.form.tag") }}</span>
+                  </div>
+                </template>
+                <template #footer>
+                  <div class="p-3 cursor-pointer flex items-center justify-end font-light text-xs text-emerald-600 gap-1">
+                    <i class="ri-add-line text-emerald-600"></i>
+                    <span @click="showCreateTagModal = true">Thêm mới</span>
+                  </div>
+                </template>
+              </MultiSelect>
+              <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
             </Field>
           </div>
           <div class="mb-3">
-            <label class="form-label">
-              {{ $t("admin.common.form.brand") }}
-            </label>
+            <label class="form-label">{{ $t("admin.common.form.brand") }}</label>
             <Field name="brandId" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
               <Select :modelValue="field.value" @update:modelValue="field.onChange" :options="brandOptions" optionLabel="name" optionValue="id" filter :placeholder="$t('admin.common.form.brandPlaceholder')" class="w-100" showClear checkmark />
-              <small v-if="errorMessage && meta.touched" class="text-danger">
-                {{ $t(errorMessage) }}
-              </small>
+              <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
             </Field>
           </div>
           <div class="mb-3">
-            <label class="form-label">
-              {{ $t("admin.common.form.related") }}
-            </label>
+            <label class="form-label">{{ $t("admin.common.form.related") }}</label>
             <Field name="relateds" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
               <MultiSelect :modelValue="field.value" @update:modelValue="field.onChange" :options="productOptions" optionLabel="name" optionValue="id" filter display="chip" :placeholder="$t('admin.common.form.relatedPlaceholder')" class="rounded py-[1px] w-100" size="small" />
               <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
@@ -200,17 +198,71 @@
             <label class="form-label">{{ $t("admin.common.status") }}</label>
             <Field name="publish" v-slot="{ field, errorMessage, meta }">
               <PublishSelect :modelValue="field.value" @update:modelValue="field.onChange" />
-              <small v-if="errorMessage && meta.touched" class="text-danger">
-                {{ $t(errorMessage) }}
-              </small>
+              <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
             </Field>
           </div>
         </div>
       </div>
     </div>
   </form>
-</template>
+  <Dialog v-model:visible="showCreateModal" modal maximizable :header="$t('admin.common.create')" :style="{ width: '40rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" append-to="body">
+    <form @submit.prevent="handleCreateCatalogue">
+      <div class="mb-3">
+        <label class="form-label" for="catalogueName">
+          {{ $t("admin.common.form.name") }}:
+          <span class="text-danger">*</span>
+        </label>
+        <input v-model="catalogueForm.name" id="catalogueName" type="text" :placeholder="$t('admin.common.form.namePlaceholder')" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">{{ $t("admin.common.form.order") }}</label>
+        <InputNumber v-model="catalogueForm.order" :min="1" showButtons class="w-full" input-class="!rounded py-[7px] w-full" size="small" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">{{ $t("admin.common.form.description") }}</label>
+        <textarea v-model="catalogueForm.description" rows="4" class="form-control" :placeholder="$t('admin.common.form.descriptionPlaceholder')" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">{{ $t("admin.common.status") }}</label>
+        <PublishSelect v-model="catalogueForm.publish" />
+      </div>
+      <div class="flex justify-end gap-3 mt-4">
+        <Button type="button" variant="cancel" @click="showCreateModal = false" />
+        <Button type="submit" variant="success" :loading="catalogueForm.isLoading" />
+      </div>
+    </form>
+  </Dialog>
 
+  <!-- Modal tạo Tag -->
+  <Dialog v-model:visible="showCreateTagModal" modal maximizable :header="$t('admin.common.create')" :style="{ width: '40rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" append-to="body">
+    <form @submit.prevent="handleCreateTag">
+      <div class="mb-3">
+        <label class="form-label" for="tagName">
+          {{ $t("admin.common.form.name") }}:
+          <span class="text-danger">*</span>
+        </label>
+        <input v-model="tagForm.name" id="tagName" type="text" :placeholder="$t('admin.common.form.namePlaceholder')" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">{{ $t("admin.common.form.order") }}</label>
+        <InputNumber v-model="tagForm.order" :min="1" showButtons class="w-full" input-class="!rounded py-[7px] w-full" size="small" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">{{ $t("admin.common.form.description") }}</label>
+        <textarea v-model="tagForm.description" rows="4" class="form-control" :placeholder="$t('admin.common.form.descriptionPlaceholder')" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">{{ $t("admin.common.status") }}</label>
+        <PublishSelect v-model="tagForm.publish" />
+      </div>
+      <div class="flex justify-end gap-3 mt-4">
+        <Button type="button" variant="cancel" @click="showCreateTagModal = false" />
+        <Button type="submit" variant="success" :loading="tagForm.isLoading" />
+      </div>
+    </form>
+  </Dialog>
+
+</template>
 <script setup lang="ts">
 import { Field } from "vee-validate";
 import Button from "~/components/admin/custom/Button.vue";
@@ -225,10 +277,89 @@ import MultipleImageUpload from "~/components/admin/custom/MultipleImageUpload.v
 import type { AlbumItem } from "~/interfaces/upload/image.interface";
 import { generateSKU } from "~/utils/helpers";
 import VariantManager from "~/components/admin/custom/VariantManager.vue";
+import { productCatalogueService } from "~/services/product/catalogue.service";
+import { productTagService } from "~/services/product/tag.service";
 
-const { isLoading, values, tagOptions, productCatalogueOptions, productOptions, brandOptions, config, slug, setValues, handleStore } = useProduct();
+const { isLoading, values, tagOptions, productCatalogueOptions, productOptions, brandOptions, config, slug, setValues, handleStore, loadProductCatalogue, loadTag } = useProduct();
+
+const catalogueForm = ref({
+  name: "",
+  order: 0,
+  description: "",
+  publish: 2,
+  isLoading: false,
+});
+
+const tagForm = ref({
+  name: "",
+  order: 0,
+  description: "",
+  publish: 2,
+  isLoading: false,
+});
+
+const showCreateTagModal = ref(false);
+
+const handleCreateCatalogue = async () => {
+  try {
+    catalogueForm.value.isLoading = true;
+    const catalogueData = {
+      name: catalogueForm.value.name,
+      order: catalogueForm.value.order || 1,
+      description: catalogueForm.value.description || "",
+      publish: catalogueForm.value.publish || 2,
+    };
+    const response = await productCatalogueService.store(catalogueData);
+    if (response && typeof response === "object" && "data" in response && response.data?.id) {
+      await loadProductCatalogue();
+      const currentCatalogues = values.productCatalogues || [];
+      setValues({ ...values, productCatalogues: [...currentCatalogues, response.data.id] });
+      showCreateModal.value = false;
+      catalogueForm.value = {
+        name: "",
+        order: 0,
+        description: "",
+        publish: 2,
+        isLoading: false,
+      };
+    }
+  } catch (error) {
+    console.error("Error creating catalogue:", error);
+  } finally {
+    catalogueForm.value.isLoading = false;
+  }
+};
+
+const handleCreateTag = async () => {
+  try {
+    tagForm.value.isLoading = true;
+    const tagData = {
+      name: tagForm.value.name,
+      order: tagForm.value.order || 1,
+      description: tagForm.value.description || "",
+      publish: tagForm.value.publish || 2,
+    };
+    const response = await productTagService.store(tagData);
+    if (response && typeof response === "object" && "data" in response && response.data?.id) {
+      await loadTag();
+      showCreateTagModal.value = false;
+      tagForm.value = {
+        name: "",
+        order: 0,
+        description: "",
+        publish: 2,
+        isLoading: false,
+      };
+    }
+  } catch (error) {
+    console.error("Error creating tag:", error);
+  } finally {
+    tagForm.value.isLoading = false;
+  }
+};
 
 const albumData = ref<AlbumItem[] | null>(null);
+const showCreateModal = ref(false);
 
 const onAlbumChange = () => {
   setValues({ ...values, album: albumData.value });
