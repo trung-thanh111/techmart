@@ -17,11 +17,18 @@
       <div class="space-y-3">
         <div v-for="(row, idx) in groupRows" :key="row.uid" class="flex items-center gap-3">
           <Select class="w-1/3 h-[38px] text-sm" :options="attributeCatalogues" option-label="name" option-value="id" v-model="row.catalogueId" placeholder="Nhóm thuộc tính" :option-disabled="(opt) => isCatalogueOptionDisabled(opt.id, row.uid)" checkmark @update:model-value="onSelectGroup(row)" />
-          <MultiSelect class="flex-1 h-[38px] text[14px]" :options="getAttributesForRow(row)" option-label="name" option-value="id" v-model="row.attributeIds" placeholder="Thuộc tính" display="chip" filter showClear :disabled="!row.catalogueId" @update:model-value="onSelectAttributes(row)" />
-          <Button icon="ri-delete-bin-line" severity="danger" size="small" outlined rounded @click="removeRow(row.uid)" :disabled="groupRows.length <= 1" v-tooltip.bottom="'Xóa dòng'" />
+          <MultiSelect class="flex-1 h-[38px] text[14px]" :options="getAttributesForRow(row)" option-label="name" option-value="id" v-model="row.attributeIds" placeholder="Thuộc tính" display="chip" filter showClear :disabled="!row.catalogueId" @update:model-value="onSelectAttributes(row)">
+            <template #footer>
+              <div class="p-3 cursor-pointer flex items-center justify-end font-light text-xs text-emerald-600 gap-1">
+                <i class="ri-add-line text-emerald-600"></i>
+                <span @click="showCreateAttributeModal = true">Thêm mới</span>
+              </div>
+            </template>
+          </MultiSelect>
+          <Button type="button" icon="ri-delete-bin-line" class="rounded-circle" severity="danger" size="small" outlined rounded @click="removeRow(row.uid)" :disabled="groupRows.length <= 1" v-tooltip.bottom="'Xóa dòng'" />
         </div>
       </div>
-      <Button label="Thêm mới" class="rounded font-light text-sm" size="small" icon="ri-add-line" outlined @click="addRow" />
+      <Button type="button" label="Thêm mới" class="rounded font-light text-sm" size="small" icon="ri-add-line" outlined @click="addRow" />
     </div>
 
     <div v-if="variants.length" class="pt-4 border-t border-gray-100">
@@ -31,7 +38,15 @@
 
       <div class="overflow-x-auto border border-gray-100 rounded-lg">
         <DataTable :value="variants" dataKey="id" :expandedRows="expandedRows" @row-toggle="expandedRows = $event.data" class="p-datatable-sm auto-width-table" rowHover>
-          <Column expander class="p-0 w-[1rem]" />
+          <Column expander class="p-0 w-[1rem] pl-2">
+            <template #header>
+              <i 
+                :class="allExpanded ? 'ri-contract-up-down-line' : 'ri-expand-up-down-line'" 
+                class="cursor-pointer text-gray-600 hover:text-gray-800 text-lg text-center"
+                @click="toggleAllExpanded"
+              ></i>
+            </template>
+          </Column>
           <Column field="sku" header="SKU" class="auto-width-column" />
           <Column field="name" header="Tên" class="auto-width-column" />
           <Column field="stock" header="Tồn kho" class="auto-width-column">
@@ -128,6 +143,38 @@
       <h4 class="text-base font-medium text-gray-700 mb-1">Chưa có biến thể nào</h4>
       <p class="text-sm text-gray-500">Thêm nhóm và giá trị thuộc tính để tạo biến thể</p>
     </div>
+
+    <Dialog v-model:visible="showCreateAttributeModal" modal maximizable header="Thêm thuộc tính mới" :style="{ width: '40rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" append-to="body">
+      <form @submit.prevent="handleCreateAttribute">
+        <div class="mb-3">
+          <label class="form-label" for="attributeName">
+            Tên thuộc tính:
+            <span class="text-danger">*</span>
+          </label>
+          <input v-model="attributeForm.name" id="attributeName" type="text" placeholder="Nhập tên thuộc tính" class="form-control" required />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Nhóm thuộc tính:</label>
+          <Select v-model="attributeForm.attributeCatalogueId" :options="attributeCatalogues" optionLabel="name" optionValue="id" filter placeholder="Chọn nhóm thuộc tính" class="w-100" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Thứ tự</label>
+          <InputNumber v-model="attributeForm.order" :min="1" showButtons class="w-full" input-class="!rounded py-[7px] w-full" size="small" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Mô tả</label>
+          <textarea v-model="attributeForm.description" rows="4" class="form-control" placeholder="Nhập mô tả thuộc tính" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Trạng thái</label>
+          <PublishSelect v-model="attributeForm.publish" />
+        </div>
+        <div class="flex justify-end gap-3 mt-4">
+          <Button type="button" variant="cancel" @click="showCreateAttributeModal = false" />
+          <Button type="submit" variant="success" :loading="attributeForm.isLoading" />
+        </div>
+      </form>
+    </Dialog>
   </div>
 </template>
 
@@ -137,6 +184,10 @@ import { useToast } from "primevue/usetoast";
 import { Field } from "vee-validate";
 import type { IProductVariant } from "~/interfaces/product/variant.interface";
 import { useProductVariantStore } from "~/stores/product/variant.store";
+import { attributeService } from "~/services/attribute/attribute.service";
+import Button from "~/components/admin/custom/Button.vue";
+import PublishSelect from "~/components/admin/custom/PublishSelect.vue";
+import { slugify } from "~/utils/helpers";
 
 const toast = useToast();
 const variantStore = useProductVariantStore();
@@ -145,11 +196,22 @@ const hasVariants = ref(false);
 type GroupRow = { uid: string; catalogueId: number | null; attributeIds: number[]; lockGroup: boolean };
 const groupRows = ref<GroupRow[]>([]);
 
+const showCreateAttributeModal = ref(false);
+const attributeForm = ref({
+  name: "",
+  attributeCatalogueId: null,
+  order: 1,
+  description: "",
+  publish: 2,
+  isLoading: false,
+});
+
 const attributeCatalogues = computed(() => variantStore.attributeCatalogues);
 const variantGroups = computed(() => variantStore.variantGroups);
 const variants = computed(() => props.modelValue || []);
 const config = useRuntimeConfig();
 const expandedRows = ref<any[]>([]);
+const allExpanded = computed(() => variants.value.length > 0 && expandedRows.value.length === variants.value.length);
 
 interface Props {
   productId?: number;
@@ -172,6 +234,16 @@ const emit = defineEmits<{
 
 const addRow = () => {
   groupRows.value.push({ uid: cryptoRandom(), catalogueId: null, attributeIds: [], lockGroup: false });
+};
+
+const toggleAllExpanded = () => {
+  if (allExpanded.value) {
+    // Thu gọn tất cả
+    expandedRows.value = [];
+  } else {
+    // Mở rộng tất cả
+    expandedRows.value = [...variants.value];
+  }
 };
 
 const removeRow = (uid: string) => {
@@ -263,6 +335,38 @@ const loadAttributeCatalogues = async () => {
       summary: "Lỗi",
       detail: "Không thể tải danh sách nhóm thuộc tính",
     });
+  }
+};
+
+const handleCreateAttribute = async () => {
+  try {
+    attributeForm.value.isLoading = true;
+    const attributeData = {
+      name: attributeForm.value.name,
+      attribute_catalogue_id: attributeForm.value.attributeCatalogueId,
+      order: attributeForm.value.order || 1,
+      description: attributeForm.value.description || "",
+      publish: attributeForm.value.publish || 2,
+    };
+    const response = await attributeService.store(attributeData);
+    if (response && typeof response === "object" && "data" in response && response.data?.id) {
+      if (attributeForm.value.attributeCatalogueId) {
+        await variantStore.loadAttributesByCatalogue(attributeForm.value.attributeCatalogueId);
+      }
+      showCreateAttributeModal.value = false;
+      attributeForm.value = {
+        name: "",
+        attributeCatalogueId: null,
+        order: 1,
+        description: "",
+        publish: 2,
+        isLoading: false,
+      };
+    }
+  } catch (error) {
+    console.error("Error creating attribute:", error);
+  } finally {
+    attributeForm.value.isLoading = false;
   }
 };
 
@@ -392,11 +496,11 @@ const generateAttributeCombinations = (groupAttributes: Record<string, any[]>) =
     }
 
     const currentGroup = remainingGroups[0];
-    const attributes = groupAttributes[currentGroup];
+    const attributes = groupAttributes[currentGroup as string];
 
     if (attributes && attributes.length > 0) {
-      attributes.forEach((attr) => {
-        generateCombinations({ ...current, [currentGroup]: attr }, remainingGroups.slice(1));
+      attributes.forEach((attr: any) => {
+        generateCombinations({ ...current, [currentGroup as string]: attr }, remainingGroups.slice(1));
       });
     }
   };
@@ -408,7 +512,7 @@ const generateAttributeCombinations = (groupAttributes: Record<string, any[]>) =
 const generateVariantNameFromAttributes = (attributeData: Record<string, any>) => {
   const attributeNames = Object.entries(attributeData)
     .sort(([a], [b]) => a.localeCompare(b))
-    .map(([groupName, attr]) => attr.name)
+    .map(([groupName, attr]: [string, any]) => attr.name)
     .join(" ");
   return attributeNames;
 };
@@ -481,7 +585,7 @@ const buildVariantLink = (variant: any) => {
   const base = `${config.public.baseUrl}/${props.productSlug || "san-pham"}`.replace(/\/$/, "");
   const params = new URLSearchParams();
   params.set("variant", String(variant?.id ?? variant?.code ?? "..."));
-  Object.entries(variant.attributeData || {}).forEach(([groupName, attr]: any) => {
+  Object.entries(variant.attributeData || {}).forEach(([groupName, attr]: [string, any]) => {
     params.set(slugify(groupName), String(attr?.id ?? ""));
   });
 
@@ -542,11 +646,13 @@ watch(
 
 watch(hasVariants, (enabled) => {
   if (enabled) {
-    if (groupRows.value.length === 0) addRow();
+    if (groupRows.value.length === 0 && variants.value.length === 0) {
+      addRow();
+    }
   } else {
     groupRows.value = [];
-    variantStore.variantGroups = [] as any;
-    variantStore.setVariants([] as any);
+    variantStore.variantGroups = [];
+    variantStore.setVariants([]);
     emit("update:modelValue", []);
   }
 });

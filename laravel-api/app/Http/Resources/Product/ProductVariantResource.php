@@ -25,9 +25,9 @@ class ProductVariantResource extends JsonResource
             'barcode' => $this->barcode,
             'attributeData' => $this->attribute_data,
             'productId' => $this->product_id,
-            'attributes' => $this->whenLoaded('variant_attributes', [
-                'id' => $this->variant_attributes->pluck('id')->toArray()
-            ]),
+            'attributes' => $this->whenLoaded('variant_attributes', 
+                $this->variant_attributes->pluck('id')->toArray()
+            ),
             // 'attributeNames' => $this->whenLoaded('variant_attributes', [
             //     'name' => $this->variant_attributes->pluck('name')->toArray()
             // ]),

@@ -8,7 +8,7 @@ import { productService } from "~/services/product/product.service";
 import type { IApiOk, IPaginate } from "~/interfaces/base.interface";
 import type { IProduct, ProductPayloadFilter } from "~/interfaces/product/product.interface";
 import type { BasePayloadFilter } from "~/interfaces/base.interface";
-import { PRODUCTINDEX, MAX_FILE_SIZE, ACCEPTED_IMAGE_TYPES } from "~/utils/constants";
+import { PRODUCTINDEX } from "~/utils/constants";
 import { productCatalogueService } from "~/services/product/catalogue.service";
 import { productTagService } from "~/services/product/tag.service";
 import { brandService } from "~/services/brand/brand.service";
@@ -32,13 +32,13 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
   const schema = {
     name: z.string({ required_error: "admin.validation.nameRequired" }).trim().min(1, "admin.validation.nameRequired").max(255, "admin.validation.nameMaxLength"),
     sku: z.string({ required_error: "admin.validation.skuRequired" }).trim().min(1, "admin.validation.skuRequired").max(100, "admin.validation.skuMaxLength"),
-    description: z.string().max(500, "admin.validation.descriptionMaxLength").nullable().optional(),
+    description: z.string().nullable().optional(),
     content: z.string().nullable().optional(),
     priceOrigin: z.number({ required_error: "admin.validation.priceOriginRequired" }).nonnegative({ message: "admin.validation.minValue" }),
     album: z.array(z.object({ path: z.string() })).nullable().optional(),
     sortOrder: z.number().int().nonnegative().nullable().optional(),
     productCatalogues: z.array(z.number(), { required_error: "admin.validation.productCatalogueRequired" }).min(1, "admin.validation.productCatalogueRequired"),
-    brandId: z.number({required_error: "admin.validation.brandRequired", invalid_type_error: "admin.validation.brandRequired",}).int().positive("admin.validation.brandRequired"),
+    brandId: z.number({ required_error: "admin.validation.brandRequired", invalid_type_error: "admin.validation.brandRequired" }).int().positive("admin.validation.brandRequired"),
     productTags: z.array(z.number()).nullable().optional(),
     relateds: z.array(z.number()).nullable().optional(),
     isHot: z.boolean().nullable().optional(),
@@ -81,6 +81,7 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
   const handleStore = handleSubmit(async (payload: TProductCreate | TProductUpdate) => {
     isLoading.value = true;
     try {
+      console.info("payload cretea:", payload);
       const response = await productService.store(payload as Partial<IProduct>);
       toast.success(response?.message || t("admin.messages.createSuccess"));
       return navigateTo(PRODUCTINDEX);
@@ -112,8 +113,13 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
   const handleUpdate = handleSubmit(async (payload: TProductUpdate) => {
     isLoading.value = true;
     try {
+      console.info("payload:", payload);
       const id = Number(useRoute().params.id);
-      await productService.update(id, payload as Partial<IProduct>);
+      
+      // Luôn gửi productVariants để xử lý cả trường hợp clear
+      const cleanPayload = { ...payload };
+      
+      await productService.update(id, cleanPayload as Partial<IProduct>);
       toast.success(t("admin.messages.updateSuccess"));
       return navigateTo(PRODUCTINDEX);
     } catch (error: any) {
@@ -295,6 +301,7 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
     handleDeleteMultiple,
     handleToggleIsHot,
     loadProductCatalogue,
+    loadTag,
     setSelectedItem,
     confirmDelete,
     fetchData,
