@@ -17,7 +17,19 @@
       <div class="space-y-3">
         <div v-for="(row, idx) in groupRows" :key="row.uid" class="flex items-center gap-3">
           <Select class="w-1/3 h-[38px] text-sm" :options="attributeCatalogues" option-label="name" option-value="id" v-model="row.catalogueId" placeholder="Nhóm thuộc tính" :option-disabled="(opt) => isCatalogueOptionDisabled(opt.id, row.uid)" checkmark @update:model-value="onSelectGroup(row)" />
-          <MultiSelect class="flex-1 h-[38px] text[14px]" :options="getAttributesForRow(row)" option-label="name" option-value="id" v-model="row.attributeIds" placeholder="Thuộc tính" display="chip" filter showClear :disabled="!row.catalogueId" @update:model-value="onSelectAttributes(row)">
+          <MultiSelect class="flex-1 h-[38px] text-sm" :options="getAttributesForRow(row)" option-label="name" option-value="id" v-model="row.attributeIds" placeholder="Thuộc tính" display="chip" filter showClear :disabled="!row.catalogueId" @update:model-value="onSelectAttributes(row)">
+            <template #value="{ value, placeholder }">
+              <div class="flex items-center gap-1 overflow-hidden">
+                <template v-if="value && value.length > 0">
+                  <span v-for="(item, index) in value.slice(0, 3)" :key="item" class="inline-flex items-center gap-1 bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+                    {{ getAttributesForRow(row).find((attr) => attr.id === item)?.name }}
+                    <i class="ri-close-line cursor-pointer hover:text-blue-600" @click.stop="removeAttribute(row, item)"></i>
+                  </span>
+                  <span v-if="getOverflowCount(row) > 0" class="inline-flex items-center bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full">+{{ getOverflowCount(row) }}</span>
+                </template>
+                <span v-else class="text-gray-500">{{ placeholder }}</span>
+              </div>
+            </template>
             <template #footer>
               <div class="p-3 cursor-pointer flex items-center justify-end font-light text-xs text-emerald-600 gap-1">
                 <i class="ri-add-line text-emerald-600"></i>
@@ -40,11 +52,7 @@
         <DataTable :value="variants" dataKey="id" :expandedRows="expandedRows" @row-toggle="expandedRows = $event.data" class="p-datatable-sm auto-width-table" rowHover>
           <Column expander class="p-0 w-[1rem] pl-2">
             <template #header>
-              <i 
-                :class="allExpanded ? 'ri-contract-up-down-line' : 'ri-expand-up-down-line'" 
-                class="cursor-pointer text-gray-600 hover:text-gray-800 text-lg text-center"
-                @click="toggleAllExpanded"
-              ></i>
+              <i :class="allExpanded ? 'ri-arrow-down-s-line' : 'ri-arrow-right-s-line'" class="cursor-pointer text-gray-600 hover:text-gray-800 text-2xl text-center" @click="toggleAllExpanded"></i>
             </template>
           </Column>
           <Column field="sku" header="SKU" class="auto-width-column" />
@@ -210,12 +218,16 @@ const attributeCatalogues = computed(() => variantStore.attributeCatalogues);
 const variantGroups = computed(() => variantStore.variantGroups);
 const variants = computed(() => props.modelValue || []);
 const config = useRuntimeConfig();
-const expandedRows = ref<any[]>([]);
-const allExpanded = computed(() => variants.value.length > 0 && expandedRows.value.length === variants.value.length);
+const expandedRows = ref<any>({});
+const allExpanded = computed(() => {
+  if (variants.value.length === 0) return false;
+  return Object.keys(expandedRows.value).length === variants.value.length;
+});
 
 interface Props {
   productId?: number;
   productSku?: string;
+  productPrice?: number;
   initialVariants?: IProductVariant[];
   productSlug?: string;
   modelValue?: IProductVariant[];
@@ -223,6 +235,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   productSku: "",
+  productPrice: 0,
   initialVariants: () => [],
   productSlug: "",
   modelValue: () => [],
@@ -242,7 +255,10 @@ const toggleAllExpanded = () => {
     expandedRows.value = [];
   } else {
     // Mở rộng tất cả
-    expandedRows.value = [...variants.value];
+    expandedRows.value = variants.value.reduce((acc: any, variant: any) => {
+      acc[variant.id || variant.code || Math.random()] = true;
+      return acc;
+    }, {});
   }
 };
 
@@ -277,6 +293,16 @@ const onSelectAttributes = (row: GroupRow) => {
 const getAttributesForRow = (row: GroupRow) => {
   const cat = attributeCatalogues.value.find((c) => c.id === row.catalogueId);
   return cat?.attributes || [];
+};
+
+const getOverflowCount = (row: GroupRow) => {
+  const count = row.attributeIds.length;
+  return count > 3 ? count - 3 : 0;
+};
+
+const removeAttribute = (row: GroupRow, attributeId: number) => {
+  row.attributeIds = row.attributeIds.filter((id) => id !== attributeId);
+  syncGroupsFromRows();
 };
 
 const syncGroupsFromRows = () => {
@@ -461,12 +487,17 @@ const generateVariants = () => {
             generateVariantBarcodes([newVariant]);
             (newVariant as any).url = buildVariantLink(newVariant);
           }
+          if (props.productPrice && props.productPrice > 0) {
+            (newVariant as any).price = props.productPrice;
+          }
           mergedVariants.push(newVariant);
         }
       });
     }
 
-    expandedRows.value = [...mergedVariants];
+    if (Object.keys(expandedRows.value).length === 0) {
+      expandedRows.value = {};
+    }
 
     emit("update:modelValue", normalizeVariants(mergedVariants as any));
   } catch (error: any) {
@@ -697,5 +728,56 @@ watch(hasVariants, (enabled) => {
   min-width: fit-content !important;
   white-space: nowrap;
   padding: 0.5rem 0.75rem;
+}
+
+/* Fix MultiSelect layout overflow */
+:deep(.p-multiselect) {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+:deep(.p-multiselect .p-multiselect-label-container) {
+  max-width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+:deep(.p-multiselect .p-multiselect-label) {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  flex: 1;
+  min-width: 0;
+}
+
+:deep(.p-multiselect .p-multiselect-token) {
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+:deep(.p-multiselect .p-multiselect-token-label) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 80px;
+}
+
+:deep(.p-multiselect .p-multiselect-token-icon) {
+  flex-shrink: 0;
+}
+
+:deep(.p-multiselect-panel) {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Custom value display for MultiSelect */
+:deep(.p-multiselect .p-multiselect-label-container) {
+  overflow: hidden;
 }
 </style>

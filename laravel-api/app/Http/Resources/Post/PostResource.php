@@ -17,6 +17,37 @@ class PostResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        if ($request->boolean('simple', false)) {
+            return [
+                'id' => $this->id,
+                'name' => $this->name,
+                'description' => $this->description,
+                'slug' => $this->slug,
+                'image' => [
+                    'path' => $this->image ?? null,
+                    'url' => asset("/storage/{$this->image}") ?? null,
+                ],
+                'isHot' => (bool) $this->is_hot,
+                'publish' => (int) $this->publish,
+                'likeCount' => (int) $this->like_count,
+                'creator' => $this->whenLoaded('users', [
+                    'id' => $this->users->id,
+                    'avatar' => asset("/storage/{$this->users->image}") ?? null,
+                    'name' => $this->users->name,
+                ]),
+                'createdAtHuman' => $this->created_at?->diffForHumans(),
+                // 'order' => (int) $this->order,
+                // 'viewCount' => (int) $this->view_count,
+                // 'postCatalogueId' => (int) $this->post_catalogue_id,
+                // 'tagId' => (int) $this->tag_id,
+                // 'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
+                // 'updatedAt' => $this->updated_at?->format('Y-m-d H:i:s'),
+                // 'publishedAt' => $this->published_at ? \Carbon\Carbon::parse($this->published_at)->format('Y-m-d H:i:s') : null,
+                // 'publishedAtHuman' => $this->published_at ? \Carbon\Carbon::parse($this->published_at)->diffForHumans() : null,
+                // 'updatedAtHuman' => $this->updated_at?->diffForHumans(),
+            ];
+        }
+
         return [
             'id' => $this->id,
             'name' => $this->name,

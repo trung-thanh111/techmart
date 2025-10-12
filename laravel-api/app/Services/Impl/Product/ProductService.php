@@ -137,4 +137,11 @@ class ProductService extends BaseService implements ProductServiceInterface
     {
         return new ProductResource($resource);
     }
+
+    public function paginate(Request $request)
+    {
+        //nếu là pthuc pagiante thì se trả về list simple nhanh gọn 
+        $request->merge(['simple' => true]);
+        return parent::paginate($request);
+    }
 }

@@ -15,7 +15,11 @@ export const slugify = (input: string): string => {
 };
 
 export const formatPrice = (price: number): string => {
-  return price.toLocaleString("vi-VN") + " ₫";
+  return (
+    new Intl.NumberFormat("vi-VN", {
+      style: "decimal"
+    }).format(price) + " ₫"
+  );
 };
 
 export const formatDate = (date: Date): string => {

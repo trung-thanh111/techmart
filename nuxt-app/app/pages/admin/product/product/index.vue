@@ -7,7 +7,7 @@ import AppCheckbox from "~/components/admin/custom/AppCheckbox.vue";
 import Button from "~/components/admin/custom/Button.vue";
 import { useProduct } from "~/composables/admin/product/useProduct";
 
-const { data, isLoading, selectedIds, selectedItem, productCatalogueOptions, tagOptions, brandOptions, filters, search, setPage, handleDeleteMultiple, handleToggleIsHot, setSelectedItem, confirmDelete, updateSelectedIds, getTotalItems, getAllItemIds } = useProduct();
+const { data, isLoading, config, selectedIds, selectedItem, productCatalogueOptions, tagOptions, brandOptions, filters, search, setPage, handleDeleteMultiple, handleToggleIsHot, setSelectedItem, confirmDelete, updateSelectedIds, getTotalItems, getAllItemIds } = useProduct();
 
 provide("getTotalItems", getTotalItems);
 provide("getAllItemIds", getAllItemIds);
@@ -71,9 +71,10 @@ definePageMeta({
           <colgroup>
             <col style="width: 40px" />
             <col />
+            <col style="width: 150px" />
             <col style="width: 100px" />
             <col style="width: 150px" />
-            <col style="width: 120px" />
+            <col style="width: 100px" />
           </colgroup>
           <thead class="table-light">
             <tr>
@@ -81,6 +82,7 @@ definePageMeta({
                 <AppCheckbox :model-value="selectedIds" :is-select-all="true" @update:model-value="handleSelectedIdsChange" />
               </th>
               <th>{{ $t("admin.page.product.groupInfo") }}</th>
+              <th class="text-center">{{ $t("admin.common.price") }}</th>
               <th class="text-center">{{ $t("admin.common.hot") }}</th>
               <th class="text-center">{{ $t("admin.common.status") }}</th>
               <th class="text-end">{{ $t("admin.common.actions") }}</th>
@@ -91,15 +93,18 @@ definePageMeta({
               <td colspan="4" class="text-center text-muted">{{ $t("admin.common.loading") }}</td>
             </tr>
             <template v-else>
-              <tr v-for="item in data?.data?.data ?? []" :key="item.id" class="cursor-pointer" :class="{ 'table-active': selectedIds.includes(item.id) }">
+              <tr v-for="item in data?.data?.data ?? []" :key="item.id" class="cursor-pointer" :class="{ 'table-active': selectedIds.includes(item.id!) }">
                 <td>
-                  <AppCheckbox :model-value="selectedIds" :value="item.id" @update:model-value="handleSelectedIdsChange" />
+                  <AppCheckbox :model-value="selectedIds" :value="item.id!" @update:model-value="handleSelectedIdsChange" />
                 </td>
                 <td>
                   <NuxtLink class="hover:text-teal-500 flex items-center gap-2" :to="`/admin/product/product/${item.id}/edit`">
-                    <NuxtImg :src="item.image?.path ? item.image?.url ?? '' : '/shared/images/defaults/record.jpg'" alt="image-record" class="rounded-md w-[120px] h-[70px] object-cover" loading="lazy" />
+                    <NuxtImg :src="item.album && item.album.length > 0 ? `${config.public.baseUrl}/storage/${item.album[0]?.path}` : '/shared/images/defaults/record.jpg'" alt="image-record" class="rounded-md w-[120px] h-[70px] object-contain" loading="lazy" />
                     {{ item.name }}
                   </NuxtLink>
+                </td>
+                <td class="text-center">
+                  <span>{{ formatPrice(item.priceOrigin ?? 0) }}</span>
                 </td>
                 <td class="text-center">
                   <ToggleSwitch v-model="item.isHot" @update:modelValue="() => handleToggleIsHot(item)" class="scale-75" />

@@ -82,7 +82,7 @@
         </div>
       </div>
       <Field name="productVariants" v-slot="{ field, errorMessage, meta }">
-        <VariantManager :product-sku="values.sku" :product-slug="slug" :model-value="field.value" @update:model-value="field.onChange" />
+        <VariantManager :product-sku="values.sku" :product-slug="slug" :product-price="values.priceOrigin" :model-value="field.value" @update:model-value="field.onChange" />
         <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
       </Field>
       <SEO :values="values" />

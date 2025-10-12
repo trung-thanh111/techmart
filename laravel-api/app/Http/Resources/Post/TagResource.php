@@ -22,8 +22,6 @@ class TagResource extends JsonResource
             'color' => $this->color,
             'isHot' => (bool) $this->is_hot,
             'publish' => (int) $this->publish,
-            // 'createdAt' => $this->created_at ?? null,
-            // 'updatedAt' => $this->updated_at ?? null,
         ];
     }
 }
