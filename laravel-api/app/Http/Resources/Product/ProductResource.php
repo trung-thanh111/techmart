@@ -18,6 +18,25 @@ class ProductResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        if ($request->boolean('simple', false)) {
+            return [
+                'id' => $this->id,
+                'name' => $this->name,
+                'slug' => $this->slug,
+                'sku' => $this->sku,
+                'priceOrigin' => $this->price_origin,
+                'album' => $this->album,
+                'sortOrder' => (int) $this->sort_order,
+                'isHot' => (bool) $this->is_hot,
+                'likeCount' => (int) $this->like_count,
+                'productCatalogueId' => (int) $this->product_catalogue_id,
+                'brandId' => (int) $this->brand_id,
+                'publish' => (int) $this->publish,
+                'createdAt' => $this->created_at,
+                'updatedAt' => $this->updated_at,
+            ];
+        }
+
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -35,11 +54,6 @@ class ProductResource extends JsonResource
             'faqId' => (int) $this->faq_id,
             'tagId' => (int) $this->tag_id,
             'publish' => (int) $this->publish,
-            // 'creator' => $this->whenLoaded('users', [
-            //     'id' => $this->users->id,
-            //     'avatar' => asset("/storage/{$this->users->image}") ?? null,
-            //     'name' => $this->users->name,
-            // ]),
             'productCatalogues' => ProductCatalogueResource::collection($this->whenLoaded('product_catalogues')),
             'brand' => $this->whenLoaded('brands', function () {
                 return new BrandResource($this->brands);

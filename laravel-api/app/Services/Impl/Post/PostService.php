@@ -63,4 +63,10 @@ class PostService extends BaseService implements PostServiceInterface
     {
         return new PostResource($resource);
     }
+
+    public function paginate(Request $request)
+    {
+        $request->merge(['simple' => true]);
+        return parent::paginate($request);
+    }
 }
