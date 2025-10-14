@@ -5,20 +5,20 @@
       <div>
         <Splide :options="bannerShopTopLeftOptions" id="banner-shop-top-left" aria-label="Banner Left Slider">
           <SplideSlide>
-            <img src="/public/images/slide/banner-slide-shop-top_5.webp" alt="Banner 1A" class="w-full h-48 object-cover rounded-md shadow" loading="lazy" />
+            <NuxtImg src="/public/images/slide/banner-slide-shop-top_5.webp" alt="Banner 1A" class="w-full h-48 object-cover rounded-md shadow" loading="lazy" />
           </SplideSlide>
           <SplideSlide>
-            <img src="/public/images/slide/banner-slide-shop-top_6.webp" alt="Banner 1B" class="w-full h-48 object-cover rounded-md shadow" loading="lazy" />
+            <NuxtImg src="/public/images/slide/banner-slide-shop-top_6.webp" alt="Banner 1B" class="w-full h-48 object-cover rounded-md shadow" loading="lazy" />
           </SplideSlide>
         </Splide>
       </div>
       <div>
         <Splide :options="bannerShopTopRightOptions" id="banner-shop-top-right" aria-label="Banner Right Slider">
           <SplideSlide>
-            <img src="/public/images/slide/banner-slide-shop-top_7.webp" alt="Banner 2A" class="w-full h-48 object-cover rounded-md shadow" loading="lazy" />
+            <NuxtImg src="/public/images/slide/banner-slide-shop-top_7.webp" alt="Banner 2A" class="w-full h-48 object-cover rounded-md shadow" loading="lazy" />
           </SplideSlide>
           <SplideSlide>
-            <img src="/public/images/slide/banner-slide-shop-top_8.webp" alt="Banner 2B" class="w-full h-48 object-cover rounded-md shadow" loading="lazy" />
+            <NuxtImg src="/public/images/slide/banner-slide-shop-top_8.webp" alt="Banner 2B" class="w-full h-48 object-cover rounded-md shadow" loading="lazy" />
           </SplideSlide>
         </Splide>
       </div>
@@ -28,7 +28,7 @@
         <SplideSlide v-for="logo in partnerLogos" :key="logo.alt">
           <a href="#" class="block rounded-md shadow">
             <div class="logo-slide h-20 w-full flex items-center justify-center px-6">
-              <img :src="logo.src" :alt="logo.alt" class="h-12 w-auto object-contain" loading="lazy" />
+              <NuxtImg :src="logo.src" :alt="logo.alt" class="h-12 w-auto object-contain" loading="lazy" />
             </div>
           </a>
         </SplideSlide>
@@ -56,7 +56,7 @@
         <SplideSlide v-for="cat in 10" :key="cat" class="shadow-lg">
           <a href="#" class="block">
             <div class="mini-category-item" style="height: 180px; width: 120px">
-              <img :src="`/public/images/slide/shop-category-${cat}.webp`" loading="lazy" class="rounded-lg w-full h-[120px] object-contain" :alt="`Category ${cat}`" />
+              <NuxtImg :src="`/public/images/slide/shop-category-${cat}.webp`" loading="lazy" class="rounded-lg w-full h-[120px] object-contain" :alt="`Category ${cat}`" />
               <div class="mini-category-text"><span class="line-clamp-2">Điện thoại thông minh</span></div>
             </div>
           </a>
@@ -77,7 +77,7 @@
       <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
         <div class="md:col-span-2">
           <div class="relative h-full w-full overflow-hidden rounded-lg">
-            <img src="/public/images/slide/Event_ITC Asia 2025.webp" loading="lazy" alt="Banner giới thiệu" class="object-cover w-full h-full rounded-lg" />
+            <NuxtImg src="/public/images/slide/Event_ITC Asia 2025.webp" loading="lazy" alt="Banner giới thiệu" class="object-cover w-full h-full rounded-lg" />
             <div class="absolute w-full inset-0 bg-black/20 flex items-end justify-center py-4">
               <a href="#" class="relative flex items-center justify-center md:px-6 md:py-2 py-1 px-3 font-medium text-sm md:text-base transition-all bg-gradient-to-r from-sky-500 to-cyan-400 rounded-md shadow-lg hover:scale-105 hover:from-sky-600 hover:to-cyan-500 focus:outline-none focus:ring-2 focus:ring-sky-400 text-white">Khám phá</a>
             </div>
@@ -88,9 +88,7 @@
             <SplideSlide>
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <!-- <ProductCard v-for="product in 3" :key="product.id || product" :product="product" /> -->
-                <div v-for="product in 3" :key="product.id || product" class="bg-gray-100 h-32 rounded-md flex items-center justify-center">
-                  Product Card {{ product }}
-                </div>
+                <div v-for="product in 3" :key="product.id || product" class="bg-gray-100 h-32 rounded-md flex items-center justify-center">Product Card</div>
               </div>
             </SplideSlide>
           </Splide>
@@ -303,9 +301,7 @@
             <SplideSlide v-for="slide in 2" :key="slide">
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
                 <!-- <ProductCardSizeMall v-for="product in 8" :key="product.id" :product="product" /> -->
-                <div v-for="product in 8" :key="product.id" class="bg-gray-100 h-40 rounded-md flex items-center justify-center">
-                  Product Card {{ product }}
-                </div>
+                <div v-for="product in 8" :key="product.id" class="bg-gray-100 h-40 rounded-md flex items-center justify-center">Product Card {{ product }}</div>
               </div>
             </SplideSlide>
           </Splide>
@@ -337,7 +333,7 @@
             <div class="space-y-4 mt-8 relative border-l border-dashed border-sky-500 pl-4">
               <a v-for="post in posts" :key="post.img" href="#">
                 <div class="flex items-start mb-3 gap-2 hover:bg-gray-100/80 transition cursor-pointer group">
-                  <img :src="post.img" :alt="post.alt" class="w-32 h-20 object-cover rounded-md flex-shrink-0" loading="lazy" />
+                  <NuxtImg :src="post.img" :alt="post.alt" class="w-32 h-20 object-cover rounded-md flex-shrink-0" loading="lazy" />
                   <div class="flex-1">
                     <p class="text-sm font-medium hover:text-sky-400 transition line-clamp-4">{{ post.title }}</p>
                   </div>
@@ -378,8 +374,7 @@ const posts = [
   { img: "/public/images/posts/post-home-2.jpg", alt: "post2", title: "Anh em không thích hiệu ứng trong suốt trên iOS 26? Đây là cách tắt nó đi" },
 ];
 
-
-const breadcrumbs = [{ label: $t("client.shop.breadcrumb"), href: "/shop" }];
+const breadcrumbs = [{ label: 'shop', href: "/shop" }];
 
 definePageMeta({ layout: "client" });
 </script>
