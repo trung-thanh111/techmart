@@ -42,7 +42,7 @@ export function useShopSlider() {
   const miniCategoryOptions: any = {
     type: "loop",
     autoplay: true,
-    interval: 3000,
+    interval: 3500,
     arrows: true,
     pagination: false,
     perPage: 6,
