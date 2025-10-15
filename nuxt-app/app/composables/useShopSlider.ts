@@ -17,7 +17,7 @@ export function useShopSlider() {
     easing: "cubic-bezier(0.25, 1, 0.5, 1)",
   };
 
-  const partnerShopOptions: any = {
+  const partnerOptions: any = {
     type: "loop",
     autoplay: true,
     interval: 2000,
@@ -83,7 +83,7 @@ export function useShopSlider() {
   return {
     bannerShopTopLeftOptions,
     bannerShopTopRightOptions,
-    partnerShopOptions,
+    partnerOptions,
     miniCategoryOptions,
     beforeShopProductOptions,
     productSliderOptions,

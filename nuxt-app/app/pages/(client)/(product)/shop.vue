@@ -5,35 +5,25 @@
       <div>
         <Splide :options="bannerShopTopLeftOptions" id="banner-shop-top-left" aria-label="Banner Left Slider">
           <SplideSlide>
-            <NuxtImg src="/public/images/slide/banner-slide-shop-top_5.webp" alt="Banner 1A" class="w-full h-48 object-cover rounded-md shadow" loading="lazy" />
+            <NuxtImg src="/assets/images/slide/banner-slide-shop-top_5.webp" alt="Banner 1A" class="w-full h-48 object-cover rounded-md shadow" loading="lazy" />
           </SplideSlide>
           <SplideSlide>
-            <NuxtImg src="/public/images/slide/banner-slide-shop-top_6.webp" alt="Banner 1B" class="w-full h-48 object-cover rounded-md shadow" loading="lazy" />
+            <NuxtImg src="/assets/images/slide/banner-slide-shop-top_6.webp" alt="Banner 1B" class="w-full h-48 object-cover rounded-md shadow" loading="lazy" />
           </SplideSlide>
         </Splide>
       </div>
       <div>
         <Splide :options="bannerShopTopRightOptions" id="banner-shop-top-right" aria-label="Banner Right Slider">
           <SplideSlide>
-            <NuxtImg src="/public/images/slide/banner-slide-shop-top_7.webp" alt="Banner 2A" class="w-full h-48 object-cover rounded-md shadow" loading="lazy" />
+            <NuxtImg src="/assets/images/slide/banner-slide-shop-top_7.webp" alt="Banner 2A" class="w-full h-48 object-cover rounded-md shadow" loading="lazy" />
           </SplideSlide>
           <SplideSlide>
-            <NuxtImg src="/public/images/slide/banner-slide-shop-top_8.webp" alt="Banner 2B" class="w-full h-48 object-cover rounded-md shadow" loading="lazy" />
+            <NuxtImg src="/assets/images/slide/banner-slide-shop-top_8.webp" alt="Banner 2B" class="w-full h-48 object-cover rounded-md shadow" loading="lazy" />
           </SplideSlide>
         </Splide>
       </div>
     </section>
-    <section class="bg-white shadow-md rounded-md py-2 px-2 md:px-6 mb-3 md:mb-6">
-      <Splide :options="partnerShopOptions" id="partner-shop-slider">
-        <SplideSlide v-for="logo in partnerLogos" :key="logo.alt">
-          <a href="#" class="block rounded-md shadow">
-            <div class="logo-slide h-20 w-full flex items-center justify-center px-6">
-              <NuxtImg :src="logo.src" :alt="logo.alt" class="h-12 w-auto object-contain" loading="lazy" />
-            </div>
-          </a>
-        </SplideSlide>
-      </Splide>
-    </section>
+    <Partner />
     <!-- Divider -->
     <div class="w-full max-w-7xl mx-auto py-2 mb-5">
       <div class="h-px w-full bg-gradient-to-r from-transparent via-[rgba(32,141,128,0.3)] to-transparent"></div>
@@ -56,7 +46,7 @@
         <SplideSlide v-for="cat in 10" :key="cat" class="shadow-lg">
           <a href="#" class="block">
             <div class="mini-category-item" style="height: 180px; width: 120px">
-              <NuxtImg :src="`/public/images/slide/shop-category-${cat}.webp`" loading="lazy" class="rounded-lg w-full h-[120px] object-contain" :alt="`Category ${cat}`" />
+              <NuxtImg :src="`/assets/images/slide/shop-category-${cat}.webp`" loading="lazy" class="rounded-lg w-full h-[120px] object-contain" :alt="`Category ${cat}`" />
               <div class="mini-category-text"><span class="line-clamp-2">Điện thoại thông minh</span></div>
             </div>
           </a>
@@ -77,7 +67,7 @@
       <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
         <div class="md:col-span-2">
           <div class="relative h-full w-full overflow-hidden rounded-lg">
-            <NuxtImg src="/public/images/slide/Event_ITC Asia 2025.webp" loading="lazy" alt="Banner giới thiệu" class="object-cover w-full h-full rounded-lg" />
+            <NuxtImg src="/assets/images/slide/Event_ITC Asia 2025.webp" loading="lazy" alt="Banner giới thiệu" class="object-cover w-full h-full rounded-lg" />
             <div class="absolute w-full inset-0 bg-black/20 flex items-end justify-center py-4">
               <a href="#" class="relative flex items-center justify-center md:px-6 md:py-2 py-1 px-3 font-medium text-sm md:text-base transition-all bg-gradient-to-r from-sky-500 to-cyan-400 rounded-md shadow-lg hover:scale-105 hover:from-sky-600 hover:to-cyan-500 focus:outline-none focus:ring-2 focus:ring-sky-400 text-white">Khám phá</a>
             </div>
@@ -351,30 +341,20 @@
 // import Filter from "../components/ui/product/FilterBgWhite.vue";
 import Breadcrumb from "~/components/shared/navigation/Breadcrumb.vue";
 import CommitMent from "~/components/client/ui/CommitMent.vue";
+import Partner from "~/components/client/ui/Partner.vue";
 // import ProductCard from "../components/ui/product/ProductCard.vue";
 // import ProductCardSizeMall from "../components/ui/product/ProductCardSizeMall.vue";
 
 const { bannerShopTopLeftOptions, bannerShopTopRightOptions, partnerShopOptions, miniCategoryOptions, beforeShopProductOptions, productSliderOptions } = useShopSlider();
 
-const partnerLogos = [
-  { src: "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg", alt: "Apple Logo" },
-  { src: "https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg", alt: "Microsoft Logo" },
-  { src: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg", alt: "Google Logo" },
-  { src: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg", alt: "Amazon Logo" },
-  { src: "https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg", alt: "Meta Logo" },
-  { src: "https://upload.wikimedia.org/wikipedia/commons/b/bb/Tesla_T_symbol.svg", alt: "Tesla Logo" },
-  { src: "https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg", alt: "Netflix Logo" },
-  { src: "https://upload.wikimedia.org/wikipedia/sco/2/21/Nvidia_logo.svg", alt: "NVIDIA Logo" },
-  { src: "https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg", alt: "Samsung Logo" },
-  { src: "https://upload.wikimedia.org/wikipedia/commons/7/7b/Adobe_Systems_logo_and_wordmark.svg", alt: "Adobe Logo" },
-];
+// Partner component sẽ tự fetch brand khi không truyền logos
 
 const posts = [
-  { img: "/public/images/posts/post-home-1.jpg", alt: "post1", title: "Trải nghiệm nhanh Apple CarPlay phiên bản mới trên iOS 26" },
-  { img: "/public/images/posts/post-home-2.jpg", alt: "post2", title: "Anh em không thích hiệu ứng trong suốt trên iOS 26? Đây là cách tắt nó đi" },
+  { img: "/assets/images/posts/post-home-1.jpg", alt: "post1", title: "Trải nghiệm nhanh Apple CarPlay phiên bản mới trên iOS 26" },
+  { img: "/assets/images/posts/post-home-2.jpg", alt: "post2", title: "Anh em không thích hiệu ứng trong suốt trên iOS 26? Đây là cách tắt nó đi" },
 ];
 
-const breadcrumbs = [{ label: 'shop', href: "/shop" }];
+const breadcrumbs = [{ label: "shop", href: "/shop" }];
 
 definePageMeta({ layout: "client" });
 </script>
