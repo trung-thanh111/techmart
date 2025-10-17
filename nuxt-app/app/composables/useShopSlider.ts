@@ -1,22 +1,4 @@
 export function useShopSlider() {
-  const bannerShopTopLeftOptions: any = {
-    type: "loop",
-    autoplay: false,
-    interval: 3000,
-    arrows: true,
-    pagination: true,
-    easing: "cubic-bezier(0.25, 1, 0.5, 1)",
-  };
-
-  const bannerShopTopRightOptions: any = {
-    type: "loop",
-    autoplay: true,
-    interval: 4000,
-    arrows: true,
-    pagination: true,
-    easing: "cubic-bezier(0.25, 1, 0.5, 1)",
-  };
-
   const partnerOptions: any = {
     type: "loop",
     autoplay: true,
@@ -81,8 +63,6 @@ export function useShopSlider() {
   };
 
   return {
-    bannerShopTopLeftOptions,
-    bannerShopTopRightOptions,
     partnerOptions,
     miniCategoryOptions,
     beforeShopProductOptions,

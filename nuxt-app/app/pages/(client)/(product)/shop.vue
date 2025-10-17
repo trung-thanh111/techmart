@@ -3,24 +3,10 @@
     <Breadcrumb :crumbs="breadcrumbs" />
     <section class="grid grid-cols-1 md:grid-cols-2 gap-4 md:mb-8 mb-4">
       <div>
-        <Splide :options="bannerShopTopLeftOptions" id="banner-shop-top-left" aria-label="Banner Left Slider">
-          <SplideSlide>
-            <NuxtImg src="/assets/images/slide/banner-slide-shop-top_5.webp" alt="Banner 1A" class="w-full h-48 object-cover rounded-md shadow" loading="lazy" />
-          </SplideSlide>
-          <SplideSlide>
-            <NuxtImg src="/assets/images/slide/banner-slide-shop-top_6.webp" alt="Banner 1B" class="w-full h-48 object-cover rounded-md shadow" loading="lazy" />
-          </SplideSlide>
-        </Splide>
+        <NuxtImg src="/images/slide/banner-slide-shop-top_5.webp" alt="Banner 1" class="w-full h-48 object-cover rounded-md shadow" loading="lazy" />
       </div>
       <div>
-        <Splide :options="bannerShopTopRightOptions" id="banner-shop-top-right" aria-label="Banner Right Slider">
-          <SplideSlide>
-            <NuxtImg src="/assets/images/slide/banner-slide-shop-top_7.webp" alt="Banner 2A" class="w-full h-48 object-cover rounded-md shadow" loading="lazy" />
-          </SplideSlide>
-          <SplideSlide>
-            <NuxtImg src="/assets/images/slide/banner-slide-shop-top_8.webp" alt="Banner 2B" class="w-full h-48 object-cover rounded-md shadow" loading="lazy" />
-          </SplideSlide>
-        </Splide>
+        <NuxtImg src="/images/slide/banner-slide-shop-top_7.webp" alt="Banner 2" class="w-full h-48 object-cover rounded-md shadow" loading="lazy" />
       </div>
     </section>
     <Partner />
@@ -337,17 +323,11 @@
   </div>
 </template>
 <script setup>
-// import ViewMore from "../components/ui/button/ViewMore.vue";
-// import Filter from "../components/ui/product/FilterBgWhite.vue";
 import Breadcrumb from "~/components/shared/navigation/Breadcrumb.vue";
 import CommitMent from "~/components/client/ui/CommitMent.vue";
 import Partner from "~/components/client/ui/Partner.vue";
-// import ProductCard from "../components/ui/product/ProductCard.vue";
-// import ProductCardSizeMall from "../components/ui/product/ProductCardSizeMall.vue";
 
-const { bannerShopTopLeftOptions, bannerShopTopRightOptions, partnerShopOptions, miniCategoryOptions, beforeShopProductOptions, productSliderOptions } = useShopSlider();
-
-// Partner component sẽ tự fetch brand khi không truyền logos
+const { miniCategoryOptions, beforeShopProductOptions, productSliderOptions } = useShopSlider();
 
 const posts = [
   { img: "/assets/images/posts/post-home-1.jpg", alt: "post1", title: "Trải nghiệm nhanh Apple CarPlay phiên bản mới trên iOS 26" },
