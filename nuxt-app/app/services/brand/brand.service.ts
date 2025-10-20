@@ -23,9 +23,7 @@ export const brandService = {
 
   show: async (id: number | string): Promise<IApiOk<IBrand>> => {
     const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IBrand>>(
-      `${ENDPOINT}/brands/${id}`
-    );
+    return await privateFetch<IApiOk<IBrand>>(`${ENDPOINT}/brands/${id}`);
   },
 
   update: async (id: number, payload: Partial<IBrand>): Promise<IApiOk<IBrand>> => {
@@ -40,7 +38,7 @@ export const brandService = {
   delete: async (id: number): Promise<IApiMessage> => {
     const { privateFetch } = useApi();
     return await privateFetch<IApiMessage>(`${ENDPOINT}/brands/${id}`, {
-      method: "DELETE"
+      method: "DELETE",
     });
   },
 
@@ -48,12 +46,12 @@ export const brandService = {
     const { privateFetch } = useApi();
     return await privateFetch<IApiMessage>(`${ENDPOINT}/brands/bulkDelete`, {
       body: { ids },
-      method: "DELETE"
+      method: "DELETE",
     });
   },
 
   all: async (): Promise<IApiOk<IBrand>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IBrand>>(`${ENDPOINT}/brands?type=all`);
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IBrand>>(`${ENDPOINT}/brands?type=all`);
   },
 };

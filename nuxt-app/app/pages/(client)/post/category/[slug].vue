@@ -31,34 +31,7 @@
       </div>
     </section>
 
-    <section class="shop-category bg-white shadow-md rounded-md sm:py-3 md:py-6 px-2 sm:px-3 md:px-6 md:mb-6 sm:mb-4">
-      <div class="mb-4 md:mb-8">
-        <div class="flex flex-wrap justify-between items-center gap-2">
-          <div>
-            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-lg md:text-2xl font-bold">{{ $t("client.post.categories") }}</h2>
-            <div class="h-1 max-w-64 my-2 relative">
-              <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-white via-green-300 to-green-300"></div>
-            </div>
-          </div>
-          <div class="group flex items-center gap-2">
-            <NuxtLink to="/post" :prefetch="false" class="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] font-medium after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#007c8b] after:to-[#00b88c] after:transition-all after:duration-300 group-hover:after:w-full">{{ $t("client.post.viewAll") }}</NuxtLink>
-          </div>
-        </div>
-        <p class="text-gray-600 mt-1 md:mt-2 max-w-2xl text-xs md:text-sm">{{ $t("client.post.categoriesDesc") }}</p>
-      </div>
-      <Splide :options="miniCategoryOptions" id="mini-category-slider">
-        <SplideSlide v-for="postCatalogueItem in postCatalogueList" :key="postCatalogueItem.id" class="shadow-lg">
-          <NuxtLink :to="`/post/category/${postCatalogueItem.slug}`" class="block" :prefetch="false">
-            <div class="mini-category-item" style="height: 180px; width: 120px">
-              <NuxtImg :src="postCatalogueItem.image?.path ? postCatalogueItem.image?.url ?? '' : IMAGEDEFAULT" :alt="postCatalogueItem.name" loading="lazy" sizes="(max-width: 640px) 120px, 120px" class="rounded-md" />
-              <div class="mini-category-text">
-                <span class="line-clamp-2">{{ postCatalogueItem.name }}</span>
-              </div>
-            </div>
-          </NuxtLink>
-        </SplideSlide>
-      </Splide>
-    </section>
+    <Category description="Khám phá các danh mục công nghệ đa dạng tại Tech Mart Store – từ thiết bị điện tử, gia dụng thông minh đến phụ kiện hiện đại, đáp ứng nhu cầu học tập, làm việc và giải trí của bạn." :items="(postCatalogueList as any)" basePath="/post/category" viewAllLink="/post/categories" viewAllText="Xem tất cả" />
 
     <section class="mx-auto bg-white shadow-md rounded-md py-3 md:py-6 px-3 md:px-6 md:mb-8 mb-4">
       <div>
@@ -107,6 +80,7 @@ import { usePost } from "~/composables/client/post/usePost";
 import { Splide, SplideSlide } from "@splidejs/vue-splide";
 import { usePostSlider } from "~/composables/usePostSlider";
 import { useDebounceFn } from "@vueuse/core";
+import Category from "~/components/client/ui/Category.vue";
 
 const route = useRoute();
 const slug = computed(() => route.params.slug as string);

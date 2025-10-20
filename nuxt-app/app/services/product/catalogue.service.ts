@@ -23,9 +23,7 @@ export const productCatalogueService = {
 
   show: async (id: number | string): Promise<IApiOk<IProductCatalogue>> => {
     const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IProductCatalogue>>(
-      `${ENDPOINT}/product_catalogues/${id}`
-    );
+    return await privateFetch<IApiOk<IProductCatalogue>>(`${ENDPOINT}/product_catalogues/${id}`);
   },
 
   update: async (id: number, payload: Partial<IProductCatalogue>): Promise<IApiOk<IProductCatalogue>> => {
@@ -40,7 +38,7 @@ export const productCatalogueService = {
   delete: async (id: number): Promise<IApiMessage> => {
     const { privateFetch } = useApi();
     return await privateFetch<IApiMessage>(`${ENDPOINT}/product_catalogues/${id}`, {
-      method: "DELETE"
+      method: "DELETE",
     });
   },
 
@@ -48,14 +46,12 @@ export const productCatalogueService = {
     const { privateFetch } = useApi();
     return await privateFetch<IApiMessage>(`${ENDPOINT}/product_catalogues/bulkDelete`, {
       body: { ids },
-      method: "DELETE"
+      method: "DELETE",
     });
   },
 
   all: async (): Promise<IApiOk<IProductCatalogue>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IProductCatalogue>>(
-      `${ENDPOINT}/product_catalogues?type=all`
-    );
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IProductCatalogue>>(`${ENDPOINT}/product_catalogues?type=all`);
   },
 };

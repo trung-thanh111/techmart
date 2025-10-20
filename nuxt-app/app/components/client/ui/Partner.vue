@@ -1,6 +1,6 @@
 <template>
   <section :class="['bg-white shadow-md rounded-md py-2 px-2 md:px-6 mb-3 md:mb-6', rootClass]">
-    <Splide :options="partnerOptions" id="partner-shop-slider">
+    <Splide :options="partnerOptions" :extensions="{ AutoScroll }" id="partner-shop-slider">
       <SplideSlide v-for="logo in resolvedLogos" :key="logo.alt || logo.src">
         <div class="block rounded-md shadow">
           <div class="logo-slide h-24 w-full flex items-center justify-center">
@@ -15,7 +15,7 @@
 import type { IBrand } from "~/interfaces/brand/brand.interface";
 import { brandService } from "~/services/brand/brand.service";
 
-const { partnerOptions } = useShopSlider();
+const { partnerOptions, AutoScroll } = useShopSlider();
 
 const props = defineProps<{
   logos?: { src: string; alt?: string }[];
@@ -38,6 +38,7 @@ onMounted(async () => {
         }))
         .filter((item) => !!item.src);
     } catch (e) {
+      console.error("Failed to load brand logos", e);
     }
   }
 });

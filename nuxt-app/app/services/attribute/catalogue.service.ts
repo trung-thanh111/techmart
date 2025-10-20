@@ -53,8 +53,8 @@ export const attributeCatalogueService = {
   },
 
   all: async (): Promise<IApiOk<IAttributeCatalogue>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IAttributeCatalogue>>(
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IAttributeCatalogue>>(
       `${ENDPOINT}/attribute_catalogues?type=all`
     );
   },

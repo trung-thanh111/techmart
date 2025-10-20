@@ -44,7 +44,7 @@ class UpdateRequest extends BaseRequest
                 Rule::unique("banners", "slug")->ignore($this->route("banner")),
             ],
             "album" => "nullable|sometimes|array",
-            'type' => "required|in:homepage,category,flash_sale,popup,custom|{$sometime}",
+            'type' => "required|in:homepage,category,flash_sale,popup,custom,shop|{$sometime}",
             'position' => "required|string|max:100|{$sometime}",
             'start_at' => "nullable|date|{$sometime}",
             'end_at' => "nullable|date|after_or_equal:start_at|{$sometime}",
