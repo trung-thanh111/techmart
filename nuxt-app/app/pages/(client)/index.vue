@@ -707,19 +707,7 @@
       </div>
     </section>
     <!-- partners -->
-    <section class="max-w-screen bg-white shadow-md rounded-md sm:py-1 md:py-2 px-2 sm:px-3 md:px-6 md:mb-8 sm:mb-4">
-      <div ref="partnerSlider" class="splide w-full">
-        <div class="splide__track">
-          <ul class="splide__list">
-            <li v-for="(partner, index) in partnerItems" :key="`partner-${index}`" class="splide__slide">
-              <div class="logo-slide h-20 w-full flex items-center justify-center px-10">
-                <img :src="partner.logo" loading="lazy" :alt="partner.alt" class="h-12 w-auto object-contain" />
-              </div>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </section>
+    <Partner />
     <!-- posts -->
     <section class="bg-white shadow-md rounded-md py-3 md:py-6 px-3 md:px-6 md:mb-8 mb-4">
       <div class="mb-4 md:mb-8">
@@ -789,6 +777,7 @@ definePageMeta({
 
 // Import auth composable
 import { useAuth } from "~/composables/auth/useAuth";
+import Partner from "~/components/client/ui/Partner.vue";
 
 const { mainOptions, thumbOptions, rightVirticalOptions, postFeaturedOptions, partnerOptions, mainItems, thumbnailItems, rightVirticalItems, postFeaturedItems, partnerItems, mainSlider, thumbSlider, partnerSlider } = useHomeSlider();
 

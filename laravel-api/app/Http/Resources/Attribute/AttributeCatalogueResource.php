@@ -14,6 +14,22 @@ class AttributeCatalogueResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        if ($request->boolean('simple', false)) {
+            return [
+                'id' => $this->id,
+                'name' => $this->name,
+                'slug' => $this->slug,
+                'description' => $this->description,
+                'order' => (int) $this->order,
+                'publish' => (int) $this->publish,
+                'attributes' => $this->whenLoaded('attributes', function () {
+                    return $this->attributes->map(fn($attr) => [
+                        'id' => $attr->id,
+                        'name' => $attr->name,
+                    ]);
+                }),
+            ];
+        }
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -21,10 +37,13 @@ class AttributeCatalogueResource extends JsonResource
             'description' => $this->description,
             'order' => (int) $this->order,
             'publish' => (int) $this->publish,
-            // 'creator' => $this->whenLoaded('users', [
-            //     'id' => $this->users->id,
-            //     'name' => $this->users->name,
-            // ]),
+            // egerload tránh n+1 tối ưu time 
+            'attributes' => $this->whenLoaded('attributes', function () {
+                return $this->attributes->map(fn($attr) => [
+                    'id' => $attr->id,
+                    'name' => $attr->name,
+                ]);
+            }),
         ];
     }
 }

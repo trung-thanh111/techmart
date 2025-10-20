@@ -55,4 +55,9 @@ export const bannerService = {
     const { privateFetch } = useApi();
     return await privateFetch<IApiOk<IBanner>>(`${ENDPOINT}/banners?type=all`);
   },
+
+  getByType: async (type: string): Promise<IApiOk<IBanner[]>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IBanner[]>>(`${ENDPOINT}/banners?type=all&type=${type}&position=main_slider&publish=2`);
+  },
 };

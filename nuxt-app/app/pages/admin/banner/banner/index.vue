@@ -13,7 +13,11 @@ provide("getTotalItems", getTotalItems);
 provide("getAllItemIds", getAllItemIds);
 
 const handleSelectedIdsChange = (value: boolean | number[]) => {
-  if (Array.isArray(value)) updateSelectedIds(value);
+  if (Array.isArray(value)) {
+    updateSelectedIds(value);
+  } else {
+    updateSelectedIds(value ? getAllItemIds() : []);
+  }
 };
 
 const handleDeleteSingle = (item: any) => setSelectedItem(item);
@@ -92,7 +96,7 @@ definePageMeta({
                     <div :id="`carousel-${item.id}`" class="carousel slide carousel-fade w-[120px] h-[70px] rounded-md overflow-hidden" data-bs-ride="carousel">
                       <div class="carousel-inner">
                         <div v-for="(img, idx) in item.album?.length ? item.album : [{ path: '/shared/images/defaults/record.jpg' }]" :key="idx" class="carousel-item" :class="{ active: idx === 0 }">
-                          <NuxtImg :src="img.path.startsWith('uploads') ? `${config.public.baseUrl}/storage/${img.path}` : img.path" alt="banner-image" class="w-[120px] h-[70px] object-cover" loading="lazy" />
+                          <NuxtImg :src="img.path?.startsWith('uploads') ? `${config.public.baseUrl}/storage/${img.path}` : IMAGEDEFAULT" alt="banner-image" class="w-[120px] h-[70px] object-cover" loading="lazy" />
                         </div>
                       </div>
                       <button v-if="item.album?.length > 1" class="carousel-control-prev" type="button" :data-bs-target="`#carousel-${item.id}`" data-bs-slide="prev">

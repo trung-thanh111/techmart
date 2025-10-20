@@ -73,35 +73,7 @@
         </template>
       </div>
     </section>
-    <section class="shop-category bg-white shadow-md rounded-md py-3 md:py-6 px-2 md:px-6 mb-4 md:mb-6">
-      <div class="mb-4 md:mb-8">
-        <div class="flex flex-wrap justify-between items-center gap-2">
-          <div>
-            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-lg md:text-2xl font-bold">{{ $t("client.post.categories") }}</h2>
-            <div class="h-1 max-w-64 my-2 relative">
-              <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-white via-green-300 to-green-300"></div>
-            </div>
-          </div>
-          <div class="group flex items-center gap-2">
-            <NuxtLink to="#" class="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] font-medium after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#007c8b] after:to-[#00b88c] after:transition-all after:duration-300 group-hover:after:w-full">{{ $t("client.post.viewAll") }}</NuxtLink>
-          </div>
-        </div>
-        <p class="text-gray-600 mt-1 md:mt-2 max-w-2xl text-xs md:text-sm">{{ $t("client.post.categoriesDesc") }}</p>
-      </div>
-      <Splide :options="miniCategoryOptions" id="mini-category-slider">
-        <SplideSlide v-for="postCatalogueItem in postCatalogueList" :key="postCatalogueItem.id" class="shadow-lg">
-          <NuxtLink :to="`/post/category/${postCatalogueItem.slug}`" class="block">
-            <div class="mini-category-item" style="height: 180px; width: 120px">
-              <NuxtImg :src="postCatalogueItem.image?.path ? postCatalogueItem.image?.url ?? '' : IMAGEDEFAULT" loading="lazy" class="rounded-md" alt="{{ postCatalogueItem.name }}" />
-              <div class="mini-category-text">
-                <span class="line-clamp-2">{{ postCatalogueItem.name }}</span>
-              </div>
-            </div>
-          </NuxtLink>
-        </SplideSlide>
-      </Splide>
-    </section>
-
+    <Category :items="(postCatalogueList as any)" basePath="/post/category" viewAllLink="/post/categories" viewAllText="Xem tất cả" />
     <section class="product-accsessory bg-white shadow-md rounded-md py-3 md:py-6 px-2 md:px-6 mb-4 md:mb-6">
       <div class="mb-4 md:mb-5">
         <div class="flex justify-between items-center gap-2">
@@ -200,9 +172,11 @@
 import { usePostSlider } from "~/composables/usePostSlider";
 import { usePost } from "~/composables/client/post/usePost";
 import Breadcrumb from "~/components/shared/navigation/Breadcrumb.vue";
+import Category from "~/components/client/ui/Category.vue";
 
 const { isLoading, fetchList, loadLatest, latestItems, latestPage, latestLastPage, latestLoading, loadHotQuick, hotQuickItems, hotQuickPage, hotQuickLastPage, hotQuickLoading, tagList, fetchTags, fetchPostCatalogues, postCatalogueList, fetchHotCataloguePosts, fetchPostsByCatalogueId, byCatalogueCache, byCatalogueLoading, mostLikedItems, mostLikedLoading, fetchMostLiked } = usePost();
-const { postSlideHotOptions, miniCategoryOptions, postProductOptions } = usePostSlider();
+const { postSlideHotOptions, postProductOptions } = usePostSlider();
+const { miniCategoryOptions } = useSlider();
 const featuredPosts = await fetchList("featured");
 const featuredPostLimits = await fetchList("featuredLimit");
 await Promise.all([fetchTags(), fetchPostCatalogues(), fetchHotCataloguePosts(), fetchPostsByCatalogueId(3), loadLatest(), loadHotQuick(), fetchMostLiked()]);

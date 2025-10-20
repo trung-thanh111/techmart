@@ -51,4 +51,10 @@ protected $useUpload = false;
         return new AttributeCatalogueResource($resource);
     }
 
+    public function paginate(Request $request)
+    {
+        $request->merge(['simple' => true]);
+        return parent::paginate($request);
+    }
+
 }
