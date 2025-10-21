@@ -17,8 +17,8 @@
     <div class="w-full max-w-7xl mx-auto py-2 mb-5">
       <div class="h-px w-full bg-gradient-to-r from-transparent via-[rgba(32,141,128,0.3)] to-transparent"></div>
     </div>
-  
-    <Category description="Khám phá các danh mục sản phẩm đa dạng tại Tech Mart Store – từ thiết bị điện tử, gia dụng thông minh đến phụ kiện hiện đại, đáp ứng nhu cầu học tập, làm việc và giải trí của bạn." :items="(productCatalogueList)" basePath="/product/category" />
+
+    <Category description="Khám phá các danh mục sản phẩm đa dạng tại Tech Mart Store – từ thiết bị điện tử, gia dụng thông minh đến phụ kiện hiện đại, đáp ứng nhu cầu học tập, làm việc và giải trí của bạn." :items="productCatalogueList" basePath="/product/category" />
 
     <!-- Before shop product -->
     <section class="product-accsessory bg-white shadow-md rounded-md py-3 md:py-6 px-2 md:px-6 mb-4">
@@ -55,7 +55,7 @@
     <!-- Shop product -->
     <section class="product-filter bg-white shadow-md rounded-md py-3 md:py-6 px-2 md:px-6 md:mb-8 mb-4">
       <div class="flex flex-wrap md:flex-nowrap gap-3 md:gap-4">
-        <FilterBar/>
+        <FilterBar />
         <div class="flex-1 w-full">
           <div class="flex justify-between items-center mb-3 md:mb-4">
             <span class="text-xs md:text-sm">
@@ -121,7 +121,7 @@ import { useShop } from "~/composables/client/shop/useShop";
 import Category from "~/components/client/ui/Category.vue";
 import FilterBar from "~/components/client/ui/FilterBar.vue";
 
-const { miniCategoryOptions, beforeShopProductOptions, productSliderOptions } = useShopSlider();
+const { beforeShopProductOptions, productSliderOptions } = useShopSlider();
 const { shopBanners, getBannerImageUrl, productCatalogueList } = useShop();
 
 const posts = [

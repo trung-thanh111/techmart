@@ -54,4 +54,11 @@ export const productService = {
     const { privateFetch } = useApi();
     return await privateFetch<IApiOk<IProduct>>(`${ENDPOINT}/products?type=all`);
   },
+
+  paginationPublic: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IProduct>>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPaginate<IProduct>>>(`${ENDPOINT}/products`, {
+      params,
+    });
+  },
 };
