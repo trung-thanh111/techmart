@@ -207,7 +207,7 @@ export const usePost = () => {
         postDetail.value.viewCount = newViewCount;
       }
     } catch (error) {
-      console.log('Error tracking view:', error);
+      console.log("Error tracking view:", error);
     }
   };
 
