@@ -60,18 +60,15 @@
           <div class="flex justify-between items-center mb-3 md:mb-4">
             <span class="text-xs md:text-sm">
               Hiển thị
-              <span class="text-sky-400 underline">300 kết quả</span>
+              <span class="text-sky-400 underline">{{ totalProducts }} kết quả</span>
             </span>
             <Filter />
           </div>
-          <Splide :options="productSliderOptions" id="product-slider" class="overflow-y-auto max-h-[90vh] lg:overflow-visible lg:max-h-none">
-            <SplideSlide v-for="slide in 2" :key="slide">
-              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
-                <!-- <ProductCardSizeMall v-for="product in 8" :key="product.id" :product="product" /> -->
-                <div v-for="product in 8" :key="product.id" class="bg-gray-100 h-40 rounded-md flex items-center justify-center">Product Card {{ product }}</div>
-              </div>
-            </SplideSlide>
-          </Splide>
+          <div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
+              <ProductCard v-for="product in products" :key="product.id" :product="product" />
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -120,9 +117,9 @@ import Partner from "~/components/client/ui/Partner.vue";
 import { useShop } from "~/composables/client/shop/useShop";
 import Category from "~/components/client/ui/Category.vue";
 import FilterBar from "~/components/client/ui/FilterBar.vue";
+import ProductCard from "~/components/client/features/ProductCard.vue";
 
-const { beforeShopProductOptions, productSliderOptions } = useShopSlider();
-const { shopBanners, getBannerImageUrl, productCatalogueList } = useShop();
+const { shopBanners, getBannerImageUrl, productCatalogueList, products, totalProducts } = useShop();
 
 const posts = [
   { img: "/assets/images/posts/post-home-1.jpg", alt: "post1", title: "Trải nghiệm nhanh Apple CarPlay phiên bản mới trên iOS 26" },

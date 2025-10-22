@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\Impl\Product;
 
 use Illuminate\Http\Request;
@@ -8,20 +9,23 @@ use App\Repositories\Product\ProductVariantRepository;
 use App\Http\Resources\Product\ProductVariantResource;
 use App\Services\Interfaces\Product\ProductVariantServiceInterface;
 
-class ProductVariantService extends BaseService implements ProductVariantServiceInterface {
+class ProductVariantService extends BaseService implements ProductVariantServiceInterface
+{
 
-protected $repository;
+    protected $repository;
 
-protected $complexFilter = ['id'];
+    protected $complexFilter = ['id'];
 
-protected $with = [
-    'products',
-    'variant_attributes'
-];
-protected $relationFilter = [];
+    protected $with = [
+        'products',
+        'variant_attributes'
+    ];
+    protected $relationFilter = [
+        'variant_attributes'
+    ];
 
-protected $cacheKeyPrefix = 'product_variants';
-protected $cacheTags = ['product_variants:collection'];
+    protected $cacheKeyPrefix = 'product_variants';
+    protected $cacheTags = ['product_variants:collection'];
 
 
     public function __construct(
@@ -30,7 +34,8 @@ protected $cacheTags = ['product_variants:collection'];
         $this->repository = $repository;
     }
 
-    protected function getRepository(){
+    protected function getRepository()
+    {
         return $this->repository;
     }
 
@@ -38,19 +43,21 @@ protected $cacheTags = ['product_variants:collection'];
      * nhiệm vụ bắt data từ client post lên (dạng thô, chuỗi, file, ....)
      *
      */
-    protected function prepareModelData(Request $request): self {
+    protected function prepareModelData(Request $request): self
+    {
 
         return $this->initializeBasicModelData($request);
     }
 
-    protected function initializeBasicModelData(Request $request): self {
+    protected function initializeBasicModelData(Request $request): self
+    {
         $fillable = $this->repository->getFillable();
         $this->modelData = $request->only($fillable);
         return $this;
     }
 
-    protected function getResource(Model $resource){
+    protected function getResource(Model $resource)
+    {
         return new ProductVariantResource($resource);
     }
-
 }

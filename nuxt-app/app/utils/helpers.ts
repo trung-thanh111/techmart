@@ -17,7 +17,7 @@ export const slugify = (input: string): string => {
 export const formatPrice = (price: number): string => {
   return (
     new Intl.NumberFormat("vi-VN", {
-      style: "decimal"
+      style: "decimal",
     }).format(price) + " ₫"
   );
 };
@@ -79,6 +79,13 @@ export const resolveImageUrl = (input?: any, fallback: string = IMAGEDEFAULT): s
     return image?.url || image.path;
   }
   return fallback;
+};
+
+export const resolveAlbum = (album: any[] = [], fallback: string = IMAGEDEFAULT): string[] => {
+  const config = useRuntimeConfig();
+  const base = `${config.public.baseUrl}/storage`;
+
+  return album.length ? album.map((a) => (a?.path ? `${base}/${a.path.replace(/^\/+/, "")}` : fallback)) : [fallback];
 };
 
 export const formatPhoneVN = (phone?: string | null): string => {
