@@ -124,7 +124,7 @@ export const usePost = () => {
 
   const fetchPostsByCatalogueId = async (catalogueId: number): Promise<IPost[]> => {
     if (!catalogueId || Number.isNaN(catalogueId)) return [];
-    if (byCatalogueCache[catalogueId]?.length) return byCatalogueCache[catalogueId];
+    if (byCatalogueCache[catalogueId]?.length) return byCatalogueCache[catalogueId] ?? [];
     byCatalogueLoading[catalogueId] = true;
     byCatalogueError[catalogueId] = null;
     try {

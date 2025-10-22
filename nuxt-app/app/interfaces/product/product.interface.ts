@@ -34,9 +34,8 @@ export interface Option {
   value: string | null;
 }
 
-export interface ProductPayloadFilter extends BasePayloadFilter{
+export interface ProductPayloadFilter extends BasePayloadFilter {
   tag_id?: number | null;
   product_catalogue_id?: number | null;
-  brand_id?: number | null
-
+  brand_id?: number | null;
 }

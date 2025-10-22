@@ -28,6 +28,7 @@ class ProductService extends BaseService implements ProductServiceInterface
         'product_catalogues',
         'brands',
         'product_tags',
+        'product_variants',
     ];
 
     protected $cacheKeyPrefix = 'products';
@@ -140,7 +141,7 @@ class ProductService extends BaseService implements ProductServiceInterface
 
     public function paginate(Request $request)
     {
-        //nếu là pthuc pagiante thì se trả về list simple nhanh gọn 
+        //nếu là pthuc pagiante thì se trả về list simple nhanh gọn
         $request->merge(['simple' => true]);
         return parent::paginate($request);
     }
