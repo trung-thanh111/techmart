@@ -61,4 +61,16 @@ export const productService = {
       params,
     });
   },
+
+  getSummerProducts: async (limit = 3): Promise<IApiOk<IProduct[]>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IProduct[]>>(`${ENDPOINT}/products`, {
+      params: {
+        season: "summer",
+        publish: 2,
+        sort: "id,desc",
+        perpage: limit,
+      },
+    });
+  },
 };
