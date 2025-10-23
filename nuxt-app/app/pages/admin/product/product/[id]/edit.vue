@@ -131,6 +131,19 @@
               <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
             </Field>
           </div>
+          <div class="mb-3">
+            <label class="form-label">{{ $t("admin.common.form.season") }}:</label>
+            <Field name="season" v-slot="{ field }" :validate-on-input="true">
+              <Select v-model="field.value" @update:modelValue="field.onChange" :options="seasonOptions" option-label="name" option-value="value" showClear :placeholder="$t('admin.common.form.selectSeason')" class="w-full text-sm" checkmark />
+            </Field>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">{{ $t("admin.common.form.warranty") }}:</label>
+            <Field name="warranty" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
+              <InputNumber :modelValue="field.value" @update:modelValue="field.onChange" :min="0" showButtons class="w-full" input-class="!rounded py-[7px] w-full" size="small" />
+              <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
+            </Field>
+          </div>
         </div>
       </div>
       <div class="card">
@@ -226,8 +239,7 @@ import type { AlbumItem } from "~/interfaces/upload/image.interface";
 import { generateSKU } from "~/utils/helpers";
 import VariantManager from "~/components/admin/custom/VariantManager.vue";
 
-
-const { isLoading, values, tagOptions, productCatalogueOptions, productOptions, brandOptions, config, slug, show, setValues, handleUpdate } = useProduct(undefined, "update");
+const { isLoading, values, tagOptions, productCatalogueOptions, productOptions, brandOptions, seasonOptions, config, slug, show, setValues, handleUpdate } = useProduct(undefined, "update");
 const id = Number(useRoute().params.id);
 const { data } = await show(id);
 
@@ -243,6 +255,8 @@ setValues({
   description: data?.description,
   content: data?.content,
   album: data?.album ?? null,
+  season: data?.season ?? null,
+  warranty: Number(data?.warranty ?? 0),
   priceOrigin: Number(data?.priceOrigin ?? 0),
   sku: data?.sku,
   sortOrder: data?.sortOrder ?? null,

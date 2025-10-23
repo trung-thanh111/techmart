@@ -117,6 +117,19 @@
               <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
             </Field>
           </div>
+          <div class="mb-3">
+            <label class="form-label">{{ $t("admin.common.form.season") }}:</label>
+            <Field name="season" v-slot="{ field }" :validate-on-input="true">
+              <Select v-model="field.value" @update:modelValue="field.onChange" :options="seasonOptions" option-label="name" option-value="value" showClear :placeholder="$t('admin.common.form.selectSeason')" class="w-full text-sm" checkmark />
+            </Field>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">{{ $t("admin.common.form.warranty") }}:</label>
+            <Field name="warranty" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
+              <InputNumber :modelValue="field.value" @update:modelValue="field.onChange" :min="0" showButtons class="w-full" input-class="!rounded py-[7px] w-full" size="small" />
+              <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
+            </Field>
+          </div>
         </div>
       </div>
       <div class="card">
@@ -168,7 +181,7 @@
           <div class="mb-3">
             <label class="form-label">{{ $t("admin.common.form.brand") }}</label>
             <Field name="brandId" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <Select :modelValue="field.value" @update:modelValue="field.onChange" :options="brandOptions" optionLabel="name" optionValue="id" filter :placeholder="$t('admin.common.form.brandPlaceholder')" class="w-100" showClear checkmark />
+              <Select :modelValue="field.value" @update:modelValue="field.onChange" :options="brandOptions" optionLabel="name" optionValue="id" filter :placeholder="$t('admin.common.form.brandPlaceholder')" class="w-100 text-sm" showClear checkmark />
               <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
             </Field>
           </div>
@@ -261,7 +274,6 @@
       </div>
     </form>
   </Dialog>
-
 </template>
 <script setup lang="ts">
 import { Field } from "vee-validate";
@@ -280,7 +292,7 @@ import VariantManager from "~/components/admin/custom/VariantManager.vue";
 import { productCatalogueService } from "~/services/product/catalogue.service";
 import { productTagService } from "~/services/product/tag.service";
 
-const { isLoading, values, tagOptions, productCatalogueOptions, productOptions, brandOptions, config, slug, setValues, handleStore, loadProductCatalogue, loadTag } = useProduct();
+const { isLoading, values, tagOptions, productCatalogueOptions, productOptions, brandOptions, seasonOptions, config, slug, setValues, handleStore, loadProductCatalogue, loadTag } = useProduct();
 
 const catalogueForm = ref({
   name: "",

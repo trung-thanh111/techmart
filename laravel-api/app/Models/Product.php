@@ -22,6 +22,8 @@ class Product extends Model
         'content',
         'price_origin',
         'album',
+        'season',
+        'warranty',
         'sort_order',
         'product_catalogue_id',
         'brand_id',

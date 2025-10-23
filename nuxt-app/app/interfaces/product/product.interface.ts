@@ -12,6 +12,8 @@ export interface IProduct {
   content?: string;
   priceOrigin?: number;
   album?: { path: string }[];
+  season?: "spring" | "summer" | "autumn" | "winter" | "none";
+  warranty?: string;
   viewCount?: number;
   likeCount?: number;
   tagId?: number;

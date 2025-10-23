@@ -41,14 +41,9 @@
           </div>
         </div>
         <div class="md:col-span-3">
-          <Splide :options="beforeShopProductOptions" id="before-shop-product-slider">
-            <SplideSlide>
-              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <!-- <ProductCard v-for="product in 3" :key="product.id || product" :product="product" /> -->
-                <div v-for="product in 3" :key="product.id || product" class="bg-gray-100 h-32 rounded-md flex items-center justify-center">Product Card</div>
-              </div>
-            </SplideSlide>
-          </Splide>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <ProductCard v-for="product in summerProducts" :key="product.id" :product="product" />
+          </div>
         </div>
       </div>
     </section>
@@ -62,11 +57,28 @@
               Hiển thị
               <span class="text-sky-400 underline">{{ totalProducts }} kết quả</span>
             </span>
-            <Filter />
+            <FilterSort />
           </div>
           <div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
-              <ProductCard v-for="product in products" :key="product.id" :product="product" />
+            <Splide :options="sliderOpts" ref="splideRef">
+              <SplideSlide v-for="(chunk, idx) in chunks" :key="idx">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
+                  <ProductCard v-for="product in chunk" :key="product.id" :product="product" />
+                </div>
+              </SplideSlide>
+            </Splide>
+
+            <div v-if="products.length" class="flex justify-center items-center gap-4 mt-6">
+              <button @click="prev" :disabled="isLoading" class="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 disabled:opacity-50 transition-all">
+                <i class="fas fa-arrow-left"></i>
+                <span>Trước</span>
+              </button>
+
+              <button @click="next" :disabled="isLoading" class="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-sky-500 to-cyan-400 text-white rounded-lg hover:from-sky-600 hover:to-cyan-500 disabled:opacity-50 transition-all">
+                <i v-if="isLoading" class="fas fa-spinner fa-spin"></i>
+                <i v-else class="fas fa-arrow-right"></i>
+                <span>{{ isLoading ? "Đang tải..." : "Tiếp" }}</span>
+              </button>
             </div>
           </div>
         </div>
@@ -118,8 +130,35 @@ import { useShop } from "~/composables/client/shop/useShop";
 import Category from "~/components/client/ui/Category.vue";
 import FilterBar from "~/components/client/ui/FilterBar.vue";
 import ProductCard from "~/components/client/features/ProductCard.vue";
+import { Splide, SplideSlide } from "@splidejs/vue-splide";
+import FilterSort from "~/components/client/features/FilterSort.vue";
 
-const { shopBanners, getBannerImageUrl, productCatalogueList, products, totalProducts } = useShop();
+const { shopBanners, getBannerImageUrl, productCatalogueList, products, summerProducts, totalProducts, hasMoreProducts, loadMoreProducts, isLoading } = useShop();
+
+const sliderOpts = { type: "slide", perPage: 1, arrows: false, pagination: false };
+const splideRef = ref();
+const chunks = computed(() => {
+  const result = [];
+  for (let i = 0; i < products.value.length; i += 8) {
+    result.push(products.value.slice(i, i + 8));
+  }
+  return result;
+});
+
+const isLastSlide = computed(() => {
+  const splide = splideRef.value?.splide;
+  return splide?.index === chunks.value.length - 1;
+});
+
+const prev = () => splideRef.value?.splide?.go("-");
+const next = async () => {
+  if (isLastSlide.value && hasMoreProducts.value) {
+    await loadMoreProducts();
+    nextTick(() => splideRef.value?.splide?.go("+"));
+  } else {
+    splideRef.value?.splide?.go("+");
+  }
+};
 
 const posts = [
   { img: "/assets/images/posts/post-home-1.jpg", alt: "post1", title: "Trải nghiệm nhanh Apple CarPlay phiên bản mới trên iOS 26" },

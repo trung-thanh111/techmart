@@ -517,7 +517,6 @@ const generateAttributeCombinations = (groupAttributes: Record<string, any[]>) =
   const validGroups = groups.filter((group) => groupAttributes[group] && groupAttributes[group].length > 0);
 
   if (validGroups.length === 0) return [{}];
-
   const combinations: Record<string, any>[] = [];
 
   const generateCombinations = (current: Record<string, any>, remainingGroups: string[]) => {

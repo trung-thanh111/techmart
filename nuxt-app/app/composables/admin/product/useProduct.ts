@@ -35,7 +35,12 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
     description: z.string().nullable().optional(),
     content: z.string().nullable().optional(),
     priceOrigin: z.number({ required_error: "admin.validation.priceOriginRequired" }).nonnegative({ message: "admin.validation.minValue" }),
-    album: z.array(z.object({ path: z.string() })).nullable().optional(),
+    album: z
+      .array(z.object({ path: z.string() }))
+      .nullable()
+      .optional(),
+    season: z.enum(["spring", "summer", "autumn", "winter", "none"]).nullable().optional(),
+    warranty: z.number().nullable().optional(),
     sortOrder: z.number().int().nonnegative().nullable().optional(),
     productCatalogues: z.array(z.number(), { required_error: "admin.validation.productCatalogueRequired" }).min(1, "admin.validation.productCatalogueRequired"),
     brandId: z.number({ required_error: "admin.validation.brandRequired", invalid_type_error: "admin.validation.brandRequired" }).int().positive("admin.validation.brandRequired"),
@@ -115,10 +120,10 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
     try {
       console.info("payload:", payload);
       const id = Number(useRoute().params.id);
-      
+
       // Luôn gửi productVariants để xử lý cả trường hợp clear
       const cleanPayload = { ...payload };
-      
+
       await productService.update(id, cleanPayload as Partial<IProduct>);
       toast.success(t("admin.messages.updateSuccess"));
       return navigateTo(PRODUCTINDEX);
@@ -270,6 +275,14 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
     return data.value?.data?.data?.map((item) => item.id) || [];
   };
 
+  const seasonOptions = [
+    { name: t("admin.common.form.none"), value: "none" },
+    { name: t("admin.common.form.spring"), value: "spring" },
+    { name: t("admin.common.form.summer"), value: "summer" },
+    { name: t("admin.common.form.autumn"), value: "autumn" },
+    { name: t("admin.common.form.winter"), value: "winter" },
+  ];
+
   onMounted(() => {
     fetchData();
     loadProductCatalogue();
@@ -292,6 +305,7 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
     tagOptions,
     brandOptions,
     productOptions,
+    seasonOptions,
     slug,
     setValues,
     show,

@@ -22,6 +22,8 @@ return new class extends Migration
             $table->json('album')->nullable();
             $table->integer('sort_order')->nullable();
             $table->integer('product_catalogue_id')->default(0);
+            $table->enum('season', ['spring', 'summer', 'autumn', 'winter', 'none'])->default('none');
+            $table->integer('warranty')->default(0)->comment('unit: months');
             $table->integer('faq_id')->default(0)->comment('thực chất là liên kết với nhóm lấy ra thông tin ds faq');
             $table->integer('tag_id')->default(0);
             $table->boolean('is_hot')->default(false);
