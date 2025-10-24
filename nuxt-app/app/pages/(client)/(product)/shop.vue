@@ -4,7 +4,7 @@
     <section class="my-2">
       <div v-if="isLoading" class="text-gray-500 text-sm text-center">Đang tải...</div>
       <div v-else>
-        <div v-for="(banner, index) in shopBanners" :key="banner.id" class="overflow-hidden grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div v-for="(banner, index) in bannerShopTops" :key="banner.id" class="overflow-hidden grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div v-for="(image, i) in banner.album" :key="i" class="mb-2 last:mb-0">
             <NuxtImg :src="getBannerImageUrl(image.path)" :alt="`${banner.name || 'Banner'} ${index + 1}-${i + 1}`" class="w-full h-full object-contain" />
           </div>
@@ -34,7 +34,7 @@
       <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
         <div class="md:col-span-2">
           <div class="relative h-full w-full overflow-hidden rounded-lg">
-            <NuxtImg src="/assets/images/slide/Event_ITC Asia 2025.webp" loading="lazy" alt="Banner giới thiệu" class="object-cover w-full h-full rounded-lg" />
+            <NuxtImg src="/images/slide/Event_ITC Asia 2025.webp" loading="lazy" alt="Banner giới thiệu" class="object-cover w-full h-full rounded-lg" />
             <div class="absolute w-full inset-0 bg-black/20 flex items-end justify-center py-4">
               <a href="#" class="relative flex items-center justify-center md:px-6 md:py-2 py-1 px-3 font-medium text-sm md:text-base transition-all bg-gradient-to-r from-sky-500 to-cyan-400 rounded-md shadow-lg hover:scale-105 hover:from-sky-600 hover:to-cyan-500 focus:outline-none focus:ring-2 focus:ring-sky-400 text-white">Khám phá</a>
             </div>
@@ -104,17 +104,17 @@
           <div class="posts-shop">
             <div class="flex justify-between items-center mb-2">
               <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-lg font-bold">Sự kiện sản phẩm</h2>
-              <a href="#" class="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] text-sm font-medium after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#007c8b] after:to-[#00b88c] after:transition-all after:duration-300 hover:after:w-full">Xem tất cả</a>
+              <NuxtLink :to="TOPOST" class="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] text-sm font-medium after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#007c8b] after:to-[#00b88c] after:transition-all after:duration-300 hover:after:w-full">Xem tất cả</NuxtLink>
             </div>
             <div class="space-y-4 mt-8 relative border-l border-dashed border-sky-500 pl-4">
-              <a v-for="post in posts" :key="post.img" href="#">
+              <NuxtLink v-for="post in posts" :key="post.id" :to="`${TOPOST}/${post.slug}`">
                 <div class="flex items-start mb-3 gap-2 hover:bg-gray-100/80 transition cursor-pointer group">
-                  <NuxtImg :src="post.img" :alt="post.alt" class="w-32 h-20 object-cover rounded-md flex-shrink-0" loading="lazy" />
+                  <NuxtImg :src="post.image?.url || DEFAULTIMAGE" :alt="post.name" class="w-32 h-20 object-cover rounded-md flex-shrink-0" loading="lazy" />
                   <div class="flex-1">
-                    <p class="text-sm font-medium hover:text-sky-400 transition line-clamp-4">{{ post.title }}</p>
+                    <p class="text-sm font-medium hover:text-sky-400 transition line-clamp-4">{{ post.name }}</p>
                   </div>
                 </div>
-              </a>
+              </NuxtLink>
             </div>
           </div>
         </div>
@@ -133,7 +133,7 @@ import ProductCard from "~/components/client/features/ProductCard.vue";
 import { Splide, SplideSlide } from "@splidejs/vue-splide";
 import FilterSort from "~/components/client/features/FilterSort.vue";
 
-const { shopBanners, getBannerImageUrl, productCatalogueList, products, summerProducts, totalProducts, hasMoreProducts, loadMoreProducts, isLoading } = useShop();
+const { isLoading, bannerShopTops, productCatalogueList, products, summerProducts, totalProducts, hasMoreProducts, getBannerImageUrl, loadMoreProducts, fetchPostByCategoryReviews, fetchBannerProductSeason } = useShop();
 
 const sliderOpts = { type: "slide", perPage: 1, arrows: false, pagination: false };
 const splideRef = ref();
@@ -160,10 +160,34 @@ const next = async () => {
   }
 };
 
-const posts = [
-  { img: "/assets/images/posts/post-home-1.jpg", alt: "post1", title: "Trải nghiệm nhanh Apple CarPlay phiên bản mới trên iOS 26" },
-  { img: "/assets/images/posts/post-home-2.jpg", alt: "post2", title: "Anh em không thích hiệu ứng trong suốt trên iOS 26? Đây là cách tắt nó đi" },
-];
+const posts = ref([]);
+const bannerProductSeason = ref([]);
+
+const loadPosts = async () => {
+  try {
+    const response = await fetchPostByCategoryReviews({ limit: 5 });
+    const data = response?.data || [];
+    posts.value = data;
+  } catch (error) {
+    console.error("Lỗi load posts:", error);
+    posts.value = [];
+  }
+};
+const loadBannerProductSeasons = async () => {
+  try {
+    const response = await fetchBannerProductSeason();
+    const data = response?.data || [];
+    bannerProductSeason.value = data;
+  } catch (error) {
+    console.error("Lỗi load banner:", error);
+    bannerProductSeason.value = [];
+  }
+};
+
+onMounted(() => {
+  loadPosts();
+  loadBannerProductSeasons();
+});
 
 const breadcrumbs = [{ label: "shop", href: "/shop" }];
 

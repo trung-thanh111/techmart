@@ -22,9 +22,7 @@ export const bannerService = {
 
   show: async (id: number | string): Promise<IApiOk<IBanner>> => {
     const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IBanner>>(
-      `${ENDPOINT}/banners/${id}`
-    );
+    return await privateFetch<IApiOk<IBanner>>(`${ENDPOINT}/banners/${id}`);
   },
 
   update: async (id: number, payload: Partial<IBanner>): Promise<IApiOk<IBanner>> => {
@@ -39,7 +37,7 @@ export const bannerService = {
   delete: async (id: number): Promise<IApiMessage> => {
     const { privateFetch } = useApi();
     return await privateFetch<IApiMessage>(`${ENDPOINT}/banners/${id}`, {
-      method: "DELETE"
+      method: "DELETE",
     });
   },
 
@@ -47,7 +45,7 @@ export const bannerService = {
     const { privateFetch } = useApi();
     return await privateFetch<IApiMessage>(`${ENDPOINT}/banners/bulkDelete`, {
       body: { ids },
-      method: "DELETE"
+      method: "DELETE",
     });
   },
 
@@ -56,8 +54,15 @@ export const bannerService = {
     return await privateFetch<IApiOk<IBanner>>(`${ENDPOINT}/banners?type=all`);
   },
 
-  getByType: async (type: string): Promise<IApiOk<IBanner[]>> => {
+  getByType: async (banner_type: string): Promise<IApiOk<IBanner[]>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IBanner[]>>(`${ENDPOINT}/banners?type=all&type=${type}&position=main_slider&publish=2`);
+    return await publicFetch<IApiOk<IBanner[]>>(`${ENDPOINT}/banners?type=all&banner_type=${banner_type}&position=main_slider&publish=2`);
+  },
+
+  fetch: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IBanner>>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPaginate<IBanner>>>(`${ENDPOINT}/banners`, {
+      params,
+    });
   },
 };
