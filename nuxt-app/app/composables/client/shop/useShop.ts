@@ -5,10 +5,11 @@ import { productCatalogueService } from "~/services/product/catalogue.service";
 import { productService } from "~/services/product/product.service";
 import type { IProduct } from "~/interfaces/product/product.interface";
 import type { IPaginate } from "~/interfaces/base.interface";
+import { postService } from "~/services/post/post.service";
 
 export const useShop = () => {
   const config = useRuntimeConfig();
-  const shopBanners = ref<IBanner[]>([]);
+  const bannerShopTops = ref<IBanner[]>([]);
   const productCatalogueList = ref<IProductCatalogue[]>([]);
   const products = ref<IProduct[]>([]);
   const summerProducts = ref<IProduct[]>([]);
@@ -21,12 +22,19 @@ export const useShop = () => {
   const fetchBanners = async () => {
     isLoading.value = true;
     try {
-      const response = await bannerService.getByType("shop");
-      const banners = (response as any)?.data?.data ?? [];
-      shopBanners.value = Array.isArray(banners) ? banners : [];
+      const response = await bannerService.fetch({
+        type: "all",
+        public: 2,
+        sort: "id,desc",
+        banner_type: "shop",
+      });
+      const data = (response?.data as any) ?? [];
+      bannerShopTops.value = data ?? [data];
+      return response;
     } catch (error) {
       console.error("Lỗi fetch shop banners:", error);
-      shopBanners.value = [];
+      bannerShopTops.value = [];
+      throw error;
     } finally {
       isLoading.value = false;
     }
@@ -81,6 +89,48 @@ export const useShop = () => {
     }
   };
 
+  const fetchPostByCategoryReviews = async (params?: Record<string, any>) => {
+    isLoading.value = true;
+    try {
+      const defaultParams = {
+        type: "all", // k paginate
+        publish: 2,
+        sort: "id,desc",
+        post_catalogue_id: 1,
+        ...params,
+      };
+
+      const response = await postService.paginationPublic(defaultParams);
+      return response;
+    } catch (error: any) {
+      console.error("Lỗi khi load posts by category reviews:", error);
+      throw error;
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
+  const fetchBannerProductSeason = async (params?: Record<string, any>) => {
+    isLoading.value = true;
+    try {
+      const defaultParams = {
+        banner_type: "shop",
+        publish: 2,
+        sort: "id,desc",
+        limit: 1,
+        ...params,
+      };
+
+      const response = await bannerService.fetch(defaultParams);
+      return response;
+    } catch (error: any) {
+      console.error("Lỗi khi load banner:", error);
+      throw error;
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
   const loadMoreProducts = async () => {
     if (!hasMoreProducts.value || isLoading.value) return;
     currentPage.value += 1;
@@ -110,10 +160,11 @@ export const useShop = () => {
     await fetchProductCatalogues();
     await fetchProducts();
     await fetchSummerProducts(3);
+    await fetchBannerProductSeason();
   });
 
   return {
-    shopBanners,
+    bannerShopTops,
     isLoading,
     productCatalogueList,
     products,
@@ -124,6 +175,8 @@ export const useShop = () => {
     fetchBanners,
     fetchProductCatalogues,
     fetchProducts,
+    fetchPostByCategoryReviews,
+    fetchBannerProductSeason,
     fetchSummerProducts,
     loadMoreProducts,
     getBannerImageUrl,

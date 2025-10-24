@@ -18,7 +18,7 @@ class Banner extends Model
         'name',
         'slug',
         'album',
-        'type',
+        'banner_type',
         'position',
         'start_at',
         'end_at',

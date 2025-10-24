@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\Impl\Banner;
 
 use Illuminate\Http\Request;
@@ -8,20 +9,21 @@ use App\Repositories\Banner\BannerRepository;
 use App\Http\Resources\Banner\BannerResource;
 use App\Services\Interfaces\Banner\BannerServiceInterface;
 
-class BannerService extends BaseService implements BannerServiceInterface {
+class BannerService extends BaseService implements BannerServiceInterface
+{
 
-protected $repository;
+    protected $repository;
 
-protected $complexFilter = ['id'];
-protected $simpleFilter = ['publish', 'type'];
+    protected $complexFilter = ['id'];
+    protected $simpleFilter = ['publish', 'banner_type'];
 
-protected $with = [];
-protected $relationFilter = [];
+    protected $with = [];
+    protected $relationFilter = [];
 
-protected $cacheKeyPrefix = 'banners';
-protected $cacheTags = ['banners:collection'];
+    protected $cacheKeyPrefix = 'banners';
+    protected $cacheTags = ['banners:collection'];
 
-protected $useUpload = true;
+    protected $useUpload = true;
 
     public function __construct(
         BannerRepository $repository
@@ -29,7 +31,8 @@ protected $useUpload = true;
         $this->repository = $repository;
     }
 
-    protected function getRepository(){
+    protected function getRepository()
+    {
         return $this->repository;
     }
 
@@ -37,19 +40,21 @@ protected $useUpload = true;
      * nhiệm vụ bắt data từ client post lên (dạng thô, chuỗi, file, ....)
      *
      */
-    protected function prepareModelData(Request $request): self {
+    protected function prepareModelData(Request $request): self
+    {
 
         return $this->initializeBasicModelData($request);
     }
 
-    protected function initializeBasicModelData(Request $request): self {
+    protected function initializeBasicModelData(Request $request): self
+    {
         $fillable = $this->repository->getFillable();
         $this->modelData = $request->only($fillable);
         return $this;
     }
 
-    protected function getResource(Model $resource){
+    protected function getResource(Model $resource)
+    {
         return new BannerResource($resource);
     }
-
 }

@@ -26,17 +26,17 @@
           <img :src="mainImage" loading="lazy" :alt="product?.name || $t('client.productCard.mainImage')" class="w-full h-full object-contain transition-opacity duration-300 group-hover:opacity-0" />
           <img v-if="subImage" :src="subImage" loading="lazy" :alt="product?.name || $t('client.productCard.subImage')" class="w-full h-full object-contain absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </div>
-        <div class="px-2 flex-grow flex flex-col justify-between z-0">
+        <div class="px-1 flex-grow flex flex-col justify-between z-0">
           <h3 class="text-sm font-medium text-gray-500 h-10 overflow-hidden leading-5 line-clamp-2">
             {{ product?.name || $t("client.productCard.sampleProductName") }}
           </h3>
-          <div class="flex items-center gap-2 mt-2">
+          <div class="flex items-center gap-2 mt-1">
             <span class="text-red-600 font-semibold">{{ formatPrice(currentPrice) }}</span>
             <span v-if="originalPrice > currentPrice" class="text-gray-400 line-through text-xs">
               {{ formatPrice(originalPrice) }}
             </span>
           </div>
-          <div class="flex flex-wrap justify-between items-center gap-2 mt-2 text-[12px] sm:text-[10px] text-gray-500 min-h-[28px]">
+          <div class="flex flex-wrap justify-between items-center gap-2 mt-1 text-[12px] sm:text-[10px] text-gray-500 min-h-[28px]">
             <div class="flex items-center gap-1 text-emerald-400">
               <i class="fas fa-award"></i>
               <span class="hidden sm:inline">{{ $t("client.productCard.bestSeller") }}</span>
@@ -53,7 +53,7 @@
           <div class="py-2 text-center h-[42px]">
             <template v-if="product?.warranty">
               <span class="inline-flex items-center bg-sky-50 w-full rounded-sm px-2 py-1 text-[10px] text-sky-700">
-                {{ `Bảo hành${product.warranty} tháng tại các cơ sở` }}
+                {{ `Bảo hành ${product.warranty} tháng tại các cơ sở` }}
               </span>
             </template>
           </div>
