@@ -69,6 +69,14 @@ export const BANNERINDEX = "/admin/banner/banner";
 export const BANNERCREATE = "/admin/banner/banner/create";
 export const BANNERUPDATE = "/admin/banner/banner/update";
 
+export const BANNERPAGEINDEX = "/admin/banner/page";
+export const BANNERPAGECREATE = "/admin/banner/page/create";
+export const BANNERPAGEUPDATE = "/admin/banner/page/update";
+
+export const BANNERPOSITIONINDEX = "/admin/banner/position";
+export const BANNERPOSITIONCREATE = "/admin/banner/position/create";
+export const BANNERPOSITIONUPDATE = "/admin/banner/position/update";
+
 export const AGENCYWORKINGHOURINDEX = "/admin/agency/working_hour";
 export const AGENCYWORKINGHOURCREATE = "/admin/agency/working_hour/create";
 export const AGENCYWORKINGHOURUPDATE = "/admin/agency/working_hour/update";

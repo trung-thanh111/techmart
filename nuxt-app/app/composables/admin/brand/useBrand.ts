@@ -25,7 +25,7 @@ export const useBrand = (initialFilters?: BrandPayloadFilter, mode: "create" | "
   const schema = {
     name: z.string({ required_error: "admin.validation.nameRequired" }).trim().min(1, "admin.validation.nameRequired").max(255, "admin.validation.nameMaxLength"),
     description: z.string().max(500, "admin.validation.descriptionMaxLength").nullable().optional(),
-    email: z.string({ required_error: 'admin.validation.emailRequired' }).email('admin.validation.emailInvalid').max(255, 'admin.validation.emailMaxLength'),
+    email: z.string({ required_error: "admin.validation.emailRequired" }).email("admin.validation.emailInvalid").max(255, "admin.validation.emailMaxLength"),
     logo: z
       .any()
       .optional()
@@ -134,8 +134,12 @@ export const useBrand = (initialFilters?: BrandPayloadFilter, mode: "create" | "
     selectedItem.value = null;
   };
 
+  // Cache flag for optimization using useState
+  const isDataLoaded = useState("brand-data-loaded", () => false);
+
   // fetch
   const fetchData = async () => {
+    if (isDataLoaded.value && page.value === 1) return; // Cache hit for first page
     isLoading.value = true;
     try {
       const response = await brandService.pagination({
@@ -143,6 +147,7 @@ export const useBrand = (initialFilters?: BrandPayloadFilter, mode: "create" | "
         page: page.value,
       });
       data.value = response;
+      if (page.value === 1) isDataLoaded.value = true;
     } catch (err: any) {
       toast.error(err?.response?.data?.message || t("admin.messages.loadDataError"));
       console.error("Lỗi! Không tải được dữ liệu:", err);
@@ -155,6 +160,7 @@ export const useBrand = (initialFilters?: BrandPayloadFilter, mode: "create" | "
     filters.value = { ...filters.value, ...newFilters };
     page.value = 1;
     selectedIds.value = [];
+    isDataLoaded.value = false; // Reset cache for new search
     await fetchData();
   };
 

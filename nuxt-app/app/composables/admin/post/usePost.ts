@@ -25,13 +25,22 @@ export const usePost = (initialFilters?: PostPayloadFilter, mode: "create" | "up
   const tagOptions = ref<Array<{ name: string; id: number }>>([]);
   const postOptions = ref<Array<{ name: string; id: number }>>([]);
   const postCatalogueOptions = ref<Array<{ name: string; id: number }>>([]);
+
+  // Cache flags for optimization using useState
+  const isDataLoaded = useState("post-data-loaded", () => false);
+  const isOptionsLoaded = useState("post-options-loaded", () => false);
+
   const slug = computed(() => slugify(values.name || ""));
 
   const schema = {
     name: z.string({ required_error: "admin.validation.nameRequired" }).trim().min(1, "admin.validation.nameRequired").max(255, "admin.validation.nameMaxLength"),
     description: z.string().max(500, "admin.validation.descriptionMaxLength").nullable().optional(),
     content: z.string({ required_error: "admin.validation.contentRequired" }).trim().min(1, "admin.validation.contentRequired"),
-    image: z.any().optional().refine((file) => !file || file.size <= MAX_FILE_SIZE, 'admin.common.maxFileSize').refine((file) => !file || ACCEPTED_IMAGE_TYPES.includes(file.type), 'admin.common.acceptedImageTypes'),
+    image: z
+      .any()
+      .optional()
+      .refine((file) => !file || file.size <= MAX_FILE_SIZE, "admin.common.maxFileSize")
+      .refine((file) => !file || ACCEPTED_IMAGE_TYPES.includes(file.type), "admin.common.acceptedImageTypes"),
     tableOfContent: z.boolean().default(false).optional(),
     order: z.number().int().nonnegative().default(0),
     isHot: z.boolean().default(false).optional(),
@@ -154,6 +163,7 @@ export const usePost = (initialFilters?: PostPayloadFilter, mode: "create" | "up
 
   // fetch
   const fetchData = async () => {
+    if (isDataLoaded.value && page.value === 1) return; // Cache hit for first page
     isLoading.value = true;
     try {
       const { post_catalogue_id, tag_id, ...rest } = (filters.value as any) || {};
@@ -166,6 +176,7 @@ export const usePost = (initialFilters?: PostPayloadFilter, mode: "create" | "up
         page: page.value,
       });
       data.value = response;
+      if (page.value === 1) isDataLoaded.value = true;
     } catch (err: any) {
       toast.error(err?.response?.data?.message || t("admin.messages.loadDataError"));
       console.error("Lỗi! Không tải được dữ liệu:", err);
@@ -175,36 +186,33 @@ export const usePost = (initialFilters?: PostPayloadFilter, mode: "create" | "up
   };
 
   const loadPostCatalogue = async () => {
+    if (postCatalogueOptions.value.length > 0) return; // Cache hit
     try {
       const response = await postCatalogueService.all();
       const rows = response?.data ?? [];
-      postCatalogueOptions.value = (Array.isArray(rows) ? rows : [rows])
-        .map((item: any) => ({ id: Number(item.id), name: item.name }))
-        .filter((opt: any) => opt.name && !Number.isNaN(opt.id));
+      postCatalogueOptions.value = (Array.isArray(rows) ? rows : [rows]).map((item: any) => ({ id: Number(item.id), name: item.name })).filter((opt: any) => opt.name && !Number.isNaN(opt.id));
     } catch (error) {
       console.error("Lỗi khi tải dữ liệu post catalogue:", error);
     }
   };
 
   const loadTag = async () => {
+    if (tagOptions.value.length > 0) return; // Cache hit
     try {
       const response = await postTagService.all();
       const rows = response?.data ?? [];
-      tagOptions.value = (Array.isArray(rows) ? rows : [rows])
-        .map((item: any) => ({ id: Number(item.id), name: item.name }))
-        .filter((opt: any) => opt.name && !Number.isNaN(opt.id));
+      tagOptions.value = (Array.isArray(rows) ? rows : [rows]).map((item: any) => ({ id: Number(item.id), name: item.name })).filter((opt: any) => opt.name && !Number.isNaN(opt.id));
     } catch (error) {
       console.error("Lỗi khi tải dữ liệu tag:", error);
     }
   };
 
   const loadPost = async () => {
+    if (postOptions.value.length > 0) return; // Cache hit
     try {
       const response = await postService.all();
       const rows = response?.data ?? [];
-      postOptions.value = (Array.isArray(rows) ? rows : [rows])
-        .map((item: any) => ({ id: Number(item.id), name: item.name }))
-        .filter((opt: any) => opt.name && !Number.isNaN(opt.id));
+      postOptions.value = (Array.isArray(rows) ? rows : [rows]).map((item: any) => ({ id: Number(item.id), name: item.name })).filter((opt: any) => opt.name && !Number.isNaN(opt.id));
     } catch (error) {
       console.error("Lỗi khi tải dữ liệu post:", error);
     }
@@ -214,6 +222,7 @@ export const usePost = (initialFilters?: PostPayloadFilter, mode: "create" | "up
     filters.value = { ...filters.value, ...newFilters };
     page.value = 1;
     selectedIds.value = [];
+    isDataLoaded.value = false; // Reset cache for new search
     await fetchData();
   };
 
@@ -235,11 +244,20 @@ export const usePost = (initialFilters?: PostPayloadFilter, mode: "create" | "up
     return data.value?.data?.data?.map((item) => item.id) || [];
   };
 
+  // Optimized initialization with Promise.all
+  const initializeData = async () => {
+    // Load main data first
+    await fetchData();
+
+    // Load options in parallel
+    if (!isOptionsLoaded.value) {
+      await Promise.all([loadPostCatalogue(), loadTag(), loadPost()]);
+      isOptionsLoaded.value = true;
+    }
+  };
+
   onMounted(() => {
-    fetchData();
-    loadPostCatalogue();
-    loadTag();
-    loadPost();
+    initializeData();
   });
 
   return {

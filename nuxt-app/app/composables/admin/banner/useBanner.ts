@@ -5,6 +5,8 @@ import { errorToField, slugify } from "~/utils/helpers";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useAppToast } from "~/composables/useAppToast";
 import { bannerService } from "~/services/banner/banner.service";
+import { pageService } from "~/services/banner/page.service";
+import { positionService } from "~/services/banner/position.service";
 import type { IApiOk, IPaginate } from "~/interfaces/base.interface";
 import type { IBanner, BannerPayloadFilter } from "~/interfaces/banner/banner.interface";
 import type { BasePayloadFilter } from "~/interfaces/base.interface";
@@ -20,6 +22,8 @@ export const useBanner = (initialFilters?: BannerPayloadFilter, mode: "create" |
   const isLoading = ref(false);
   const selectedIds = ref<number[]>([]);
   const selectedItem = ref<IBanner | null>(null);
+  const pageOptions = ref<Array<{ name: string; id: number }>>([]);
+  const positionOptions = ref<Array<{ name: string; id: number }>>([]);
   const slug = computed(() => slugify(values.name || ""));
 
   const schema = {
@@ -28,8 +32,8 @@ export const useBanner = (initialFilters?: BannerPayloadFilter, mode: "create" |
       .array(z.object({ path: z.string() }))
       .nullable()
       .optional(),
-    banner_type: z.enum(["homepage", "category", "flash_sale", "popup", "custom", "shop"], { errorMap: () => ({ message: "admin.validation.typeInvalid" }) }),
-    position: z.enum(["main_slider", "homepage_top_ads", "homepage_middle_ads", "homepage_bottom_ads", "category_top_banner", "category_sidebar_banner", "category_bottom_banner", "flash_sale_header", "flash_sale_footer", "popup_center", "popup_bottom_right", "custom_html", "custom_slot"], { errorMap: () => ({ message: "admin.validation.positionInvalid" }) }),
+    pageId: z.number({ required_error: "admin.validation.pageRequired", invalid_type_error: "admin.validation.pageRequired" }).int().positive("admin.validation.pageRequired"),
+    positionId: z.number({ required_error: "admin.validation.positionRequired", invalid_type_error: "admin.validation.positionRequired" }).int().positive("admin.validation.positionRequired"),
     startAt: z.string().nullable().optional(),
     endAt: z.string().nullable().optional(),
     order: z.number().nullable().optional(),
@@ -187,30 +191,27 @@ export const useBanner = (initialFilters?: BannerPayloadFilter, mode: "create" |
     return data.value?.data?.data?.map((item) => item.id) || [];
   };
 
-  const typeOptions = computed(() => [
-    { name: t("admin.common.homepage"), value: "homepage" },
-    { name: t("admin.common.category"), value: "category" },
-    { name: t("admin.common.flash_sale"), value: "flash_sale" },
-    { name: t("admin.common.popup"), value: "popup" },
-    { name: t("admin.common.custom"), value: "custom" },
-    { name: t("admin.common.shop"), value: "shop" },
-  ]);
+  const loadPage = async () => {
+    if (pageOptions.value.length > 0) return; // Cache hit
+    try {
+      const response = await pageService.all();
+      const rows = response?.data ?? [];
+      pageOptions.value = (Array.isArray(rows) ? rows : [rows]).map((item: any) => ({ id: Number(item.id), name: item.name })).filter((opt: any) => opt.name && !Number.isNaN(opt.id));
+    } catch (error) {
+      console.error("Lỗi khi tải dữ liệu page:", error);
+    }
+  };
 
-  const positionOptions = computed(() => [
-    { name: t("admin.common.main_slider"), value: "main_slider" },
-    { name: t("admin.common.homepage_top_ads"), value: "homepage_top_ads" },
-    { name: t("admin.common.homepage_middle_ads"), value: "homepage_middle_ads" },
-    { name: t("admin.common.homepage_bottom_ads"), value: "homepage_bottom_ads" },
-    { name: t("admin.common.category_top_banner"), value: "category_top_banner" },
-    { name: t("admin.common.category_sidebar_banner"), value: "category_sidebar_banner" },
-    { name: t("admin.common.category_bottom_banner"), value: "category_bottom_banner" },
-    { name: t("admin.common.flash_sale_header"), value: "flash_sale_header" },
-    { name: t("admin.common.flash_sale_footer"), value: "flash_sale_footer" },
-    { name: t("admin.common.popup_center"), value: "popup_center" },
-    { name: t("admin.common.popup_bottom_right"), value: "popup_bottom_right" },
-    { name: t("admin.common.custom_html"), value: "custom_html" },
-    { name: t("admin.common.custom_slot"), value: "custom_slot" },
-  ]);
+  const loadPosition = async () => {
+    if (positionOptions.value.length > 0) return; // Cache hit
+    try {
+      const response = await positionService.all();
+      const rows = response?.data ?? [];
+      positionOptions.value = (Array.isArray(rows) ? rows : [rows]).map((item: any) => ({ id: Number(item.id), name: item.name })).filter((opt: any) => opt.name && !Number.isNaN(opt.id));
+    } catch (error) {
+      console.error("Lỗi khi tải dữ liệu position:", error);
+    }
+  };
 
   onMounted(() => {
     fetchData();
@@ -227,7 +228,7 @@ export const useBanner = (initialFilters?: BannerPayloadFilter, mode: "create" |
     selectedIds,
     selectedItem,
     slug,
-    typeOptions,
+    pageOptions,
     positionOptions,
     setValues,
     show,
@@ -244,6 +245,8 @@ export const useBanner = (initialFilters?: BannerPayloadFilter, mode: "create" |
     updateSelectedIds,
     getTotalItems,
     getAllItemIds,
+    loadPage,
+    loadPosition,
   };
 };
 

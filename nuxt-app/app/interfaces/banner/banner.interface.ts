@@ -5,8 +5,8 @@ export interface IBanner {
   name?: string;
   slug?: string;
   album: { path: string }[];
-  banner_type?: string;
-  position?: string;
+  pageId?: number;
+  positionId?: number;
   startAt?: string;
   endAt?: string;
   order?: number;

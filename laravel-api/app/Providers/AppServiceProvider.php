@@ -1,8 +1,13 @@
 <?php
+
 namespace App\Providers;
 
 use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
+use App\Services\Interfaces\Banner\BannerPositionServiceInterface;
+use App\Services\Impl\Banner\BannerPositionService;
+use App\Services\Interfaces\Banner\BannerPageServiceInterface;
+use App\Services\Impl\Banner\BannerPageService;
 use App\Services\Interfaces\Promotion\PromotionServiceInterface;
 use App\Services\Impl\Promotion\PromotionService;
 use App\Services\Interfaces\Post\PostCommentLikeServiceInterface;
@@ -100,6 +105,8 @@ class AppServiceProvider extends ServiceProvider
         PasswordResetServiceInterface::class => PasswordResetService::class,
         ChangePasswordServiceInterface::class => ChangePasswordService::class,
         PromotionServiceInterface::class => PromotionService::class,
+        BannerPageServiceInterface::class => BannerPageService::class,
+        BannerPositionServiceInterface::class => BannerPositionService::class,
     ];
 
     /**

@@ -23,10 +23,13 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
   const isLoading = ref(false);
   const selectedIds = ref<number[]>([]);
   const selectedItem = ref<IProduct | null>(null);
+  // Options with caching
   const tagOptions = ref<Array<{ name: string; id: number }>>([]);
   const brandOptions = ref<Array<{ name: string; id: number }>>([]);
   const productOptions = ref<Array<{ name: string; id: number }>>([]);
   const productCatalogueOptions = ref<Array<{ name: string; id: number }>>([]);
+  // Cache flags to avoid reloading using useState
+  const isOptionsLoaded = useState("product-options-loaded", () => false);
   const slug = computed(() => slugify(values.name || ""));
 
   const schema = {
@@ -118,7 +121,6 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
   const handleUpdate = handleSubmit(async (payload: TProductUpdate) => {
     isLoading.value = true;
     try {
-      console.info("payload:", payload);
       const id = Number(useRoute().params.id);
 
       // Luôn gửi productVariants để xử lý cả trường hợp clear
@@ -211,6 +213,7 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
   };
 
   const loadProductCatalogue = async () => {
+    if (productCatalogueOptions.value.length > 0) return; // Cache hit
     try {
       const response = await productCatalogueService.all();
       const rows = response?.data ?? [];
@@ -221,6 +224,7 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
   };
 
   const loadTag = async () => {
+    if (tagOptions.value.length > 0) return; // Cache hit
     try {
       const response = await productTagService.all();
       const rows = response?.data ?? [];
@@ -231,6 +235,7 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
   };
 
   const loadBrand = async () => {
+    if (brandOptions.value.length > 0) return; // Cache hit
     try {
       const response = await brandService.all();
       const rows = response?.data ?? [];
@@ -241,6 +246,7 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
   };
 
   const loadProduct = async () => {
+    if (productOptions.value.length > 0) return; // Cache hit
     try {
       const response = await productService.all();
       const rows = response?.data ?? [];
@@ -283,12 +289,16 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
     { name: t("admin.common.form.winter"), value: "winter" },
   ];
 
-  onMounted(() => {
-    fetchData();
-    loadProductCatalogue();
-    loadTag();
-    loadProduct();
-    loadBrand();
+  const initializeData = async () => {
+    await fetchData();
+    if (!isOptionsLoaded.value) {
+      await Promise.all([loadProductCatalogue(), loadTag(), loadBrand(), loadProduct()]);
+      isOptionsLoaded.value = true;
+    }
+  };
+
+  onMounted(async () => {
+    initializeData();
   });
 
   return {

@@ -18,8 +18,8 @@ class Banner extends Model
         'name',
         'slug',
         'album',
-        'banner_type',
-        'position',
+        'page_id',
+        'position_id',
         'start_at',
         'end_at',
         'order',
@@ -46,5 +46,15 @@ class Banner extends Model
     public function users(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function banner_pages(): BelongsTo
+    {
+        return $this->belongsTo(BannerPage::class, 'page_id');
+    }
+
+    public function banner_positions(): BelongsTo
+    {
+        return $this->belongsTo(BannerPosition::class, 'position_id');
     }
 }

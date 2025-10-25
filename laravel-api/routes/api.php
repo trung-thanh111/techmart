@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\Banner\BannerPositionController;
+use App\Http\Controllers\Api\V1\Banner\BannerPageController;
 use App\Http\Controllers\Api\V1\Promotion\PromotionController;
 use App\Http\Controllers\Api\V1\Post\PostCommentLikeController;
 use App\Http\Controllers\Api\V1\Post\PostLikeController;
@@ -368,6 +370,28 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
             Route::delete('{id}/detach', [PromotionController::class, 'detach']);
         });
         Route::resource('promotions', PromotionController::class)->except($routeExcept);
+
+        // This is route BannerPage
+        Route::group(['prefix' => 'banner_pages'], function() {
+            Route::post('bulkStore', [BannerPageController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [BannerPageController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [BannerPageController::class, 'bulkUpdate']);
+            Route::delete('bulkDelete', [BannerPageController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [BannerPageController::class, 'attach']);
+            Route::delete('{id}/detach', [BannerPageController::class, 'detach']);
+        });
+        Route::resource('banner_pages', BannerPageController::class)->except($routeExcept);
+
+        // This is route BannerPosition
+        Route::group(['prefix' => 'banner_positions'], function() {
+            Route::post('bulkStore', [BannerPositionController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [BannerPositionController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [BannerPositionController::class, 'bulkUpdate']);
+            Route::delete('bulkDelete', [BannerPositionController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [BannerPositionController::class, 'attach']);
+            Route::delete('{id}/detach', [BannerPositionController::class, 'detach']);
+        });
+        Route::resource('banner_positions', BannerPositionController::class)->except($routeExcept);
 
         // generate route
 
