@@ -86,7 +86,7 @@ abstract class BaseService implements BaseServiceInterface
         $cacheKey = $this->generateCollectionCacheKey($request->all());
         $lockKey = "lock:{$cacheKey}";
 
-        $this->result = Cache::lock($lockKey, 5)->block(5, function () use ($cacheKey, $request) {
+        $this->result = Cache::lock($lockKey, 2)->block(2, function () use ($cacheKey, $request) {
             return Cache::tags($this->cacheTags)->remember($cacheKey, $this->cacheTTL, function () use ($request) {
                 $specification = $this->specifications($request);
                 return $this->repository->paginate($specification);
@@ -205,7 +205,7 @@ abstract class BaseService implements BaseServiceInterface
         $cacheKey = $this->generateSingleCacheKey();
         $lockKey = "lock:{$cacheKey}";
         // nếu mà cache có data thì lấy trong cache ra còn không thì mới lấy từ database
-        $this->model = Cache::lock($lockKey, 5)->block(5, function () use ($cacheKey, $id) {
+        $this->model = Cache::lock($lockKey, 2)->block(2, function () use ($cacheKey, $id) {
             return Cache::remember($cacheKey, $this->cacheTTL, function () use ($id) {
                 // nếu mà k có data thì lấy trong model ra (db) với quan hệ
                 return $this->repository->findById($id, $this->with);
@@ -285,7 +285,7 @@ abstract class BaseService implements BaseServiceInterface
     {
         $cacheKey = "{$this->cacheKeyPrefix}:{$field}:{$value}";
         $lockKey = "lock:{$cacheKey}";
-        $this->model = Cache::lock($lockKey, 5)->block(5, function () use ($cacheKey, $field, $value) {
+        $this->model = Cache::lock($lockKey, 2)->block(2, function () use ($cacheKey, $field, $value) {
             return Cache::tags($this->cacheTags)->remember($cacheKey, $this->cacheTTL, function () use ($field, $value) {
                 return $this->repository->findByField($field, $value, $this->with);
             });
@@ -313,7 +313,7 @@ abstract class BaseService implements BaseServiceInterface
         // Reload model với relations mới sau khi handle relation
         $this->model = $this->repository->findById($this->model->getKey(), $this->with);
         $this->result = $this->model;
-        
+
         // Cache lại data sau khi đã handle relation để đảm bảo data mới được cache
         return $this->cacheSingleRecord();
     }

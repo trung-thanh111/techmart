@@ -128,18 +128,48 @@
             </label>
           </div>
           <div class="mb-3">
-            <label class="form-label">{{ $t("admin.common.form.type") }}</label>
-            <Field name="type" v-slot="{ field, errorMessage, meta }">
-              <Select v-model="field.value" :options="typeOptions" @update:modelValue="field.onChange" option-label="name" option-value="value" filter showClear :placeholder="$t('admin.common.form.type')" class="rounded py-[1px] w-100" size="small" />
+            <label class="form-label">
+              {{ $t("admin.common.form.page") }}
+              <span class="text-danger">*</span>
+            </label>
+            <Field name="pageId" v-slot="{ field, errorMessage, meta }">
+              <Select v-model="field.value" :options="pageOptions" @update:modelValue="field.onChange" @focus="loadPage" option-label="name" option-value="id" filter showClear :placeholder="$t('admin.common.form.pagePlaceholder')" class="rounded py-[1px] w-100" size="small">
+                <template #header>
+                  <div class="inline-flex items-center justify-center p-2">
+                    <span class="font-medium whitespace-nowrap">{{ $t("admin.common.form.page") }}</span>
+                  </div>
+                </template>
+                <template #footer>
+                  <div class="p-3 cursor-pointer flex items-center justify-end font-light text-xs text-emerald-600 gap-1">
+                    <i class="ri-add-line text-emerald-600"></i>
+                    <span @click="showCreatePageModal = true">Thêm mới</span>
+                  </div>
+                </template>
+              </Select>
               <small v-if="errorMessage && meta.touched" class="text-danger">
                 {{ $t(errorMessage) }}
               </small>
             </Field>
           </div>
           <div class="mb-3">
-            <label class="form-label">{{ $t("admin.common.form.position") }}</label>
-            <Field name="position" v-slot="{ field, errorMessage, meta }">
-              <Select v-model="field.value" :options="positionOptions" @update:modelValue="field.onChange" option-label="name" option-value="value" filter showClear :placeholder="$t('admin.common.form.position')" class="rounded py-[1px] w-100" size="small" />
+            <label class="form-label">
+              {{ $t("admin.common.form.position") }}
+              <span class="text-danger">*</span>
+            </label>
+            <Field name="positionId" v-slot="{ field, errorMessage, meta }">
+              <Select v-model="field.value" :options="positionOptions" @update:modelValue="field.onChange" @focus="loadPosition" option-label="name" option-value="id" filter showClear :placeholder="$t('admin.common.form.positionPlaceholder')" class="rounded py-[1px] w-100" size="small">
+                <template #header>
+                  <div class="inline-flex items-center justify-center p-2">
+                    <span class="font-medium whitespace-nowrap">{{ $t("admin.common.form.position") }}</span>
+                  </div>
+                </template>
+                <template #footer>
+                  <div class="p-3 cursor-pointer flex items-center justify-end font-light text-xs text-emerald-600 gap-1">
+                    <i class="ri-add-line text-emerald-600"></i>
+                    <span @click="showCreatePositionModal = true">Thêm mới</span>
+                  </div>
+                </template>
+              </Select>
               <small v-if="errorMessage && meta.touched" class="text-danger">
                 {{ $t(errorMessage) }}
               </small>
@@ -158,6 +188,48 @@
       </div>
     </div>
   </form>
+
+  <!-- Modal tạo Page -->
+  <Dialog v-model:visible="showCreatePageModal" modal maximizable :header="$t('admin.common.create')" :style="{ width: '40rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" append-to="body">
+    <form @submit.prevent="handleCreatePage">
+      <div class="mb-3">
+        <label class="form-label" for="pageName">
+          {{ $t("admin.common.form.name") }}:
+          <span class="text-danger">*</span>
+        </label>
+        <input v-model="pageForm.name" id="pageName" type="text" :placeholder="$t('admin.common.form.namePlaceholder')" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">{{ $t("admin.common.status") }}</label>
+        <PublishSelect v-model="pageForm.publish" />
+      </div>
+      <div class="flex justify-end gap-3 mt-4">
+        <Button type="button" variant="cancel" @click="showCreatePageModal = false" />
+        <Button type="submit" variant="success" :loading="pageForm.isLoading" />
+      </div>
+    </form>
+  </Dialog>
+
+  <!-- Modal tạo Position -->
+  <Dialog v-model:visible="showCreatePositionModal" modal maximizable :header="$t('admin.common.create')" :style="{ width: '40rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" append-to="body">
+    <form @submit.prevent="handleCreatePosition">
+      <div class="mb-3">
+        <label class="form-label" for="positionName">
+          {{ $t("admin.common.form.name") }}:
+          <span class="text-danger">*</span>
+        </label>
+        <input v-model="positionForm.name" id="positionName" type="text" :placeholder="$t('admin.common.form.namePlaceholder')" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">{{ $t("admin.common.status") }}</label>
+        <PublishSelect v-model="positionForm.publish" />
+      </div>
+      <div class="flex justify-end gap-3 mt-4">
+        <Button type="button" variant="cancel" @click="showCreatePositionModal = false" />
+        <Button type="submit" variant="success" :loading="positionForm.isLoading" />
+      </div>
+    </form>
+  </Dialog>
 </template>
 
 <script setup lang="ts">
@@ -169,31 +241,36 @@ import { useBanner } from "~/composables/admin/banner/useBanner";
 import { BANNERINDEX } from "~/utils/constants";
 import MultipleImageUpload from "~/components/admin/custom/MultipleImageUpload.vue";
 import AppCheckbox from "~/components/admin/custom/AppCheckbox.vue";
+import { pageService } from "~/services/banner/page.service";
+import { positionService } from "~/services/banner/position.service";
 import type { AlbumItem } from "~/interfaces/upload/image.interface";
 
-const { config, isLoading, values, slug, show, handleUpdate, setValues, positionOptions, typeOptions } = useBanner(undefined, "update");
+const { config, isLoading, values, slug, show, handleUpdate, setValues, pageOptions, positionOptions, loadPage, loadPosition } = useBanner(undefined, "update");
 
 const id = Number(useRoute().params.id);
-const { data } = await show(id);
-
 const albumData = ref<AlbumItem[] | null>(null);
 const onAlbumChange = () => {
   setValues({ ...values, album: albumData.value });
 };
-albumData.value = data?.album ?? null;
 
-setValues({
-  name: data?.name,
-  order: data?.order,
-  linkUrl: data?.linkUrl,
-  startAt: data?.startAt,
-  endAt: data?.endAt,
-  isHot: data?.isHot ?? false,
-  type: data?.type,
-  position: data?.position,
-  publish: data?.publish,
-  album: data?.album ?? null,
-} as any);
+onMounted(async () => {
+  await Promise.all([loadPage(), loadPosition()]);
+  const { data } = await show(id);
+  albumData.value = data?.album ?? null;
+
+  setValues({
+    name: data?.name,
+    order: data?.order,
+    linkUrl: data?.linkUrl,
+    startAt: data?.startAt,
+    endAt: data?.endAt,
+    isHot: data?.isHot ?? false,
+    pageId: data?.pageId,
+    positionId: data?.positionId,
+    publish: data?.publish,
+    album: data?.album ?? null,
+  } as any);
+});
 
 watch(
   albumData,
@@ -202,6 +279,82 @@ watch(
   },
   { immediate: false, deep: true }
 );
+
+// Forms cho dialog
+const pageForm = ref({
+  name: "",
+  publish: 2,
+  isLoading: false,
+});
+
+const positionForm = ref({
+  name: "",
+  publish: 2,
+  isLoading: false,
+});
+
+const showCreatePageModal = ref(false);
+const showCreatePositionModal = ref(false);
+
+const handleCreatePage = async () => {
+  try {
+    pageForm.value.isLoading = true;
+    const pageData = {
+      name: pageForm.value.name,
+      publish: pageForm.value.publish || 2,
+    };
+    const response = await pageService.store(pageData);
+    if (response && typeof response === "object" && "data" in response && response.data?.id) {
+      const newPage = {
+        id: response.data.id,
+        name: response.data.name || "",
+      };
+      pageOptions.value.push(newPage);
+      setValues({ ...values, pageId: response.data.id });
+
+      showCreatePageModal.value = false;
+      pageForm.value = {
+        name: "",
+        publish: 2,
+        isLoading: false,
+      };
+    }
+  } catch (error) {
+    console.error("Error creating page:", error);
+  } finally {
+    pageForm.value.isLoading = false;
+  }
+};
+
+const handleCreatePosition = async () => {
+  try {
+    positionForm.value.isLoading = true;
+    const positionData = {
+      name: positionForm.value.name,
+      publish: positionForm.value.publish || 2,
+    };
+    const response = await positionService.store(positionData);
+    if (response && typeof response === "object" && "data" in response && response.data?.id) {
+      const newPosition = {
+        id: response.data.id,
+        name: response.data.name || "",
+      };
+      positionOptions.value.push(newPosition);
+      setValues({ ...values, positionId: response.data.id });
+
+      showCreatePositionModal.value = false;
+      positionForm.value = {
+        name: "",
+        publish: 2,
+        isLoading: false,
+      };
+    }
+  } catch (error) {
+    console.error("Error creating position:", error);
+  } finally {
+    positionForm.value.isLoading = false;
+  }
+};
 
 definePageMeta({
   layout: "admin",

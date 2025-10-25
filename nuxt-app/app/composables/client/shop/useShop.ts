@@ -19,43 +19,48 @@ export const useShop = () => {
   const hasMoreProducts = ref(true);
   const isLoading = ref(false);
 
+  // Cache flags for optimization using useState
+  const isBannersLoaded = useState("shop-banners-loaded", () => false);
+  const isCataloguesLoaded = useState("shop-catalogues-loaded", () => false);
+  const isProductsLoaded = useState("shop-products-loaded", () => false);
+  const isSummerLoaded = useState("shop-summer-loaded", () => false);
+
   const fetchBanners = async () => {
-    isLoading.value = true;
+    if (isBannersLoaded.value) return; // Cache hit
     try {
       const response = await bannerService.fetch({
         type: "all",
-        public: 2,
+        publish: 2,
         sort: "id,desc",
         banner_type: "shop",
       });
       const data = (response?.data as any) ?? [];
-      bannerShopTops.value = data ?? [data];
+      bannerShopTops.value = Array.isArray(data) ? data : [data];
+      isBannersLoaded.value = true;
       return response;
     } catch (error) {
       console.error("Lỗi fetch shop banners:", error);
       bannerShopTops.value = [];
       throw error;
-    } finally {
-      isLoading.value = false;
     }
   };
 
   const fetchProductCatalogues = async (): Promise<IProductCatalogue[]> => {
-    isLoading.value = true;
+    if (isCataloguesLoaded.value) return productCatalogueList.value; // Cache hit
     try {
       const response = await productCatalogueService.all();
       const data = (response as any)?.data ?? [];
       productCatalogueList.value = Array.isArray(data) ? data : [data];
+      isCataloguesLoaded.value = true;
       return productCatalogueList.value;
     } catch (error: any) {
-      console.error("Lỗi khi load tag list:", error);
+      console.error("Lỗi khi load catalogues:", error);
       throw error;
-    } finally {
-      isLoading.value = false;
     }
   };
 
   const fetchProducts = async (page = 1, perPage = 8, append = false) => {
+    if (!append && isProductsLoaded.value && page === 1) return; // Cache hit for first page
     isLoading.value = true;
     try {
       const response = await productService.paginationPublic({
@@ -72,6 +77,7 @@ export const useShop = () => {
       } else {
         products.value = newProducts;
         currentPage.value = 1;
+        isProductsLoaded.value = true;
       }
 
       totalProducts.value = Number(data?.total || 0);
@@ -138,10 +144,12 @@ export const useShop = () => {
   };
 
   const fetchSummerProducts = async (limit = 3) => {
+    if (isSummerLoaded.value) return; // Cache hit
     try {
       const response = await productService.getSummerProducts(limit);
       const data = (response as any)?.data?.data;
       summerProducts.value = Array.isArray(data) ? data : [];
+      isSummerLoaded.value = true;
       return response;
     } catch (error: any) {
       console.error("Lỗi khi load summer products:", error);
@@ -155,12 +163,17 @@ export const useShop = () => {
     return path.startsWith("uploads") ? `${config.public.baseUrl}/storage/${path}` : path;
   };
 
+  // Optimized initialization with Promise.all
+  const initializeData = async () => {
+    // Load critical data first (banners and products)
+    await Promise.all([fetchBanners(), fetchProductCatalogues(), fetchProducts()]);
+
+    // Load secondary data in parallel
+    await Promise.all([fetchSummerProducts(3), fetchBannerProductSeason()]);
+  };
+
   onMounted(async () => {
-    await fetchBanners();
-    await fetchProductCatalogues();
-    await fetchProducts();
-    await fetchSummerProducts(3);
-    await fetchBannerProductSeason();
+    await initializeData();
   });
 
   return {

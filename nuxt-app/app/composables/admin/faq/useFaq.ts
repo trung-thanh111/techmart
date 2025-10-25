@@ -22,6 +22,9 @@ export const useFaq = (initialFilters?: FaqPayloadFilter, mode: "create" | "upda
   const selectedIds = ref<number[]>([]);
   const selectedItem = ref<IFaq | null>(null);
   const faqCatalogueOptions = ref<Array<{ name: string; id: number }>>([]);
+  const isDataLoaded = useState("faq-data-loaded", () => false);
+  const isOptionsLoaded = useState("faq-options-loaded", () => false);
+
   const slug = computed(() => slugify(values.question || ""));
 
   const schema = {
@@ -29,7 +32,7 @@ export const useFaq = (initialFilters?: FaqPayloadFilter, mode: "create" | "upda
     answer: z.string({ required_error: "admin.validation.answerRequired" }).trim().min(1, "admin.validation.answerRequired"),
     order: z.number().int().nonnegative().default(0),
     isHot: z.boolean().default(false).optional(),
-    faqCatalogueId: z.number({required_error: "admin.validation.faqCatalogueIdRequired"}).min(1, "admin.validation.faqCatalogueIdRequired"),
+    faqCatalogueId: z.number({ required_error: "admin.validation.faqCatalogueIdRequired" }).min(1, "admin.validation.faqCatalogueIdRequired"),
     publish: z.number({ required_error: "admin.validation.statusRequired" }).refine((val) => [0, 1, 2].includes(val), { message: "admin.validation.statusInvalid" }),
   };
   const createSchema = z.object({ ...schema });
@@ -141,6 +144,7 @@ export const useFaq = (initialFilters?: FaqPayloadFilter, mode: "create" | "upda
 
   // fetch
   const fetchData = async () => {
+    if (isDataLoaded.value && page.value === 1) return; // Cache hit for first page
     isLoading.value = true;
     try {
       const response = await faqService.pagination({
@@ -148,6 +152,7 @@ export const useFaq = (initialFilters?: FaqPayloadFilter, mode: "create" | "upda
         page: page.value,
       });
       data.value = response;
+      if (page.value === 1) isDataLoaded.value = true;
     } catch (err: any) {
       toast.error(err?.response?.data?.message || t("admin.messages.loadDataError"));
       console.error("Lỗi! Không tải được dữ liệu:", err);
@@ -157,12 +162,11 @@ export const useFaq = (initialFilters?: FaqPayloadFilter, mode: "create" | "upda
   };
 
   const loadFaqCatalogue = async () => {
+    if (faqCatalogueOptions.value.length > 0) return; // Cache hit
     try {
       const response = await faqCatalogueService.all();
       const rows = response?.data ?? [];
-      faqCatalogueOptions.value = (Array.isArray(rows) ? rows : [rows])
-        .map((item: any) => ({ id: Number(item.id), name: item.name }))
-        .filter((opt: any) => opt.name && !Number.isNaN(opt.id));
+      faqCatalogueOptions.value = (Array.isArray(rows) ? rows : [rows]).map((item: any) => ({ id: Number(item.id), name: item.name })).filter((opt: any) => opt.name && !Number.isNaN(opt.id));
     } catch (error) {
       console.error("Lỗi khi tải dữ liệu faq catalogue:", error);
     }
@@ -172,6 +176,7 @@ export const useFaq = (initialFilters?: FaqPayloadFilter, mode: "create" | "upda
     filters.value = { ...filters.value, ...newFilters };
     page.value = 1;
     selectedIds.value = [];
+    isDataLoaded.value = false; // Reset cache for new search
     await fetchData();
   };
 
@@ -193,9 +198,20 @@ export const useFaq = (initialFilters?: FaqPayloadFilter, mode: "create" | "upda
     return data.value?.data?.data?.map((item) => item.id) || [];
   };
 
+  // Optimized initialization with Promise.all
+  const initializeData = async () => {
+    // Load main data first
+    await fetchData();
+
+    // Load options in parallel
+    if (!isOptionsLoaded.value) {
+      await loadFaqCatalogue();
+      isOptionsLoaded.value = true;
+    }
+  };
+
   onMounted(() => {
-    fetchData();
-    loadFaqCatalogue();
+    initializeData();
   });
 
   return {

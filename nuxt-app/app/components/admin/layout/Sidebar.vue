@@ -197,10 +197,23 @@
             <div class="collapse menu-dropdown" id="sidebarbanners">
               <ul class="nav nav-sm flex-column">
                 <li class="nav-item">
-                  <NuxtLink :to="BANNERINDEX" class="nav-link" data-key="t-banner-list">{{ $t("admin.sidebar.bannerList") }}</NuxtLink>
+                  <NuxtLink to="#sidebarbanner" class="nav-link menu-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarbanner" data-key="t-banner">{{ $t("admin.sidebar.banners") }}</NuxtLink>
+                  <div class="collapse menu-dropdown" id="sidebarbanner">
+                    <ul class="nav nav-sm flex-column">
+                      <li class="nav-item">
+                        <NuxtLink :to="BANNERINDEX" class="nav-link" data-key="t-banner-list">{{ $t("admin.sidebar.bannerList") }}</NuxtLink>
+                      </li>
+                      <li class="nav-item">
+                        <NuxtLink :to="BANNERCREATE" class="nav-link" data-key="t-banner-create">{{ $t("admin.sidebar.bannerCreate") }}</NuxtLink>
+                      </li>
+                    </ul>
+                  </div>
                 </li>
                 <li class="nav-item">
-                  <NuxtLink :to="BANNERCREATE" class="nav-link" data-key="t-banner-create">{{ $t("admin.sidebar.bannerCreate") }}</NuxtLink>
+                  <NuxtLink :to="BANNERPAGEINDEX" class="nav-link" data-key="t-banner-page">{{ $t("admin.sidebar.bannerPage") }}</NuxtLink>
+                </li>
+                <li class="nav-item">
+                  <NuxtLink :to="BANNERPOSITIONINDEX" class="nav-link" data-key="t-banner-position">{{ $t("admin.sidebar.bannerPosition") }}</NuxtLink>
                 </li>
               </ul>
             </div>
@@ -214,7 +227,7 @@
   <div class="vertical-overlay"></div>
 </template>
 <script setup lang="ts">
-import { TODASHBOARD, PRODUCTCATALOGUEINDEX, PRODUCTINDEX, PRODUCTCREATE, ATTRIBUTECATALOGUEINDEX, ATTRIBUTEINDEX, BRANDINDEX, PRODUCTTAGINDEX, PROMOTIONCATALOGUEINDEX, USERINDEX, USERCREATE, USERCATALOGUEINDEX, ADDRESSORDERINDEX, POSTINDEX, POSTCREATE, POSTCATALOGUEINDEX, POSTTAGINDEX, FAQINDEX, FAQCREATE, FAQCATALOGUEINDEX, AGENCYINDEX, AGENCYCREATE, AGENCYWORKINGHOURINDEX, BANNERINDEX, BANNERCREATE } from "~/utils/constants";
+import { TODASHBOARD, PRODUCTCATALOGUEINDEX, PRODUCTINDEX, PRODUCTCREATE, ATTRIBUTECATALOGUEINDEX, ATTRIBUTEINDEX, BRANDINDEX, PRODUCTTAGINDEX, PROMOTIONCATALOGUEINDEX, USERINDEX, USERCREATE, USERCATALOGUEINDEX, ADDRESSORDERINDEX, POSTINDEX, POSTCREATE, POSTCATALOGUEINDEX, POSTTAGINDEX, FAQINDEX, FAQCREATE, FAQCATALOGUEINDEX, AGENCYINDEX, AGENCYCREATE, AGENCYWORKINGHOURINDEX, BANNERINDEX, BANNERCREATE, BANNERPAGEINDEX, BANNERPOSITIONINDEX } from "~/utils/constants";
 </script>
 <style scoped>
 .collapse {

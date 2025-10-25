@@ -82,6 +82,8 @@
       "type": "Loại",
       "position": "Vị trí",
       "form": {
+        "page": "Trang",
+        "pagePlaceholder": "Chọn trang",
         "none": "Không có",
         "spring": "Mùa xuân",
         "summer": "Mùa hè",
@@ -275,6 +277,8 @@
       "brandCreate": "Thêm mới",
       "banners": "Banner",
       "bannerList": "Danh sách",
+      "bannerPage": "Trang",
+      "bannerPosition": "Vị trí",
       "bannerCreate": "Thêm mới",
       "tags": "Tag",
       "customers": "Khách hàng",
@@ -463,6 +467,18 @@
       "banner": {
         "title": "banner",
         "breadcrumb": "Quản lý banner",
+        "groupInfo": "Thông tin",
+        "filterGroup": "Lọc nhóm"
+      },
+      "position": {
+        "title": "Vị trí",
+        "breadcrumb": "Quản lý vị trí",
+        "groupInfo": "Thông tin",
+        "filterGroup": "Lọc nhóm"
+      },
+      "page": {
+        "title": "Trang",
+        "breadcrumb": "Quản lý trang",
         "groupInfo": "Thông tin",
         "filterGroup": "Lọc nhóm"
       },

@@ -1,9 +1,11 @@
 <?php
+
 namespace App\Traits;
 
 use Illuminate\Support\Facades\Cache;
 
-trait HasCache {
+trait HasCache
+{
 
     /**
      * cache lưu dữ liệu bằng cặp key-value
@@ -19,7 +21,8 @@ trait HasCache {
      *
      * @return integer
      */
-    protected function getRandomTTL(): int {
+    protected function getRandomTTL(): int
+    {
         return rand(3600, 7200) * 60; // thời gian sống của cache
     }
 
@@ -29,7 +32,8 @@ trait HasCache {
      * @param integer|null $ttl
      * @return self
      */
-    protected function setCacheTTL(?int $ttl = null): void {
+    protected function setCacheTTL(?int $ttl = null): void
+    {
         $this->cacheTTL = $ttl ?? $this->getRandomTTL();
     }
 
@@ -39,14 +43,16 @@ trait HasCache {
      * @param integer|null $id
      * @return string
      */
-    protected function generateSingleCacheKey(?int $id = null): string {
-        if(!$id){
+    protected function generateSingleCacheKey(?int $id = null): string
+    {
+        if (!$id) {
             $id = $this->model ? $this->model->getKey() : request()->route(substr($this->cacheKeyPrefix, 0, -1));
         }
         return "{$this->cacheKeyPrefix}:single:{$id}";
     }
 
-    protected function cacheSingleRecord(?int $id = null): self{
+    protected function cacheSingleRecord(?int $id = null): self
+    {
         $cacheKey = $this->generateSingleCacheKey($id);
         $cacheData = $this->getResult();
         Cache::put($cacheKey, $cacheData, $this->cacheTTL); // lưu cache
@@ -54,21 +60,23 @@ trait HasCache {
         return $this;
     }
 
-    protected function clearCacheById(?int $id = null): self{
+    protected function clearCacheById(?int $id = null): self
+    {
         $cacheKey = $this->generateSingleCacheKey($id);
         Cache::forget($cacheKey); // xóa cache
         return $this;
     }
 
-    protected function generateCollectionCacheKey(array $params = []) {
+    protected function generateCollectionCacheKey(array $params = [])
+    {
         krsort($params); // sắp xếp giảm dần để tránh việc trùng lập data khi vị trí các params thay dổi
         $hash = md5(serialize($params)); // mã hóa các tham số thành dạng hash
         return "{$this->cacheKeyPrefix}:collection:{$hash}";
     }
 
-    protected function clearCacheByTags(): self {
+    protected function clearCacheByTags(): self
+    {
         Cache::tags($this->cacheTags)->flush(); // xóa cache theo tag
         return $this;
     }
-
 }

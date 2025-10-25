@@ -23,25 +23,25 @@ class StoreRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:banners,slug',
+            "name" => "required|string|max:255",
+            "slug" => "nullable|string|max:255|unique:banners,slug",
             "album" => "nullable|sometimes|array",
-            'type' => 'required|in:homepage,category,flash_sale,popup,custom,shop',
-            'position' => 'required|string|max:100',
-            'start_at' => 'nullable|date',
-            'end_at' => 'nullable|date|after_or_equal:start_at',
-            'order' => 'nullable|integer',
-            'link_url' => 'nullable|string|max:255',
-            'is_hot' => 'nullable|boolean',
-            'publish' => 'required|integer|in:0,1,2',
+            "page_id" => "required|integer|min:0",
+            "position_id" => "required|integer|min:0",
+            "start_at" => "nullable|date",
+            "end_at" => "nullable|date|after_or_equal:start_at",
+            "order" => "nullable|integer",
+            "link_url" => "nullable|string|max:255",
+            "is_hot" => "nullable|boolean",
+            "publish" => "required|integer|in:0,1,2",
         ];
     }
 
     public function prepareForValidation()
     {
         $this->merge([
-            'slug' => generate_slug($this->name),
-            'user_id' => auth(Common::API)->user()->id,
+            "slug" => generate_slug($this->name),
+            "user_id" => auth(Common::API)->user()->id,
         ]);
     }
 

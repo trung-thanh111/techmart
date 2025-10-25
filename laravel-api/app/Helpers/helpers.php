@@ -28,6 +28,20 @@ if (!function_exists('generate_slug')) {
     }
 }
 
+if (!function_exists('generate_snake_case')) {
+    /**
+     * Convert a model class name to its corresponding table name in snake_case.
+     *
+     * @param string $name
+     * @return string
+     */
+    function generate_snake_case(string $name = ''): string
+    {
+        $name = Str::ascii($name);
+        return Str::snake($name);
+    }
+}
+
 if (!function_exists('string_to_price')) {
     /**
      * Chuyển chuỗi giá (có dấu .) thành int
