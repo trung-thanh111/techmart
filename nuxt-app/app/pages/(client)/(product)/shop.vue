@@ -18,7 +18,7 @@
       <div class="h-px w-full bg-gradient-to-r from-transparent via-[rgba(32,141,128,0.3)] to-transparent"></div>
     </div>
 
-    <Category description="Khám phá các danh mục sản phẩm đa dạng tại Tech Mart Store – từ thiết bị điện tử, gia dụng thông minh đến phụ kiện hiện đại, đáp ứng nhu cầu học tập, làm việc và giải trí của bạn." :items="productCatalogueList" basePath="/product/category" />
+    <Category description="Khám phá các danh mục sản phẩm đa dạng tại Tech Mart Store – từ thiết bị điện tử, gia dụng thông minh đến phụ kiện hiện đại, đáp ứng nhu cầu học tập, làm việc và giải trí của bạn." :items="productCatalogueList as any" basePath="/product/category" />
 
     <!-- Before shop product -->
     <section class="product-accsessory bg-white shadow-md rounded-md py-3 md:py-6 px-2 md:px-6 mb-4">
@@ -50,17 +50,17 @@
     <!-- Shop product -->
     <section class="product-filter bg-white shadow-md rounded-md py-3 md:py-6 px-2 md:px-6 md:mb-8 mb-4">
       <div class="flex flex-wrap md:flex-nowrap gap-3 md:gap-4">
-        <FilterBar />
+        <FilterBar @update:attributes="handleAttributesChange" @update:price="handlePriceChange" @update:brand="handleBrandChange" />
         <div class="flex-1 w-full">
           <div class="flex justify-between items-center mb-3 md:mb-4">
             <span class="text-xs md:text-sm">
               Hiển thị
               <span class="text-sky-400 underline">{{ totalProducts }} kết quả</span>
             </span>
-            <FilterSort />
+            <FilterSort :sort="filters.sort" :setSort="setSort" />
           </div>
-          <div>
-            <Splide :options="sliderOpts" ref="splideRef">
+          <div class="relative" id="product-shop-slide">
+            <Splide :options="sliderOptions" ref="splideRef">
               <SplideSlide v-for="(chunk, idx) in chunks" :key="idx">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
                   <ProductCard v-for="product in chunk" :key="product.id" :product="product" />
@@ -68,18 +68,14 @@
               </SplideSlide>
             </Splide>
 
-            <div v-if="products.length" class="flex justify-center items-center gap-4 mt-6">
-              <button @click="prev" :disabled="isLoading" class="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 disabled:opacity-50 transition-all">
-                <i class="fas fa-arrow-left"></i>
-                <span>Trước</span>
-              </button>
+            <button @click="prev" :disabled="isLoading" class="absolute left-0 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 text-gray-700 shadow hover:bg-gray-200 disabled:opacity-50 transition-all">
+              <i class="fa-solid fa-chevron-left"></i>
+            </button>
 
-              <button @click="next" :disabled="isLoading" class="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-sky-500 to-cyan-400 text-white rounded-lg hover:from-sky-600 hover:to-cyan-500 disabled:opacity-50 transition-all">
-                <i v-if="isLoading" class="fas fa-spinner fa-spin"></i>
-                <i v-else class="fas fa-arrow-right"></i>
-                <span>{{ isLoading ? "Đang tải..." : "Tiếp" }}</span>
-              </button>
-            </div>
+            <button @click="next" :disabled="isLoading" class="absolute right-0 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-sky-500 to-cyan-400 text-white shadow hover:from-sky-600 hover:to-cyan-500 disabled:opacity-50 transition-all">
+              <i v-if="isLoading" class="fa-solid fa-circle-notch fa-spin"></i>
+              <i v-else class="fa-solid fa-chevron-right"></i>
+            </button>
           </div>
         </div>
       </div>
@@ -109,7 +105,7 @@
             <div class="space-y-4 mt-8 relative border-l border-dashed border-sky-500 pl-4">
               <NuxtLink v-for="post in posts" :key="post.id" :to="`${TOPOST}/${post.slug}`">
                 <div class="flex items-start mb-3 gap-2 hover:bg-gray-100/80 transition cursor-pointer group">
-                  <NuxtImg :src="post.image?.url || DEFAULTIMAGE" :alt="post.name" class="w-32 h-20 object-cover rounded-md flex-shrink-0" loading="lazy" />
+                  <NuxtImg :src="post.image?.url || IMAGEDEFAULT" :alt="post.name" class="w-32 h-20 object-cover rounded-md flex-shrink-0" loading="lazy" />
                   <div class="flex-1">
                     <p class="text-sm font-medium hover:text-sky-400 transition line-clamp-4">{{ post.name }}</p>
                   </div>
@@ -122,7 +118,7 @@
     </section>
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import Breadcrumb from "~/components/shared/navigation/Breadcrumb.vue";
 import CommitMent from "~/components/client/ui/CommitMent.vue";
 import Partner from "~/components/client/ui/Partner.vue";
@@ -133,10 +129,44 @@ import ProductCard from "~/components/client/features/ProductCard.vue";
 import { Splide, SplideSlide } from "@splidejs/vue-splide";
 import FilterSort from "~/components/client/features/FilterSort.vue";
 
-const { isLoading, bannerShopTops, productCatalogueList, products, summerProducts, totalProducts, hasMoreProducts, getBannerImageUrl, loadMoreProducts, fetchPostByCategoryReviews, fetchBannerProductSeason } = useShop();
+const { banners, catalogues, products, summerProducts, posts, bannerSeason, totalProducts, hasMore, isLoading, initializeData, loadMore, getBannerImageUrl, filters, setSort, setFilter } = useShop();
 
-const sliderOpts = { type: "slide", perPage: 1, arrows: false, pagination: false };
-const splideRef = ref();
+initializeData();
+
+// Xử lý khi attributes thay đổi
+const handleAttributesChange = async (newAttributes: Record<string, number[]>) => {
+  await setFilter("attributes", newAttributes);
+};
+
+// Xử lý khi price range thay đổi
+const handlePriceChange = async (newRange: number[]) => {
+  await setFilter("price", newRange);
+};
+
+// Xử lý khi brand thay đổi
+const handleBrandChange = async (brandId: number | null) => {
+  await setFilter("brand", brandId);
+};
+
+const bannerShopTops = banners;
+const productCatalogueList = catalogues;
+const bannerProductSeason = bannerSeason;
+const hasMoreProducts = hasMore;
+const loadMoreProducts = loadMore;
+const isInitialized = computed(() => !!banners.value.length && !!products.value.length);
+
+const sliderOptions = {
+  type: "slide",
+  perPage: 1,
+  arrows: false,
+  pagination: false,
+  drag: true,
+  speed: 600,
+  easing: "cubic-bezier(0.25, 1, 0.5, 1)",
+};
+
+const splideRef = ref<any>(null);
+
 const chunks = computed(() => {
   const result = [];
   for (let i = 0; i < products.value.length; i += 8) {
@@ -160,36 +190,57 @@ const next = async () => {
   }
 };
 
-const posts = ref([]);
-const bannerProductSeason = ref([]);
-
-const loadPosts = async () => {
-  try {
-    const response = await fetchPostByCategoryReviews({ limit: 5 });
-    const data = response?.data || [];
-    posts.value = data;
-  } catch (error) {
-    console.error("Lỗi load posts:", error);
-    posts.value = [];
-  }
-};
-const loadBannerProductSeasons = async () => {
-  try {
-    const response = await fetchBannerProductSeason();
-    const data = response?.data || [];
-    bannerProductSeason.value = data;
-  } catch (error) {
-    console.error("Lỗi load banner:", error);
-    bannerProductSeason.value = [];
-  }
-};
-
-onMounted(() => {
-  loadPosts();
-  loadBannerProductSeasons();
-});
-
 const breadcrumbs = [{ label: "shop", href: "/shop" }];
 
 definePageMeta({ layout: "client" });
 </script>
+<style>
+#product-shop-slide button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-57%);
+  height: 3.5em;
+  width: 2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  outline: none;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+#product-shop-slide button:first-of-type {
+  left: 0;
+  background: linear-gradient(to right, #00a3b8, #0097cc);
+  border-radius: 0;
+  border-top-right-radius: 14px;
+  border-bottom-right-radius: 14px;
+}
+
+#product-shop-slide button:last-of-type {
+  right: 0;
+  background: linear-gradient(to right, #0097cc, #00c3b5);
+  border-radius: 0;
+  border-top-left-radius: 14px;
+  border-bottom-left-radius: 14px;
+}
+
+#product-shop-slide button:hover {
+  transform: translateY(-50%) 0;
+  filter: brightness(1.1);
+}
+
+#product-shop-slide button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: translateY(-50%) 0;
+}
+
+#product-shop-slide button i {
+  font-size: 1.2em;
+  color: #fff;
+}
+</style>
