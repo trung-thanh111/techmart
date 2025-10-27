@@ -1,197 +1,291 @@
 import { bannerService } from "~/services/banner/banner.service";
-import type { IBanner } from "~/interfaces/banner/banner.interface";
-import type { IProductCatalogue } from "~/interfaces/product/catalogue.interface";
 import { productCatalogueService } from "~/services/product/catalogue.service";
 import { productService } from "~/services/product/product.service";
+import { postService } from "~/services/post/post.service";
+import type { IBanner } from "~/interfaces/banner/banner.interface";
+import type { IProductCatalogue } from "~/interfaces/product/catalogue.interface";
 import type { IProduct } from "~/interfaces/product/product.interface";
 import type { IPaginate } from "~/interfaces/base.interface";
-import { postService } from "~/services/post/post.service";
+import type { IPost } from "~/interfaces/post/post.interface";
 
 export const useShop = () => {
   const config = useRuntimeConfig();
-  const bannerShopTops = ref<IBanner[]>([]);
-  const productCatalogueList = ref<IProductCatalogue[]>([]);
-  const products = ref<IProduct[]>([]);
-  const summerProducts = ref<IProduct[]>([]);
-  const paginate = ref<IPaginate<IProduct> | null>(null);
-  const totalProducts = ref(0);
-  const currentPage = ref(1);
-  const hasMoreProducts = ref(true);
-  const isLoading = ref(false);
 
-  // Cache flags for optimization using useState
-  const isBannersLoaded = useState("shop-banners-loaded", () => false);
-  const isCataloguesLoaded = useState("shop-catalogues-loaded", () => false);
-  const isProductsLoaded = useState("shop-products-loaded", () => false);
-  const isSummerLoaded = useState("shop-summer-loaded", () => false);
+  // Global state (persist across routes)
+  const banners = useState<IBanner[]>("shop-banners", () => []);
+  const catalogues = useState<IProductCatalogue[]>("shop-catalogues", () => []);
+  const products = useState<IProduct[]>("shop-products", () => []);
+  const summerProducts = useState<IProduct[]>("shop-summer", () => []);
+  const posts = useState<IPost[]>("shop-posts", () => []);
+  const bannerSeason = useState<IBanner[]>("shop-banner-season", () => []);
+
+  const filters = useState<Record<string, any>>("shop-filters", () => ({
+    sort: "created_at,desc",
+    product_variants: {
+      variant_attributes: {
+        "attributes.id": {
+          in: "",
+        },
+      },
+    },
+    price_origin: {
+      between: "0,100000000",
+    },
+    brand_id: {
+      eq: null,
+    },
+  }));
+
+  // Pagination / flags
+  const paginate = useState<IPaginate<IProduct> | null>("shop-paginate", () => null);
+  const totalProducts = useState<number>("shop-total-products", () => 0);
+  const currentPage = useState<number>("shop-current-page", () => 1);
+  const hasMore = useState<boolean>("shop-has-more", () => true);
+
+  // Loading flag (local)
+  const isLoading = ref(false);
+  const isInitialized = useState<boolean>("shop-initialized", () => false);
+  // Request sequence id to avoid race conditions (older responses overwriting newer ones)
+  const requestSeq = ref(0);
 
   const fetchBanners = async () => {
-    if (isBannersLoaded.value) return; // Cache hit
-    try {
-      const response = await bannerService.fetch({
-        type: "all",
-        publish: 2,
-        sort: "id,desc",
-        banner_type: "shop",
-      });
-      const data = (response?.data as any) ?? [];
-      bannerShopTops.value = Array.isArray(data) ? data : [data];
-      isBannersLoaded.value = true;
-      return response;
-    } catch (error) {
-      console.error("Lỗi fetch shop banners:", error);
-      bannerShopTops.value = [];
-      throw error;
-    }
+    if (banners.value.length) return banners.value;
+    const { data } = await bannerService.fetch({
+      type: "all",
+      publish: 2,
+      sort: "id,desc",
+      banner_type: "shop",
+    });
+    banners.value = Array.isArray(data) ? data : [data];
+    return banners.value;
   };
 
-  const fetchProductCatalogues = async (): Promise<IProductCatalogue[]> => {
-    if (isCataloguesLoaded.value) return productCatalogueList.value; // Cache hit
-    try {
-      const response = await productCatalogueService.all();
-      const data = (response as any)?.data ?? [];
-      productCatalogueList.value = Array.isArray(data) ? data : [data];
-      isCataloguesLoaded.value = true;
-      return productCatalogueList.value;
-    } catch (error: any) {
-      console.error("Lỗi khi load catalogues:", error);
-      throw error;
-    }
+  const fetchCatalogues = async () => {
+    if (catalogues.value.length) return catalogues.value;
+    const { data } = await productCatalogueService.all();
+    catalogues.value = Array.isArray(data) ? data : [data];
+    return catalogues.value;
   };
 
   const fetchProducts = async (page = 1, perPage = 8, append = false) => {
-    if (!append && isProductsLoaded.value && page === 1) return; // Cache hit for first page
+    // Nếu không append và là trang 1 và đã có dữ liệu => không fetch lại
+    if (!append && page === 1 && products.value.length && !filters.value.sort) {
+      return products.value;
+    }
+
     isLoading.value = true;
     try {
-      const response = await productService.paginationPublic({
+      // Chuẩn bị params gửi lên API
+      const params: Record<string, any> = {
         publish: 2,
         page,
         perpage: perPage,
-      });
-      const data = (response as any)?.data;
-      paginate.value = data ?? null;
-      const newProducts = Array.isArray(data?.data) ? data.data : [];
-
-      if (append) {
-        products.value = [...products.value, ...newProducts];
-      } else {
-        products.value = newProducts;
-        currentPage.value = 1;
-        isProductsLoaded.value = true;
-      }
-
-      totalProducts.value = Number(data?.total || 0);
-      hasMoreProducts.value = products.value.length < totalProducts.value;
-      return response;
-    } catch (error: any) {
-      console.error("Lỗi khi load products:", error);
-      if (!append) {
-        products.value = [];
-        totalProducts.value = 0;
-      }
-      throw error;
-    } finally {
-      isLoading.value = false;
-    }
-  };
-
-  const fetchPostByCategoryReviews = async (params?: Record<string, any>) => {
-    isLoading.value = true;
-    try {
-      const defaultParams = {
-        type: "all", // k paginate
-        publish: 2,
-        sort: "id,desc",
-        post_catalogue_id: 1,
-        ...params,
+        sort: filters.value.sort || null,
       };
 
-      const response = await postService.paginationPublic(defaultParams);
-      return response;
-    } catch (error: any) {
-      console.error("Lỗi khi load posts by category reviews:", error);
+      // Gom filter
+      const filterParams: Record<string, any> = {};
+
+      if (filters.value.product_variants?.variant_attributes?.["attributes.id"]?.in?.length) {
+        filterParams.product_variants = filters.value.product_variants;
+      }
+
+      if (filters.value.price_origin) {
+        filterParams.price_origin = filters.value.price_origin;
+      }
+
+      if (filters.value.brand_id?.eq !== null) {
+        filterParams.brand_id = filters.value.brand_id;
+      }
+
+      params.filters = JSON.stringify(filterParams);
+
+      // Mark this request with a sequence id to avoid races
+      requestSeq.value += 1;
+      const thisRequest = requestSeq.value;
+
+      // Gọi API
+      const res = await productService.paginationPublic(params);
+
+      // If a newer request started after this one, ignore this response
+      if (thisRequest !== requestSeq.value) {
+        // do not apply stale response
+        return products.value;
+      }
+
+      const data = res?.data || {};
+      const list = Array.isArray(data.data) ? data.data : [];
+      const total = Number(data.total || 0);
+
+      paginate.value = data;
+      totalProducts.value = total;
+
+      // Nếu không có sản phẩm thì reset danh sách
+      if (list.length === 0) {
+        if (page === 1) products.value = [];
+        hasMore.value = false;
+        currentPage.value = page;
+        return products.value;
+      }
+
+      // Cập nhật danh sách
+      products.value = append ? [...products.value, ...list] : list;
+
+      // Tính toán có còn dữ liệu nữa không
+      const loaded = products.value.length;
+      hasMore.value = loaded < total;
+
+      currentPage.value = page;
+
+      return products.value;
+    } catch (error) {
+      console.error("[useShop] fetchProducts error:", error);
       throw error;
     } finally {
       isLoading.value = false;
     }
   };
 
-  const fetchBannerProductSeason = async (params?: Record<string, any>) => {
-    isLoading.value = true;
-    try {
-      const defaultParams = {
-        banner_type: "shop",
-        publish: 2,
-        sort: "id,desc",
-        limit: 1,
-        ...params,
-      };
+  /**
+   * Hàm set sort
+   * Khi người dùng chọn sort mới, reset về trang 1 và fetch lại
+   * @param sortValue - Giá trị sort mới (vd: "price_origin,desc")
+   */
+  const setSort = async (sortValue: string) => {
+    // Nếu sort value giống với sort hiện tại => không làm gì
+    if (filters.value.sort === sortValue) return;
 
-      const response = await bannerService.fetch(defaultParams);
-      return response;
-    } catch (error: any) {
-      console.error("Lỗi khi load banner:", error);
-      throw error;
-    } finally {
-      isLoading.value = false;
-    }
+    // Cập nhật sort value
+    filters.value.sort = sortValue;
+
+    // Reset về trang 1 và fetch lại danh sách
+    currentPage.value = 1;
+    await fetchProducts(1, 8, false);
   };
 
-  const loadMoreProducts = async () => {
-    if (!hasMoreProducts.value || isLoading.value) return;
-    currentPage.value += 1;
-    await fetchProducts(currentPage.value, 8, true);
+  /**
+   * Hàm set filter (chuẩn bị cho tương lai)
+   * @param filterKey - Key của filter (vd: "brand_id", "price_origin")
+   * @param filterValue - Giá trị filter
+   */
+  const setFilter = async (filterKey: string, filterValue: any) => {
+    switch (filterKey) {
+      case "attributes":
+        // Xử lý attributes filter
+        const selectedIds = Object.values(filterValue).flat().filter(Boolean);
+        if (selectedIds.length) {
+          filters.value.product_variants.variant_attributes["attributes.id"].in = selectedIds.join(",");
+        } else {
+          filters.value.product_variants.variant_attributes["attributes.id"].in = "";
+        }
+        break;
+      case "price":
+        // Xử lý price filter
+        const [min, max] = filterValue;
+        filters.value.price_origin.beetwen = `${min},${max}`;
+        break;
+      case "brand":
+        // Xử lý brand filter
+        filters.value.brand_id.eq = filterValue || null;
+        break;
+      default:
+        console.warn(`Unknown filter key: ${filterKey}`);
+        return;
+    }
+
+    // Reset về trang 1 và fetch lại
+    currentPage.value = 1;
+    await fetchProducts(1, 8, false);
+  };
+
+  const resetFilters = async () => {
+    filters.value = {
+      sort: "created_at,desc",
+    };
+    currentPage.value = 1;
+    await fetchProducts(1, 8, false);
+  };
+
+  const loadMore = async () => {
+    if (!hasMore.value || isLoading.value) return;
+    await fetchProducts(currentPage.value + 1, 8, true);
   };
 
   const fetchSummerProducts = async (limit = 3) => {
-    if (isSummerLoaded.value) return; // Cache hit
+    if (summerProducts.value.length) return summerProducts.value;
+    const { data } = await productService.getSummerProducts(limit);
+    summerProducts.value = Array.isArray(data?.data) ? data.data : [];
+    return summerProducts.value;
+  };
+
+  const fetchPosts = async () => {
+    if (posts.value.length) return posts.value;
+    const { data } = await postService.paginationPublic({
+      type: "all",
+      publish: 2,
+      sort: "id,desc",
+      post_catalogue_id: 1,
+      limit: 5,
+    });
+    posts.value = Array.isArray(data) ? data : [data];
+    return posts.value;
+  };
+
+  const fetchBannerSeason = async () => {
+    if (bannerSeason.value.length) return bannerSeason.value;
+    const { data } = await bannerService.fetch({
+      banner_type: "shop",
+      publish: 2,
+      sort: "id,desc",
+      limit: 1,
+    });
+    bannerSeason.value = Array.isArray(data) ? data : [data];
+    return bannerSeason.value;
+  };
+
+  const getBannerImageUrl = (path: string) => (path?.startsWith("uploads") ? `${config.public.baseUrl}/storage/${path}` : path || IMAGEDEFAULT);
+
+  const initializeData = async () => {
+    if (isInitialized.value) return;
+    isLoading.value = true;
     try {
-      const response = await productService.getSummerProducts(limit);
-      const data = (response as any)?.data?.data;
-      summerProducts.value = Array.isArray(data) ? data : [];
-      isSummerLoaded.value = true;
-      return response;
-    } catch (error: any) {
-      console.error("Lỗi khi load summer products:", error);
-      summerProducts.value = [];
-      throw error;
+      await Promise.all([fetchBanners(), fetchCatalogues(), fetchProducts(1, 8), fetchSummerProducts(), fetchPosts(), fetchBannerSeason()]);
+      isInitialized.value = true;
+    } catch (err) {
+      console.error("[useShop] Init failed:", err);
+    } finally {
+      isLoading.value = false;
     }
   };
 
-  const getBannerImageUrl = (path: string) => {
-    if (!path) return IMAGEDEFAULT;
-    return path.startsWith("uploads") ? `${config.public.baseUrl}/storage/${path}` : path;
-  };
-
-  // Optimized initialization with Promise.all
-  const initializeData = async () => {
-    // Load critical data first (banners and products)
-    await Promise.all([fetchBanners(), fetchProductCatalogues(), fetchProducts()]);
-
-    // Load secondary data in parallel
-    await Promise.all([fetchSummerProducts(3), fetchBannerProductSeason()]);
-  };
-
-  onMounted(async () => {
-    await initializeData();
-  });
-
   return {
-    bannerShopTops,
-    isLoading,
-    productCatalogueList,
+    // state
+    banners,
+    catalogues,
     products,
     summerProducts,
+    posts,
+    bannerSeason,
+    paginate,
     totalProducts,
     currentPage,
-    hasMoreProducts,
+    hasMore,
+    isLoading,
+    filters,
+
+    // methods
     fetchBanners,
-    fetchProductCatalogues,
+    fetchCatalogues,
     fetchProducts,
-    fetchPostByCategoryReviews,
-    fetchBannerProductSeason,
     fetchSummerProducts,
-    loadMoreProducts,
+    fetchPosts,
+    fetchBannerSeason,
+    loadMore,
+    initializeData,
     getBannerImageUrl,
+
+    setSort,
+    setFilter,
+    resetFilters,
   };
 };

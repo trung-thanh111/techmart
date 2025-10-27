@@ -14,7 +14,7 @@ class ProductVariantService extends BaseService implements ProductVariantService
 
     protected $repository;
 
-    protected $complexFilter = ['id'];
+    protected $complexFilter = ['id', 'price'];
 
     protected $with = [
         'products',

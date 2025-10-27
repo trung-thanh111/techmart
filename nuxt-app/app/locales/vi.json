@@ -661,6 +661,16 @@
     }
   },
   "client": {
+    "common": {
+      "filter": {
+        "title": "Sắp xếp",
+        "newest": "Mới nhất",
+        "oldest": "Cũ nhất",
+        "price_high": "Giá: Cao đến thấp",
+        "price_low": "Giá: Thấp đến cao",
+        "best_seller": "Bán chạy nhất"
+      }
+    },
     "header": {
       "title": "Trang chủ",
       "description": "Trang chủ",

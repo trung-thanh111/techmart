@@ -15,7 +15,8 @@ class ProductService extends BaseService implements ProductServiceInterface
 
     protected $repository;
 
-    protected $complexFilter = ['id'];
+    protected $complexFilter = ['id', 'price_origin'];
+    protected $simpleFilter = ['publish', 'brand_id'];
 
     protected $with = [
         'product_catalogues',
@@ -26,7 +27,6 @@ class ProductService extends BaseService implements ProductServiceInterface
     ];
     protected $relationFilter = [
         'product_catalogues',
-        'brands',
         'product_tags',
         'product_variants',
     ];

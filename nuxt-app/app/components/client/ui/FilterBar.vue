@@ -19,7 +19,6 @@
         </AccordionPanel>
       </Accordion>
       <Accordion multiple>
-        <!-- Bộ lọc giá -->
         <AccordionPanel value="price">
           <AccordionHeader>Giá tiền</AccordionHeader>
           <AccordionContent>
@@ -50,10 +49,42 @@ import Accordion from "primevue/accordion";
 import { attributeCatalogueService } from "~/services/attribute/catalogue.service";
 
 const attributeCatalogues = ref([]);
+const emit = defineEmits(["update:attributes", "update:priceRange"]);
+
 const selectedAttributes = ref({});
-const minPrice = 1000;
+const minPrice = 0;
 const maxPrice = 100000000;
-const priceRange = ref([1000000, 100000000]);
+const priceRange = ref([0, 100000000]);
+const selectedBrandId = ref(null);
+
+// Watch attributes changes
+watch(
+  selectedAttributes,
+  (newValue) => {
+    emit("update:attributes", newValue);
+  },
+  { deep: true }
+);
+
+// Watch price range changes
+watch(
+  priceRange,
+  (newValue) => {
+    // Chỉ emit khi người dùng thay đổi xong (sau 500ms)
+    if (debounceTimer) clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      emit("update:price", newValue);
+    }, 500);
+  },
+  { deep: true }
+);
+
+// Watch brand changes
+watch(selectedBrandId, (newValue) => {
+  emit("update:brand", newValue);
+});
+
+let debounceTimer = null;
 
 const fetchAttributeCatalogues = async () => {
   try {
@@ -91,7 +122,7 @@ onMounted(() => {
 :deep(.p-accordioncontent-content) {
   padding: 0 !important;
 }
-.p-accordionheader-toggle-icon{
+.p-accordionheader-toggle-icon {
   font-size: 10px !important;
 }
 </style>
