@@ -1,16 +1,26 @@
 <template>
   <aside class="product-filter flex-shrink-0 w-full md:w-[280px] mb-3 md:mb-0 sticky top-4">
     <div class="p-1 md:p-2 overflow-y-auto max-h-[126vh] custom-scrollbar">
-      <h2 class="text-transparent text-start bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-lg sm:text-md font-bold pb-2">Bộ lọc sản phẩm</h2>
+      <div class="flex justify-between items-center gap-2">
+        <h2 class="text-transparent text-start bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-lg sm:text-md font-bold pb-2">Bộ lọc</h2>
+        <button v-if="hasActiveFilters" class="flex items-center gap-1 text-xs text-[#0097cc] cursor-pointer hover:text-[#007c8b] transition-colors" @click="handleResetFilters">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+          Bỏ lọc
+        </button>
+      </div>
       <div class="filter-scroll"></div>
       <Accordion multiple>
         <AccordionPanel v-for="catalogue in attributeCatalogues" :key="catalogue.id" :value="catalogue.id.toString()">
-          <AccordionHeader>{{ catalogue.name }}</AccordionHeader>
+          <LazyAccordionHeader>
+            {{ catalogue.name }}
+          </LazyAccordionHeader>
           <AccordionContent>
             <div class="flex flex-col gap-2 py-2">
-              <div v-for="attr in catalogue.attributes" :key="attr.id" class="flex items-center gap-2 py-1 text-[14px]">
+              <div v-for="attr in catalogue.attributes" :key="attr.id" class="flex items-center gap-2 rounded-md px-2 py-1 transition-colors text-[14px]">
                 <Checkbox v-model="selectedAttributes[catalogue.slug]" :inputId="`attr-${catalogue.slug}-${attr.id}`" :value="attr.id" />
-                <label :for="`attr-${catalogue.slug}-${attr.id}`" class="text-gray-700">
+                <label :for="`attr-${catalogue.slug}-${attr.id}`" class="text-gray-700 cursor-pointer">
                   {{ attr.name }}
                 </label>
               </div>
@@ -18,6 +28,22 @@
           </AccordionContent>
         </AccordionPanel>
       </Accordion>
+      <Accordion multiple>
+        <AccordionPanel value="brand">
+          <AccordionHeader input-class="text-sm font-semibold text-gray-800">Thương hiệu</AccordionHeader>
+          <AccordionContent>
+            <div class="flex flex-col gap-2 py-2">
+              <div v-for="brand in brands" :key="brand.id" class="flex items-center gap-2 rounded-md px-2 py-1 transition-colors text-[14px]">
+                <RadioButton v-model="selectedBrand" :inputId="`brand-${brand.id}`" :value="brand.id" name="brand" />
+                <label :for="`brand-${brand.id}`" class="text-gray-700 text-sm cursor-pointer select-none">
+                  {{ brand.name }}
+                </label>
+              </div>
+            </div>
+          </AccordionContent>
+        </AccordionPanel>
+      </Accordion>
+
       <Accordion multiple>
         <AccordionPanel value="price">
           <AccordionHeader>Giá tiền</AccordionHeader>
@@ -41,50 +67,44 @@
     </div>
   </aside>
 </template>
-
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch, nextTick } from "vue";
 import Checkbox from "primevue/checkbox";
 import Accordion from "primevue/accordion";
 import { attributeCatalogueService } from "~/services/attribute/catalogue.service";
+import { brandService } from "~/services/brand/brand.service";
+import { useShop } from "~/composables/client/shop/useShop";
+
+const { resetFilters } = useShop();
 
 const attributeCatalogues = ref([]);
-const emit = defineEmits(["update:attributes", "update:priceRange"]);
+const brands = ref([]);
+const emit = defineEmits(["update:attributes", "update:price", "update:brand"]);
 
 const selectedAttributes = ref({});
-const minPrice = 0;
-const maxPrice = 100000000;
-const priceRange = ref([0, 100000000]);
-const selectedBrandId = ref(null);
+const selectedBrand = ref(null);
+const minPrice = 1000;
+const maxPrice = 300000000;
 
-// Watch attributes changes
-watch(
-  selectedAttributes,
-  (newValue) => {
-    emit("update:attributes", newValue);
-  },
-  { deep: true }
-);
+const defaultPriceRange = [minPrice, maxPrice];
+const priceRange = ref([...defaultPriceRange]);
 
-// Watch price range changes
+let isInitialized = false;
+let debounceTimer = null;
+
+watch(selectedAttributes, (newValue) => isInitialized && emit("update:attributes", newValue), { deep: true });
+
 watch(
   priceRange,
   (newValue) => {
-    // Chỉ emit khi người dùng thay đổi xong (sau 500ms)
-    if (debounceTimer) clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => {
-      emit("update:price", newValue);
-    }, 500);
+    if (!isInitialized) return;
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => emit("update:price", newValue), 500);
   },
   { deep: true }
 );
 
-// Watch brand changes
-watch(selectedBrandId, (newValue) => {
-  emit("update:brand", newValue);
-});
-
-let debounceTimer = null;
+watch(selectedBrand, (newValue) => isInitialized && emit("update:brand", newValue));
 
 const fetchAttributeCatalogues = async () => {
   try {
@@ -98,8 +118,37 @@ const fetchAttributeCatalogues = async () => {
   }
 };
 
-onMounted(() => {
-  fetchAttributeCatalogues();
+const fetchBrands = async () => {
+  try {
+    const res = await brandService.paginationPublic({
+      type: "all",
+      publish: 2,
+    });
+    brands.value = res.data || [];
+  } catch (e) {
+    console.error("Lỗi khi load brands:", e);
+  }
+};
+
+const hasActiveFilters = computed(() => {
+  const hasAttr = Object.values(selectedAttributes.value).some((arr) => Array.isArray(arr) && arr.length > 0);
+  const hasBrand = selectedBrand.value !== null && selectedBrand.value !== undefined;
+  const hasPrice = priceRange.value[0] !== defaultPriceRange[0] || priceRange.value[1] !== defaultPriceRange[1];
+  return hasAttr || hasBrand || hasPrice;
+});
+
+const handleResetFilters = async () => {
+  Object.keys(selectedAttributes.value).forEach((key) => {
+    selectedAttributes.value[key] = [];
+  });
+  selectedBrand.value = null;
+  priceRange.value = [minPrice, maxPrice];
+  await resetFilters();
+};
+
+onMounted(async () => {
+  await Promise.all([fetchAttributeCatalogues(), fetchBrands()]);
+  nextTick(() => (isInitialized = true));
 });
 </script>
 <style scoped>
@@ -122,6 +171,7 @@ onMounted(() => {
 :deep(.p-accordioncontent-content) {
   padding: 0 !important;
 }
+
 .p-accordionheader-toggle-icon {
   font-size: 10px !important;
 }

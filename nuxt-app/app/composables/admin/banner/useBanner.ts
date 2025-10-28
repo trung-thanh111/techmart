@@ -192,7 +192,7 @@ export const useBanner = (initialFilters?: BannerPayloadFilter, mode: "create" |
   };
 
   const loadPage = async () => {
-    if (pageOptions.value.length > 0) return; // Cache hit
+    if (pageOptions.value.length > 0) return;
     try {
       const response = await pageService.all();
       const rows = response?.data ?? [];
@@ -203,7 +203,7 @@ export const useBanner = (initialFilters?: BannerPayloadFilter, mode: "create" |
   };
 
   const loadPosition = async () => {
-    if (positionOptions.value.length > 0) return; // Cache hit
+    if (positionOptions.value.length > 0) return;
     try {
       const response = await positionService.all();
       const rows = response?.data ?? [];

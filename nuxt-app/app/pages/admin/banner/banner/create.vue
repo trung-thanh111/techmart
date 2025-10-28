@@ -116,7 +116,7 @@
               {{ $t("admin.common.form.page") }}
               <span class="text-danger">*</span>
             </label>
-            <Field name="page_id" v-slot="{ field, errorMessage, meta }">
+            <Field name="pageId" v-slot="{ field, errorMessage, meta }">
               <Select v-model="field.value" :options="pageOptions" @update:modelValue="field.onChange" @focus="loadPage" option-label="name" option-value="id" filter showClear :placeholder="$t('admin.common.form.pagePlaceholder')" class="rounded py-[1px] w-100" size="small">
                 <template #header>
                   <div class="inline-flex items-center justify-center p-2">
@@ -140,7 +140,7 @@
               {{ $t("admin.common.form.position") }}
               <span class="text-danger">*</span>
             </label>
-            <Field name="position_id" v-slot="{ field, errorMessage, meta }">
+            <Field name="positionId" v-slot="{ field, errorMessage, meta }">
               <Select v-model="field.value" :options="positionOptions" @update:modelValue="field.onChange" @focus="loadPosition" option-label="name" option-value="id" filter showClear :placeholder="$t('admin.common.form.positionPlaceholder')" class="rounded py-[1px] w-100" size="small">
                 <template #header>
                   <div class="inline-flex items-center justify-center p-2">

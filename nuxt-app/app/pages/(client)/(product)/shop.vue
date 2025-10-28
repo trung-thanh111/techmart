@@ -4,23 +4,18 @@
     <section class="my-2">
       <div v-if="isLoading" class="text-gray-500 text-sm text-center">Đang tải...</div>
       <div v-else>
-        <div v-for="(banner, index) in bannerShopTops" :key="banner.id" class="overflow-hidden grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <div v-for="(image, i) in banner.album" :key="i" class="mb-2 last:mb-0">
-            <NuxtImg :src="getBannerImageUrl(image.path)" :alt="`${banner.name || 'Banner'} ${index + 1}-${i + 1}`" class="w-full h-full object-contain" />
+        <div v-for="(bannerTop, index) in bannerShopTops" :key="bannerTop.id" class="overflow-hidden grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div v-for="(imageTop, i) in bannerTop.album" :key="i" class="mb-2 last:mb-0">
+            <NuxtImg :src="getBannerImageUrl(imageTop.path)" :alt="`${bannerTop.name || 'Banner'} ${index + 1}-${i + 1}`" class="w-full h-full object-contain" />
           </div>
         </div>
       </div>
     </section>
-
     <Partner />
-    <!-- Divider -->
-    <div class="w-full max-w-7xl mx-auto py-2 mb-5">
+    <div class="w-full max-w-7xl mx-auto py-2 mb-3">
       <div class="h-px w-full bg-gradient-to-r from-transparent via-[rgba(32,141,128,0.3)] to-transparent"></div>
     </div>
-
     <Category description="Khám phá các danh mục sản phẩm đa dạng tại Tech Mart Store – từ thiết bị điện tử, gia dụng thông minh đến phụ kiện hiện đại, đáp ứng nhu cầu học tập, làm việc và giải trí của bạn." :items="productCatalogueList as any" basePath="/product/category" />
-
-    <!-- Before shop product -->
     <section class="product-accsessory bg-white shadow-md rounded-md py-3 md:py-6 px-2 md:px-6 mb-4">
       <div class="mb-4 flex flex-wrap justify-between items-center gap-2">
         <div>
@@ -33,8 +28,10 @@
       </div>
       <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
         <div class="md:col-span-2">
-          <div class="relative h-full w-full overflow-hidden rounded-lg">
-            <NuxtImg src="/images/slide/Event_ITC Asia 2025.webp" loading="lazy" alt="Banner giới thiệu" class="object-cover w-full h-full rounded-lg" />
+          <div v-for="bannerSeason in bannerProductSeason" :key="bannerSeason.id" class="relative h-full w-full overflow-hidden rounded-lg">
+            <div v-for="(imageSeason, i) in bannerSeason.album" :key="i" class="relative h-full w-full overflow-hidden rounded-lg">
+              <NuxtImg :src="getBannerImageUrl(imageSeason.path)" :alt="`${bannerSeason.name || 'Banner Season'} ${i + 1}`" loading="lazy" class="object-cover w-full h-full rounded-lg" />
+            </div>
             <div class="absolute w-full inset-0 bg-black/20 flex items-end justify-center py-4">
               <a href="#" class="relative flex items-center justify-center md:px-6 md:py-2 py-1 px-3 font-medium text-sm md:text-base transition-all bg-gradient-to-r from-sky-500 to-cyan-400 rounded-md shadow-lg hover:scale-105 hover:from-sky-600 hover:to-cyan-500 focus:outline-none focus:ring-2 focus:ring-sky-400 text-white">Khám phá</a>
             </div>
@@ -47,7 +44,7 @@
         </div>
       </div>
     </section>
-    <!-- Shop product -->
+
     <section class="product-filter bg-white shadow-md rounded-md py-3 md:py-6 px-2 md:px-6 md:mb-8 mb-4">
       <div class="flex flex-wrap md:flex-nowrap gap-3 md:gap-4">
         <FilterBar @update:attributes="handleAttributesChange" @update:price="handlePriceChange" @update:brand="handleBrandChange" />
@@ -60,28 +57,35 @@
             <FilterSort :sort="filters.sort" :setSort="setSort" />
           </div>
           <div class="relative" id="product-shop-slide">
-            <Splide :options="sliderOptions" ref="splideRef">
-              <SplideSlide v-for="(chunk, idx) in chunks" :key="idx">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
-                  <ProductCard v-for="product in chunk" :key="product.id" :product="product" />
-                </div>
-              </SplideSlide>
-            </Splide>
-
-            <button @click="prev" :disabled="isLoading" class="absolute left-0 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 text-gray-700 shadow hover:bg-gray-200 disabled:opacity-50 transition-all">
-              <i class="fa-solid fa-chevron-left"></i>
-            </button>
-
-            <button @click="next" :disabled="isLoading" class="absolute right-0 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-sky-500 to-cyan-400 text-white shadow hover:from-sky-600 hover:to-cyan-500 disabled:opacity-50 transition-all">
-              <i v-if="isLoading" class="fa-solid fa-circle-notch fa-spin"></i>
-              <i v-else class="fa-solid fa-chevron-right"></i>
-            </button>
+            <template v-if="totalProducts > 0 && chunks.length">
+              <Splide :options="sliderOptions" ref="splideRef">
+                <SplideSlide v-for="(chunk, idx) in chunks" :key="idx">
+                  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
+                    <ProductCard v-for="product in chunk" :key="product.id" :product="product" />
+                  </div>
+                </SplideSlide>
+              </Splide>
+              <button v-if="totalProducts > 8" @click="prev" :disabled="isLoading" class="absolute left-0 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 text-gray-700 shadow hover:bg-gray-200 disabled:opacity-50 transition-all">
+                <i class="fa-solid fa-chevron-left"></i>
+              </button>
+              <button v-if="totalProducts > 8" @click="next" :disabled="isLoading" class="absolute right-0 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-sky-500 to-cyan-400 text-white shadow hover:from-sky-600 hover:to-cyan-500 disabled:opacity-50 transition-all">
+                <i v-if="isLoading" class="fa-solid fa-circle-notch fa-spin"></i>
+                <i v-else class="fa-solid fa-chevron-right"></i>
+              </button>
+            </template>
+            <template v-else>
+              <div class="flex flex-col items-center justify-center py-10 text-center text-gray-500">
+                <NuxtImg :src="EMPTYBOX" alt="" class="object-contain" />
+                <p class="text-sm text-center">Không có sản phẩm phù hợp với bộ lọc bạn chọn.</p>
+              </div>
+            </template>
           </div>
         </div>
       </div>
     </section>
+
     <CommitMent />
-    <!-- About & Posts -->
+
     <section class="product-accsessory">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
         <div class="lg:col-span-8 bg-white shadow-md rounded-md py-3 md:py-6 px-2 md:px-6 mb-4">
@@ -128,24 +132,27 @@ import FilterBar from "~/components/client/ui/FilterBar.vue";
 import ProductCard from "~/components/client/features/ProductCard.vue";
 import { Splide, SplideSlide } from "@splidejs/vue-splide";
 import FilterSort from "~/components/client/features/FilterSort.vue";
+import { EMPTYBOX, IMAGEDEFAULT, TOPOST } from "#imports";
 
 const { banners, catalogues, products, summerProducts, posts, bannerSeason, totalProducts, hasMore, isLoading, initializeData, loadMore, getBannerImageUrl, filters, setSort, setFilter } = useShop();
 
 initializeData();
 
-// Xử lý khi attributes thay đổi
+const resetSlide = () => nextTick(() => splideRef.value?.splide?.go(0));
+
 const handleAttributesChange = async (newAttributes: Record<string, number[]>) => {
   await setFilter("attributes", newAttributes);
+  resetSlide();
 };
 
-// Xử lý khi price range thay đổi
 const handlePriceChange = async (newRange: number[]) => {
   await setFilter("price", newRange);
+  resetSlide();
 };
 
-// Xử lý khi brand thay đổi
 const handleBrandChange = async (brandId: number | null) => {
   await setFilter("brand", brandId);
+  resetSlide();
 };
 
 const bannerShopTops = banners;
@@ -184,10 +191,9 @@ const prev = () => splideRef.value?.splide?.go("-");
 const next = async () => {
   if (isLastSlide.value && hasMoreProducts.value) {
     await loadMoreProducts();
-    nextTick(() => splideRef.value?.splide?.go("+"));
-  } else {
-    splideRef.value?.splide?.go("+");
+    await nextTick();
   }
+  splideRef.value?.splide?.go("+");
 };
 
 const breadcrumbs = [{ label: "shop", href: "/shop" }];
