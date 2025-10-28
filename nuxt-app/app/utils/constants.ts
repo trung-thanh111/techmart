@@ -94,6 +94,8 @@ export const TOFORGOTRESET = "/forgot-password/reset";
 
 // FE
 export const IMAGEDEFAULT = "/shared/images/defaults/record.jpg";
+export const EMPTYBOX = "/client/images/box-emtpy.png";
+
 export const TOHOME = "/";
 // Profile routes
 export const PROFILEINDEX = "/profile";

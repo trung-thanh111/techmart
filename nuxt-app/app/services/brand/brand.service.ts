@@ -54,4 +54,11 @@ export const brandService = {
     const { publicFetch } = useApi();
     return await publicFetch<IApiOk<IBrand>>(`${ENDPOINT}/brands?type=all`);
   },
+
+  paginationPublic: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IBrand>>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPaginate<IBrand>>>(`${ENDPOINT}/brands`, {
+      params,
+    });
+  },
 };

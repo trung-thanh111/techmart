@@ -15,7 +15,7 @@ class BannerService extends BaseService implements BannerServiceInterface
     protected $repository;
 
     protected $complexFilter = ['id'];
-    protected $simpleFilter = ['publish', 'banner_type'];
+    protected $simpleFilter = ['publish', 'page_id', 'position_id'];
 
     protected $with = [];
     protected $relationFilter = [];

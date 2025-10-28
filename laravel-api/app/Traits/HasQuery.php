@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Traits;
 
 use Illuminate\Support\Carbon;
@@ -82,7 +83,7 @@ trait HasQuery
                                 $query->whereIn($field, $in);
                             }
                             break;
-                        case 'beetwen': // nằm giữa (between)
+                        case 'between': // nằm giữa (between)
                             // dùng destructoring để lấy ra 2 giá trị min và max
                             [$min, $max] = explode(',', $val);
                             if ((int)$max > (int)$min) {
@@ -132,7 +133,7 @@ trait HasQuery
                         case 'not_null':
                             $query->whereNotNull($field);
                             break;
-                        case 'beetwen':
+                        case 'between':
                             [$startDate, $endDate] = explode(',', $date);
                             $startDate = Carbon::createFromFormat('d/m/Y', trim($startDate))->format('Y-m-d');
                             $endDate = Carbon::createFromFormat('d/m/Y', trim($endDate))->format('Y-m-d');
@@ -159,7 +160,7 @@ trait HasQuery
         $relationConditions = []; // chứa các tên quan hệ cần lọc
 
         foreach ($conditions as $key => $val) {
-            if (isset($val) && is_array($val) && array_intersect_key($val, array_flip(['gt', 'gte', 'lt', 'lte', 'in', 'eq', 'neq', 'beetwen']))) {
+            if (isset($val) && is_array($val) && array_intersect_key($val, array_flip(['gt', 'gte', 'lt', 'lte', 'in', 'eq', 'neq', 'between']))) {
                 $fieldConditions[$key] = $val;
             } else {
                 $relationConditions[$key] = $val;
@@ -208,7 +209,7 @@ trait HasQuery
                             $query->whereIn($field, $in);
                         }
                         break;
-                    case 'beetwen':
+                    case 'between':
                         [$min, $max] = explode(',', $valFilter);
                         if ((int)$max > (int)$min) {
                             $query->whereBetween($field, [$min, $max]);
