@@ -26,6 +26,7 @@
     "ckeditor5": "^46.1.1",
     "jquery": "^3.7.1",
     "nuxt": "^4.0.1",
+    "nuxt-easy-lightbox": "^1.1.0",
     "pinia": "^3.0.3",
     "pinia-plugin-persistedstate": "^4.5.0",
     "primevue": "^4.3.9",

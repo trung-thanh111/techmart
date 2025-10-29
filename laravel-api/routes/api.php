@@ -317,7 +317,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
         Route::resource('banners', BannerController::class)->except($routeExcept);
 
         // This is route ProductTag
-        Route::group(['prefix' => 'product_tags'], function() {
+        Route::group(['prefix' => 'product_tags'], function () {
             Route::post('bulkStore', [ProductTagController::class, 'bulkStore']);
             Route::put('bulkUpdate', [ProductTagController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [ProductTagController::class, 'bulkUpdate']);
@@ -328,7 +328,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
         Route::resource('product_tags', ProductTagController::class)->except($routeExcept);
 
         // This is route PostComment
-        Route::group(['prefix' => 'post_comments'], function() {
+        Route::group(['prefix' => 'post_comments'], function () {
             Route::post('bulkStore', [PostCommentController::class, 'bulkStore']);
             Route::put('bulkUpdate', [PostCommentController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [PostCommentController::class, 'bulkUpdate']);
@@ -339,7 +339,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
         Route::resource('post_comments', PostCommentController::class)->except($routeExcept);
 
         // This is route PostLike
-        Route::group(['prefix' => 'post_likes'], function() {
+        Route::group(['prefix' => 'post_likes'], function () {
             Route::post('bulkStore', [PostLikeController::class, 'bulkStore']);
             Route::put('bulkUpdate', [PostLikeController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [PostLikeController::class, 'bulkUpdate']);
@@ -350,7 +350,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
         Route::resource('post_likes', PostLikeController::class)->except($routeExcept);
 
         // This is route PostCommentLike
-        Route::group(['prefix' => 'post_comment_likes'], function() {
+        Route::group(['prefix' => 'post_comment_likes'], function () {
             Route::post('bulkStore', [PostCommentLikeController::class, 'bulkStore']);
             Route::put('bulkUpdate', [PostCommentLikeController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [PostCommentLikeController::class, 'bulkUpdate']);
@@ -361,7 +361,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
         Route::resource('post_comment_likes', PostCommentLikeController::class)->except($routeExcept);
 
         // This is route Promotion
-        Route::group(['prefix' => 'promotions'], function() {
+        Route::group(['prefix' => 'promotions'], function () {
             Route::post('bulkStore', [PromotionController::class, 'bulkStore']);
             Route::put('bulkUpdate', [PromotionController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [PromotionController::class, 'bulkUpdate']);
@@ -372,7 +372,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
         Route::resource('promotions', PromotionController::class)->except($routeExcept);
 
         // This is route BannerPage
-        Route::group(['prefix' => 'banner_pages'], function() {
+        Route::group(['prefix' => 'banner_pages'], function () {
             Route::post('bulkStore', [BannerPageController::class, 'bulkStore']);
             Route::put('bulkUpdate', [BannerPageController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [BannerPageController::class, 'bulkUpdate']);
@@ -383,7 +383,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
         Route::resource('banner_pages', BannerPageController::class)->except($routeExcept);
 
         // This is route BannerPosition
-        Route::group(['prefix' => 'banner_positions'], function() {
+        Route::group(['prefix' => 'banner_positions'], function () {
             Route::post('bulkStore', [BannerPositionController::class, 'bulkStore']);
             Route::put('bulkUpdate', [BannerPositionController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [BannerPositionController::class, 'bulkUpdate']);
@@ -398,6 +398,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
     });
 
     // FE routes (public) -> match đúng data -> route định nghĩa ở FE (phải giống route FE)
+    Route::get('product/{slug}', [ProductController::class, 'showBySlug']);
     Route::get('post/{slug}', [PostController::class, 'showBySlug']);
     Route::get('post/category/{slug}', [PostCatalogueController::class, 'showBySlug']);
     Route::get('agency/{slug}', [AgencyController::class, 'showBySlug']);

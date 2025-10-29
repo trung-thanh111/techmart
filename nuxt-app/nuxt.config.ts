@@ -9,7 +9,7 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-08-23",
   srcDir: "app/",
 
-  modules: ["@nuxtjs/tailwindcss", "@primevue/nuxt-module", "@nuxt/image", "@pinia/nuxt", "pinia-plugin-persistedstate/nuxt", "@nuxtjs/i18n"],
+  modules: ["@nuxtjs/tailwindcss", "@primevue/nuxt-module", "@nuxt/image", "@pinia/nuxt", "pinia-plugin-persistedstate/nuxt", "@nuxtjs/i18n", "nuxt-easy-lightbox"],
 
   primevue: {
     autoImport: true,
