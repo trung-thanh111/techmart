@@ -197,8 +197,6 @@ export const useShop = () => {
     return bannerSeason.value;
   };
 
-  const getBannerImageUrl = (path: string) => (path?.startsWith("uploads") ? `${config.public.baseUrl}/storage/${path}` : path || IMAGEDEFAULT);
-
   const initializeData = async () => {
     if (isInitialized.value) return;
     isLoading.value = true;
@@ -234,7 +232,6 @@ export const useShop = () => {
     fetchBannerSeason,
     loadMore,
     initializeData,
-    getBannerImageUrl,
 
     setSort,
     setFilter,

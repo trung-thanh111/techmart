@@ -1,0 +1,1013 @@
+<template>
+  <div class="main-content max-w-7xl mx-auto">
+    <div v-if="productDetailLoading" class="flex items-center justify-center min-h-[400px]">
+      <div class="text-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+        <p class="text-gray-600">Đang tải...</p>
+      </div>
+    </div>
+    <div v-else-if="productDetailError" class="flex items-center justify-center min-h-[400px]">
+      <div class="text-center">
+        <h2 class="text-xl font-semibold text-gray-800 mb-2">Có lỗi! vui lòng tải lại.</h2>
+        <p class="text-gray-600 mb-4">{{ productDetailError }}</p>
+      </div>
+    </div>
+    <div v-else-if="productDetail">
+      <Breadcrumb :crumbs="breadcrumbs" />
+      <section class="bg-white shadow-md rounded-md">
+        <div class="container">
+          <div class="pb-3 xl:flex xl:pb-4 xl:space-x-2">
+            <div class="flex-1 bg-white border-b lg:flex xl:border-b-0">
+              <div class="slide lg:w-[392px] relative">
+                <div class="sticky-product">
+                  <div class="gallery-product pb-0 pt-4 md:py-4 px-3 xl:px-0 xl:pl-4">
+                    <div class="relative">
+                      <div class="relative mb-4">
+                        <div v-if="discountPercent > 0" class="absolute top-2 left-2 z-10 bg-red-500 text-white font-bold text-xs md:text-sm px-2 py-1 rounded-md shadow-lg">-{{ discountPercent }}%</div>
+                        <div class="absolute top-2 right-2 z-10 flex flex-col items-center gap-2">
+                          <div v-tooltip.top="'So sánh sản phẩm'">
+                            <Checkbox v-model="isCompareChecked" inputId="compare-checkbox" :binary="true" class="compare-checkbox-large" />
+                          </div>
+                          <button class="p-2 rounded-full bg-white/80 hover:bg-red-100 transition-colors shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="w-4 h-4 fill-gray-400 hover:fill-red-500 transition-colors"><path d="M378.9 80c-27.3 0-53 13.1-69 35.2l-34.4 47.6c-4.5 6.2-11.7 9.9-19.4 9.9s-14.9-3.7-19.4-9.9l-34.4-47.6c-16-22.1-41.7-35.2-69-35.2-47 0-85.1 38.1-85.1 85.1 0 49.9 32 98.4 68.1 142.3 41.1 50 91.4 94 125.9 120.3 3.2 2.4 7.9 4.2 14 4.2s10.8-1.8 14-4.2c34.5-26.3 84.8-70.4 125.9-120.3 36.2-43.9 68.1-92.4 68.1-142.3 0-47-38.1-85.1-85.1-85.1zM271 87.1c25-34.6 65.2-55.1 107.9-55.1 73.5 0 133.1 59.6 133.1 133.1 0 68.6-42.9 128.9-79.1 172.8-44.1 53.6-97.3 100.1-133.8 127.9-12.3 9.4-27.5 14.1-43.1 14.1s-30.8-4.7-43.1-14.1C176.4 438 123.2 391.5 79.1 338 42.9 294.1 0 233.7 0 165.1 0 91.6 59.6 32 133.1 32 175.8 32 216 52.5 241 87.1l15 20.7 15-20.7z" /></svg>
+                          </button>
+                        </div>
+
+                        <Splide ref="mainSliderRef" :options="productImageMainOptions" class="mb-4">
+                          <SplideSlide v-for="(image, index) in images" :key="index">
+                            <div class="cursor-pointer" @click="showLightbox(index)">
+                              <NuxtImg :src="image" :alt="productDetail.name" class="w-full h-auto max-h-[400px] md:max-h-[500px] lg:max-h-[600px] aspect-[4/5] object-contain rounded mx-auto" loading="lazy" />
+                            </div>
+                          </SplideSlide>
+                        </Splide>
+
+                        <VueEasyLightbox :visible="lightboxVisible" :imgs="images" :index="lightboxIndex" @hide="lightboxVisible = false" />
+                      </div>
+
+                      <Splide ref="thumbSliderRef" :options="productImageThumbnailOptions" class="product-thumbnail-slider">
+                        <SplideSlide v-for="(image, index) in images" :key="index">
+                          <NuxtImg :src="image" :alt="`${productDetail.name} - ${index + 1}`" class="object-contain w-full h-full aspect-square rounded cursor-pointer border border-gray-300 hover:border-blue-500" loading="lazy" />
+                        </SplideSlide>
+                      </Splide>
+                    </div>
+                  </div>
+
+                  <div class="lg:mb-3 p-3">
+                    <div class="flex items-center md:justify-between justify-end">
+                      <div class="flex items-center justify-between">
+                        <span class="caption font-medium text-sm text-gray-500 mr-[18px] md:block hidden">Chia sẻ</span>
+                        <div class="flex items-center space-x-[12px]">
+                          <a aria-label="message-share" class="transition duration-200 ease-in-out hover:opacity-70" href="https://www.facebook.com/dialog/send?app_id=420292729776844&amp;display=popup&amp;link=https://techmart.vn/den-led-ban-hoc-cam-ung-6w-rd-rl-38plus-p-221223003160&amp;redirect_uri=https://techmart.vn/den-led-ban-hoc-cam-ung-6w-rd-rl-38plus-p-221223003160"><NuxtImg src="/client/images/social/messenger.png" alt="facebook message" class="object-cover w-5 h-5" /></a>
+                          <a aria-label="facebook-share" class="transition duration-200 ease-in-out hover:opacity-70" href="https://www.facebook.com/sharer/sharer.php?u=https://techmart.vn/den-led-ban-hoc-cam-ung-6w-rd-rl-38plus-p-221223003160">
+                            <NuxtImg src="/client/images/social/facebook.png" alt="facebook share" class="object-cover w-5 h-5" />
+                          </a>
+
+                          <a aria-label="printer-share" class="transition duration-200 ease-in-out hover:opacity-70" href="http://pinterest.com/pin/create/button/?url=https://techmart.vn/den-led-ban-hoc-cam-ung-6w-rd-rl-38plus-p-221223003160">
+                            <NuxtImg src="/client/images/social/zalo.png" alt="sharing printer" class="object-cover w-5 h-5" />
+                          </a>
+                          <div class="relative">
+                            <div class="w-5 h-5 transition duration-200 ease-in-out hover:opacity-70">
+                              <span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="20" fill="none" viewBox="0 0 25 24">
+                                  <rect width="24" height="24" x=".5" fill="#D8DCE7" rx="12"></rect>
+                                  <path stroke="#545866" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M12.156 8.03l1.532-1.532a3.404 3.404 0 1 1 4.814 4.816l-2.188 2.189a3.403 3.403 0 0 1-4.814 0"></path>
+                                  <path stroke="#545866" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M12.844 15.97l-1.532 1.532a3.406 3.406 0 0 1-4.815 0 3.406 3.406 0 0 1 .001-4.816l2.188-2.189a3.404 3.404 0 0 1 4.814 0"></path>
+                                </svg>
+                              </span>
+                            </div>
+                            <input id="input-copy" type="hidden" />
+                            <div class="absolute top-[0%] bg-green-300 text-white duration-300 py-[4px] px-[12px] w-max left-[160%] hidden">Đã copy link</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="p-3 lg:px-4">
+                    <div class="rounded-lg border border-gray-300 overflow-hidden">
+                      <h4 class="text-gray-600 body-text font-medium px-4 py-2 bg-gray-200">Khuyến mãi</h4>
+                      <div class="prose max-w-none py-2 px-3 lg:px-4 promotion-content">
+                        <figure class="image">
+                          <NuxtImg src="/client/images/promotions/hinh-thuc-khuyen-mai.webp" width="100%" height="100%" />
+                        </figure>
+                        <p>
+                          <strong>MUA ĐÈN BÀN – NHẬN NGAY QUÀ TẶNG&nbsp;</strong>
+                        </p>
+                        <p>
+                          Quà tặng:
+                          <strong>Bộ dụng cụ học tập</strong>
+                        </p>
+                        <p>
+                          Thời gian áp dụng:
+                          <strong>Từ ngày 24/5/2025 đến 30/6/2025</strong>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="flex-1">
+                <div class="p-2 mb-3 bg-white lg:px-4 lg:pb-1 lg:mb-0">
+                  <div class="mb-2 lg:flex lg:flex-row-reverse lg:items-start lg:mb-4">
+                    <div class="lg:flex-1 lg:mr-3">
+                      <h1 class="mb-1 text-xl leading-[24px] font-medium text-gray-700 uppercase font-display">
+                        {{ productDetail.name }}
+                        <span v-if="selectedVariant?.name" class="normal-case">| {{ selectedVariant.name }}</span>
+                      </h1>
+                      <div class="text-sm text-gray-500 my-1">
+                        <span>Danh mục:</span>
+                        <NuxtLink v-for="catalogue in (productDetail.productCatalogues as any[])" :key="catalogue.id" :to="`/product/category/${catalogue.slug}`" class="ml-2 font-semibold text-sky-500 hover:underline">
+                          {{ catalogue.name }}
+                        </NuxtLink>
+                        <template v-if="(productDetail as any).brand">
+                          &nbsp;|&nbsp;
+                          <span>Thương hiệu:</span>
+                          <NuxtLink :to="`/brand/${(productDetail as any).brand.slug}`" class="ml-2 font-semibold text-sky-500 hover:underline">{{ (productDetail as any).brand.name }}</NuxtLink>
+                        </template>
+                      </div>
+                      <div v-if="selectedVariant" class="text-xs font-medium text-sky-500 md:text-sm">Sku: {{ selectedVariant.sku }}</div>
+                    </div>
+                  </div>
+                  <div class="mb-4 lg:rounded lg:bg-gray-100 lg:px-4 lg:py-3">
+                    <div>
+                      <div class="flex flex-wrap items-center mb-1">
+                        <strong class="mr-4 font-bold text-red-500 text-xl">{{ displayPrice }}&nbsp;₫</strong>
+                        <span v-if="productDetail.priceOrigin" class="mr-4 text-gray-400 line-through body-text text-sm">{{ new Intl.NumberFormat("vi-VN").format(parseFloat(productDetail.priceOrigin.toString())) }}&nbsp;₫</span>
+                      </div>
+                    </div>
+                    <NuxtLink to="/chinh-sach/chinh-sach-doi-tra" class="inline-flex items-center transition-colors duration-200 ease-in-out text-sky-500 hover:text-sky-600">
+                      <span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" fill="none" viewBox="0 0 20 21">
+                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 18a7.5 7.5 0 1 0 0-15 7.5 7.5 0 0 0 0 15z"></path>
+                          <path fill="currentColor" d="M10 15.5a.937.937 0 1 0 0-1.875.937.937 0 0 0 0 1.875z"></path>
+                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 11.75v-.625a2.187 2.187 0 1 0-2.188-2.188"></path>
+                        </svg>
+                      </span>
+                      <span class="ml-1 font-medium caption text-sm text-sky-500">Dễ dàng đổi trả</span>
+                    </NuxtLink>
+                  </div>
+                  <div v-if="Object.keys(attributeGroups).length > 0">
+                    <div v-for="(attributes, attrName) in attributeGroups" :key="attrName" class="mb-3">
+                      <div>
+                        <div class="mb-2 caption text-sm">
+                          <span class="text-gray-600">{{ attrName }}:</span>
+                          <span class="font-medium ml-2 text-xs text-sky-500">{{ attributes.find((a) => a.id === selectedAttributes[attrName])?.name || "" }}</span>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                          <label v-for="attr in attributes" :key="attr.id" class="relative cursor-pointer">
+                            <input type="radio" :name="`attr-${attrName}`" :value="attr.id" :checked="selectedAttributes[attrName] === attr.id" @change="handleSelectAttribute(attrName, attr.id)" class="sr-only peer" />
+                            <div class="flex items-center flex-wrap justify-center px-2 min-w-[80px] h-9 bg-white text-gray-700 font-semibold rounded peer-checked:border-sky-500 peer-checked:bg-sky-50 peer-checked:text-sky-600 hover:bg-sky-100 hover:border-sky-500 border border-gray-300 transition-colors duration-200 text-sm">
+                              {{ attr.name }}
+                            </div>
+                            <div class="rounded-tr-sm absolute top-0 right-0 w-5 h-5 bg-gradient-to-tr from-sky-600 to-cyan-500 peer-checked:flex hidden" style="clip-path: polygon(110% 0, 0 0, 110% 110%)">
+                              <svg class="absolute top-[1px] right-[1px] w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z" clip-rule="evenodd" />
+                              </svg>
+                            </div>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="px-4 pb-3 bg-white">
+                  <div class="relative">
+                    <div class="flex items-center gap-2 mb-2">
+                      <span class="text-gray-600 text-sm">Số lượng:</span>
+                      <span class="font-medium text-sky-500 text-sm">{{ displayStock }}</span>
+                    </div>
+                    <div class="flex items-center mt-2 border border-gray-300 rounded overflow-hidden w-max h-[38px]">
+                      <button @click="quantity = Math.max(1, quantity - 1)" title="quantity-decrease" class="px-3 flex items-center justify-center text-gray-500 hover:text-gray-700">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 18 18">
+                          <path d="M3.75 9H14.25"></path>
+                        </svg>
+                      </button>
+                      <input v-model.number="quantity" type="text" :min="1" :max="displayStock" class="w-12 text-center border-x border-gray-200 text-gray-700 text-sm focus:outline-none" inputmode="numeric" />
+                      <button @click="quantity = Math.min(displayStock, quantity + 1)" title="quantity-increase" class="px-3 flex items-center justify-center text-gray-500 hover:text-gray-700">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 18 18">
+                          <path d="M9 3.75V14.25"></path>
+                          <path d="M3.75 9H14.25"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-2 mb-2 gap-x-4 mt-5">
+                    <NuxtLink to="#" class="flex items-center justify-center bg-gradient-to-r from-sky-500 to-sky-600 hover:from-sky-600 hover:to-sky-700 text-white font-semibold py-4 px-4 rounded-sm transition-all duration-300 ease-in-out transform hover:scale-98 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-1 uppercase text-sm md:text-base leading-none shadow-md hover:shadow-md">Thêm giỏ hàng</NuxtLink>
+                    <!-- Buy Now Button - Gradient -->
+                    <button class="flex items-center justify-center bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-semibold py-4 px-4 rounded-sm transition-all duration-300 ease-in-out transform hover:scale-98 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 uppercase text-sm md:text-base leading-none shadow-md hover:shadow-md">Mua ngay</button>
+                  </div>
+                  <div class="font-medium text-gray-500 text-xs description">
+                    <NuxtLink to="#" class="font-bold underline cursor-pointer text-sky-400 hover:text-sky-600">Đăng nhập</NuxtLink>
+                    để hưởng quyền lợi thành viên từ chúng tôi!
+                  </div>
+                </div>
+                <div class="px-4 md:px-[24px]">
+                  <div class="py-2 md:py-3 border-t border-gray-300">
+                    <div class="mb-1 space-y-[4px] text-sm" v-if="Object.keys(attributeGroups).length > 0">
+                      <div v-for="(attributes, attrName) in attributeGroups" :key="attrName">
+                        <div class="flex caption text-gray-600">
+                          <div class="w-[120px] mr-2 md:mr-3 xl:mr-4">{{ attrName }}</div>
+                          <div class="flex-1">{{ attributes.map((a) => a.name).join(", ") }}</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div v-else class="mb-1 text-sm text-gray-500">Không có thông số kỹ thuật</div>
+                    <div class="btn-md text-strong-blue-400 inline-flex items-center cursor-pointer duration-200 mt-2">
+                      <a @click.prevent="scrollToTab('specification')" href="#tabs-information" class="text-xs font-medium flex items-center space-x-[6px] text-sky-500">Xem chi tiết</a>
+                      <div class="ml-[4px] flex-shrink-0">
+                        <svg class="text-sky-500" xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
+                          <g clip-path="url(#clip0_8633_16495)">
+                            <path d="M2.54054 0.159839L2.2107 0.487403C2.10769 0.590493 2.05094 0.727648 2.05094 0.874234C2.05094 1.02074 2.10769 1.15806 2.2107 1.26115L5.94748 4.99776L2.20655 8.73869C2.10354 8.84162 2.04687 8.97893 2.04687 9.12544C2.04687 9.27195 2.10354 9.40934 2.20655 9.51235L2.53436 9.84C2.74753 10.0533 3.09477 10.0533 3.30794 9.84L7.77798 5.38598C7.88091 5.28305 7.95343 5.1459 7.95343 4.99809L7.95343 4.99638C7.95343 4.8498 7.88082 4.71264 7.77798 4.60971L3.32006 0.159839C3.21713 0.0567483 3.07583 0.000163033 2.92932 -3.85729e-08C2.78273 -3.21654e-08 2.64338 0.0567484 2.54054 0.159839Z" fill="currentColor"></path>
+                          </g>
+                          <defs>
+                            <clipPath id="clip0_8633_16495">
+                              <rect width="10" height="10" fill="white" transform="translate(0 10) rotate(-90)"></rect>
+                            </clipPath>
+                          </defs>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="px-4 lg:px-[24px]">
+                  <div class="py-2 md:py-3 border-t border-gray-300 text-sm">
+                    <!-- fill data  -->
+                    <div class="prose max-w-none caption summary-content line-clamp-5 text-gray-600" v-if="productDetail.description">
+                      <div v-html="shortDescription"></div>
+                    </div>
+                    <div v-else class="text-gray-500 text-sm">Không có mô tả</div>
+                    <div class="btn-md text-strong-blue-400 inline-flex items-center cursor-pointer hover:text-strong-blue-500 duration-200 mt-2">
+                      <a @click.prevent="scrollToTab('summary')" href="#tabs-information" class="text-xs font-medium flex items-center space-x-[6px] text-sky-500">Xem chi tiết</a>
+                      <div class="ml-[4px] flex-shrink-0">
+                        <svg class="text-sky-500" xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
+                          <g clip-path="url(#clip0_8633_16495)">
+                            <path d="M2.54054 0.159839L2.2107 0.487403C2.10769 0.590493 2.05094 0.727648 2.05094 0.874234C2.05094 1.02074 2.10769 1.15806 2.2107 1.26115L5.94748 4.99776L2.20655 8.73869C2.10354 8.84162 2.04687 8.97893 2.04687 9.12544C2.04687 9.27195 2.10354 9.40934 2.20655 9.51235L2.53436 9.84C2.74753 10.0533 3.09477 10.0533 3.30794 9.84L7.77798 5.38598C7.88091 5.28305 7.95343 5.1459 7.95343 4.99809L7.95343 4.99638C7.95343 4.8498 7.88082 4.71264 7.77798 4.60971L3.32006 0.159839C3.21713 0.0567483 3.07583 0.000163033 2.92932 -3.85729e-08C2.78273 -3.21654e-08 2.64338 0.0567484 2.54054 0.159839Z" fill="currentColor"></path>
+                          </g>
+                          <defs>
+                            <clipPath id="clip0_8633_16495">
+                              <rect width="10" height="10" fill="white" transform="translate(0 10) rotate(-90)"></rect>
+                            </clipPath>
+                          </defs>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="xl:w-[352px] sticky top-[10px] h-full lg:block hidden mr-3">
+              <div class="space-y-[8px]">
+                <div class="py-[16px] bg-white rounded-b-[4px]">
+                  <div class="relative flex items-center mb-2">
+                    <div class="relative flex items-center mb-2">
+                      <div class="relative bg-gradient-to-r from-[#f59e0b] via-[#f97316] to-[#eab308] border border-white z-10 w-[34px] h-[34px] rounded-full overflow-hidden flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                          <g clip-path="url(#clip0_9148_135645)">
+                            <path d="M2.5 17.5H17.5" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M12.5 6.66667C12.5 7.32971 12.7634 7.96559 13.2322 8.43443C13.7011 8.90328 14.337 9.16667 15 9.16667C15.663 9.16667 16.2989 8.90328 16.7678 8.43443C17.2366 7.96559 17.5 7.32971 17.5 6.66667V5.83333H2.5L4.16667 2.5H15.8333L17.5 5.83333M2.5 5.83333V6.66667C2.5 7.32971 2.76339 7.96559 3.23223 8.43443C3.70107 8.90328 4.33696 9.16667 5 9.16667C5.66304 9.16667 6.29893 8.90328 6.76777 8.43443C7.23661 7.96559 7.5 7.32971 7.5 6.66667V5.83333H2.5ZM7.5 6.66667C7.5 7.32971 7.76339 7.96559 8.23223 8.43443C8.70107 8.90328 9.33696 9.16667 10 9.16667C10.663 9.16667 11.2989 8.90328 11.7678 8.43443C12.2366 7.96559 12.5 7.32971 12.5 6.66667V5.83333L7.5 6.66667Z" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M4.16797 17.5013V9.04297" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M15.832 17.5013V9.04297" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M7.5 17.5V14.1667C7.5 13.7246 7.6756 13.3007 7.98816 12.9882C8.30072 12.6756 8.72464 12.5 9.16667 12.5H10.8333C11.2754 12.5 11.6993 12.6756 12.0118 12.9882C12.3244 13.3007 12.5 13.7246 12.5 14.1667V17.5" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                          </g>
+                          <defs>
+                            <clipPath id="clip0_9148_135645">
+                              <rect width="20" height="20" fill="white"></rect>
+                            </clipPath>
+                          </defs>
+                        </svg>
+                      </div>
+                      <div class="relative py-[2px] pl-[14px] bg-gradient-to-r from-[#f59e0b] via-[#f97316] to-[#eab308] caption text-white text-sm font-medium min-w-[216px] transform translate-x-[-10px]">Hệ thống kho phân phối TMĐT</div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="flex space-x-[8px] items-center mx-2">
+                      <div class="flex-1">
+                        <div class="border border-gray-300 rounded overflow-hidden relative bg-white">
+                          <select class="appearance-none py-2 px-3 block w-full ring-0 outline-none focus:outline-none border-none bg-transparent relative z-50 caption">
+                            <option value="" class="caption">Tỉnh/ thành phố</option>
+                          </select>
+                          <div class="absolute right-[10px] top-1/2 transform -translate-y-1/2">
+                            <span>
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="17" viewBox="0 0 16 17" fill="none">
+                                <path d="M12.3561 6.35952L12.0613 6.07233C11.9686 5.98264 11.8451 5.93323 11.7132 5.93323C11.5813 5.93323 11.4577 5.98264 11.365 6.07233L8.00201 9.32595L4.63518 6.06872C4.54254 5.97903 4.41896 5.92969 4.2871 5.92969C4.15525 5.92969 4.03159 5.97903 3.93888 6.06872L3.644 6.35414C3.452 6.53975 3.452 6.84209 3.644 7.0277L7.65262 10.9198C7.74525 11.0094 7.86869 11.0725 8.00172 11.0725L8.00326 11.0725C8.13518 11.0725 8.25862 11.0093 8.35126 10.9198L12.3561 7.03825C12.4489 6.94863 12.4999 6.8256 12.5 6.69804C12.5 6.5704 12.4489 6.44907 12.3561 6.35952Z" fill="#88898E"></path>
+                              </svg>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="flex-1">
+                        <div class="border border-gray-300 rounded overflow-hidden relative bg-white">
+                          <select class="appearance-none py-2 px-3 block w-full ring-0 outline-none focus:outline-none border-none bg-transparent relative z-50 text-gray-500 caption">
+                            <option value="">Quận/ huyện</option>
+                          </select>
+                          <div class="absolute right-[10px] top-1/2 transform -translate-y-1/2">
+                            <span>
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="17" viewBox="0 0 16 17" fill="none">
+                                <path d="M12.3561 6.35952L12.0613 6.07233C11.9686 5.98264 11.8451 5.93323 11.7132 5.93323C11.5813 5.93323 11.4577 5.98264 11.365 6.07233L8.00201 9.32595L4.63518 6.06872C4.54254 5.97903 4.41896 5.92969 4.2871 5.92969C4.15525 5.92969 4.03159 5.97903 3.93888 6.06872L3.644 6.35414C3.452 6.53975 3.452 6.84209 3.644 7.0277L7.65262 10.9198C7.74525 11.0094 7.86869 11.0725 8.00172 11.0725L8.00326 11.0725C8.13518 11.0725 8.25862 11.0093 8.35126 10.9198L12.3561 7.03825C12.4489 6.94863 12.4999 6.8256 12.5 6.69804C12.5 6.5704 12.4489 6.44907 12.3561 6.35952Z" fill="#88898E"></path>
+                              </svg>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-2 text-sm text-end">
+                    <div class="text-gray-600 caption">
+                      Có
+                      <span class="font-bold text-gray-700">10</span>
+                      cửa hàng có sản phẩm
+                    </div>
+                    <div class="mt-2 overflow-hidden border border-gray-200 rounded-lg">
+                      <div class="h-[280px] xl:h-[320px] overflow-y-auto scrollbar-hide address-agents">
+                        <div class="w-full h-full">
+                          <div v-for="(agency, index) in 10" :key="index" :class="['flex items-center space-x-[6px] text-[13px] p-2', index % 2 === 0 ? 'bg-white' : 'bg-gray-200']">
+                            <div class="flex items-center space-x-[2px]">
+                              <div class="flex-shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="13" viewBox="0 0 12 13" fill="none">
+                                  <path d="M11.0204 9.42932L10.9572 9.31253C10.7803 8.92721 8.60618 8.34341 8.42922 8.33175L8.29018 8.3434C8.02469 8.39007 7.73399 8.61193 7.16522 9.0673C7.05148 9.16072 6.89973 9.18409 6.7607 9.11397C6.01496 8.72865 5.10488 7.95801 4.64982 7.49098C4.15686 6.98894 3.56279 6.15989 3.28471 5.49431C3.23418 5.36587 3.28471 5.22578 3.38584 5.13237C4.03045 4.59522 4.30853 4.33843 4.33383 4.05816C4.34644 3.8947 3.96732 1.82801 3.57539 1.62952L3.46165 1.55947C3.20888 1.40766 2.82965 1.18579 2.41254 1.26757C2.3114 1.29094 2.21028 1.32596 2.12184 1.37263C1.84385 1.53626 1.14863 1.97998 0.832631 2.55205C0.643067 2.91399 0.554551 6.19502 3.20894 8.96228C5.83805 11.7062 9.08652 11.8229 9.56684 11.7295H9.57945L9.61736 11.7179C10.2747 11.496 10.8308 10.9239 11.0457 10.6787C11.4375 10.2467 11.1722 9.72123 11.0204 9.42932Z" fill="#0180AD"></path>
+                                </svg>
+                              </div>
+                              <div class="flex items-center text-[#0180AD]">
+                                <NuxtLink to="tel:0898109810" class="description !leading-[140%] font-bold">0898109810</NuxtLink>
+                                <!---->
+                              </div>
+                            </div>
+                            <div class="w-[1px] h-[11px] bg-gray-300"></div>
+                            <div class="flex-1">
+                              <NuxtLink to="/he-thong-dai-ly/kho-tong-cong-ty" class="text-gray-800 duration-150 line-clamp-1 description hover:text-[#0180AD]">Số 87-89, phố Hạ Đình, Phường Thanh Xuân Trung, Quận Thanh Xuân, Hà Nội, Phường Thanh Xuân Trung, Quận Thanh Xuân, Thành phố Hà Nội</NuxtLink>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="px-3 py-4 bg-white rounded-b">
+                  <div class="relative flex items-center mb-2">
+                    <div class="relative shadow-lg border border-white z-10 w-[34px] h-[34px] bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] rounded-full overflow-hidden flex items-center justify-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <g clip-path="url(#clip0_9148_135645)">
+                          <path d="M2.5 17.5H17.5" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                          <path d="M12.5 6.66667C12.5 7.32971 12.7634 7.96559 13.2322 8.43443C13.7011 8.90328 14.337 9.16667 15 9.16667C15.663 9.16667 16.2989 8.90328 16.7678 8.43443C17.2366 7.96559 17.5 7.32971 17.5 6.66667V5.83333H2.5L4.16667 2.5H15.8333L17.5 5.83333M2.5 5.83333V6.66667C2.5 7.32971 2.76339 7.96559 3.23223 8.43443C3.70107 8.90328 4.33696 9.16667 5 9.16667C5.66304 9.16667 6.29893 8.90328 6.76777 8.43443C7.23661 7.96559 7.5 7.32971 7.5 6.66667V5.83333H2.5ZM7.5 6.66667C7.5 7.32971 7.76339 7.96559 8.23223 8.43443C8.70107 8.90328 9.33696 9.16667 10 9.16667C10.663 9.16667 11.2989 8.90328 11.7678 8.43443C12.2366 7.96559 12.5 7.32971 12.5 6.66667V5.83333L7.5 6.66667Z" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                          <path d="M4.16797 17.5013V9.04297" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                          <path d="M15.832 17.5013V9.04297" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                          <path d="M7.5 17.5V14.1667C7.5 13.7246 7.6756 13.3007 7.98816 12.9882C8.30072 12.6756 8.72464 12.5 9.16667 12.5H10.8333C11.2754 12.5 11.6993 12.6756 12.0118 12.9882C12.3244 13.3007 12.5 13.7246 12.5 14.1667V17.5" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_9148_135645">
+                            <rect width="20" height="20" fill="white"></rect>
+                          </clipPath>
+                        </defs>
+                      </svg>
+                    </div>
+                    <div class="relative bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-xs text-white font-medium min-w-[160px] transform translate-x-[-10px] translate-y-[1px] pl-[14px] py-1">ĐẠI LÝ PHÂN PHỐI</div>
+                  </div>
+                  <div class="flex items-center mb-1">
+                    <span class="mr-3 text-green-600">
+                      <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_7612_110764)">
+                          <path fill-rule="evenodd" clip-rule="evenodd" d="M2.27363 14.122C1.71852 14.0284 1.20199 13.7645 0.798711 13.3612C0.287305 12.8498 0 12.1562 0 11.433V9.77113C0 9.04789 0.287305 8.35426 0.798711 7.84285C1.31016 7.33145 2.00379 7.0441 2.72703 7.0441H2.90852C3.19867 3.38176 6.26281 0.5 10 0.5C13.7372 0.5 16.8013 3.38176 17.0915 7.0441H17.273C17.9963 7.0441 18.6899 7.33145 19.2013 7.84285C19.7127 8.35426 20 9.04789 20 9.77113V11.433C20 12.1562 19.7127 12.8498 19.2013 13.3612C18.6899 13.8727 17.9963 14.16 17.273 14.16H16.4683C16.1345 14.16 15.864 13.8895 15.864 13.5557V7.61398C15.864 4.37539 13.2386 1.75 10 1.75C6.76141 1.75 4.13605 4.37539 4.13605 7.61398V13.5557C4.13605 13.8894 3.86547 14.16 3.53176 14.16H3.53168C3.62063 14.9986 3.99391 15.7862 4.5957 16.388C5.2902 17.0825 6.23215 17.4727 7.21434 17.4727H7.29738C7.40082 17.1224 7.59055 16.8 7.85348 16.537C8.26734 16.1232 8.82871 15.8906 9.41406 15.8906H10.5859C11.8048 15.8906 12.793 16.8787 12.793 18.0977C12.793 19.3166 11.8048 20.3047 10.5859 20.3047H9.41406C8.41227 20.3047 7.56633 19.6372 7.2968 18.7227H7.21434C5.90062 18.7227 4.64074 18.2008 3.71184 17.2719C2.86641 16.4264 2.35816 15.3069 2.27363 14.122ZM11.543 18.0977C11.543 17.5691 11.1145 17.1406 10.5859 17.1406H9.41406C9.16023 17.1406 8.91684 17.2414 8.73734 17.4209C8.55785 17.6004 8.45703 17.8438 8.45703 18.0977C8.45703 18.6262 8.88551 19.0547 9.41406 19.0547H10.5859C11.1145 19.0547 11.543 18.6262 11.543 18.0977ZM2.88605 8.2941H2.72703C2.33527 8.2941 1.95961 8.44973 1.68262 8.72672C1.40562 9.00371 1.25 9.37941 1.25 9.77113V11.433C1.25 11.8247 1.40562 12.2004 1.68262 12.4774C1.95961 12.7544 2.33527 12.91 2.72703 12.91H2.88605V8.2941ZM17.114 8.2941V12.91H17.273C17.6647 12.91 18.0404 12.7544 18.3174 12.4774C18.5944 12.2004 18.75 11.8247 18.75 11.433V9.77113C18.75 9.37941 18.5944 9.00371 18.3174 8.72672C18.0404 8.44973 17.6647 8.2941 17.273 8.2941H17.114Z" fill="#4E7C0E"></path>
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_7612_110764">
+                            <rect width="20" height="20" fill="white" transform="translate(0 0.5)"></rect>
+                          </clipPath>
+                        </defs>
+                      </svg>
+                    </span>
+                    <span class="text-gray-600 caption text-sm">Tư vấn chiếu sáng miễn phí</span>
+                  </div>
+                  <div class="flex items-center mb-1">
+                    <span class="mr-3 text-green-600">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="21" fill="none" viewBox="0 0 20 21">
+                        <path fill="currentColor" d="M4.45 5.778v1.389l.11-.111a.614.614 0 0 1 .884 0 .623.623 0 0 1 0 .888L4.257 9.111a.65.65 0 0 1-.442.195.586.586 0 0 1-.441-.195L2.186 7.917a.623.623 0 0 1 0-.89.614.614 0 0 1 .884 0l.11.112V5.778C3.18 3.972 4.644 2.5 6.438 2.5h1.38c.332 0 .608.278.608.611a.615.615 0 0 1-.607.611h-1.38c-1.078 0-1.989.917-1.989 2.056zm13.39 7.278l-1.186-1.167a.614.614 0 0 0-.884 0l-1.187 1.194a.623.623 0 0 0 0 .89c.248.25.635.25.883 0l.11-.112v1.361a2.045 2.045 0 0 1-2.042 2.056h-1.38a.615.615 0 0 0-.608.61c0 .334.276.612.607.612h1.38c1.795 0 3.258-1.472 3.258-3.278v-1.389l.111.111a.65.65 0 0 0 .442.195.587.587 0 0 0 .441-.195.626.626 0 0 0 .056-.888zm-9.166-.612a.615.615 0 0 0 .608-.61.615.615 0 0 0-.608-.612H2.656a.615.615 0 0 0-.608.611v6.056c0 .333.276.611.608.611h6.018a.615.615 0 0 0 .608-.611v-3.417a.615.615 0 0 0-.608-.61.615.615 0 0 0-.607.61v2.778H3.291v-4.806h5.383zm9.222-3.222V5.806a.615.615 0 0 0-.608-.612.615.615 0 0 0-.607.612v2.777h-4.804V3.778h5.384a.615.615 0 0 0 .607-.611.615.615 0 0 0-.607-.611H11.27a.615.615 0 0 0-.608.61v6.056c0 .334.276.611.608.611h6.018a.615.615 0 0 0 .608-.61z"></path>
+                      </svg>
+                    </span>
+                    <span class="text-gray-600 caption text-sm">Đổi trả dễ dàng</span>
+                  </div>
+                  <div class="flex items-center mb-2.5">
+                    <span class="mr-3 text-green-600">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="21" fill="none" viewBox="0 0 20 21">
+                        <path fill="currentColor" stroke="currentColor" stroke-width=".75" d="M10.136 2.603L10 2.5l-.136.103C6.85 4.902 3.214 5.737 3.177 5.745L3 5.784v.184C3 9.76 3 17.659 9.973 18.5h.054C17 17.66 17 9.766 17 5.968v-.184l-.177-.04c-.036-.007-3.672-.842-6.687-3.141zM10 18.042c-6.452-.797-6.544-7.918-6.544-11.896C4.219 5.948 7.334 5.063 10 3.07c2.683 1.994 5.786 2.879 6.544 3.077 0 3.978-.092 11.1-6.544 11.898v-.002z"></path>
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 10.583L9.8 13.5l3.2-5"></path>
+                      </svg>
+                    </span>
+                    <span class="text-gray-600 caption text-sm">Bảo hành từ 2-5 năm</span>
+                  </div>
+                  <NuxtLink to="/chinh-sach/" class="text-sm font-medium flex items-center space-x-[6px] text-sky-500">
+                    <span class="underline">Xem chính sách</span>
+                    <span>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="7" height="10" fill="none" viewBox="0 0 7 10">
+                        <path fill="currentColor" d="M1.04.16L.71.487a.543.543 0 0 0-.16.387c0 .147.058.284.16.387l3.737 3.737-3.74 3.74a.543.543 0 0 0-.16.387c0 .147.057.284.16.387l.327.328c.214.213.56.213.774 0l4.47-4.454a.56.56 0 0 0 .175-.388v-.002a.559.559 0 0 0-.175-.386L1.82.16a.553.553 0 0 0-.78 0z"></path>
+                      </svg>
+                    </span>
+                  </NuxtLink>
+                </div>
+                <NuxtLink to="tel:19002098" class="block w-full h-[158px]"><NuxtImg src="/client/images/contact/contact-advice.webp" alt="contact" loading="lazy" class="object-cover w-full h-full" /></NuxtLink>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- info product  -->
+      <section id="tabs-information" class="bg-white product-description max-md:pt-3 mt-5 p-3 shadow-md">
+        <div class="container pb-1 sticky top-0 z-40 tabs">
+          <div class="relative max-w-full overflow-x-auto scrollbar-hide hiddenScroll tabs-information-scroll">
+            <div class="flex w-full items-center space-x-[2px]">
+              <div id="tab-info-summary" class="flex-1 flex-shrink-0 p-2 md:p-3 font-semibold text-center whitespace-normal duration-75 cursor-pointer tabs_item text-gray-700 bg-white hover:bg-gradient-to-r hover:from-sky-500 hover:to-sky-600 hover:text-white active-tab" @click="activeTab = 'summary'">
+                <span class="inline-block md:hidden">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+                  </svg>
+                </span>
+                <span class="hidden md:inline">Mô tả sản phẩm</span>
+              </div>
+              <div id="tab-info-specification" class="flex-1 flex-shrink-0 p-2 md:p-3 font-semibold text-center whitespace-normal duration-75 cursor-pointer tabs_item text-gray-700 bg-white hover:bg-gradient-to-r hover:from-sky-500 hover:to-sky-600 hover:text-white" @click="activeTab = 'specification'">
+                <span class="inline-block md:hidden">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path d="M9.75 3v1.5M14.25 3v1.5M3.75 7.5h16.5M6 10.5v8.25a.75.75 0 00.75.75h10.5a.75.75 0 00.75-.75V10.5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+                <span class="hidden md:inline">Thông số kỹ thuật</span>
+              </div>
+              <div id="tab-info-document" class="flex-1 flex-shrink-0 p-2 md:p-3 font-semibold text-center whitespace-normal duration-75 cursor-pointer tabs_item text-gray-700 bg-white hover:bg-gradient-to-r hover:from-sky-500 hover:to-sky-600 hover:text-white" @click="activeTab = 'faq'">
+                <span class="inline-block md:hidden">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline" fill="currentColor" viewBox="0 0 512 512">
+                    <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM169.8 165.3c7.9-22.3 29.1-37.3 52.8-37.3l58.3 0c34.9 0 63.1 28.3 63.1 63.1c0 22.6-12.1 43.5-31.7 54.8L280 264.4c-.2 13-10.9 23.6-24 23.6c-13.3 0-24-10.7-24-24l0-13.5c0-8.6 4.6-16.5 12.1-20.8l44.3-25.4c4.7-2.7 7.6-7.7 7.6-13.1c0-8.4-6.8-15.1-15.1-15.1l-58.3 0c-3.4 0-6.4 2.1-7.5 5.3l-.4 1.2c-4.4 12.5-18.2 19-30.6 14.6s-19-18.2-14.6-30.6l.4-1.2zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z" />
+                  </svg>
+                </span>
+                <span class="hidden md:inline">Câu hỏi thường gặp</span>
+              </div>
+              <div id="tab-info-rating" class="flex-1 flex-shrink-0 p-2 md:p-3 font-semibold text-center whitespace-normal duration-75 cursor-pointer tabs_item text-gray-700 bg-white hover:bg-gradient-to-r hover:from-sky-500 hover:to-sky-600 hover:text-white" @click="activeTab = 'rating'">
+                <span class="inline-block md:hidden">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.966a1 1 0 00.95.69h4.178c.969 0 1.371 1.24.588 1.81l-3.386 2.46a1 1 0 00-.364 1.118l1.286 3.966c.3.921-.755 1.688-1.54 1.118L10 14.347l-3.386 2.46c-.784.57-1.838-.197-1.539-1.118l1.286-3.966a1 1 0 00-.364-1.118L2.611 9.393c-.783-.57-.38-1.81.588-1.81h4.178a1 1 0 00.95-.69l1.286-3.966z" />
+                  </svg>
+                </span>
+                <span class="hidden md:inline">Đánh giá</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="container">
+          <div class="text-gray-600 text-base" v-if="activeTab === 'summary'">
+            <div class="max-w-[720px] w-full mx-auto py-4">
+              <div class="p-2 lg:p-0 content-block">
+                <div class="contentContainer relative text-gray-600 text-base" :class="isDescriptionExpanded ? '' : 'overflow-hidden max-h-[653px]'">
+                  <div v-if="!isDescriptionExpanded" class="overflow-blur-content absolute bottom-0 left-0 w-full h-full max-h-20 transparent-NuxtImg bg-gradient-to-t from-white"></div>
+                  <!---->
+                  <div class="prose markup-custom list-striped">
+                    <!-- filldata -->
+                    <div class="prose max-w-none" v-html="productDetail.description"></div>
+                  </div>
+                  <!-- Tags sản phẩm -->
+                  <div v-if="(productDetail as any).productTags && (productDetail as any).productTags.length > 0" class="flex flex-col gap-1 mt-5 justify-center items-start w-full bg-white dark:bg-transparent px-4 py-4 shadow-xl rounded-lg">
+                    <p class="font-medium text-xl text-gray-500 mb-2">Tags sản phẩm</p>
+                    <div class="flex flex-wrap gap-2">
+                      <NuxtLink v-for="tag in ((productDetail as any).productTags as any[])" :key="tag.id" :to="`/product/tag/${tag.slug}`" class="px-3 py-1 text-[12px] bg-[#d9dfe3] max-w-max rounded font-semibold text-[#7281a3] hover:bg-sky-100 hover:text-sky-600 transition-colors">#{{ tag.name }}</NuxtLink>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex justify-center mt-6 sm:mt-8">
+                  <div class="relative z-10">
+                    <button type="button" @click="isDescriptionExpanded = !isDescriptionExpanded" class="toggleBtn w-full flex items-center justify-center bg-gradient-to-r from-sky-700 to-sky-600 hover:from-sky-600 hover:to-sky-500 text-white rounded-xs transition-all duration-300 ease-in-out transform focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-1 text-sm leading-none shadow-md hover:shadow-md font-semibold py-[12px] px-[24px]">
+                      <span class="whitespace-nowrap">{{ isDescriptionExpanded ? "Thu gọn" : "Xem thêm" }}</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="text-gray-600 text-base" v-if="activeTab === 'specification'">
+            <div class="max-w-[1018px] w-full mx-auto py-4">
+              <div class="px-4 bg-white">
+                <div class="prose specification-table">
+                  <div class="specifications">
+                    <p style="font-weight: bold; font-size: 20px">Đặc tính của Phích</p>
+
+                    <table border="0" cellpadding="4" cellspacing="4" width="100%">
+                      <tbody>
+                        <tr>
+                          <td>Dung tích</td>
+                          <td>2 lít</td>
+                        </tr>
+                        <tr>
+                          <td>Vật liệu</td>
+                          <td>Thân inox kẻ cao cấp bền đẹp, ruột thủy tinh, gioăng silicone</td>
+                        </tr>
+                        <tr>
+                          <td>Độ giữ nhiệt sau 6 giờ</td>
+                          <td>≥ 80 °C</td>
+                        </tr>
+                        <tr>
+                          <td>Trọng lượng 1 phích</td>
+                          <td>1,3 kg</td>
+                        </tr>
+                        <tr>
+                          <td>Đường kính miệng</td>
+                          <td>45 mm</td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                    <p style="font-weight: bold; font-size: 20px">Quy cách đóng gói</p>
+
+                    <table border="0" cellpadding="4" cellspacing="4" width="100%">
+                      <tbody>
+                        <tr>
+                          <td>Số lượng bao gói/thùng</td>
+                          <td>04 cái</td>
+                        </tr>
+                        <tr>
+                          <td>Kích thước thùng ngoài</td>
+                          <td>(345x349x415) mm</td>
+                        </tr>
+                        <tr>
+                          <td>Khối lượng</td>
+                          <td>6,5 (kg)</td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                    &nbsp;
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="text-gray-600 text-base" v-if="activeTab === 'faq'">
+            <div class="w-full py-2 sm:py-4">
+              <div class="mx-auto lg:w-[40vw] w-full px-0 sm:px-2 md:px-6">
+                <template v-for="(faq, id) in 8" :key="id">
+                  <div class="bg-white rounded-md border border-gray-100 hover:border-cyan-500 shadow transition hover:shadow-lg overflow-hidden mb-2">
+                    <h2>
+                      <button type="button" class="flex items-center justify-between w-full px-4 py-3 text-left text-base font-semibold text-gray-800 hover:text-cyan-600 transition" :aria-expanded="openFaq === id" @click="openFaq === id ? (openFaq = null) : (openFaq = id)">
+                        <div class="flex items-center space-x-3">
+                          <div class="w-8 h-8 flex items-center justify-center bg-cyan-100 text-cyan-600 font-bold rounded-md text-sm">
+                            {{ id + 1 }}
+                          </div>
+                          <span class="line-clamp-2">Làm sao để kích hoạt bảo hành online?</span>
+                        </div>
+                        <svg class="w-4 h-4 shrink-0 transition-transform duration-300" :class="{ 'rotate-180': openFaq === id }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </button>
+                    </h2>
+                    <div v-show="openFaq === id" class="px-4 pb-4 text-sm text-gray-600 transition-all duration-300">Bạn có thể truy cập website của Tech Mart, chọn mục "Bảo hành sản phẩm", sau đó nhập mã seri sản phẩm cùng thông tin cá nhân là hoàn tất.</div>
+                  </div>
+                </template>
+              </div>
+            </div>
+          </div>
+          <div class="text-gray-600 text-base" v-if="activeTab === 'rating'">
+            <div class="p-4">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white rounded-md shadow-md p-3 mb-5">
+                <div class="space-y-4">
+                  <h2 class="text-2xl font-bold text-gray-700">Đánh Giá Khách Hàng</h2>
+                  <p class="text-gray-600 text-sm">Chiếc ghế này sử dụng chất liệu đệm an toàn, thân thiện với môi trường, mang lại cảm giác êm ái và dễ chịu khi sử dụng.</p>
+                  <p class="text-gray-600 text-sm">Vải bọc cao cấp, mềm mại nhưng vẫn bền đẹp theo thời gian, với nhiều tông màu đa dạng để bạn dễ dàng lựa chọn theo phong cách nội thất.</p>
+                </div>
+                <div class="">
+                  <div class="flex items-center justify-between mb-2">
+                    <div>
+                      <p class="text-sm text-gray-500">
+                        Dựa trên
+                        <span class="text-sky-500">254</span>
+                        đánh giá
+                      </p>
+                      <p class="text-3xl font-bold text-gray-900">4.0</p>
+                    </div>
+                    <div class="flex items-center">
+                      <!-- Stars -->
+                      <template v-for="star in 5" :key="star">
+                        <svg :class="star <= 4 ? 'text-yellow-400' : 'text-gray-300'" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.97 4.184.012c.97.003 1.371 1.24.588 1.81l-3.396 2.53 1.27 3.996c.286.899-.755 1.637-1.54 1.092L10 13.187l-3.343 2.148c-.784.545-1.825-.193-1.54-1.092l1.27-3.996-3.396-2.53c-.783-.57-.382-1.807.588-1.81l4.184-.012 1.286-3.97z" />
+                        </svg>
+                      </template>
+                    </div>
+                  </div>
+
+                  <div class="space-y-2">
+                    <!-- One row -->
+                    <div class="flex items-center gap-3">
+                      <span class="text-sm w-4 font-medium text-gray-900">5</span>
+                      <div class="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-green-400 to-green-600 rounded-full" style="width: 63%"></div>
+                      </div>
+                      <span class="text-sm w-12 text-right text-gray-600">63%</span>
+                    </div>
+                    <!-- Repeat for others -->
+                    <div class="flex items-center gap-3">
+                      <span class="text-sm w-4 font-medium text-gray-900">4</span>
+                      <div class="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-lime-400 to-lime-600 rounded-full" style="width: 22%"></div>
+                      </div>
+                      <span class="text-sm w-12 text-right text-gray-600">22%</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                      <span class="text-sm w-4 font-medium text-gray-900">3</span>
+                      <div class="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-full" style="width: 23%"></div>
+                      </div>
+                      <span class="text-sm w-12 text-right text-gray-600">23%</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                      <span class="text-sm w-4 font-medium text-gray-900">2</span>
+                      <div class="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-orange-400 to-orange-500 rounded-full" style="width: 8%"></div>
+                      </div>
+                      <span class="text-sm w-12 text-right text-gray-600">8%</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                      <span class="text-sm w-4 font-medium text-gray-900">1</span>
+                      <div class="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-red-400 to-red-500 rounded-full" style="width: 35%"></div>
+                      </div>
+                      <span class="text-sm w-12 text-right text-gray-600">35%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- RIGHT: Ratings -->
+              <div class="max-w-2xl mx-auto">
+                <h1 class="text-2xl font-bold text-gray-600 mb-4 text-center tracking-wide">Cảm nghĩ của bạn</h1>
+                <form class="rounded-md bg-gray-100 overflow-hidden shadow-md">
+                  <textarea class="w-full p-4 text-gray-600 placeholder-gray-500 focus:outline-none resize-none bg-gray-100" rows="4" placeholder="Bạn đang nghĩ gì ..." required></textarea>
+                  <div class="flex items-center justify-between bg-gray-300 px-4 py-2">
+                    <div class="flex items-center space-x-4 text-gray-600">
+                      <!-- Image icon -->
+                      <button type="button">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M3 5h18v14H3V5zm3 8l3 3 4-4 5 5H5z" />
+                        </svg>
+                      </button>
+                    </div>
+                    <button class="flex items-center justify-center ml-3 text-white rounded-md h-9 w-14 bg-sky-500 hover:bg-sky-600 xl:ml-5">
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M4.98481 2.44399C3.11333 1.57147 1.15325 3.46979 1.96543 5.36824L3.82086 9.70527C3.90146 9.89367 3.90146 10.1069 3.82086 10.2953L1.96543 14.6323C1.15326 16.5307 3.11332 18.4291 4.98481 17.5565L16.8184 12.0395C18.5508 11.2319 18.5508 8.76865 16.8184 7.961L4.98481 2.44399ZM3.34453 4.77824C3.0738 4.14543 3.72716 3.51266 4.35099 3.80349L16.1846 9.32051C16.762 9.58973 16.762 10.4108 16.1846 10.68L4.35098 16.197C3.72716 16.4879 3.0738 15.8551 3.34453 15.2223L5.19996 10.8853C5.21944 10.8397 5.23735 10.7937 5.2537 10.7473L9.11784 10.7473C9.53206 10.7473 9.86784 10.4115 9.86784 9.99726C9.86784 9.58304 9.53206 9.24726 9.11784 9.24726L5.25157 9.24726C5.2358 9.20287 5.2186 9.15885 5.19996 9.11528L3.34453 4.77824Z" fill="white"></path>
+                      </svg>
+                    </button>
+                  </div>
+                </form>
+              </div>
+              <!-- COMMENT LIST -->
+              <div class="max-w-2xl mx-auto space-y-4 mt-6">
+                <h1 class="text-xl font-bold text-gray-500 mb-4">Đánh giá của mọi người (23)</h1>
+                <!-- Comment Card -->
+                <div v-for="product_reviews in 5" :key="product_reviews" class="bg-white border border-gray-200 p-4 rounded-lg shadow-sm">
+                  <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center space-x-3">
+                      <NuxtImg class="w-8 h-8 rounded-full" src="https://i.pravatar.cc/40" alt="avatar" />
+                      <div>
+                        <p class="text-sm font-semibold text-gray-800">Michael Gough</p>
+                        <p class="text-xs text-gray-500">Feb. 8, 2022</p>
+                      </div>
+                    </div>
+                    <div class="relative inline-block text-left group">
+                      <button class="text-gray-400">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M6 10a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm6-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm4-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z" />
+                        </svg>
+                      </button>
+                      <!-- Hover bridge: chống mất hover -->
+                      <div class="absolute top-full right-0 w-full h-3 group-hover:block hidden z-0"></div>
+                      <div class="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 hidden group-hover:block transition-all duration-300 ease-in-out">
+                        <div class="w-full bg-white rounded-md border-0 shadow-xl font-normal ring-black/10 divide-y divide-gray-100">
+                          <div class="py-1">
+                            <NuxtLink to="pages-profile.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                              <i class="fa-regular fa-user text-gray-400 text-md mr-2"></i>
+                              <span>Profile</span>
+                            </NuxtLink>
+
+                            <NuxtLink to="apps-chat.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                              <i class="fa-regular fa-comment-dots text-gray-400 text-md mr-2"></i>
+                              <span>Messages</span>
+                            </NuxtLink>
+
+                            <NuxtLink to="apps-tasks-kanban.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                              <i class="fa-regular fa-calendar-check text-gray-400 text-md mr-2"></i>
+                              <span>Taskboard</span>
+                            </NuxtLink>
+
+                            <NuxtLink to="pages-faqs.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                              <i class="fa-solid fa-life-ring text-gray-400 text-md mr-2"></i>
+                              <span>Help</span>
+                            </NuxtLink>
+                          </div>
+                          <div class="border-t border-gray-200"></div>
+                          <div class="py-1">
+                            <NuxtLink to="auth-logout-basic.html" class="flex items-center px-4 py-2 text-sm text-red-700 hover:bg-red-100">
+                              <i class="fa-solid fa-arrow-right-from-bracket text-md mr-2"></i>
+                              <span>Logout</span>
+                            </NuxtLink>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="text-gray-700 text-sm mb-3">Very straight-to-point article. Really worth time reading. Thank you! But tools are just the instruments for the UX designers...</p>
+                  <div class="flex items-center space-x-6 text-gray-500 text-xs">
+                    <span class="flex items-center space-x-1">
+                      <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8l0-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5l0 3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20-.1-.1s0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5l0 3.3c0 28.5 11.9 55.8 32.8 75.2L256 430.7 431.2 268c20.9-19.4 32.8-46.7 32.8-75.2l0-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z" />
+                      </svg>
+                      <span>11 thích</span>
+                    </span>
+                    <button class="hover:underline hover:text-sky-500">trả lời</button>
+                  </div>
+                </div>
+
+                <!-- Reply Card -->
+                <div class="ml-8 bg-white border border-gray-200 p-4 rounded-lg shadow-sm">
+                  <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center space-x-3">
+                      <NuxtImg class="w-8 h-8 rounded-full" src="https://i.pravatar.cc/40?img=2" alt="avatar" />
+                      <div>
+                        <p class="text-sm font-semibold text-gray-800">Jese Leos</p>
+                        <p class="text-xs text-gray-500">Feb. 12, 2022</p>
+                      </div>
+                    </div>
+                    <div class="relative inline-block text-left group">
+                      <button class="text-gray-400">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M6 10a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm6-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm4-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z" />
+                        </svg>
+                      </button>
+                      <!-- Hover bridge: chống mất hover -->
+                      <div class="absolute top-full right-0 w-full h-3 group-hover:block hidden z-0"></div>
+                      <div class="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 hidden group-hover:block transition-all duration-300 ease-in-out">
+                        <div class="w-full bg-white rounded-md border-0 shadow-xl font-normal ring-black/10 divide-y divide-gray-100">
+                          <div class="py-1">
+                            <NuxtLink to="pages-profile.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                              <i class="fa-regular fa-user text-gray-400 text-md mr-2"></i>
+                              <span>Profile</span>
+                            </NuxtLink>
+
+                            <NuxtLink to="apps-chat.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                              <i class="fa-regular fa-comment-dots text-gray-400 text-md mr-2"></i>
+                              <span>Messages</span>
+                            </NuxtLink>
+
+                            <NuxtLink to="apps-tasks-kanban.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                              <i class="fa-regular fa-calendar-check text-gray-400 text-md mr-2"></i>
+                              <span>Taskboard</span>
+                            </NuxtLink>
+
+                            <NuxtLink to="pages-faqs.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                              <i class="fa-solid fa-life-ring text-gray-400 text-md mr-2"></i>
+                              <span>Help</span>
+                            </NuxtLink>
+                          </div>
+                          <div class="border-t border-gray-200"></div>
+                          <div class="py-1">
+                            <NuxtLink to="auth-logout-basic.html" class="flex items-center px-4 py-2 text-sm text-red-700 hover:bg-red-100">
+                              <i class="fa-solid fa-arrow-right-from-bracket text-md mr-2"></i>
+                              <span>Logout</span>
+                            </NuxtLink>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="text-gray-700 text-sm mb-3">Much appreciated! Glad you liked it 😊</p>
+                  <div class="flex items-center space-x-6 text-gray-500 text-xs">
+                    <span class="flex items-center space-x-1">
+                      <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8l0-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5l0 3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20-.1-.1s0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5l0 3.3c0 28.5 11.9 55.8 32.8 75.2L256 430.7 431.2 268c20.9-19.4 32.8-46.7 32.8-75.2l0-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z" />
+                      </svg>
+                      <span>11 thích</span>
+                    </span>
+                    <button class="hover:underline hover:text-sky-500">trả lời</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="flex justify-center mt-6 sm:mt-8">
+              <div class="relative z-10">
+                <button type="button" class="toggleBtn w-full flex items-center justify-center bg-gradient-to-r from-sky-700 to-sky-600 hover:from-sky-600 hover:to-sky-500 text-white rounded-xs transition-all duration-300 ease-in-out transform focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-1 text-sm leading-none shadow-md hover:shadow-md font-semibold py-[12px] px-[24px]">
+                  <span class="whitespace-nowrap">Xem thêm</span>
+                </button>
+              </div>
+            </div> -->
+          </div>
+        </div>
+      </section>
+      <section v-if="relatedProducts.length > 0" class="product-accsessory bg-white shadow-md rounded-md py-3 md:py-6 px-3 md:px-6 md:mb-8 mb-4 mt-5">
+        <div class="mb-4 md:mb-8">
+          <div class="flex justify-between items-center space-x-2">
+            <div class="head-section-product">
+              <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-xl md:text-3xl font-bold">Có thể bạn sẽ thích</h2>
+              <div class="h-1 max-w-48 my-1 md:my-2 relative">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-white via-green-300 to-green-300"></div>
+              </div>
+            </div>
+          </div>
+          <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">Các thiết bị chiếu sáng được ưa chuộng nhất tại Tech mart Store, nâng cao trải nghiệm sống của hàng ngàn khách hàng.</p>
+        </div>
+        <div class="col-span-5 min-w-0">
+          <Splide :options="productRelatedOptions(relatedProducts.length)" id="product-related-slide">
+            <SplideSlide v-for="product in relatedProducts" :key="product.id">
+              <ProductCard :product="product" />
+            </SplideSlide>
+          </Splide>
+        </div>
+      </section>
+    </div>
+  </div>
+</template>
+<script setup lang="ts">
+import Breadcrumb from "~/components/shared/navigation/Breadcrumb.vue";
+import ProductCard from "~/components/client/features/ProductCard.vue";
+import { Splide, SplideSlide } from "@splidejs/vue-splide";
+import { useProduct } from "~/composables/client/product/useProduct";
+import { useProductSlider } from "~/composables/useProductSlider";
+import { resolveAlbum } from "~/utils/helpers";
+import type { IProduct } from "~/interfaces/product/product.interface";
+
+const route = useRoute();
+
+const { productDetail, productDetailLoading, productDetailError, trackView, fetchDetailBySlug } = useProduct();
+const { productImageMainOptions, productImageThumbnailOptions, productRelatedOptions } = useProductSlider();
+
+// State
+const activeTab = ref("summary");
+const selectedAttributes = ref<Record<string, number>>({});
+const selectedVariant = ref<any>(null);
+const openFaq = ref<number | null>(null);
+const quantity = ref(1);
+const isDescriptionExpanded = ref(false);
+const isCompareChecked = ref(false);
+
+// Refs cho Splide sliders
+const mainSliderRef = ref<any>(null);
+const thumbSliderRef = ref<any>(null);
+const lightboxVisible = ref(false);
+const lightboxIndex = ref(0);
+
+// Hiển thị lightbox khi click vào ảnh
+const showLightbox = (index: number) => {
+  lightboxIndex.value = index;
+  lightboxVisible.value = true;
+};
+
+// Computed
+const breadcrumbs = computed(() => [
+  { label: $t("client.product.breadcrumb"), href: "/product" },
+  { label: productDetail.value?.name || "...", href: route.fullPath },
+]);
+
+const images = computed(() => {
+  if (!productDetail.value?.album?.length) return [];
+  return resolveAlbum(productDetail.value.album);
+});
+
+// Nhóm các thuộc tính từ variants
+const attributeGroups = computed(() => {
+  if (!productDetail.value?.productVariants?.length) return {};
+
+  const groups: Record<string, { id: number; name: string }[]> = {};
+
+  (productDetail.value.productVariants as any[]).forEach((variant: any) => {
+    if (variant?.attributeData) {
+      Object.entries(variant.attributeData).forEach(([attrName, attrValue]: [string, any]) => {
+        if (!groups[attrName]) {
+          groups[attrName] = [];
+        }
+        const exists = groups[attrName]?.find((item) => item.id === attrValue.id);
+        if (!exists) {
+          groups[attrName]?.push(attrValue);
+        }
+      });
+    }
+  });
+
+  return groups;
+});
+
+// Tìm variant phù hợp với attributes đã chọn
+const findMatchingVariant = () => {
+  if (!productDetail.value?.productVariants?.length) return null;
+
+  return (productDetail.value.productVariants as any[]).find((variant: any) => {
+    if (!variant?.attributeData) return false;
+
+    return Object.entries(selectedAttributes.value).every(([attrName, attrId]) => {
+      return variant.attributeData?.[attrName]?.id === attrId;
+    });
+  });
+};
+
+const handleSelectAttribute = (attributeName: string, attributeId: number) => {
+  selectedAttributes.value[attributeName] = attributeId;
+  selectedVariant.value = findMatchingVariant();
+};
+
+const displayPrice = computed(() => {
+  if (selectedVariant.value?.price) {
+    return new Intl.NumberFormat("vi-VN").format(selectedVariant.value.price);
+  }
+  if (productDetail.value?.priceOrigin) {
+    return new Intl.NumberFormat("vi-VN").format(parseFloat(productDetail.value.priceOrigin.toString()));
+  }
+  return "0";
+});
+
+const displayStock = computed(() => {
+  if (selectedVariant.value?.stock !== undefined) {
+    return selectedVariant.value.stock;
+  }
+  return 0;
+});
+
+const discountPercent = computed(() => {
+  if (!productDetail.value) return 0;
+
+  const originalPrice = parseFloat(productDetail.value.priceOrigin?.toString() || "0");
+  const salePrice = selectedVariant.value?.price ? parseFloat(selectedVariant.value.price.toString()) : productDetail.value.priceOrigin ? parseFloat(productDetail.value.priceOrigin.toString()) : 0;
+
+  if (originalPrice <= 0 || salePrice >= originalPrice) return 0;
+
+  const discount = ((originalPrice - salePrice) / originalPrice) * 100;
+  return Math.round(discount);
+});
+
+// Related products
+const relatedProducts = computed(() => {
+  if (!productDetail.value?.relateds || !Array.isArray(productDetail.value.relateds)) return [];
+  const items = productDetail.value.relateds;
+  if (items.length === 0) return [];
+  if (typeof items[0] === "object" && items[0] !== null && "id" in items[0]) {
+    return items as IProduct[];
+  }
+  return [];
+});
+
+// Short description for preview
+const shortDescription = computed(() => {
+  if (!productDetail.value?.description) return "";
+  const text = productDetail.value.description
+    .replace(/<[^>]*>/g, "")
+    .replace(/&nbsp;/g, " ")
+    .trim();
+  if (text.length <= 300) return productDetail.value.description;
+  const plainTextPreview = text.slice(0, 300);
+  return `<p>${plainTextPreview}...</p>`;
+});
+
+watch(quantity, (newVal) => {
+  if (newVal < 1) quantity.value = 1;
+  if (displayStock.value > 0 && newVal > displayStock.value) {
+    quantity.value = displayStock.value;
+  }
+});
+
+const scrollToTab = (tabName: string) => {
+  activeTab.value = tabName;
+  nextTick(() => {
+    const element = document.getElementById("tabs-information");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  });
+};
+
+// Load data khi component mount
+onMounted(async () => {
+  const slug = route.params.slug as string;
+  if (slug) {
+    await fetchDetailBySlug(slug);
+
+    // Chọn variant đầu tiên mặc định
+    if (productDetail.value?.productVariants?.length) {
+      const firstVariant = (productDetail.value.productVariants as any[])[0];
+      if (firstVariant?.attributeData) {
+        Object.entries(firstVariant.attributeData).forEach(([attrName, attrValue]: [string, any]) => {
+          selectedAttributes.value[attrName] = attrValue.id;
+        });
+      }
+      selectedVariant.value = firstVariant;
+    }
+
+    // Sync sliders
+    await nextTick();
+    if (mainSliderRef.value?.splide && thumbSliderRef.value?.splide) {
+      mainSliderRef.value.splide.sync(thumbSliderRef.value.splide);
+    }
+
+    // Track view
+    if (productDetail.value?.id) {
+      await trackView(productDetail.value.id);
+    }
+  }
+});
+
+definePageMeta({
+  layout: "client",
+});
+</script>
+<style scoped>
+.active-tab {
+  color: #fff !important;
+}
+</style>

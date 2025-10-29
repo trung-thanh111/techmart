@@ -73,4 +73,9 @@ export const productService = {
       },
     });
   },
+
+  showBySlug: async (slug: string): Promise<IApiOk<IProduct[]>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IProduct[]>>(`${ENDPOINT}/product/${slug}`);
+  },
 };
