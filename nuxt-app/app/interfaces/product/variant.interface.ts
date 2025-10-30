@@ -1,3 +1,14 @@
+export interface IAgencyAvailable {
+  id: number;
+  name: string;
+  slug?: string;
+  phone?: string;
+  address?: string;
+  iframeMap?: string;
+  stock: number;
+  priceOverride: number;
+}
+
 export interface IProductVariant {
   id?: number;
   name?: string;
@@ -11,6 +22,7 @@ export interface IProductVariant {
   attributes?: number[];
   productId?: number | null;
   publish?: number | null;
+  availableAgencies?: IAgencyAvailable[];
 }
 
 export interface IAttribute {

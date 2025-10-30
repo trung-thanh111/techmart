@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use App\Traits\HasQuery;
@@ -23,11 +24,17 @@ class Agency extends Model
         'phone',
         'address',
         'iframe_map',
+        'is_main',
+        'is_online',
+        'is_visible',
         'user_id',
         'publish'
     ];
 
-    protected $casts = [];
+    protected $casts = [
+        'is_main' => 'boolean',
+        'is_visible' => 'boolean',
+    ];
 
     /**
      * Biến này đăng ký quan hệ được phép bắn lên từ client
@@ -47,5 +54,4 @@ class Agency extends Model
     {
         return $this->belongsToMany(AgencyWorkingHour::class, 'agency_working_hour_agency', 'agency_id', 'agency_working_hour_id');
     }
-
 }

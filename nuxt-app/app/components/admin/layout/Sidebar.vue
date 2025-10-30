@@ -40,6 +40,9 @@
                   <NuxtLink :to="PRODUCTCATALOGUEINDEX" class="nav-link" data-key="t-product-catelogue">{{ $t("admin.sidebar.productCatalogue") }}</NuxtLink>
                 </li>
                 <li class="nav-item">
+                  <NuxtLink :to="INVENTORYINDEX" class="nav-link" data-key="t-product-inventory">{{ $t("admin.sidebar.inventory") }}</NuxtLink>
+                </li>
+                <li class="nav-item">
                   <NuxtLink to="#sidebarProduct" class="nav-link menu-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProduct" data-key="t-profile">{{ $t("admin.sidebar.products") }}</NuxtLink>
                   <div class="collapse menu-dropdown" id="sidebarProduct">
                     <ul class="nav nav-sm flex-column">

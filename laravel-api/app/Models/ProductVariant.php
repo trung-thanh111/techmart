@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -35,15 +36,30 @@ class ProductVariant extends Model
      * @var array
      */
     public $relationable = [
-        'variant_attributes'
+        'variant_attributes',
+        'availableAgencies'
     ];
 
-    public function products(): BelongsTo {
+    public function products(): BelongsTo
+    {
         return $this->belongsTo(Product::class);
     }
 
-    public function variant_attributes(): BelongsToMany {
+    public function variant_attributes(): BelongsToMany
+    {
         return $this->belongsToMany(Attribute::class, 'product_variant_attribute');
     }
 
+
+    /**
+     * Lấy danh sách agencies có sẵn variant này (stock > 1 và isVisible = true)
+     */
+    public function availableAgencies(): BelongsToMany
+    {
+        return $this->belongsToMany(Agency::class, 'inventorys', 'product_variant_id', 'agency_id')
+            ->withPivot('stock', 'price_override', 'publish')
+            ->wherePivot('stock', '>', 1)
+            ->where('agencies.is_visible', true)
+            ->where('agencies.publish', 2)->get();
+    }
 }

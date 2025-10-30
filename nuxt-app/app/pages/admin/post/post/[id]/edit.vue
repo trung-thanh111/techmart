@@ -94,7 +94,7 @@
           </div>
         </div>
       </div>
-      <SEO :values="values"/>
+      <SEO :values="values" />
       <div class="flex justify-end gap-3 mt-4 position-sticky bottom-5 z-20">
         <Button type="button" variant="cancel" :to="POSTINDEX" />
         <Button variant="success" :loading="isLoading" />
@@ -211,27 +211,29 @@ import SEO from "~/components/admin/custom/SEO.vue";
 
 const { isLoading, tagOptions, postCatalogueOptions, postOptions, config, slug, show, handleUpdate, setValues, values } = usePost(undefined, "update");
 const id = Number(useRoute().params.id);
-const { data } = await show(id);
 const currentImageUrl = ref<string | null>(null);
-currentImageUrl.value = data?.image?.path ? data?.image?.url || null : null;
+onMounted(async () => {
+  const { data } = await show(id);
 
-setValues({
-  name: data.name,
-  description: data.description,
-  content: data.content,
-  tableOfContent: data.tableOfContent,
-  order: data.order,
-  isHot: data.isHot,
-  viewCount: data.viewCount,
-  // ép kiểu để load data & phù hợp với Interface
-  postCatalogues: (data?.postCatalogues as { id: number; name: string }[] | undefined)?.map((c) => c.id) ?? [],
-  postTags: (data?.tags as { id: number; name: string }[] | undefined)?.map((t) => t.id) ?? [],
-  relateds: (data?.relateds as { id: number; name: string }[] | undefined)?.map((r) => r.id) ?? [],
-  publish: data.publish || 0,
-  metaTitle: data.metaTitle,
-  metaKeyword: data.metaKeyword,
-  metaDescription: data.metaDescription,
-  publishedAt: data.publishedAt,
+  setValues({
+    name: data.name,
+    description: data.description,
+    content: data.content,
+    tableOfContent: data.tableOfContent,
+    order: data.order,
+    isHot: data.isHot,
+    viewCount: data.viewCount,
+    // ép kiểu để load data & phù hợp với Interface
+    postCatalogues: (data?.postCatalogues as { id: number; name: string }[] | undefined)?.map((c) => c.id) ?? [],
+    postTags: (data?.tags as { id: number; name: string }[] | undefined)?.map((t) => t.id) ?? [],
+    relateds: (data?.relateds as { id: number; name: string }[] | undefined)?.map((r) => r.id) ?? [],
+    publish: data.publish || 0,
+    metaTitle: data.metaTitle,
+    metaKeyword: data.metaKeyword,
+    metaDescription: data.metaDescription,
+    publishedAt: data.publishedAt,
+  });
+  currentImageUrl.value = data?.image?.path ? data?.image?.url || null : null;
 });
 
 definePageMeta({

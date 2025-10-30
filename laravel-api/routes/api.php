@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\Inventory\InventoryController;
 use App\Http\Controllers\Api\V1\Banner\BannerPositionController;
 use App\Http\Controllers\Api\V1\Banner\BannerPageController;
 use App\Http\Controllers\Api\V1\Promotion\PromotionController;
@@ -392,6 +393,17 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
             Route::delete('{id}/detach', [BannerPositionController::class, 'detach']);
         });
         Route::resource('banner_positions', BannerPositionController::class)->except($routeExcept);
+
+        // This is route Inventory
+        Route::group(['prefix' => 'inventorys'], function() {
+            Route::post('bulkStore', [InventoryController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [InventoryController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [InventoryController::class, 'bulkUpdate']);
+            Route::delete('bulkDelete', [InventoryController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [InventoryController::class, 'attach']);
+            Route::delete('{id}/detach', [InventoryController::class, 'detach']);
+        });
+        Route::resource('inventorys', InventoryController::class)->except($routeExcept);
 
         // generate route
 

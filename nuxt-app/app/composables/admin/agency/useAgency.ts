@@ -26,13 +26,19 @@ export const useAgency = (initialFilters?: AgencyPayloadFilter, mode: "create" |
 
   const schema = {
     name: z.string({ required_error: "admin.validation.nameRequired" }).trim().min(1, "admin.validation.nameRequired").max(255, "admin.validation.nameMaxLength"),
-    email: z.string({ required_error: 'admin.validation.emailRequired' }).email('admin.validation.emailInvalid').max(255, 'admin.validation.emailMaxLength'),
-    phone: z.string().max(255, 'admin.validation.phoneMaxLength').nullable().optional(),
-    address: z.string().max(255, 'admin.validation.addressMaxLength').nullable().optional(),
+    email: z.string({ required_error: "admin.validation.emailRequired" }).email("admin.validation.emailInvalid").max(255, "admin.validation.emailMaxLength"),
+    phone: z.string().max(255, "admin.validation.phoneMaxLength").nullable().optional(),
+    address: z.string().max(255, "admin.validation.addressMaxLength").nullable().optional(),
     website: z.string().max(500, "admin.validation.websiteMaxLength").nullable().optional(),
     description: z.string().max(500, "admin.validation.descriptionMaxLength").nullable().optional(),
     iframeMap: z.string().nullable().optional(),
-    logo: z.any().optional().refine((file) => !file || file.size <= MAX_FILE_SIZE, 'admin.common.maxFileSize').refine((file) => !file || ACCEPTED_IMAGE_TYPES.includes(file.type), 'admin.common.acceptedImageTypes'),
+    isMain: z.boolean().default(false).optional(),
+    isVisible: z.boolean().default(true).optional(),
+    logo: z
+      .any()
+      .optional()
+      .refine((file) => !file || file.size <= MAX_FILE_SIZE, "admin.common.maxFileSize")
+      .refine((file) => !file || ACCEPTED_IMAGE_TYPES.includes(file.type), "admin.common.acceptedImageTypes"),
     agencyWorkingHours: z.array(z.number()).min(1, "admin.validation.agencyWorkingHourRequired"),
     publish: z.number({ required_error: "admin.validation.statusRequired" }).refine((val) => [0, 1, 2].includes(val), { message: "admin.validation.statusInvalid" }),
   };
@@ -154,9 +160,7 @@ export const useAgency = (initialFilters?: AgencyPayloadFilter, mode: "create" |
     try {
       const response = await agencyWorkingHourService.all();
       const rows = response?.data ?? [];
-      agencyWorkingHourOptions.value = (Array.isArray(rows) ? rows : [rows])
-        .map((item: any) => ({ id: Number(item.id), name: item.dayOfWeek }))
-        .filter((opt: any) => opt.name && !Number.isNaN(opt.id));
+      agencyWorkingHourOptions.value = (Array.isArray(rows) ? rows : [rows]).map((item: any) => ({ id: Number(item.id), name: item.dayOfWeek })).filter((opt: any) => opt.name && !Number.isNaN(opt.id));
     } catch (error) {
       console.error("Lỗi khi tải dữ liệu agency working_hour:", error);
     }

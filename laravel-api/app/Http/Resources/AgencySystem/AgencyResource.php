@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Resources\AgencySystem;
 
 use App\Http\Resources\User\UserResource;
@@ -28,14 +29,10 @@ class AgencyResource extends JsonResource
             'phone' => $this->phone ?? null,
             'address' => $this->address ?? null,
             'iframeMap' => $this->iframe_map ?? null,
+            'isMain' => $this->is_main ?? false,
+            'isVisible' => $this->is_Visible ?? false,
             'agencyWorkingHours' => AgencyWorkingHourResource::collection($this->agency_working_hours),
-            'publish' => (int) $this->publish,
-            'createdAt' => $this->created_at ?? null,
-            'updatedAt' => $this->updated_at ?? null,
-            // 'creator' => $this->whenLoaded('users', [
-            //     'id' => $this->users->id,
-            //     'name' => $this->users->name,
-            // ]),
+            'publish' => (int) $this->publish
         ];
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Resources\Product;
 
 use Illuminate\Http\Request;
@@ -21,11 +22,12 @@ class ProductVariantResource extends JsonResource
             'sku' => $this->sku,
             'stock' => (int) $this->stock,
             'sku' => $this->sku,
-            'price' => (double) $this->price,
+            'price' => (float) $this->price,
             'barcode' => $this->barcode,
             'attributeData' => $this->attribute_data,
             'productId' => $this->product_id,
-            'attributes' => $this->whenLoaded('variant_attributes', 
+            'attributes' => $this->whenLoaded(
+                'variant_attributes',
                 $this->variant_attributes->pluck('id')->toArray()
             ),
             // 'attributeNames' => $this->whenLoaded('variant_attributes', [
@@ -41,6 +43,19 @@ class ProductVariantResource extends JsonResource
             //     })->values();
             // }),
             'publish' => (int) $this->publish,
+            'availableAgencies' => $this->whenLoaded('availableAgencies', function () {
+                return $this->availableAgencies->map(function ($agency) {
+                    return [
+                        'id' => $agency->id,
+                        'name' => $agency->name,
+                        'slug' => $agency->slug,
+                        'phone' => $agency->phone,
+                        'address' => $agency->address,
+                        'stock' => (int) $agency->pivot->stock,
+                        'priceOverride' => (float) $agency->pivot->price_override,
+                    ];
+                });
+            }),
         ];
     }
 }

@@ -275,51 +275,19 @@
                           </defs>
                         </svg>
                       </div>
-                      <div class="relative py-[2px] pl-[14px] bg-gradient-to-r from-[#f59e0b] via-[#f97316] to-[#eab308] caption text-white text-sm font-medium min-w-[216px] transform translate-x-[-10px]">Hệ thống kho phân phối TMĐT</div>
+                      <div class="relative py-[2px] pl-[14px] pr-2 bg-gradient-to-r from-[#f59e0b] via-[#f97316] to-[#eab308] caption text-white text-sm font-medium min-w-[216px] transform translate-x-[-10px]">Hệ thống kho phân phối TMĐT</div>
                     </div>
                   </div>
-                  <div>
-                    <div class="flex space-x-[8px] items-center mx-2">
-                      <div class="flex-1">
-                        <div class="border border-gray-300 rounded overflow-hidden relative bg-white">
-                          <select class="appearance-none py-2 px-3 block w-full ring-0 outline-none focus:outline-none border-none bg-transparent relative z-50 caption">
-                            <option value="" class="caption">Tỉnh/ thành phố</option>
-                          </select>
-                          <div class="absolute right-[10px] top-1/2 transform -translate-y-1/2">
-                            <span>
-                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="17" viewBox="0 0 16 17" fill="none">
-                                <path d="M12.3561 6.35952L12.0613 6.07233C11.9686 5.98264 11.8451 5.93323 11.7132 5.93323C11.5813 5.93323 11.4577 5.98264 11.365 6.07233L8.00201 9.32595L4.63518 6.06872C4.54254 5.97903 4.41896 5.92969 4.2871 5.92969C4.15525 5.92969 4.03159 5.97903 3.93888 6.06872L3.644 6.35414C3.452 6.53975 3.452 6.84209 3.644 7.0277L7.65262 10.9198C7.74525 11.0094 7.86869 11.0725 8.00172 11.0725L8.00326 11.0725C8.13518 11.0725 8.25862 11.0093 8.35126 10.9198L12.3561 7.03825C12.4489 6.94863 12.4999 6.8256 12.5 6.69804C12.5 6.5704 12.4489 6.44907 12.3561 6.35952Z" fill="#88898E"></path>
-                              </svg>
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="flex-1">
-                        <div class="border border-gray-300 rounded overflow-hidden relative bg-white">
-                          <select class="appearance-none py-2 px-3 block w-full ring-0 outline-none focus:outline-none border-none bg-transparent relative z-50 text-gray-500 caption">
-                            <option value="">Quận/ huyện</option>
-                          </select>
-                          <div class="absolute right-[10px] top-1/2 transform -translate-y-1/2">
-                            <span>
-                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="17" viewBox="0 0 16 17" fill="none">
-                                <path d="M12.3561 6.35952L12.0613 6.07233C11.9686 5.98264 11.8451 5.93323 11.7132 5.93323C11.5813 5.93323 11.4577 5.98264 11.365 6.07233L8.00201 9.32595L4.63518 6.06872C4.54254 5.97903 4.41896 5.92969 4.2871 5.92969C4.15525 5.92969 4.03159 5.97903 3.93888 6.06872L3.644 6.35414C3.452 6.53975 3.452 6.84209 3.644 7.0277L7.65262 10.9198C7.74525 11.0094 7.86869 11.0725 8.00172 11.0725L8.00326 11.0725C8.13518 11.0725 8.25862 11.0093 8.35126 10.9198L12.3561 7.03825C12.4489 6.94863 12.4999 6.8256 12.5 6.69804C12.5 6.5704 12.4489 6.44907 12.3561 6.35952Z" fill="#88898E"></path>
-                              </svg>
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="mt-2 text-sm text-end">
+                  <div v-if="selectedVariant && availableAgenciesForVariant.length > 0" class="mt-2 text-sm">
                     <div class="text-gray-600 caption">
                       Có
-                      <span class="font-bold text-gray-700">10</span>
+                      <span class="font-bold text-gray-700">{{ availableAgenciesForVariant.length }}</span>
                       cửa hàng có sản phẩm
                     </div>
                     <div class="mt-2 overflow-hidden border border-gray-200 rounded-lg">
                       <div class="h-[280px] xl:h-[320px] overflow-y-auto scrollbar-hide address-agents">
                         <div class="w-full h-full">
-                          <div v-for="(agency, index) in 10" :key="index" :class="['flex items-center space-x-[6px] text-[13px] p-2', index % 2 === 0 ? 'bg-white' : 'bg-gray-200']">
+                          <div v-for="(agency, index) in availableAgenciesForVariant" :key="agency.id" :class="['flex items-center space-x-[6px] text-[13px] p-2', index % 2 === 0 ? 'bg-white' : 'bg-gray-200']">
                             <div class="flex items-center space-x-[2px]">
                               <div class="flex-shrink-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="13" viewBox="0 0 12 13" fill="none">
@@ -327,18 +295,21 @@
                                 </svg>
                               </div>
                               <div class="flex items-center text-[#0180AD]">
-                                <NuxtLink to="tel:0898109810" class="description !leading-[140%] font-bold">0898109810</NuxtLink>
-                                <!---->
+                                <NuxtLink :to="`tel:${agency.phone}`" class="description !leading-[140%] font-bold">{{ agency.phone }}</NuxtLink>
                               </div>
                             </div>
                             <div class="w-[1px] h-[11px] bg-gray-300"></div>
                             <div class="flex-1">
-                              <NuxtLink to="/he-thong-dai-ly/kho-tong-cong-ty" class="text-gray-800 duration-150 line-clamp-1 description hover:text-[#0180AD]">Số 87-89, phố Hạ Đình, Phường Thanh Xuân Trung, Quận Thanh Xuân, Hà Nội, Phường Thanh Xuân Trung, Quận Thanh Xuân, Thành phố Hà Nội</NuxtLink>
+                              <NuxtLink v-if="agency.slug" :to="`/he-thong-dai-ly/${agency.slug}`" class="text-gray-800 duration-150 line-clamp-1 description hover:text-[#0180AD]">{{ agency.address }}</NuxtLink>
+                              <span v-else class="text-gray-800 line-clamp-1 description">{{ agency.address }}</span>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
+                  </div>
+                  <div v-else-if="selectedVariant" class="mt-2 text-sm">
+                    <div class="text-gray-500 caption italic">Chưa có cửa hàng nào có sẵn phiên bản này</div>
                   </div>
                 </div>
                 <div class="px-3 py-4 bg-white rounded-b">
@@ -918,6 +889,11 @@ const displayStock = computed(() => {
     return selectedVariant.value.stock;
   }
   return 0;
+});
+
+const availableAgenciesForVariant = computed(() => {
+  if (!selectedVariant.value?.availableAgencies) return [];
+  return selectedVariant.value.availableAgencies;
 });
 
 const discountPercent = computed(() => {

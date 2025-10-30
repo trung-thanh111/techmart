@@ -9,6 +9,7 @@
   },
   "admin": {
     "common": {
+      "stock": "Tồn kho",
       "customize": "Tùy chỉnh",
       "price": "Giá",
       "noteUploadImage": "jpg, jpeg, png, webp (tối đa 5MB)",
@@ -82,6 +83,12 @@
       "type": "Loại",
       "position": "Vị trí",
       "form": {
+        "agency": "Đại lý",
+        "product": "Sản phẩm",
+        "priceOverride": "Giá tại cửa hàng",
+        "agencyPlaceholder": "Chọn đại lý",
+        "productPlaceholder": "Chọn sản phẩm",
+        "productVariantPlaceholder": "Chọn phiên bản",
         "page": "Trang",
         "pagePlaceholder": "Chọn trang",
         "none": "Không có",
@@ -98,6 +105,8 @@
         "orderPlaceholder": "Nhập thứ tự",
         "urlTooltip": "URL của bản ghi",
         "isHot": "Nổi bật",
+        "isMain": "Kho trung tâm",
+        "isVisible": "Được hiển thị",
         "isHotPlaceholder": "Chọn nổi bật",
         "email": "Email",
         "emailPlaceholder": "Nhập email",
@@ -258,6 +267,7 @@
       "management": "Quản lý",
       "products": "Sản phẩm",
       "productCatalogue": "Nhóm sản phẩm",
+      "inventory": "Kho hàng",
       "promotions": "Khuyến mãi",
       "promotionCatalogue": "Nhóm khuyến mãi",
       "productList": "Danh sách",
@@ -447,6 +457,13 @@
         "breadcrumb": "Quản lý nhóm câu hỏi thường gặp",
         "groupInfo": "Thông tin"
       },
+      "inventory": {
+        "title": "Kho hàng",
+        "breadcrumb": "Quản lý Kho hàng",
+        "groupInfo": "Thông tin",
+        "agency": "Đại lý",
+        "variant": "sản phẩm (Vra)"
+      },
       "promotionCatalogue": {
         "title": "nhóm khuyến mãi",
         "breadcrumb": "Quản lý nhóm khuyến mãi",
@@ -630,7 +647,9 @@
       "priceOriginRequired": "Giá gốc là bắt buộc",
       "minValue": "Giá trị phải lớn hơn hoặc bằng 0",
       "brandRequired": "Bạn chưa chọn thương hiệu",
-      "productCatalogueRequired": "Bạn chưa chọn nhóm sản phẩm"
+      "productCatalogueRequired": "Bạn chưa chọn nhóm sản phẩm",
+      "agencyRequired": "Bạn chưa chọn đại lý",
+      "productVariantRequired": "Bạn chưa chọn phiên bản sản phẩm"
     },
     "messages": {
       "createSuccess": "Thêm mới thành công",

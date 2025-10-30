@@ -11,8 +11,10 @@ export interface IAgency {
   phone?: string;
   address?: string;
   iframeMap?: string;
+  isMain?: boolean;
+  isVisible?: boolean;
   publish?: number;
-  agencyWorkingHours?: number[]
+  agencyWorkingHours?: number[];
 }
 
 export interface Option {
