@@ -45,6 +45,10 @@ export const PRODUCTINDEX = "/admin/product/product";
 export const PRODUCTCREATE = "/admin/product/product/create";
 export const PRODUCTUPDATE = "/admin/product/product/update";
 
+export const INVENTORYINDEX = "/admin/inventory/inventory";
+export const INVENTORYCREATE = "/admin/inventory/inventory/create";
+export const INVENTORYUPDATE = "/admin/inventory/inventory/update";
+
 export const PRODUCTCATALOGUEINDEX = "/admin/product/catalogue";
 export const PRODUCTCATALOGUECREATE = "/admin/product/catalogue/create";
 export const PRODUCTCATALOGUEUPDATE = "/admin/product/catalogue/update";

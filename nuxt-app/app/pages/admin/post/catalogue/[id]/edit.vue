@@ -60,7 +60,7 @@
           </div>
         </div>
       </div>
-      <SEO :values="values"/>
+      <SEO :values="values" />
 
       <div class="flex justify-end gap-3 mt-4 position-sticky bottom-5 z-20">
         <Button type="button" variant="cancel" :to="POSTCATALOGUEINDEX" />
@@ -125,21 +125,24 @@ import SEO from "~/components/admin/custom/SEO.vue";
 const { config, isLoading, postCatalogueOptions, values, slug, show, handleUpdate, setValues } = usePostCatalogue(undefined, "update");
 
 const id = Number(useRoute().params.id);
-const { data } = await show(id);
-setValues({
-  name: data.name,
-  description: data.description,
-  publish: data.publish,
-  order: data.order,
-  parentId: data.parentId,
-  isHot: data.isHot,
-  metaTitle: data.metaTitle,
-  metaKeyword: data.metaKeyword,
-  metaDescription: data.metaDescription,
-});
-
 const currentImageUrl = ref<string | null>(null);
-currentImageUrl.value = data?.image?.path ? data?.image?.url || null : null;
+
+onMounted(async () => {
+  const { data } = await show(id);
+  setValues({
+    name: data.name,
+    description: data.description,
+    publish: data.publish,
+    order: data.order,
+    parentId: data.parentId,
+    isHot: data.isHot,
+    metaTitle: data.metaTitle,
+    metaKeyword: data.metaKeyword,
+    metaDescription: data.metaDescription,
+  });
+
+  currentImageUrl.value = data?.image?.path ? data?.image?.url || null : null;
+});
 
 definePageMeta({
   layout: "admin",

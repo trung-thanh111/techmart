@@ -132,6 +132,22 @@
         </div>
         <div class="card-body">
           <div class="mb-3">
+            <div class="form-check d-flex align-items-center gap-2 ps-0">
+              <Field name="isMain" v-slot="{ field }">
+                <AppCheckbox :modelValue="field.value" @update:modelValue="field.onChange" inputId="is_main" class="scale-125" />
+              </Field>
+              <label for="is_main" class="mb-0">{{ $t("admin.common.form.isMain") }}</label>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="form-check d-flex align-items-center gap-2 ps-0">
+              <Field name="isVisible" v-slot="{ field }">
+                <AppCheckbox :modelValue="field.value" @update:modelValue="field.onChange" inputId="is_visible" class="scale-125" />
+              </Field>
+              <label for="is_visible" class="mb-0">{{ $t("admin.common.form.isVisible") }}</label>
+            </div>
+          </div>
+          <div class="mb-3">
             <label class="form-label">{{ $t("admin.common.status") }}</label>
             <Field name="publish" v-slot="{ field, errorMessage, meta }">
               <PublishSelect :modelValue="field.value" @update:modelValue="field.onChange" />
@@ -154,6 +170,7 @@ import Breadcrumb from "~/components/admin/navigation/Breadcrumb.vue";
 import PublishSelect from "~/components/admin/custom/PublishSelect.vue";
 import { useAgency } from "~/composables/admin/agency/useAgency";
 import SingleImageUpload from "~/components/admin/custom/SingleImageUpload.vue";
+import AppCheckbox from "~/components/admin/custom/AppCheckbox.vue";
 
 const { handleStore, setValues, values, isLoading, config, slug, agencyWorkingHourOptions } = useAgency();
 

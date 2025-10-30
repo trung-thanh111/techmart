@@ -1,4 +1,4 @@
-import type { IApiOk, IApiMessage } from "~/interfaces/base.interface";
+import type { IApiOk } from "~/interfaces/base.interface";
 import { attributeCatalogueService } from "~/services/attribute/catalogue.service";
 import { attributeService } from "~/services/attribute/attribute.service";
 import { productService } from "~/services/product/product.service";
@@ -16,7 +16,7 @@ export const productVariantService = {
    */
   getAttributesByCatalogue: async (catalogueId: number): Promise<IApiOk<any>> => {
     // Gọi API với filter theo attribute_catalogue_id để BE lọc sẵn
-    return await attributeService.pagination({ type: 'all', attribute_catalogue_id: catalogueId });
+    return await attributeService.pagination({ type: "all", attribute_catalogue_id: catalogueId });
   },
 
   /**

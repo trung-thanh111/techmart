@@ -4,6 +4,13 @@ namespace App\Providers;
 
 use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
+use App\Models\ProductVariant;
+use App\Models\Agency;
+use App\Observers\ProductVariantObserver;
+use App\Observers\AgencyObserver;
+use App\Services\Interfaces\Inventory\InventoryServiceInterface;
+use App\Services\Impl\Inventory\InventoryService;
+use App\Services\Impl\Inventory\InventorySyncService;
 use App\Services\Interfaces\Banner\BannerPositionServiceInterface;
 use App\Services\Impl\Banner\BannerPositionService;
 use App\Services\Interfaces\Banner\BannerPageServiceInterface;
@@ -107,6 +114,7 @@ class AppServiceProvider extends ServiceProvider
         PromotionServiceInterface::class => PromotionService::class,
         BannerPageServiceInterface::class => BannerPageService::class,
         BannerPositionServiceInterface::class => BannerPositionService::class,
+        InventoryServiceInterface::class => InventoryService::class,
     ];
 
     /**
@@ -117,6 +125,9 @@ class AppServiceProvider extends ServiceProvider
         foreach ($this->bindServices as $interface => $implementation) {
             $this->app->bind($interface, $implementation);
         }
+
+        // Đăng ký InventorySyncService như singleton
+        $this->app->singleton(InventorySyncService::class);
     }
 
     /**
@@ -125,5 +136,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Carbon::setLocale(config('app.locale'));
+
+        // Đăng ký Observers
+        ProductVariant::observe(ProductVariantObserver::class);
+        Agency::observe(AgencyObserver::class);
     }
 }

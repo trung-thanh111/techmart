@@ -18,7 +18,8 @@ class ProductVariantService extends BaseService implements ProductVariantService
 
     protected $with = [
         'products',
-        'variant_attributes'
+        'variant_attributes',
+        'availableAgencies'
     ];
     protected $relationFilter = [
         'variant_attributes'

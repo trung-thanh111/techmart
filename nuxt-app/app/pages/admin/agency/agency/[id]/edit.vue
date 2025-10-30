@@ -148,6 +148,22 @@
         </div>
         <div class="card-body">
           <div class="mb-3">
+            <div class="form-check d-flex align-items-center gap-2 ps-0">
+              <Field name="isMain" v-slot="{ field }">
+                <AppCheckbox :modelValue="field.value" @update:modelValue="field.onChange" inputId="is_main" class="scale-125" />
+              </Field>
+              <label for="is_main" class="mb-0">{{ $t("admin.common.form.isMain") }}</label>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="form-check d-flex align-items-center gap-2 ps-0">
+              <Field name="isVisible" v-slot="{ field }">
+                <AppCheckbox :modelValue="field.value" @update:modelValue="field.onChange" inputId="is_visible" class="scale-125" />
+              </Field>
+              <label for="is_visible" class="mb-0">{{ $t("admin.common.form.isVisible") }}</label>
+            </div>
+          </div>
+          <div class="mb-3">
             <label class="form-label">{{ $t("admin.common.status") }}</label>
             <Field name="publish" v-slot="{ field, errorMessage, meta }">
               <PublishSelect :modelValue="field.value" @update:modelValue="field.onChange" />
@@ -170,6 +186,7 @@ import Breadcrumb from "~/components/admin/navigation/Breadcrumb.vue";
 import { useAgency } from "~/composables/admin/agency/useAgency";
 import { AGENCYINDEX } from "~/utils/constants";
 import SingleImageUpload from "~/components/admin/custom/SingleImageUpload.vue";
+import AppCheckbox from "~/components/admin/custom/AppCheckbox.vue";
 
 const { config, isLoading, values, slug, agencyWorkingHourOptions, show, handleUpdate, setValues } = useAgency(undefined, "update");
 
@@ -183,9 +200,10 @@ setValues({
   phone: data.phone,
   address: data.address,
   website: data.website,
+  isMain: data.isMain,
+  isVisible: data.isVisible,
   publish: data.publish,
   agencyWorkingHours: (data?.agencyWorkingHours as { id: number; name: string }[] | undefined)?.map((c) => c.id) ?? [],
-
 });
 
 const currentLogoUrl = ref<string | null>(null);
