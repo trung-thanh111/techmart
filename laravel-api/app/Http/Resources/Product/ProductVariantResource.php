@@ -30,6 +30,16 @@ class ProductVariantResource extends JsonResource
                 'variant_attributes',
                 $this->variant_attributes->pluck('id')->toArray()
             ),
+            'agencies' => $this->whenLoaded('agencies', function () {
+                return $this->agencies->map(function ($agency) {
+                    return [
+                        'id' => $agency->id,
+                        'name' => $agency->name,
+                        'phone' => $agency->phone,
+                        'address' => $agency->address,
+                    ];
+                });
+            }),
             // 'attributeNames' => $this->whenLoaded('variant_attributes', [
             //     'name' => $this->variant_attributes->pluck('name')->toArray()
             // ]),
@@ -43,19 +53,6 @@ class ProductVariantResource extends JsonResource
             //     })->values();
             // }),
             'publish' => (int) $this->publish,
-            'availableAgencies' => $this->whenLoaded('availableAgencies', function () {
-                return $this->availableAgencies->map(function ($agency) {
-                    return [
-                        'id' => $agency->id,
-                        'name' => $agency->name,
-                        'slug' => $agency->slug,
-                        'phone' => $agency->phone,
-                        'address' => $agency->address,
-                        'stock' => (int) $agency->pivot->stock,
-                        'priceOverride' => (float) $agency->pivot->price_override,
-                    ];
-                });
-            }),
         ];
     }
 }

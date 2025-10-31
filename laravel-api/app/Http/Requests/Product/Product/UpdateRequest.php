@@ -47,6 +47,8 @@ class UpdateRequest extends BaseRequest
             "tag_id" => "{$sometime}|nullable|integer|min:0",
             "is_hot" => "{$sometime}|nullable|boolean",
             "like_count" => "{$sometime}|nullable|integer|min:0",
+            "sold" => "{$sometime}|nullable|integer|min:0",
+            "warranty" => "{$sometime}|nullable|integer|min:0",
             "publish" => "{$sometime}|nullable|integer|in:0,1,2",
             "user_id" => "{$sometime}|nullable|integer|exists:users,id",
             "meta_title" => "{$sometime}|nullable|string|max:255",

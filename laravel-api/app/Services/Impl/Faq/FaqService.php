@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\Impl\Faq;
 
 use Illuminate\Http\Request;
@@ -8,20 +9,21 @@ use App\Repositories\Faq\FaqRepository;
 use App\Http\Resources\Faq\FaqResource;
 use App\Services\Interfaces\Faq\FaqServiceInterface;
 
-class FaqService extends BaseService implements FaqServiceInterface {
+class FaqService extends BaseService implements FaqServiceInterface
+{
 
-protected $repository;
+    protected $repository;
 
-protected $complexFilter = ['id'];
-protected $simpleFilter = ['publish', 'faq_catalogue_id'];
+    protected $complexFilter = ['id'];
+    protected $simpleFilter = ['publish', 'faq_catalogue_id'];
 
-protected $with = ['faq_catalogues'];
-protected $relationFilter = [];
+    protected $with = ['faq_catalogues'];
+    protected $relationFilter = [];
 
-protected $cacheKeyPrefix = 'faqs';
-protected $cacheTags = ['faqs:collection'];
+    protected $cacheKeyPrefix = 'faqs';
+    protected $cacheTags = ['faqs:collection'];
 
-protected $useUpload = false;
+    protected $useUpload = false;
 
     public function __construct(
         FaqRepository $repository
@@ -29,7 +31,8 @@ protected $useUpload = false;
         $this->repository = $repository;
     }
 
-    protected function getRepository(){
+    protected function getRepository()
+    {
         return $this->repository;
     }
 
@@ -37,19 +40,27 @@ protected $useUpload = false;
      * nhiệm vụ bắt data từ client post lên (dạng thô, chuỗi, file, ....)
      *
      */
-    protected function prepareModelData(Request $request): self {
+    protected function prepareModelData(Request $request): self
+    {
 
         return $this->initializeBasicModelData($request);
     }
 
-    protected function initializeBasicModelData(Request $request): self {
+    protected function initializeBasicModelData(Request $request): self
+    {
         $fillable = $this->repository->getFillable();
         $this->modelData = $request->only($fillable);
         return $this;
     }
 
-    protected function getResource(Model $resource){
+    protected function getResource(Model $resource)
+    {
         return new FaqResource($resource);
     }
 
+    public function paginate(Request $request)
+    {
+        $request->merge(['simple' => true]);
+        return parent::paginate($request);
+    }
 }

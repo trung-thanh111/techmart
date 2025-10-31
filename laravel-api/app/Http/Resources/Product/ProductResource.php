@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Product;
 
 use App\Http\Resources\Brand\BrandResource;
+use App\Http\Resources\Faq\FaqResource;
 use App\Http\Resources\Product\ProductCatalogueResource;
 use App\Http\Resources\Product\ProductTagResource;
 use App\Http\Resources\Product\ProductVariantResource;
@@ -32,6 +33,7 @@ class ProductResource extends JsonResource
                 'isHot' => (bool) $this->is_hot,
                 'likeCount' => (int) $this->like_count,
                 'productCatalogueId' => (int) $this->product_catalogue_id,
+
                 'brandId' => (int) $this->brand_id,
                 'publish' => (int) $this->publish,
                 'createdAt' => $this->created_at,
@@ -65,6 +67,7 @@ class ProductResource extends JsonResource
             'relateds' => $this->whenLoaded('relateds', function () {
                 return ProductResource::collection($this->relateds);
             }),
+            'faqs' => FaqResource::collection($this->whenLoaded('product_faqs')),
             'productTags' => ProductTagResource::collection($this->whenLoaded('product_tags')),
             'productVariants' => ProductVariantResource::collection($this->whenLoaded('product_variants')),
             'metaTitle' => $this->meta_title,

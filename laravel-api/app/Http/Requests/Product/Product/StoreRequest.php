@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Requests\Product\Product;
 
 use App\Enums\Common;
@@ -36,6 +37,8 @@ class StoreRequest extends BaseRequest
             'tag_id' => 'nullable|integer|min:0',
             'is_hot' => 'nullable|boolean',
             'like_count' => 'nullable|integer|min:0',
+            'warranty' => 'nullable|integer|min:0',
+            'sold' => 'nullable|integer|min:0',
             'publish' => 'nullable|integer|in:0,1,2',
             'user_id' => 'nullable|integer|exists:users,id',
             'meta_title' => 'nullable|string|max:255',
@@ -53,7 +56,8 @@ class StoreRequest extends BaseRequest
         ]);
     }
 
-    public function messages(){
+    public function messages()
+    {
         return [];
     }
 }
