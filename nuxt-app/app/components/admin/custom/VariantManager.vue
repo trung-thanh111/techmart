@@ -132,7 +132,6 @@
                       :min="0"
                       fluid
                       class="w-full"
-                      disabled
                     />
                   </div>
                 </div>

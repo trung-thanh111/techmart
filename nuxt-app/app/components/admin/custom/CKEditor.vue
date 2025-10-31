@@ -63,3 +63,12 @@ const model = computed<string>({
   background: #f3f4f6;
 }
 </style>
+<style>
+.ck-editor__editable_inline,
+.ck-content {
+  max-height: 500px !important;
+  overflow-y: auto !important;
+  height: auto !important;
+  min-height: unset !important;
+}
+</style>

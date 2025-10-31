@@ -13,7 +13,8 @@ export interface IProduct {
   priceOrigin?: number;
   album?: { path: string }[];
   season?: "spring" | "summer" | "autumn" | "winter" | "none";
-  warranty?: string;
+  warranty?: number;
+  sold?: number;
   viewCount?: number;
   likeCount?: number;
   tagId?: number;
@@ -24,6 +25,7 @@ export interface IProduct {
   productCatalogues?: number[];
   productVariants?: IProductVariant[];
   productTags?: number[];
+  faqs?: number[];
   relateds?: number[];
   publish?: number;
   metaTitle?: string;

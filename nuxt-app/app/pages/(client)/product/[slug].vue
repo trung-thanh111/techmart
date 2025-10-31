@@ -200,17 +200,16 @@
                     để hưởng quyền lợi thành viên từ chúng tôi!
                   </div>
                 </div>
-                <div class="px-4 md:px-[24px]">
+                <div class="px-4 md:px-[24px]" v-if="Object.keys(attributeGroups).length > 0">
                   <div class="py-2 md:py-3 border-t border-gray-300">
-                    <div class="mb-1 space-y-[4px] text-sm" v-if="Object.keys(attributeGroups).length > 0">
-                      <div v-for="(attributes, attrName) in attributeGroups" :key="attrName">
+                    <div class="mb-1 space-y-[4px] text-sm">
+                      <div v-for="([attrName, attributes], index) in Object.entries(attributeGroups).slice(0, 2)" :key="attrName">
                         <div class="flex caption text-gray-600">
                           <div class="w-[120px] mr-2 md:mr-3 xl:mr-4">{{ attrName }}</div>
                           <div class="flex-1">{{ attributes.map((a) => a.name).join(", ") }}</div>
                         </div>
                       </div>
                     </div>
-                    <div v-else class="mb-1 text-sm text-gray-500">Không có thông số kỹ thuật</div>
                     <div class="btn-md text-strong-blue-400 inline-flex items-center cursor-pointer duration-200 mt-2">
                       <a @click.prevent="scrollToTab('specification')" href="#tabs-information" class="text-xs font-medium flex items-center space-x-[6px] text-sky-500">Xem chi tiết</a>
                       <div class="ml-[4px] flex-shrink-0">
@@ -228,13 +227,11 @@
                     </div>
                   </div>
                 </div>
-                <div class="px-4 lg:px-[24px]">
+                <div v-if="productDetail.description" class="px-4 lg:px-[24px]">
                   <div class="py-2 md:py-3 border-t border-gray-300 text-sm">
-                    <!-- fill data  -->
-                    <div class="prose max-w-none caption summary-content line-clamp-5 text-gray-600" v-if="productDetail.description">
-                      <div v-html="shortDescription"></div>
+                    <div class="prose max-w-none caption summary-content line-clamp-5 text-gray-600">
+                      <div v-html="productDetail.description"></div>
                     </div>
-                    <div v-else class="text-gray-500 text-sm">Không có mô tả</div>
                     <div class="btn-md text-strong-blue-400 inline-flex items-center cursor-pointer hover:text-strong-blue-500 duration-200 mt-2">
                       <a @click.prevent="scrollToTab('summary')" href="#tabs-information" class="text-xs font-medium flex items-center space-x-[6px] text-sky-500">Xem chi tiết</a>
                       <div class="ml-[4px] flex-shrink-0">
@@ -278,16 +275,16 @@
                       <div class="relative py-[2px] pl-[14px] pr-2 bg-gradient-to-r from-[#f59e0b] via-[#f97316] to-[#eab308] caption text-white text-sm font-medium min-w-[216px] transform translate-x-[-10px]">Hệ thống kho phân phối TMĐT</div>
                     </div>
                   </div>
-                  <div v-if="selectedVariant && availableAgenciesForVariant.length > 0" class="mt-2 text-sm">
+                  <div v-if="selectedVariant && agenciesForVariant.length > 0" class="mt-2 text-sm">
                     <div class="text-gray-600 caption">
                       Có
-                      <span class="font-bold text-gray-700">{{ availableAgenciesForVariant.length }}</span>
+                      <span class="font-bold text-gray-700">{{ agenciesForVariant.length }}</span>
                       cửa hàng có sản phẩm
                     </div>
                     <div class="mt-2 overflow-hidden border border-gray-200 rounded-lg">
                       <div class="h-[280px] xl:h-[320px] overflow-y-auto scrollbar-hide address-agents">
                         <div class="w-full h-full">
-                          <div v-for="(agency, index) in availableAgenciesForVariant" :key="agency.id" :class="['flex items-center space-x-[6px] text-[13px] p-2', index % 2 === 0 ? 'bg-white' : 'bg-gray-200']">
+                          <div v-for="(agency, index) in agenciesForVariant" :key="agency.id" :class="['flex items-center space-x-[6px] text-[12px] p-2', index % 2 === 0 ? 'bg-white' : 'bg-gray-200']">
                             <div class="flex items-center space-x-[2px]">
                               <div class="flex-shrink-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="13" viewBox="0 0 12 13" fill="none">
@@ -345,7 +342,7 @@
                         </defs>
                       </svg>
                     </span>
-                    <span class="text-gray-600 caption text-sm">Tư vấn chiếu sáng miễn phí</span>
+                    <span class="text-gray-600 caption text-sm">Tư vấn miễn phí</span>
                   </div>
                   <div class="flex items-center mb-1">
                     <span class="mr-3 text-green-600">
@@ -364,7 +361,7 @@
                     </span>
                     <span class="text-gray-600 caption text-sm">Bảo hành từ 2-5 năm</span>
                   </div>
-                  <NuxtLink to="/chinh-sach/" class="text-sm font-medium flex items-center space-x-[6px] text-sky-500">
+                  <NuxtLink to="/chinh-sach/" class="text-sm flex items-center space-x-[6px] text-sky-500">
                     <span class="underline">Xem chính sách</span>
                     <span>
                       <svg xmlns="http://www.w3.org/2000/svg" width="7" height="10" fill="none" viewBox="0 0 7 10">
@@ -427,14 +424,12 @@
               <div class="p-2 lg:p-0 content-block">
                 <div class="contentContainer relative text-gray-600 text-base" :class="isDescriptionExpanded ? '' : 'overflow-hidden max-h-[653px]'">
                   <div v-if="!isDescriptionExpanded" class="overflow-blur-content absolute bottom-0 left-0 w-full h-full max-h-20 transparent-NuxtImg bg-gradient-to-t from-white"></div>
-                  <!---->
                   <div class="prose markup-custom list-striped">
-                    <!-- filldata -->
-                    <div class="prose max-w-none" v-html="productDetail.description"></div>
+                    <div class="prose max-w-none" v-if="productDetail.description" v-html="productDetail.description"></div>
+                    <div v-else class="my-5 text-center text-gray-500">Không có mô tả</div>
                   </div>
-                  <!-- Tags sản phẩm -->
                   <div v-if="(productDetail as any).productTags && (productDetail as any).productTags.length > 0" class="flex flex-col gap-1 mt-5 justify-center items-start w-full bg-white dark:bg-transparent px-4 py-4 shadow-xl rounded-lg">
-                    <p class="font-medium text-xl text-gray-500 mb-2">Tags sản phẩm</p>
+                    <p class="font-medium text-xl text-gray-500 mb-2">Tags</p>
                     <div class="flex flex-wrap gap-2">
                       <NuxtLink v-for="tag in ((productDetail as any).productTags as any[])" :key="tag.id" :to="`/product/tag/${tag.slug}`" class="px-3 py-1 text-[12px] bg-[#d9dfe3] max-w-max rounded font-semibold text-[#7281a3] hover:bg-sky-100 hover:text-sky-600 transition-colors">#{{ tag.name }}</NuxtLink>
                     </div>
@@ -455,52 +450,19 @@
               <div class="px-4 bg-white">
                 <div class="prose specification-table">
                   <div class="specifications">
-                    <p style="font-weight: bold; font-size: 20px">Đặc tính của Phích</p>
-
-                    <table border="0" cellpadding="4" cellspacing="4" width="100%">
-                      <tbody>
-                        <tr>
-                          <td>Dung tích</td>
-                          <td>2 lít</td>
-                        </tr>
-                        <tr>
-                          <td>Vật liệu</td>
-                          <td>Thân inox kẻ cao cấp bền đẹp, ruột thủy tinh, gioăng silicone</td>
-                        </tr>
-                        <tr>
-                          <td>Độ giữ nhiệt sau 6 giờ</td>
-                          <td>≥ 80 °C</td>
-                        </tr>
-                        <tr>
-                          <td>Trọng lượng 1 phích</td>
-                          <td>1,3 kg</td>
-                        </tr>
-                        <tr>
-                          <td>Đường kính miệng</td>
-                          <td>45 mm</td>
-                        </tr>
-                      </tbody>
-                    </table>
-
-                    <p style="font-weight: bold; font-size: 20px">Quy cách đóng gói</p>
-
-                    <table border="0" cellpadding="4" cellspacing="4" width="100%">
-                      <tbody>
-                        <tr>
-                          <td>Số lượng bao gói/thùng</td>
-                          <td>04 cái</td>
-                        </tr>
-                        <tr>
-                          <td>Kích thước thùng ngoài</td>
-                          <td>(345x349x415) mm</td>
-                        </tr>
-                        <tr>
-                          <td>Khối lượng</td>
-                          <td>6,5 (kg)</td>
-                        </tr>
-                      </tbody>
-                    </table>
-
+                    <div class="px-4 md:px-[24px]" v-if="Object.keys(attributeGroups).length > 0">
+                      <div class="py-2 md:py-3">
+                        <div class="mb-1 space-y-[4px]">
+                          <div v-for="(attributes, attrName) in attributeGroups" :key="attrName">
+                            <div class="flex caption text-gray-600">
+                              <div class="w-[120px] mr-2 md:mr-3 xl:mr-4">{{ attrName }}</div>
+                              <div class="flex-1">{{ attributes.map((a) => a.name).join(", ") }}</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div v-else class="my-5 text-center text-gray-500">Không có thông số kỹ thuật</div>
                     &nbsp;
                   </div>
                 </div>
@@ -508,9 +470,9 @@
             </div>
           </div>
           <div class="text-gray-600 text-base" v-if="activeTab === 'faq'">
-            <div class="w-full py-2 sm:py-4">
+            <div v-if="(productDetail as any).faqs.length" class="w-full py-2 sm:py-4">
               <div class="mx-auto lg:w-[40vw] w-full px-0 sm:px-2 md:px-6">
-                <template v-for="(faq, id) in 8" :key="id">
+                <template v-for="(faq, id) in ((productDetail as any).faqs)" :key="id">
                   <div class="bg-white rounded-md border border-gray-100 hover:border-cyan-500 shadow transition hover:shadow-lg overflow-hidden mb-2">
                     <h2>
                       <button type="button" class="flex items-center justify-between w-full px-4 py-3 text-left text-base font-semibold text-gray-800 hover:text-cyan-600 transition" :aria-expanded="openFaq === id" @click="openFaq === id ? (openFaq = null) : (openFaq = id)">
@@ -518,18 +480,19 @@
                           <div class="w-8 h-8 flex items-center justify-center bg-cyan-100 text-cyan-600 font-bold rounded-md text-sm">
                             {{ id + 1 }}
                           </div>
-                          <span class="line-clamp-2">Làm sao để kích hoạt bảo hành online?</span>
+                          <span class="line-clamp-2">{{ faq.question }}</span>
                         </div>
                         <svg class="w-4 h-4 shrink-0 transition-transform duration-300" :class="{ 'rotate-180': openFaq === id }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                       </button>
                     </h2>
-                    <div v-show="openFaq === id" class="px-4 pb-4 text-sm text-gray-600 transition-all duration-300">Bạn có thể truy cập website của Tech Mart, chọn mục "Bảo hành sản phẩm", sau đó nhập mã seri sản phẩm cùng thông tin cá nhân là hoàn tất.</div>
+                    <div v-show="openFaq === id" class="px-4 pb-4 text-sm text-gray-600 transition-all duration-300" v-html="faq.answer"></div>
                   </div>
                 </template>
               </div>
             </div>
+            <div v-else class="my-5 text-center text-gray-500">Không có dữ liệu</div>
           </div>
           <div class="text-gray-600 text-base" v-if="activeTab === 'rating'">
             <div class="p-4">
@@ -795,6 +758,7 @@ import { useProduct } from "~/composables/client/product/useProduct";
 import { useProductSlider } from "~/composables/useProductSlider";
 import { resolveAlbum } from "~/utils/helpers";
 import type { IProduct } from "~/interfaces/product/product.interface";
+import { useAuthStore } from "~/stores/auth/auth";
 
 const route = useRoute();
 
@@ -891,9 +855,9 @@ const displayStock = computed(() => {
   return 0;
 });
 
-const availableAgenciesForVariant = computed(() => {
-  if (!selectedVariant.value?.availableAgencies) return [];
-  return selectedVariant.value.availableAgencies;
+const agenciesForVariant = computed(() => {
+  if (!selectedVariant.value?.agencies) return [];
+  return selectedVariant.value.agencies;
 });
 
 const discountPercent = computed(() => {
@@ -917,18 +881,6 @@ const relatedProducts = computed(() => {
     return items as IProduct[];
   }
   return [];
-});
-
-// Short description for preview
-const shortDescription = computed(() => {
-  if (!productDetail.value?.description) return "";
-  const text = productDetail.value.description
-    .replace(/<[^>]*>/g, "")
-    .replace(/&nbsp;/g, " ")
-    .trim();
-  if (text.length <= 300) return productDetail.value.description;
-  const plainTextPreview = text.slice(0, 300);
-  return `<p>${plainTextPreview}...</p>`;
 });
 
 watch(quantity, (newVal) => {
@@ -969,11 +921,6 @@ onMounted(async () => {
     await nextTick();
     if (mainSliderRef.value?.splide && thumbSliderRef.value?.splide) {
       mainSliderRef.value.splide.sync(thumbSliderRef.value.splide);
-    }
-
-    // Track view
-    if (productDetail.value?.id) {
-      await trackView(productDetail.value.id);
     }
   }
 });
