@@ -22,7 +22,7 @@ export interface IProductVariant {
   attributes?: number[];
   productId?: number | null;
   publish?: number | null;
-  availableAgencies?: IAgencyAvailable[];
+  agencies?: IAgencyAvailable[];
 }
 
 export interface IAttribute {

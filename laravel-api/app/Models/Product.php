@@ -24,6 +24,7 @@ class Product extends Model
         'album',
         'season',
         'warranty',
+        'sold',
         'sort_order',
         'product_catalogue_id',
         'brand_id',
@@ -52,19 +53,20 @@ class Product extends Model
     public $relationable = [
         'product_catalogues',
         'product_tags',
+        'product_faqs',
         'relateds'
     ];
-
-    protected static function booted(): void
-    {
-        // creating đến gán trước khi insert tối ưu thay vì dùng created 2 lần insert & update
-        static::creating(function (Product $product) {
-            // Xử lý productCatalogues từ frontend (camelCase) - fallback nếu Service chưa xử lý
-            if (!empty($product->productCatalogues) && is_array($product->productCatalogues)) {
-                $product->product_catalogue_id = $product->productCatalogues[0];
-            }
-        });
-    }
+    // todo 
+    // protected static function booted(): void
+    // {
+    //     // creating đến gán trước khi insert tối ưu thay vì dùng created 2 lần insert & update
+    //     static::creating(function (Product $product) {
+    //         // Xử lý productCatalogues từ frontend (camelCase) - fallback nếu Service chưa xử lý
+    //         if (!empty($product->productCatalogues) && is_array($product->productCatalogues)) {
+    //             $product->product_catalogue_id = $product->productCatalogues[0];
+    //         }
+    //     });
+    // }
 
     public function product_catalogues(): BelongsToMany
     {
@@ -89,6 +91,11 @@ class Product extends Model
     public function product_tags(): BelongsToMany
     {
         return $this->belongsToMany(ProductTag::class, 'product_tag_product', 'product_id', 'product_tag_id');
+    }
+
+    public function product_faqs(): BelongsToMany
+    {
+        return $this->belongsToMany(Faq::class, 'product_faqs', 'product_id', 'faq_id');
     }
 
     public function relateds(): BelongsToMany

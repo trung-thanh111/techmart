@@ -12,6 +12,7 @@ import { PRODUCTINDEX } from "~/utils/constants";
 import { productCatalogueService } from "~/services/product/catalogue.service";
 import { productTagService } from "~/services/product/tag.service";
 import { brandService } from "~/services/brand/brand.service";
+import { faqService } from "~/services/faq/faq.service";
 
 export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create" | "update" = "create") => {
   const { t } = useI18n();
@@ -24,6 +25,7 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
   const selectedIds = ref<number[]>([]);
   const selectedItem = ref<IProduct | null>(null);
   // Options with caching
+  const faqOptions = ref<Array<{ name: string; id: number }>>([]);
   const tagOptions = ref<Array<{ name: string; id: number }>>([]);
   const brandOptions = ref<Array<{ name: string; id: number }>>([]);
   const productOptions = ref<Array<{ name: string; id: number }>>([]);
@@ -44,10 +46,12 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
       .optional(),
     season: z.enum(["spring", "summer", "autumn", "winter", "none"]).nullable().optional(),
     warranty: z.number().nullable().optional(),
+    sold: z.number().nullable().optional(),
     sortOrder: z.number().int().nonnegative().nullable().optional(),
     productCatalogues: z.array(z.number(), { required_error: "admin.validation.productCatalogueRequired" }).min(1, "admin.validation.productCatalogueRequired"),
     brandId: z.number({ required_error: "admin.validation.brandRequired", invalid_type_error: "admin.validation.brandRequired" }).int().positive("admin.validation.brandRequired"),
     productTags: z.array(z.number()).nullable().optional(),
+    productFaqs: z.array(z.number()).nullable().optional(),
     relateds: z.array(z.number()).nullable().optional(),
     isHot: z.boolean().nullable().optional(),
     likeCount: z.number().int().nonnegative().nullable().optional(),
@@ -256,6 +260,35 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
     }
   };
 
+  const loadFaqOptions = async () => {
+    if (faqOptions.value.length > 0) return; // Cache hit
+    try {
+      const response = await faqService.pagination({
+        type: "all",
+        publish: 2,
+      });
+      // Response có thể là IPaginate hoặc array trực tiếp
+      let rows: any[] = [];
+      if (response?.data) {
+        if (Array.isArray(response.data)) {
+          rows = response.data;
+        } else if (response.data?.data && Array.isArray(response.data.data)) {
+          rows = response.data.data;
+        } else if (typeof response.data === "object") {
+          rows = [response.data];
+        }
+      }
+      faqOptions.value = rows
+        .map((item: any) => ({
+          id: Number(item.id),
+          name: item.question || item.name || "",
+        }))
+        .filter((opt: any) => opt.name && !Number.isNaN(opt.id));
+    } catch (error) {
+      console.error("Lỗi khi tải dữ liệu faqs:", error);
+    }
+  };
+
   const search = async (newFilters: BasePayloadFilter) => {
     filters.value = { ...filters.value, ...newFilters };
     page.value = 1;
@@ -292,7 +325,7 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
   const initializeData = async () => {
     await fetchData();
     if (!isOptionsLoaded.value) {
-      await Promise.all([loadProductCatalogue(), loadTag(), loadBrand(), loadProduct()]);
+      await Promise.all([loadProductCatalogue(), loadTag(), loadBrand(), loadProduct(), loadFaqOptions()]);
       isOptionsLoaded.value = true;
     }
   };
@@ -315,6 +348,7 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
     tagOptions,
     brandOptions,
     productOptions,
+    faqOptions,
     seasonOptions,
     slug,
     setValues,

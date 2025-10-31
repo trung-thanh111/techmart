@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use App\Traits\HasQuery;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ProductVariant extends Model
 {
@@ -37,7 +38,7 @@ class ProductVariant extends Model
      */
     public $relationable = [
         'variant_attributes',
-        'availableAgencies'
+        'agencies'
     ];
 
     public function products(): BelongsTo
@@ -50,16 +51,20 @@ class ProductVariant extends Model
         return $this->belongsToMany(Attribute::class, 'product_variant_attribute');
     }
 
-
-    /**
-     * Lấy danh sách agencies có sẵn variant này (stock > 1 và isVisible = true)
-     */
-    public function availableAgencies(): BelongsToMany
+    public function inventorys(): HasMany
     {
-        return $this->belongsToMany(Agency::class, 'inventorys', 'product_variant_id', 'agency_id')
-            ->withPivot('stock', 'price_override', 'publish')
-            ->wherePivot('stock', '>', 1)
-            ->where('agencies.is_visible', true)
-            ->where('agencies.publish', 2)->get();
+        return $this->hasMany(Inventory::class, 'product_variant_id', 'id');
+    }
+
+    public function agencies()
+    {
+        return $this->hasManyThrough(
+            Agency::class,
+            Inventory::class,
+            'product_variant_id',
+            'id',
+            'id',
+            'agency_id'
+        )->where('is_visible', true)->distinct();
     }
 }

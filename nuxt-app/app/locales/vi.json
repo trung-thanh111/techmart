@@ -83,12 +83,15 @@
       "type": "Loại",
       "position": "Vị trí",
       "form": {
+        "sold": "Đã bán",
         "agency": "Đại lý",
         "product": "Sản phẩm",
         "priceOverride": "Giá tại cửa hàng",
         "agencyPlaceholder": "Chọn đại lý",
         "productPlaceholder": "Chọn sản phẩm",
         "productVariantPlaceholder": "Chọn phiên bản",
+        "faq": "FAQ",
+        "faqPlaceholder": "Chọn Faq",
         "page": "Trang",
         "pagePlaceholder": "Chọn trang",
         "none": "Không có",
@@ -788,6 +791,9 @@
         "title": "Hoàn trả 100%",
         "desc": "Hoàn tiền nếu sản phẩm lỗi kỹ thuật trong 7 ngày"
       }
+    },
+    "product": {
+      "breadcrumb": "Sản phẩm"
     },
     "faq": {
       "title": "Câu hỏi thường gặp",

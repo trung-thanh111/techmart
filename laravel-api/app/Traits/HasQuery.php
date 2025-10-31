@@ -15,7 +15,23 @@ trait HasQuery
     // lọc theo quan hệ
     public function scopeWithRelation($query, array $with = [])
     {
-        $query->with($with)->withCount($with);
+        $directRelations = [];
+        $nestedRelations = [];
+
+        foreach ($with as $relation) {
+            if (str_contains($relation, '.')) {
+                $nestedRelations[] = $relation;
+            } else {
+                $directRelations[] = $relation;
+            }
+        }
+        if (count($directRelations)) {
+            $query->withCount($directRelations);
+        }
+        if (count($with)) {
+            $query->with($with);
+        }
+
         return $query;
     }
 

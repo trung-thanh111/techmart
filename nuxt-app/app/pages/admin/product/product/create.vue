@@ -85,6 +85,19 @@
         <VariantManager :product-sku="values.sku" :product-slug="slug" :product-price="values.priceOrigin" :model-value="field.value" @update:model-value="field.onChange" />
         <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
       </Field>
+      <div class="card mt-4">
+        <div class="card-header">
+          <h5 class="card-title mb-0">{{ $t("admin.common.form.faq") }}</h5>
+        </div>
+        <div class="card-body">
+          <Field name="productFaqs" v-slot="{ field, errorMessage, meta }">
+            <MultiSelect :modelValue="field.value" @update:modelValue="field.onChange" :options="faqOptions" optionLabel="name" optionValue="id" filter display="chip" :placeholder="$t('admin.common.form.faqPlaceholder')" class="w-100" />
+            <small v-if="errorMessage && meta.touched" class="text-danger">
+              {{ $t(errorMessage) }}
+            </small>
+          </Field>
+        </div>
+      </div>
       <SEO :values="values" />
       <div class="flex justify-end gap-3 mt-4 position-sticky bottom-5 z-20">
         <Button type="button" variant="cancel" :to="PRODUCTINDEX" />
@@ -114,6 +127,13 @@
             </label>
             <Field name="sku" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
               <input v-bind="field" id="sku" type="text" :placeholder="$t('admin.common.form.skuPlaceholder')" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" disabled />
+              <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
+            </Field>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">{{ $t("admin.common.form.sold") }}:</label>
+            <Field name="sold" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
+              <InputNumber :modelValue="field.value" @update:modelValue="field.onChange" :min="0" showButtons class="w-full" input-class="!rounded py-[7px] w-full" size="small" disabled />
               <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
             </Field>
           </div>
@@ -292,7 +312,7 @@ import VariantManager from "~/components/admin/custom/VariantManager.vue";
 import { productCatalogueService } from "~/services/product/catalogue.service";
 import { productTagService } from "~/services/product/tag.service";
 
-const { isLoading, values, tagOptions, productCatalogueOptions, productOptions, brandOptions, seasonOptions, config, slug, setValues, handleStore, loadProductCatalogue, loadTag } = useProduct();
+const { isLoading, values, tagOptions, productCatalogueOptions, productOptions, brandOptions, faqOptions, seasonOptions, config, slug, setValues, handleStore, loadProductCatalogue, loadTag } = useProduct();
 
 const catalogueForm = ref({
   name: "",

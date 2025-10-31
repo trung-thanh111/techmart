@@ -99,6 +99,17 @@
           {{ $t(errorMessage) }}
         </small>
       </Field>
+      <div class="card mt-4">
+        <div class="card-header">
+          <h5 class="card-title mb-0">{{ $t("admin.common.form.faq") }}</h5>
+        </div>
+        <div class="card-body">
+          <Field name="productFaqs" v-slot="{ field, errorMessage, meta }">
+            <MultiSelect :modelValue="field.value" @update:modelValue="field.onChange" :options="faqOptions" optionLabel="name" optionValue="id" filter display="chip" :placeholder="$t('admin.common.form.faqPlaceholder')" class="w-100" />
+            <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
+          </Field>
+        </div>
+      </div>
       <SEO :values="values" />
       <div class="flex justify-end gap-3 mt-4 position-sticky bottom-5 z-20">
         <Button type="button" variant="cancel" :to="PRODUCTINDEX" />
@@ -128,6 +139,14 @@
             </label>
             <Field name="sku" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
               <input v-bind="field" id="sku" type="text" :placeholder="$t('admin.common.form.skuPlaceholder')" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
+              <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
+            </Field>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">{{ $t("admin.common.form.sold") }}:</label>
+            <Field name="sold" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
+              <InputNumber :modelValue="field.value" @update:modelValue="field.onChange" :min="0" showButtons class="w-full" input-class="!rounded py-[7px] w-full" size="small" disabled />
               <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
             </Field>
           </div>
@@ -239,41 +258,47 @@ import type { AlbumItem } from "~/interfaces/upload/image.interface";
 import { generateSKU } from "~/utils/helpers";
 import VariantManager from "~/components/admin/custom/VariantManager.vue";
 
-const { isLoading, values, tagOptions, productCatalogueOptions, productOptions, brandOptions, seasonOptions, config, slug, show, setValues, handleUpdate } = useProduct(undefined, "update");
+const { isLoading, values, tagOptions, productCatalogueOptions, productOptions, brandOptions, faqOptions, seasonOptions, config, slug, show, setValues, handleUpdate } = useProduct(undefined, "update");
 const id = Number(useRoute().params.id);
-const { data } = await show(id);
-
 const albumData = ref<AlbumItem[] | null>(null);
 
 const onAlbumChange = () => {
   setValues({ ...values, album: albumData.value });
 };
-albumData.value = data?.album ?? null;
 
-setValues({
-  name: data?.name,
-  description: data?.description,
-  content: data?.content,
-  album: data?.album ?? null,
-  season: data?.season ?? null,
-  warranty: Number(data?.warranty ?? 0),
-  priceOrigin: Number(data?.priceOrigin ?? 0),
-  sku: data?.sku,
-  sortOrder: data?.sortOrder ?? null,
-  isHot: Boolean(data?.isHot ?? false),
-  likeCount: Number(data?.likeCount ?? 0),
-  productCatalogues: (data?.productCatalogues as Array<{ id: number; name: string }> | undefined)?.map((c) => c.id) ?? [],
-  productTags: (data?.productTags as Array<{ id: number; name: string }> | undefined)?.map((t) => t.id) ?? [],
-  productVariants: (data?.productVariants as Array<any> | undefined) ?? [],
-  brandId: (data as any)?.brandId ?? (data as any)?.brand?.id ?? null,
-  relateds: (data?.relateds as Array<{ id: number; name: string }> | undefined)?.map((r) => r.id) ?? [],
-  publish: (data as any)?.publish ?? 0,
-  metaTitle: (data as any)?.metaTitle ?? null,
-  metaKeyword: (data as any)?.metaKeyword ?? null,
-  metaDescription: (data as any)?.metaDescription ?? null,
-});
+onMounted(async () => {
+  const response = await show(id);
+  const data = response?.data;
 
-onMounted(() => {
+  if (data) {
+    albumData.value = data?.album ?? null;
+
+    setValues({
+      name: data?.name,
+      description: data?.description,
+      content: data?.content,
+      album: data?.album ?? null,
+      season: data?.season ?? null,
+      warranty: Number(data?.warranty ?? 0),
+      sold: Number(data?.sold ?? 0),
+      priceOrigin: Number(data?.priceOrigin ?? 0),
+      sku: data?.sku,
+      sortOrder: data?.sortOrder ?? null,
+      isHot: Boolean(data?.isHot ?? false),
+      likeCount: Number(data?.likeCount ?? 0),
+      productCatalogues: (data?.productCatalogues as Array<{ id: number; name: string }> | undefined)?.map((c) => c.id) ?? [],
+      productTags: (data?.productTags as Array<{ id: number; name: string }> | undefined)?.map((t) => t.id) ?? [],
+      productFaqs: (data?.faqs as Array<{ id: number; question: string }> | undefined)?.map((f) => f.id) ?? [],
+      productVariants: (data?.productVariants as Array<any> | undefined) ?? [],
+      brandId: (data as any)?.brandId ?? (data as any)?.brand?.id ?? null,
+      relateds: (data?.relateds as Array<{ id: number; name: string }> | undefined)?.map((r) => r.id) ?? [],
+      publish: (data as any)?.publish ?? 0,
+      metaTitle: (data as any)?.metaTitle ?? null,
+      metaKeyword: (data as any)?.metaKeyword ?? null,
+      metaDescription: (data as any)?.metaDescription ?? null,
+    });
+  }
+
   if (!values.sku) {
     const sku = generateSKU();
     setValues({ ...values, sku });
