@@ -33,7 +33,6 @@ class ProductResource extends JsonResource
                 'isHot' => (bool) $this->is_hot,
                 'likeCount' => (int) $this->like_count,
                 'productCatalogueId' => (int) $this->product_catalogue_id,
-
                 'brandId' => (int) $this->brand_id,
                 'publish' => (int) $this->publish,
                 'createdAt' => $this->created_at,

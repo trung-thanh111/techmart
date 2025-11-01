@@ -43,7 +43,7 @@ class ProductVariant extends Model
 
     public function products(): BelongsTo
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 
     public function variant_attributes(): BelongsToMany
@@ -66,5 +66,10 @@ class ProductVariant extends Model
             'id',
             'agency_id'
         )->where('is_visible', true)->distinct();
+    }
+
+    public function wishlists(): HasMany
+    {
+        return $this->hasMany(Wishlist::class, 'product_variant_id', 'id');
     }
 }

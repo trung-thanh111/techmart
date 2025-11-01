@@ -28,8 +28,14 @@
                           <div v-tooltip.top="'So sánh sản phẩm'">
                             <Checkbox v-model="isCompareChecked" inputId="compare-checkbox" :binary="true" class="compare-checkbox-large" />
                           </div>
-                          <button class="p-2 rounded-full bg-white/80 hover:bg-red-100 transition-colors shadow-md">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="w-4 h-4 fill-gray-400 hover:fill-red-500 transition-colors"><path d="M378.9 80c-27.3 0-53 13.1-69 35.2l-34.4 47.6c-4.5 6.2-11.7 9.9-19.4 9.9s-14.9-3.7-19.4-9.9l-34.4-47.6c-16-22.1-41.7-35.2-69-35.2-47 0-85.1 38.1-85.1 85.1 0 49.9 32 98.4 68.1 142.3 41.1 50 91.4 94 125.9 120.3 3.2 2.4 7.9 4.2 14 4.2s10.8-1.8 14-4.2c34.5-26.3 84.8-70.4 125.9-120.3 36.2-43.9 68.1-92.4 68.1-142.3 0-47-38.1-85.1-85.1-85.1zM271 87.1c25-34.6 65.2-55.1 107.9-55.1 73.5 0 133.1 59.6 133.1 133.1 0 68.6-42.9 128.9-79.1 172.8-44.1 53.6-97.3 100.1-133.8 127.9-12.3 9.4-27.5 14.1-43.1 14.1s-30.8-4.7-43.1-14.1C176.4 438 123.2 391.5 79.1 338 42.9 294.1 0 233.7 0 165.1 0 91.6 59.6 32 133.1 32 175.8 32 216 52.5 241 87.1l15 20.7 15-20.7z" /></svg>
+                          <button @click="handleWishlistToggle" :data-product-variant-id="selectedVariant?.id" class="p-2 rounded-full bg-white/80 hover:bg-red-100 transition-colors shadow-md relative group/heart">
+                            <svg v-if="isCurrentVariantInWishlist" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="w-4 h-4 transition-all fill-red-500 group-hover/heart:opacity-0 group-hover/heart:scale-0">
+                              <path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z" />
+                            </svg>
+                            <i v-if="isCurrentVariantInWishlist" class="fa-solid fa-heart-crack w-4 h-4 text-red-500 absolute inset-0 m-auto transition-all opacity-0 scale-0 group-hover/heart:opacity-100 group-hover/heart:scale-100"></i>
+                            <svg v-else xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="w-4 h-4 transition-colors fill-gray-400 hover:fill-red-500">
+                              <path d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8l0-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5l0 3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20-.1-.1s0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5l0 3.3c0 28.5 11.9 55.8 32.8 75.2L256 430.7 431.2 268c20.9-19.4 32.8-46.7 32.8-75.2l0-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z" />
+                            </svg>
                           </button>
                         </div>
 
@@ -275,7 +281,7 @@
                       <div class="relative py-[2px] pl-[14px] pr-2 bg-gradient-to-r from-[#f59e0b] via-[#f97316] to-[#eab308] caption text-white text-sm font-medium min-w-[216px] transform translate-x-[-10px]">Hệ thống kho phân phối TMĐT</div>
                     </div>
                   </div>
-                  <div v-if="selectedVariant && agenciesForVariant.length > 0" class="mt-2 text-sm">
+                  <div v-if="selectedVariant && agenciesForVariant.length > 0" class="mt-2 text-xs">
                     <div class="text-gray-600 caption">
                       Có
                       <span class="font-bold text-gray-700">{{ agenciesForVariant.length }}</span>
@@ -284,7 +290,7 @@
                     <div class="mt-2 overflow-hidden border border-gray-200 rounded-lg">
                       <div class="h-[280px] xl:h-[320px] overflow-y-auto scrollbar-hide address-agents">
                         <div class="w-full h-full">
-                          <div v-for="(agency, index) in agenciesForVariant" :key="agency.id" :class="['flex items-center space-x-[6px] text-[12px] p-2', index % 2 === 0 ? 'bg-white' : 'bg-gray-200']">
+                          <div v-for="(agency, index) in agenciesForVariant" :key="agency.id" :class="['flex items-center space-x-[6px] text-xs p-2', index % 2 === 0 ? 'bg-white' : 'bg-gray-200']">
                             <div class="flex items-center space-x-[2px]">
                               <div class="flex-shrink-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="13" viewBox="0 0 12 13" fill="none">
@@ -759,11 +765,14 @@ import { useProductSlider } from "~/composables/useProductSlider";
 import { resolveAlbum } from "~/utils/helpers";
 import type { IProduct } from "~/interfaces/product/product.interface";
 import { useAuthStore } from "~/stores/auth/auth";
+import { useWishlist } from "~/composables/client/product/useWishlist";
 
 const route = useRoute();
 
 const { productDetail, productDetailLoading, productDetailError, trackView, fetchDetailBySlug } = useProduct();
 const { productImageMainOptions, productImageThumbnailOptions, productRelatedOptions } = useProductSlider();
+const { toggleWishlist, isVariantInWishlist, checkVariantWishlistStatus, fetchWishlist } = useWishlist();
+const authStore = useAuthStore();
 
 // State
 const activeTab = ref("summary");
@@ -788,7 +797,7 @@ const showLightbox = (index: number) => {
 
 // Computed
 const breadcrumbs = computed(() => [
-  { label: $t("client.product.breadcrumb"), href: "/product" },
+  { label: $t("client.shop.breadcrumb"), href: "/shop" },
   { label: productDetail.value?.name || "...", href: route.fullPath },
 ]);
 
@@ -883,6 +892,17 @@ const relatedProducts = computed(() => {
   return [];
 });
 
+// Wishlist
+const isCurrentVariantInWishlist = computed(() => {
+  if (!selectedVariant.value?.id) return false;
+  return isVariantInWishlist(selectedVariant.value.id);
+});
+
+const handleWishlistToggle = async () => {
+  if (!selectedVariant.value?.id) return;
+  await toggleWishlist(selectedVariant.value.id);
+};
+
 watch(quantity, (newVal) => {
   if (newVal < 1) quantity.value = 1;
   if (displayStock.value > 0 && newVal > displayStock.value) {
@@ -906,6 +926,11 @@ onMounted(async () => {
   if (slug) {
     await fetchDetailBySlug(slug);
 
+    // Load wishlist nếu đã đăng nhập
+    if (authStore.isAuthenticated) {
+      await fetchWishlist();
+    }
+
     // Chọn variant đầu tiên mặc định
     if (productDetail.value?.productVariants?.length) {
       const firstVariant = (productDetail.value.productVariants as any[])[0];
@@ -925,6 +950,13 @@ onMounted(async () => {
   }
 });
 
+// check wishlist status
+watch(selectedVariant, async (newVariant) => {
+  if (newVariant?.id && authStore.isAuthenticated) {
+    await checkVariantWishlistStatus(newVariant.id);
+  }
+});
+
 definePageMeta({
   layout: "client",
 });
@@ -932,5 +964,9 @@ definePageMeta({
 <style scoped>
 .active-tab {
   color: #fff !important;
+}
+.product-thumbnail-slider.splide__slide.is-visible.is-active {
+  border: 1px solid #5786d0 !important;
+  border-radius: 0.375rem !important;
 }
 </style>
