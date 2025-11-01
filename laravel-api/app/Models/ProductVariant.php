@@ -67,4 +67,9 @@ class ProductVariant extends Model
             'agency_id'
         )->where('is_visible', true)->distinct();
     }
+
+    public function wishlists(): HasMany
+    {
+        return $this->hasMany(Wishlist::class, 'product_variant_id', 'id');
+    }
 }

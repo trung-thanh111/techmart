@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
+use App\Services\Interfaces\Product\WishlistServiceInterface;
+use App\Services\Impl\Product\WishlistService;
 use App\Models\ProductVariant;
 use App\Models\Agency;
 use App\Observers\ProductVariantObserver;
@@ -115,6 +117,7 @@ class AppServiceProvider extends ServiceProvider
         BannerPageServiceInterface::class => BannerPageService::class,
         BannerPositionServiceInterface::class => BannerPositionService::class,
         InventoryServiceInterface::class => InventoryService::class,
+        WishlistServiceInterface::class => WishlistService::class,
     ];
 
     /**

@@ -275,7 +275,7 @@
                       <div class="relative py-[2px] pl-[14px] pr-2 bg-gradient-to-r from-[#f59e0b] via-[#f97316] to-[#eab308] caption text-white text-sm font-medium min-w-[216px] transform translate-x-[-10px]">Hệ thống kho phân phối TMĐT</div>
                     </div>
                   </div>
-                  <div v-if="selectedVariant && agenciesForVariant.length > 0" class="mt-2 text-sm">
+                  <div v-if="selectedVariant && agenciesForVariant.length > 0" class="mt-2 text-xs">
                     <div class="text-gray-600 caption">
                       Có
                       <span class="font-bold text-gray-700">{{ agenciesForVariant.length }}</span>
@@ -284,7 +284,7 @@
                     <div class="mt-2 overflow-hidden border border-gray-200 rounded-lg">
                       <div class="h-[280px] xl:h-[320px] overflow-y-auto scrollbar-hide address-agents">
                         <div class="w-full h-full">
-                          <div v-for="(agency, index) in agenciesForVariant" :key="agency.id" :class="['flex items-center space-x-[6px] text-[12px] p-2', index % 2 === 0 ? 'bg-white' : 'bg-gray-200']">
+                          <div v-for="(agency, index) in agenciesForVariant" :key="agency.id" :class="['flex items-center space-x-[6px] text-xs p-2', index % 2 === 0 ? 'bg-white' : 'bg-gray-200']">
                             <div class="flex items-center space-x-[2px]">
                               <div class="flex-shrink-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="13" viewBox="0 0 12 13" fill="none">
@@ -932,5 +932,9 @@ definePageMeta({
 <style scoped>
 .active-tab {
   color: #fff !important;
+}
+.product-thumbnail-slider.splide__slide.is-visible.is-active {
+  border: 1px solid #5786d0 !important;
+  border-radius: 0.375rem !important;
 }
 </style>

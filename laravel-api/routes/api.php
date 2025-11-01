@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\Product\WishlistController;
 use App\Http\Controllers\Api\V1\Inventory\InventoryController;
 use App\Http\Controllers\Api\V1\Banner\BannerPositionController;
 use App\Http\Controllers\Api\V1\Banner\BannerPageController;
@@ -404,6 +405,17 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
             Route::delete('{id}/detach', [InventoryController::class, 'detach']);
         });
         Route::resource('inventorys', InventoryController::class)->except($routeExcept);
+
+        // This is route Wishlist
+        Route::group(['prefix' => 'wishlists'], function() {
+            Route::post('bulkStore', [WishlistController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [WishlistController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [WishlistController::class, 'bulkUpdate']);
+            Route::delete('bulkDelete', [WishlistController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [WishlistController::class, 'attach']);
+            Route::delete('{id}/detach', [WishlistController::class, 'detach']);
+        });
+        Route::resource('wishlists', WishlistController::class)->except($routeExcept);
 
         // generate route
 
