@@ -857,6 +857,14 @@
       "loadMore": "Xem thêm",
       "loadingMore": "Đang tải..."
     },
+    "wishlist": {
+      "title": "Yêu thích",
+      "breadcrumb": "Yêu thích",
+      "loading": "Đang tải...",
+      "noItems": "Chưa có sản phẩm yêu thích nào",
+      "description": "Các thiết bị chiếu sáng được ưa chuộng nhất tại Tech mart Store, nâng cao trải nghiệm sống của hàng ngàn khách hàng.",
+      "loadMore": "xem thêm"
+    },
     "profile": {
       "title": "Quản lý tài khoản",
       "breadcrumb": "Quản lý tài khoản",
