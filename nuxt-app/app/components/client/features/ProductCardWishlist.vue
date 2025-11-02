@@ -35,7 +35,7 @@
         <NuxtLink to="#" class="text-gray-400 hover:text-sky-500 p-2 transition duration-200">
           <i class="fas fa-random"></i>
         </NuxtLink>
-        <NuxtLink :to="`/product/${product?.slug || ''}`" class="text-gray-400 hover:text-sky-500 p-2 transition duration-200">
+        <NuxtLink :to="`/product/${productData?.slug || ''}`" class="text-gray-400 hover:text-sky-500 p-2 transition duration-200">
           <i class="fas fa-eye"></i>
         </NuxtLink>
         <NuxtLink to="#" class="text-gray-400 hover:text-sky-500 p-2 transition duration-200">
@@ -45,12 +45,12 @@
 
       <div class="h-full flex flex-col relative overflow-hidden z-10">
         <div class="relative h-[260px] overflow-hidden z-0">
-          <img v-if="mainImage" :src="mainImage" loading="lazy" :alt="product?.name || ''" class="w-full h-full object-contain transition-opacity duration-300 group-hover:opacity-0" />
-          <img v-if="subImage" :src="subImage" loading="lazy" :alt="product?.name || ''" class="w-full h-full object-contain absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <img v-if="mainImage" :src="mainImage" loading="lazy" :alt="productData?.name || ''" class="w-full h-full object-contain transition-opacity duration-300 group-hover:opacity-0" />
+          <img v-if="subImage" :src="subImage" loading="lazy" :alt="productData?.name || ''" class="w-full h-full object-contain absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </div>
         <div class="px-1 flex-grow flex flex-col justify-between z-0">
           <h3 class="text-sm font-medium text-gray-500 h-10 overflow-hidden leading-5 line-clamp-2">
-            {{ product?.name || "" }}
+            {{ productData?.name || "" }}
           </h3>
           <div class="flex items-center gap-2 mt-1">
             <span class="text-red-600 font-semibold">{{ formatPrice(priceOrigin) }}</span>
@@ -105,17 +105,10 @@ interface WishlistVariant {
   wishlistId?: number;
 }
 
-interface WishlistProduct {
-  id: number;
-  name: string;
-  slug: string;
-  priceOrigin: number;
-  album?: Array<{ path: string }>;
-  variants: WishlistVariant[];
-}
+import type { IWishlistGrouped } from "~/interfaces/product/wishlist.interface";
 
 const props = defineProps<{
-  product: WishlistProduct;
+  product: IWishlistGrouped;
 }>();
 
 const { removeWishlist, wishlistGrouped } = useWishlist();
@@ -124,22 +117,33 @@ const emit = defineEmits<{
   removed: [variantId: number];
 }>();
 
-const albumUrls = computed(() => resolveAlbum(props.product?.album || []));
+// Map product data từ IWishlistGrouped structure
+const productData = computed(() => props.product?.product || null);
+const albumData = computed(() => {
+  if (!productData.value?.album) return [];
+  try {
+    return typeof productData.value.album === "string" ? JSON.parse(productData.value.album) : productData.value.album;
+  } catch {
+    return [];
+  }
+});
+
+const albumUrls = computed(() => resolveAlbum(albumData.value));
 const mainImage = computed(() => albumUrls.value[0] || "");
 const subImage = computed(() => albumUrls.value[1] || "");
 
-const priceOrigin = computed(() => Number(props.product?.priceOrigin || 0));
+const priceOrigin = computed(() => Number(productData.value?.priceOrigin || 0));
 
-// Watch wishlistGrouped để update variants khi có thay đổi
+// Watch wishlistGrouped để update variants khi có thay đổi (real-time)
 const currentProduct = computed(() => {
-  return wishlistGrouped.value.find((p: any) => p.id === props.product?.id) as any;
+  return wishlistGrouped.value.find((p) => p.product?.id === props.product?.product?.id);
 });
 
 const variants = computed(() => {
-  if (currentProduct.value && currentProduct.value.variants) {
-    return currentProduct.value.variants;
+  if (currentProduct.value?.product?.variants) {
+    return currentProduct.value.product.variants;
   }
-  return props.product?.variants || [];
+  return productData.value?.variants || [];
 });
 
 const variantsCount = computed(() => variants.value.length);
