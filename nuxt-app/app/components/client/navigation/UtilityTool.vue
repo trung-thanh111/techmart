@@ -139,182 +139,69 @@
       </div>
     </transition>
 
-    <!-- Taskbar so sánh sản phẩm dưới cùng -->
-    <transition name="slide-up ">
-      <div v-if="showCompareBar" class="fixed bottom-0 left-0 right-0 z-50 bg-white shadow px-4 py-2 border-t border-gray-200">
-        <div class="max-w-7xl mx-auto flex items-center">
-          <span class="font-medium text-gray-700">
-            <span class="text-teal-500">{{ compareList.length }}</span>
-            /3 {{ $t("client.utilityTool.productsCompared") }}
-          </span>
-          <button class="ml-auto text-sky-500 font-normal flex items-center gap-1" @click="openCompareModal">
-            {{ $t("client.utilityTool.show") }}
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" /></svg>
-          </button>
-        </div>
-      </div>
-    </transition>
-
-    <!-- Modal so sánh sản phẩm -->
-    <transition name="fade">
-      <div v-if="showCompareModal" class="fixed inset-0 z-50 flex flex-col bg-black/30">
-        <div class="bg-white rounded-t-lg shadow-lg w-full max-w-full mt-auto p-4">
-          <div class="flex items-center mb-4">
-            <span class="font-semibold text-gray-700">{{ compareList.length }}/3 {{ $t("client.utilityTool.productsCompared") }}</span>
-            <button class="ml-auto text-sky-500 flex items-center gap-1" @click="closeCompareModal">
-              {{ $t("client.utilityTool.hide") }}
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-            </button>
-          </div>
-          <div class="max-w-6xl mx-auto">
-            <div class="grid grid-cols-4 gap-4">
-              <template v-for="(sp, idx) in 3">
-                <div v-if="compareList[idx]" :key="'compare-' + idx" class="border border-gray-400 rounded p-2 flex flex-col items-center relative min-h-[180px]">
-                  <img :src="compareList[idx].img" class="w-20 h-20 object-contain mb-2" />
-                  <div class="text-center text-xs font-medium">{{ compareList[idx].name }}</div>
-                  <button class="absolute top-1 right-1 text-gray-400 hover:text-red-500" @click="removeProduct(idx)">✕</button>
-                </div>
-                <div v-else :key="'empty-' + idx" class="border-dashed border-1 border-gray-400 rounded flex flex-col items-center justify-center h-32 cursor-pointer min-h-[180px]" @click="openSearchPopup">
-                  <span class="text-3xl text-gray-400">+</span>
-                  <span class="text-xs text-gray-500 mt-1">{{ $t("client.utilityTool.addProduct") }}</span>
-                </div>
-              </template>
-              <div class="ml-auto mt-4 gap-2">
-                <button class="bg-gradient-to-r from-sky-500 to-cyan-400 text-white px-6 py-2 rounded font-bold">{{ $t("client.utilityTool.compareNow") }}</button>
-                <button class="text-sky-500 underline" @click="clearAll">{{ $t("client.utilityTool.clearAllProducts") }}</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </transition>
-
-    <!-- Popup tìm kiếm sản phẩm -->
-    <transition name="fade">
-      <div v-if="showSearchPopup" class="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
-        <div class="bg-white rounded-xl shadow-lg w-full max-w-md mx-2 flex flex-col">
-          <!-- Header -->
-          <div class="flex items-center justify-between px-4 py-3 border-b">
-            <h3 class="text-base font-semibold text-gray-700">{{ $t("client.utilityTool.searchProduct") }}</h3>
-            <button class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-500 hover:text-gray-700 transition" @click="closeSearchPopup">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-          <!-- Form tìm kiếm + suggestion -->
-          <div class="px-4 py-3 flex flex-col gap-3">
-            <form class="flex rounded-lg overflow-hidden border border-gray-200 bg-white">
-              <input v-model="searchQuery" type="text" :placeholder="$t('client.utilityTool.searchPlaceholder')" class="flex-1 px-4 py-2 text-gray-700 bg-transparent focus:outline-none text-sm" />
-              <button type="submit" class="bg-sky-500 px-4 flex items-center justify-center hover:bg-sky-600">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5 text-white"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z" /></svg>
-              </button>
-            </form>
-            <!-- Suggestion list -->
-            <div class="space-y-2">
-              <div>
-                <div class="text-xs font-semibold text-gray-500 mb-1">{{ $t("client.utilityTool.recentSearches") }}</div>
-                <div class="flex flex-col gap-1">
-                  <div class="flex items-center gap-2 p-2 rounded hover:bg-gray-100 cursor-pointer">
-                    <img src="/shared/images/logo/cod.png" alt="" class="w-8 h-8 object-cover rounded" />
-                    <span class="text-gray-700 text-sm truncate">Đèn LED Downlight Âm Trần Đổi Màu 90/8W AT20 ĐM</span>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <div class="text-xs font-semibold text-gray-500 mb-1">{{ $t("client.utilityTool.featuredProducts") }}</div>
-                <div class="flex flex-col gap-1">
-                  <div class="flex items-center gap-2 p-2 rounded hover:bg-gray-100 cursor-pointer">
-                    <img src="/shared/images/logo/cod.png" alt="" class="w-8 h-8 object-cover rounded" />
-                    <span class="text-gray-700 text-sm truncate">Đèn LED Downlight Âm Trần Đổi Màu 90/8W AT20 ĐM</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </transition>
+    <!-- Compare Components -->
+    <CompareBar @open-search="openSearchModal" />
+    <SearchProductModal v-model="showSearchModal" :selection-mode="searchSelectionMode" @added="handleProductsAdded" @close="closeSearchModal" />
   </div>
 </template>
 
-<script setup>
-import { ref, onMounted, computed } from "vue";
+<script setup lang="ts">
+import { ref } from "vue";
+import CompareBar from "~/components/client/navigation/CompareBar.vue";
+import SearchProductModal from "~/components/client/features/SearchProductModal.vue";
 
-const showConditions = ref([false, false, false]); // Sử dụng mảng thay vì object
+const showConditions = ref([false, false, false]);
+const showDrawer = ref(false);
+const showSearchModal = ref(false);
+const searchSelectionMode = ref<"record" | "checkbox">("record");
 
-// Hàm toggle ẩn/hiện điều kiện
-const toggleCondition = (index) => {
+let touchStartY = 0;
+let touchEndY = 0;
+
+const toggleCondition = (index: number) => {
   showConditions.value[index] = !showConditions.value[index];
 };
-const compareList = ref([
-  {
-    id: 1,
-    name: "Đèn LED Downlight Âm Trần Đổi Màu 90/8W AT20 ĐM",
-    img: "/client/images/products/iphone-16-pro-max.webp",
-  },
-]);
-const showCompareModal = ref(false);
-const showSearchPopup = ref(false);
-const searchQuery = ref("");
 
-const showCompareBar = computed(() => compareList.value.length > 0);
-
-// Mở drawer
-function openDrawer() {
+const openDrawer = () => {
   showDrawer.value = true;
-  document.body.style.overflow = "hidden";
-}
+  if (typeof document !== "undefined") {
+    document.body.style.overflow = "hidden";
+  }
+};
 
-// Đóng drawer
-function closeDrawer() {
+const closeDrawer = () => {
   showDrawer.value = false;
-  // Cho phép scroll body khi drawer đóng
-  document.body.style.overflow = "auto";
-}
+  if (typeof document !== "undefined") {
+    document.body.style.overflow = "auto";
+  }
+};
 
-// Swipe down để đóng drawer (mobile)
-function onTouchStart(e) {
-  touchStartY = e.touches[0].clientY;
-}
+const onTouchStart = (e: TouchEvent) => {
+  touchStartY = e.touches?.[0]?.clientY || 0;
+};
 
-function onTouchMove(e) {
-  touchEndY = e.touches[0].clientY;
-}
+const onTouchMove = (e: TouchEvent) => {
+  touchEndY = e.touches?.[0]?.clientY || 0;
+};
 
-function onTouchEnd() {
+const onTouchEnd = () => {
   if (touchEndY - touchStartY > 60) {
     closeDrawer();
   }
-}
+};
 
-onMounted(() => {
-  document.body.style.overflow = "auto";
-});
+const openSearchModal = () => {
+  showSearchModal.value = true;
+  searchSelectionMode.value = "record";
+};
 
-function openCompareModal() {
-  showCompareModal.value = true;
-}
-function closeCompareModal() {
-  showCompareModal.value = false;
-}
-function openSearchPopup() {
-  showSearchPopup.value = true;
-}
-function closeSearchPopup() {
-  showSearchPopup.value = false;
-}
-function addProductToCompare(product) {
-  if (compareList.value.length < 3) compareList.value.push(product);
-  closeSearchPopup();
-}
-function removeProduct(idx) {
-  compareList.value.splice(idx, 1);
-}
-function clearAll() {
-  compareList.value = [];
-  closeCompareModal();
-}
+const closeSearchModal = () => {
+  showSearchModal.value = false;
+};
+
+const handleProductsAdded = () => {
+  closeSearchModal();
+};
 </script>
 
 <style scoped>

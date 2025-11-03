@@ -985,7 +985,7 @@
       "table": "Bảng",
       "ticket": "Vé",
       "view": "Xem",
-      "productsCompared": "sản phẩm được so sánh",
+      "productsCompared": "sản phẩm",
       "show": "Hiện",
       "hide": "Ẩn",
       "addProduct": "Thêm sản phẩm",
@@ -993,7 +993,7 @@
       "clearAllProducts": "Xóa tất cả sản phẩm",
       "searchProduct": "Tìm kiếm sản phẩm",
       "searchPlaceholder": "Tìm sản phẩm, danh mục...",
-      "recentSearches": "Tìm kiếm gần đây",
+      "suggestion": "Gợi ý",
       "featuredProducts": "Sản phẩm nổi bật"
     },
     "productCard": {
