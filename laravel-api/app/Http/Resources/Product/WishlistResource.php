@@ -31,9 +31,11 @@ class WishlistResource extends JsonResource
                 'album' => $product->album,
                 'productCatalogueId' => (int) ($product->product_catalogue_id ?? 0),
                 'brandId' => (int) ($product->brand_id ?? 0),
-                'variants' => [
+                'variant' => [
                     'id' => $variant?->id,
                     'name' => $variant?->name,
+                    'price' => $variant?->price,
+                    "attributeData" => $variant?->attribute_data
                 ],
             ],
         ];
