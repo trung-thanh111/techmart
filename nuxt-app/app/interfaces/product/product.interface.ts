@@ -24,6 +24,7 @@ export interface IProduct {
   userId?: number;
   productCatalogues?: number[];
   productVariants?: IProductVariant[];
+  variant?: IProductVariant;
   productTags?: number[];
   faqs?: number[];
   relateds?: number[];

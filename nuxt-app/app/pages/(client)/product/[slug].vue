@@ -766,12 +766,14 @@ import { resolveAlbum } from "~/utils/helpers";
 import type { IProduct } from "~/interfaces/product/product.interface";
 import { useAuthStore } from "~/stores/auth/auth";
 import { useWishlist } from "~/composables/client/product/useWishlist";
+import { useCompare } from "~/composables/client/product/useCompare";
 
 const route = useRoute();
 
 const { productDetail, productDetailLoading, productDetailError, trackView, fetchDetailBySlug } = useProduct();
 const { productImageMainOptions, productImageThumbnailOptions, productRelatedOptions } = useProductSlider();
 const { toggleWishlist, isVariantInWishlist, checkVariantWishlistStatus, fetchWishlist } = useWishlist();
+const { addToCompare, removeFromCompare, isInCompare } = useCompare();
 const authStore = useAuthStore();
 
 // State
@@ -781,7 +783,21 @@ const selectedVariant = ref<any>(null);
 const openFaq = ref<number | null>(null);
 const quantity = ref(1);
 const isDescriptionExpanded = ref(false);
-const isCompareChecked = ref(false);
+// Compare checkbox state - sync với store
+const isCompareChecked = computed({
+  get: () => {
+    if (!selectedVariant.value?.id) return false;
+    return isInCompare(selectedVariant.value.id);
+  },
+  set: (value: boolean) => {
+    if (!selectedVariant.value?.id || !productDetail.value) return;
+    if (value) {
+      addToCompare(productDetail.value, selectedVariant.value);
+    } else {
+      removeFromCompare(selectedVariant.value.id);
+    }
+  },
+});
 
 // Refs cho Splide sliders
 const mainSliderRef = ref<any>(null);

@@ -20,6 +20,16 @@ class ProductResource extends JsonResource
     public function toArray(Request $request): array
     {
         if ($request->boolean('simple', false)) {
+            $firstVariant = $this->whenLoaded('product_variants', function () {
+                $variant = $this->product_variants->first();
+                return $variant ? [
+                    'id' => $variant->id,
+                    'name' => $variant->name,
+                    'price' => $variant->price,
+                    'attributeData' => $variant->attribute_data,
+                ] : null;
+            });
+
             return [
                 'id' => $this->id,
                 'name' => $this->name,
@@ -35,8 +45,7 @@ class ProductResource extends JsonResource
                 'productCatalogueId' => (int) $this->product_catalogue_id,
                 'brandId' => (int) $this->brand_id,
                 'publish' => (int) $this->publish,
-                'createdAt' => $this->created_at,
-                'updatedAt' => $this->updated_at,
+                'variant' => $firstVariant,
             ];
         }
 

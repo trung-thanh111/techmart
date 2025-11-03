@@ -3,13 +3,13 @@
     <div class="product-item relative w-full h-[420px] bg-white shadow-md rounded-lg overflow-hidden group">
       <div class="absolute top-1 -left-8 w-24 text-center text-white text-[10px] py-0.5 font-medium shadow-md z-20 transform -rotate-45 bg-gradient-to-r from-red-400 via-red-500 to-green-300 rounded-md opacity-90">- 40%</div>
       <div class="absolute top-0 right-0 h-full w-10 flex flex-col justify-start items-center gap-1 z-30 translate-x-full group-hover:translate-x-0 transition-all duration-300 ease-in-out bg-gradient-to-l from-white via-white/50 to-transparent rounded-l-md backdrop-blur-sm">
-        <NuxtLink to="#" class="text-gray-400 hover:text-red-500 p-2 transition duration-200">
-          <i class="fa-regular fa-heart"></i>
+        <NuxtLink to="" @click.prevent="handleToggleWishlist" class="text-gray-400 hover:text-red-500 p-2 transition duration-200">
+          <i :class="isInWishlist ? 'fas fa-heart text-red-500' : 'fa-regular fa-heart'"></i>
         </NuxtLink>
         <NuxtLink to="#" class="text-gray-400 hover:text-sky-500 p-2 transition duration-200">
           <i class="fas fa-cart-plus"></i>
         </NuxtLink>
-        <NuxtLink to="#" class="text-gray-400 hover:text-sky-500 p-2 transition duration-200">
+        <NuxtLink to="" @click.prevent="handleAddToCompare" class="text-gray-400 hover:text-sky-500 p-2 transition duration-200">
           <i class="fas fa-random"></i>
         </NuxtLink>
         <NuxtLink :to="`/product/${product?.slug}`" class="text-gray-400 hover:text-sky-500 p-2 transition duration-200">
@@ -77,10 +77,16 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
 import type { IProduct } from "~/interfaces/product/product.interface";
 import { formatPrice, resolveAlbum } from "~/utils/helpers";
+import { useCompare } from "~/composables/client/product/useCompare";
+import { useWishlist } from "~/composables/client/product/useWishlist";
 
 const props = defineProps<{ product: IProduct }>();
+
+const { handleAddToCompareFromProduct } = useCompare();
+const { handleToggleWishlistFromProduct, isProductVariantInWishlist } = useWishlist();
 
 const mainImage = computed(() => {
   return resolveAlbum(props.product?.album)?.[0] || "";
@@ -95,4 +101,16 @@ const originalPrice = computed(() => Number(props.product?.priceOrigin || 0));
 const currentPrice = computed(() => {
   return originalPrice.value;
 });
+
+const isInWishlist = computed(() => {
+  return isProductVariantInWishlist(props.product);
+});
+
+const handleAddToCompare = async () => {
+  await handleAddToCompareFromProduct(props.product);
+};
+
+const handleToggleWishlist = async () => {
+  await handleToggleWishlistFromProduct(props.product);
+};
 </script>

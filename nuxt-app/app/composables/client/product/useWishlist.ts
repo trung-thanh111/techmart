@@ -2,6 +2,7 @@ import type { Ref } from "vue";
 import { wishlistService } from "~/services/product/wishlist.service";
 import type { IApiOk, IPaginate } from "~/interfaces/base.interface";
 import type { IWishlist, IWishlistGrouped } from "~/interfaces/product/wishlist.interface";
+import type { IProduct } from "~/interfaces/product/product.interface";
 import { useAuthStore } from "~/stores/auth/auth";
 import { useAppToast } from "~/composables/useAppToast";
 
@@ -206,6 +207,42 @@ export const useWishlist = () => {
     }
   };
 
+  const handleToggleWishlistFromProduct = async (product: IProduct): Promise<boolean> => {
+    if (!product) {
+      toast.error("Lỗi", { description: "Thông tin sản phẩm không hợp lệ" });
+      return false;
+    }
+
+    let variantId: number | undefined;
+
+    if (product.variant?.id) {
+      variantId = product.variant.id;
+    } else if (product.productVariants && product.productVariants.length > 0 && product.productVariants[0]) {
+      variantId = product.productVariants[0].id;
+    }
+
+    if (!variantId) {
+      toast.error("Lỗi", { description: "Sản phẩm không có phiên bản" });
+      return false;
+    }
+
+    return await toggleWishlist(variantId);
+  };
+
+  const isProductVariantInWishlist = (product: IProduct): boolean => {
+    if (!product) return false;
+
+    let variantId: number | undefined;
+    if (product.variant?.id) {
+      variantId = product.variant.id;
+    } else if (product.productVariants && product.productVariants.length > 0 && product.productVariants[0]) {
+      variantId = product.productVariants[0].id;
+    }
+
+    if (!variantId) return false;
+    return isVariantInWishlist(variantId);
+  };
+
   return {
     isLoading,
     isInitialized,
@@ -218,7 +255,9 @@ export const useWishlist = () => {
     removeWishlist,
 
     isVariantInWishlist,
+    isProductVariantInWishlist,
     getWishlistVariantsByProduct,
     checkVariantWishlistStatus,
+    handleToggleWishlistFromProduct,
   };
 };
