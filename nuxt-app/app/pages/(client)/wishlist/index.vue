@@ -14,7 +14,6 @@
         <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("client.wishlist.description") }}</p>
       </div>
 
-      <!-- Filter Section -->
       <div v-if="!isLoading && wishlistGrouped.length > 0" class="mb-4 md:mb-6">
         <div class="flex flex-wrap items-center justify-between gap-2 md:gap-3 pb-3 border-b border-gray-200">
           <FilterWishlist :filters="filters" :catalogues="catalogues" :brands="brands" @update:price="handlePriceChange" @update:catalogues="handleCatalogueChange" @update:brands="handleBrandChange" />

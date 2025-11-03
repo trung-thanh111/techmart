@@ -110,6 +110,7 @@ export const PROFILEWISHLISTS = "/profile/wishlists";
 export const PROFILEVOUCHERS = "/profile/vouchers";
 
 // Client routes
+export const TOWISHLIST = "/wishlist";
 export const TOAGENCY = "/agency";
 export const TOFAQ = "/faq";
 export const TOPOST = "/post";

@@ -82,6 +82,8 @@ class WishlistService extends BaseService implements WishlistServiceInterface
                     return [
                         'id' => $variant?->id,
                         'name' => $variant?->name,
+                        'price' => $variant?->price,
+                        "attributeData" => $variant?->attribute_data,
                         'wishlistId' => $wishlist->id,
                     ];
                 })->values()->toArray();
@@ -94,7 +96,7 @@ class WishlistService extends BaseService implements WishlistServiceInterface
                     'album' => $product->album,
                     'productCatalogueId' => (int) ($product->product_catalogue_id ?? 0),
                     'brandId' => (int) ($product->brand_id ?? 0),
-                    'variants' => $variants,
+                    'variant' => $variants,
                 ];
             })
             ->filter()

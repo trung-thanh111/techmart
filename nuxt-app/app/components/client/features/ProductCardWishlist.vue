@@ -6,7 +6,7 @@
         <div class="relative group/heart">
           <button @click.prevent="handleHeartClick" class="text-red-500 p-1.5 transition duration-200 relative">
             <i v-if="variantsCount > 1" class="fa-solid fa-heart"></i>
-            <i v-else class="fa-solid fa-heart-crack"></i>
+            <i v-else class="fa-solid fa-heart"></i>
 
             <span v-if="variantsCount > 1" class="absolute top-0 right-1 text-red-500 text-[10px]">
               {{ variantsCount > 5 ? "5+" : variantsCount }}
@@ -28,11 +28,10 @@
             </div>
           </div>
         </div>
-
         <NuxtLink to="#" class="text-gray-400 hover:text-sky-500 p-2 transition duration-200">
           <i class="fas fa-cart-plus"></i>
         </NuxtLink>
-        <NuxtLink to="#" class="text-gray-400 hover:text-sky-500 p-2 transition duration-200">
+        <NuxtLink to="" @click.prevent="handleAddToCompare" class="text-gray-400 hover:text-sky-500 p-2 transition duration-200">
           <i class="fas fa-random"></i>
         </NuxtLink>
         <NuxtLink :to="`/product/${productData?.slug || ''}`" class="text-gray-400 hover:text-sky-500 p-2 transition duration-200">
@@ -98,14 +97,18 @@
 <script setup lang="ts">
 import { formatPrice, resolveAlbum } from "~/utils/helpers";
 import { useWishlist } from "~/composables/client/product/useWishlist";
+import type { IWishlistGrouped } from "~/interfaces/product/wishlist.interface";
+import { useCompare } from "~/composables/client/product/useCompare";
+import type { IProduct } from "~/interfaces/product/product.interface";
+import type { IProductVariant } from "~/interfaces/product/variant.interface";
+
+const { handleAddToCompareFromProduct } = useCompare();
 
 interface WishlistVariant {
   id: number;
   name: string;
   wishlistId?: number;
 }
-
-import type { IWishlistGrouped } from "~/interfaces/product/wishlist.interface";
 
 const props = defineProps<{
   product: IWishlistGrouped;
@@ -139,20 +142,20 @@ const currentProduct = computed(() => {
   return wishlistGrouped.value.find((p) => p.product?.id === props.product?.product?.id);
 });
 
+const variant = computed(() => {
+  return currentProduct.value?.product?.variant || productData.value?.variant || null;
+});
+
 const variants = computed(() => {
-  if (currentProduct.value?.product?.variants) {
-    return currentProduct.value.product.variants;
-  }
-  return productData.value?.variants || [];
+  return variant.value ? [variant.value] : [];
 });
 
 const variantsCount = computed(() => variants.value.length);
 const displayedVariants = computed(() => variants.value.slice(0, 2));
 
 const handleHeartClick = async () => {
-  if (variantsCount.value === 1 && variants.value[0]) {
-    const variant = variants.value[0];
-    await handleRemoveWishlist(variant.id, variant.wishlistId);
+  if (variant.value) {
+    await handleRemoveWishlist(variant.value.id, variant.value.wishlistId);
   }
 };
 
@@ -161,5 +164,38 @@ const handleRemoveWishlist = async (variantId: number, wishlistId?: number) => {
   if (success) {
     emit("removed", variantId);
   }
+};
+
+const handleAddToCompare = async () => {
+  const productData = props.product?.product;
+  if (!productData?.id) {
+    return;
+  }
+
+  const variantData = productData.variant;
+  const productVariant: IProductVariant = variantData
+    ? {
+        id: variantData.id,
+        name: variantData.name,
+        price: variantData.price,
+        attributeData: variantData.attributeData,
+      }
+    : ({} as IProductVariant);
+
+  const productForCompare: IProduct = {
+    id: productData.id,
+    name: productData.name,
+    slug: productData.slug,
+    sku: productData.sku,
+    priceOrigin: productData.priceOrigin,
+    album: productData.album ? (typeof productData.album === "string" ? JSON.parse(productData.album) : productData.album) : undefined,
+    season: productData.season ? (productData.season as "spring" | "summer" | "autumn" | "winter" | "none") : undefined,
+    warranty: productData.warranty ? (typeof productData.warranty === "string" ? Number(productData.warranty) : productData.warranty) : undefined,
+    productCatalogueId: productData.productCatalogueId,
+    brandId: productData.brandId,
+    variant: productVariant,
+  };
+
+  await handleAddToCompareFromProduct(productForCompare);
 };
 </script>
