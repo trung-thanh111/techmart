@@ -2,6 +2,7 @@ import type { Ref } from "vue";
 import { wishlistService } from "~/services/product/wishlist.service";
 import type { IApiOk, IPaginate } from "~/interfaces/base.interface";
 import type { IWishlist, IWishlistGrouped } from "~/interfaces/product/wishlist.interface";
+import type { IProduct } from "~/interfaces/product/product.interface";
 import { useAuthStore } from "~/stores/auth/auth";
 import { useAppToast } from "~/composables/useAppToast";
 
@@ -201,6 +202,23 @@ export const useWishlist = () => {
     }
   };
 
+  const isProductVariantInWishlist = (product: IProduct): boolean => {
+    if (!product) return false;
+    const variantId = product.variant?.id;
+    if (!variantId) return false;
+    return isVariantInWishlist(variantId);
+  };
+
+  const handleToggleWishlistFromProduct = async (product: IProduct): Promise<boolean> => {
+    if (!product) return false;
+    const variantId = product.variant?.id;
+    if (!variantId) {
+      toast.warning("Cảnh báo", { description: "Sản phẩm chưa có biến thể" });
+      return false;
+    }
+    return await toggleWishlist(variantId);
+  };
+
   return {
     isLoading,
     isInitialized,
@@ -213,7 +231,9 @@ export const useWishlist = () => {
     removeWishlist,
 
     isVariantInWishlist,
+    isProductVariantInWishlist,
     getWishlistVariantsByProduct,
     checkVariantWishlistStatus,
+    handleToggleWishlistFromProduct,
   };
 };

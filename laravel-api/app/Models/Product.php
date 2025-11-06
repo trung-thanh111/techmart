@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use App\Traits\HasQuery;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Product extends Model
 {
@@ -56,7 +57,7 @@ class Product extends Model
         'product_faqs',
         'relateds'
     ];
-    // todo 
+    // todo
     // protected static function booted(): void
     // {
     //     // creating đến gán trước khi insert tối ưu thay vì dùng created 2 lần insert & update
@@ -101,5 +102,10 @@ class Product extends Model
     public function relateds(): BelongsToMany
     {
         return $this->belongsToMany(Product::class, 'related_products', 'product_id', 'related_product_id');
+    }
+
+    public function cart_items(): MorphMany
+    {
+        return $this->morphMany(CartItem::class, 'purchasable');
     }
 }

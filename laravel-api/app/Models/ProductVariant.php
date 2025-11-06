@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use App\Traits\HasQuery;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class ProductVariant extends Model
 {
@@ -71,5 +72,10 @@ class ProductVariant extends Model
     public function wishlists(): HasMany
     {
         return $this->hasMany(Wishlist::class, 'product_variant_id', 'id');
+    }
+
+    public function cart_items(): MorphMany
+    {
+        return $this->morphMany(CartItem::class, 'purchasable');
     }
 }

@@ -114,6 +114,7 @@ export const TOWISHLIST = "/wishlist";
 export const TOAGENCY = "/agency";
 export const TOFAQ = "/faq";
 export const TOPOST = "/post";
+export const TOCART = "/cart";
 export const TOPROFILEADDRESSORDERCREATE = "/profile/address_order/create";
 
 export const PROFILEADRESSORDERINDEX = "/profile/address_order";

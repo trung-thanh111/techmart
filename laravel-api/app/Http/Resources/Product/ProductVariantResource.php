@@ -21,11 +21,13 @@ class ProductVariantResource extends JsonResource
             'code' => $this->code,
             'sku' => $this->sku,
             'stock' => (int) $this->stock,
-            'sku' => $this->sku,
             'price' => (float) $this->price,
             'barcode' => $this->barcode,
             'attributeData' => $this->attribute_data,
             'productId' => $this->product_id,
+            // 'products' => $this->whenLoaded('products', function () {
+            //     return new ProductResource($this->products);
+            // }),
             'attributes' => $this->whenLoaded(
                 'variant_attributes',
                 $this->variant_attributes->pluck('id')->toArray()

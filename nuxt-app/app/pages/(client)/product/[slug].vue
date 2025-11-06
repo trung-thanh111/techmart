@@ -187,7 +187,7 @@
                           <path d="M3.75 9H14.25"></path>
                         </svg>
                       </button>
-                      <input v-model.number="quantity" type="text" :min="1" :max="displayStock" class="w-12 text-center border-x border-gray-200 text-gray-700 text-sm focus:outline-none" inputmode="numeric" />
+                      <input v-model.number="quantity" type="number" :min="1" :max="displayStock" @input="handleQuantityInput" class="w-12 text-center border-x border-gray-200 text-gray-700 text-sm focus:outline-none" inputmode="numeric" />
                       <button @click="quantity = Math.min(displayStock, quantity + 1)" title="quantity-increase" class="px-3 flex items-center justify-center text-gray-500 hover:text-gray-700">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 18 18">
                           <path d="M9 3.75V14.25"></path>
@@ -197,9 +197,8 @@
                     </div>
                   </div>
                   <div class="grid grid-cols-2 mb-2 gap-x-4 mt-5">
-                    <NuxtLink to="#" class="flex items-center justify-center bg-gradient-to-r from-sky-500 to-sky-600 hover:from-sky-600 hover:to-sky-700 text-white font-semibold py-4 px-4 rounded-sm transition-all duration-300 ease-in-out transform hover:scale-98 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-1 uppercase text-sm md:text-base leading-none shadow-md hover:shadow-md">Thêm giỏ hàng</NuxtLink>
-                    <!-- Buy Now Button - Gradient -->
-                    <button class="flex items-center justify-center bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-semibold py-4 px-4 rounded-sm transition-all duration-300 ease-in-out transform hover:scale-98 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 uppercase text-sm md:text-base leading-none shadow-md hover:shadow-md">Mua ngay</button>
+                    <Button :label="$t('client.cart.addToCart')" icon="pi pi-shopping-cart" size="large" @click="handleAddToCart" :loading="isAddingToCart" class="border-0 !flex items-center justify-center !bg-gradient-to-r !from-sky-500 !to-sky-600 hover:!from-sky-600 hover:!to-sky-700 text-white font-semibold py-4 px-4 rounded-sm transition-all duration-300 ease-in-out transform hover:scale-98 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-1 uppercase text-sm md:text-base leading-none shadow-md hover:shadow-md" />
+                    <Button :label="$t('client.cart.buyNow')" icon="pi pi-bolt" severity="danger" size="large" @click="handleBuyNow" :loading="isBuyingNow" class="flex items-center justify-center bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-semibold py-4 px-4 rounded-sm transition-all duration-300 ease-in-out transform hover:scale-98 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 uppercase text-sm md:text-base leading-none shadow-md hover:shadow-md" />
                   </div>
                   <div class="font-medium text-gray-500 text-xs description">
                     <NuxtLink to="#" class="font-bold underline cursor-pointer text-sky-400 hover:text-sky-600">Đăng nhập</NuxtLink>
@@ -767,6 +766,7 @@ import type { IProduct } from "~/interfaces/product/product.interface";
 import { useAuthStore } from "~/stores/auth/auth";
 import { useWishlist } from "~/composables/client/product/useWishlist";
 import { useCompare } from "~/composables/client/product/useCompare";
+import { useCart } from "~/composables/client/cart/useCart";
 
 const route = useRoute();
 
@@ -774,6 +774,7 @@ const { productDetail, productDetailLoading, productDetailError, trackView, fetc
 const { productImageMainOptions, productImageThumbnailOptions, productRelatedOptions } = useProductSlider();
 const { toggleWishlist, isVariantInWishlist, checkVariantWishlistStatus, fetchWishlist } = useWishlist();
 const { addToCompare, removeFromCompare, isInCompare } = useCompare();
+const { addItem, isAddingToCart, isBuyingNow } = useCart();
 const authStore = useAuthStore();
 
 // State
@@ -926,6 +927,18 @@ watch(quantity, (newVal) => {
   }
 });
 
+const handleQuantityInput = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  const value = parseInt(target.value, 10);
+  if (isNaN(value) || value < 1) {
+    quantity.value = 1;
+  } else if (displayStock.value > 0 && value > displayStock.value) {
+    quantity.value = displayStock.value;
+  } else {
+    quantity.value = value;
+  }
+};
+
 const scrollToTab = (tabName: string) => {
   activeTab.value = tabName;
   nextTick(() => {
@@ -934,6 +947,19 @@ const scrollToTab = (tabName: string) => {
       element.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   });
+};
+
+const handleAddToCart = async () => {
+  if (!selectedVariant.value && !productDetail.value) return;
+  await addItem(productDetail.value!, selectedVariant.value, quantity.value, false);
+};
+
+const handleBuyNow = async () => {
+  if (!selectedVariant.value && !productDetail.value) return;
+  const success = await addItem(productDetail.value!, selectedVariant.value, quantity.value, true);
+  if (success) {
+    await navigateTo(TOCART);
+  }
 };
 
 // Load data khi component mount
