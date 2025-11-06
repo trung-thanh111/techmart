@@ -109,3 +109,10 @@ export const generateSKU = (): string => {
   const randomNumbers = Math.floor(1000 + Math.random() * 9000).toString();
   return prefix + randomLetters + randomNumbers;
 };
+
+export const generateGuestId = (): string => {
+  const timestamp = Date.now().toString(36);
+  const randomStr = Math.random().toString(36).substring(2, 15);
+  const randomStr2 = Math.random().toString(36).substring(2, 15);
+  return `${timestamp}-${randomStr}-${randomStr2}`.substring(0, 64);
+};

@@ -103,14 +103,17 @@
           </div>
           <div class="items-center gap-4 hidden sm:flex text-white">
             <NuxtLink to="#" class="flex items-center gap-1 hover:text-gray-300 transition-colors">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6 mt-1.5">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-7 h-7 mt-1.5">
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
                 <polyline points="14,2 14,8 20,8" />
                 <line x1="16" y1="13" x2="8" y2="13" />
                 <line x1="16" y1="17" x2="8" y2="17" />
                 <polyline points="10,9 9,9 8,9" />
               </svg>
-              <span class="font-light" v-html="$t('client.header.trackOrder')"></span>
+              <div class="font-light text-sm">
+                <p>{{ $t("client.header.track") }}</p>
+                <p>{{ $t("client.header.order") }}</p>
+              </div>
             </NuxtLink>
             <div class="relative inline-block text-left group">
               <NuxtLink v-if="!user" :to="TOLOGIN" class="flex items-center gap-1">
@@ -212,32 +215,40 @@
               </div>
             </div>
             <div class="relative inline-block text-left group">
-              <NuxtLink to="#" class="block relative text-white mt-2">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6 text-lg">
-                  <circle cx="9" cy="21" r="1" />
-                  <circle cx="20" cy="21" r="1" />
-                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+              <NuxtLink :to="TOCART" class="block relative text-white mt-2 group/cart">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
-                <span class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs px-1">0</span>
+                <span v-if="cartCount > 0" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs px-1 min-w-[20px] text-center">
+                  {{ cartCount }}
+                </span>
               </NuxtLink>
               <div class="absolute top-full right-0 w-full h-5 group-hover:block hidden z-10"></div>
-              <div class="absolute right-0 top-12 z-30 min-w-[24rem] origin-top-right bg-white shadow-md rounded-md hidden group-hover:block transition-all duration-300 ease-in-out">
+              <div v-if="cartItems.length > 0" class="absolute right-0 top-12 z-30 min-w-[24rem] origin-top-right bg-white shadow-md rounded-md hidden group-hover:block transition-all duration-300 ease-in-out">
                 <div class="w-full rounded-md border-0 shadow-xl font-normal">
                   <div class="w-full max-w-md rounded-lg shadow-lg overflow-hidden text-sm">
-                    <div class="px-4 py-2 bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-white font-medium">{{ $t("client.header.quickView") }}</div>
-                    <div class="flex items-start px-4 py-3 border-b border-gray-100">
-                      <img :src="iphoneImage" alt="Ấm Điện" class="w-14 h-14 object-cover rounded mr-3" loading="lazy" />
-                      <div class="flex-1">
-                        <div class="font-semibold text-gray-800 leading-snug text-sm">Ấm Điện Siêu Tốc 1.7L RD-AST17 P1</div>
-                        <div class="flex items-center justify-between mt-1">
-                          <span class="text-red-500 font-semibold text-sm">391.220 đ</span>
-                          <span class="text-gray-400 text-xs">x1</span>
+                    <div class="px-4 py-2 bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-white font-medium">
+                      {{ $t("client.header.quickView") }}
+                    </div>
+                    <div class="max-h-[300px] overflow-y-auto">
+                      <div v-for="item in cartItems" :key="item.id" class="flex items-start px-4 py-3 border-b border-gray-100 hover:bg-gray-50">
+                        <NuxtImg :src="getCartItemImage(item)" :alt="getCartItemName(item)" class="w-14 h-14 object-cover rounded mr-3 flex-shrink-0" loading="lazy" />
+                        <div class="flex-1 min-w-0">
+                          <NuxtLink :to="`/product/${item.product?.slug || ''}`" class="font-medium text-gray-800 text-sm line-clamp-2 hover:text-teal-600 line-clamp-custom-2">
+                            {{ getCartItemName(item) }}
+                          </NuxtLink>
+                          <div class="flex items-center justify-between mt-1">
+                            <span class="text-red-500 font-semibold text-sm">{{ formatPrice((item.price || 0) * (item.quantity || 0)) }}</span>
+                            <span class="text-gray-400 text-xs">x{{ item.quantity }}</span>
+                          </div>
                         </div>
                       </div>
                     </div>
-                    <div class="flex items-center justify-between px-4 py-3">
-                      <span class="text-gray-500 text-sm">{{ $t("client.header.itemsAddedToCart", { count: 1 }) }}</span>
-                      <NuxtLink to="#gio-hang" class="bg-red-500 hover:bg-red-600 text-white font-medium p-2 rounded text-sm transition-all duration-200">{{ $t("client.header.viewCart") }}</NuxtLink>
+                    <div class="flex items-center justify-between px-4 py-3 border-t border-gray-100">
+                      <span class="text-gray-500 text-sm">{{ $t("client.cart.itemsInCart", { count: cartCount }) }}</span>
+                      <NuxtLink :to="TOCART" class="bg-info-500 hover:bg-info-600 text-white font-medium p-2 rounded text-sm transition-all duration-200">
+                        {{ $t("client.header.viewCart") }}
+                      </NuxtLink>
                     </div>
                   </div>
                 </div>
@@ -348,32 +359,42 @@
                 </div>
               </div>
               <div class="relative inline-block text-left group">
-                <NuxtLink to="#" class="block relative text-white mt-4">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6 text-lg">
-                    <circle cx="9" cy="21" r="1" />
-                    <circle cx="20" cy="21" r="1" />
-                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                <NuxtLink :to="TOCART" class="block relative text-white mt-4 group/cart">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                   </svg>
-                  <span class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs px-1">0</span>
+                  <span v-if="cartCount > 0" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs px-1 min-w-[20px] text-center">
+                    {{ cartCount }}
+                  </span>
                 </NuxtLink>
-                <div class="absolute top-full right-0 w-full h-5 group-hover:block hidden z-10"></div>
-                <div class="absolute right-0 top-12 z-30 min-w-[24rem] origin-top-right bg-white shadow-md rounded-md hidden group-hover:block transition-all duration-300 ease-in-out">
+                <div class="absolute top-full right-0 w-full max-h-5 group-hover:block hidden z-10"></div>
+                <div v-if="cartItems.length > 0" class="absolute right-0 top-12 z-30 min-w-[24rem] origin-top-right bg-white shadow-md rounded-md hidden group-hover:block transition-all duration-300 ease-in-out">
                   <div class="w-full rounded-md border-0 shadow-xl font-normal">
                     <div class="w-full max-w-md rounded-lg shadow-lg overflow-hidden text-sm">
-                      <div class="px-4 py-2 bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-white font-medium">Sản phẩm mới thêm</div>
-                      <div class="flex items-start px-4 py-3 border-b border-gray-100">
-                        <img :src="iphoneImage" alt="Ấm Điện" class="w-14 h-14 object-cover rounded mr-3" loading="lazy" />
-                        <div class="flex-1">
-                          <div class="font-semibold text-gray-800 leading-snug text-sm">Ấm Điện Siêu Tốc 1.7L RD-AST17 P1</div>
-                          <div class="flex items-center justify-between mt-1">
-                            <span class="text-red-500 font-semibold text-sm">391.220 đ</span>
-                            <span class="text-gray-400 text-xs">x1</span>
+                      <div class="px-4 py-2 bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-white font-medium">
+                        {{ $t("client.header.quickView") }}
+                      </div>
+                      <div class="max-h-[300px] overflow-y-auto">
+                        <div v-for="item in cartItems" :key="item.id" class="flex items-start px-4 py-3 border-b border-gray-100 hover:bg-gray-50">
+                          <NuxtImg :src="getCartItemImage(item)" :alt="getCartItemName(item)" class="w-14 h-14 object-cover rounded mr-3 flex-shrink-0" loading="lazy" />
+                          <div class="flex-1 min-w-0">
+                            <NuxtLink :to="`/product/${item.product?.slug || ''}`" v-tooltip.top="getCartItemName(item)" class="font-semibold text-gray-800 leading-snug text-sm hover:text-teal-600">
+                              <p class="line-clamp-2">
+                                {{ getCartItemName(item) }}
+                              </p>
+                            </NuxtLink>
+                            <div class="flex items-center justify-between mt-1">
+                              <span class="text-red-500 text-xs">{{ formatPrice((item.price || 0) * (item.quantity || 0)) }}</span>
+                              <span class="text-gray-400 text-xs">x{{ item.quantity }}</span>
+                            </div>
                           </div>
                         </div>
                       </div>
-                      <div class="flex items-center justify-between px-4 py-3">
-                        <span class="text-gray-500 text-sm">1 sản phẩm đã thêm vào giỏ hàng</span>
-                        <NuxtLink to="#gio-hang" class="bg-red-500 hover:bg-red-600 text-white font-medium p-2 rounded text-sm transition-all duration-200">Xem giỏ hàng</NuxtLink>
+                      <div class="flex items-center justify-between px-4 py-3 border-t border-gray-100">
+                        <span class="text-gray-500 text-sm">{{ $t("client.cart.itemsInCart", { count: cartCount }) }}</span>
+                        <NuxtLink :to="TOCART" class="!bg-info-500 hover:!bg-info-600 text-white font-medium p-2 rounded text-sm transition-all duration-200">
+                          {{ $t("client.header.viewCart") }}
+                        </NuxtLink>
                       </div>
                     </div>
                   </div>
@@ -653,16 +674,20 @@
     </div>
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from "vue";
 import { storeToRefs } from "pinia";
-import { TOLOGIN, TOAGENCY, TOFAQ, PROFILEINDEX, TODASHBOARD } from "~/utils/constants";
+import { TOLOGIN, TOAGENCY, TOFAQ, PROFILEINDEX, TODASHBOARD, TOCART } from "~/utils/constants";
 import logo from "~/assets/shared/images/logo/logo-website.png";
 import codImage from "~/assets/shared/images/logo/cod.png";
 import iphoneImage from "~/assets/client/images/products/iphone-16-pro-max.webp";
 import logoWebsite from "~/assets/shared/images/logo/logo-website.png";
 import { useAuthStore } from "~/stores/auth/auth";
 import { useAuth } from "~/composables/auth/useAuth";
+import { useCart } from "~/composables/client/cart/useCart";
+import { formatPrice, resolveAlbum } from "~/utils/helpers";
+import { IMAGEDEFAULT } from "~/utils/constants";
+import type { ICartItem } from "~/interfaces/cart/cartItem.interface";
 
 const authStore = useAuthStore();
 const { user } = storeToRefs(authStore);
@@ -674,6 +699,28 @@ const avatar = computed(() => {
 });
 
 const { handleLogout } = useAuth();
+const { count: cartCount, items: cartItems } = useCart();
+
+const getCartItemImage = (item: ICartItem): string => {
+  if (item.variant?.products?.album) {
+    const images = resolveAlbum(item.variant.products.album);
+    return images[0] || IMAGEDEFAULT;
+  }
+  if (item.product?.album) {
+    const images = resolveAlbum(item.product.album);
+    return images[0] || IMAGEDEFAULT;
+  }
+  return IMAGEDEFAULT;
+};
+
+const getCartItemName = (item: ICartItem): string => {
+  const productName = item.product?.name || "";
+  const variantName = item.variant?.name || "";
+  if (variantName) {
+    return `${productName} - ${variantName}`;
+  }
+  return productName;
+};
 
 // category
 const isMobileMenuOpen = ref(false);
@@ -732,3 +779,12 @@ const closeProductMenu = () => {
   productMenuOpen.value = null;
 };
 </script>
+<style scoped>
+.line-clamp-custom-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+}
+</style>

@@ -6,7 +6,7 @@
         <NuxtLink to="" @click.prevent="handleToggleWishlist" class="text-gray-400 hover:text-red-500 p-2 transition duration-200">
           <i :class="isInWishlist ? 'fas fa-heart text-red-500' : 'fa-regular fa-heart'"></i>
         </NuxtLink>
-        <NuxtLink to="#" class="text-gray-400 hover:text-sky-500 p-2 transition duration-200">
+        <NuxtLink to="#" @click.prevent="handleAddToCart" class="text-gray-400 hover:text-sky-500 p-2 transition duration-200" :title="$t('client.cart.addToCart')">
           <i class="fas fa-cart-plus"></i>
         </NuxtLink>
         <NuxtLink to="" @click.prevent="handleAddToCompare" class="text-gray-400 hover:text-sky-500 p-2 transition duration-200">
@@ -82,11 +82,13 @@ import type { IProduct } from "~/interfaces/product/product.interface";
 import { formatPrice, resolveAlbum } from "~/utils/helpers";
 import { useCompare } from "~/composables/client/product/useCompare";
 import { useWishlist } from "~/composables/client/product/useWishlist";
+import { useCart } from "~/composables/client/cart/useCart";
 
 const props = defineProps<{ product: IProduct }>();
 
 const { handleAddToCompareFromProduct } = useCompare();
 const { handleToggleWishlistFromProduct, isProductVariantInWishlist } = useWishlist();
+const { addItem } = useCart();
 
 const mainImage = computed(() => {
   return resolveAlbum(props.product?.album)?.[0] || "";
@@ -112,5 +114,15 @@ const handleAddToCompare = async () => {
 
 const handleToggleWishlist = async () => {
   await handleToggleWishlistFromProduct(props.product);
+};
+
+const handleAddToCart = async () => {
+  let variant = null;
+  if (props.product?.variant?.id) {
+    variant = props.product.variant;
+  } else if (props.product?.productVariants && props.product.productVariants.length > 0) {
+    variant = props.product.productVariants[0];
+  }
+  await addItem(props.product, variant, 1, false);
 };
 </script>

@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\Cart\CartItemController;
+use App\Http\Controllers\Api\V1\Cart\CartController;
 use App\Http\Controllers\Api\V1\Product\WishlistController;
 use App\Http\Controllers\Api\V1\Inventory\InventoryController;
 use App\Http\Controllers\Api\V1\Banner\BannerPositionController;
@@ -396,7 +398,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
         Route::resource('banner_positions', BannerPositionController::class)->except($routeExcept);
 
         // This is route Inventory
-        Route::group(['prefix' => 'inventorys'], function() {
+        Route::group(['prefix' => 'inventorys'], function () {
             Route::post('bulkStore', [InventoryController::class, 'bulkStore']);
             Route::put('bulkUpdate', [InventoryController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [InventoryController::class, 'bulkUpdate']);
@@ -407,7 +409,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
         Route::resource('inventorys', InventoryController::class)->except($routeExcept);
 
         // This is route Wishlist
-        Route::group(['prefix' => 'wishlists'], function() {
+        Route::group(['prefix' => 'wishlists'], function () {
             Route::post('bulkStore', [WishlistController::class, 'bulkStore']);
             Route::put('bulkUpdate', [WishlistController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [WishlistController::class, 'bulkUpdate']);
@@ -428,4 +430,42 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
     Route::get('agency/{slug}', [AgencyController::class, 'showBySlug']);
     Route::get('faq/{slug}', [FaqController::class, 'showBySlug']);
     Route::get('faq-catalogue/{slug}', [FaqCatalogueController::class, 'showBySlug']);
+
+    // This is route Cart
+    Route::middleware(['convert'])->group(function () use ($routeExcept) {
+        Route::group(['prefix' => 'carts'], function () {
+            Route::post('bulkStore', [CartController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [CartController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [CartController::class, 'bulkUpdate']);
+            Route::delete('bulkDelete', [CartController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [CartController::class, 'attach']);
+            Route::delete('{id}/detach', [CartController::class, 'detach']);
+        });
+        Route::resource('carts', CartController::class)->except($routeExcept);
+
+        // This is route CartItem
+        Route::group(['prefix' => 'cart_items'], function () {
+            Route::post('bulkStore', [CartItemController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [CartItemController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [CartItemController::class, 'bulkUpdate']);
+            Route::delete('bulkDelete', [CartItemController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [CartItemController::class, 'attach']);
+            Route::delete('{id}/detach', [CartItemController::class, 'detach']);
+        });
+        Route::resource('cart_items', CartItemController::class)->except($routeExcept);
+    });
+
+
+    // // Public Cart routes (guest cart)
+    // Route::middleware(['convert'])->group(function () {
+    //     Route::get('carts', [CartController::class, 'index']);
+    //     Route::post('carts', [CartController::class, 'store']);
+    //     Route::get('carts/{id}', [CartController::class, 'show']);
+    //     Route::post('carts/{id}', [CartController::class, 'update']);
+    //     Route::delete('carts/{id}', [CartController::class, 'destroy']);
+
+    //     Route::post('cart_items', [CartItemController::class, 'store']);
+    //     Route::post('cart_items/{id}', [CartItemController::class, 'update']);
+    //     Route::delete('cart_items/{id}', [CartItemController::class, 'destroy']);
+    // });
 });
