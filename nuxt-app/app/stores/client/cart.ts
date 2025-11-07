@@ -148,7 +148,6 @@ export const useCartStore = defineStore("cart", {
       const index = this.cart.cartItems.findIndex((item) => item.id === itemId);
       if (index > -1) {
         this.cart.cartItems.splice(index, 1);
-        // Remove from selected items if exists
         this.selectedItems = this.selectedItems.filter((id) => id !== itemId);
         this.expiresAt = Date.now() + TTL_MS;
         saveToStorage(this.$state);
