@@ -1099,6 +1099,7 @@
       "errorClear": "Không thể xóa giỏ hàng",
       "errorLoad": "Không thể tải giỏ hàng",
       "errorCreate": "Không thể tạo giỏ hàng",
+      "errorSync": "Có lỗi khi đồng bộ giỏ hàng. Vui lòng kiểm tra lại.",
       "productNotFound": "Không tìm thấy sản phẩm",
       "hideConditions": "Ẩn điều kiện",
       "conditions": "Điều kiện",

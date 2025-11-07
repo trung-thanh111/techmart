@@ -232,7 +232,6 @@
     </section>
   </div>
 
-  <!-- Delete Item Dialog -->
   <Dialog v-model:visible="showDeleteItemDialog" :header="t('client.cart.removeItem')" :modal="true" :style="{ width: '450px' }" :closable="true" @hide="selectedItemToDelete = null">
     <div class="flex flex-col gap-4">
       <div class="flex items-center gap-3">
@@ -241,19 +240,17 @@
       </div>
       <div v-if="selectedItemToDelete" class="mt-2">
         <p class="text-sm text-gray-600 mb-2">{{ t("client.cart.product") }}:</p>
-        <div class="p-3 bg-gray-50 border border-red-200 rounded">
-          <p class="font-medium text-gray-900">{{ getProductName(selectedItemToDelete) }}</p>
-          <p class="text-sm text-gray-500 mt-1">{{ getVariantInfo(selectedItemToDelete) }}</p>
+        <div class="p-2 bg-gray-50 border border-red-200 rounded">
+          <p class="font-medium text-red-500 text-sm">{{ getProductName(selectedItemToDelete) }}</p>
         </div>
       </div>
     </div>
     <template #footer>
-      <Button :label="t('client.cart.cancel')" severity="secondary" outlined @click="showDeleteItemDialog = false" />
-      <Button :label="t('client.cart.removeItem')" severity="danger" :loading="isLoading" @click="handleConfirmDeleteItem" />
+      <Button :label="t('client.cart.cancel')" severity="secondary" outlined @click="showDeleteItemDialog = false" class="px-3 py-1.5 text-xs rounded" />
+      <Button :label="t('client.cart.removeItem')" severity="danger" :loading="isLoading" @click="handleConfirmDeleteItem" class="px-3 py-1.5 text-xs rounded" />
     </template>
   </Dialog>
 
-  <!-- Clear Cart Dialog -->
   <Dialog v-model:visible="showClearCartDialog" :header="t('client.cart.clearCart')" :modal="true" :style="{ width: '450px' }" :closable="true" @hide="showClearCartDialog = false">
     <div class="flex flex-col gap-4">
       <div class="flex items-center gap-3">
@@ -265,8 +262,8 @@
       </div>
     </div>
     <template #footer>
-      <Button :label="t('client.cart.cancel')" severity="secondary" outlined @click="showClearCartDialog = false" />
-      <Button :label="t('client.cart.clearCart')" severity="danger" :loading="isLoading" @click="handleConfirmClearCart" />
+      <Button :label="t('client.cart.cancel')" severity="secondary" outlined @click="showClearCartDialog = false" class="px-3 py-1.5 text-xs rounded" />
+      <Button :label="t('client.cart.clearCart')" severity="danger" :loading="isLoading" @click="handleConfirmClearCart" class="px-3 py-1.5 text-xs rounded" />
     </template>
   </Dialog>
 </template>
@@ -398,7 +395,6 @@ const applyCoupon = () => {
   if (selectedCount.value === 0) {
     return;
   }
-  // TODO: Implement coupon logic
   toast.add({
     severity: "info",
     summary: "Thông báo",

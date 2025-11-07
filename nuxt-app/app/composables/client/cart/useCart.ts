@@ -1,19 +1,21 @@
 import { computed, ref, nextTick } from "vue";
-import { useToast } from "primevue/usetoast";
+import { useI18n } from "vue-i18n";
 import { useCartStore } from "~/stores/client/cart";
 import { cartService } from "~/services/cart/cart.service";
 import { cartItemService } from "~/services/cart/cartItem.service";
 import { useAuthStore } from "~/stores/auth/auth";
 import { generateGuestId } from "~/utils/helpers";
+import { useAppToast } from "~/composables/useAppToast";
 import type { ICart, CartPayload } from "~/interfaces/cart/cart.interface";
 import type { ICartItem, CartItemPayload } from "~/interfaces/cart/cartItem.interface";
 import type { IProduct } from "~/interfaces/product/product.interface";
 import type { IProductVariant } from "~/interfaces/product/variant.interface";
 
 export const useCart = () => {
+  const { t } = useI18n();
   const store = useCartStore();
   const authStore = useAuthStore();
-  const toast = useToast();
+  const toast = useAppToast();
   const isLoading = ref(false);
   const isAddingToCart = ref(false);
   const isBuyingNow = ref(false);
@@ -70,12 +72,7 @@ export const useCart = () => {
       console.error("Error fetching cart:", error);
       // Không hiển thị toast khi không có cart (có thể là lần đầu)
       if (error?.statusCode !== 404 && error?.code !== 404) {
-        toast.add({
-          severity: "error",
-          summary: "Lỗi",
-          detail: "Không thể tải giỏ hàng",
-          life: 3000,
-        });
+        toast.error(t("client.cart.errorLoad"));
       }
       return null;
     } finally {
@@ -138,12 +135,7 @@ export const useCart = () => {
       return null;
     } catch (error: any) {
       console.error("Error creating cart:", error);
-      toast.add({
-        severity: "error",
-        summary: "Lỗi",
-        detail: "Không thể tạo giỏ hàng",
-        life: 3000,
-      });
+      toast.error(error?.data?.message || t("client.cart.errorCreate"));
       return null;
     } finally {
       isLoading.value = false;
@@ -194,12 +186,7 @@ export const useCart = () => {
         if (!currentCart || !currentCart.id) {
           currentCart = await getOrCreateCart();
           if (!currentCart || !currentCart.id) {
-            toast.add({
-              severity: "error",
-              summary: "Lỗi",
-              detail: "Không thể tạo giỏ hàng",
-              life: 3000,
-            });
+            toast.error(t("client.cart.errorCreate"));
             return false;
           }
         }
@@ -224,7 +211,6 @@ export const useCart = () => {
 
         if (response.data) {
           store.addItem(response.data);
-          // Nếu là buy now, chọn item này
           if (isBuyNow) {
             store.deselectAll();
             if (response.data.id) {
@@ -243,22 +229,12 @@ export const useCart = () => {
 
       // Hiển thị toast sau khi reload xong
       await nextTick();
-      toast.add({
-        severity: "success",
-        summary: "Thành công",
-        detail: isBuyNow ? "Đã thêm vào giỏ hàng và chọn sản phẩm" : "Đã thêm vào giỏ hàng",
-        life: 3000,
-      });
+      toast.success(isBuyNow ? t("client.cart.addSuccessBuyNow") : t("client.cart.addSuccess"));
 
       return true;
     } catch (error: any) {
       console.error("Error adding item to cart:", error);
-      toast.add({
-        severity: "error",
-        summary: "Lỗi",
-        detail: error?.data?.message || "Không thể thêm sản phẩm vào giỏ hàng",
-        life: 3000,
-      });
+      toast.error(error?.data?.message || t("client.cart.errorAdd"));
       return false;
     } finally {
       if (isBuyNow) {
@@ -281,12 +257,7 @@ export const useCart = () => {
     try {
       const item = items.value.find((i) => i.id === itemId);
       if (!item) {
-        toast.add({
-          severity: "error",
-          summary: "Lỗi",
-          detail: "Không tìm thấy sản phẩm",
-          life: 3000,
-        });
+        toast.error(t("client.cart.productNotFound"));
         return false;
       }
 
@@ -314,12 +285,7 @@ export const useCart = () => {
       return true;
     } catch (error: any) {
       console.error("Error updating item quantity:", error);
-      toast.add({
-        severity: "error",
-        summary: "Lỗi",
-        detail: "Không thể cập nhật số lượng",
-        life: 3000,
-      });
+      toast.error(t("client.cart.errorUpdate"));
       return false;
     } finally {
       isLoading.value = false;
@@ -334,47 +300,31 @@ export const useCart = () => {
     try {
       const response = isAuthenticated.value ? await cartItemService.delete(itemId) : await cartItemService.deleteGuest(itemId);
 
-      // Xóa khỏi store trước
       store.removeItem(itemId);
 
-      // Reload cart để đồng bộ từ DB
       if (isAuthenticated.value) {
         await fetchCart();
       } else {
         await fetchGuestCart();
       }
 
-      toast.add({
-        severity: "success",
-        summary: "Thành công",
-        detail: "Đã xóa sản phẩm khỏi giỏ hàng",
-        life: 3000,
-      });
+      toast.success(t("client.cart.removeSuccess"));
 
       return true;
     } catch (error: any) {
       console.error("Error removing item from cart:", error);
-      toast.add({
-        severity: "error",
-        summary: "Lỗi",
-        detail: "Không thể xóa sản phẩm",
-        life: 3000,
-      });
+      toast.error(t("client.cart.errorRemove"));
       return false;
     } finally {
       isLoading.value = false;
     }
   };
 
-  /**
-   * Xóa tất cả items
-   */
   const clearCart = async (): Promise<boolean> => {
     if (isEmpty.value) return true;
 
     isLoading.value = true;
     try {
-      // Xóa từng item
       const itemIds = items.value.map((item) => item.id!).filter((id): id is number => id !== undefined);
       for (const itemId of itemIds) {
         try {
@@ -385,45 +335,30 @@ export const useCart = () => {
           }
         } catch (error: any) {
           console.error(`Error deleting item ${itemId}:`, error);
-          // Continue with next item
         }
       }
 
       // Clear store
       store.clear();
 
-      // Reload cart để đồng bộ
       if (isAuthenticated.value) {
         await fetchCart();
       } else {
         await fetchGuestCart();
       }
 
-      toast.add({
-        severity: "success",
-        summary: "Thành công",
-        detail: "Đã xóa tất cả sản phẩm",
-        life: 3000,
-      });
+      toast.success(t("client.cart.clearSuccess"));
 
       return true;
     } catch (error: any) {
       console.error("Error clearing cart:", error);
-      toast.add({
-        severity: "error",
-        summary: "Lỗi",
-        detail: "Không thể xóa giỏ hàng",
-        life: 3000,
-      });
+      toast.error(t("client.cart.errorClear"));
       return false;
     } finally {
       isLoading.value = false;
     }
   };
 
-  /**
-   * Đồng bộ cart khi login (merge guest cart với user cart)
-   */
   const syncCartAfterLogin = async (): Promise<void> => {
     if (!isAuthenticated.value) return;
 
@@ -439,7 +374,6 @@ export const useCart = () => {
         await fetchCart();
         return;
       }
-
       // Lấy user cart hiện tại từ API
       const userCart = await fetchCart();
 
@@ -518,19 +452,14 @@ export const useCart = () => {
       await fetchCart();
     } catch (error: any) {
       console.error("Error syncing cart after login:", error);
-      toast.add({
-        severity: "warn",
-        summary: "Thông báo",
-        detail: "Có lỗi khi đồng bộ giỏ hàng. Vui lòng kiểm tra lại.",
-        life: 3000,
-      });
+      toast.error(t("client.cart.errorSync"));
     } finally {
       isSyncing.value = false;
     }
   };
 
   /**
-   * Load cart khi component mount - ưu tiên DB khi đăng nhập
+   * Load cart khi component mount - ưu tiên session cho guest, DB cho user
    */
   const loadCart = async (): Promise<void> => {
     try {
@@ -548,15 +477,30 @@ export const useCart = () => {
           return;
         }
       } else {
-        // Guest: fetch từ DB hoặc session
+        // Guest: ưu tiên session storage trước (đã được load từ store khi khởi tạo)
+        const sessionCart = cart.value;
+        if (sessionCart && sessionCart.cartItems && sessionCart.cartItems.length > 0) {
+          // Cart đã có trong session, kiểm tra xem có trong DB không để đồng bộ
+          // Nếu có trong DB, fetch để đảm bảo data mới nhất
+          // Nếu không có trong DB (404), giữ nguyên session cart
+          try {
+            const dbCart = await fetchGuestCart();
+            // Nếu có cart trong DB, đã được set vào store trong fetchGuestCart()
+            // Nếu không có (404), session cart vẫn được giữ nguyên
+          } catch (error: any) {
+            // Lỗi 404 hoặc lỗi khác - giữ nguyên session cart
+            if (error?.statusCode !== 404 && error?.code !== 404) {
+              console.error("Error fetching guest cart:", error);
+            }
+          }
+          return;
+        }
+
+        // Nếu không có session cart, thử fetch từ DB
         const guestCart = await fetchGuestCart();
         if (!guestCart || !guestCart.cartItems || guestCart.cartItems.length === 0) {
-          // Nếu không có cart trong DB, kiểm tra session
-          const sessionCart = cart.value;
-          if (sessionCart && sessionCart.cartItems && sessionCart.cartItems.length > 0) {
-            // Cart đã có trong session, không cần làm gì
-            return;
-          }
+          // Không có cart trong DB và session, không cần làm gì
+          return;
         }
       }
     } catch (error: any) {

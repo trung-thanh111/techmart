@@ -80,4 +80,11 @@ export const productService = {
       params: relations ? { with: relations } : undefined,
     });
   },
+
+  showPublic: async (id: number | string, relations?: string[]): Promise<IApiOk<IProduct>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IProduct>>(`${ENDPOINT}/products/${id}`, {
+      params: relations ? { with: relations } : undefined,
+    });
+  },
 };

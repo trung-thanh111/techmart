@@ -210,12 +210,12 @@ export const useCompare = () => {
   };
 
   /**
-   * Load chi tiết product với variant (để lấy attributeData)
+   * Load chi tiết product với variant (để lấy attributeData) - dùng public API
    */
   const loadProductDetail = async (productId: number): Promise<IProduct | null> => {
     isLoading.value = true;
     try {
-      const response = await productService.show(productId);
+      const response = await productService.showPublic(productId, ["product_variants"]);
       return response.data || null;
     } catch (error) {
       console.error("Error loading product detail:", error);

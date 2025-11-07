@@ -187,20 +187,32 @@ const addProductToCompare = async (product: IProduct) => {
   try {
     // Kiểm tra và load product detail nếu chưa có variants
     let productToAdd = product;
-    if (!product.productVariants || product.productVariants.length === 0) {
-      // Load product detail để lấy variants
+
+    // Kiểm tra xem có variant trong product chưa (từ paginationPublic có thể có variant hoặc productVariants)
+    const hasVariant = product.variant || (product.productVariants && product.productVariants.length > 0);
+
+    if (!hasVariant) {
+      // Load product detail để lấy variants - dùng public API
       try {
-        const response = await productService.show(product.id!);
+        const response = await productService.showPublic(product.id!, ["product_variants"]);
         if (response.data) {
           productToAdd = response.data;
         }
       } catch (error) {
         console.error("Error loading product detail:", error);
+        toast.add({
+          severity: "error",
+          summary: "Lỗi",
+          detail: "Không thể tải thông tin sản phẩm",
+          life: 3000,
+        });
+        return;
       }
     }
 
-    const firstVariant = productToAdd.productVariants?.[0];
-    if (!firstVariant) {
+    // Ưu tiên: product.variant (từ API list với simple format) hoặc productVariants[0]
+    const firstVariant = productToAdd.variant || productToAdd.productVariants?.[0];
+    if (!firstVariant || !firstVariant.id) {
       toast.add({
         severity: "error",
         summary: "Lỗi",
