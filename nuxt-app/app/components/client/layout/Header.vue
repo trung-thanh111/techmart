@@ -245,7 +245,7 @@
                       </div>
                     </div>
                     <div class="flex items-center justify-between px-4 py-3 border-t border-gray-100">
-                      <span class="text-gray-500 text-sm">{{ $t("client.cart.itemsInCart", { count: cartCount }) }}</span>
+                      <p class="text-gray-500 text-sm">{{ $t("client.cart.itemsInCart", { count: cartCount }) }}</p>
                       <NuxtLink :to="TOCART" class="bg-info-500 hover:bg-info-600 text-white font-medium p-2 rounded text-sm transition-all duration-200">
                         {{ $t("client.header.viewCart") }}
                       </NuxtLink>
@@ -680,7 +680,6 @@ import { storeToRefs } from "pinia";
 import { TOLOGIN, TOAGENCY, TOFAQ, PROFILEINDEX, TODASHBOARD, TOCART } from "~/utils/constants";
 import logo from "~/assets/shared/images/logo/logo-website.png";
 import codImage from "~/assets/shared/images/logo/cod.png";
-import iphoneImage from "~/assets/client/images/products/iphone-16-pro-max.webp";
 import logoWebsite from "~/assets/shared/images/logo/logo-website.png";
 import { useAuthStore } from "~/stores/auth/auth";
 import { useAuth } from "~/composables/auth/useAuth";
