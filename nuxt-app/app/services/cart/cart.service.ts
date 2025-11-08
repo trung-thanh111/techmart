@@ -66,7 +66,6 @@ export const cartService = {
       }
       return { ...response, data: null };
     } catch (error: any) {
-      // Nếu lỗi 404, trả về null thay vì throw
       if (error?.statusCode === 404 || error?.code === 404) {
         return { data: null, success: false, message: "Cart not found" };
       }
