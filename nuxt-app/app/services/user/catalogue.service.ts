@@ -22,9 +22,7 @@ export const userCatalogueService = {
 
   show: async (id: number | string): Promise<IApiOk<IUserCatalogue>> => {
     const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IUserCatalogue>>(
-      `${ENDPOINT}/user_catalogues/${id}`
-    );
+    return await privateFetch<IApiOk<IUserCatalogue>>(`${ENDPOINT}/user_catalogues/${id}`);
   },
 
   update: async (id: number, payload: Partial<IUserCatalogue>): Promise<IApiOk<IUserCatalogue>> => {
@@ -34,11 +32,11 @@ export const userCatalogueService = {
       body: payload,
     });
   },
-  
+
   delete: async (id: number): Promise<IApiMessage> => {
     const { privateFetch } = useApi();
     return await privateFetch<IApiMessage>(`${ENDPOINT}/user_catalogues/${id}`, {
-      method: "DELETE"
+      method: "DELETE",
     });
   },
 
@@ -46,12 +44,33 @@ export const userCatalogueService = {
     const { privateFetch } = useApi();
     return await privateFetch<IApiMessage>(`${ENDPOINT}/user_catalogues/bulkDelete`, {
       body: { ids },
-      method: "DELETE"
+      method: "DELETE",
     });
   },
 
   all: async (): Promise<IApiOk<IUserCatalogue>> => {
     const { privateFetch } = useApi();
     return await privateFetch<IApiOk<IUserCatalogue>>(`${ENDPOINT}/user_catalogues?type=all`);
+  },
+
+  getPermissions: async (id: number): Promise<IApiOk<any>> => {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiOk<any>>(`${ENDPOINT}/user_catalogues/${id}/permissions`);
+  },
+
+  attach: async (id: number, ids: number[], withRelation: string = "permissions"): Promise<IApiMessage> => {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiMessage>(`${ENDPOINT}/user_catalogues/${id}/attach`, {
+      method: "POST",
+      body: { ids, with: withRelation },
+    });
+  },
+
+  detach: async (id: number, ids: number[], withRelation: string = "permissions"): Promise<IApiMessage> => {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiMessage>(`${ENDPOINT}/user_catalogues/${id}/detach`, {
+      method: "DELETE",
+      body: { ids, with: withRelation },
+    });
   },
 };

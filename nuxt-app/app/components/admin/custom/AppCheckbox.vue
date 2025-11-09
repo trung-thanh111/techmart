@@ -5,6 +5,7 @@ interface Props {
   isSelectAll?: boolean;
   disabled?: boolean;
   class?: string;
+  size?: "small" | "medium" | "large";
 }
 
 interface Emits {
@@ -16,6 +17,7 @@ const props = withDefaults(defineProps<Props>(), {
   modelValue: false,
   disabled: false,
   class: "",
+  size: "medium",
 });
 
 const emit = defineEmits<Emits>();
@@ -65,6 +67,6 @@ const handleChange = (value: boolean) => {
 
 <template>
   <div class="checkbox-wrapper" :class="class">
-    <Checkbox :model-value="isChecked" :disabled="disabled" @update:model-value="handleChange" class="scale-75" binary />
+    <Checkbox :model-value="isChecked" :disabled="disabled" @update:model-value="handleChange" :class="size === 'large' ? 'scale-100' : size === 'small' ? 'scale-50' : 'scale-75'" binary />
   </div>
 </template>
