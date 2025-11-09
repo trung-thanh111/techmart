@@ -583,7 +583,27 @@
         "confirmDelete": "Hãy xác nhận thông tin để xóa. Không thể phục hồi!",
         "confirmDeleteMultiple": "Hãy xác nhận danh sách bản ghi cần xóa. Không thể phục hồi!",
         "record": "Bản ghi",
-        "selectedRecords": "Danh sách bản ghi được chọn"
+        "selectedRecords": "Danh sách bản ghi được chọn",
+        "permissions": {
+          "title": "Phân quyền nhóm người dùng",
+          "subtitle": "Phân quyền cho nhóm: {name}",
+          "selectAll": "Chọn tất cả",
+          "selectModule": "Chọn module",
+          "selectedCount": "Đã chọn {count} quyền",
+          "noPermissions": "Không có quyền nào"
+        }
+      },
+      "permission": {
+        "title": "Quyền truy cập",
+        "breadcrumb": "Quản lý quyền truy cập",
+        "name": "Tên quyền",
+        "namePlaceholder": "Nhập tên quyền (ví dụ: users:index)",
+        "module": "Module",
+        "modulePlaceholder": "Nhập tên module (ví dụ: users)",
+        "value": "Giá trị",
+        "valuePlaceholder": "Nhập giá trị quyền (số nguyên)",
+        "titlePlaceholder": "Nhập tiêu đề quyền",
+        "selectModule": "Chọn module"
       }
     },
     "validation": {
@@ -652,7 +672,11 @@
       "brandRequired": "Bạn chưa chọn thương hiệu",
       "productCatalogueRequired": "Bạn chưa chọn nhóm sản phẩm",
       "agencyRequired": "Bạn chưa chọn đại lý",
-      "productVariantRequired": "Bạn chưa chọn phiên bản sản phẩm"
+      "productVariantRequired": "Bạn chưa chọn phiên bản sản phẩm",
+      "moduleRequired": "Module là bắt buộc",
+      "moduleMaxLength": "Module vượt quá 255 ký tự",
+      "valueRequired": "Giá trị quyền là bắt buộc",
+      "valueMin": "Giá trị quyền phải lớn hơn hoặc bằng 0"
     },
     "messages": {
       "createSuccess": "Thêm mới thành công",

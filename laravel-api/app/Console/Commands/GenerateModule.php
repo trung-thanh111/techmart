@@ -53,6 +53,7 @@ class GenerateModule extends Command
             ->registerServiceProvider()
             ->createRoute()
             ->createMigration()
+            ->generatePermissions()
             // ->logGenerateModule()
         ;
 
@@ -256,7 +257,8 @@ EOT;
         File::put($folder, $content);
         return $this;
     }
-    protected function createMigration(): self{
+    protected function createMigration(): self
+    {
         $folder = database_path('migrations');
         File::ensureDirectoryExists($folder);
 
@@ -276,6 +278,21 @@ EOT;
         return $this;
     }
 
+    protected function generatePermissions(): self
+    {
+        try {
+            $permissionObserver = app(\App\Observers\PermissionObserver::class);
+            $moduleName = camel_case_to_snake_case($this->name);
+            $created = $permissionObserver->generateForModule($moduleName);
 
-
+            if (count($created) > 0) {
+                $this->info("Generated " . count($created) . " permissions for module: {$moduleName}");
+            } else {
+                $this->warn("Permissions for module {$moduleName} already exist, skipping...");
+            }
+        } catch (\Exception $e) {
+            $this->error("Failed to generate permissions: " . $e->getMessage());
+        }
+        return $this;
+    }
 }

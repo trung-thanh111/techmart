@@ -185,6 +185,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
             Route::post('bulkStore', [UserCatalogueController::class, 'bulkStore']);
             Route::put('bulkUpdate', [UserCatalogueController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [UserCatalogueController::class, 'bulkUpdate']);
+            Route::get('{id}/permissions', [UserCatalogueController::class, 'getPermissions']);
         });
         Route::resource('user_catalogues', UserCatalogueController::class)->except($routeExcept);
 

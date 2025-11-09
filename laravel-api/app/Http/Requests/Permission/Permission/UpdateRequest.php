@@ -34,13 +34,6 @@ class UpdateRequest extends BaseRequest
         $sometime = ($method === 'PATCH') ? 'sometimes' : '';
         return [
             "name" => "{$sometime}|required|string|max:255",
-            "slug" => [
-                "{$sometime}",
-                "required",
-                "string",
-                "max:255",
-                Rule::unique("permissions", "slug")->ignore($this->route("permission")),
-            ],
             "value" => "{$sometime}|required|integer|min:0",
             "module" => "{$sometime}|required|string|max:255",
             "title" => "{$sometime}|nullable|string|max:255",
@@ -49,10 +42,10 @@ class UpdateRequest extends BaseRequest
         ];
     }
 
-    public function prepareForValidation() {
+    public function prepareForValidation()
+    {
         $this->merge([
             'updated_at' => now(),
-            ...($this->has('name') && !$this->has('slug') ? ['slug' => Str::slug($this->name)] : [])
         ]);
     }
 

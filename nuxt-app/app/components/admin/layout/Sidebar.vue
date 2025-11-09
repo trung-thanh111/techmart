@@ -116,6 +116,9 @@
                   <NuxtLink :to="USERCATALOGUEINDEX" class="nav-link" data-key="t-user-catelogue">{{ $t("admin.sidebar.customerCatalogue") }}</NuxtLink>
                 </li>
                 <li class="nav-item">
+                  <NuxtLink :to="PERMISSIONINDEX" class="nav-link" data-key="t-user-permission">{{ $t("admin.sidebar.permission") }}</NuxtLink>
+                </li>
+                <li class="nav-item">
                   <NuxtLink :to="ADDRESSORDERINDEX" class="nav-link" data-key="t-user-address-order">{{ $t("admin.sidebar.addressOrder") }}</NuxtLink>
                 </li>
               </ul>

@@ -9,6 +9,8 @@ use App\Http\Requests\User\Catalogue\BulkUpdateRequest;
 use App\Http\Requests\User\Catalogue\StoreRequest;
 use App\Http\Requests\User\Catalogue\UpdateRequest;
 use App\Services\Interfaces\User\UserCatalogueServiceInterface as UserCatalogueService;
+use App\Http\Resources\ApiResource;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Http\JsonResponse;
 
 class UserCatalogueController extends BaseController
@@ -21,37 +23,49 @@ class UserCatalogueController extends BaseController
         $this->service = $service;
     }
 
-    public function store(StoreRequest $request): JsonResponse{
+    public function store(StoreRequest $request): JsonResponse
+    {
         return $this->baseSave($request);
     }
 
-    public function bulkStore(BulkStoreRequest $request): JsonResponse{
+    public function bulkStore(BulkStoreRequest $request): JsonResponse
+    {
         return $this->baseBulkSave($request, 'store');
-
     }
 
-    public function bulkUpdate(BulkUpdateRequest $request): JsonResponse{
+    public function bulkUpdate(BulkUpdateRequest $request): JsonResponse
+    {
         return $this->baseBulkSave($request, 'update');
-
     }
 
-    public function update(UpdateRequest $request, int $id): JsonResponse{
+    public function update(UpdateRequest $request, int $id): JsonResponse
+    {
         return $this->baseSave($request, $id);
     }
 
-    public function attach(RelationRequest $request, int $id = 0): JsonResponse{
+    public function attach(RelationRequest $request, int $id = 0): JsonResponse
+    {
         return $this->baseRelation($request, $id, 'attach');
     }
 
-    public function detach(RelationRequest $request, int $id = 0): JsonResponse{
+    public function detach(RelationRequest $request, int $id = 0): JsonResponse
+    {
         return $this->baseRelation($request, $id, 'detach');
     }
 
-    public function restore(RestoreRequest $request, int $id = 0): JsonResponse{
+    public function restore(RestoreRequest $request, int $id = 0): JsonResponse
+    {
         return $this->baseRestore($request, $id);
     }
 
-    protected function getService(){
+    public function getPermissions(int $id): JsonResponse
+    {
+        $response = $this->service->getPermissions($id);
+        return ApiResource::ok($response, Lang::get('message.successfully'));
+    }
+
+    protected function getService()
+    {
         return $this->service;
     }
 }

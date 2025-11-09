@@ -13,6 +13,10 @@ export const USERINDEX = "/admin/user/user";
 export const USERCREATE = "/admin/user/user/create";
 export const USERUPDATE = "/admin/user/user/update";
 
+export const PERMISSIONINDEX = "/admin/user/permission";
+export const PERMISSIONCREATE = "/admin/user/permission/create";
+export const PERMISSIONUPDATE = "/admin/user/permission/update";
+
 export const POSTCATALOGUEINDEX = "/admin/post/catalogue";
 export const POSTCATALOGUECREATE = "/admin/post/catalogue/create";
 export const POSTCATALOGUEUPDATE = "/admin/post/catalogue/update";

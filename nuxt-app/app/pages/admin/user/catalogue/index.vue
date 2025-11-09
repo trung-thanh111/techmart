@@ -108,6 +108,12 @@ definePageMeta({
                         </NuxtLink>
                       </li>
                       <li>
+                        <NuxtLink class="dropdown-item text-primary" :to="`/admin/user/catalogue/${item.id}/permissions`">
+                          <i class="ri-shield-user-line me-1"></i>
+                          {{ $t("admin.page.userCatalogue.permissions.title") }}
+                        </NuxtLink>
+                      </li>
+                      <li>
                         <button type="button" class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteRecord" @click.stop="handleDeleteSingle(item)">
                           <i class="ri-delete-bin-line me-1"></i>
                           {{ $t("admin.common.delete") }}
