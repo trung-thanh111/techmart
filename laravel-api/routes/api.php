@@ -53,7 +53,7 @@ Route::group(['prefix' => 'v1/auth'], function () {
         Route::post('login', [AuthController::class, 'login']);
         Route::post('register', [AuthController::class, 'register']);
     });
-    Route::middleware(['jwt:api', 'convert', 'checkPermission'])->group(function () {
+    Route::middleware(['jwt:api', 'convert'])->group(function () {
         Route::get('me', [AuthController::class, 'me']);
         Route::post('logout', [AuthController::class, 'logout']);
     });

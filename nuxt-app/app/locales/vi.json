@@ -996,7 +996,9 @@
     "profileHeader": {
       "customer": "Khách hàng",
       "admin": "Quản trị viên",
-      "since": "từ ngày"
+      "since": "từ ngày",
+      "refreshToken": "Làm mới token",
+      "refreshing": "Đang làm mới..."
     },
     "utilityTool": {
       "chat": "Chat",

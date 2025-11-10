@@ -16,6 +16,7 @@ const createFetch = (options: FetchOptions = {}) => {
   return $fetch.create({
     baseURL: config.public.baseUrl,
     timeout: 10000, // ms
+    credentials: "include", // Để gửi cookie
     ...options,
     onResponseError({ request, response }) {
       console.error("API Error:", request, response);

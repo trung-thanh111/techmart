@@ -21,7 +21,7 @@ export const useAuthStore = defineStore("auth", {
       this.accessToken = tokens.accessToken;
       this.refreshToken = tokens.refreshToken ?? null;
       this.csrfToken = tokens.csrfToken;
-      this.expireAt = tokens.expireAt;
+      this.expireAt = tokens.expireAt ? Date.now() + tokens.expireAt * 1000 : null;
       this.isAuthenticated = !!tokens.accessToken;
       this.isAdmin = isAdminFromUser(user);
     },

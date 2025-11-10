@@ -33,6 +33,11 @@ export const useLogin = () => {
     isLoading.value = true;
     try {
       const res = await authService.login(payload);
+
+      if (!res || !res.data) {
+        throw new Error("Response không hợp lệ");
+      }
+
       auth.setAuth(res.data.user, {
         accessToken: res.data.accessToken,
         refreshToken: null,
@@ -41,13 +46,20 @@ export const useLogin = () => {
       });
 
       // Đồng bộ cart sau khi login
-      const { syncCartAfterLogin } = useCart();
-      await syncCartAfterLogin();
+      try {
+        const { syncCartAfterLogin } = useCart();
+        await syncCartAfterLogin();
+      } catch (cartError) {
+        console.warn("Lỗi đồng bộ cart:", cartError);
+        // Không block login nếu cart sync fail
+      }
 
       toast.success("Đăng nhập thành công");
-      return navigateTo(auth.isAdmin ? TODASHBOARD : TOHOME);
+      await navigateTo(auth.isAdmin ? TODASHBOARD : TOHOME);
     } catch (e: any) {
-      toast.error(e?.response?.data?.message || "Đăng nhập thất bại");
+      console.error("Login error:", e);
+      const errorMessage = e?.data?.message || e?.response?.data?.message || e?.message || "Đăng nhập thất bại";
+      toast.error(errorMessage);
     } finally {
       isLoading.value = false;
     }
