@@ -23,9 +23,7 @@ export const attributeService = {
 
   show: async (id: number | string): Promise<IApiOk<IAttribute>> => {
     const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IAttribute>>(
-      `${ENDPOINT}/attributes/${id}`
-    );
+    return await privateFetch<IApiOk<IAttribute>>(`${ENDPOINT}/attributes/${id}`);
   },
 
   update: async (id: number, payload: Partial<IAttribute>): Promise<IApiOk<IAttribute>> => {
@@ -40,7 +38,7 @@ export const attributeService = {
   delete: async (id: number): Promise<IApiMessage> => {
     const { privateFetch } = useApi();
     return await privateFetch<IApiMessage>(`${ENDPOINT}/attributes/${id}`, {
-      method: "DELETE"
+      method: "DELETE",
     });
   },
 
@@ -48,18 +46,17 @@ export const attributeService = {
     const { privateFetch } = useApi();
     return await privateFetch<IApiMessage>(`${ENDPOINT}/attributes/bulkDelete`, {
       body: { ids },
-      method: "DELETE"
+      method: "DELETE",
     });
   },
 
   all: async (): Promise<IApiOk<IAttribute>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IAttribute>>(`${ENDPOINT}/attributes?type=all`);
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IAttribute>>(`${ENDPOINT}/attributes?type=all`);
   },
 
   getAttributesByCatalogue: async (catalogueId: number): Promise<IApiOk<any>> => {
     const { publicFetch } = useApi();
     return await publicFetch<IApiOk<IAttribute>>(`${ENDPOINT}/attributes?type=all&attribute_catalogue_id=${catalogueId}`);
-
   },
 };

@@ -3,6 +3,7 @@ import type { TLoginRequest } from "~/composables/auth/useLogin";
 import type { TRegisterRequest } from "~/composables/auth/useRegister";
 import type { IAuthSuccessResponse } from "~/interfaces/user/user.interface";
 import { useApi } from "~/composables/useApi";
+import { useAuthStore } from "~/stores/auth/auth";
 
 const ENDPOINT = "/api/v1/auth";
 const VERIFY_ENDPOINT = "/api/v1/email-verification";
@@ -38,13 +39,13 @@ export const authService = {
       method: "POST",
     });
   },
-  
+
   // Status verification by email
   verifyStatus: async (email: string): Promise<{ data: { verified: boolean } }> => {
     const { publicFetch } = useApi();
     return await publicFetch<any>(`${VERIFY_ENDPOINT}/status?email=${encodeURIComponent(email)}`);
   },
-  
+
   // Forgot password flow
   forgotRequest: async (email: string): Promise<any> => {
     const { publicFetch } = useApi();
@@ -84,6 +85,18 @@ export const authService = {
     return await privateFetch<any>(`${CHANGE_PASSWORD_ENDPOINT}`, {
       method: "POST",
       body: payload,
+    });
+  },
+
+  refresh: async (): Promise<IApiOk<IAuthSuccessResponse>> => {
+    const { publicFetch } = useApi();
+    const auth = useAuthStore();
+    return await publicFetch<IApiOk<IAuthSuccessResponse>>(`${ENDPOINT}/refresh`, {
+      method: "POST",
+      headers: {
+        "X-CSRF-TOKEN": auth.csrfToken || "",
+      },
+      credentials: "include",
     });
   },
 };

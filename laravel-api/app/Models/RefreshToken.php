@@ -15,4 +15,10 @@ class RefreshToken extends Model
         'was_used',
         'is_revoked',
     ];
+
+    protected $casts = [
+        'expires_at' => 'datetime',
+        'was_used' => 'boolean',
+        'is_revoked' => 'boolean',
+    ];
 }

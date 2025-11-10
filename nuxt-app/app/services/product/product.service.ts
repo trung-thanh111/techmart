@@ -1,7 +1,6 @@
 import type { IApiOk, IApiMessage, IPaginate } from "~/interfaces/base.interface";
 import type { IProduct } from "~/interfaces/product/product.interface";
 import { useApi } from "~/composables/useApi";
-import { formData } from "~/utils/formData";
 
 const ENDPOINT = "/api/v1";
 
@@ -51,8 +50,8 @@ export const productService = {
   },
 
   all: async (): Promise<IApiOk<IProduct>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IProduct>>(`${ENDPOINT}/products?type=all`);
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IProduct>>(`${ENDPOINT}/products?type=all`);
   },
 
   paginationPublic: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IProduct>>> => {
