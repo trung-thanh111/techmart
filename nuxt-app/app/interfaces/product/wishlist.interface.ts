@@ -37,6 +37,7 @@ export interface IWishlistGrouped {
   userId: number;
   productVariantId: number;
   product: IWishlistGroupedProduct & {
-    variant: IWishlistGroupedVariant;
+    variant: IWishlistGroupedVariant | IWishlistGroupedVariant[];
+    variants?: IWishlistGroupedVariant[];
   };
 }

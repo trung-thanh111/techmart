@@ -5,9 +5,7 @@
         <!-- Heart Icon -->
         <div class="relative group/heart">
           <button @click.prevent="handleHeartClick" class="text-red-500 p-1.5 transition duration-200 relative">
-            <i v-if="variantsCount > 1" class="fa-solid fa-heart"></i>
-            <i v-else class="fa-solid fa-heart"></i>
-
+            <i class="fa-solid fa-heart"></i>
             <span v-if="variantsCount > 1" class="absolute top-0 right-1 text-red-500 text-[10px]">
               {{ variantsCount > 5 ? "5+" : variantsCount }}
             </span>
@@ -142,20 +140,47 @@ const currentProduct = computed(() => {
   return wishlistGrouped.value.find((p) => p.product?.id === props.product?.product?.id);
 });
 
-const variant = computed(() => {
-  return currentProduct.value?.product?.variant || productData.value?.variant || null;
-});
+const resolveVariantName = (variant: Record<string, any> | null | undefined): string => {
+  if (!variant) return "";
+  if (variant.name) return variant.name as string;
 
-const variants = computed(() => {
-  return variant.value ? [variant.value] : [];
+  if (variant.attributeData) {
+    const attributeNames = Object.values(variant.attributeData as Record<string, { id?: number; name?: string }>)
+      .map((attr) => attr?.name)
+      .filter(Boolean);
+
+    if (attributeNames.length) {
+      return attributeNames.join(" / ");
+    }
+  }
+
+  return "";
+};
+
+const variants = computed<WishlistVariant[]>(() => {
+  const product = currentProduct.value?.product ?? productData.value;
+  if (!product) return [];
+
+  const rawVariants = product.variants ?? product.variant ?? [];
+  const normalizedVariants = Array.isArray(rawVariants) ? rawVariants : rawVariants ? [rawVariants] : [];
+
+  return normalizedVariants
+    .map((variant: any) => ({
+      id: variant?.id ?? variant?.productVariantId ?? 0,
+      name: resolveVariantName(variant) || `#${variant?.id ?? variant?.productVariantId ?? ""}`,
+      wishlistId: variant?.wishlistId,
+    }))
+    .filter((variant) => variant.id > 0);
 });
 
 const variantsCount = computed(() => variants.value.length);
 const displayedVariants = computed(() => variants.value.slice(0, 2));
+const primaryVariant = computed(() => variants.value[0]);
+const hasMoreVariants = computed(() => variantsCount.value > displayedVariants.value.length);
 
 const handleHeartClick = async () => {
-  if (variant.value) {
-    await handleRemoveWishlist(variant.value.id, variant.value.wishlistId);
+  if (variantsCount.value === 1 && primaryVariant.value) {
+    await handleRemoveWishlist(primaryVariant.value.id, primaryVariant.value.wishlistId);
   }
 };
 

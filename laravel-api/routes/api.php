@@ -420,6 +420,17 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
         });
         Route::resource('wishlists', WishlistController::class)->except($routeExcept);
 
+        // This is route Promotion
+        Route::group(['prefix' => 'promotions'], function() {
+            Route::post('bulkStore', [PromotionController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [PromotionController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [PromotionController::class, 'bulkUpdate']);
+            Route::delete('bulkDelete', [PromotionController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [PromotionController::class, 'attach']);
+            Route::delete('{id}/detach', [PromotionController::class, 'detach']);
+        });
+        Route::resource('promotions', PromotionController::class)->except($routeExcept);
+
         // generate route
 
     });
