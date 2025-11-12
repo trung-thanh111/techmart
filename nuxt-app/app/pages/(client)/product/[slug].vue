@@ -772,7 +772,7 @@ const route = useRoute();
 
 const { productDetail, productDetailLoading, productDetailError, trackView, fetchDetailBySlug } = useProduct();
 const { productImageMainOptions, productImageThumbnailOptions, productRelatedOptions } = useProductSlider();
-const { toggleWishlist, isVariantInWishlist, checkVariantWishlistStatus, fetchWishlist } = useWishlist();
+const { toggleWishlist, isVariantInWishlist, checkVariantWishlistStatus, fetchWishlist, getWishlistVariantIdsByProductId } = useWishlist();
 const { addToCompare, removeFromCompare, isInCompare } = useCompare();
 const { addItem, isAddingToCart, isBuyingNow } = useCart();
 const authStore = useAuthStore();
@@ -918,6 +918,23 @@ const isCurrentVariantInWishlist = computed(() => {
 const handleWishlistToggle = async () => {
   if (!selectedVariant.value?.id) return;
   await toggleWishlist(selectedVariant.value.id);
+};
+
+// Lấy tất cả variant IDs có trong wishlist cho product hiện tại
+const wishlistVariantIds = computed(() => {
+  if (!productDetail.value?.id) return [];
+  return getWishlistVariantIdsByProductId(productDetail.value.id);
+});
+
+const isAttributeOptionInWishlist = (attrName: string, attrId: number): boolean => {
+  if (!productDetail.value?.productVariants?.length || wishlistVariantIds.value.length === 0) return false;
+
+  return (productDetail.value.productVariants as any[]).some((variant: any) => {
+    if (!wishlistVariantIds.value.includes(variant.id)) return false;
+
+    if (!variant?.attributeData?.[attrName]) return false;
+    return variant.attributeData[attrName].id === attrId;
+  });
 };
 
 watch(quantity, (newVal) => {

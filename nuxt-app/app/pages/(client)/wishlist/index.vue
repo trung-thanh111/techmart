@@ -159,7 +159,7 @@ const handleSort = (sort: string) => {
 };
 
 const handleProductRemoved = () => {
-  applyFilters();
+  applyFiltersImmediate();
 };
 
 const applyFilters = () => {
@@ -168,63 +168,60 @@ const applyFilters = () => {
   }
 
   filterDebounceTimer = setTimeout(() => {
-    let result = [...wishlistGrouped.value];
-
-    // Filter by price
-    const [minPrice, maxPrice] = filters.value.price;
-    result = result.filter((item) => {
-      const price = item.product?.priceOrigin || 0;
-      return price >= minPrice && price <= maxPrice;
-    });
-
-    // Filter by catalogues (multiselect - in)
-    if (filters.value.catalogues.length > 0) {
-      result = result.filter((item) => item.product?.productCatalogueId && filters.value.catalogues.includes(item.product.productCatalogueId));
-    }
-
-    // Filter by brands (multiselect - in)
-    if (filters.value.brands.length > 0) {
-      result = result.filter((item) => item.product?.brandId && filters.value.brands.includes(item.product.brandId));
-    }
-
-    // Sort - giống shop
-    const [sortField, sortOrder] = sortValue.value.split(",");
-    result.sort((a, b) => {
-      let aVal: any;
-      let bVal: any;
-
-      if (sortField === "price" || sortField === "price_origin") {
-        aVal = a.product?.priceOrigin || 0;
-        bVal = b.product?.priceOrigin || 0;
-      } else if (sortField === "name") {
-        aVal = (a.product?.name || "").toLowerCase();
-        bVal = (b.product?.name || "").toLowerCase();
-      } else if (sortField === "created_at") {
-        // Có thể cần thêm field created_at vào interface
-        aVal = 0;
-        bVal = 0;
-      } else {
-        aVal = a[sortField as keyof typeof a];
-        bVal = b[sortField as keyof typeof b];
-      }
-
-      if (sortOrder === "asc") {
-        return aVal > bVal ? 1 : aVal < bVal ? -1 : 0;
-      } else {
-        return aVal < bVal ? 1 : aVal > bVal ? -1 : 0;
-      }
-    });
-
-    filteredProducts.value = result;
+    applyFiltersImmediate();
   }, 150);
 };
 
-watch(
-  () => wishlistGrouped.value.length,
-  () => {
-    applyFilters();
+const applyFiltersImmediate = () => {
+  let result = [...wishlistGrouped.value];
+
+  // Filter by price
+  const [minPrice, maxPrice] = filters.value.price;
+  result = result.filter((item) => {
+    const price = item.product?.priceOrigin || 0;
+    return price >= minPrice && price <= maxPrice;
+  });
+
+  // Filter by catalogues (multiselect - in)
+  if (filters.value.catalogues.length > 0) {
+    result = result.filter((item) => item.product?.productCatalogueId && filters.value.catalogues.includes(item.product.productCatalogueId));
   }
-);
+
+  // Filter by brands (multiselect - in)
+  if (filters.value.brands.length > 0) {
+    result = result.filter((item) => item.product?.brandId && filters.value.brands.includes(item.product.brandId));
+  }
+
+  // Sort - giống shop
+  const [sortField, sortOrder] = sortValue.value.split(",");
+  result.sort((a, b) => {
+    let aVal: any;
+    let bVal: any;
+
+    if (sortField === "price" || sortField === "price_origin") {
+      aVal = a.product?.priceOrigin || 0;
+      bVal = b.product?.priceOrigin || 0;
+    } else if (sortField === "name") {
+      aVal = (a.product?.name || "").toLowerCase();
+      bVal = (b.product?.name || "").toLowerCase();
+    } else if (sortField === "created_at") {
+      // Có thể cần thêm field created_at vào interface
+      aVal = 0;
+      bVal = 0;
+    } else {
+      aVal = a[sortField as keyof typeof a];
+      bVal = b[sortField as keyof typeof b];
+    }
+
+    if (sortOrder === "asc") {
+      return aVal > bVal ? 1 : aVal < bVal ? -1 : 0;
+    } else {
+      return aVal < bVal ? 1 : aVal > bVal ? -1 : 0;
+    }
+  });
+
+  filteredProducts.value = result;
+};
 
 onMounted(async () => {
   await Promise.all([fetchCatalogues(), fetchBrands()]);

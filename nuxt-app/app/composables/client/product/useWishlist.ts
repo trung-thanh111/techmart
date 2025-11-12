@@ -36,8 +36,7 @@ export const useWishlist = () => {
 
       const transformedItems = items.map((item: any) => {
         if (item.product) {
-          // API có thể trả về variant là array hoặc object, cần check
-          const variantData = item.product.variant || (item.product as any).variants;
+          let variantData = item.product.variant || (item.product as any).variants;
           const variantArray = Array.isArray(variantData) ? variantData : variantData ? [variantData] : [];
           const variant = variantArray.length > 0 ? variantArray[0] : null;
 
@@ -45,13 +44,12 @@ export const useWishlist = () => {
             ...item,
             product: {
               ...item.product,
-              variant: variant, // Single variant object
+              variant: variant,
+              variants: variantArray,
             },
             productVariantId: variant?.id || item.productVariantId || 0,
           };
         }
-        // Nếu item là flat structure thì wrap trong product
-        // Chuyển variant array thành single variant
         const variantData = item.variant || item.variants;
         const variantArray = Array.isArray(variantData) ? variantData : variantData ? [variantData] : [];
         const variant = variantArray.length > 0 ? variantArray[0] : null;
@@ -70,7 +68,8 @@ export const useWishlist = () => {
             album: item.album,
             productCatalogueId: item.productCatalogueId || 0,
             brandId: item.brandId || 0,
-            variant: variant, // Single variant object
+            variant: variant,
+            variants: variantArray,
           },
         };
       });
@@ -121,28 +120,75 @@ export const useWishlist = () => {
 
     try {
       let itemId = wishlistId;
+      let targetItem: IWishlistGrouped | null = null;
+      let targetVariantIndex = -1;
 
+      // Tìm item và variant cần xóa
       if (!itemId) {
         for (const item of wishlistGrouped.value) {
-          const variant = item.product?.variant;
-          if (variant && (variant.id === productVariantId || variant.productVariantId === productVariantId) && variant.wishlistId) {
-            itemId = variant.wishlistId;
-            break;
+          const variants = (item.product as any)?.variants || [];
+          const variantArray = Array.isArray(variants) ? variants : variants ? [variants] : [];
+
+          for (let i = 0; i < variantArray.length; i++) {
+            const variant = variantArray[i];
+            if (variant && (variant.id === productVariantId || variant.productVariantId === productVariantId) && variant.wishlistId) {
+              itemId = variant.wishlistId;
+              targetItem = item;
+              targetVariantIndex = i;
+              break;
+            }
           }
+          if (itemId) break;
+        }
+      } else {
+        for (const item of wishlistGrouped.value) {
+          const variants = (item.product as any)?.variants || [];
+          const variantArray = Array.isArray(variants) ? variants : variants ? [variants] : [];
+
+          for (let i = 0; i < variantArray.length; i++) {
+            const variant = variantArray[i];
+            if (variant && variant.wishlistId === itemId) {
+              targetItem = item;
+              targetVariantIndex = i;
+              break;
+            }
+          }
+          if (targetItem) break;
         }
       }
 
-      if (!itemId) {
+      if (!itemId || !targetItem || targetVariantIndex === -1) {
         toast.warning("Không tìm thấy", { description: "Không tìm thấy mục yêu thích này" });
         return false;
       }
 
       await wishlistService.delete(itemId);
 
-      wishlistGrouped.value = wishlistGrouped.value.filter((item) => {
-        const variant = item.product?.variant;
-        return !(variant && (variant.wishlistId === itemId || variant.id === productVariantId || variant.productVariantId === productVariantId));
-      });
+      const variants = (targetItem.product as any)?.variants || [];
+      const variantArray = Array.isArray(variants) ? [...variants] : variants ? [variants] : [];
+
+      variantArray.splice(targetVariantIndex, 1);
+
+      if (variantArray.length > 0) {
+        const updatedProduct = {
+          ...targetItem.product,
+          variants: variantArray,
+          variant: variantArray[0],
+        };
+
+        wishlistGrouped.value = wishlistGrouped.value.map((item) => {
+          if (item.product?.id === targetItem?.product?.id) {
+            return {
+              ...item,
+              product: updatedProduct,
+              productVariantId: variantArray[0].id || variantArray[0].productVariantId || 0,
+            };
+          }
+          return item;
+        });
+      } else {
+        wishlistGrouped.value = wishlistGrouped.value.filter((item) => item.product?.id !== targetItem?.product?.id);
+      }
 
       toast.success("Thành công", { description: "Đã xóa khỏi yêu thích" });
       return true;
@@ -157,11 +203,15 @@ export const useWishlist = () => {
     if (!productVariantId) return false;
 
     for (const item of wishlistGrouped.value) {
-      const variant = item.product?.variant;
-      if (variant) {
-        const variantId = variant.id || variant.productVariantId;
-        if (variantId === productVariantId && variant.wishlistId) {
-          return true;
+      const variants = (item.product as any)?.variants || [];
+      const variantArray = Array.isArray(variants) ? variants : variants ? [variants] : [];
+
+      for (const variant of variantArray) {
+        if (variant) {
+          const variantId = variant.id || variant.productVariantId;
+          if (variantId === productVariantId && variant.wishlistId) {
+            return true;
+          }
         }
       }
     }
@@ -171,6 +221,29 @@ export const useWishlist = () => {
 
   const getWishlistVariantsByProduct = (productId: number): IWishlist[] => {
     return wishlistItems.value.filter((item) => item.productVariant?.productId === productId);
+  };
+
+  /**
+   * Lấy tất cả variant IDs có trong wishlist cho một product
+   */
+  const getWishlistVariantIdsByProductId = (productId: number): number[] => {
+    if (!productId) return [];
+
+    const wishlistItem = wishlistGrouped.value.find((item) => item.product?.id === productId);
+    if (!wishlistItem) return [];
+
+    const variants = (wishlistItem.product as any).variants || [];
+    if (Array.isArray(variants) && variants.length > 0) {
+      return variants.map((v: any) => v.id || v.productVariantId).filter((id: any) => id);
+    }
+
+    // Fallback: check single variant
+    const variant = (wishlistItem.product as any).variant;
+    if (variant?.id) {
+      return [variant.id];
+    }
+
+    return [];
   };
 
   const checkVariantWishlistStatus = async (productVariantId: number): Promise<boolean> => {
@@ -233,6 +306,7 @@ export const useWishlist = () => {
     isVariantInWishlist,
     isProductVariantInWishlist,
     getWishlistVariantsByProduct,
+    getWishlistVariantIdsByProductId,
     checkVariantWishlistStatus,
     handleToggleWishlistFromProduct,
   };
