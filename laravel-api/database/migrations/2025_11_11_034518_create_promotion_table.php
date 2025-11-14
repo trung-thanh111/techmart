@@ -29,7 +29,7 @@ return new class extends Migration
             $table->tinyInteger('publish')->default(0)->comment('0: draft, 1: private, 2: publish');
             $table->timestamps();
 
-            $table->index(['type', 'publish']);
+            $table->index(['promotion_catalogue_id', 'publish']);
             $table->index(['start_date', 'end_date']);
             $table->index('priority');
         });
