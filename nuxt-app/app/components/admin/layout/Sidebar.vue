@@ -88,6 +88,19 @@
                 <li class="nav-item">
                   <NuxtLink :to="PROMOTIONCATALOGUEINDEX" class="nav-link" data-key="t-promotion-catelogue">{{ $t("admin.sidebar.promotionCatalogue") }}</NuxtLink>
                 </li>
+                <li class="nav-item">
+                  <NuxtLink to="#sidebarPromotion" class="nav-link menu-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarPromotion" data-key="t-profile">{{ $t("admin.sidebar.promotions") }}</NuxtLink>
+                  <div class="collapse menu-dropdown" id="sidebarPromotion">
+                    <ul class="nav nav-sm flex-column">
+                      <li class="nav-item">
+                        <NuxtLink :to="PROMOTIONINDEX" class="nav-link" data-key="t-promotion-list">{{ $t("admin.sidebar.promotionList") }}</NuxtLink>
+                      </li>
+                      <li class="nav-item">
+                        <NuxtLink :to="PROMOTIONCREATE" class="nav-link" data-key="t-promotion-create">{{ $t("admin.sidebar.promotionCreate") }}</NuxtLink>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
               </ul>
             </div>
           </li>
