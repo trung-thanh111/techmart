@@ -1,7 +1,6 @@
 import type { IApiOk, IApiMessage, IPaginate } from "~/interfaces/base.interface";
 import type { IPromotion } from "~/interfaces/promotion/promotion.interface";
 import { useApi } from "~/composables/useApi";
-import { formData } from "~/utils/formData";
 
 const ENDPOINT = "/api/v1";
 
@@ -17,20 +16,22 @@ export const promotionService = {
     const { privateFetch } = useApi();
     return await privateFetch<IApiOk<IPromotion>>(`${ENDPOINT}/promotions`, {
       method: "POST",
-      body: formData(payload),
+      body: payload,
     });
   },
 
-  show: async (id: number | string): Promise<IApiOk<IPromotion>> => {
+  show: async (id: number | string, relations?: string[]): Promise<IApiOk<IPromotion>> => {
     const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPromotion>>(`${ENDPOINT}/promotions/${id}`);
+    return await privateFetch<IApiOk<IPromotion>>(`${ENDPOINT}/promotions/${id}`, {
+      params: relations ? { with: relations.join(",") } : undefined,
+    });
   },
 
   update: async (id: number, payload: Partial<IPromotion>): Promise<IApiOk<IPromotion>> => {
     const { privateFetch } = useApi();
     return await privateFetch<IApiOk<IPromotion>>(`${ENDPOINT}/promotions/${id}`, {
       method: "POST",
-      body: formData(payload),
+      body: payload,
       params: { _method: "PATCH" },
     });
   },
@@ -50,8 +51,8 @@ export const promotionService = {
     });
   },
 
-  all: async (): Promise<IApiOk<IPromotion>> => {
+  all: async (): Promise<IApiOk<IPromotion[]>> => {
     const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPromotion>>(`${ENDPOINT}/promotions?type=all`);
+    return await privateFetch<IApiOk<IPromotion[]>>(`${ENDPOINT}/promotions?type=all`);
   },
 };

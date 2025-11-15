@@ -51,7 +51,7 @@ definePageMeta({
           <Button variant="cancel" :loading="isLoading" :disabled="!hasSelectedItems" @click="updateSelectedIds([])" />
         </div>
         <div class="d-flex align-items-center gap-2">
-          <NuxtLink to="/admin/promotion//create" class="btn btn-success">
+          <NuxtLink :to="PROMOTIONCREATE" class="btn btn-success">
             <i class="ri-add-line me-1"></i>
             {{ $t("admin.common.create") }}
           </NuxtLink>
@@ -86,9 +86,12 @@ definePageMeta({
                   <AppCheckbox :model-value="selectedIds" :value="item.id" @update:model-value="handleSelectedIdsChange" />
                 </td>
                 <td>
-                  <NuxtLink class="hover:text-teal-500 flex items-center gap-2" :to="`/admin/promotion//${item.id}/edit`">
-                    <NuxtImg :src="item.image?.path ? item.image?.url ?? '' : '/shared/images/defaults/record.jpg'" alt="image-record" class="rounded-md w-[120px] h-[70px] object-cover" loading="lazy" />
-                    {{ item.name }}
+                  <NuxtLink class="hover:text-teal-500 flex items-center gap-2" :to="`/admin/promotion/promotion/${item.id}/edit`">
+                    <div class="flex flex-col">
+                      <span class="font-medium">{{ item.name }}</span>
+                      <span class="text-sm text-muted" v-if="item.couponCode">{{ $t("admin.page.promotion.couponCode") }}: {{ item.couponCode }}</span>
+                      <span class="text-sm text-muted" v-if="item.discountValue">{{ item.discountValue }}{{ item.discountType === "percent" ? "%" : "" }}</span>
+                    </div>
                   </NuxtLink>
                 </td>
                 <td class="text-center">
@@ -103,7 +106,7 @@ definePageMeta({
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
                       <li>
-                        <NuxtLink class="dropdown-item text-info" :to="`/admin/promotion//${item.id}/edit`">
+                        <NuxtLink class="dropdown-item text-info" :to="`/admin/promotion/promotion/${item.id}/edit`">
                           <i class="ri-edit-box-line me-1"></i>
                           {{ $t("admin.common.edit") }}
                         </NuxtLink>

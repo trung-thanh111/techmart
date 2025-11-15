@@ -1,13 +1,40 @@
 import type { BasePayloadFilter } from "../base.interface";
 
+export interface IPromotionTarget {
+  id?: number;
+  promotionId?: number;
+  productId?: number | null;
+  productVariantId?: number | null;
+  productCatalogueId?: number | null;
+  isGift?: boolean;
+  minQuantity?: number;
+  maxQuantity?: number | null;
+  minValue?: number | null;
+  maxValue?: number | null;
+  product?: any;
+  productVariant?: any;
+  productCatalogue?: any;
+}
+
 export interface IPromotion {
-  id: number;
+  id?: number;
   name?: string;
-  slug?: string;
-  image: { path: string | null; url: string | null };
-  order?: number;
-  description?: string;
+  couponCode?: string | null;
+  description?: string | null;
+  promotionCatalogueId?: number;
+  discountValue?: number;
+  discountType?: "percent" | "amount";
+  maxDiscountValue?: number | null;
+  startDate?: string | null;
+  endDate?: string | null;
+  priority?: number;
+  canCombine?: boolean;
+  usedCount?: number;
   publish?: number;
+  promotionTargets?: IPromotionTarget[];
+  promotionCatalogue?: any;
+  createdAt?: string | null;
+  updatedAt?: string | null;
 }
 
 export interface Option {
@@ -15,4 +42,7 @@ export interface Option {
   value: string | null;
 }
 
-export type PromotionPayloadFilter = BasePayloadFilter;
+export interface PromotionPayloadFilter extends BasePayloadFilter {
+  promotion_catalogue_id?: number | null;
+  discount_type?: string | null;
+}
