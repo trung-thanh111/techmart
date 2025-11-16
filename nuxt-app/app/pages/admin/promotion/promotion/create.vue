@@ -155,7 +155,6 @@
                 </button>
               </div>
 
-              <!-- Target Type Selection with Toggle Switches -->
               <div class="mb-3">
                 <label class="form-label mb-2">{{ $t("admin.page.promotion.target") }}</label>
                 <div class="d-flex justify-between align-items-center gap-2">
@@ -174,13 +173,11 @@
                 </div>
               </div>
 
-              <!-- Product Selection -->
               <div class="mb-3" v-if="target.enableProduct">
                 <label class="form-label">{{ $t("admin.page.promotion.product") }}</label>
                 <Select :modelValue="target.productId" @update:modelValue="(val) => handleTargetChange(index, 'productId', val ? Number(val) : null)" size="small" :options="productOptions" optionLabel="name" optionValue="value" filter showClear :placeholder="$t('admin.page.promotion.selectProduct')" class="w-100" />
               </div>
 
-              <!-- Product Variant Selection -->
               <div v-if="target.enableVariant">
                 <div class="mb-3">
                   <label class="form-label">{{ $t("admin.page.promotion.product") }}</label>
@@ -192,13 +189,11 @@
                 </div>
               </div>
 
-              <!-- Product Catalogue Selection -->
               <div class="mb-3" v-if="target.enableCatalogue">
                 <label class="form-label">{{ $t("admin.page.promotion.productCatalogue") }}</label>
                 <Select :modelValue="target.productCatalogueId" @update:modelValue="(val) => handleTargetChange(index, 'productCatalogueId', val ? Number(val) : null)" size="small" :options="productCatalogueOptions" optionLabel="name" optionValue="value" filter showClear :placeholder="$t('admin.page.promotion.selectProductCatalogue')" class="w-100" />
               </div>
 
-              <!-- Additional Fields -->
               <div class="row">
                 <div class="col-md-6 mb-3">
                   <label class="form-label d-flex align-items-center gap-2">
