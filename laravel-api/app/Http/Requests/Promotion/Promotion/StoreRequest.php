@@ -48,15 +48,6 @@ class StoreRequest extends BaseRequest
     public function prepareForValidation()
     {
         $this->merge([
-            'coupon_code' => $this->couponCode ?? null,
-            'promotion_catalogue_id' => $this->promotionCatalogueId ?? 0,
-            'discount_value' => $this->discountValue ?? 0,
-            'discount_type' => $this->discountType ?? 'amount',
-            'max_discount_value' => $this->maxDiscountValue ?? null,
-            'start_date' => $this->startDate ?? null,
-            'end_date' => $this->endDate ?? null,
-            'priority' => $this->priority ?? 0,
-            'can_combine' => $this->canCombine ?? false,
             'used_count' => 0,
         ]);
     }

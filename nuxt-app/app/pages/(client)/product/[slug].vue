@@ -91,21 +91,31 @@
                   <div class="p-3 lg:px-4">
                     <div class="rounded-lg border border-gray-300 overflow-hidden">
                       <h4 class="text-gray-600 body-text font-medium px-4 py-2 bg-gray-200">Khuyến mãi</h4>
-                      <div class="prose max-w-none py-2 px-3 lg:px-4 promotion-content">
-                        <figure class="image">
-                          <NuxtImg src="/client/images/promotions/hinh-thuc-khuyen-mai.webp" width="100%" height="100%" />
-                        </figure>
-                        <p>
-                          <strong>MUA ĐÈN BÀN – NHẬN NGAY QUÀ TẶNG&nbsp;</strong>
-                        </p>
-                        <p>
-                          Quà tặng:
-                          <strong>Bộ dụng cụ học tập</strong>
-                        </p>
-                        <p>
-                          Thời gian áp dụng:
-                          <strong>Từ ngày 24/5/2025 đến 30/6/2025</strong>
-                        </p>
+                      <div class="max-w-none py-3 px-3 lg:px-4 promotion-content space-y-3">
+                        <template v-if="applicablePromotions.length">
+                          <div v-for="promotion in applicablePromotions" :key="promotion.id" class="rounded-md border border-sky-100 bg-sky-50/40 p-3 space-y-2">
+                            <div class="flex flex-wrap justify-between gap-3">
+                              <div>
+                                <p class="text-base font-semibold text-sky-700 mb-1">{{ promotion.name }}</p>
+                                <p class="text-sm text-gray-600">
+                                  Giảm {{ formatPromotionDiscount(promotion) }}
+                                  <span v-if="promotion.discountType === 'percent' && promotion.maxDiscountValue">(tối đa {{ formatCurrency(promotion.maxDiscountValue) }})</span>
+                                </p>
+                                <p v-if="promotionWindow(promotion)" class="text-xs text-gray-500">Thời gian: {{ promotionWindow(promotion) }}</p>
+                              </div>
+                              <span class="inline-flex items-center text-xs font-semibold uppercase tracking-wide bg-sky-500 text-white rounded-full px-3 py-1">Ưu tiên #{{ promotion.priority ?? 0 }}</span>
+                            </div>
+                            <div v-if="promotion.description" class="text-sm text-gray-600 leading-relaxed prose max-w-none" v-html="promotion.description"></div>
+                            <div v-if="promotion.applicableTargets?.length" class="text-xs text-gray-500 flex flex-wrap items-center gap-2">
+                              <span class="font-semibold text-gray-600">Áp dụng cho:</span>
+                              <span v-for="target in promotion.applicableTargets" :key="`${promotion.id}-${target.id || target.productVariantId || target.productId || target.productCatalogueId}`" class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-white text-gray-600 border border-gray-200">
+                                <span v-if="target.isGift" class="text-[10px] font-semibold text-pink-600 uppercase">Quà tặng</span>
+                                <span>{{ resolvePromotionTargetLabel(target) }}</span>
+                              </span>
+                            </div>
+                          </div>
+                        </template>
+                        <p v-else class="text-sm text-gray-500 m-0">Hiện chưa có khuyến mãi cho phiên bản này.</p>
                       </div>
                     </div>
                   </div>
@@ -767,8 +777,10 @@ import { useAuthStore } from "~/stores/auth/auth";
 import { useWishlist } from "~/composables/client/product/useWishlist";
 import { useCompare } from "~/composables/client/product/useCompare";
 import { useCart } from "~/composables/client/cart/useCart";
+import type { IPromotion, IPromotionTarget } from "~/interfaces/promotion/promotion.interface";
 
 const route = useRoute();
+type PromotionWithTargets = IPromotion & { applicableTargets: IPromotionTarget[] };
 
 const { productDetail, productDetailLoading, productDetailError, trackView, fetchDetailBySlug } = useProduct();
 const { productImageMainOptions, productImageThumbnailOptions, productRelatedOptions } = useProductSlider();
@@ -784,6 +796,7 @@ const selectedVariant = ref<any>(null);
 const openFaq = ref<number | null>(null);
 const quantity = ref(1);
 const isDescriptionExpanded = ref(false);
+const currencyFormatter = new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" });
 // Compare checkbox state - sync với store
 const isCompareChecked = computed({
   get: () => {
@@ -880,6 +893,75 @@ const displayStock = computed(() => {
   }
   return 0;
 });
+
+const productCatalogueIds = computed<number[]>(() => {
+  const catalogues = (productDetail.value as any)?.productCatalogues;
+  if (!Array.isArray(catalogues)) return [];
+  return catalogues.map((catalogue: any) => (typeof catalogue === "number" ? catalogue : catalogue?.id)).filter((id): id is number => typeof id === "number");
+});
+
+const applicablePromotions = computed<PromotionWithTargets[]>(() => {
+  const promotions = (productDetail.value as any)?.promotions;
+  if (!Array.isArray(promotions)) return [];
+  const productId = productDetail.value?.id;
+  const variantId = selectedVariant.value?.id;
+
+  return promotions
+    .map((promotion: IPromotion) => {
+      const targets = (promotion.promotionTargets ?? []).filter((target) => {
+        if (variantId && target.productVariantId) {
+          return target.productVariantId === variantId;
+        }
+        if (target.productId && productId) {
+          return target.productId === productId;
+        }
+        if (target.productCatalogueId && productCatalogueIds.value.includes(target.productCatalogueId)) {
+          return true;
+        }
+        return false;
+      });
+      if (!targets.length) return null;
+      return { ...promotion, applicableTargets: targets };
+    })
+    .filter((item): item is PromotionWithTargets => Boolean(item));
+});
+
+const formatCurrency = (value?: number | null) => {
+  if (typeof value !== "number") return "";
+  return currencyFormatter.format(value);
+};
+
+const formatPromotionDiscount = (promotion: IPromotion) => {
+  if (promotion.discountType === "percent") {
+    return `${promotion.discountValue ?? 0}%`;
+  }
+  return formatCurrency(promotion.discountValue ?? 0);
+};
+
+const promotionWindow = (promotion: IPromotion) => {
+  const formatDate = (input?: string | null) => {
+    if (!input) return null;
+    const parsed = new Date(input);
+    if (Number.isNaN(parsed.getTime())) return null;
+    return parsed.toLocaleDateString("vi-VN");
+  };
+  const start = formatDate(promotion.startDate);
+  const end = formatDate(promotion.endDate);
+  if (start && end) return `${start} - ${end}`;
+  if (start) return `Từ ${start}`;
+  if (end) return `Đến ${end}`;
+  return "Không giới hạn";
+};
+
+const resolvePromotionTargetLabel = (target: IPromotionTarget) => {
+  if ((target as any).productVariant?.name) return (target as any).productVariant.name;
+  if ((target as any).product?.name) return (target as any).product.name;
+  if ((target as any).productCatalogue?.name) return (target as any).productCatalogue.name;
+  if (target.productVariantId) return `Phiên bản #${target.productVariantId}`;
+  if (target.productId) return `Sản phẩm #${target.productId}`;
+  if (target.productCatalogueId) return `Danh mục #${target.productCatalogueId}`;
+  return "Sản phẩm";
+};
 
 const agenciesForVariant = computed(() => {
   if (!selectedVariant.value?.agencies) return [];

@@ -1,4 +1,5 @@
 import type { BasePayloadFilter } from "../base.interface";
+import type { IPromotion } from "../promotion/promotion.interface";
 import type { IProductVariant } from "./variant.interface";
 
 export interface IProduct {
@@ -22,7 +23,7 @@ export interface IProduct {
   brandId?: number;
   faqId?: number;
   userId?: number;
-  productCatalogues?: number[];
+  productCatalogues?: any[];
   productVariants?: IProductVariant[];
   variant?: IProductVariant;
   productTags?: number[];
@@ -32,6 +33,7 @@ export interface IProduct {
   metaTitle?: string;
   metaKeyword?: string;
   metaDescription?: string;
+  promotions?: IPromotion[];
 }
 
 export interface Option {

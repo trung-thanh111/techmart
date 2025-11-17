@@ -46,8 +46,13 @@
             <label class="form-label" for="description">
               {{ $t("admin.common.form.description") }}
             </label>
-            <Field name="description" v-slot="{ field }">
-              <textarea v-bind="field" id="description" rows="4" class="form-control" :placeholder="$t('admin.common.form.descriptionPlaceholder')" />
+            <Field name="description" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
+              <div class="w-full">
+                <CKEditor v-model="field.value" @update:modelValue="field.onChange" class="h-64" />
+                <small v-if="errorMessage && meta.touched" class="text-danger">
+                  {{ $t(errorMessage) }}
+                </small>
+              </div>
             </Field>
           </div>
         </div>
@@ -270,6 +275,7 @@ import Breadcrumb from "~/components/admin/navigation/Breadcrumb.vue";
 import PublishSelect from "~/components/admin/custom/PublishSelect.vue";
 import { usePromotion } from "~/composables/admin/promotion/usePromotion";
 import type { IPromotionTarget } from "~/interfaces/promotion/promotion.interface";
+import CKEditor from "~/components/admin/custom/CKEditor.vue";
 
 const { handleStore, setValues, values, isLoading, promotionCatalogueOptions, productOptions, productCatalogueOptions, productVariantOptions, loadProductVariants, generateCouponCode } = usePromotion(undefined, "create");
 
