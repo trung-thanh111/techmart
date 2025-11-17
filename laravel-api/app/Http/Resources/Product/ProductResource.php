@@ -7,6 +7,8 @@ use App\Http\Resources\Faq\FaqResource;
 use App\Http\Resources\Product\ProductCatalogueResource;
 use App\Http\Resources\Product\ProductTagResource;
 use App\Http\Resources\Product\ProductVariantResource;
+use App\Http\Resources\Promotion\PromotionResource;
+use App\Models\Promotion;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -78,9 +80,107 @@ class ProductResource extends JsonResource
             'faqs' => FaqResource::collection($this->whenLoaded('product_faqs')),
             'productTags' => ProductTagResource::collection($this->whenLoaded('product_tags')),
             'productVariants' => ProductVariantResource::collection($this->whenLoaded('product_variants')),
+            'promotions' => $this->resolvePromotions($request),
             'metaTitle' => $this->meta_title,
             'metaKeyword' => $this->meta_keyword,
             'metaDescription' => $this->meta_description,
+        ];
+    }
+
+    private function resolvePromotions(Request $request): array
+    {
+        $productId = $this->id;
+        $variantIds = $this->relationLoaded('product_variants')
+            ? $this->product_variants->pluck('id')->all()
+            : [];
+        $catalogueIds = $this->relationLoaded('product_catalogues')
+            ? $this->product_catalogues->pluck('id')->all()
+            : [];
+
+        if ($this->product_catalogue_id) {
+            $catalogueIds[] = (int) $this->product_catalogue_id;
+        }
+
+        $catalogueIds = array_values(array_unique(array_filter($catalogueIds)));
+
+        if (!$productId && empty($variantIds) && empty($catalogueIds)) {
+            return [
+                'product' => [],
+                'variants' => [],
+                'catalogues' => [],
+            ];
+        }
+
+        $now = now();
+
+        $promotions = Promotion::query()
+            ->with('promotion_targets')
+            ->where('publish', 1)
+            ->where(function ($query) use ($now) {
+                $query->whereNull('start_date')->orWhere('start_date', '<=', $now);
+            })
+            ->where(function ($query) use ($now) {
+                $query->whereNull('end_date')->orWhere('end_date', '>=', $now);
+            })
+            ->whereHas('promotion_targets', function ($query) use ($productId, $variantIds, $catalogueIds) {
+                $query->where(function ($targetQuery) use ($productId, $variantIds, $catalogueIds) {
+                    $targetQuery->whereRaw('1 = 0');
+
+                    if ($productId) {
+                        $targetQuery->orWhere('product_id', $productId);
+                    }
+
+                    if (!empty($variantIds)) {
+                        $targetQuery->orWhereIn('product_variant_id', $variantIds);
+                    }
+
+                    if (!empty($catalogueIds)) {
+                        $targetQuery->orWhereIn('product_catalogue_id', $catalogueIds);
+                    }
+                });
+            })
+            ->orderByDesc('priority')
+            ->orderByDesc('id')
+            ->get();
+
+        $productPromotions = collect();
+        $variantPromotions = [];
+        $cataloguePromotions = [];
+
+        foreach ($variantIds as $variantId) {
+            $variantPromotions[$variantId] = collect();
+        }
+
+        foreach ($catalogueIds as $catalogueId) {
+            $cataloguePromotions[$catalogueId] = collect();
+        }
+
+        foreach ($promotions as $promotion) {
+            foreach ($promotion->promotion_targets as $target) {
+                if ($target->product_id && $target->product_id === $productId) {
+                    $productPromotions->put($promotion->id, $promotion);
+                }
+
+                if ($target->product_variant_id && isset($variantPromotions[$target->product_variant_id])) {
+                    $variantPromotions[$target->product_variant_id]->put($promotion->id, $promotion);
+                }
+
+                if ($target->product_catalogue_id && isset($cataloguePromotions[$target->product_catalogue_id])) {
+                    $cataloguePromotions[$target->product_catalogue_id]->put($promotion->id, $promotion);
+                }
+            }
+        }
+
+        return [
+            'product' => PromotionResource::collection($productPromotions->values())->resolve($request),
+            'variants' => collect($variantPromotions)
+                ->filter(fn($collection) => $collection->isNotEmpty())
+                ->map(fn($collection) => PromotionResource::collection($collection->values())->resolve($request))
+                ->toArray(),
+            'catalogues' => collect($cataloguePromotions)
+                ->filter(fn($collection) => $collection->isNotEmpty())
+                ->map(fn($collection) => PromotionResource::collection($collection->values())->resolve($request))
+                ->toArray(),
         ];
     }
 }
