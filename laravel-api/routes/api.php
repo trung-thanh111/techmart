@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\System\PopupController;
 use App\Http\Controllers\Api\V1\System\SystemController;
 use App\Http\Controllers\Api\V1\Cart\CartItemController;
 use App\Http\Controllers\Api\V1\Cart\CartController;
@@ -442,6 +443,17 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
             Route::delete('{id}/detach', [SystemController::class, 'detach']);
         });
         Route::resource('systems', SystemController::class)->except($routeExcept);
+
+        // This is route Popup
+        Route::group(['prefix' => 'popups'], function() {
+            Route::post('bulkStore', [PopupController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [PopupController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [PopupController::class, 'bulkUpdate']);
+            Route::delete('bulkDelete', [PopupController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [PopupController::class, 'attach']);
+            Route::delete('{id}/detach', [PopupController::class, 'detach']);
+        });
+        Route::resource('popups', PopupController::class)->except($routeExcept);
 
         // generate route
 
