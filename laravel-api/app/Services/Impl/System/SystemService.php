@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\Impl\System;
 
 use Illuminate\Http\Request;
@@ -8,19 +9,21 @@ use App\Repositories\System\SystemRepository;
 use App\Http\Resources\System\SystemResource;
 use App\Services\Interfaces\System\SystemServiceInterface;
 
-class SystemService extends BaseService implements SystemServiceInterface {
+class SystemService extends BaseService implements SystemServiceInterface
+{
 
-protected $repository;
+    protected $repository;
 
-protected $complexFilter = ['id'];
+    protected $complexFilter = ['id'];
+    protected $fieldSearchs = ['keyword'];
 
-protected $with = [];
-protected $relationFilter = [];
+    protected $with = [];
+    protected $relationFilter = [];
 
-protected $cacheKeyPrefix = 'systems';
-protected $cacheTags = ['systems:collection'];
+    protected $cacheKeyPrefix = 'systems';
+    protected $cacheTags = ['systems:collection'];
 
-protected $useUpload = false;
+    protected $useUpload = false;
 
     public function __construct(
         SystemRepository $repository
@@ -28,7 +31,8 @@ protected $useUpload = false;
         $this->repository = $repository;
     }
 
-    protected function getRepository(){
+    protected function getRepository()
+    {
         return $this->repository;
     }
 
@@ -36,19 +40,21 @@ protected $useUpload = false;
      * nhiệm vụ bắt data từ client post lên (dạng thô, chuỗi, file, ....)
      *
      */
-    protected function prepareModelData(Request $request): self {
+    protected function prepareModelData(Request $request): self
+    {
 
         return $this->initializeBasicModelData($request);
     }
 
-    protected function initializeBasicModelData(Request $request): self {
+    protected function initializeBasicModelData(Request $request): self
+    {
         $fillable = $this->repository->getFillable();
         $this->modelData = $request->only($fillable);
         return $this;
     }
 
-    protected function getResource(Model $resource){
+    protected function getResource(Model $resource)
+    {
         return new SystemResource($resource);
     }
-
 }

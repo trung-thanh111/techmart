@@ -104,6 +104,8 @@
         "selectSeason": "Chọn mùa",
         "name": "Tên",
         "namePlaceholder": "Nhập tên",
+        "keyword": "Từ khóa",
+        "keywordPlaceholder": "Nhập từ khoá",
         "description": "Mô tả",
         "descriptionPlaceholder": "Nhập mô tả",
         "order": "Thứ tự",
@@ -257,6 +259,7 @@
       "helpCenter": "Trung tâm trợ giúp",
       "myAccountSettings": "Cài đặt tài khoản của tôi",
       "manager": "Quản lý",
+      "configuration": "Cấu hình",
       "webDesigner": "Thiết kế web",
       "reactDeveloper": "Lập trình viên React",
       "language": "ngôn ngữ",
@@ -297,6 +300,8 @@
       "bannerPage": "Trang",
       "bannerPosition": "Vị trí",
       "bannerCreate": "Thêm mới",
+      "systemList": "Danh sách cấu hình",
+      "systemCreate": "Thêm mới",
       "tags": "Tag",
       "customers": "Khách hàng",
       "customerCatalogue": "Nhóm khách hàng",
@@ -529,6 +534,13 @@
         "breadcrumb": "Quản lý thương hiệu",
         "groupInfo": "Thông tin",
         "filterGroup": "Lọc nhóm"
+      },
+      "system": {
+        "title": "Cấu hình",
+        "breadcrumb": "Quản lý cấu hình",
+        "groupInfo": "Thông tin",
+        "filterKeyword": "Từ khóa",
+        "filterStatus": "Trạng thái"
       },
       "banner": {
         "title": "banner",
