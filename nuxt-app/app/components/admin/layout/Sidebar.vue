@@ -251,6 +251,9 @@
                 <li class="nav-item">
                   <NuxtLink :to="SYSTEMINDEX" class="nav-link" data-key="t-system-list">{{ $t("admin.sidebar.systemList") }}</NuxtLink>
                 </li>
+                <li class="nav-item">
+                  <NuxtLink :to="SYSTEMCREATE" class="nav-link" data-key="t-system-create">{{ $t("admin.sidebar.systemCreate") }}</NuxtLink>
+                </li>
               </ul>
             </div>
           </li>

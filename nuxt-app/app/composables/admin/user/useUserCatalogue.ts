@@ -9,10 +9,7 @@ import type { BasePayloadFilter, IApiOk, IPaginate } from "~/interfaces/base.int
 import type { IUserCatalogue, CataloguePayloadFilter } from "~/interfaces/user/catalogue.interface";
 import { USERCATALOGUEINDEX } from "~/utils/constants";
 
-export const useUserCatalogue = (
-  initialFilters?: CataloguePayloadFilter,
-  mode: "create" | "update" = "create"
-) => {
+export const useUserCatalogue = (initialFilters?: CataloguePayloadFilter, mode: "create" | "update" = "create") => {
   const { t } = useI18n();
   const config = useRuntimeConfig();
   const toast = useAppToast();
@@ -26,9 +23,9 @@ export const useUserCatalogue = (
   const slug = computed(() => slugify(values.name || ""));
 
   const schema = {
-    name: z.string({ required_error: 'admin.validation.nameRequired' }).trim().min(1, 'admin.validation.nameRequired').max(255, 'admin.validation.nameMaxLength'),
+    name: z.string({ required_error: "admin.validation.nameRequired" }).trim().min(1, "admin.validation.nameRequired").max(255, "admin.validation.nameMaxLength"),
     description: z.string().nullable().optional(),
-    publish: z.number({ required_error: 'admin.validation.statusRequired' }).refine((val) => [0, 1, 2].includes(val), { message: 'admin.validation.statusInvalid' }),
+    publish: z.number({ required_error: "admin.validation.statusRequired" }).refine((val) => [0, 1, 2].includes(val), { message: "admin.validation.statusInvalid" }),
   };
   const createSchema = z.object({ ...schema });
   const updateSchema = z.object({ ...schema });
@@ -40,25 +37,31 @@ export const useUserCatalogue = (
   });
 
   // store
-  const handleStore = handleSubmit(async (payload: TUserCatalogueCreate) => {
-    isLoading.value = true;
-    try {
-      const response = await userCatalogueService.store(payload as Partial<IUserCatalogue>);
-      toast.success(response?.message || t('admin.messages.createSuccess'));
-      resetForm();
-      return navigateTo(USERCATALOGUEINDEX);
-    } catch (error: any) {
-      if (error?.data?.isValidationError) {
-        errorToField(setFieldError, error?.data?.errors, t, 'name');
-        return;
+  const handleStore = (shouldClose = false) => {
+    const wrapped = handleSubmit(async (payload: TUserCatalogueCreate) => {
+      isLoading.value = true;
+      try {
+        const response = await userCatalogueService.store(payload as Partial<IUserCatalogue>);
+        toast.success(response?.message || t("admin.messages.createSuccess"));
+        if (shouldClose) {
+          return navigateTo(USERCATALOGUEINDEX);
+        }
+        resetForm();
+      } catch (error: any) {
+        if (error?.data?.isValidationError) {
+          errorToField(setFieldError, error?.data?.errors, t, "name");
+          return;
+        }
+        console.error("Store error:", error);
+        toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
+        throw error;
+      } finally {
+        isLoading.value = false;
       }
-      console.error("Store error:", error);
-      toast.error(error?.response?.data?.message || t('admin.messages.createFailed'));
-      throw error;
-    } finally {
-      isLoading.value = false;
-    }
-  });
+    });
+
+    return wrapped();
+  };
 
   const show = async (id: number) => {
     try {
@@ -66,34 +69,41 @@ export const useUserCatalogue = (
       return response;
     } catch (error: any) {
       console.error("Lỗi! Không tìm thấy bản ghi: ", error);
-      toast.error(error?.response?.data?.message || t('admin.messages.createFailed'));
+      toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
       throw error;
     }
   };
 
-  const handleUpdate = handleSubmit(async (payload: TUserCatalogueUpdate) => {
-    isLoading.value = true;
-    try {
-      const id = Number(useRoute().params.id);
-      await userCatalogueService.update(id, payload as Partial<IUserCatalogue>);
-      toast.success(t('admin.messages.updateSuccess'));
-      return navigateTo(USERCATALOGUEINDEX);
-    } catch (error: any) {
-      console.error("Store error:", error);
-      toast.error(error?.response?.data?.message || t('admin.messages.updateFailed'));
-    } finally {
-      isLoading.value = false;
-    }
-  });
+  const handleUpdate = (shouldClose = false) => {
+    const wrapped = handleSubmit(async (payload: TUserCatalogueUpdate) => {
+      isLoading.value = true;
+      try {
+        const id = Number(useRoute().params.id);
+        await userCatalogueService.update(id, payload as Partial<IUserCatalogue>);
+        toast.success(t("admin.messages.updateSuccess"));
+        if (shouldClose) {
+          return navigateTo(USERCATALOGUEINDEX);
+        }
+        // keep on page
+      } catch (error: any) {
+        console.error("Store error:", error);
+        toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
+      } finally {
+        isLoading.value = false;
+      }
+    });
+
+    return wrapped();
+  };
 
   const handleDelete = async (id: number) => {
     isLoading.value = true;
     try {
       await userCatalogueService.delete(id);
-      toast.success(t('admin.messages.deleteSuccess'));
+      toast.success(t("admin.messages.deleteSuccess"));
       await fetchData();
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || t('admin.messages.deleteFailed'));
+      toast.error(error?.response?.data?.message || t("admin.messages.deleteFailed"));
     } finally {
       isLoading.value = false;
     }
@@ -104,11 +114,11 @@ export const useUserCatalogue = (
     isLoading.value = true;
     try {
       await userCatalogueService.deleteMultiple(selectedIds.value);
-      toast.success(t('admin.messages.deleteMultipleSuccess', { count: selectedIds.value.length }));
+      toast.success(t("admin.messages.deleteMultipleSuccess", { count: selectedIds.value.length }));
       selectedIds.value = [];
       await fetchData();
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || t('admin.messages.deleteFailed'));
+      toast.error(error?.response?.data?.message || t("admin.messages.deleteFailed"));
     } finally {
       isLoading.value = false;
     }
@@ -134,7 +144,7 @@ export const useUserCatalogue = (
       });
       data.value = response;
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || t('admin.messages.loadDataError'));
+      toast.error(err?.response?.data?.message || t("admin.messages.loadDataError"));
       console.error("Fetch error:", err);
     } finally {
       isLoading.value = false;

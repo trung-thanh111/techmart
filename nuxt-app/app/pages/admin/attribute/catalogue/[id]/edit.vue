@@ -26,7 +26,7 @@
       </div>
     </div>
   </div>
-  <form @submit.prevent="handleUpdate" class="row space-y-4">
+  <form @submit.prevent="() => handleUpdate(false)" class="row space-y-4">
     <div class="col-lg-8">
       <div class="card">
         <div class="card-body">
@@ -62,7 +62,8 @@
       </div>
       <div class="flex justify-end gap-3 mt-4 position-sticky bottom-5 z-20">
         <Button type="button" variant="cancel" :to="ATTRIBUTECATALOGUEINDEX" />
-        <Button variant="success" :loading="isLoading" />
+        <Button type="button" variant="custom" severity="info" :label="$t('admin.components.buttons.confirm')" :loading="isLoading" @click="() => handleUpdate(false)" />
+        <Button type="button" variant="success" :loading="isLoading" @click="() => handleUpdate(true)" />
       </div>
     </div>
     <div class="col-lg-4 mt-0">

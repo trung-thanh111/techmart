@@ -40,29 +40,36 @@ export const useFaq = (initialFilters?: FaqPayloadFilter, mode: "create" | "upda
   type TFaqCreate = z.infer<typeof createSchema>;
   type TFaqUpdate = z.infer<typeof updateSchema>;
 
-  const { handleSubmit, values, errors, setValues, setFieldError } = useForm<TFaqCreate | TFaqUpdate>({
+  const { handleSubmit, values, errors, setValues, resetForm, setFieldError } = useForm<TFaqCreate | TFaqUpdate>({
     validationSchema: toTypedSchema(mode === "create" ? createSchema : updateSchema),
     keepValuesOnUnmount: true,
   });
 
-  const handleStore = handleSubmit(async (payload: TFaqCreate | TFaqUpdate) => {
-    isLoading.value = true;
-    try {
-      const response = await faqService.store(payload as Partial<IFaq>);
-      toast.success(response?.message || t("admin.messages.createSuccess"));
-      return navigateTo(FAQINDEX);
-    } catch (error: any) {
-      if (error?.data?.isValidationError) {
-        errorToField(setFieldError, error?.data?.errors, t, "question");
-        return;
+  const handleStore = (shouldClose = false) => {
+    const wrapped = handleSubmit(async (payload: TFaqCreate | TFaqUpdate) => {
+      isLoading.value = true;
+      try {
+        const response = await faqService.store(payload as Partial<IFaq>);
+        toast.success(response?.message || t("admin.messages.createSuccess"));
+        if (shouldClose) {
+          return navigateTo(FAQINDEX);
+        }
+        resetForm();
+      } catch (error: any) {
+        if (error?.data?.isValidationError) {
+          errorToField(setFieldError, error?.data?.errors, t, "question");
+          return;
+        }
+        console.error("Thêm mới thất bại:", error);
+        toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
+        throw error;
+      } finally {
+        isLoading.value = false;
       }
-      console.error("Thêm mới thất bại:", error);
-      toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
-      throw error;
-    } finally {
-      isLoading.value = false;
-    }
-  });
+    });
+
+    return wrapped();
+  };
 
   const show = async (id: number) => {
     try {
@@ -75,24 +82,31 @@ export const useFaq = (initialFilters?: FaqPayloadFilter, mode: "create" | "upda
     }
   };
 
-  const handleUpdate = handleSubmit(async (payload: TFaqUpdate) => {
-    isLoading.value = true;
-    try {
-      const id = Number(useRoute().params.id);
-      await faqService.update(id, payload as Partial<IFaq>);
-      toast.success(t("admin.messages.updateSuccess"));
-      return navigateTo(FAQINDEX);
-    } catch (error: any) {
-      if (error?.data?.isValidationError) {
-        errorToField(setFieldError, error?.data?.errors, t, "question");
-        return;
+  const handleUpdate = (shouldClose = false) => {
+    const wrapped = handleSubmit(async (payload: TFaqUpdate) => {
+      isLoading.value = true;
+      try {
+        const id = Number(useRoute().params.id);
+        await faqService.update(id, payload as Partial<IFaq>);
+        toast.success(t("admin.messages.updateSuccess"));
+        if (shouldClose) {
+          return navigateTo(FAQINDEX);
+        }
+        // keep on page
+      } catch (error: any) {
+        if (error?.data?.isValidationError) {
+          errorToField(setFieldError, error?.data?.errors, t, "question");
+          return;
+        }
+        console.error("Cập nhật thất bại:", error);
+        toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
+      } finally {
+        isLoading.value = false;
       }
-      console.error("Cập nhật thất bại:", error);
-      toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
-    } finally {
-      isLoading.value = false;
-    }
-  });
+    });
+
+    return wrapped();
+  };
 
   const handleToggleIsHot = async (item: any) => {
     try {

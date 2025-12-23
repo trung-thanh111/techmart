@@ -82,7 +82,7 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
   type TProductCreate = z.infer<typeof createSchema>;
   type TProductUpdate = z.infer<typeof updateSchema>;
 
-  const { handleSubmit, values, errors, setValues, setFieldError } = useForm<TProductCreate | TProductUpdate>({
+  const { handleSubmit, values, errors, setValues, resetForm, setFieldError } = useForm<TProductCreate | TProductUpdate>({
     validationSchema: toTypedSchema(mode === "create" ? createSchema : updateSchema),
     keepValuesOnUnmount: true,
     initialValues: {
@@ -90,26 +90,33 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
     },
   });
 
-  const handleStore = handleSubmit(async (payload: TProductCreate | TProductUpdate) => {
-    isLoading.value = true;
-    try {
-      console.info("payload cretea:", payload);
-      const response = await productService.store(payload as Partial<IProduct>);
-      toast.success(response?.message || t("admin.messages.createSuccess"));
-      return navigateTo(PRODUCTINDEX);
-    } catch (error: any) {
-      if (error?.data?.isValidationError) {
-        errorToField(setFieldError, error?.data?.errors, t, "name");
-        errorToField(setFieldError, error?.data?.errors, t, "sku");
-        return;
+  const handleStore = (shouldClose = false) => {
+    const wrapped = handleSubmit(async (payload: TProductCreate | TProductUpdate) => {
+      isLoading.value = true;
+      try {
+        console.info("payload cretea:", payload);
+        const response = await productService.store(payload as Partial<IProduct>);
+        toast.success(response?.message || t("admin.messages.createSuccess"));
+        if (shouldClose) {
+          return navigateTo(PRODUCTINDEX);
+        }
+        resetForm();
+      } catch (error: any) {
+        if (error?.data?.isValidationError) {
+          errorToField(setFieldError, error?.data?.errors, t, "name");
+          errorToField(setFieldError, error?.data?.errors, t, "sku");
+          return;
+        }
+        console.error("Thêm mới thất bại:", error);
+        toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
+        throw error;
+      } finally {
+        isLoading.value = false;
       }
-      console.error("Thêm mới thất bại:", error);
-      toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
-      throw error;
-    } finally {
-      isLoading.value = false;
-    }
-  });
+    });
+
+    return wrapped();
+  };
 
   const show = async (id: number) => {
     try {
@@ -122,28 +129,35 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
     }
   };
 
-  const handleUpdate = handleSubmit(async (payload: TProductUpdate) => {
-    isLoading.value = true;
-    try {
-      const id = Number(useRoute().params.id);
+  const handleUpdate = (shouldClose = false) => {
+    const wrapped = handleSubmit(async (payload: TProductUpdate) => {
+      isLoading.value = true;
+      try {
+        const id = Number(useRoute().params.id);
 
-      // Luôn gửi productVariants để xử lý cả trường hợp clear
-      const cleanPayload = { ...payload };
+        // Luôn gửi productVariants để xử lý cả trường hợp clear
+        const cleanPayload = { ...payload };
 
-      await productService.update(id, cleanPayload as Partial<IProduct>);
-      toast.success(t("admin.messages.updateSuccess"));
-      return navigateTo(PRODUCTINDEX);
-    } catch (error: any) {
-      if (error?.data?.isValidationError) {
-        errorToField(setFieldError, error?.data?.errors, t, "name");
-        return;
+        await productService.update(id, cleanPayload as Partial<IProduct>);
+        toast.success(t("admin.messages.updateSuccess"));
+        if (shouldClose) {
+          return navigateTo(PRODUCTINDEX);
+        }
+        // keep on page
+      } catch (error: any) {
+        if (error?.data?.isValidationError) {
+          errorToField(setFieldError, error?.data?.errors, t, "name");
+          return;
+        }
+        console.error("Cập nhật thất bại:", error);
+        toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
+      } finally {
+        isLoading.value = false;
       }
-      console.error("Cập nhật thất bại:", error);
-      toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
-    } finally {
-      isLoading.value = false;
-    }
-  });
+    });
+
+    return wrapped();
+  };
 
   const handleToggleIsHot = async (item: any) => {
     try {

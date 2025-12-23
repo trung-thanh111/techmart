@@ -36,29 +36,36 @@ export const usePermission = (initialFilters?: PermissionPayloadFilter, mode: "c
   type TPermissionCreate = z.infer<typeof createSchema>;
   type TPermissionUpdate = z.infer<typeof updateSchema>;
 
-  const { handleSubmit, values, errors, setValues, setFieldError } = useForm<TPermissionCreate | TPermissionUpdate>({
+  const { handleSubmit, values, errors, setValues, resetForm, setFieldError } = useForm<TPermissionCreate | TPermissionUpdate>({
     validationSchema: toTypedSchema(mode === "create" ? createSchema : updateSchema),
     keepValuesOnUnmount: true,
   });
 
-  const handleStore = handleSubmit(async (payload: TPermissionCreate | TPermissionUpdate) => {
-    isLoading.value = true;
-    try {
-      const response = await permissionService.store(payload as Partial<IPermission>);
-      toast.success(response?.message || t("admin.messages.createSuccess"));
-      return navigateTo(PERMISSIONINDEX);
-    } catch (error: any) {
-      if (error?.data?.isValidationError) {
-        errorToField(setFieldError, error?.data?.errors, t, "name");
-        return;
+  const handleStore = (shouldClose = false) => {
+    const wrapped = handleSubmit(async (payload: TPermissionCreate | TPermissionUpdate) => {
+      isLoading.value = true;
+      try {
+        const response = await permissionService.store(payload as Partial<IPermission>);
+        toast.success(response?.message || t("admin.messages.createSuccess"));
+        if (shouldClose) {
+          return navigateTo(PERMISSIONINDEX);
+        }
+        resetForm();
+      } catch (error: any) {
+        if (error?.data?.isValidationError) {
+          errorToField(setFieldError, error?.data?.errors, t, "name");
+          return;
+        }
+        console.error("Thêm mới thất bại:", error);
+        toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
+        throw error;
+      } finally {
+        isLoading.value = false;
       }
-      console.error("Thêm mới thất bại:", error);
-      toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
-      throw error;
-    } finally {
-      isLoading.value = false;
-    }
-  });
+    });
+
+    return wrapped();
+  };
 
   const show = async (id: number) => {
     try {
@@ -71,24 +78,31 @@ export const usePermission = (initialFilters?: PermissionPayloadFilter, mode: "c
     }
   };
 
-  const handleUpdate = handleSubmit(async (payload: TPermissionUpdate) => {
-    isLoading.value = true;
-    try {
-      const id = Number(useRoute().params.id);
-      await permissionService.update(id, payload as Partial<IPermission>);
-      toast.success(t("admin.messages.updateSuccess"));
-      return navigateTo(PERMISSIONINDEX);
-    } catch (error: any) {
-      if (error?.data?.isValidationError) {
-        errorToField(setFieldError, error?.data?.errors, t, "name");
-        return;
+  const handleUpdate = (shouldClose = false) => {
+    const wrapped = handleSubmit(async (payload: TPermissionUpdate) => {
+      isLoading.value = true;
+      try {
+        const id = Number(useRoute().params.id);
+        await permissionService.update(id, payload as Partial<IPermission>);
+        toast.success(t("admin.messages.updateSuccess"));
+        if (shouldClose) {
+          return navigateTo(PERMISSIONINDEX);
+        }
+        // keep on page
+      } catch (error: any) {
+        if (error?.data?.isValidationError) {
+          errorToField(setFieldError, error?.data?.errors, t, "name");
+          return;
+        }
+        console.error("Cập nhật thất bại:", error);
+        toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
+      } finally {
+        isLoading.value = false;
       }
-      console.error("Cập nhật thất bại:", error);
-      toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
-    } finally {
-      isLoading.value = false;
-    }
-  });
+    });
+
+    return wrapped();
+  };
 
   const handleDelete = async (id: number) => {
     isLoading.value = true;

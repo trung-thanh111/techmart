@@ -26,9 +26,9 @@ export const useAttribute = (initialFilters?: AttributePayloadFilter, mode: "cre
 
   const schema = {
     name: z.string({ required_error: "admin.validation.nameRequired" }).trim().min(1, "admin.validation.nameRequired").max(255, "admin.validation.nameMaxLength"),
-    description: z.string().max(255, 'admin.validation.descriptionMaxLength').nullable().optional(),
+    description: z.string().max(255, "admin.validation.descriptionMaxLength").nullable().optional(),
     order: z.number().int().nonnegative().default(0),
-    attributeCatalogueId: z.number({required_error: "admin.validation.attributeCatalogueIdRequired"}).min(1, "admin.validation.attributeCatalogueIdRequired"),
+    attributeCatalogueId: z.number({ required_error: "admin.validation.attributeCatalogueIdRequired" }).min(1, "admin.validation.attributeCatalogueIdRequired"),
     publish: z.number({ required_error: "admin.validation.statusRequired" }).refine((val) => [0, 1, 2].includes(val), { message: "admin.validation.statusInvalid" }),
   };
   const createSchema = z.object({ ...schema });
@@ -36,29 +36,36 @@ export const useAttribute = (initialFilters?: AttributePayloadFilter, mode: "cre
   type TAttributeCreate = z.infer<typeof createSchema>;
   type TAttributeUpdate = z.infer<typeof updateSchema>;
 
-  const { handleSubmit, values, errors, setValues, setFieldError } = useForm<TAttributeCreate | TAttributeUpdate>({
+  const { handleSubmit, values, errors, setValues, resetForm, setFieldError } = useForm<TAttributeCreate | TAttributeUpdate>({
     validationSchema: toTypedSchema(mode === "create" ? createSchema : updateSchema),
     keepValuesOnUnmount: true,
   });
 
-  const handleStore = handleSubmit(async (payload: TAttributeCreate | TAttributeUpdate) => {
-    isLoading.value = true;
-    try {
-      const response = await attributeService.store(payload as Partial<IAttribute>);
-      toast.success(response?.message || t("admin.messages.createSuccess"));
-      return navigateTo(ATTRIBUTEINDEX);
-    } catch (error: any) {
-      if (error?.data?.isValidationError) {
-        errorToField(setFieldError, error?.data?.errors, t, "name");
-        return;
+  const handleStore = (shouldClose = false) => {
+    const wrapped = handleSubmit(async (payload: TAttributeCreate | TAttributeUpdate) => {
+      isLoading.value = true;
+      try {
+        const response = await attributeService.store(payload as Partial<IAttribute>);
+        toast.success(response?.message || t("admin.messages.createSuccess"));
+        if (shouldClose) {
+          return navigateTo(ATTRIBUTEINDEX);
+        }
+        resetForm();
+      } catch (error: any) {
+        if (error?.data?.isValidationError) {
+          errorToField(setFieldError, error?.data?.errors, t, "name");
+          return;
+        }
+        console.error("Thêm mới thất bại:", error);
+        toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
+        throw error;
+      } finally {
+        isLoading.value = false;
       }
-      console.error("Thêm mới thất bại:", error);
-      toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
-      throw error;
-    } finally {
-      isLoading.value = false;
-    }
-  });
+    });
+
+    return wrapped();
+  };
 
   const show = async (id: number) => {
     try {
@@ -71,24 +78,31 @@ export const useAttribute = (initialFilters?: AttributePayloadFilter, mode: "cre
     }
   };
 
-  const handleUpdate = handleSubmit(async (payload: TAttributeUpdate) => {
-    isLoading.value = true;
-    try {
-      const id = Number(useRoute().params.id);
-      await attributeService.update(id, payload as Partial<IAttribute>);
-      toast.success(t("admin.messages.updateSuccess"));
-      return navigateTo(ATTRIBUTEINDEX);
-    } catch (error: any) {
-      if (error?.data?.isValidationError) {
-        errorToField(setFieldError, error?.data?.errors, t, "name");
-        return;
+  const handleUpdate = (shouldClose = false) => {
+    const wrapped = handleSubmit(async (payload: TAttributeUpdate) => {
+      isLoading.value = true;
+      try {
+        const id = Number(useRoute().params.id);
+        await attributeService.update(id, payload as Partial<IAttribute>);
+        toast.success(t("admin.messages.updateSuccess"));
+        if (shouldClose) {
+          return navigateTo(ATTRIBUTEINDEX);
+        }
+        // keep on page for edit
+      } catch (error: any) {
+        if (error?.data?.isValidationError) {
+          errorToField(setFieldError, error?.data?.errors, t, "name");
+          return;
+        }
+        console.error("Cập nhật thất bại:", error);
+        toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
+      } finally {
+        isLoading.value = false;
       }
-      console.error("Cập nhật thất bại:", error);
-      toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
-    } finally {
-      isLoading.value = false;
-    }
-  });
+    });
+
+    return wrapped();
+  };
 
   const handleDelete = async (id: number) => {
     isLoading.value = true;
@@ -149,9 +163,7 @@ export const useAttribute = (initialFilters?: AttributePayloadFilter, mode: "cre
     try {
       const response = await attributeCatalogueService.all();
       const rows = response?.data ?? [];
-      attributeCatalogueOptions.value = (Array.isArray(rows) ? rows : [rows])
-        .map((item: any) => ({ id: Number(item.id), name: item.name }))
-        .filter((opt: any) => opt.name && !Number.isNaN(opt.id));
+      attributeCatalogueOptions.value = (Array.isArray(rows) ? rows : [rows]).map((item: any) => ({ id: Number(item.id), name: item.name })).filter((opt: any) => opt.name && !Number.isNaN(opt.id));
     } catch (error) {
       console.error("Lỗi khi tải dữ liệu attribute catalogue:", error);
     }

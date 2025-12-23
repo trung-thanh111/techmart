@@ -29,28 +29,34 @@ export const useSystem = (initialFilters?: SystemPayloadFilter, mode: "create" |
   type TCreate = z.infer<typeof createSchema>;
   type TUpdate = z.infer<typeof updateSchema>;
 
-  const { handleSubmit, values, errors, setValues, setFieldError } = useForm<TCreate | TUpdate>({
+  const { handleSubmit, values, errors, setValues, setFieldError, resetForm } = useForm<TCreate | TUpdate>({
     validationSchema: toTypedSchema(mode === "create" ? createSchema : updateSchema),
     keepValuesOnUnmount: true,
   });
 
-  const handleStore = handleSubmit(async (payload: TCreate | TUpdate) => {
-    isLoading.value = true;
-    try {
-      const response = await systemService.store(payload as Partial<ISystem>);
-      toast.success(response?.message || t("admin.messages.createSuccess"));
-      return navigateTo(SYSTEMINDEX);
-    } catch (error: any) {
-      if (error?.data?.isValidationError) {
-        // map validation
-        return;
+  const handleStore = (shouldClose: boolean = false) => {
+    const wrapped = handleSubmit(async (payload: TCreate | TUpdate) => {
+      isLoading.value = true;
+      try {
+        const response = await systemService.store(payload as Partial<ISystem>);
+        toast.success(response?.message || t("admin.messages.createSuccess"));
+        if (shouldClose) {
+          return navigateTo(SYSTEMINDEX);
+        }
+        resetForm();
+      } catch (error: any) {
+        if (error?.data?.isValidationError) {
+          return;
+        }
+        toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
+        throw error;
+      } finally {
+        isLoading.value = false;
       }
-      toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
-      throw error;
-    } finally {
-      isLoading.value = false;
-    }
-  });
+    });
+
+    return wrapped();
+  };
 
   const show = async (id: number) => {
     try {
@@ -62,22 +68,28 @@ export const useSystem = (initialFilters?: SystemPayloadFilter, mode: "create" |
     }
   };
 
-  const handleUpdate = handleSubmit(async (payload: TUpdate) => {
-    isLoading.value = true;
-    try {
-      const id = Number(useRoute().params.id);
-      await systemService.update(id, payload as Partial<ISystem>);
-      toast.success(t("admin.messages.updateSuccess"));
-      return navigateTo(SYSTEMINDEX);
-    } catch (error: any) {
-      if (error?.data?.isValidationError) {
-        return;
+  const handleUpdate = (shouldClose: boolean = false) => {
+    const wrapped = handleSubmit(async (payload: TUpdate) => {
+      isLoading.value = true;
+      try {
+        const id = Number(useRoute().params.id);
+        await systemService.update(id, payload as Partial<ISystem>);
+        toast.success(t("admin.messages.updateSuccess"));
+        if (shouldClose) {
+          return navigateTo(SYSTEMINDEX);
+        }
+      } catch (error: any) {
+        if (error?.data?.isValidationError) {
+          return;
+        }
+        toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
+      } finally {
+        isLoading.value = false;
       }
-      toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
-    } finally {
-      isLoading.value = false;
-    }
-  });
+    });
+
+    return wrapped();
+  };
 
   const handleDelete = async (id: number) => {
     isLoading.value = true;

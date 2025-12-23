@@ -31,7 +31,7 @@ const emit = defineEmits<{
 const buttonConfig = computed(() => {
   const configs = {
     success: {
-      label: t("admin.components.buttons.confirm"),
+      label: t("admin.components.buttons.confirmAndClose"),
       severity: "success" as const,
       class: "py-1.5 px-3 border-0 rounded-sm text-[12px]",
     },

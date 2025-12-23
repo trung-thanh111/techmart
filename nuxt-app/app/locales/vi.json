@@ -769,7 +769,8 @@
         "duplicate": "Nhân bản",
         "cancel": "Hủy",
         "delete": "Xóa",
-        "confirm": "Xác nhận"
+        "confirm": "Xác nhận",
+        "confirmAndClose": "Xác nhận & đóng"
       }
     }
   },

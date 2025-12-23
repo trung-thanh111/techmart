@@ -47,29 +47,36 @@ export const useAgency = (initialFilters?: AgencyPayloadFilter, mode: "create" |
   type TAgencyCreate = z.infer<typeof createSchema>;
   type TAgencyUpdate = z.infer<typeof updateSchema>;
 
-  const { handleSubmit, values, errors, setValues, setFieldError } = useForm<TAgencyCreate | TAgencyUpdate>({
+  const { handleSubmit, values, errors, setValues, resetForm, setFieldError } = useForm<TAgencyCreate | TAgencyUpdate>({
     validationSchema: toTypedSchema(mode === "create" ? createSchema : updateSchema),
     keepValuesOnUnmount: true,
   });
 
-  const handleStore = handleSubmit(async (payload: TAgencyCreate | TAgencyUpdate) => {
-    isLoading.value = true;
-    try {
-      const response = await agencyService.store(payload as Partial<IAgency>);
-      toast.success(response?.message || t("admin.messages.createSuccess"));
-      return navigateTo(AGENCYINDEX);
-    } catch (error: any) {
-      if (error?.data?.isValidationError) {
-        errorToField(setFieldError, error?.data?.errors, t, "name");
-        return;
+  const handleStore = (shouldClose = false) => {
+    const wrapped = handleSubmit(async (payload: TAgencyCreate | TAgencyUpdate) => {
+      isLoading.value = true;
+      try {
+        const response = await agencyService.store(payload as Partial<IAgency>);
+        toast.success(response?.message || t("admin.messages.createSuccess"));
+        if (shouldClose) {
+          return navigateTo(AGENCYINDEX);
+        }
+        resetForm();
+      } catch (error: any) {
+        if (error?.data?.isValidationError) {
+          errorToField(setFieldError, error?.data?.errors, t, "name");
+          return;
+        }
+        console.error("Thêm mới thất bại:", error);
+        toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
+        throw error;
+      } finally {
+        isLoading.value = false;
       }
-      console.error("Thêm mới thất bại:", error);
-      toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
-      throw error;
-    } finally {
-      isLoading.value = false;
-    }
-  });
+    });
+
+    return wrapped();
+  };
 
   const show = async (id: number) => {
     try {
@@ -82,24 +89,31 @@ export const useAgency = (initialFilters?: AgencyPayloadFilter, mode: "create" |
     }
   };
 
-  const handleUpdate = handleSubmit(async (payload: TAgencyUpdate) => {
-    isLoading.value = true;
-    try {
-      const id = Number(useRoute().params.id);
-      await agencyService.update(id, payload as Partial<IAgency>);
-      toast.success(t("admin.messages.updateSuccess"));
-      return navigateTo(AGENCYINDEX);
-    } catch (error: any) {
-      if (error?.data?.isValidationError) {
-        errorToField(setFieldError, error?.data?.errors, t, "name");
-        return;
+  const handleUpdate = (shouldClose = false) => {
+    const wrapped = handleSubmit(async (payload: TAgencyUpdate) => {
+      isLoading.value = true;
+      try {
+        const id = Number(useRoute().params.id);
+        await agencyService.update(id, payload as Partial<IAgency>);
+        toast.success(t("admin.messages.updateSuccess"));
+        if (shouldClose) {
+          return navigateTo(AGENCYINDEX);
+        }
+        // keep on page
+      } catch (error: any) {
+        if (error?.data?.isValidationError) {
+          errorToField(setFieldError, error?.data?.errors, t, "name");
+          return;
+        }
+        console.error("Cập nhật thất bại:", error);
+        toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
+      } finally {
+        isLoading.value = false;
       }
-      console.error("Cập nhật thất bại:", error);
-      toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
-    } finally {
-      isLoading.value = false;
-    }
-  });
+    });
+
+    return wrapped();
+  };
 
   const handleDelete = async (id: number) => {
     isLoading.value = true;
