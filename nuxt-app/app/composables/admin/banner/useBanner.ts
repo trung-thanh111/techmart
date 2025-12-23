@@ -47,29 +47,36 @@ export const useBanner = (initialFilters?: BannerPayloadFilter, mode: "create" |
   type TBannerCreate = z.infer<typeof createSchema>;
   type TBannerUpdate = z.infer<typeof updateSchema>;
 
-  const { handleSubmit, values, errors, setValues, setFieldError } = useForm<TBannerCreate | TBannerUpdate>({
+  const { handleSubmit, values, errors, setValues, resetForm, setFieldError } = useForm<TBannerCreate | TBannerUpdate>({
     validationSchema: toTypedSchema(mode === "create" ? createSchema : updateSchema),
     keepValuesOnUnmount: true,
   });
 
-  const handleStore = handleSubmit(async (payload: TBannerCreate | TBannerUpdate) => {
-    isLoading.value = true;
-    try {
-      const response = await bannerService.store(payload as Partial<IBanner>);
-      toast.success(response?.message || t("admin.messages.createSuccess"));
-      return navigateTo(BANNERINDEX);
-    } catch (error: any) {
-      if (error?.data?.isValidationError) {
-        errorToField(setFieldError, error?.data?.errors, t, "name");
-        return;
+  const handleStore = (shouldClose = false) => {
+    const wrapped = handleSubmit(async (payload: TBannerCreate | TBannerUpdate) => {
+      isLoading.value = true;
+      try {
+        const response = await bannerService.store(payload as Partial<IBanner>);
+        toast.success(response?.message || t("admin.messages.createSuccess"));
+        if (shouldClose) {
+          return navigateTo(BANNERINDEX);
+        }
+        resetForm();
+      } catch (error: any) {
+        if (error?.data?.isValidationError) {
+          errorToField(setFieldError, error?.data?.errors, t, "name");
+          return;
+        }
+        console.error("Thêm mới thất bại:", error);
+        toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
+        throw error;
+      } finally {
+        isLoading.value = false;
       }
-      console.error("Thêm mới thất bại:", error);
-      toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
-      throw error;
-    } finally {
-      isLoading.value = false;
-    }
-  });
+    });
+
+    return wrapped();
+  };
 
   const show = async (id: number) => {
     try {
@@ -82,24 +89,31 @@ export const useBanner = (initialFilters?: BannerPayloadFilter, mode: "create" |
     }
   };
 
-  const handleUpdate = handleSubmit(async (payload: TBannerUpdate) => {
-    isLoading.value = true;
-    try {
-      const id = Number(useRoute().params.id);
-      await bannerService.update(id, payload as Partial<IBanner>);
-      toast.success(t("admin.messages.updateSuccess"));
-      return navigateTo(BANNERINDEX);
-    } catch (error: any) {
-      if (error?.data?.isValidationError) {
-        errorToField(setFieldError, error?.data?.errors, t, "name");
-        return;
+  const handleUpdate = (shouldClose = false) => {
+    const wrapped = handleSubmit(async (payload: TBannerUpdate) => {
+      isLoading.value = true;
+      try {
+        const id = Number(useRoute().params.id);
+        await bannerService.update(id, payload as Partial<IBanner>);
+        toast.success(t("admin.messages.updateSuccess"));
+        if (shouldClose) {
+          return navigateTo(BANNERINDEX);
+        }
+        // keep on page
+      } catch (error: any) {
+        if (error?.data?.isValidationError) {
+          errorToField(setFieldError, error?.data?.errors, t, "name");
+          return;
+        }
+        console.error("Cập nhật thất bại:", error);
+        toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
+      } finally {
+        isLoading.value = false;
       }
-      console.error("Cập nhật thất bại:", error);
-      toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
-    } finally {
-      isLoading.value = false;
-    }
-  });
+    });
+
+    return wrapped();
+  };
 
   const handleDelete = async (id: number) => {
     isLoading.value = true;

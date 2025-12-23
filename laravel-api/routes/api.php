@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\System\SystemController;
 use App\Http\Controllers\Api\V1\Cart\CartItemController;
 use App\Http\Controllers\Api\V1\Cart\CartController;
 use App\Http\Controllers\Api\V1\Product\WishlistController;
@@ -430,6 +431,17 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
             Route::delete('{id}/detach', [PromotionController::class, 'detach']);
         });
         Route::resource('promotions', PromotionController::class)->except($routeExcept);
+
+        // This is route System
+        Route::group(['prefix' => 'systems'], function() {
+            Route::post('bulkStore', [SystemController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [SystemController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [SystemController::class, 'bulkUpdate']);
+            Route::delete('bulkDelete', [SystemController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [SystemController::class, 'attach']);
+            Route::delete('{id}/detach', [SystemController::class, 'detach']);
+        });
+        Route::resource('systems', SystemController::class)->except($routeExcept);
 
         // generate route
 

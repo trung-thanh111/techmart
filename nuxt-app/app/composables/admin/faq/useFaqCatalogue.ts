@@ -46,24 +46,31 @@ export const useFaqCatalogue = (
   });
 
   // store
-  const handleStore = handleSubmit(async (payload: TFaqCatalogueCreate | TFaqCatalogueUpdate) => {
-    isLoading.value = true;
-    try {
-      const response = await faqCatalogueService.store(payload as Partial<IFaqCatalogue>);
-      toast.success(response?.message || t('admin.messages.createSuccess'));
-      return navigateTo(FAQCATALOGUEINDEX);
-    } catch (error: any) {
-      if (error?.data?.isValidationError) {
-        errorToField(setFieldError, error?.data?.errors, t, 'name');
-        return;
+  const handleStore = (shouldClose = false) => {
+    const wrapped = handleSubmit(async (payload: TFaqCatalogueCreate | TFaqCatalogueUpdate) => {
+      isLoading.value = true;
+      try {
+        const response = await faqCatalogueService.store(payload as Partial<IFaqCatalogue>);
+        toast.success(response?.message || t('admin.messages.createSuccess'));
+        if (shouldClose) {
+          return navigateTo(FAQCATALOGUEINDEX);
+        }
+        resetForm();
+      } catch (error: any) {
+        if (error?.data?.isValidationError) {
+          errorToField(setFieldError, error?.data?.errors, t, 'name');
+          return;
+        }
+        console.error("Store error:", error);
+        toast.error(error?.response?.data?.message || t('admin.messages.createFailed'));
+        throw error;
+      } finally {
+        isLoading.value = false;
       }
-      console.error("Store error:", error);
-      toast.error(error?.response?.data?.message || t('admin.messages.createFailed'));
-      throw error;
-    } finally {
-      isLoading.value = false;
-    }
-  });
+    });
+
+    return wrapped();
+  };
 
   const show = async (id: number) => {
     try {
@@ -76,23 +83,30 @@ export const useFaqCatalogue = (
     }
   };
 
-  const handleUpdate = handleSubmit(async (payload: TFaqCatalogueUpdate) => {
-    isLoading.value = true;
-    try {
-      const id = Number(useRoute().params.id);
-      await faqCatalogueService.update(id, payload as Partial<IFaqCatalogue>);
-      toast.success(t('admin.messages.updateSuccess'));
-      return navigateTo(FAQCATALOGUEINDEX);
-    } catch (error: any) {
-      if (error?.data?.isValidationError) {
-        errorToField(setFieldError, error?.data?.errors, t, 'name'); return;
+  const handleUpdate = (shouldClose = false) => {
+    const wrapped = handleSubmit(async (payload: TFaqCatalogueUpdate) => {
+      isLoading.value = true;
+      try {
+        const id = Number(useRoute().params.id);
+        await faqCatalogueService.update(id, payload as Partial<IFaqCatalogue>);
+        toast.success(t('admin.messages.updateSuccess'));
+        if (shouldClose) {
+          return navigateTo(FAQCATALOGUEINDEX);
+        }
+        // keep on page
+      } catch (error: any) {
+        if (error?.data?.isValidationError) {
+          errorToField(setFieldError, error?.data?.errors, t, 'name'); return;
+        }
+        console.error("Store error:", error);
+        toast.error(error?.response?.data?.message || t('admin.messages.updateFailed'));
+      } finally {
+        isLoading.value = false;
       }
-      console.error("Store error:", error);
-      toast.error(error?.response?.data?.message || t('admin.messages.updateFailed'));
-    } finally {
-      isLoading.value = false;
-    }
-  });
+    });
+
+    return wrapped();
+  };
 
   const handleToggleIsHot = async (item: any) => {
     try {

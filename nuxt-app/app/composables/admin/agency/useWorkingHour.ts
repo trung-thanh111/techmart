@@ -34,25 +34,32 @@ export const useAgencyWorkingHour = (
   type TAgencyWorkingHourCreate = z.infer<typeof createSchema>;
   type TAgencyWorkingHourUpdate = z.infer<typeof updateSchema>;
 
-  const { handleSubmit, values, errors, setValues } = useForm<TAgencyWorkingHourCreate | TAgencyWorkingHourUpdate>({
+  const { handleSubmit, values, errors, setValues, resetForm } = useForm<TAgencyWorkingHourCreate | TAgencyWorkingHourUpdate>({
     validationSchema: toTypedSchema(mode === "create" ? createSchema : updateSchema),
   });
 
   // store
-  const handleStore = handleSubmit(async (payload: TAgencyWorkingHourCreate | TAgencyWorkingHourUpdate) => {
-    isLoading.value = true;
-    try {
-      const response = await agencyWorkingHourService.store(payload as Partial<IAgencyWorkingHour>);
-      toast.success(response?.message || t('admin.messages.createSuccess'));
-      return navigateTo(AGENCYWORKINGHOURINDEX);
-    } catch (error: any) {
-      console.error("Store error:", error);
-      toast.error(error?.response?.data?.message || t('admin.messages.createFailed'));
-      throw error;
-    } finally {
-      isLoading.value = false;
-    }
-  });
+  const handleStore = (shouldClose = false) => {
+    const wrapped = handleSubmit(async (payload: TAgencyWorkingHourCreate | TAgencyWorkingHourUpdate) => {
+      isLoading.value = true;
+      try {
+        const response = await agencyWorkingHourService.store(payload as Partial<IAgencyWorkingHour>);
+        toast.success(response?.message || t('admin.messages.createSuccess'));
+        if (shouldClose) {
+          return navigateTo(AGENCYWORKINGHOURINDEX);
+        }
+        resetForm();
+      } catch (error: any) {
+        console.error("Store error:", error);
+        toast.error(error?.response?.data?.message || t('admin.messages.createFailed'));
+        throw error;
+      } finally {
+        isLoading.value = false;
+      }
+    });
+
+    return wrapped();
+  };
 
   const show = async (id: number) => {
     try {
@@ -65,20 +72,27 @@ export const useAgencyWorkingHour = (
     }
   };
 
-  const handleUpdate = handleSubmit(async (payload: TAgencyWorkingHourUpdate) => {
-    isLoading.value = true;
-    try {
-      const id = Number(useRoute().params.id);
-      await agencyWorkingHourService.update(id, payload as Partial<IAgencyWorkingHour>);
-      toast.success(t('admin.messages.updateSuccess'));
-      return navigateTo(AGENCYWORKINGHOURINDEX);
-    } catch (error: any) {
-      console.error("Store error:", error);
-      toast.error(error?.response?.data?.message || t('admin.messages.updateFailed'));
-    } finally {
-      isLoading.value = false;
-    }
-  });
+  const handleUpdate = (shouldClose = false) => {
+    const wrapped = handleSubmit(async (payload: TAgencyWorkingHourUpdate) => {
+      isLoading.value = true;
+      try {
+        const id = Number(useRoute().params.id);
+        await agencyWorkingHourService.update(id, payload as Partial<IAgencyWorkingHour>);
+        toast.success(t('admin.messages.updateSuccess'));
+        if (shouldClose) {
+          return navigateTo(AGENCYWORKINGHOURINDEX);
+        }
+        // keep on page
+      } catch (error: any) {
+        console.error("Store error:", error);
+        toast.error(error?.response?.data?.message || t('admin.messages.updateFailed'));
+      } finally {
+        isLoading.value = false;
+      }
+    });
+
+    return wrapped();
+  };
 
   const handleDelete = async (id: number) => {
     isLoading.value = true;

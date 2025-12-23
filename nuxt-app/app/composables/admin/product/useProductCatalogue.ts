@@ -48,25 +48,31 @@ export const useProductCatalogue = (
   });
 
   // store
-  const handleStore = handleSubmit(async (payload: TProductCatalogueCreate | TProductCatalogueUpdate) => {
-    isLoading.value = true;
-    try {
-      const response = await productCatalogueService.store(payload as Partial<IProductCatalogue>);
-      toast.success(response?.message || t('admin.messages.createSuccess'));
-      resetForm();
-      return navigateTo(PRODUCTCATALOGUEINDEX);
-    } catch (error: any) {
-      if (error?.data?.isValidationError) {
-        errorToField(setFieldError, error?.data?.errors, t, 'name');
-        return;
+  const handleStore = (shouldClose = false) => {
+    const wrapped = handleSubmit(async (payload: TProductCatalogueCreate | TProductCatalogueUpdate) => {
+      isLoading.value = true;
+      try {
+        const response = await productCatalogueService.store(payload as Partial<IProductCatalogue>);
+        toast.success(response?.message || t('admin.messages.createSuccess'));
+        if (shouldClose) {
+          return navigateTo(PRODUCTCATALOGUEINDEX);
+        }
+        resetForm();
+      } catch (error: any) {
+        if (error?.data?.isValidationError) {
+          errorToField(setFieldError, error?.data?.errors, t, 'name');
+          return;
+        }
+        console.error("Store error:", error);
+        toast.error(error?.response?.data?.message || t('admin.messages.createFailed'));
+        throw error;
+      } finally {
+        isLoading.value = false;
       }
-      console.error("Store error:", error);
-      toast.error(error?.response?.data?.message || t('admin.messages.createFailed'));
-      throw error;
-    } finally {
-      isLoading.value = false;
-    }
-  });
+    });
+
+    return wrapped();
+  };
 
   const show = async (id: number) => {
     try {
@@ -79,23 +85,30 @@ export const useProductCatalogue = (
     }
   };
 
-  const handleUpdate = handleSubmit(async (payload: TProductCatalogueUpdate) => {
-    isLoading.value = true;
-    try {
-      const id = Number(useRoute().params.id);
-      await productCatalogueService.update(id, payload as Partial<IProductCatalogue>);
-      toast.success(t('admin.messages.updateSuccess'));
-      return navigateTo(PRODUCTCATALOGUEINDEX);
-    } catch (error: any) {
-      if (error?.data?.isValidationError) {
-        errorToField(setFieldError, error?.data?.errors, t, 'name'); return;
+  const handleUpdate = (shouldClose = false) => {
+    const wrapped = handleSubmit(async (payload: TProductCatalogueUpdate) => {
+      isLoading.value = true;
+      try {
+        const id = Number(useRoute().params.id);
+        await productCatalogueService.update(id, payload as Partial<IProductCatalogue>);
+        toast.success(t('admin.messages.updateSuccess'));
+        if (shouldClose) {
+          return navigateTo(PRODUCTCATALOGUEINDEX);
+        }
+        // keep on page
+      } catch (error: any) {
+        if (error?.data?.isValidationError) {
+          errorToField(setFieldError, error?.data?.errors, t, 'name'); return;
+        }
+        console.error("Store error:", error);
+        toast.error(error?.response?.data?.message || t('admin.messages.updateFailed'));
+      } finally {
+        isLoading.value = false;
       }
-      console.error("Store error:", error);
-      toast.error(error?.response?.data?.message || t('admin.messages.updateFailed'));
-    } finally {
-      isLoading.value = false;
-    }
-  });
+    });
+
+    return wrapped();
+  };
 
   const handleToggleIsHot = async (item: any) => {
     try {

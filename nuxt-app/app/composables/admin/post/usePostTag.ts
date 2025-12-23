@@ -39,25 +39,31 @@ export const usePostTag = (initialFilters?: TagPayloadFilter, mode: "create" | "
   });
 
   // store
-  const handleStore = handleSubmit(async (payload: TPostTagCreate | TPostTagUpdate) => {
-    isLoading.value = true;
-    try {
-      const response = await postTagService.store(payload as Partial<IPostTag>);
-      toast.success(response?.message || t("admin.messages.createSuccess"));
-      resetForm();
-      return navigateTo(POSTTAGINDEX);
-    } catch (error: any) {
-      if (error?.data?.isValidationError) {
-        errorToField(setFieldError, error?.data?.errors, t, "name");
-        return;
+  const handleStore = (shouldClose = false) => {
+    const wrapped = handleSubmit(async (payload: TPostTagCreate | TPostTagUpdate) => {
+      isLoading.value = true;
+      try {
+        const response = await postTagService.store(payload as Partial<IPostTag>);
+        toast.success(response?.message || t("admin.messages.createSuccess"));
+        if (shouldClose) {
+          return navigateTo(POSTTAGINDEX);
+        }
+        resetForm();
+      } catch (error: any) {
+        if (error?.data?.isValidationError) {
+          errorToField(setFieldError, error?.data?.errors, t, "name");
+          return;
+        }
+        console.error("Store error:", error);
+        toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
+        throw error;
+      } finally {
+        isLoading.value = false;
       }
-      console.error("Store error:", error);
-      toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
-      throw error;
-    } finally {
-      isLoading.value = false;
-    }
-  });
+    });
+
+    return wrapped();
+  };
 
   const show = async (id: number) => {
     try {
@@ -70,24 +76,31 @@ export const usePostTag = (initialFilters?: TagPayloadFilter, mode: "create" | "
     }
   };
 
-  const handleUpdate = handleSubmit(async (payload: TPostTagUpdate) => {
-    isLoading.value = true;
-    try {
-      const id = Number(useRoute().params.id);
-      await postTagService.update(id, payload as Partial<IPostTag>);
-      toast.success(t("admin.messages.updateSuccess"));
-      return navigateTo(POSTTAGINDEX);
-    } catch (error: any) {
-      if (error?.data?.isValidationError) {
-        errorToField(setFieldError, error?.data?.errors, t, "name");
-        return;
+  const handleUpdate = (shouldClose = false) => {
+    const wrapped = handleSubmit(async (payload: TPostTagUpdate) => {
+      isLoading.value = true;
+      try {
+        const id = Number(useRoute().params.id);
+        await postTagService.update(id, payload as Partial<IPostTag>);
+        toast.success(t("admin.messages.updateSuccess"));
+        if (shouldClose) {
+          return navigateTo(POSTTAGINDEX);
+        }
+        // keep on page
+      } catch (error: any) {
+        if (error?.data?.isValidationError) {
+          errorToField(setFieldError, error?.data?.errors, t, "name");
+          return;
+        }
+        console.error("Update error:", error);
+        toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
+      } finally {
+        isLoading.value = false;
       }
-      console.error("Update error:", error);
-      toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
-    } finally {
-      isLoading.value = false;
-    }
-  });
+    });
+
+    return wrapped();
+  };
 
   const handleDelete = async (id: number) => {
     isLoading.value = true;

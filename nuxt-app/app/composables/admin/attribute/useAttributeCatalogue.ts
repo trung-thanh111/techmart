@@ -9,10 +9,7 @@ import type { IAttributeCatalogue, CataloguePayloadFilter } from "~/interfaces/a
 import { ATTRIBUTECATALOGUEINDEX } from "~/utils/constants";
 import { useI18n } from "#imports";
 
-export const useAttributeCatalogue = (
-  initialFilters?: CataloguePayloadFilter,
-  mode: "create" | "update" = "create"
-) => {
+export const useAttributeCatalogue = (initialFilters?: CataloguePayloadFilter, mode: "create" | "update" = "create") => {
   const { t } = useI18n();
   const config = useRuntimeConfig();
   const toast = useAppToast();
@@ -26,13 +23,16 @@ export const useAttributeCatalogue = (
   const slug = computed(() => slugify(values.name || ""));
   const attributeCatalogueOptions = ref<{ name: string; id: number }[]>([]);
 
-
   const schema = {
-    name: z.string({ required_error: 'admin.validation.nameRequired' }).trim().min(1, 'admin.validation.nameRequired').max(255, 'admin.validation.nameMaxLength'),
-    description: z.string().max(255, 'admin.validation.descriptionMaxLength').nullable().optional(),
-    order: z.number().min(0, 'admin.validation.orderMin').nullable().optional(),
-    image: z.any().optional().refine((file) => !file || file.size <= MAX_FILE_SIZE, 'admin.common.maxFileSize').refine((file) => !file || ACCEPTED_IMAGE_TYPES.includes(file.type), 'admin.common.acceptedImageTypes'),
-    publish: z.number({ required_error: 'admin.validation.statusRequired' }).refine((val) => [0, 1, 2].includes(val), { message: 'admin.validation.statusInvalid' }),
+    name: z.string({ required_error: "admin.validation.nameRequired" }).trim().min(1, "admin.validation.nameRequired").max(255, "admin.validation.nameMaxLength"),
+    description: z.string().max(255, "admin.validation.descriptionMaxLength").nullable().optional(),
+    order: z.number().min(0, "admin.validation.orderMin").nullable().optional(),
+    image: z
+      .any()
+      .optional()
+      .refine((file) => !file || file.size <= MAX_FILE_SIZE, "admin.common.maxFileSize")
+      .refine((file) => !file || ACCEPTED_IMAGE_TYPES.includes(file.type), "admin.common.acceptedImageTypes"),
+    publish: z.number({ required_error: "admin.validation.statusRequired" }).refine((val) => [0, 1, 2].includes(val), { message: "admin.validation.statusInvalid" }),
     isHot: z.boolean().default(false).optional(),
     attributeCatalogues: z.array(z.number()).nullable().optional(),
   };
@@ -46,24 +46,31 @@ export const useAttributeCatalogue = (
   });
 
   // store
-  const handleStore = handleSubmit(async (payload: TAttributeCatalogueCreate | TAttributeCatalogueUpdate) => {
-    isLoading.value = true;
-    try {
-      const response = await attributeCatalogueService.store(payload as Partial<IAttributeCatalogue>);
-      toast.success(response?.message || t('admin.messages.createSuccess'));
-      return navigateTo(ATTRIBUTECATALOGUEINDEX);
-    } catch (error: any) {
-      if (error?.data?.isValidationError) {
-        errorToField(setFieldError, error?.data?.errors, t, 'name');
-        return;
+  const handleStore = (shouldClose = false) => {
+    const wrapped = handleSubmit(async (payload: TAttributeCatalogueCreate | TAttributeCatalogueUpdate) => {
+      isLoading.value = true;
+      try {
+        const response = await attributeCatalogueService.store(payload as Partial<IAttributeCatalogue>);
+        toast.success(response?.message || t("admin.messages.createSuccess"));
+        if (shouldClose) {
+          return navigateTo(ATTRIBUTECATALOGUEINDEX);
+        }
+        resetForm();
+      } catch (error: any) {
+        if (error?.data?.isValidationError) {
+          errorToField(setFieldError, error?.data?.errors, t, "name");
+          return;
+        }
+        console.error("Store error:", error);
+        toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
+        throw error;
+      } finally {
+        isLoading.value = false;
       }
-      console.error("Store error:", error);
-      toast.error(error?.response?.data?.message || t('admin.messages.createFailed'));
-      throw error;
-    } finally {
-      isLoading.value = false;
-    }
-  });
+    });
+
+    return wrapped();
+  };
 
   const show = async (id: number) => {
     try {
@@ -71,37 +78,45 @@ export const useAttributeCatalogue = (
       return response;
     } catch (error: any) {
       console.error("Lỗi! Không tìm thấy bản ghi: ", error);
-      toast.error(error?.response?.data?.message || t('admin.messages.createFailed'));
+      toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
       throw error;
     }
   };
 
-  const handleUpdate = handleSubmit(async (payload: TAttributeCatalogueUpdate) => {
-    isLoading.value = true;
-    try {
-      const id = Number(useRoute().params.id);
-      await attributeCatalogueService.update(id, payload as Partial<IAttributeCatalogue>);
-      toast.success(t('admin.messages.updateSuccess'));
-      return navigateTo(ATTRIBUTECATALOGUEINDEX);
-    } catch (error: any) {
-      if (error?.data?.isValidationError) {
-        errorToField(setFieldError, error?.data?.errors, t, 'name'); return;
+  const handleUpdate = (shouldClose = false) => {
+    const wrapped = handleSubmit(async (payload: TAttributeCatalogueUpdate) => {
+      isLoading.value = true;
+      try {
+        const id = Number(useRoute().params.id);
+        await attributeCatalogueService.update(id, payload as Partial<IAttributeCatalogue>);
+        toast.success(t("admin.messages.updateSuccess"));
+        if (shouldClose) {
+          return navigateTo(ATTRIBUTECATALOGUEINDEX);
+        }
+        // keep on page
+      } catch (error: any) {
+        if (error?.data?.isValidationError) {
+          errorToField(setFieldError, error?.data?.errors, t, "name");
+          return;
+        }
+        console.error("Store error:", error);
+        toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
+      } finally {
+        isLoading.value = false;
       }
-      console.error("Store error:", error);
-      toast.error(error?.response?.data?.message || t('admin.messages.updateFailed'));
-    } finally {
-      isLoading.value = false;
-    }
-  });
+    });
+
+    return wrapped();
+  };
 
   const handleDelete = async (id: number) => {
     isLoading.value = true;
     try {
       await attributeCatalogueService.delete(id);
-      toast.success(t('admin.messages.deleteSuccess'));
+      toast.success(t("admin.messages.deleteSuccess"));
       await fetchData();
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || t('admin.messages.deleteFailed'));
+      toast.error(error?.response?.data?.message || t("admin.messages.deleteFailed"));
     } finally {
       isLoading.value = false;
     }
@@ -112,11 +127,11 @@ export const useAttributeCatalogue = (
     isLoading.value = true;
     try {
       await attributeCatalogueService.deleteMultiple(selectedIds.value);
-      toast.success(t('admin.messages.deleteMultipleSuccess', { count: selectedIds.value.length }));
+      toast.success(t("admin.messages.deleteMultipleSuccess", { count: selectedIds.value.length }));
       selectedIds.value = [];
       await fetchData();
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || t('admin.messages.deleteFailed'));
+      toast.error(error?.response?.data?.message || t("admin.messages.deleteFailed"));
     } finally {
       isLoading.value = false;
     }
@@ -160,7 +175,7 @@ export const useAttributeCatalogue = (
       });
       data.value = response;
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || t('admin.messages.loadDataError'));
+      toast.error(err?.response?.data?.message || t("admin.messages.loadDataError"));
       console.error("Fetch error:", err);
     } finally {
       isLoading.value = false;

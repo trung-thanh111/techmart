@@ -44,26 +44,34 @@ export const useAddressOrder = (
   type TAddressOrderCreate = z.infer<typeof createSchema>;
   type TAddressOrderUpdate = z.infer<typeof updateSchema>;
 
-  const { handleSubmit, values, errors, setValues } = useForm<TAddressOrderCreate | TAddressOrderUpdate>({
+  const { handleSubmit, values, errors, setValues, resetForm } = useForm<TAddressOrderCreate | TAddressOrderUpdate>({
     validationSchema: toTypedSchema(mode === "create" ? createSchema : updateSchema),
   });
 
-  const handleStore = handleSubmit(async (payload: TAddressOrderCreate) => {
-    console.info("payload:", payload);
-    isLoading.value = true;
-    try {
-      const response = await useAddressOrderService.store(payload as Partial<IAddressOrder>);
-      toast.success(response?.message || t("admin.messages.createSuccess"));
-      await navigateTo(options?.redirectPath ?? ADDRESSORDERINDEX);
-      await fetchData();
-    } catch (error: any) {
-      console.error("Thêm mới thất bại:", error);
-      toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
-      throw error;
-    } finally {
-      isLoading.value = false;
-    }
-  });
+  const handleStore = (shouldClose = false) => {
+    const wrapped = handleSubmit(async (payload: TAddressOrderCreate) => {
+      console.info("payload:", payload);
+      isLoading.value = true;
+      try {
+        const response = await useAddressOrderService.store(payload as Partial<IAddressOrder>);
+        toast.success(response?.message || t("admin.messages.createSuccess"));
+        if (shouldClose) {
+          await navigateTo(options?.redirectPath ?? ADDRESSORDERINDEX);
+        } else {
+          resetForm();
+        }
+        await fetchData();
+      } catch (error: any) {
+        console.error("Thêm mới thất bại:", error);
+        toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
+        throw error;
+      } finally {
+        isLoading.value = false;
+      }
+    });
+
+    return wrapped();
+  };
 
   const show = async (id: number) => {
     try {
@@ -76,21 +84,27 @@ export const useAddressOrder = (
     }
   };
 
-  const handleUpdate = handleSubmit(async (payload: TAddressOrderUpdate) => {
-    isLoading.value = true;
-    try {
-      const id = Number(useRoute().params.id);
-      await useAddressOrderService.update(id, payload as Partial<IAddressOrder>);
-      toast.success(t("admin.messages.updateSuccess"));
-      await navigateTo(options?.redirectPath ?? ADDRESSORDERINDEX);
-      await fetchData();
-    } catch (error: any) {
-      console.error("Cập nhật thất bại:", error);
-      toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
-    } finally {
-      isLoading.value = false;
-    }
-  });
+  const handleUpdate = (shouldClose = false) => {
+    const wrapped = handleSubmit(async (payload: TAddressOrderUpdate) => {
+      isLoading.value = true;
+      try {
+        const id = Number(useRoute().params.id);
+        await useAddressOrderService.update(id, payload as Partial<IAddressOrder>);
+        toast.success(t("admin.messages.updateSuccess"));
+        if (shouldClose) {
+          await navigateTo(options?.redirectPath ?? ADDRESSORDERINDEX);
+        }
+        await fetchData();
+      } catch (error: any) {
+        console.error("Cập nhật thất bại:", error);
+        toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
+      } finally {
+        isLoading.value = false;
+      }
+    });
+
+    return wrapped();
+  };
 
   const handleDelete = async (id: number) => {
     isLoading.value = true;

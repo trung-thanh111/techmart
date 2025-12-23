@@ -75,26 +75,31 @@ export const useInventory = (initialFilters?: InventoryPayloadFilter, mode: "cre
   });
 
   // store
-  const handleStore = handleSubmit(async (payload: TInventoryCreate | TInventoryUpdate) => {
-    console.info("payload:", payload);
-    isLoading.value = true;
-    try {
-      const response = await inventoryService.store(payload as Partial<IInventory>);
-      toast.success(response?.message || t("admin.messages.createSuccess"));
-      resetForm();
-      return navigateTo(INVENTORYINDEX);
-    } catch (error: any) {
-      if (error?.data?.isValidationError) {
-        errorToField(setFieldError, error?.data?.errors, t, "name");
-        return;
+  const handleStore = (shouldClose = false) => {
+    const wrapped = handleSubmit(async (payload: TInventoryCreate | TInventoryUpdate) => {
+      isLoading.value = true;
+      try {
+        const response = await inventoryService.store(payload as Partial<IInventory>);
+        toast.success(response?.message || t("admin.messages.createSuccess"));
+        if (shouldClose) {
+          return navigateTo(INVENTORYINDEX);
+        }
+        resetForm();
+      } catch (error: any) {
+        if (error?.data?.isValidationError) {
+          errorToField(setFieldError, error?.data?.errors, t, "name");
+          return;
+        }
+        console.error("Store error:", error);
+        toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
+        throw error;
+      } finally {
+        isLoading.value = false;
       }
-      console.error("Store error:", error);
-      toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
-      throw error;
-    } finally {
-      isLoading.value = false;
-    }
-  });
+    });
+
+    return wrapped();
+  };
 
   const show = async (id: number) => {
     try {
@@ -107,24 +112,31 @@ export const useInventory = (initialFilters?: InventoryPayloadFilter, mode: "cre
     }
   };
 
-  const handleUpdate = handleSubmit(async (payload: TInventoryUpdate) => {
-    isLoading.value = true;
-    try {
-      const id = Number(useRoute().params.id);
-      await inventoryService.update(id, payload as Partial<IInventory>);
-      toast.success(t("admin.messages.updateSuccess"));
-      return navigateTo(INVENTORYINDEX);
-    } catch (error: any) {
-      if (error?.data?.isValidationError) {
-        errorToField(setFieldError, error?.data?.errors, t, "name");
-        return;
+  const handleUpdate = (shouldClose = false) => {
+    const wrapped = handleSubmit(async (payload: TInventoryUpdate) => {
+      isLoading.value = true;
+      try {
+        const id = Number(useRoute().params.id);
+        await inventoryService.update(id, payload as Partial<IInventory>);
+        toast.success(t("admin.messages.updateSuccess"));
+        if (shouldClose) {
+          return navigateTo(INVENTORYINDEX);
+        }
+        // keep on page
+      } catch (error: any) {
+        if (error?.data?.isValidationError) {
+          errorToField(setFieldError, error?.data?.errors, t, "name");
+          return;
+        }
+        console.error("Store error:", error);
+        toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
+      } finally {
+        isLoading.value = false;
       }
-      console.error("Store error:", error);
-      toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
-    } finally {
-      isLoading.value = false;
-    }
-  });
+    });
+
+    return wrapped();
+  };
 
   const handleDelete = async (id: number) => {
     isLoading.value = true;

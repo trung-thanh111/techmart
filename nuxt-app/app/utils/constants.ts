@@ -73,6 +73,10 @@ export const BRANDINDEX = "/admin/brand/brand";
 export const BRANDCREATE = "/admin/brand/brand/create";
 export const BRANDUPDATE = "/admin/brand/brand/update";
 
+export const SYSTEMINDEX = "/admin/system/system";
+export const SYSTEMCREATE = "/admin/system/system/create";
+export const SYSTEMUPDATE = "/admin/system/system/update";
+
 export const AGENCYINDEX = "/admin/agency/agency";
 export const AGENCYCREATE = "/admin/agency/agency/create";
 export const AGENCYUPDATE = "/admin/agency/agency/update";

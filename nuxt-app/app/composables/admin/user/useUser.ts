@@ -67,21 +67,27 @@ export const useUser = (initialFilters?: UserPayloadFilter, mode: "create" | "up
     validationSchema: toTypedSchema(mode === "create" ? createSchema : updateSchema),
   });
 
-  const handleStore = handleSubmit(async (payload: TUserCreate | TUserUpdate) => {
-    isLoading.value = true;
-    try {
-      const response = await useUserService.store(payload as Partial<IUser>);
-      toast.success(response?.message || t("admin.messages.createSuccess"));
-      resetForm();
-      return navigateTo(USERINDEX);
-    } catch (error: any) {
-      console.error("Thêm mới thất bại:", error);
-      toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
-      throw error;
-    } finally {
-      isLoading.value = false;
-    }
-  });
+  const handleStore = (shouldClose = false) => {
+    const wrapped = handleSubmit(async (payload: TUserCreate | TUserUpdate) => {
+      isLoading.value = true;
+      try {
+        const response = await useUserService.store(payload as Partial<IUser>);
+        toast.success(response?.message || t("admin.messages.createSuccess"));
+        if (shouldClose) {
+          return navigateTo(USERINDEX);
+        }
+        resetForm();
+      } catch (error: any) {
+        console.error("Thêm mới thất bại:", error);
+        toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
+        throw error;
+      } finally {
+        isLoading.value = false;
+      }
+    });
+
+    return wrapped();
+  };
 
   const show = async (id: number) => {
     try {
@@ -94,20 +100,27 @@ export const useUser = (initialFilters?: UserPayloadFilter, mode: "create" | "up
     }
   };
 
-  const handleUpdate = handleSubmit(async (payload: TUserUpdate) => {
-    isLoading.value = true;
-    try {
-      const id = Number(useRoute().params.id);
-      await useUserService.update(id, payload as Partial<IUser>);
-      toast.success(t("admin.messages.updateSuccess"));
-      return navigateTo(USERINDEX);
-    } catch (error: any) {
-      console.error("Cập nhật thất bại:", error);
-      toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
-    } finally {
-      isLoading.value = false;
-    }
-  });
+  const handleUpdate = (shouldClose = false) => {
+    const wrapped = handleSubmit(async (payload: TUserUpdate) => {
+      isLoading.value = true;
+      try {
+        const id = Number(useRoute().params.id);
+        await useUserService.update(id, payload as Partial<IUser>);
+        toast.success(t("admin.messages.updateSuccess"));
+        if (shouldClose) {
+          return navigateTo(USERINDEX);
+        }
+        // keep on page
+      } catch (error: any) {
+        console.error("Cập nhật thất bại:", error);
+        toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
+      } finally {
+        isLoading.value = false;
+      }
+    });
+
+    return wrapped();
+  };
 
   const handleUpdateProfile = handleSubmit(async (payload: TUserUpdate) => {
     isLoading.value = true;
