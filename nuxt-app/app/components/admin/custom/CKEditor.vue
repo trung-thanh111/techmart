@@ -11,13 +11,14 @@ import "ckeditor5/ckeditor5.css";
 
 import { ClassicEditor, Essentials, Paragraph, Heading, Bold, Italic, Strikethrough, Link, List, Code, CodeBlock, Alignment, Image, ImageToolbar, ImageCaption, ImageStyle, ImageUpload, BlockQuote, HorizontalLine } from "ckeditor5";
 
-const props = defineProps<{ modelValue: string | null | undefined }>();
+const props = defineProps<{ modelValue: string | null | undefined; placeholder?: string | null }>();
 
 const emit = defineEmits<{ (e: "update:modelValue", value: string): void }>();
 
 const editorConfig = computed(() => ({
   licenseKey: "GPL",
   language: "en",
+  placeholder: props.placeholder ?? "",
   plugins: [Essentials, Paragraph, Heading, Bold, Italic, Strikethrough, Link, List, Code, CodeBlock, Alignment, Image, ImageToolbar, ImageCaption, ImageStyle, ImageUpload, BlockQuote, HorizontalLine],
   toolbar: ["heading", "|", "bold", "italic", "strikethrough", "link", "bulletedList", "numberedList", "|", "code", "codeBlock", "alignment", "insertImage", "blockQuote", "horizontalLine", "|", "undo", "redo"],
 }));

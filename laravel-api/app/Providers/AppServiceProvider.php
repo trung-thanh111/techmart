@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
+use App\Services\Interfaces\System\PopupServiceInterface;
+use App\Services\Impl\System\PopupService;
 use App\Services\Interfaces\System\SystemServiceInterface;
 use App\Services\Impl\System\SystemService;
 use App\Services\Interfaces\Cart\CartItemServiceInterface;
@@ -127,6 +129,7 @@ class AppServiceProvider extends ServiceProvider
         CartServiceInterface::class => CartService::class,
         CartItemServiceInterface::class => CartItemService::class,
         SystemServiceInterface::class => SystemService::class,
+        PopupServiceInterface::class => PopupService::class,
     ];
 
     /**

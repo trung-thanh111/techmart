@@ -168,6 +168,11 @@
         "titlePlaceholder": "Nhập tiêu đề",
         "content": "Nội dung",
         "contentPlaceholder": "Nhập nội dung",
+        "popupType": "Loại popup",
+        "formHtml": "Form HTML",
+        "showDelayMs": "Thời gian hiển thị (ms)",
+        "buttonText": "Nút",
+        "link": "Đường dẫn",
         "question": "Câu hỏi",
         "questionPlaceholder": "Nhập câu hỏi",
         "answer": "Câu trả lời",
@@ -300,6 +305,9 @@
       "bannerPage": "Trang",
       "bannerPosition": "Vị trí",
       "bannerCreate": "Thêm mới",
+      "popups": "Popups",
+      "popupList": "Danh sách Popups",
+      "popupCreate": "Thêm mới Popup",
       "systemList": "Danh sách cấu hình",
       "systemCreate": "Thêm mới",
       "tags": "Tag",
@@ -541,6 +549,41 @@
         "groupInfo": "Thông tin",
         "filterKeyword": "Từ khóa",
         "filterStatus": "Trạng thái"
+      },
+      "popup": {
+        "title": "Popup",
+        "breadcrumb": "Quản lý Popup",
+        "groupInfo": "Thông tin",
+        "index": {
+          "title": "Danh sách Popup",
+          "breadcrumb": "Danh sách Popup",
+          "filterKeyword": "Từ khóa",
+          "filterStatus": "Trạng thái"
+        },
+        "create": {
+          "title": "Tạo Popup",
+          "breadcrumb": "Tạo Popup",
+          "groupInfo": "Thông tin Popup"
+        },
+        "edit": {
+          "title": "Chỉnh sửa Popup",
+          "breadcrumb": "Chỉnh sửa Popup",
+          "groupInfo": "Thông tin Popup"
+        },
+        "form": {
+          "type": "Loại",
+          "link": "Đường dẫn",
+          "buttonText": "Nội dung nút",
+          "showDelay": "Thời gian hiển thị (giây)",
+          "priority": "Ưu tiên"
+        },
+        "type": {
+          "promotion": "Khuyến mãi",
+          "notification": "Thông báo",
+          "confirm": "Xác nhận",
+          "form": "Form",
+          "guide": "Hướng dẫn"
+        }
       },
       "banner": {
         "title": "banner",
