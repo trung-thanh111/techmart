@@ -120,10 +120,9 @@ export const PROFILEINDEX = "/profile";
 export const PROFILECHANGEPASSWORD = "/profile/change-password";
 export const PROFILEADDRESSORDER = "/profile/address_order";
 export const PROFILEORDERS = "/profile/orders";
-export const PROFILEWISHLISTS = "/profile/wishlists";
-export const PROFILEVOUCHERS = "/profile/vouchers";
 
 // Client routes
+export const TOVOUCHER = "/voucher";
 export const TOWISHLIST = "/wishlist";
 export const TOAGENCY = "/agency";
 export const TOFAQ = "/faq";

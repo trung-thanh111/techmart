@@ -54,52 +54,7 @@
           </div>
           <!-- Search -->
           <div class="flex-1 max-w-xl relative">
-            <form id="searchHome" class="flex rounded overflow-hidden bg-white shadow-sm">
-              <input type="text" name="keyword" :placeholder="$t('client.header.search')" class="searchInput flex-1 px-4 py-2 text-gray-600 focus:outline-none" />
-              <button type="submit" class="bg-[#00b88c] px-3 hover:bg-[#00b88d] transition-colors text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="w-5 h-5">
-                  <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
-                </svg>
-              </button>
-            </form>
-            <div class="boxSuggestion absolute w-full bg-white shadow-lg mt-1 rounded z-40 hidden">
-              <div class="px-4 py-2">
-                <p class="text-sm font-semibold text-gray-500 mb-2">{{ $t("client.header.recentSearches") }}</p>
-                <div class="space-y-1">
-                  <div class="flex items-center justify-between group p-2 rounded hover:bg-gray-100 cursor-pointer">
-                    <div class="flex items-center gap-2 w-full text-gray-400">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="w-7 h-7">
-                        <path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9L0 168c0 13.3 10.7 24 24 24l110.1 0c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24l0 104c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65 0-94.1c0-13.3-10.7-24-24-24z" />
-                      </svg>
-                      <img :src="codImage" loading="lazy" alt="" class="w-10 h-8 object-cover rounded" />
-                      <p class="name-search-keyword text-gray-700 text-sm font-normal truncate">Áo thun nam Áo thun namÁo thun namÁo thun namÁo thun namÁo thun namÁo thun namÁo thun namÁo thun namÁo thun namÁo thun nam</p>
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-8 h-8 text-gray-400 hover:text-red-500 cursor-pointer">
-                        <line x1="18" y1="6" x2="6" y2="18" />
-                        <line x1="6" y1="6" x2="18" y2="18" />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="w-full max-w-7xl mx-auto">
-                <div class="h-px w-full bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
-              </div>
-              <div class="px-4 py-2">
-                <p class="text-sm font-semibold text-gray-500 mb-2">{{ $t("client.header.featuredProducts") }}</p>
-                <div class="space-y-1">
-                  <div class="flex items-center justify-between group p-2 rounded hover:bg-gray-100 cursor-pointer">
-                    <div class="flex items-center gap-2 w-full text-gray-400">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-8 h-8 text-gray-400"><polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2" /></svg>
-                      <img :src="codImage" loading="lazy" alt="" class="w-10 h-8 object-cover rounded" />
-                      <p class="text-gray-700 text-sm font-normal truncate">Áo thun nam Áo thun namÁo thun namÁo thun namÁo thun namÁo thun namÁo thun namÁo thun namÁo thun namÁo thun nam</p>
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="w-7 h-7">
-                        <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <SearchSuggestion />
           </div>
           <div class="items-center gap-4 hidden sm:flex text-white">
             <NuxtLink to="#" class="flex items-center gap-1 hover:text-gray-300 transition-colors">
@@ -687,6 +642,7 @@ import { useCart } from "~/composables/client/cart/useCart";
 import { formatPrice, resolveAlbum } from "~/utils/helpers";
 import { IMAGEDEFAULT } from "~/utils/constants";
 import type { ICartItem } from "~/interfaces/cart/cartItem.interface";
+import SearchSuggestion from "../features/SearchSuggestion.vue";
 
 const authStore = useAuthStore();
 const { user } = storeToRefs(authStore);
@@ -701,10 +657,6 @@ const { handleLogout } = useAuth();
 const { count: cartCount, items: cartItems } = useCart();
 
 const getCartItemImage = (item: ICartItem): string => {
-  if (item.variant?.products?.album) {
-    const images = resolveAlbum(item.variant.products.album);
-    return images[0] || IMAGEDEFAULT;
-  }
   if (item.product?.album) {
     const images = resolveAlbum(item.product.album);
     return images[0] || IMAGEDEFAULT;
@@ -723,25 +675,27 @@ const getCartItemName = (item: ICartItem): string => {
 
 // category
 const isMobileMenuOpen = ref(false);
-const subMenuOpen = ref(null);
-const productMenuOpen = ref(null);
+const subMenuOpen = ref<string | null>(null);
+const productMenuOpen = ref<string | null>(null);
 
 const subMenuTitle = computed(() => {
-  const titles = {
+  const titles: Record<string, string> = {
     categories: "Danh mục",
     smartphone: "Điện thoại",
     laptop: "Laptop",
     blog: "Blogs",
   };
-  return titles[subMenuOpen.value] || "";
+  const key = subMenuOpen.value ?? "";
+  return titles[key] || "";
 });
 
 const productMenuTitle = computed(() => {
-  const titles = {
+  const titles: Record<string, string> = {
     phones: "Điện thoại",
     laptops: "Laptop",
   };
-  return titles[productMenuOpen.value] || "";
+  const key = productMenuOpen.value ?? "";
+  return titles[key] || "";
 });
 
 const toggleMobileMenu = () => {
@@ -760,7 +714,7 @@ const closeMobileMenu = () => {
   document.body.style.overflow = "";
 };
 
-const openSubMenu = (menu) => {
+const openSubMenu = (menu: string) => {
   subMenuOpen.value = menu;
   productMenuOpen.value = null;
 };
@@ -770,7 +724,7 @@ const closeSubMenu = () => {
   productMenuOpen.value = null;
 };
 
-const openProductMenu = (product) => {
+const openProductMenu = (product: string) => {
   productMenuOpen.value = product;
 };
 
