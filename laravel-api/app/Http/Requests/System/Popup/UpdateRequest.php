@@ -34,9 +34,11 @@ class UpdateRequest extends BaseRequest
     {
         $method = $this->getMethod();
         $sometime = ($method === 'PATCH') ? 'sometimes' : '';
+        $mimes = implode(',', config('upload.image.allowed_type'));
+        $max_size = config('upload.image.max_size');
         return [
-            "title" => "required|string|max:255|{$sometime}",
-            "type" => "{$sometime}required|string|in:promotion,notification,confirm,form,guide",
+            "title" => "{$sometime}|required|string|max:255",
+            "type" => "{$sometime}|required|string|in:promotion,notification,confirm,form,guide",
             "slug" => [
                 "{$sometime}",
                 "required",
@@ -44,20 +46,14 @@ class UpdateRequest extends BaseRequest
                 "max:255",
                 Rule::unique('popups', 'slug')->ignore($this->route('popup')),
             ],
-            "content" => "nullable|string|{$sometime}",
-            "image" => "nullable|string|max:255|{$sometime}",
-            "link" => "nullable|url|max:255|{$sometime}",
-            "button_text" => "nullable|string|max:255|{$sometime}",
-            "form_html" => "nullable|string|{$sometime}",
-            "show_delay" => "nullable|integer|min:0|{$sometime}",
-            "priority" => "nullable|boolean|{$sometime}",
-            "publish" => "required|integer|in:0,1,2|{$sometime}",
-
-            "image" => "{$sometime}required_if:type,promotion|nullable|string|max:255",
-            "link" => "{$sometime}required_if:type,promotion|nullable|url|max:255",
-            "button_text" => "{$sometime}required_if:type,promotion,confirm|nullable|string|max:255",
-            "form_html" => "{$sometime}required_if:type,form|nullable|string",
-            "content" => "{$sometime}required_if:type,notification,confirm,guide|nullable|string",
+            "content" => "{$sometime}|nullable|string",
+            "image" => "{$sometime}|nullable|mimes:{$mimes}|max:{$max_size}",
+            "link" => "{$sometime}|nullable|url|max:255",
+            "button_text" => "{$sometime}|nullable|string|max:255",
+            "form_html" => "{$sometime}|nullable|string",
+            "show_delay" => "{$sometime}|nullable|integer|min:0",
+            "priority" => "{$sometime}|nullable|boolean",
+            "publish" => "{$sometime}|required|integer|in:0,1,2",
         ];
     }
 

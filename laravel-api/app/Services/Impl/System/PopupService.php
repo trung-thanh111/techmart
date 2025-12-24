@@ -7,12 +7,14 @@ use App\Services\Impl\BaseService;
 use Illuminate\Database\Eloquent\Model;
 use App\Repositories\System\PopupRepository;
 use App\Http\Resources\System\PopupResource;
+use App\Services\Impl\ImageService;
 use App\Services\Interfaces\System\PopupServiceInterface;
 use Illuminate\Support\Facades\DB;
 
 class PopupService extends BaseService implements PopupServiceInterface
 {
 
+    private const PIPELINE = 'default';
     protected $repository;
 
     protected $complexFilter = ['id'];
@@ -24,12 +26,15 @@ class PopupService extends BaseService implements PopupServiceInterface
     protected $cacheKeyPrefix = 'popups';
     protected $cacheTags = ['popups:collection'];
 
-    protected $useUpload = false;
+    protected $useUpload = true;
+    protected $imageService;
 
     public function __construct(
-        PopupRepository $repository
+        PopupRepository $repository,
+        ImageService $imageService
     ) {
         $this->repository = $repository;
+        $this->imageService = $imageService;
     }
 
     protected function getRepository()
@@ -44,7 +49,8 @@ class PopupService extends BaseService implements PopupServiceInterface
     protected function prepareModelData(Request $request): self
     {
 
-        return $this->initializeBasicModelData($request);
+        return $this->initializeBasicModelData($request)
+            ->uploadImage($request, 'image', self::PIPELINE, 'image');
     }
 
     protected function initializeBasicModelData(Request $request): self

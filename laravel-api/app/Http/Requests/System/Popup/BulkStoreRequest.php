@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Requests\System\Popup;
 
 use Illuminate\Support\Str;
@@ -22,7 +23,7 @@ class BulkStoreRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            "data.*.name" => "required|string|max:255",
+            "data.*.title" => "required|string|max:255",
             "data.*.publish" => "required|integer|in:0,1,2",
         ];
     }
@@ -32,7 +33,7 @@ class BulkStoreRequest extends BaseRequest
         $data = collect($this->input('data', []))->map(function ($item) {
             unset($item['id']);
             return array_merge($item, [
-                'slug' => $item['slug'] ?? Str::slug($item['name'] ?? ''),
+                'slug' => $item['slug'] ?? generate_slug($item['title'] ?? ''),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
