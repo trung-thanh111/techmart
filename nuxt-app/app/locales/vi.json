@@ -818,6 +818,9 @@
     }
   },
   "client": {
+    "search": {
+      "breadcrumb": "Kết quả tìm kiếm"
+    },
     "common": {
       "filter": {
         "title": "Sắp xếp",

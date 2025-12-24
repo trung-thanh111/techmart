@@ -1,7 +1,7 @@
 <template>
   <Dialog v-model:visible="visible" modal :header="headerText" :style="{ width: dialogWidth }" :breakpoints="{ '1199px': '75vw', '575px': '95vw' }" append-to="body" @hide="onHide">
     <div v-if="currentPopup" class="space-y-4">
-      <NuxtLink :to="currentPopup.link" v-if="hasImage(currentPopup)" class="w-full flex items-center justify-center">
+      <NuxtLink :to="currentPopup.link as any" v-if="hasImage(currentPopup)" class="w-full flex items-center justify-center">
         <NuxtImg :src="getImageUrl(currentPopup)" :alt="headerText" class="max-h-[60vh] w-full object-contain rounded" loading="lazy" />
       </NuxtLink>
       <div class="px-2">

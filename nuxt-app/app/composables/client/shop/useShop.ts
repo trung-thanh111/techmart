@@ -66,6 +66,7 @@ export const useShop = () => {
         page,
         perpage: perPage,
         sort: filters.value.sort || "created_at,desc",
+        ...(filters.value.keyword ? { keyword: filters.value.keyword } : {}),
       };
 
       if (filters.value.product_variants?.variant_attributes?.["attributes.id"]?.in) {
