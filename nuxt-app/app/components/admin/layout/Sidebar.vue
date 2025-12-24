@@ -242,20 +242,14 @@
             <span class="text-light">{{ $t("admin.sidebar.configuration") }}</span>
           </li>
           <li class="nav-item">
-            <NuxtLink class="nav-link menu-link" to="#sidebarConfiguration" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarConfiguration">
+            <NuxtLink :to="SYSTEMINDEX" class="nav-link menu-link">
               <i class="ri-settings-3-line"></i>
-              <span data-key="t-configuration">{{ $t("admin.sidebar.configuration") }}</span>
+              <span data-key="t-configuration">{{ $t("admin.sidebar.systemList") }}</span>
             </NuxtLink>
-            <div class="collapse menu-dropdown" id="sidebarConfiguration">
-              <ul class="nav nav-sm flex-column">
-                <li class="nav-item">
-                  <NuxtLink :to="SYSTEMINDEX" class="nav-link" data-key="t-system-list">{{ $t("admin.sidebar.systemList") }}</NuxtLink>
-                </li>
-                <li class="nav-item">
-                  <NuxtLink :to="SYSTEMCREATE" class="nav-link" data-key="t-system-create">{{ $t("admin.sidebar.systemCreate") }}</NuxtLink>
-                </li>
-              </ul>
-            </div>
+            <NuxtLink :to="POPUPINDEX" class="nav-link menu-link">
+              <i class="ri-notification-line"></i>
+              <span data-key="t-popup-list">{{ $t("admin.sidebar.popupList") }}</span>
+            </NuxtLink>
           </li>
         </ul>
       </div>
@@ -266,7 +260,7 @@
   <div class="vertical-overlay"></div>
 </template>
 <script setup lang="ts">
-import { TODASHBOARD, PRODUCTCATALOGUEINDEX, PRODUCTINDEX, PRODUCTCREATE, ATTRIBUTECATALOGUEINDEX, ATTRIBUTEINDEX, BRANDINDEX, PRODUCTTAGINDEX, PROMOTIONCATALOGUEINDEX, USERINDEX, USERCREATE, USERCATALOGUEINDEX, ADDRESSORDERINDEX, POSTINDEX, POSTCREATE, POSTCATALOGUEINDEX, POSTTAGINDEX, FAQINDEX, FAQCREATE, FAQCATALOGUEINDEX, AGENCYINDEX, AGENCYCREATE, AGENCYWORKINGHOURINDEX, BANNERINDEX, BANNERCREATE, BANNERPAGEINDEX, BANNERPOSITIONINDEX, SYSTEMINDEX } from "~/utils/constants";
+import { TODASHBOARD, PRODUCTCATALOGUEINDEX, PRODUCTINDEX, PRODUCTCREATE, ATTRIBUTECATALOGUEINDEX, ATTRIBUTEINDEX, BRANDINDEX, PRODUCTTAGINDEX, PROMOTIONCATALOGUEINDEX, USERINDEX, USERCREATE, USERCATALOGUEINDEX, ADDRESSORDERINDEX, POSTINDEX, POSTCREATE, POSTCATALOGUEINDEX, POSTTAGINDEX, FAQINDEX, FAQCREATE, FAQCATALOGUEINDEX, AGENCYINDEX, AGENCYCREATE, AGENCYWORKINGHOURINDEX, BANNERINDEX, BANNERCREATE, BANNERPAGEINDEX, BANNERPOSITIONINDEX, SYSTEMINDEX, POPUPINDEX } from "~/utils/constants";
 </script>
 <style scoped>
 .collapse {
