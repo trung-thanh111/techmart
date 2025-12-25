@@ -1,0 +1,45 @@
+{
+  "name": "Miễn Phí Vận Chuyển",
+  "code": "FREESHIP",
+  "slug": "mien-phi-van-chuyen",
+  "description": "Miễn phí ship cho đơn hàng từ 300k",
+  "type": "free_ship",
+  "priority": 20,
+  "promotion_catalogue_id": 3,
+  "can_combine": true,
+  "combinable_with": null,
+  "usage_limit": null,
+  "usage_per_customer": null,
+  "start_date": "2025-01-01 00:00:00",
+  "end_date": null,
+  "publish": 2,
+  "rules": [
+    {
+      "rule_group": 1,
+      "logic_operator": "AND",
+      "rule_type": "min_order_total",
+      "operator": ">=",
+      "value": "300000",
+      "description": "Đơn tối thiểu 300k"
+    }
+  ],
+  "actions": [
+    {
+      "execution_order": 1,
+      "action_type": "free_shipping",
+      "action_value": null,
+      "max_discount": 50000,
+      "min_discount": null,
+      "apply_to": "shipping_fee",
+      "config": null
+    }
+  ],
+  "targets": [
+    {
+      "target_type": "order",
+      "target_id": null,
+      "is_included": true,
+      "metadata": null
+    }
+  ]
+}

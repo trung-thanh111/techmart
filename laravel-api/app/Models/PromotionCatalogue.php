@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -31,8 +32,19 @@ class PromotionCatalogue extends Model
      */
     public $relationable = [];
 
-    public function users(): BelongsTo {
+    public function users(): BelongsTo
+    {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
+    /**
+     * Scope: chỉ lấy những catalogue được publish.
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopePublished($query)
+    {
+        return $query->where('publish', 2);
+    }
 }

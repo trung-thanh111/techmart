@@ -275,6 +275,7 @@
       "viewAll": "Xem tất cả"
     },
     "sidebar": {
+      "permission": "Phân quyền",
       "statistics": "Thống kê",
       "dashboard": "Bảng điều khiển",
       "management": "Quản lý",

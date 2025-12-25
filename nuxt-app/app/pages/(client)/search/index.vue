@@ -1,8 +1,6 @@
 <template>
   <div class="main-content max-w-7xl mx-auto">
-    <!-- Breadcrumb  -->
     <Breadcrumb :crumbs="breadcrumbs" />
-    <!-- Search Header -->
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 mb-8">
       <div class="h-1 relative">
         <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-300 via-green-300 to-[rgba(43,57,144,0.91)]"></div>
@@ -38,13 +36,12 @@
       </div>
     </div>
 
-    <!-- Products Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 px-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 px-4 mb-5">
       <ProductCard v-for="product in products" :key="product.id" :product="product" />
     </div>
 
     <div v-if="!products || products.length === 0" class="flex flex-col items-center justify-center py-16">
-      <!-- <img src="/public/images/empty_state.png" alt="Không tìm thấy" loading="lazy" class="w-64 h-64 mb-6 object-cover" /> -->
+      <NuxtImg :src="EMPTYBOX" alt="Không tìm thấy" loading="lazy" class="w-64 h-64 mb-6 object-cover" />
       <h3 class="text-xl uppercase font-bold text-gray-700 mb-1">Không tìm thấy sản phẩm nào</h3>
       <p class="text-gray-500 text-sm mb-4">Hãy thử từ khoá khác hoặc kiểm tra lại bộ lọc tìm kiếm của bạn.</p>
     </div>
@@ -53,11 +50,12 @@
 
 <script setup lang="ts">
 import { onMounted, ref, watch, computed } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import Breadcrumb from "~/components/shared/navigation/Breadcrumb.vue";
 import ProductCard from "~/components/client/features/ProductCard.vue";
 import FilterSort from "~/components/client/features/FilterSort.vue";
 import { useShop } from "~/composables/client/shop/useShop";
+import { EMPTYBOX } from "~/utils/constants";
 
 const route = useRoute();
 const queryKeyword = ref((route.query.keyword as string) || "");

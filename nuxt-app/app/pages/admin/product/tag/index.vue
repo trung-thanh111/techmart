@@ -80,7 +80,7 @@ definePageMeta({
           </thead>
           <tbody>
             <tr v-if="isLoading">
-              <td colspan="4" class="text-center text-muted">{{ $t("admin.common.loading") }}</td>
+              <td colspan="5" class="text-center text-muted">{{ $t("admin.common.loading") }}</td>
             </tr>
             <template v-else>
               <tr v-for="item in data?.data?.data ?? []" :key="item.id" class="cursor-pointer" :class="{ 'table-active': selectedIds.includes(item.id) }">
@@ -123,7 +123,7 @@ definePageMeta({
                 </td>
               </tr>
               <tr v-if="(data?.data?.data?.length ?? 0) === 0">
-                <td colspan="4" class="text-center text-muted">{{ $t("admin.common.noData") }}</td>
+                <td colspan="5" class="text-center text-muted">{{ $t("admin.common.noData") }}</td>
               </tr>
             </template>
           </tbody>

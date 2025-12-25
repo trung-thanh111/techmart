@@ -7,6 +7,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -94,6 +95,29 @@ class User extends Authenticatable implements JWTSubject
     public function user_catalogues(): BelongsToMany
     {
         return $this->belongsToMany(UserCatalogue::class, 'user_catalogue_user');
+    }
+
+    public function user_catalogue(): BelongsTo
+    {
+        return $this->belongsTo(UserCatalogue::class, 'user_catalogue_id', 'id');
+    }
+
+    /**
+     * Accessor: kiểm tra user có phải admin không
+     */
+    public function getIsAdminAttribute(): bool
+    {
+        return $this->user_catalogue?->is_admin ?? false;
+    }
+
+    /**
+     * Scope: lấy các user admin
+     */
+    public function scopeAdmin($query)
+    {
+        return $query->whereHas('user_catalogue', function ($q) {
+            $q->where('is_admin', true);
+        });
     }
 
     public function address_orders(): HasMany

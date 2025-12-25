@@ -27,6 +27,7 @@ class UserResource extends JsonResource
             'phone' => $this->phone,
             'address' => $this->address,
             'userCatalogueId' => (int) $this->user_catalogue_id,
+            'isAdmin' => $this->is_admin,
             'image' => [
                 'path' => $this->image ?? null,
                 'url' => asset("/storage/{$this->image}") ?? null,

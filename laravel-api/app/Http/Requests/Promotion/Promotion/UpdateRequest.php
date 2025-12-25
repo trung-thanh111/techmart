@@ -2,9 +2,8 @@
 
 namespace App\Http\Requests\Promotion\Promotion;
 
-use App\Enums\Common;
+use App\Enums\Promotion;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 use App\Http\Requests\BaseRequest;
 
 class UpdateRequest extends BaseRequest
@@ -26,38 +25,32 @@ class UpdateRequest extends BaseRequest
     {
         $method = $this->getMethod();
         $sometime = ($method === 'PATCH') ? 'sometimes' : '';
-        $promotionId = $this->route('promotion');
-
+        $id = $this->route('promotion') ?? null;
         return [
-            "name" => "{$sometime}|required|string|max:255",
-            "couponCode" => [
-                "{$sometime}",
-                "nullable",
-                "string",
-                "max:100",
-                Rule::unique('promotions', 'coupon_code')->ignore($promotionId),
-            ],
-            "description" => "{$sometime}|nullable|string",
-            "promotionCatalogueId" => "{$sometime}|nullable|integer|exists:promotion_catalogues,id",
-            "discountValue" => "{$sometime}|required|numeric|min:0",
-            "discountType" => "{$sometime}|required|string|in:percent,amount",
-            "maxDiscountValue" => "{$sometime}|nullable|numeric|min:0",
-            "startDate" => "{$sometime}|nullable|date",
-            "endDate" => "{$sometime}|nullable|date|after_or_equal:startDate",
-            "priority" => "{$sometime}|nullable|integer|min:0",
-            "canCombine" => "{$sometime}|nullable|boolean",
-            "publish" => "{$sometime}|required|integer|in:0,1,2",
-            "promotionTargets" => "{$sometime}|nullable|array",
-            "promotionTargets.*.productId" => "nullable|integer|exists:products,id|required_without_all:promotionTargets.*.productVariantId,promotionTargets.*.productCatalogueId",
-            "promotionTargets.*.productVariantId" => "nullable|integer|exists:product_variants,id|required_without_all:promotionTargets.*.productId,promotionTargets.*.productCatalogueId",
-            "promotionTargets.*.productCatalogueId" => "nullable|integer|exists:product_catalogues,id|required_without_all:promotionTargets.*.productId,promotionTargets.*.productVariantId",
-            "promotionTargets.*.isGift" => "nullable|boolean",
-            "promotionTargets.*.minQuantity" => "nullable|integer|min:1",
-            "promotionTargets.*.maxQuantity" => "nullable|integer|min:1|gt:promotionTargets.*.minQuantity",
+            'name' => "{$sometime}|required|string|max:255",
+            'code' => ["{$sometime}", 'nullable', 'string', 'max:100', \Illuminate\Validation\Rule::unique('promotions', 'code')->ignore($this->route('promotion'))],
+            'slug' => ["{$sometime}", 'required', 'string', 'max:255', \Illuminate\Validation\Rule::unique('promotions', 'slug')->ignore($this->route('promotion'))],
+            'description' => "{$sometime}|nullable|string",
+            'type' => "{$sometime}|required|string|in:" . implode(',', Promotion::AVAILABLE_TYPES),
+            'priority' => "{$sometime}|nullable|integer|min:0",
+            'promotion_catalogue_id' => "{$sometime}|nullable|integer|exists:promotion_catalogues,id",
+            'can_combine' => "{$sometime}|nullable|boolean",
+            'combinable_with' => "{$sometime}|nullable|array",
+            'combinable_with.*' => "{$sometime}|integer|exists:promotions,id",
+            'usage_limit' => "{$sometime}|nullable|integer|min:1",
+            'usage_per_customer' => "{$sometime}|nullable|integer|min:1",
+            'start_date' => "{$sometime}|nullable|date|before:end_date",
+            'end_date' => "{$sometime}|nullable|date|after:start_date",
+            'publish' => "{$sometime}|required|integer|in:" . implode(',', Promotion::AVAILABLE_PUBLISH_STATUS),
         ];
     }
 
-    public function prepareForValidation() {}
+    public function prepareForValidation()
+    {
+        $this->merge([
+            ...($this->has('name') && !$this->has('slug') ? ['slug' => Str::slug($this->name)] : [])
+        ]);
+    }
 
     public function messages()
     {

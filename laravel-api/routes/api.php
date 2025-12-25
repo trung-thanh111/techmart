@@ -367,17 +367,6 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
         });
         Route::resource('post_comment_likes', PostCommentLikeController::class)->except($routeExcept);
 
-        // This is route Promotion
-        Route::group(['prefix' => 'promotions'], function () {
-            Route::post('bulkStore', [PromotionController::class, 'bulkStore']);
-            Route::put('bulkUpdate', [PromotionController::class, 'bulkUpdate']);
-            Route::patch('bulkUpdate', [PromotionController::class, 'bulkUpdate']);
-            Route::delete('bulkDelete', [PromotionController::class, 'bulkDelete']);
-            Route::post('{id}/attach', [PromotionController::class, 'attach']);
-            Route::delete('{id}/detach', [PromotionController::class, 'detach']);
-        });
-        Route::resource('promotions', PromotionController::class)->except($routeExcept);
-
         // This is route BannerPage
         Route::group(['prefix' => 'banner_pages'], function () {
             Route::post('bulkStore', [BannerPageController::class, 'bulkStore']);
@@ -422,19 +411,8 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
         });
         Route::resource('wishlists', WishlistController::class)->except($routeExcept);
 
-        // This is route Promotion
-        Route::group(['prefix' => 'promotions'], function() {
-            Route::post('bulkStore', [PromotionController::class, 'bulkStore']);
-            Route::put('bulkUpdate', [PromotionController::class, 'bulkUpdate']);
-            Route::patch('bulkUpdate', [PromotionController::class, 'bulkUpdate']);
-            Route::delete('bulkDelete', [PromotionController::class, 'bulkDelete']);
-            Route::post('{id}/attach', [PromotionController::class, 'attach']);
-            Route::delete('{id}/detach', [PromotionController::class, 'detach']);
-        });
-        Route::resource('promotions', PromotionController::class)->except($routeExcept);
-
         // This is route System
-        Route::group(['prefix' => 'systems'], function() {
+        Route::group(['prefix' => 'systems'], function () {
             Route::post('bulkStore', [SystemController::class, 'bulkStore']);
             Route::put('bulkUpdate', [SystemController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [SystemController::class, 'bulkUpdate']);
@@ -445,7 +423,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
         Route::resource('systems', SystemController::class)->except($routeExcept);
 
         // This is route Popup
-        Route::group(['prefix' => 'popups'], function() {
+        Route::group(['prefix' => 'popups'], function () {
             Route::post('bulkStore', [PopupController::class, 'bulkStore']);
             Route::put('bulkUpdate', [PopupController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [PopupController::class, 'bulkUpdate']);
@@ -454,6 +432,17 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
             Route::delete('{id}/detach', [PopupController::class, 'detach']);
         });
         Route::resource('popups', PopupController::class)->except($routeExcept);
+
+        // This is route Promotion
+        Route::group(['prefix' => 'promotions'], function() {
+            Route::post('bulkStore', [PromotionController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [PromotionController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [PromotionController::class, 'bulkUpdate']);
+            Route::delete('bulkDelete', [PromotionController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [PromotionController::class, 'attach']);
+            Route::delete('{id}/detach', [PromotionController::class, 'detach']);
+        });
+        Route::resource('promotions', PromotionController::class)->except($routeExcept);
 
         // generate route
 

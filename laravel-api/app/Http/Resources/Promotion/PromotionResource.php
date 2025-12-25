@@ -2,9 +2,6 @@
 
 namespace App\Http\Resources\Promotion;
 
-use App\Http\Resources\Product\ProductResource;
-use App\Http\Resources\Product\ProductVariantResource;
-use App\Http\Resources\Product\ProductCatalogueResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -17,23 +14,88 @@ class PromotionResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        if ($request->boolean('simple', false)) {
+            return [
+                'id' => $this->id,
+                'code' => $this->code,
+                'name' => $this->name,
+                'slug' => $this->slug,
+                'type' => $this->type,
+                'priority' => $this->priority,
+                'publish' => (int) $this->publish,
+                'canCombine' => (bool) $this->can_combine,
+                'combinableWith' => $this->combinable_with,
+                'usageLimit' => (int) $this->usage_limit,
+                'usagePerCustomer' => (int) $this->usage_per_customer,
+                'usedCount' => (int) $this->used_count,
+                'startDate' => $this->start_date,
+                'endDate' => $this->end_date,
+                'createdAt' => $this->created_at ?? null,
+                'updatedAt' => $this->updated_at ?? null,
+            ];
+        }
         return [
             'id' => $this->id,
+            'code' => $this->code,
             'name' => $this->name,
-            'couponCode' => $this->coupon_code,
+            'slug' => $this->slug,
             'description' => $this->description,
-            'promotionCatalogueId' => (int) $this->promotion_catalogue_id,
-            'discountValue' => (float) $this->discount_value,
-            'discountType' => $this->discount_type,
-            'maxDiscountValue' => $this->max_discount_value ? (float) $this->max_discount_value : null,
-            'startDate' => $this->start_date ? $this->start_date->format('Y-m-d H:i:s') : null,
-            'endDate' => $this->end_date ? $this->end_date->format('Y-m-d H:i:s') : null,
-            'priority' => (int) $this->priority,
-            'canCombine' => (bool) $this->can_combine,
-            'usedCount' => (int) $this->used_count,
-            'publish' => (int) $this->publish,
-            'promotionTargets' => PromotionTargetResource::collection($this->whenLoaded('promotion_targets')),
-            'promotionCatalogue' => new PromotionCatalogueResource($this->whenLoaded('promotion_catalogues')),
+            'type' => $this->type,
+            'priority' => $this->priority,
+            'promotionCatalogue' => $this->whenLoaded('promotion_catalogue', function () {
+                return $this->promotion_catalogue;
+            }),
+            'canCombine' => (bool)$this->can_combine,
+            'combinableWith' => $this->combinable_with,
+            'usageLimit' => $this->usage_limit,
+            'usagePerCustomer' => $this->usage_per_customer,
+            'usedCount' => $this->used_count,
+            'startDate' => $this->start_date,
+            'endDate' => $this->end_date,
+            'publish' => (int)$this->publish,
+            'isActive' => (bool)($this->is_active ?? false),
+            'remainingUsage' => $this->remaining_usage ?? null,
+            'rules' => $this->whenLoaded('promotion_rules', function () {
+                return $this->promotion_rules->map(function ($r) {
+                    return [
+                        'id' => $r->id,
+                        'ruleGroup' => $r->rule_group,
+                        'logicOperator' => $r->logic_operator,
+                        'ruleType' => $r->rule_type,
+                        'operator' => $r->operator,
+                        'value' => $r->value,
+                        'parsedValue' => $r->parsed_value,
+                        'description' => $r->description,
+                    ];
+                });
+            }),
+            'actions' => $this->whenLoaded('promotion_actions', function () {
+                return $this->promotion_actions->map(function ($a) {
+                    return [
+                        'id' => $a->id,
+                        'executionOrder' => $a->execution_order,
+                        'actionType' => $a->action_type,
+                        'actionValue' => $a->action_value,
+                        'maxDiscount' => $a->max_discount,
+                        'minDiscount' => $a->min_discount,
+                        'applyTo' => $a->apply_to,
+                        'config' => $a->config,
+                    ];
+                });
+            }),
+            'targets' => $this->whenLoaded('promotion_targets', function () {
+                return $this->promotion_targets->map(function ($t) {
+                    return [
+                        'id' => $t->id,
+                        'targetType' => $t->target_type,
+                        'targetId' => $t->target_id,
+                        'isIncluded' => (bool)$t->is_included,
+                        'metadata' => $t->metadata,
+                    ];
+                });
+            }),
+            'createdAt' => $this->created_at,
+            'updatedAt' => $this->updated_at,
         ];
     }
 }

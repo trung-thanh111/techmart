@@ -17,7 +17,12 @@ class UserCatalogue extends Model
         'name',
         'slug',
         'description',
-        'publish'
+        'publish',
+        'is_admin'
+    ];
+
+    protected $casts = [
+        'is_admin' => 'boolean',
     ];
 
     /**
@@ -30,11 +35,37 @@ class UserCatalogue extends Model
         'permissions'
     ];
 
-    public function users():BelongsToMany {
+    public function users(): BelongsToMany
+    {
         return $this->belongsToMany(User::class, 'user_catalogue_user');
     }
 
-    public function permissions():BelongsToMany {
+    public function permissions(): BelongsToMany
+    {
         return $this->belongsToMany(Permission::class, 'user_catalogue_permission');
+    }
+
+    /**
+     * Scope: lấy các nhóm admin
+     */
+    public function scopeAdmin($query)
+    {
+        return $query->where('is_admin', true);
+    }
+
+    /**
+     * Scope: lấy nhóm admin đầu tiên
+     */
+    public static function getAdminCatalogue()
+    {
+        return static::admin()->first();
+    }
+
+    /**
+     * Helper: kiểm tra catalogue có phải admin không
+     */
+    public function isAdmin(): bool
+    {
+        return $this->is_admin;
     }
 }
