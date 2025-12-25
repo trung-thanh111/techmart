@@ -13,6 +13,7 @@ export interface IUser {
   phone: string | null;
   address: string | null;
   userCatalogueId: number;
+  isAdmin: boolean;
   image: { path: string | null; url: string | null };
   addressOrder: any[];
   userCatalogue: any[];

@@ -38,6 +38,9 @@ class GeneratePermissionsForModules extends Command
         'posts',
         'post_catalogues',
         'post_tags',
+        'post_comments',
+        'post_likes',
+        'post_comment_likes',
         'banners',
         'banner_pages',
         'banner_positions',
@@ -49,6 +52,12 @@ class GeneratePermissionsForModules extends Command
         'agency_working_hours',
         'inventories',
         'address_orders',
+        'images',
+        'systems',
+        'popups',
+        'carts',
+        'cart_items',
+        'wishlists',
     ];
 
     /**

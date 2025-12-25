@@ -14,22 +14,24 @@ return new class extends Migration
     {
         Schema::create('promotion_targets', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('promotion_id')->constrained()->onDelete('cascade');
-            $table->foreignId('product_id')->nullable()->constrained()->onDelete('cascade');
-            $table->foreignId('product_variant_id')->nullable()->constrained()->onDelete('cascade');
-            $table->foreignId('product_catalogue_id')->nullable()->constrained()->onDelete('cascade');
-            $table->boolean('is_gift')->default(false);
-            $table->integer('min_quantity')->default(1);
-            $table->integer('max_quantity')->nullable();
-            $table->timestamps();
-            $table->softDeletes();
-        });
+            $table->foreignId('promotion_id')->constrained('promotions')->cascadeOnDelete();
 
-        DB::statement('ALTER TABLE promotion_targets ADD CONSTRAINT chk_target check (
-            (product_id IS NOT NULL AND product_variant_id IS NULL AND product_catalogue_id IS NULL) OR
-            (product_id IS NULL AND product_variant_id IS NOT NULL AND product_catalogue_id IS NULL) OR
-            (product_id IS NULL AND product_variant_id IS NULL AND product_catalogue_id IS NOT NULL)
-        )');
+            // Target definition
+            $table->string('target_type', 100); // order, product, category, brand, customer_group, location
+            $table->unsignedBigInteger('target_id')->nullable();
+
+            // Include/Exclude logic
+            $table->boolean('is_included')->default(true); // true=áp dụng, false=loại trừ
+
+            // Metadata
+            $table->json('metadata')->nullable(); // Lưu thêm thông tin như tên, slug
+
+            $table->timestamps();
+
+            // Indexes quan trọng
+            $table->index(['promotion_id', 'target_type', 'is_included']);
+            $table->index(['target_type', 'target_id']);
+        });
     }
 
     /**

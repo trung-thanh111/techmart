@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import piniaPersistedstate from "pinia-plugin-persistedstate";
 import type { IAuthState, IUser, IJWTTokens } from "~/interfaces/user/user.interface";
 
-const isAdminFromUser = (u: IUser | null) => (u ? u.userCatalogueId === 2 : false);
+const isAdminFromUser = (u: IUser | null) => (u ? u.isAdmin : false);
 
 export const useAuthStore = defineStore("auth", {
   state: (): IAuthState => ({

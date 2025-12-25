@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 use App\Repositories\Promotion\PromotionRepository;
 use App\Http\Resources\Promotion\PromotionResource;
 use App\Services\Interfaces\Promotion\PromotionServiceInterface;
-use App\Models\PromotionTarget;
+use App\Http\Resources\Promotion\PromotionDetailResource;
+use App\Models\Promotion;
 
 class PromotionService extends BaseService implements PromotionServiceInterface
 {
@@ -17,23 +18,23 @@ class PromotionService extends BaseService implements PromotionServiceInterface
 
     protected $complexFilter = ['id'];
 
-    protected $with = ['promotion_targets', 'promotion_catalogues'];
-    protected $relationFilter = [];
+    protected $relationFilter = [
+        'promotion_catalogue',
+        'promotion_rules',
+        'promotion_actions',
+        'promotion_targets',
+    ];
+    protected $with = ['promotion_catalogue', 'promotion_rules', 'promotion_actions', 'promotion_targets'];
 
     protected $cacheKeyPrefix = 'promotions';
     protected $cacheTags = ['promotions:collection'];
 
-    protected $useUpload = false;
+    protected $useUpload = true;
 
     public function __construct(
         PromotionRepository $repository
     ) {
         $this->repository = $repository;
-    }
-
-    protected function getRepository()
-    {
-        return $this->repository;
     }
 
     /**
@@ -42,8 +43,20 @@ class PromotionService extends BaseService implements PromotionServiceInterface
      */
     protected function prepareModelData(Request $request): self
     {
+        $this->initializeBasicModelData($request);
 
-        return $this->initializeBasicModelData($request);
+        // Normalize combinable_with: accept JSON string or array
+        if ($request->has('combinable_with')) {
+            $combinable = $request->input('combinable_with');
+            if (is_string($combinable)) {
+                $decoded = json_decode($combinable, true);
+                $this->modelData['combinable_with'] = json_last_error() === JSON_ERROR_NONE ? $decoded : null;
+            } else {
+                $this->modelData['combinable_with'] = $combinable;
+            }
+        }
+
+        return $this;
     }
 
     protected function initializeBasicModelData(Request $request): self
@@ -53,53 +66,156 @@ class PromotionService extends BaseService implements PromotionServiceInterface
         return $this;
     }
 
+    /**
+     * Xử lý quan hệ nested rules/actions/targets riêng cho Promotion.
+     *
+     * @param Request $request
+     * @return $this
+     */
     protected function handleRelation(Request $request): self
     {
-        // Xử lý promotion_targets
-        if ($request->has('promotionTargets')) {
-            $this->handlePromotionTargets($request);
+        // Nếu không có model (lỗi) thì bỏ qua
+        if (!$this->model || !$this->model->getKey()) {
+            return $this;
+        }
+
+        // Rules
+        if ($request->has('rules')) {
+            $this->model->promotion_rules()->delete();
+            $rules = $request->input('rules', []);
+            foreach ($rules as $rule) {
+                $this->model->promotion_rules()->create($rule);
+            }
+        }
+
+        // Actions
+        if ($request->has('actions')) {
+            $this->model->promotion_actions()->delete();
+            $actions = $request->input('actions', []);
+            foreach ($actions as $action) {
+                $this->model->promotion_actions()->create($action);
+            }
+        }
+
+        // Targets
+        if ($request->has('targets')) {
+            $this->model->promotion_targets()->delete();
+            $targets = $request->input('targets', []);
+            foreach ($targets as $target) {
+                $this->model->promotion_targets()->create($target);
+            }
         }
 
         return $this;
     }
 
-    private function handlePromotionTargets(Request $request): self
+    /**
+     * Kiểm tra chương trình promotion đang active.
+     *
+     * @param Promotion $promotion
+     * @return bool
+     */
+    public function isActive(Promotion $promotion): bool
     {
-        $targets = $request->input('promotionTargets');
+        if (!$promotion->publish) {
+            return false;
+        }
+        $now = now();
+        if ($promotion->start_date && $now->lt($promotion->start_date)) {
+            return false;
+        }
+        if ($promotion->end_date && $now->gt($promotion->end_date)) {
+            return false;
+        }
+        return true;
+    }
 
-        if (!is_array($targets) || empty($targets)) {
-            // Nếu không có targets, xóa tất cả targets cũ
-            if ($this->model->exists) {
-                $this->model->promotion_targets()->delete();
+    /**
+     * Kiểm tra khách hàng có thể dùng promotion hay không.
+     *
+     * @param Promotion $promotion
+     * @param \App\Models\User|int|null $customer
+     * @return bool
+     */
+    public function canBeUsedByCustomer(Promotion $promotion, $customer = null): bool
+    {
+        if (!$this->isActive($promotion)) {
+            return false;
+        }
+        if ($promotion->usage_limit !== null && $promotion->used_count >= $promotion->usage_limit) {
+            return false;
+        }
+        if ($customer) {
+            $customerId = is_object($customer) ? $customer->id : (int)$customer;
+            if ($promotion->usage_per_customer !== null) {
+                $usedByCustomer = $promotion->promotion_usages()->where('customer_id', $customerId)->count();
+                if ($usedByCustomer >= $promotion->usage_per_customer) {
+                    return false;
+                }
             }
-            return $this;
         }
+        return true;
+    }
 
-        // Xóa tất cả targets cũ
-        if ($this->model->exists) {
-            $this->model->promotion_targets()->delete();
+    /**
+     * Kiểm tra có thể kết hợp với promotion khác không.
+     *
+     * @param Promotion $promotion
+     * @param int|null $otherPromotionId
+     * @return bool
+     */
+    public function canCombineWith(Promotion $promotion, ?int $otherPromotionId): bool
+    {
+        if (!$promotion->can_combine) {
+            return false;
         }
-
-        // Tạo targets mới
-        foreach ($targets as $targetData) {
-            $targetAttributes = [
-                'promotion_id' => $this->model->id,
-                'product_id' => $targetData['productId'] ?? null,
-                'product_variant_id' => $targetData['productVariantId'] ?? null,
-                'product_catalogue_id' => $targetData['productCatalogueId'] ?? null,
-                'is_gift' => $targetData['isGift'] ?? false,
-                'min_quantity' => $targetData['minQuantity'] ?? 1,
-                'max_quantity' => $targetData['maxQuantity'] ?? null,
-            ];
-
-            PromotionTarget::create($targetAttributes);
+        if (empty($promotion->combinable_with)) {
+            return true;
         }
+        return in_array($otherPromotionId, $promotion->combinable_with, true);
+    }
 
-        return $this;
+    /**
+     * Lấy usage của khách hàng cho promotion này.
+     *
+     * @param Promotion $promotion
+     * @param \App\Models\User|int $customer
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
+    public function getUsageByCustomer(Promotion $promotion, $customer)
+    {
+        $customerId = is_object($customer) ? $customer->id : (int)$customer;
+        return $promotion->promotion_usages()->where('customer_id', $customerId)->first();
+    }
+
+    /**
+     * Tính số lần còn lại có thể dùng.
+     *
+     * @param Promotion $promotion
+     * @return int|null
+     */
+    public function getRemainingUsage(Promotion $promotion): ?int
+    {
+        if ($promotion->usage_limit === null) {
+            return null;
+        }
+        $remaining = (int)$promotion->usage_limit - (int)$promotion->used_count;
+        return $remaining < 0 ? 0 : $remaining;
+    }
+
+    protected function getRepository()
+    {
+        return $this->repository;
     }
 
     protected function getResource(Model $resource)
     {
         return new PromotionResource($resource);
+    }
+
+    public function paginate(Request $request)
+    {
+        $request->merge(['simple' => true]);
+        return parent::paginate($request);
     }
 }

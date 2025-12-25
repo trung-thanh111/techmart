@@ -129,7 +129,7 @@ definePageMeta({
                 </td>
               </tr>
               <tr v-if="(data?.data?.data?.length ?? 0) === 0">
-                <td colspan="4" class="text-center text-muted">{{ $t("admin.common.noData") }}</td>
+                <td colspan="6" class="text-center text-muted">{{ $t("admin.common.noData") }}</td>
               </tr>
             </template>
           </tbody>

@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Promotion\Promotion;
 
 use App\Enums\Common;
+use App\Enums\Promotion;
 use App\Http\Requests\BaseRequest;
 
 class StoreRequest extends BaseRequest
@@ -23,32 +24,53 @@ class StoreRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            "name" => "required|string|max:255",
-            "couponCode" => "nullable|string|max:100|unique:promotions,coupon_code",
-            "description" => "nullable|string",
-            "promotionCatalogueId" => "nullable|integer|exists:promotion_catalogues,id",
-            "discountValue" => "required|numeric|min:0",
-            "discountType" => "required|string|in:percent,amount",
-            "maxDiscountValue" => "nullable|numeric|min:0",
-            "startDate" => "nullable|date",
-            "endDate" => "nullable|date|after_or_equal:startDate",
-            "priority" => "nullable|integer|min:0",
-            "canCombine" => "nullable|boolean",
-            "publish" => "required|integer|in:0,1,2",
-            "promotionTargets" => "nullable|array",
-            "promotionTargets.*.productId" => "nullable|integer|exists:products,id|required_without_all:promotionTargets.*.productVariantId,promotionTargets.*.productCatalogueId",
-            "promotionTargets.*.productVariantId" => "nullable|integer|exists:product_variants,id|required_without_all:promotionTargets.*.productId,promotionTargets.*.productCatalogueId",
-            "promotionTargets.*.productCatalogueId" => "nullable|integer|exists:product_catalogues,id|required_without_all:promotionTargets.*.productId,promotionTargets.*.productVariantId",
-            "promotionTargets.*.isGift" => "nullable|boolean",
-            "promotionTargets.*.minQuantity" => "nullable|integer|min:1",
-            "promotionTargets.*.maxQuantity" => "nullable|integer|min:1|gt:promotionTargets.*.minQuantity",
+            'name' => 'required|string|max:255',
+            'code' => 'nullable|string|max:50|unique:promotions,code',
+            'slug' => 'required|string|max:255|unique:promotions,slug',
+            'description' => 'nullable|string',
+            'type' => 'required|string|in:' . implode(',', Promotion::AVAILABLE_TYPES),
+            'priority' => 'nullable|integer|min:0',
+            'promotion_catalogue_id' => 'nullable|integer|exists:promotion_catalogues,id',
+            'can_combine' => 'nullable|boolean',
+            'combinable_with' => 'nullable|array',
+            'combinable_with.*' => 'integer|exists:promotions,id',
+            'usage_limit' => 'nullable|integer|min:1',
+            'usage_per_customer' => 'nullable|integer|min:1',
+            'start_date' => 'nullable|date|before:end_date',
+            'end_date' => 'nullable|date|after:start_date',
+            'publish' => 'required|integer|in:' . implode(',', Promotion::AVAILABLE_PUBLISH_STATUS),
+
+            // nested relations
+            'rules' => 'nullable|array',
+            'rules.*.rule_group' => 'required|integer|min:0',
+            'rules.*.logic_operator' => 'required|string|in:' . implode(',', Promotion::AVAILABLE_LOGIC_OPERATORS),
+            'rules.*.rule_type' => 'required|string|in:' . implode(',', Promotion::AVAILABLE_RULE_TYPES),
+            'rules.*.operator' => 'required|string|in:' . implode(',', Promotion::AVAILABLE_RULE_OPERATORS),
+            'rules.*.value' => 'required',
+            'rules.*.description' => 'nullable|string',
+
+            'actions' => 'nullable|array',
+            'actions.*.execution_order' => 'required|integer|min:0',
+            'actions.*.action_type' => 'required|string|in:' . implode(',', Promotion::AVAILABLE_ACTION_TYPES),
+            'actions.*.action_value' => 'nullable|numeric|min:0',
+            'actions.*.max_discount' => 'nullable|numeric|min:0',
+            'actions.*.min_discount' => 'nullable|numeric|min:0',
+            'actions.*.apply_to' => 'required|string|in:' . implode(',', Promotion::AVAILABLE_APPLY_TO),
+            'actions.*.config' => 'nullable|array',
+
+            'targets' => 'nullable|array',
+            'targets.*.target_type' => 'required|string|in:' . implode(',', Promotion::AVAILABLE_TARGET_TYPES),
+            'targets.*.target_id' => 'nullable|integer|min:0',
+            'targets.*.is_included' => 'required|boolean',
+            'targets.*.metadata' => 'nullable|array',
         ];
     }
 
     public function prepareForValidation()
     {
         $this->merge([
-            'used_count' => 0,
+            'slug' => generate_slug($this->name),
+            'usage_per_customer' => auth(Common::API)->user()->id,
         ]);
     }
 

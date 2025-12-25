@@ -1,58 +1,76 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Traits\HasQuery;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
+/**
+ * Class PromotionTarget
+ *
+ * Định nghĩa target áp dụng cho Promotion (order, product, category, ...).
+ *
+ * @package App\Models
+ */
 class PromotionTarget extends Model
 {
-    use HasQuery, SoftDeletes;
-
     protected $table = 'promotion_targets';
 
     protected $fillable = [
         'promotion_id',
-        'product_id',
-        'product_variant_id',
-        'product_catalogue_id',
-        'is_gift',
-        'min_quantity',
-        'max_quantity',
+        'target_type',
+        'target_id',
+        'is_included',
+        'metadata',
     ];
 
     protected $casts = [
-        'is_gift' => 'boolean',
-        'min_quantity' => 'integer',
-        'max_quantity' => 'integer',
+        'metadata' => 'array',
+        'is_included' => 'boolean',
     ];
 
     /**
-     * Biến này đăng ký quan hệ được phép bắn lên từ client
+     * Relation: target thuộc về promotion
      *
-     * @var array
+     * @return BelongsTo
      */
-    public $relationable = [];
-
     public function promotion(): BelongsTo
     {
         return $this->belongsTo(Promotion::class, 'promotion_id', 'id');
     }
 
-    public function product(): BelongsTo
+    /**
+     * Morph relation: có thể liên kết tới nhiều loại đối tượng (product, category, ...)
+     *
+     * @return MorphTo
+     */
+    public function targetable(): MorphTo
     {
-        return $this->belongsTo(Product::class, 'product_id', 'id');
+        return $this->morphTo(null, 'target_type', 'target_id');
     }
 
-    public function product_variant(): BelongsTo
+    /**
+     * Scope: include targets
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopeIncluded($query)
     {
-        return $this->belongsTo(ProductVariant::class, 'product_variant_id', 'id');
+        return $query->where('is_included', true);
     }
 
-    public function product_catalogue(): BelongsTo
+    /**
+     * Scope: excluded targets
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopeExcluded($query)
     {
-        return $this->belongsTo(ProductCatalogue::class, 'product_catalogue_id', 'id');
+        return $query->where('is_included', false);
     }
 }

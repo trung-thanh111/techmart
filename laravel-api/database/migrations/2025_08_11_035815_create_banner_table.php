@@ -22,13 +22,13 @@ return new class extends Migration
             $table->boolean('is_hot')->default(false);
             $table->string('link_url', 1000)->nullable();
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
-            $table->foreignId('page_id')->nullable()->constrained()->onDelete('set null');
-            $table->foreignId('position_id')->nullable()->constrained()->onDelete('set null');
+            $table->foreignId('page_id')->nullable()->constrained('banner_pages')->onDelete('set null');
+            $table->foreignId('position_id')->nullable()->constrained('banner_positions')->onDelete('set null');
             $table->tinyInteger('publish')->default(0)->comment('0: draft, 1: private, 2: publish');
             $table->timestamps();
             $table->softDeletes();
 
-            $table->index(['type', 'publish', 'position']);
+            $table->index(['publish', 'position_id', 'page_id']);
         });
     }
 

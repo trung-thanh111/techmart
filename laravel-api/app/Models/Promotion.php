@@ -1,44 +1,67 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Traits\HasQuery;
 
+/**
+ * Class Promotion
+ *
+ * Model chính cho chương trình khuyến mãi.
+ * - Các quan hệ đặt theo tên snake_case (hasMany: có s).
+ *
+ * @package App\Models
+ */
 class Promotion extends Model
 {
-    use HasQuery, SoftDeletes;
+    use HasQuery;
 
     protected $table = 'promotions';
 
     protected $fillable = [
+        'code',
         'name',
-        'coupon_code',
+        'slug',
         'description',
+        'type',
+        'priority',
         'promotion_catalogue_id',
-        'discount_value',
-        'discount_type',
-        'max_discount_value',
+        'can_combine',
+        'combinable_with',
+        'usage_limit',
+        'usage_per_customer',
+        'used_count',
         'start_date',
         'end_date',
-        'priority',
-        'can_combine',
-        'used_count',
         'publish',
     ];
 
+    /**
+     * Các kiểu ép (casts).
+     *
+     * @var array
+     */
     protected $casts = [
-        'discount_value' => 'decimal:2',
-        'max_discount_value' => 'decimal:2',
+        'combinable_with' => 'array',
         'start_date' => 'datetime',
         'end_date' => 'datetime',
+        'publish' => 'boolean',
         'can_combine' => 'boolean',
-        'priority' => 'integer',
-        'used_count' => 'integer',
+    ];
+
+    /**
+     * Thuộc tính ảo trả về trong JSON.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'remaining_usage',
     ];
 
     /**
@@ -46,39 +69,120 @@ class Promotion extends Model
      *
      * @var array
      */
-    public $relationable = [];
+    public $relationable = [
+        'promotion_rules',
+        'promotion_actions',
+        'promotion_targets',
+    ];
 
+    /**
+     * Relation: Promotion thuộc về PromotionCatalogue.
+     *
+     * @return BelongsTo
+     */
+    public function promotion_catalogue(): BelongsTo
+    {
+        return $this->belongsTo(PromotionCatalogue::class, 'promotion_catalogue_id', 'id');
+    }
+
+    /**
+     * Relation: Promotion có nhiều rules.
+     *
+     * @return HasMany
+     */
+    public function promotion_rules(): HasMany
+    {
+        return $this->hasMany(PromotionRule::class, 'promotion_id', 'id');
+    }
+
+    /**
+     * Relation: Promotion có nhiều actions.
+     *
+     * @return HasMany
+     */
+    public function promotion_actions(): HasMany
+    {
+        return $this->hasMany(PromotionAction::class, 'promotion_id', 'id')->orderBy('execution_order', 'asc');
+    }
+
+    /**
+     * Relation: Promotion có nhiều targets.
+     *
+     * @return HasMany
+     */
     public function promotion_targets(): HasMany
     {
         return $this->hasMany(PromotionTarget::class, 'promotion_id', 'id');
     }
 
-    public function promotion_catalogues(): BelongsTo
+    /**
+     * Relation: Promotion có nhiều usages.
+     *
+     * @return HasMany
+     */
+    public function promotion_usages(): HasMany
     {
-        return $this->belongsTo(PromotionCatalogue::class, 'promotion_catalogue_id', 'id');
+        return $this->hasMany(PromotionUsage::class, 'promotion_id', 'id');
     }
 
-    public function products(): BelongsToMany
+
+    /**
+     * Accessor: số lần còn lại có thể dùng (null = unlimited).
+     *
+     * @return int|null
+     */
+    public function getRemainingUsageAttribute(): ?int
     {
-        return $this->belongsToMany(Product::class, 'promotion_targets', 'promotion_id', 'product_id')
-            ->whereNull('promotion_targets.product_variant_id')
-            ->whereNull('promotion_targets.product_catalogue_id')
-            ->wherePivot('is_gift', false);
+        if ($this->usage_limit === null) {
+            return null;
+        }
+        $remaining = (int)$this->usage_limit - (int)$this->used_count;
+        return $remaining < 0 ? 0 : $remaining;
     }
 
-    public function product_variants(): BelongsToMany
+    /**
+     * Scope: chỉ lấy các chương trình active.
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopeActive($query)
     {
-        return $this->belongsToMany(ProductVariant::class, 'promotion_targets', 'promotion_id', 'product_variant_id')
-            ->whereNull('promotion_targets.product_id')
-            ->whereNull('promotion_targets.product_catalogue_id')
-            ->wherePivot('is_gift', false);
+        $now = Carbon::now();
+        return $query->where('publish', 1)
+            ->when($now, fn($q) => $q->where(function ($q2) use ($now) {
+                $q2->whereNull('start_date')->orWhere('start_date', '<=', $now);
+            }))
+            ->when($now, fn($q) => $q->where(function ($q2) use ($now) {
+                $q2->whereNull('end_date')->orWhere('end_date', '>=', $now);
+            }));
     }
 
-    public function product_catalogues(): BelongsToMany
+    /**
+     * Scope: lọc theo type.
+     *
+     * @param $query
+     * @param string|array $type
+     * @return mixed
+     */
+    public function scopeOfType($query, $type)
     {
-        return $this->belongsToMany(ProductCatalogue::class, 'promotion_targets', 'promotion_id', 'product_catalogue_id')
-            ->whereNull('promotion_targets.product_id')
-            ->whereNull('promotion_targets.product_variant_id')
-            ->wherePivot('is_gift', false);
+        if (is_array($type)) {
+            return $query->whereIn('type', $type);
+        }
+        return $query->where('type', $type);
+    }
+
+    /**
+     * Scope: có usage left (nếu usage_limit null => unlimited = true).
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopeHasUsageLeft($query)
+    {
+        return $query->where(function ($q) {
+            $q->whereNull('usage_limit')->orWhereColumn('used_count', '<', 'usage_limit');
+        });
     }
 }
