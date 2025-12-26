@@ -102,6 +102,72 @@ export const AGENCYWORKINGHOURUPDATE = "/admin/agency/working_hour/update";
 export const MAX_FILE_SIZE = 5 * 1024 * 1024;
 export const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
 
+// Promotion Constants
+export const PROMOTION_TYPES = [
+  { label: "Đơn hàng", value: "order" },
+  { label: "Sản phẩm", value: "product" },
+  { label: "Flash Sale", value: "flash_sale" },
+  { label: "Combo", value: "bundle" },
+  { label: "Mua X tặng Y", value: "bxgy" },
+  { label: "Miễn phí ship", value: "free_ship" },
+];
+
+export const PROMOTION_PUBLISH_STATUS = [
+  { label: "Bản nháp", value: 0 },
+  { label: "Riêng tư", value: 1 },
+  { label: "Công khai", value: 2 },
+];
+
+export const PROMOTION_RULE_TYPES = [
+  { label: "Tổng đơn tối thiểu", value: "min_order_total" },
+  { label: "Số lượng sản phẩm", value: "product_qty" },
+  { label: "Số lượng theo danh mục", value: "product_qty_by_category" },
+  { label: "Nhóm khách hàng", value: "customer_group" },
+  { label: "Khoảng thời gian", value: "time_slot" },
+];
+
+export const PROMOTION_OPERATORS = [
+  { label: "=", value: "=" },
+  { label: "!=", value: "!=" },
+  { label: ">", value: ">" },
+  { label: ">=", value: ">=" },
+  { label: "<", value: "<" },
+  { label: "<=", value: "<=" },
+  { label: "Trong (IN)", value: "IN" },
+  { label: "Không trong (NOT_IN)", value: "NOT_IN" },
+  { label: "Trong khoảng (BETWEEN)", value: "BETWEEN" },
+];
+
+export const PROMOTION_ACTION_TYPES = [
+  { label: "Phần trăm", value: "percent" },
+  { label: "Cố định", value: "fixed" },
+  { label: "Miễn phí vận chuyển", value: "free_shipping" },
+  { label: "Mua X tặng Y", value: "bxgy" },
+  { label: "Theo bậc", value: "tiered" },
+];
+
+export const PROMOTION_APPLY_TO = [
+  { label: "Đơn hàng", value: "order" },
+  { label: "Tổng giỏ hàng", value: "cart_subtotal" },
+  { label: "Phí vận chuyển", value: "shipping_fee" },
+  { label: "Sản phẩm rẻ nhất", value: "cheapest_item" },
+  { label: "Sản phẩm đắt nhất", value: "most_expensive_item" },
+  { label: "Sản phẩm cụ thể", value: "specific_products" },
+];
+
+export const PROMOTION_TARGET_TYPES = [
+  { label: "Đơn hàng", value: "order" },
+  { label: "Sản phẩm", value: "product" },
+  { label: "Danh mục", value: "category" },
+  { label: "Thương hiệu", value: "brand" },
+  { label: "Nhóm khách hàng", value: "customer_group" },
+];
+
+export const PROMOTION_LOGIC_OPERATORS = [
+  { label: "VÀ", value: "AND" },
+  { label: "HOẶC", value: "OR" },
+];
+
 // auth
 export const TOLOGIN = "/auth/login";
 export const TOREGISTER = "/auth/register";

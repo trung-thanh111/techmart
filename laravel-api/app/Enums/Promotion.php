@@ -8,10 +8,9 @@ enum Promotion: string
     public const TYPE_ORDER = 'order';
     public const TYPE_PRODUCT = 'product';
     public const TYPE_FLASH_SALE = 'flash_sale';
-    public const TYPE_BUNDLE = 'bundle';
+    public const TYPE_COMBO = 'combo';
     public const TYPE_BXGY = 'bxgy';
     public const TYPE_FREESHIP = 'free_ship';
-    public const TYPE_VOUCHER = 'voucher';
 
     // Publish Status
     public const PUBLISH_DRAFT = 0;
@@ -68,10 +67,9 @@ enum Promotion: string
         self::TYPE_ORDER,
         self::TYPE_PRODUCT,
         self::TYPE_FLASH_SALE,
-        self::TYPE_BUNDLE,
+        self::TYPE_COMBO,
         self::TYPE_BXGY,
         self::TYPE_FREESHIP,
-        self::TYPE_VOUCHER,
     ];
 
     // Available Rule Types

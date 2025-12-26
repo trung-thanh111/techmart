@@ -7,7 +7,7 @@ import AppCheckbox from "~/components/admin/custom/AppCheckbox.vue";
 import Button from "~/components/admin/custom/Button.vue";
 import { usePromotion } from "~/composables/admin/promotion/usePromotion";
 
-const { data, isLoading, selectedIds, selectedItem, search, setPage, handleDeleteMultiple, setSelectedItem, confirmDelete, updateSelectedIds, getTotalItems, getAllItemIds } = usePromotion();
+const { data, isLoading, filters, selectedIds, selectedItem, search, setPage, handleDeleteMultiple, setSelectedItem, confirmDelete, updateSelectedIds, getTotalItems, getAllItemIds } = usePromotion();
 
 provide("getTotalItems", getTotalItems);
 provide("getAllItemIds", getAllItemIds);
@@ -32,6 +32,72 @@ const isBulkSelecting = computed(() => selectedIds.value.length >= 1);
 const hasData = computed(() => Boolean(data.value?.data?.data?.length));
 const hasSelectedItems = computed(() => selectedIds.value.length > 0);
 
+const getPromotionStatus = (item: any) => {
+  const now = new Date();
+  const startDate = item.startDate ? new Date(item.startDate) : null;
+  let endDate = item.endDate ? new Date(item.endDate) : null;
+  console.info(endDate);
+  if (endDate && !isNaN(endDate?.getTime())) {
+    endDate = new Date(endDate?.getFullYear(), endDate?.getMonth(), endDate?.getDate(), 23, 59, 59, 999);
+  } else {
+    endDate = null;
+  }
+
+  if (endDate && endDate < now) {
+    return { status: "expired", text: "Đã hết hạn", class: "bg-danger-subtle text-danger", tooltip: `Chương trình đã hết hạn vào ${item.endDate ? new Date(item.endDate).toLocaleDateString("vi-VN") : "-"}` };
+  }
+
+  if (startDate && !isNaN(startDate.getTime()) && startDate > now) {
+    return { status: "inactive", text: "Chưa bắt đầu", class: "bg-secondary-subtle text-secondary", tooltip: `Chương trình sẽ bắt đầu vào ${startDate.toLocaleDateString("vi-VN")}` };
+  }
+
+  if (endDate && !isNaN(endDate.getTime())) {
+    const msInDay = 1000 * 60 * 60 * 24;
+    const daysLeft = Math.ceil((endDate?.getTime() - now?.getTime()) / msInDay);
+    if (daysLeft <= 3) {
+      return {
+        status: "expiring_soon",
+        text: `Còn ${daysLeft} ngày`,
+        class: "bg-warning-subtle text-warning",
+        tooltip: `Chương trình sẽ hết hạn sau ${daysLeft} ngày`,
+      };
+    }
+  }
+
+  return { status: "active", text: "Đang diễn ra", class: "bg-success-subtle text-success", tooltip: endDate ? `Chương trình sẽ hết hạn vào ${new Date(item.endDate).toLocaleDateString("vi-VN")}` : "Chương trình đang hoạt động" };
+};
+
+const getPromotionTypeText = (type: string) => {
+  const typeMap: Record<string, string> = {
+    order: "Đơn hàng",
+    product: "Sản phẩm",
+    flash_sale: "Flash Sale",
+    bundle: "Bundle",
+    bxgy: "Mua X tặng Y",
+    free_ship: "Miễn phí ship",
+    voucher: "Voucher",
+  };
+  return typeMap[type] || type;
+};
+
+const getConditionsText = (item: any) => {
+  const promotionRules = item.promotionRules || item.promotion_rules || [];
+  if (!promotionRules || promotionRules.length === 0) return "Không có điều kiện";
+
+  const conditions = promotionRules.map((rule: any) => {
+    const typeMap: Record<string, string> = {
+      min_order_total: "Tổng đơn tối thiểu",
+      product_qty: "SL sản phẩm",
+      product_qty_by_category: "SL SP theo danh mục",
+      customer_group: "Nhóm khách hàng",
+      time_slot: "Khung giờ",
+    };
+    return `${typeMap[rule.rule_type] || rule.rule_type}: ${rule.value}`;
+  });
+
+  return conditions.join(", ");
+};
+
 definePageMeta({
   layout: "admin",
   middleware: ["auth-required", "auth-admin"],
@@ -51,19 +117,21 @@ definePageMeta({
           <Button variant="cancel" :loading="isLoading" :disabled="!hasSelectedItems" @click="updateSelectedIds([])" />
         </div>
         <div class="d-flex align-items-center gap-2">
-          <NuxtLink :to="PROMOTIONCREATE" class="btn btn-success">
+          <NuxtLink to="/admin/promotion/promotion/create" class="btn btn-success">
             <i class="ri-add-line me-1"></i>
             {{ $t("admin.common.create") }}
           </NuxtLink>
         </div>
       </div>
-      <FilterBar @search="search" />
+      <FilterBar @search="search"></FilterBar>
       <div class="table-responsive">
         <table class="table table-hover align-middle" style="table-layout: fixed">
           <colgroup>
             <col style="width: 40px" />
             <col />
-            <col style="width: 150px" />
+            <col style="width: 120px" />
+            <col style="width: 120px" />
+            <col style="width: 120px" />
             <col style="width: 120px" />
           </colgroup>
           <thead class="table-light">
@@ -72,13 +140,18 @@ definePageMeta({
                 <AppCheckbox :model-value="selectedIds" :is-select-all="true" @update:model-value="handleSelectedIdsChange" />
               </th>
               <th>{{ $t("admin.page.promotion.groupInfo") }}</th>
+              <th class="text-center">{{ $t("admin.page.promotion.type") }}</th>
+              <th class="text-center">{{ $t("admin.page.promotion.time") }}</th>
               <th class="text-center">{{ $t("admin.common.status") }}</th>
               <th class="text-end">{{ $t("admin.common.actions") }}</th>
             </tr>
           </thead>
           <tbody>
             <tr v-if="isLoading">
-              <td colspan="4" class="text-center text-muted">{{ $t("admin.common.loading") }}</td>
+              <td colspan="6" class="text-center text-muted">{{ $t("admin.common.loading") }}</td>
+            </tr>
+            <tr v-if="(data?.data?.data?.length ?? 0) === 0 && !isLoading">
+              <td colspan="6" class="text-center text-muted">{{ $t("admin.common.noData") }}</td>
             </tr>
             <template v-else>
               <tr v-for="item in data?.data?.data ?? []" :key="item.id" class="cursor-pointer" :class="{ 'table-active': selectedIds.includes(item.id) }">
@@ -87,12 +160,29 @@ definePageMeta({
                 </td>
                 <td>
                   <NuxtLink class="hover:text-teal-500 flex items-center gap-2" :to="`/admin/promotion/promotion/${item.id}/edit`">
+                    <div>
+                      <img v-if="item.image" :src="item.image" :alt="item.name" class="w-12 h-12 object-cover rounded" />
+                      <div v-else class="w-12 h-12 bg-gray-200 rounded flex items-center justify-center">
+                        <i class="mdi mdi-image text-gray-400"></i>
+                      </div>
+                    </div>
                     <div class="flex flex-col">
-                      <span class="font-medium">{{ item.name }}</span>
-                      <span class="text-sm text-muted" v-if="item.couponCode">{{ $t("admin.page.promotion.couponCode") }}: {{ item.couponCode }}</span>
-                      <span class="text-sm text-muted" v-if="item.discountValue">{{ item.discountValue }}{{ item.discountType === "percent" ? "%" : "" }}</span>
+                      <span class="font-medium text-base">{{ item.name }}</span>
+                      <span class="text-xs text-muted" v-if="item.code">{{ item.code }}</span>
+                      <div class="text-xs text-muted" v-if="getConditionsText(item).length > 0">
+                        <i class="mdi mdi-information-outline me-1" v-tooltip.top="getConditionsText(item)"></i>
+                        {{ getConditionsText(item).substring(0, 50) }}{{ getConditionsText(item).length > 50 ? "..." : "" }}
+                      </div>
                     </div>
                   </NuxtLink>
+                </td>
+                <td class="text-center">
+                  <span class="badge bg-info-subtle text-info">{{ getPromotionTypeText(item.type) }}</span>
+                </td>
+                <td class="text-center">
+                  <span :class="['badge', getPromotionStatus(item).class]" v-tooltip.top="getPromotionStatus(item).tooltip">
+                    {{ getPromotionStatus(item).text }}
+                  </span>
                 </td>
                 <td class="text-center">
                   <span :class="['badge', item.publish === 2 ? 'bg-success-subtle text-success' : item.publish === 1 ? 'bg-secondary-subtle text-secondary' : 'bg-danger-subtle text-danger']">
@@ -120,9 +210,6 @@ definePageMeta({
                     </ul>
                   </div>
                 </td>
-              </tr>
-              <tr v-if="(data?.data?.data?.length ?? 0) === 0">
-                <td colspan="4" class="text-center text-muted">{{ $t("admin.common.noData") }}</td>
               </tr>
             </template>
           </tbody>
