@@ -10,6 +10,22 @@
     </div>
   </div>
 
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="align-items-center">
+            <h5>{{ $t("admin.common.titleNote") }}</h5>
+            <span>
+              {{ $t("admin.common.note") }}
+              <p class="fst-italic">{{ $t("admin.common.required") }}</p>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <form @submit.prevent="() => handleUpdate(false)" class="row space-y-4">
     <div class="col-lg-8">
       <div class="card">
@@ -17,223 +33,55 @@
           <h5 class="card-title mb-0">{{ $t("admin.page.promotion.basicInfo") }}</h5>
         </div>
         <div class="card-body">
+          <!-- Name -->
           <div class="mb-3">
             <label class="form-label" for="name">
-              {{ $t("admin.common.form.name") }}:
+              {{ $t("admin.page.promotion.name") }}:
               <span class="text-danger">*</span>
             </label>
             <Field name="name" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <input v-bind="field" id="name" type="text" :placeholder="$t('admin.common.form.namePlaceholder')" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
-              <small v-if="errorMessage && meta.touched" class="text-danger">
-                {{ $t(errorMessage) }}
-              </small>
+              <input v-bind="field" id="name" type="text" :placeholder="$t('admin.page.promotion.name')" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
+              <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
             </Field>
           </div>
 
           <div class="mb-3">
-            <label class="form-label" for="couponCode">
-              {{ $t("admin.page.promotion.couponCode") }}
-            </label>
-            <Field name="couponCode" v-slot="{ field, errorMessage, meta }">
-              <input v-bind="field" id="couponCode" type="text" :placeholder="$t('admin.page.promotion.couponCodePlaceholder')" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
-              <small v-if="errorMessage && meta.touched" class="text-danger">
-                {{ $t(errorMessage) }}
-              </small>
-            </Field>
+            <label class="form-label" for="code">{{ $t("admin.page.promotion.code") }}:</label>
+            <div class="input-group">
+              <Field name="code" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
+                <input v-bind="field" id="code" type="text" :placeholder="$t('admin.page.promotion.code')" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
+                <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
+              </Field>
+              <button type="button" class="btn btn-outline-secondary" @click="setValues({ ...(values as any), code: generateCouponCode() })">
+                <i class="mdi mdi-refresh"></i>
+              </button>
+            </div>
           </div>
 
           <div class="mb-3">
             <label class="form-label" for="description">
               {{ $t("admin.common.form.description") }}
             </label>
-            <Field name="description" v-slot="{ field }">
-              <textarea v-bind="field" id="description" rows="4" class="form-control" :placeholder="$t('admin.common.form.descriptionPlaceholder')" />
+            <Field name="description" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
+              <div class="w-full">
+                <CKEditor v-model="field.value" @update:modelValue="field.onChange" class="h-64" />
+                <small v-if="errorMessage && meta.touched" class="text-danger">
+                  {{ $t(errorMessage) }}
+                </small>
+              </div>
             </Field>
           </div>
         </div>
       </div>
 
-      <div class="card mt-3">
-        <div class="card-header">
-          <h5 class="card-title mb-0">{{ $t("admin.page.promotion.discountInfo") }}</h5>
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label class="form-label" for="discountType">
-                {{ $t("admin.page.promotion.discountType") }}:
-                <span class="text-danger">*</span>
-              </label>
-              <Field name="discountType" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-                <Select :modelValue="field.value" @update:modelValue="field.onChange" :options="discountTypeOptions" optionLabel="name" optionValue="value" :placeholder="$t('admin.page.promotion.selectDiscountType')" class="w-100" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
-                <small v-if="errorMessage && meta.touched" class="text-danger">
-                  {{ $t(errorMessage) }}
-                </small>
-              </Field>
-            </div>
+      <!-- Rules -->
+      <PromotionRule v-model="formValues.rules" @save-record="saveRule" />
 
-            <div class="col-md-6 mb-3">
-              <label class="form-label" for="discountValue">
-                {{ $t("admin.page.promotion.discountValue") }}:
-                <span class="text-danger">*</span>
-              </label>
-              <Field name="discountValue" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-                <InputNumber :modelValue="field.value" @update:modelValue="field.onChange" :min="0" :suffix="values.discountType === 'percent' ? '%' : ''" showButtons class="w-full" input-class="!rounded py-[7px] w-full" size="small" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
-                <small v-if="errorMessage && meta.touched" class="text-danger">
-                  {{ $t(errorMessage) }}
-                </small>
-              </Field>
-            </div>
-          </div>
+      <!-- Action -->
+      <PromotionAction v-model="formValues.actions" />
 
-          <div class="mb-3" v-if="values.discountType === 'percent'">
-            <label class="form-label" for="maxDiscountValue">
-              {{ $t("admin.page.promotion.maxDiscountValue") }}
-            </label>
-            <Field name="maxDiscountValue" v-slot="{ field }">
-              <InputNumber :modelValue="field.value" @update:modelValue="field.onChange" :min="0" showButtons class="w-full" input-class="!rounded py-[7px] w-full" size="small" />
-            </Field>
-          </div>
-
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label class="form-label" for="startDate">
-                {{ $t("admin.page.promotion.startDate") }}
-              </label>
-              <Field name="startDate" v-slot="{ field }">
-                <input v-bind="field" id="startDate" type="datetime-local" class="form-control" />
-              </Field>
-            </div>
-
-            <div class="col-md-6 mb-3">
-              <label class="form-label" for="endDate">
-                {{ $t("admin.page.promotion.endDate") }}
-              </label>
-              <Field name="endDate" v-slot="{ field }">
-                <input v-bind="field" id="endDate" type="datetime-local" class="form-control" />
-              </Field>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label class="form-label" for="priority">
-                {{ $t("admin.page.promotion.priority") }}
-              </label>
-              <Field name="priority" v-slot="{ field }">
-                <InputNumber :modelValue="field.value" @update:modelValue="field.onChange" :min="0" showButtons class="w-full" input-class="!rounded py-[7px] w-full" size="small" />
-              </Field>
-            </div>
-
-            <div class="col-md-6 mb-3">
-              <label class="form-label d-flex align-items-center gap-2">
-                {{ $t("admin.page.promotion.canCombine") }}
-                <Field name="canCombine" v-slot="{ field }">
-                  <InputSwitch :modelValue="field.value" @update:modelValue="field.onChange" />
-                </Field>
-              </label>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card mt-3">
-        <div class="card-header d-flex justify-content-between align-items-center">
-          <h5 class="card-title mb-0">{{ $t("admin.page.promotion.promotionTargets") }}:</h5>
-          <button type="button" class="btn btn-sm btn-success" @click="addPromotionTarget">
-            <i class="ri-add-line me-1"></i>
-            {{ $t("admin.common.add") }}
-          </button>
-        </div>
-        <div class="card-body">
-          <Field name="promotionTargets" v-slot="{ field, errorMessage, meta }">
-            <div v-if="errorMessage && meta.touched" class="alert alert-danger mb-3">
-              {{ $t(errorMessage) }}
-            </div>
-            <div v-for="(target, index) in promotionTargets" :key="target.uid" class="border rounded p-3 mb-3">
-              <div class="d-flex justify-content-between align-items-start mb-3">
-                <h6 class="mb-0">{{ $t("admin.page.promotion.target") }} #{{ index + 1 }}</h6>
-                <button type="button" class="btn btn-sm btn-danger" @click="removePromotionTarget(index)" v-if="promotionTargets.length > 1">
-                  <i class="ri-delete-bin-line"></i>
-                </button>
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label mb-2">{{ $t("admin.page.promotion.target") }}</label>
-                <div class="d-flex flex-column gap-2">
-                  <div class="d-flex align-items-center justify-content-between p-2 border rounded">
-                    <label class="form-label mb-0">{{ $t("admin.page.promotion.product") }}</label>
-                    <InputSwitch :modelValue="target.enableProduct" @update:modelValue="(val: boolean) => handleTargetToggle(index, 'product', val)" />
-                  </div>
-                  <div class="d-flex align-items-center justify-content-between p-2 border rounded">
-                    <label class="form-label mb-0">{{ $t("admin.page.promotion.productVariant") }}</label>
-                    <InputSwitch :modelValue="target.enableVariant" @update:modelValue="(val: boolean) => handleTargetToggle(index, 'variant', val)" />
-                  </div>
-                  <div class="d-flex align-items-center justify-content-between p-2 border rounded">
-                    <label class="form-label mb-0">{{ $t("admin.page.promotion.productCatalogue") }}</label>
-                    <InputSwitch :modelValue="target.enableCatalogue" @update:modelValue="(val: boolean) => handleTargetToggle(index, 'catalogue', val)" />
-                  </div>
-                </div>
-              </div>
-
-              <div class="mb-3" v-if="target.enableProduct">
-                <label class="form-label">{{ $t("admin.page.promotion.product") }}</label>
-                <Select :modelValue="target.productId" @update:modelValue="(val) => handleTargetChange(index, 'productId', val ? Number(val) : null)" :options="productOptions" optionLabel="name" optionValue="value" filter showClear :placeholder="$t('admin.page.promotion.selectProduct')" class="w-100" />
-              </div>
-
-              <div v-if="target.enableVariant">
-                <div class="mb-3">
-                  <label class="form-label">{{ $t("admin.page.promotion.product") }}</label>
-                  <Select :modelValue="target.selectedProductId" @update:modelValue="(val) => handleProductSelectForVariant(index, val ? Number(val) : null)" :options="productOptions" optionLabel="name" optionValue="value" filter showClear :placeholder="$t('admin.page.promotion.selectProduct')" class="w-100" />
-                </div>
-                <div class="mb-3" v-if="target.selectedProductId">
-                  <label class="form-label">{{ $t("admin.page.promotion.productVariant") }}</label>
-                  <Select :modelValue="target.productVariantId" @update:modelValue="(val) => handleTargetChange(index, 'productVariantId', val ? Number(val) : null)" :options="getVariantOptions(index)" optionLabel="name" optionValue="value" filter showClear :placeholder="$t('admin.page.promotion.selectProductVariant')" class="w-100" />
-                </div>
-              </div>
-
-              <div class="mb-3" v-if="target.enableCatalogue">
-                <label class="form-label">{{ $t("admin.page.promotion.productCatalogue") }}</label>
-                <Select :modelValue="target.productCatalogueId" @update:modelValue="(val) => handleTargetChange(index, 'productCatalogueId', val ? Number(val) : null)" :options="productCatalogueOptions" optionLabel="name" optionValue="value" filter showClear :placeholder="$t('admin.page.promotion.selectProductCatalogue')" class="w-100" />
-              </div>
-
-              <div class="row">
-                <div class="col-md-6 mb-3">
-                  <label class="form-label d-flex align-items-center gap-2">
-                    {{ $t("admin.page.promotion.isGift") }}
-                    <InputSwitch :modelValue="target.isGift" @update:modelValue="(val: boolean) => handleTargetChange(index, 'isGift', val)" />
-                  </label>
-                </div>
-
-                <div class="col-md-3 mb-3">
-                  <label class="form-label">{{ $t("admin.page.promotion.minQuantity") }}:</label>
-                  <InputNumber :modelValue="target.minQuantity" @update:modelValue="(val) => handleTargetChange(index, 'minQuantity', val)" :min="1" showButtons class="w-full" input-class="!rounded py-[7px] w-full" size="small" />
-                </div>
-
-                <div class="col-md-3 mb-3">
-                  <label class="form-label">{{ $t("admin.page.promotion.maxQuantity") }}</label>
-                  <InputNumber :modelValue="target.maxQuantity" @update:modelValue="(val) => handleTargetChange(index, 'maxQuantity', val)" :min="1" showButtons class="w-full" input-class="!rounded py-[7px] w-full" size="small" />
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ $t("admin.page.promotion.minValue") }}</label>
-                  <InputNumber :modelValue="target.minValue" @update:modelValue="(val) => handleTargetChange(index, 'minValue', val)" :min="0" :maxFractionDigits="2" showButtons class="w-full" input-class="!rounded py-[7px] w-full" size="small" mode="currency" currency="VND" locale="vi-VN" />
-                </div>
-
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ $t("admin.page.promotion.maxValue") }}</label>
-                  <InputNumber :modelValue="target.maxValue" @update:modelValue="(val) => handleTargetChange(index, 'maxValue', val)" :min="0" :maxFractionDigits="2" showButtons class="w-full" input-class="!rounded py-[7px] w-full" size="small" mode="currency" currency="VND" locale="vi-VN" />
-                </div>
-              </div>
-            </div>
-            <div v-if="promotionTargets.length === 0" class="text-center text-muted py-4">
-              {{ $t("admin.page.promotion.noTargets") }}
-            </div>
-          </Field>
-        </div>
-      </div>
+      <!-- Target -->
+      <PromotionTarget v-model="formValues.targets" />
 
       <div class="flex justify-end gap-3 mt-4 position-sticky bottom-5 z-20">
         <Button type="button" variant="cancel" :to="PROMOTIONINDEX" />
@@ -245,29 +93,99 @@
     <div class="col-lg-4 mt-0">
       <div class="card">
         <div class="card-header">
+          <h5 class="card-title mb-0">{{ $t("admin.common.image") }}</h5>
+        </div>
+        <div class="card-body">
+          <Field name="image" v-slot="{ field, errorMessage, meta }">
+            <SingleImageUpload v-model="field.value" @update:modelValue="field.onChange" />
+            <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
+          </Field>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">{{ $t("admin.page.promotion.type") }}</h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label" for="type">
+              {{ $t("admin.page.promotion.type") }}:
+              <span class="text-danger">*</span>
+            </label>
+            <Field name="type" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
+              <Select v-model="field.value" @update:modelValue="field.onChange" :options="PROMOTION_TYPES" option-label="label" option-value="value" :placeholder="$t('admin.page.promotion.selectType')" class="w-full rounded py-[1px]" size="small" showClear checkmark />
+              <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
+            </Field>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">{{ $t("admin.page.promotion.promotionCatalogue") }}</h5>
+        </div>
+        <div class="card-body">
+          <Field name="promotionCatalogueId" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
+            <Select v-bind="field" :options="promotionCatalogueOptions" option-label="name" option-value="value" :placeholder="$t('admin.page.promotion.selectPromotionCatalogue')" showClear class="w-full" />
+            <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
+          </Field>
+        </div>
+      </div> -->
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">{{ $t("admin.common.form.time") }}</h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label" for="start_date">{{ $t("admin.page.promotion.startDate") }}</label>
+            <Field name="startDate" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
+              <Calendar v-model="field.value" @update:modelValue="field.onChange" dateFormat="yy-mm-dd" :showTime="true" hourFormat="24" class="w-full" input-class="rounded py-[5px] w-full" />
+              <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
+            </Field>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="end_date">{{ $t("admin.page.promotion.endDate") }}</label>
+            <Field name="endDate" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
+              <Calendar v-model="field.value" @update:modelValue="field.onChange" dateFormat="yy-mm-dd" :showTime="true" hourFormat="24" class="w-full" input-class="rounded py-[5px] w-full" />
+              <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
+            </Field>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
           <h5 class="card-title mb-0">{{ $t("admin.common.setting") }}</h5>
         </div>
         <div class="card-body">
           <div class="mb-3">
-            <label class="form-label" for="promotionCatalogueId">
-              {{ $t("admin.page.promotion.promotionCatalogue") }}:
-              <span class="text-danger">*</span>
-            </label>
-            <Field name="promotionCatalogueId" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <Select :modelValue="field.value" @update:modelValue="field.onChange" :options="promotionCatalogueOptions" optionLabel="name" optionValue="value" filter :placeholder="$t('admin.page.promotion.selectPromotionCatalogue')" class="w-100" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
-              <small v-if="errorMessage && meta.touched" class="text-danger">
-                {{ $t(errorMessage) }}
-              </small>
+            <label class="form-label" for="priority">{{ $t("admin.page.promotion.priority") }}</label>
+            <Field name="priority" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
+              <InputNumber v-model="field.value" @update:modelValue="field.onChange" :min="0" class="w-full rounded py-[5px]" size="small" />
+              <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
             </Field>
           </div>
-
           <div class="mb-3">
-            <label class="form-label">{{ $t("admin.common.status") }}</label>
-            <Field name="publish" v-slot="{ field, errorMessage, meta }">
-              <PublishSelect :modelValue="field.value" @update:modelValue="field.onChange" />
-              <small v-if="errorMessage && meta.touched" class="text-danger">
-                {{ $t(errorMessage) }}
-              </small>
+            <Field name="canCombine" v-slot="{ field, errorMessage, meta }">
+              <div class="flex items-center gap-2">
+                <Checkbox v-model="field.value" @update:modelValue="field.onChange" :id="`can_combine`" binary />
+                <label class="form-check-label" :for="`can_combine`">
+                  {{ $t("admin.page.promotion.canCombine") }}
+                </label>
+              </div>
+              <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
+            </Field>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="usage_limit">{{ $t("admin.page.promotion.usageLimit") }}</label>
+            <Field name="usageLimit" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
+              <InputNumber v-model="field.value" @update:modelValue="field.onChange" :min="1" class="w-full rounded py-[5px]" size="small" />
+              <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
+            </Field>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="usage_per_customer">{{ $t("admin.page.promotion.usagePerCustomer") }}</label>
+            <Field name="usagePerCustomer" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
+              <InputNumber v-model="field.value" @update:modelValue="field.onChange" :min="1" class="w-full rounded py-[5px]" size="small" />
+              <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
             </Field>
           </div>
         </div>
@@ -278,225 +196,68 @@
 
 <script setup lang="ts">
 import { Field } from "vee-validate";
-import { PROMOTIONINDEX } from "~/utils/constants";
-import Button from "~/components/admin/custom/Button.vue";
-import Breadcrumb from "~/components/admin/navigation/Breadcrumb.vue";
-import PublishSelect from "~/components/admin/custom/PublishSelect.vue";
 import { usePromotion } from "~/composables/admin/promotion/usePromotion";
-import type { IPromotionTarget } from "~/interfaces/promotion/promotion.interface";
+import { PROMOTIONINDEX } from "~/utils/constants";
+import Breadcrumb from "~/components/admin/navigation/Breadcrumb.vue";
+import Button from "~/components/admin/custom/Button.vue";
+import PromotionRule from "~/components/admin/promotion/PromotionRule.vue";
+import PromotionAction from "~/components/admin/promotion/PromotionAction.vue";
+import PromotionTarget from "~/components/admin/promotion/PromotionTarget.vue";
+import SingleImageUpload from "~/components/admin/custom/SingleImageUpload.vue";
+import CKEditor from "~/components/admin/custom/CKEditor.vue";
+import { promotionService } from "~/services/promotion/promotion.service";
+import { useAppToast } from "~/composables/useAppToast";
 
-const { config, isLoading, values, show, handleUpdate, setValues, promotionCatalogueOptions, productOptions, productCatalogueOptions, productVariantOptions, loadProductVariants } = usePromotion(undefined, "update");
+const route = useRoute();
+const id = Number(route.params.id);
 
-const id = Number(useRoute().params.id);
-const { data } = await show(id);
+const { values, errors, isLoading, show, handleUpdate, setValues, promotionCatalogueOptions, PROMOTION_TYPES, PROMOTION_PUBLISH_STATUS, PROMOTION_RULE_TYPES, PROMOTION_OPERATORS, PROMOTION_ACTION_TYPES, PROMOTION_APPLY_TO, PROMOTION_TARGET_TYPES, PROMOTION_LOGIC_OPERATORS, generateCouponCode } = usePromotion(undefined, "update");
+const formValues = values as any;
 
-// Format dates for datetime-local input
-const formatDateForInput = (dateString: string | null | undefined): string => {
-  if (!dateString) return "";
-  const date = new Date(dateString);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  const hours = String(date.getHours()).padStart(2, "0");
-  const minutes = String(date.getMinutes()).padStart(2, "0");
-  return `${year}-${month}-${day}T${hours}:${minutes}`;
-};
+onMounted(async () => {
+  const promotionResponse = await show(id);
+  const promotionData = (promotionResponse?.data as any) || null;
 
-const discountTypeOptions = [
-  { name: "Phần trăm (%)", value: "percent" },
-  { name: "Số tiền", value: "amount" },
-];
-
-const promotionTargets = ref<(IPromotionTarget & { uid: string; selectedProductId?: number | null; enableProduct?: boolean; enableVariant?: boolean; enableCatalogue?: boolean })[]>([]);
-
-// Load promotion targets from data
-if (data.promotionTargets && data.promotionTargets.length > 0) {
-  promotionTargets.value = data.promotionTargets.map((target: IPromotionTarget) => {
-    // Determine which type is enabled based on which field has value
-    const enableProduct = !!target.productId;
-    const enableVariant = !!target.productVariantId;
-    const enableCatalogue = !!target.productCatalogueId;
-
-    // If variant is enabled, we need to find the product ID from the variant
-    let selectedProductId = null;
-    if (enableVariant && target.productVariantId) {
-      // We'll need to load variants to find the product, but for now set it from the variant relationship if available
-      selectedProductId = target.productVariant?.productId || null;
-    }
-
-    return {
-      ...target,
-      uid: target.id?.toString() || crypto.randomUUID(),
-      selectedProductId,
-      enableProduct,
-      enableVariant,
-      enableCatalogue,
-      isGift: target.isGift ?? false,
-      minQuantity: target.minQuantity ?? 1,
-    };
-  });
-
-  // Load product variants for targets that have variants
-  promotionTargets.value.forEach(async (target) => {
-    if (target.enableVariant && target.selectedProductId) {
-      await loadProductVariants(target.selectedProductId);
-    }
-  });
-} else {
-  promotionTargets.value = [
-    {
-      uid: crypto.randomUUID(),
-      productId: null,
-      productVariantId: null,
-      productCatalogueId: null,
-      selectedProductId: null,
-      enableProduct: false,
-      enableVariant: false,
-      enableCatalogue: false,
-      isGift: false,
-      minQuantity: 1,
-      maxQuantity: null,
-      minValue: null,
-      maxValue: null,
-    },
-  ];
-}
-
-setValues({
-  name: data.name,
-  couponCode: data.couponCode,
-  description: data.description,
-  promotionCatalogueId: data.promotionCatalogueId,
-  discountValue: data.discountValue,
-  discountType: data.discountType,
-  maxDiscountValue: data.maxDiscountValue,
-  startDate: formatDateForInput(data.startDate),
-  endDate: formatDateForInput(data.endDate),
-  priority: data.priority ?? 0,
-  canCombine: data.canCombine ?? false,
-  publish: data.publish,
-  promotionTargets: promotionTargets.value.map(({ uid, selectedProductId, enableProduct, enableVariant, enableCatalogue, ...rest }) => ({
-    ...rest,
-    isGift: rest.isGift ?? false,
-    minQuantity: rest.minQuantity ?? 1,
-  })),
+  if (promotionData) {
+    setValues({
+      name: promotionData.name || "",
+      code: promotionData.code || "",
+      description: promotionData.description || "",
+      image: promotionData.image || "",
+      type: (promotionData.type as any) || "order",
+      priority: promotionData.priority || 0,
+      promotionCatalogueId: promotionData.promotionCatalogueId || null,
+      canCombine: promotionData.canCombine || false,
+      combinableWith: promotionData.combinableWith || null,
+      usageLimit: promotionData.usageLimit || null,
+      usagePerCustomer: promotionData.usagePerCustomer || null,
+      startDate: promotionData.startDate || null,
+      endDate: promotionData.endDate || null,
+      publish: promotionData.publish || 2,
+      // API returns keys: rules, actions, targets
+      rules: promotionData.rules || [],
+      actions: promotionData.actions || [],
+      targets: promotionData.targets || [],
+    });
+  }
 });
 
-// Handle target toggle - only allow one to be enabled at a time
-const handleTargetToggle = (index: number, type: "product" | "variant" | "catalogue", enabled: boolean) => {
-  const target = promotionTargets.value[index];
-  if (!target) return;
+const toast = useAppToast();
 
-  if (enabled) {
-    // Disable all other toggles
-    target.enableProduct = type === "product";
-    target.enableVariant = type === "variant";
-    target.enableCatalogue = type === "catalogue";
-
-    // Clear all target fields
-    target.productId = null;
-    target.productVariantId = null;
-    target.productCatalogueId = null;
-    target.selectedProductId = null;
-  } else {
-    // Disable the current toggle
-    if (type === "product") {
-      target.enableProduct = false;
-      target.productId = null;
-    } else if (type === "variant") {
-      target.enableVariant = false;
-      target.productVariantId = null;
-      target.selectedProductId = null;
-    } else if (type === "catalogue") {
-      target.enableCatalogue = false;
-      target.productCatalogueId = null;
-    }
+const saveRule = async (index: number, record: any) => {
+  try {
+    const idNum = Number(id);
+    const payload = { rules: formValues.rules } as any;
+    const response = await promotionService.update(idNum, payload as any);
+    toast.success(response?.message || "Đã lưu điều kiện");
+    // refresh rules from server if available
+    const refreshed = await show(idNum);
+    const data = refreshed?.data || {};
+    if (data.rules) setValues({ ...(values as any), rules: data.rules } as any);
+  } catch (err: any) {
+    toast.error(err?.response?.data?.message || "Lưu thất bại");
+    console.error("Save rule error:", err);
   }
-
-  syncPromotionTargets();
-};
-
-// Handle product select for variant
-const handleProductSelectForVariant = async (index: number, productId: number | null) => {
-  const target = promotionTargets.value[index];
-  if (!target) return;
-
-  target.selectedProductId = productId;
-  target.productVariantId = null; // Clear variant when product changes
-
-  if (productId) {
-    await loadProductVariants(productId);
-  }
-
-  syncPromotionTargets();
-};
-
-// Get variant options for a target
-const getVariantOptions = (index: number) => {
-  const target = promotionTargets.value[index];
-  if (!target?.selectedProductId) return [];
-  return productVariantOptions.value[target.selectedProductId] || [];
-};
-
-// Handle target field change
-const handleTargetChange = (index: number, field: string, value: any) => {
-  const target = promotionTargets.value[index];
-  if (!target) return;
-
-  // If setting a target field, clear others and update toggles
-  if (field === "productId") {
-    target.productVariantId = null;
-    target.productCatalogueId = null;
-    target.selectedProductId = null;
-    target.enableProduct = value !== null && value !== undefined;
-    target.enableVariant = false;
-    target.enableCatalogue = false;
-  } else if (field === "productVariantId") {
-    target.productId = null;
-    target.productCatalogueId = null;
-    target.enableProduct = false;
-    target.enableVariant = value !== null && value !== undefined;
-    target.enableCatalogue = false;
-  } else if (field === "productCatalogueId") {
-    target.productId = null;
-    target.productVariantId = null;
-    target.selectedProductId = null;
-    target.enableProduct = false;
-    target.enableVariant = false;
-    target.enableCatalogue = value !== null && value !== undefined;
-  }
-
-  (target as any)[field] = value;
-  syncPromotionTargets();
-};
-
-const addPromotionTarget = () => {
-  promotionTargets.value.push({
-    uid: crypto.randomUUID(),
-    productId: null,
-    productVariantId: null,
-    productCatalogueId: null,
-    selectedProductId: null,
-    enableProduct: false,
-    enableVariant: false,
-    enableCatalogue: false,
-    isGift: false,
-    minQuantity: 1,
-    maxQuantity: null,
-    minValue: null,
-    maxValue: null,
-  });
-  syncPromotionTargets();
-};
-
-const removePromotionTarget = (index: number) => {
-  promotionTargets.value.splice(index, 1);
-  syncPromotionTargets();
-};
-
-const syncPromotionTargets = () => {
-  const targets = promotionTargets.value.map(({ uid, selectedProductId, enableProduct, enableVariant, enableCatalogue, ...rest }) => rest);
-  setValues({ ...values, promotionTargets: targets } as any);
 };
 
 definePageMeta({

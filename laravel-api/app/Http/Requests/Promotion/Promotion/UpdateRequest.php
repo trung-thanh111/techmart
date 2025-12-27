@@ -25,12 +25,14 @@ class UpdateRequest extends BaseRequest
     {
         $method = $this->getMethod();
         $sometime = ($method === 'PATCH') ? 'sometimes' : '';
-        $id = $this->route('promotion') ?? null;
+        $mimes = implode(',', config('upload.image.allowed_type'));
+        $max_size = config('upload.image.max_size');
         return [
             'name' => "{$sometime}|required|string|max:255",
             'code' => ["{$sometime}", 'nullable', 'string', 'max:100', \Illuminate\Validation\Rule::unique('promotions', 'code')->ignore($this->route('promotion'))],
             'slug' => ["{$sometime}", 'required', 'string', 'max:255', \Illuminate\Validation\Rule::unique('promotions', 'slug')->ignore($this->route('promotion'))],
             'description' => "{$sometime}|nullable|string",
+            "image" => "nullable|{$sometime}|mimes:{$mimes}|max:{$max_size}",
             'type' => "{$sometime}|required|string|in:" . implode(',', Promotion::AVAILABLE_TYPES),
             'priority' => "{$sometime}|nullable|integer|min:0",
             'promotion_catalogue_id' => "{$sometime}|nullable|integer|exists:promotion_catalogues,id",

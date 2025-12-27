@@ -434,7 +434,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
         Route::resource('popups', PopupController::class)->except($routeExcept);
 
         // This is route Promotion
-        Route::group(['prefix' => 'promotions'], function() {
+        Route::group(['prefix' => 'promotions'], function () {
             Route::post('bulkStore', [PromotionController::class, 'bulkStore']);
             Route::put('bulkUpdate', [PromotionController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [PromotionController::class, 'bulkUpdate']);

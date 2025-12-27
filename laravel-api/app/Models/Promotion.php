@@ -29,6 +29,7 @@ class Promotion extends Model
         'name',
         'slug',
         'description',
+        'image',
         'type',
         'priority',
         'promotion_catalogue_id',

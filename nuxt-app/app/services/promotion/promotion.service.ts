@@ -1,6 +1,7 @@
 import type { IApiOk, IApiMessage, IPaginate } from "~/interfaces/base.interface";
 import type { IPromotion } from "~/interfaces/promotion/promotion.interface";
 import { useApi } from "~/composables/useApi";
+import { formData } from "~/utils/formData";
 
 const ENDPOINT = "/api/v1";
 
@@ -16,7 +17,7 @@ export const promotionService = {
     const { privateFetch } = useApi();
     return await privateFetch<IApiOk<IPromotion>>(`${ENDPOINT}/promotions`, {
       method: "POST",
-      body: payload,
+      body: formData(payload),
     });
   },
 
@@ -31,7 +32,7 @@ export const promotionService = {
     const { privateFetch } = useApi();
     return await privateFetch<IApiOk<IPromotion>>(`${ENDPOINT}/promotions/${id}`, {
       method: "POST",
-      body: payload,
+      body: formData(payload),
       params: { _method: "PATCH" },
     });
   },
@@ -49,10 +50,5 @@ export const promotionService = {
       body: { ids },
       method: "DELETE",
     });
-  },
-
-  all: async (): Promise<IApiOk<IPromotion[]>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPromotion[]>>(`${ENDPOINT}/promotions?type=all`);
   },
 };

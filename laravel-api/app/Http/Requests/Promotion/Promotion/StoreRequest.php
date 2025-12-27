@@ -23,11 +23,14 @@ class StoreRequest extends BaseRequest
      */
     public function rules(): array
     {
+        $mimes = implode(',', config('upload.image.allowed_type'));
+        $max_size = config('upload.image.max_size');
         return [
             'name' => 'required|string|max:255',
             'code' => 'nullable|string|max:50|unique:promotions,code',
             'slug' => 'required|string|max:255|unique:promotions,slug',
             'description' => 'nullable|string',
+            "image" => "nullable|sometimes|mimes:{$mimes}|max:{$max_size}",
             'type' => 'required|string|in:' . implode(',', Promotion::AVAILABLE_TYPES),
             'priority' => 'nullable|integer|min:0',
             'promotion_catalogue_id' => 'nullable|integer|exists:promotion_catalogues,id',

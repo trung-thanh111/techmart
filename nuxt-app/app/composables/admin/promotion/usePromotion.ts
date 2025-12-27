@@ -1,16 +1,65 @@
 import z from "zod";
-import { useForm } from "vee-validate";
 import { useI18n } from "vue-i18n";
+import { useForm } from "vee-validate";
 import { errorToField, slugify } from "~/utils/helpers";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useAppToast } from "~/composables/useAppToast";
 import { promotionService } from "~/services/promotion/promotion.service";
 import { promotionCatalogueService } from "~/services/promotion/catalogue.service";
-import { productService } from "~/services/product/product.service";
-import { productCatalogueService } from "~/services/product/catalogue.service";
+import { userCatalogueService } from "~/services/user/catalogue.service";
 import type { BasePayloadFilter, IApiOk, IPaginate } from "~/interfaces/base.interface";
 import type { IPromotion, PromotionPayloadFilter } from "~/interfaces/promotion/promotion.interface";
-import { PROMOTIONINDEX, MAX_FILE_SIZE, ACCEPTED_IMAGE_TYPES } from "~/utils/constants";
+import { PROMOTIONINDEX, PROMOTION_TYPES, PROMOTION_PUBLISH_STATUS, PROMOTION_RULE_TYPES, PROMOTION_OPERATORS, PROMOTION_ACTION_TYPES, PROMOTION_APPLY_TO, PROMOTION_TARGET_TYPES, PROMOTION_LOGIC_OPERATORS } from "~/utils/constants";
+
+// Schema definitions for types
+const ruleSchemaForTypes = z.object({
+  ruleGroup: z.number().min(0),
+  logicOperator: z.enum(["AND", "OR"]),
+  ruleType: z.enum(["min_order_total", "product_qty", "product_qty_by_category", "customer_group", "time_slot"]),
+  operator: z.enum(["=", "!=", ">", ">=", "<", "<=", "IN", "NOT_IN", "BETWEEN"]),
+  value: z.union([z.string(), z.number(), z.object({ from: z.string(), to: z.string() }), z.object({ category_id: z.number(), min_qty: z.number() })]),
+  description: z.string().optional(),
+});
+
+const actionSchemaForTypes = z.object({
+  executionOrder: z.number().min(0),
+  actionType: z.enum(["percent", "fixed", "free_shipping", "bxgy", "tiered"]),
+  actionValue: z.number().nullable().optional(),
+  maxDiscount: z.number().min(0).nullable().optional(),
+  minDiscount: z.number().min(0).nullable().optional(),
+  applyTo: z.enum(["order", "cart_subtotal", "shipping_fee", "cheapest_item", "most_expensive_item", "specific_products"]),
+  config: z.record(z.any()).nullable().optional(),
+});
+
+const targetSchemaForTypes = z.object({
+  targetType: z.enum(["order", "product", "category", "brand", "customer_group", "location"]),
+  targetId: z.number().nullable().optional(),
+  isIncluded: z.boolean(),
+  metadata: z.record(z.any()).nullable().optional(),
+});
+
+const promotionSchemaForTypes = z.object({
+  name: z.string().min(1).max(255),
+  code: z.string().max(50).nullable().optional(),
+  description: z.string().nullable().optional(),
+  image: z.string().nullable().optional(),
+  type: z.enum(["order", "product", "flash_sale", "bundle", "bxgy", "free_ship", "voucher"]),
+  priority: z.number().min(0).default(0),
+  promotionCatalogueId: z.number().nullable().optional(),
+  canCombine: z.boolean().default(false),
+  combinableWith: z.array(z.number()).nullable().optional(),
+  usageLimit: z.number().min(1).nullable().optional(),
+  usagePerCustomer: z.number().min(1).nullable().optional(),
+  startDate: z.string().nullable().optional(),
+  endDate: z.string().nullable().optional(),
+  publish: z.number().refine((val) => [0, 1, 2].includes(val)),
+  rules: z.array(ruleSchemaForTypes).optional(),
+  actions: z.array(actionSchemaForTypes).min(1),
+  targets: z.array(targetSchemaForTypes).optional(),
+});
+
+export type TPromotionCreate = z.infer<typeof promotionSchemaForTypes>;
+export type TPromotionUpdate = z.infer<typeof promotionSchemaForTypes>;
 
 export const usePromotion = (initialFilters?: PromotionPayloadFilter, mode: "create" | "update" = "create") => {
   const { t } = useI18n();
@@ -24,112 +73,103 @@ export const usePromotion = (initialFilters?: PromotionPayloadFilter, mode: "cre
   const selectedIds = ref<number[]>([]);
   const selectedItem = ref<IPromotion | null>(null);
 
-  // Options for selects
-  const promotionCatalogueOptions = ref<{ name: string; value: number }[]>([]);
-  const productOptions = ref<{ name: string; value: number }[]>([]);
-  const productCatalogueOptions = ref<{ name: string; value: number }[]>([]);
-  const productVariantOptions = ref<Record<number, { name: string; value: number }[]>>({});
+  // Options with caching
+  const promotionCatalogueOptions = ref<Array<{ name: string; value: number }>>([]);
+  const customerGroupOptions = ref<Array<{ name: string; value: number }>>([]);
+  // Cache flags to avoid reloading
+  const isOptionsLoaded = useState("promotion-options-loaded", () => false);
 
-  const promotionTargetSchema = z
-    .object({
-      productId: z.number().nullable().optional(),
-      productVariantId: z.number().nullable().optional(),
-      productCatalogueId: z.number().nullable().optional(),
-      isGift: z.boolean().default(false),
-      // minQuantity: z.number().min(1, "admin.validation.minQuantityRequired").default(1),
-      // maxQuantity: z.number().nullable().optional(),
-      minValue: z.number().nullable().optional(),
-      maxValue: z.number().nullable().optional(),
-    })
-    .refine(
-      (data) => {
-        // Chỉ cho phép 1 trong 3 field được set (theo constraint database)
-        const count = [data.productId, data.productVariantId, data.productCatalogueId].filter((v) => v !== null && v !== undefined).length;
-        return count === 1;
-      },
-      { message: "admin.validation.promotionTargetRequired", path: ["productId"] }
-    );
+  const ruleSchema = z.object({
+    ruleGroup: z.number().min(0),
+    logicOperator: z.enum(["AND", "OR"]),
+    ruleType: z.enum(["min_order_total", "product_qty", "product_qty_by_category", "customer_group", "time_slot"]),
+    operator: z.enum(["=", "!=", ">", ">=", "<", "<=", "IN", "NOT_IN", "BETWEEN"]),
+    value: z.union([z.string(), z.number(), z.object({ from: z.string(), to: z.string() }), z.object({ category_id: z.number(), min_qty: z.number() })]),
+    description: z.string().optional(),
+  });
+
+  const actionSchema = z.object({
+    executionOrder: z.number().min(0),
+    actionType: z.enum(["percent", "fixed", "free_shipping", "bxgy", "tiered"]),
+    actionValue: z.number().nullable().optional(),
+    maxDiscount: z.number().min(0).nullable().optional(),
+    minDiscount: z.number().min(0).nullable().optional(),
+    applyTo: z.enum(["order", "cart_subtotal", "shipping_fee", "cheapest_item", "most_expensive_item", "specific_products"]),
+    config: z.record(z.any()).nullable().optional(),
+  });
+
+  const targetSchema = z.object({
+    targetType: z.enum(["order", "product", "category", "brand", "customer_group", "location"]),
+    targetId: z.number().nullable().optional(),
+    isIncluded: z.boolean(),
+    metadata: z.record(z.any()).nullable().optional(),
+  });
 
   const schema = {
     name: z.string({ required_error: "admin.validation.nameRequired" }).trim().min(1, "admin.validation.nameRequired").max(255, "admin.validation.nameMaxLength"),
-    couponCode: z.string().max(50, "admin.validation.couponCodeMaxLength").nullable().optional(),
-    description: z.string().max(1000, "admin.validation.descriptionMaxLength").nullable().optional(),
-    promotionCatalogueId: z.number({ required_error: "admin.validation.promotionCatalogueRequired" }).min(1, "admin.validation.promotionCatalogueRequired"),
-    discountValue: z.number({ required_error: "admin.validation.discountValueRequired" }).min(0, "admin.validation.discountValueMin"),
-    discountType: z.enum(["percent", "amount"], { required_error: "admin.validation.discountTypeRequired" }),
-    maxDiscountValue: z.number().nullable().optional(),
+    code: z.string().max(50).nullable().optional(),
+    description: z.string().nullable().optional(),
+    image: z.string().nullable().optional(),
+    type: z.enum(["order", "product", "flash_sale", "bundle", "bxgy", "free_ship", "voucher"]),
+    priority: z.number().min(0).default(0),
+    promotionCatalogueId: z.number().nullable().optional(),
+    canCombine: z.boolean().default(false),
+    combinableWith: z.array(z.number()).nullable().optional(),
+    usageLimit: z.number().min(1).nullable().optional(),
+    usagePerCustomer: z.number().min(1).nullable().optional(),
     startDate: z.string().nullable().optional(),
     endDate: z.string().nullable().optional(),
-    priority: z.number().min(0, "admin.validation.priorityMin").default(0).nullable().optional(),
-    canCombine: z.boolean().default(false),
     publish: z.number({ required_error: "admin.validation.statusRequired" }).refine((val) => [0, 1, 2].includes(val), { message: "admin.validation.statusInvalid" }),
-    promotionTargets: z.array(promotionTargetSchema).min(1, "admin.validation.promotionTargetsRequired"),
+    rules: z.array(ruleSchema).optional(),
+    actions: z.array(actionSchema).min(1, t("admin.validation.actionsRequired")),
+    targets: z.array(targetSchema).optional(),
   };
 
   const createSchema = z.object({ ...schema });
   const updateSchema = z.object({ ...schema });
+
   type TPromotionCreate = z.infer<typeof createSchema>;
   type TPromotionUpdate = z.infer<typeof updateSchema>;
 
   const { handleSubmit, values, errors, setValues, resetForm, setFieldError } = useForm<TPromotionCreate | TPromotionUpdate>({
     validationSchema: toTypedSchema(mode === "create" ? createSchema : updateSchema),
+    keepValuesOnUnmount: true,
     initialValues: {
-      promotionTargets: [],
-      canCombine: false,
+      type: "order",
       priority: 0,
-      discountType: "percent",
-    } as any,
+      canCombine: false,
+      publish: 2,
+      rules: [],
+      actions: [],
+      targets: [],
+    },
   });
 
-  // Load options
   const loadPromotionCatalogueOptions = async () => {
+    if (promotionCatalogueOptions.value.length > 0) return; // Cache hit
     try {
       const response = await promotionCatalogueService.all();
       const rows = response?.data ?? [];
       promotionCatalogueOptions.value = (Array.isArray(rows) ? rows : [rows]).map((item: any) => ({ name: item.name, value: Number(item.id) })).filter((opt: any) => opt.name && !Number.isNaN(opt.value));
     } catch (error) {
-      console.error("Error loading promotion catalogue options:", error);
+      console.error("Lỗi khi tải dữ liệu promotion catalogue:", error);
     }
   };
 
-  const loadProductOptions = async () => {
+  const loadCustomerGroupOptions = async () => {
+    if (customerGroupOptions.value.length > 0) return; // Cache hit
     try {
-      const response = await productService.all();
+      const response = await userCatalogueService.all();
       const rows = response?.data ?? [];
-      productOptions.value = (Array.isArray(rows) ? rows : [rows]).map((item: any) => ({ name: item.name, value: Number(item.id) })).filter((opt: any) => opt.name && !Number.isNaN(opt.value));
+      customerGroupOptions.value = (Array.isArray(rows) ? rows : [rows]).map((item: any) => ({ name: item.name, value: Number(item.id) })).filter((opt: any) => opt.name && !Number.isNaN(opt.value));
     } catch (error) {
-      console.error("Error loading product options:", error);
+      console.error("Lỗi khi tải dữ liệu customer group:", error);
     }
   };
 
-  const loadProductCatalogueOptions = async () => {
-    try {
-      const response = await productCatalogueService.all();
-      const rows = response?.data ?? [];
-      productCatalogueOptions.value = (Array.isArray(rows) ? rows : [rows]).map((item: any) => ({ name: item.name, value: Number(item.id) })).filter((opt: any) => opt.name && !Number.isNaN(opt.value));
-    } catch (error) {
-      console.error("Error loading product catalogue options:", error);
-    }
-  };
-
-  // Load product variants by product ID
-  const loadProductVariants = async (productId: number) => {
-    if (!productId || productVariantOptions.value[productId]) {
-      return productVariantOptions.value[productId] || [];
-    }
-    try {
-      const response = await (productService as any).show(productId, ["product_variants"]);
-      const product = response?.data;
-      const variants = product?.productVariants || [];
-      productVariantOptions.value[productId] = variants.map((variant: any) => ({
-        name: variant.name || variant.code || `Variant #${variant.id}`,
-        value: Number(variant.id),
-      }));
-      return productVariantOptions.value[productId];
-    } catch (error) {
-      console.error("Error loading product variants:", error);
-      return [];
-    }
+  // Generate slug from name
+  const generateSlug = (name: string): string => {
+    return slugify(name);
   };
 
   // Generate coupon code: 4 uppercase letters + 4 random numbers
@@ -148,7 +188,6 @@ export const usePromotion = (initialFilters?: PromotionPayloadFilter, mode: "cre
     return code;
   };
 
-  // store
   const handleStore = (shouldClose = false) => {
     const wrapped = handleSubmit(async (payload: TPromotionCreate | TPromotionUpdate) => {
       isLoading.value = true;
@@ -162,9 +201,11 @@ export const usePromotion = (initialFilters?: PromotionPayloadFilter, mode: "cre
       } catch (error: any) {
         if (error?.data?.isValidationError) {
           errorToField(setFieldError, error?.data?.errors, t, "name");
+          errorToField(setFieldError, error?.data?.errors, t, "type");
+          errorToField(setFieldError, error?.data?.errors, t, "publish");
           return;
         }
-        console.error("Store error:", error);
+        console.error("Thêm mới thất bại:", error);
         toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
         throw error;
       } finally {
@@ -177,7 +218,7 @@ export const usePromotion = (initialFilters?: PromotionPayloadFilter, mode: "cre
 
   const show = async (id: number) => {
     try {
-      const response = await promotionService.show(id, ["promotion_targets", "promotion_catalogues"]);
+      const response = await promotionService.show(id);
       return response;
     } catch (error: any) {
       console.error("Lỗi! Không tìm thấy bản ghi: ", error);
@@ -196,13 +237,15 @@ export const usePromotion = (initialFilters?: PromotionPayloadFilter, mode: "cre
         if (shouldClose) {
           return navigateTo(PROMOTIONINDEX);
         }
-        // keep on page for edit
+        // keep on page
       } catch (error: any) {
         if (error?.data?.isValidationError) {
           errorToField(setFieldError, error?.data?.errors, t, "name");
+          errorToField(setFieldError, error?.data?.errors, t, "type");
+          errorToField(setFieldError, error?.data?.errors, t, "publish");
           return;
         }
-        console.error("Update error:", error);
+        console.error("Cập nhật thất bại:", error);
         toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
       } finally {
         isLoading.value = false;
@@ -292,31 +335,38 @@ export const usePromotion = (initialFilters?: PromotionPayloadFilter, mode: "cre
     return data.value?.data?.data?.map((item) => item.id) || [];
   };
 
-  onMounted(() => {
-    if (mode === "create" || mode === "update") {
-      loadPromotionCatalogueOptions();
-      loadProductOptions();
-      loadProductCatalogueOptions();
-    } else {
-      fetchData();
+  const initializeData = async () => {
+    await fetchData();
+    if (!isOptionsLoaded.value) {
+      await Promise.all([loadPromotionCatalogueOptions(), loadCustomerGroupOptions()]);
+      isOptionsLoaded.value = true;
     }
+  };
+
+  onMounted(async () => {
+    initializeData();
   });
 
   return {
     data,
     isLoading,
     filters,
+    config,
     page,
     values,
     errors,
-    config,
     selectedIds,
     selectedItem,
     promotionCatalogueOptions,
-    productOptions,
-    productCatalogueOptions,
-    productVariantOptions,
-    loadProductVariants,
+    customerGroupOptions,
+    PROMOTION_TYPES,
+    PROMOTION_PUBLISH_STATUS,
+    PROMOTION_RULE_TYPES,
+    PROMOTION_OPERATORS,
+    PROMOTION_ACTION_TYPES,
+    PROMOTION_APPLY_TO,
+    PROMOTION_TARGET_TYPES,
+    PROMOTION_LOGIC_OPERATORS,
     generateCouponCode,
     setValues,
     show,
@@ -333,10 +383,6 @@ export const usePromotion = (initialFilters?: PromotionPayloadFilter, mode: "cre
     getTotalItems,
     getAllItemIds,
     loadPromotionCatalogueOptions,
-    loadProductOptions,
-    loadProductCatalogueOptions,
+    loadCustomerGroupOptions,
   };
 };
-
-export type TPromotionCreate = Partial<IPromotion>;
-export type TPromotionUpdate = TPromotionCreate;
