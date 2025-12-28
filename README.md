@@ -2,7 +2,7 @@
 
 Dự án gồm 2 phần chính:
 - `laravel-api/`: Backend API (Laravel 10, MySQL, Redis, JWT, Queue, Excel)
-- `nuxt-app/`: Frontend Admin (Nuxt 3, TypeScript, TailwindCSS, PrimeVue, VeeValidate/Zod, i18n)
+- `nuxt-app/`: Frontend (Nuxt v4.1, TypeScript, TailwindCSS, PrimeVue v4, VeeValidate/Zod, i18n)
 
 ## 1) Yêu cầu hệ thống
 - Node.js >= 18, npm >= 9
@@ -206,4 +206,5 @@ techmart/
 - Format code theo linting của dự án, commit rõ ràng
 
 —
+
 Nếu cần script “one-click” dev cho Windows/WSL, có thể bổ sung sau.
