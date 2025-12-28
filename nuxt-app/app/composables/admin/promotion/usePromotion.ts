@@ -50,8 +50,8 @@ const promotionSchemaForTypes = z.object({
   combinableWith: z.array(z.number()).nullable().optional(),
   usageLimit: z.number().min(1).nullable().optional(),
   usagePerCustomer: z.number().min(1).nullable().optional(),
-  startDate: z.string().nullable().optional(),
-  endDate: z.string().nullable().optional(),
+  startDate: z.union([z.string(), z.date()]).nullable().optional(),
+  endDate: z.union([z.string(), z.date()]).nullable().optional(),
   publish: z.number().refine((val) => [0, 1, 2].includes(val)),
   rules: z.array(ruleSchemaForTypes).optional(),
   actions: z.array(actionSchemaForTypes).min(1),
@@ -117,8 +117,8 @@ export const usePromotion = (initialFilters?: PromotionPayloadFilter, mode: "cre
     combinableWith: z.array(z.number()).nullable().optional(),
     usageLimit: z.number().min(1).nullable().optional(),
     usagePerCustomer: z.number().min(1).nullable().optional(),
-    startDate: z.string().nullable().optional(),
-    endDate: z.string().nullable().optional(),
+    startDate: z.union([z.string(), z.date()]).nullable().optional(),
+    endDate: z.union([z.string(), z.date()]).nullable().optional(),
     publish: z.number({ required_error: "admin.validation.statusRequired" }).refine((val) => [0, 1, 2].includes(val), { message: "admin.validation.statusInvalid" }),
     rules: z.array(ruleSchema).optional(),
     actions: z.array(actionSchema).min(1, t("admin.validation.actionsRequired")),
@@ -167,11 +167,6 @@ export const usePromotion = (initialFilters?: PromotionPayloadFilter, mode: "cre
     }
   };
 
-  // Generate slug from name
-  const generateSlug = (name: string): string => {
-    return slugify(name);
-  };
-
   // Generate coupon code: 4 uppercase letters + 4 random numbers
   const generateCouponCode = (): string => {
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -192,7 +187,20 @@ export const usePromotion = (initialFilters?: PromotionPayloadFilter, mode: "cre
     const wrapped = handleSubmit(async (payload: TPromotionCreate | TPromotionUpdate) => {
       isLoading.value = true;
       try {
-        const response = await promotionService.store(payload as Partial<IPromotion>);
+        // prepare payload: serialize dates and ensure arrays are plain
+        const payloadToSend: any = JSON.parse(JSON.stringify(payload || {}));
+        const serializeDate = (d: any) => {
+          if (!d) return null;
+          if (typeof d === "string") return d;
+          if (d instanceof Date) return d.toISOString().slice(0, 19).replace("T", " ");
+          return String(d);
+        };
+        payloadToSend.startDate = serializeDate((payload as any).startDate);
+        payloadToSend.endDate = serializeDate((payload as any).endDate);
+        payloadToSend.rules = Array.isArray((payload as any).rules) ? (payload as any).rules : [];
+        payloadToSend.actions = Array.isArray((payload as any).actions) ? (payload as any).actions : [];
+        payloadToSend.targets = Array.isArray((payload as any).targets) ? (payload as any).targets : [];
+        const response = await promotionService.store(payloadToSend as Partial<IPromotion>);
         toast.success(response?.message || t("admin.messages.createSuccess"));
         if (shouldClose) {
           return navigateTo(PROMOTIONINDEX);
@@ -232,7 +240,19 @@ export const usePromotion = (initialFilters?: PromotionPayloadFilter, mode: "cre
       isLoading.value = true;
       try {
         const id = Number(useRoute().params.id);
-        await promotionService.update(id, payload as Partial<IPromotion>);
+        const payloadToSend: any = JSON.parse(JSON.stringify(payload || {}));
+        const serializeDate = (d: any) => {
+          if (!d) return null;
+          if (typeof d === "string") return d;
+          if (d instanceof Date) return d.toISOString().slice(0, 19).replace("T", " ");
+          return String(d);
+        };
+        payloadToSend.startDate = serializeDate((payload as any).startDate);
+        payloadToSend.endDate = serializeDate((payload as any).endDate);
+        payloadToSend.rules = Array.isArray((payload as any).rules) ? (payload as any).rules : [];
+        payloadToSend.actions = Array.isArray((payload as any).actions) ? (payload as any).actions : [];
+        payloadToSend.targets = Array.isArray((payload as any).targets) ? (payload as any).targets : [];
+        await promotionService.update(id, payloadToSend as Partial<IPromotion>);
         toast.success(t("admin.messages.updateSuccess"));
         if (shouldClose) {
           return navigateTo(PROMOTIONINDEX);

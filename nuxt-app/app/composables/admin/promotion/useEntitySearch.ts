@@ -217,7 +217,7 @@ export const useEntitySearch = (entityType: EntityType) => {
       let entity: any = null;
 
       switch (entityType) {
-        case "product":
+        case "product": {
           const productResponse = await productService.show(id);
           entity = productResponse?.data;
           if (entity) {
@@ -230,8 +230,8 @@ export const useEntitySearch = (entityType: EntityType) => {
             };
           }
           break;
-
-        case "category":
+        }
+        case "category": {
           const categoryResponse = await productCatalogueService.show(id);
           entity = categoryResponse?.data;
           if (entity) {
@@ -243,8 +243,8 @@ export const useEntitySearch = (entityType: EntityType) => {
             };
           }
           break;
-
-        case "brand":
+        }
+        case "brand": {
           const brandResponse = await brandService.show(id);
           entity = brandResponse?.data;
           if (entity) {
@@ -256,8 +256,8 @@ export const useEntitySearch = (entityType: EntityType) => {
             };
           }
           break;
-
-        case "customer_group":
+        }
+        case "customer_group": {
           const groupResponse = await userCatalogueService.show(id);
           entity = groupResponse?.data;
           if (entity) {
@@ -268,6 +268,7 @@ export const useEntitySearch = (entityType: EntityType) => {
             };
           }
           break;
+        }
       }
 
       return null;
