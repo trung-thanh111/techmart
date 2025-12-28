@@ -63,9 +63,8 @@
                           :options="PROMOTION_RULE_TYPES"
                           option-label="label"
                           option-value="value"
-                          class="w-full"
+                          class="w-full h-[38px]"
                           :placeholder="$t('admin.page.promotion.selectRuleType')"
-                          style="height: 38px"
                         />
                         <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
                       </Field>
@@ -84,28 +83,27 @@
                       <label class="form-label">{{ $t("admin.page.promotion.value") }}</label>
                       <Field :name="`rules.${index}.value`" v-slot="{ field, errorMessage, meta }">
                         <template v-if="rule.ruleType === 'min_order_total'">
-                          <InputNumber v-model="field.value" @update:modelValue="field.onChange" mode="currency" currency="VND" locale="vi-VN" class="w-full" input-class="rounded" :min="0" style="height: 38px" />
+                          <InputNumber v-model="field.value" @update:modelValue="field.onChange" mode="currency" currency="VND" locale="vi-VN" class="w-full h-[38px] rounded" :min="0" />
                         </template>
                         <template v-else-if="rule.ruleType === 'time_slot'">
                           <div class="flex gap-2">
-                            <input :value="(field.value && field.value.from) || ''" @input="(e) => updateNestedFieldFromEvent(field, 'from', e)" class="form-control rounded" placeholder="Từ (HH:MM)" style="height: 38px" />
-                            <input :value="(field.value && field.value.to) || ''" @input="(e) => updateNestedFieldFromEvent(field, 'to', e)" class="form-control rounded" placeholder="Đến (HH:MM)" style="height: 38px" />
+                            <input :value="(field.value && field.value.from) || ''" @input="(e) => updateNestedFieldFromEvent(field, 'from', e)" class="form-control rounded h-[38px]" placeholder="Từ (HH:MM)" />
+                            <input :value="(field.value && field.value.to) || ''" @input="(e) => updateNestedFieldFromEvent(field, 'to', e)" class="form-control rounded h-[38px]" placeholder="Đến (HH:MM)" />
                           </div>
                         </template>
                         <template v-else-if="rule.ruleType === 'product_qty_by_category'">
                           <div class="flex gap-2">
-                            <input :value="(field.value && field.value.category_id) || ''" @input="(e) => updateNestedFieldFromEventNumber(field, 'category_id', e)" class="form-control rounded" placeholder="ID danh mục" style="height: 38px" />
-                            <input :value="(field.value && field.value.min_qty) || ''" @input="(e) => updateNestedFieldFromEventNumber(field, 'min_qty', e)" class="form-control rounded" placeholder="SL tối thiểu" style="height: 38px" />
+                            <input :value="(field.value && field.value.category_id) || ''" @input="(e) => updateNestedFieldFromEventNumber(field, 'category_id', e)" class="form-control rounded h-[38px]" placeholder="ID danh mục" />
+                            <input :value="(field.value && field.value.min_qty) || ''" @input="(e) => updateNestedFieldFromEventNumber(field, 'min_qty', e)" class="form-control rounded h-[38px]" placeholder="SL tối thiểu" />
                           </div>
                         </template>
                         <template v-else>
-                          <input :value="field.value" @input="(e) => updateFieldFromEvent(field, e)" type="text" class="form-control rounded" :class="errorMessage && meta.touched ? 'border-red-500' : ''" placeholder="Nhập giá trị điều kiện" style="height: 38px" />
+                          <input :value="field.value" @input="(e) => updateFieldFromEvent(field, e)" type="text" class="form-control rounded h-[38px]" :class="errorMessage && meta.touched ? 'border-red-500' : ''" placeholder="Nhập giá trị điều kiện" />
                         </template>
                         <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
                       </Field>
                     </div>
                   </div>
-
                   <div class="row mt-3">
                     <div class="col-12">
                       <label class="form-label">{{ $t("admin.page.promotion.description") }}</label>

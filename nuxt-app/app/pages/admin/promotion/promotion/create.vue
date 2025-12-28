@@ -159,13 +159,13 @@
           <div class="mb-3">
             <label class="form-label" for="priority">{{ $t("admin.page.promotion.priority") }}</label>
             <Field name="priority" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <InputNumber v-model="field.value" @update:modelValue="field.onChange" :min="0" class="w-full" input-class="rounded py-[1px]" size="small" />
+              <InputNumber v-model="field.value" @update:modelValue="field.onChange" :min="0" class="w-full rounded py-[5px]" size="small" />
               <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
             </Field>
           </div>
           <div class="mb-3">
             <Field name="canCombine" v-slot="{ field, errorMessage, meta }">
-              <div class="form-check">
+              <div class="flex items-center gap-2">
                 <Checkbox v-model="field.value" @update:modelValue="field.onChange" :id="`can_combine`" />
                 <label class="form-check-label" :for="`can_combine`">
                   {{ $t("admin.page.promotion.canCombine") }}
@@ -177,14 +177,14 @@
           <div class="mb-3">
             <label class="form-label" for="usage_limit">{{ $t("admin.page.promotion.usageLimit") }}</label>
             <Field name="usageLimit" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <InputNumber v-model="field.value" @update:modelValue="field.onChange" :min="1" class="w-full" input-class="rounded py-[1px]" size="small" />
+              <InputNumber v-model="field.value" @update:modelValue="field.onChange" :min="1" class="w-full rounded py-[5px]" size="small" />
               <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
             </Field>
           </div>
           <div class="mb-3">
             <label class="form-label" for="usage_per_customer">{{ $t("admin.page.promotion.usagePerCustomer") }}</label>
             <Field name="usagePerCustomer" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <InputNumber v-model="field.value" @update:modelValue="field.onChange" :min="1" class="w-full" input-class="rounded py-[1px]" size="small" />
+              <InputNumber v-model="field.value" @update:modelValue="field.onChange" :min="1" class="w-full rounded py-[5px]" size="small" />
               <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
             </Field>
           </div>

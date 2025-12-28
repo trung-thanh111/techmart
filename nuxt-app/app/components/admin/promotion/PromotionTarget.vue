@@ -33,12 +33,26 @@
             </AccordionHeader>
             <AccordionContent>
               <div class="record-body">
-                <!-- Row 1: Target Type and Is Included (5:5 split) -->
                 <div class="row">
                   <div class="col-md-6">
                     <label class="form-label">{{ $t("admin.page.promotion.targetType") }}</label>
                     <Field :name="`targets.${index}.targetType`" v-slot="{ field, errorMessage, meta }">
-                      <Select v-model="field.value" @update:modelValue="field.onChange" :options="PROMOTION_TARGET_TYPES" option-label="label" option-value="value" class="w-full" :placeholder="$t('admin.page.promotion.selectTargetType')" style="height: 38px" />
+                      <Select
+                        v-model="field.value"
+                        @update:modelValue="
+                          (val) => {
+                            field.onChange(val);
+                            targetsLocal[index].targetType = val;
+                            emit('update:modelValue', targetsLocal);
+                          }
+                        "
+                        :options="PROMOTION_TARGET_TYPES"
+                        option-label="label"
+                        option-value="value"
+                        class="w-full"
+                        :placeholder="$t('admin.page.promotion.selectTargetType')"
+                        style="height: 38px"
+                      />
                       <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
                     </Field>
                   </div>
@@ -62,58 +76,51 @@
                     </Field>
                   </div>
                 </div>
-
-                <!-- Row 2: Entity Search -->
                 <div class="row mt-3" v-if="needsTargetId(targetsLocal[index].targetType)">
                   <div class="col-12">
                     <div class="relative">
-                      <!-- Hidden input for targetId -->
                       <Field :name="`targets.${index}.targetId`" v-slot="{ field, errorMessage, meta }">
                         <input type="hidden" v-model="field.value" />
                         <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
                       </Field>
-
-                      <!-- Search input with button -->
-                      <div class="flex gap-2">
+                      <div class="flex gap-2 h-[38px]">
                         <div class="flex-1 relative">
-                          <input v-model="searchKeywords[index]" @input="updateSearchKeyword(index, ($event.target as HTMLInputElement).value)" @focus="showSuggestions(index)" @blur="hideSuggestions(index)" type="text" class="form-control rounded" style="height: 38px" :placeholder="$t('admin.page.promotion.searchEntity')" />
-
-                          <!-- Suggestions dropdown -->
-                          <div v-if="(entitySearchInstances[index] as ExtendedEntitySearchInstance)?.suggestions?.value?.length || ((entitySearchInstances[index] as ExtendedEntitySearchInstance)?.showSuggestions && !(entitySearchInstances[index] as ExtendedEntitySearchInstance)?.keyword?.value)" class="absolute w-full bg-white border rounded shadow-lg mt-1 z-10 max-h-60 overflow-y-auto">
-                            <div v-if="!(entitySearchInstances[index] as ExtendedEntitySearchInstance)?.keyword?.value && (entitySearchInstances[index] as ExtendedEntitySearchInstance)?.showSuggestions && !(entitySearchInstances[index] as ExtendedEntitySearchInstance)?.suggestions?.value?.length" class="p-3 text-gray-500">
-                              {{ $t("admin.page.promotion.loading") || "Đang tải..." }}
+                          <input v-model="searchKeywords[index]" @input="updateSearchKeyword(index, ($event.target as HTMLInputElement).value)" @focus="showSuggestions(index)" @blur="hideSuggestions(index)" type="text" class="form-control rounded h-[38px]" :placeholder="$t('admin.page.promotion.searchEntity')" />
+                          <div v-if="shouldShowSuggestions(index)" class="absolute w-full bg-white border rounded shadow-lg z-10 overflow-y-auto">
+                            <div v-if="isInstanceLoading((entitySearchInstances[index] as ExtendedEntitySearchInstance)) && getSuggestionsArray((entitySearchInstances[index] as ExtendedEntitySearchInstance)).length === 0" class="p-3 text-gray-500">
+                              {{ $t("admin.page.promotion.loading") }}
                             </div>
-                            <div v-for="suggestion in (entitySearchInstances[index] as ExtendedEntitySearchInstance)?.suggestions?.value || []" :key="suggestion.id" @click="onEntitySelect(index, suggestion)" class="flex items-center gap-2 p-3 hover:bg-gray-50 cursor-pointer border-b last:border-b-0">
-                              <NuxtImg v-if="suggestion.image" :src="suggestion.image" alt="" class="w-8 h-8 object-cover rounded flex-shrink-0" loading="lazy" />
+                            <div v-for="suggestion in getSuggestionsArray((entitySearchInstances[index] as ExtendedEntitySearchInstance))" :key="suggestion.id" @mousedown.prevent="onEntitySelect(index, suggestion)" @click.prevent="onEntitySelect(index, suggestion)" class="flex gap-2 p-1 hover:bg-gray-50 cursor-pointer border-b last:border-b-0">
+                              <NuxtImg v-if="suggestion.image" :src="suggestion.image" alt="" class="w-10 h-10 object-cover rounded flex-shrink-0" loading="lazy" />
                               <div class="flex-1 min-w-0">
-                                <p class="text-sm font-medium text-gray-700 truncate">{{ suggestion.name }}</p>
-                                <p v-if="suggestion.price" class="text-sm font-bold text-red-600">{{ formatPrice(suggestion.price) }}</p>
+                                <p class="text-sm font-medium text-gray-700 truncate mb-1">{{ suggestion.name }}</p>
+                                <p v-if="suggestion.price" class="text-xs font-bold text-red-600 mb-0">{{ formatPrice(suggestion.price) }}</p>
+                                <p v-else-if="suggestion.metaImportant" class="text-xs text-gray-600 mb-0">{{ suggestion.metaImportant }}</p>
                               </div>
                             </div>
                           </div>
                         </div>
-
-                        <Button type="button" variant="custom" severity="info" @click="showSuggestions(index)" class="px-3" style="height: 38px; min-width: 38px">
-                          <i class="mdi mdi-magnify"></i>
-                        </Button>
+                        <Button type="button" variant="custom" severity="info" @click="showSuggestions(index)" :icon="'mdi mdi-magnify'" class="h-[38px]" />
                       </div>
                     </div>
-
-                    <div v-if="(entitySearchInstances[index] as ExtendedEntitySearchInstance)?.selectedEntity?.value" class="mt-3 p-3 bg-info-300 rounded flex items-center gap-3">
-                      <span class="text-sm font-medium text-gray-700">#{{ targetsLocal[index].targetId }}</span>
-                      <img v-if="(entitySearchInstances[index] as ExtendedEntitySearchInstance)?.selectedEntity?.value?.image" :src="(entitySearchInstances[index] as ExtendedEntitySearchInstance)?.selectedEntity?.value?.image" alt="" class="w-10 h-8 object-cover rounded" />
-                      <div class="flex-1 min-w-0">
-                        <p class="text-sm font-medium text-gray-900 truncate">{{ (entitySearchInstances[index] as ExtendedEntitySearchInstance)?.selectedEntity?.value?.name }}</p>
-                        <p v-if="(entitySearchInstances[index] as ExtendedEntitySearchInstance)?.selectedEntity?.value?.price" class="text-sm text-red-600">{{ formatPrice((entitySearchInstances[index] as ExtendedEntitySearchInstance)?.selectedEntity?.value?.price) }}</p>
+                    <div v-if="(entitySearchInstances[index] as ExtendedEntitySearchInstance)?.selectedEntity?.value || targetsLocal[index].targetId || selectedEntities[index]" class="mt-3 bg-info-100 roundedp-1">
+                      <div class="text-sm text-gray-600 mb-2 font-medium">{{ $t("admin.page.promotion.selectedEntityLabel") || "Đối tượng đã chọn:" }}</div>
+                      <div class="p-2 bg-info-300 rounded flex items-center gap-2">
+                        <span class="text-sm font-medium text-gray-700 me-2">#{{ targetsLocal[index].targetId }}</span>
+                        <NuxtImg v-if="(selectedEntities[index] && selectedEntities[index]?.image) || (entitySearchInstances[index] as ExtendedEntitySearchInstance)?.selectedEntity?.value?.image" :src="(selectedEntities[index] && selectedEntities[index]?.image) || (entitySearchInstances[index] as ExtendedEntitySearchInstance)?.selectedEntity?.value?.image" alt="" class="w-10 h-10 object-cover rounded" loading="lazy" />
+                        <div class="flex-1 min-w-0">
+                          <p class="text-sm font-medium text-gray-900 truncate mb-1">{{ (selectedEntities[index] && selectedEntities[index]?.name) || (entitySearchInstances[index] as ExtendedEntitySearchInstance)?.selectedEntity?.value?.name || "" }}</p>
+                          <p v-if="(selectedEntities[index] && selectedEntities[index]?.price) || (entitySearchInstances[index] as ExtendedEntitySearchInstance)?.selectedEntity?.value?.price" class="text-xs text-red-600 mb-0">
+                            {{ formatPrice((selectedEntities[index] && selectedEntities[index]?.price) || (entitySearchInstances[index] as ExtendedEntitySearchInstance)?.selectedEntity?.value?.price || 0) }}
+                          </p>
+                        </div>
+                        <button @click="onEntityClear(index)" class="w-8 h-8 flex items-center justify-center rounded-full text-white bg-red-500 hover:bg-red-700 transition text-xs" aria-label="remove">
+                          <i class="mdi mdi-trash-can"></i>
+                        </button>
                       </div>
-                      <button @click="onEntityClear(index)" class="w-6 h-6 flex items-center justify-center rounded-full text-white bg-red-500 hover:bg-red-700 transition text-xs">
-                        <i class="mdi mdi-close"></i>
-                      </button>
                     </div>
                   </div>
                 </div>
-
-                <!-- Row 3: Metadata -->
                 <div class="row mt-3">
                   <div class="col-12">
                     <label class="form-label">{{ $t("admin.page.promotion.metadata") }}</label>
@@ -144,13 +151,12 @@
         </template>
       </Accordion>
     </div>
-    <!-- Metadata Dialog -->
     <Dialog v-model:visible="showMetadataDialog" :header="$t('admin.page.promotion.editMetadataTitle')" modal class="w-11/12 max-w-2xl">
       <textarea v-model="currentMetadataContent" class="w-full border rounded p-2" rows="8" :placeholder="$t('admin.page.promotion.editMetadataPlaceholder')"></textarea>
       <template #footer>
         <div class="flex justify-end gap-2">
-          <Button @click="closeMetadataDialog" severity="secondary">{{ $t("admin.components.buttons.cancel") }}</Button>
-          <Button @click="saveMetadataDialog" severity="success">{{ $t("admin.components.buttons.confirm") }}</Button>
+          <Button @click="closeMetadataDialog" variant="custom" severity="secondary" :label="$t('admin.components.buttons.cancel')"></Button>
+          <Button @click="saveMetadataDialog" variant="success" :label="$t('admin.components.buttons.confirm')"></Button>
         </div>
       </template>
     </Dialog>
@@ -159,9 +165,8 @@
 
 <script setup lang="ts">
 import { ref, watch, nextTick } from "vue";
-import { Field } from "vee-validate";
+import { Field, useForm } from "vee-validate";
 import Button from "~/components/admin/custom/Button.vue";
-import InputNumber from "primevue/inputnumber";
 import Select from "primevue/select";
 import Accordion from "primevue/accordion";
 import AccordionPanel from "primevue/accordionpanel";
@@ -185,32 +190,39 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
-
-// local targets array synced with parent
+const { setFieldValue } = useForm();
 const targetsLocal = ref<any[]>(
   (props.modelValue || []).map((target) => ({
     ...target,
-    _id: target._id || Date.now() + Math.random(), // ensure unique key for reactivity
+    _id: target._id || Date.now() + Math.random(),
   }))
 );
 watch(
   () => props.modelValue,
   (v) => {
+    const prevSelected = selectedEntities.value ? selectedEntities.value.slice() : [];
     targetsLocal.value = (v || []).map((target) => ({
       ...target,
-      _id: target._id || Date.now() + Math.random(), // ensure unique key for reactivity
+      _id: target._id || Date.now() + Math.random(),
     }));
+    selectedEntities.value = targetsLocal.value.map((t, i) => {
+      const id = t?.targetId;
+      if (id == null) return null;
+      const found = prevSelected.find((s) => s && Number(s.id) === Number(id));
+      return found ?? null;
+    });
+    hideSuggestionsByBlur.value = targetsLocal.value.map((t, i) => hideSuggestionsByBlur.value[i] ?? false);
   },
   { deep: true }
 );
 
 const addTarget = () => {
   const newRecord = {
-    targetType: "order",
+    targetType: "",
     targetId: null,
     isIncluded: true,
     metadata: null,
-    _id: Date.now() + Math.random(), // unique key for reactivity
+    _id: Date.now() + Math.random(),
   };
   targetsLocal.value.push(newRecord);
   activeIndex.value = targetsLocal.value.length - 1;
@@ -219,7 +231,6 @@ const addTarget = () => {
 
 const removeTarget = (index: number) => {
   targetsLocal.value.splice(index, 1);
-  // adjust active index after removal
   if (activeIndex.value !== null) {
     if (activeIndex.value === index) {
       activeIndex.value = null; // collapse if current panel was removed
@@ -227,15 +238,12 @@ const removeTarget = (index: number) => {
       activeIndex.value = activeIndex.value - 1; // adjust index if later panels were shifted
     }
   }
-  // notify parent immediately
   emit("update:modelValue", targetsLocal.value);
 };
 
-// accordion state
 const activeIndex = ref<number | null>(null);
 const toast = useAppToast();
 
-// metadata string editing helpers
 const metaStrings = ref<string[]>([]);
 const metaErrors = ref<(string | null)[]>([]);
 
@@ -253,21 +261,16 @@ const syncMetaStrings = () => {
   metaErrors.value = targetsLocal.value.map(() => null);
 };
 
-// metadata dialog state
 const showMetadataDialog = ref(false);
 const currentMetadataContent = ref("");
 const currentMetadataIndex = ref(-1);
-
-// entity search instances for each target
 const entitySearchInstances = ref<any[]>([]);
-
-// flag to prevent recursive updates between watchers
+const selectedEntities = ref<(SearchResult | null)[]>([]);
+const hideSuggestionsByBlur = ref<boolean[]>([]);
+const skipLoadAfterSelect = ref<boolean[]>([]);
 const isUpdating = ref(false);
-
-// local keywords for inputs (avoid mutating composable internals)
 const searchKeywords = ref<string[]>([]);
 
-// Type for extended entity search instance
 interface ExtendedEntitySearchInstance {
   keyword: any;
   suggestions: any;
@@ -280,12 +283,10 @@ interface ExtendedEntitySearchInstance {
   showSuggestions: boolean;
 }
 
-// computed to check if targetId is needed based on targetType
-const needsTargetId = (targetType: string) => {
-  return targetType !== "order";
+const needsTargetId = (targetType: string | null | undefined) => {
+  return !!targetType && targetType !== "order";
 };
 
-// Get entity type from target type
 const getEntityType = (targetType: string): EntityType | null => {
   const mapping: Record<string, EntityType> = {
     product: "product",
@@ -296,20 +297,24 @@ const getEntityType = (targetType: string): EntityType | null => {
   return mapping[targetType] || null;
 };
 
-// Initialize entity search instances
+// ensure per-index helper arrays keep their previous values and match targets length
+const ensurePerIndexArrays = (len: number) => {
+  searchKeywords.value = Array.from({ length: len }, (_, i) => searchKeywords.value[i] ?? "");
+  selectedEntities.value = Array.from({ length: len }, (_, i) => selectedEntities.value[i] ?? null);
+  hideSuggestionsByBlur.value = Array.from({ length: len }, (_, i) => hideSuggestionsByBlur.value[i] ?? false);
+  skipLoadAfterSelect.value = Array.from({ length: len }, (_, i) => skipLoadAfterSelect.value[i] ?? false);
+};
+
 const initializeEntitySearchInstances = () => {
   entitySearchInstances.value = targetsLocal.value.map((target): ExtendedEntitySearchInstance | null => {
     const entityType = getEntityType(target.targetType);
     if (entityType) {
       const instance = useEntitySearch(entityType) as ExtendedEntitySearchInstance;
-      // Add showSuggestions property
       instance.showSuggestions = false;
-      // Ensure keyword is a ref
       if (!instance.keyword || typeof instance.keyword !== "object" || !("value" in instance.keyword)) {
         // @ts-ignore
         instance.keyword = ref(String(instance.keyword ?? ""));
       }
-      // Preload default suggestions (type=all) so dropdown shows immediately on focus
       try {
         instance.search(instance.keyword.value || "");
       } catch (e) {
@@ -319,56 +324,59 @@ const initializeEntitySearchInstances = () => {
     }
     return null;
   });
-  // ensure searchKeywords length matches targets
-  searchKeywords.value = targetsLocal.value.map((t) => "");
+  ensurePerIndexArrays(targetsLocal.value.length);
 };
 
-// Show suggestions dropdown
 const showSuggestions = (index: number) => {
   const instance = entitySearchInstances.value[index] as ExtendedEntitySearchInstance;
-  console.log("Show suggestions for index:", index, "instance:", instance);
-  if (instance) {
-    instance.showSuggestions = true;
-    // Always trigger search to show all data when no keyword
-    const searchQuery = instance.keyword.value || "";
-    console.log("Triggering search with query:", searchQuery);
-    instance.search(searchQuery);
-    // debug: log suggestions after short delay
-    setTimeout(() => {
-      try {
-        // eslint-disable-next-line no-console
-        console.log("Post-search suggestions for index", index, ":", (instance.suggestions && instance.suggestions.value) || instance.suggestions);
-      } catch (e) {
-        // ignore
-      }
-    }, 400);
-  }
+  if (!instance) return;
+  hideSuggestionsByBlur.value[index] = false;
+  instance.showSuggestions = true;
+  instance.search(instance.keyword.value || "");
 };
 
-// Hide suggestions dropdown
 const hideSuggestions = (index: number) => {
   const instance = entitySearchInstances.value[index] as ExtendedEntitySearchInstance;
   if (instance) {
-    // Delay hiding to allow for clicking on suggestions
     setTimeout(() => {
       instance.showSuggestions = false;
+      hideSuggestionsByBlur.value[index] = true;
     }, 150);
   }
 };
 
-// Update search keyword for entity search
+// Helpers to normalize composable return shapes (ref vs raw)
+const getSuggestionsArray = (instance: any) => {
+  if (!instance) return [];
+  const s = instance.suggestions;
+  if (!s) return [];
+  return "value" in s ? s.value : s;
+};
+
+const isInstanceLoading = (instance: any) => {
+  if (!instance) return false;
+  const l = instance.isLoading;
+  if (l === undefined) return false;
+  return typeof l === "object" && "value" in l ? l.value : !!l;
+};
+
+const shouldShowSuggestions = (index: number) => {
+  const instance = entitySearchInstances.value[index];
+  if (!instance) return false;
+  const suggestions = getSuggestionsArray(instance);
+  if (hideSuggestionsByBlur.value[index]) return false;
+  return suggestions.length > 0 || (instance.showSuggestions && (isInstanceLoading(instance) || !instance.keyword?.value));
+};
+
 const updateSearchKeyword = (index: number, value: string) => {
   let instance = entitySearchInstances.value[index] as ExtendedEntitySearchInstance;
 
-  // If instance not initialized for this index, try to create one based on target type
   if (!instance) {
     const target = targetsLocal.value[index];
     const entityType = getEntityType(target?.targetType);
     if (entityType) {
       const newInstance = useEntitySearch(entityType) as ExtendedEntitySearchInstance;
       newInstance.showSuggestions = true;
-      // ensure keyword is a ref
-      // don't touch composable internals - we keep local searchKeywords instead
       entitySearchInstances.value[index] = newInstance;
       instance = newInstance;
     } else {
@@ -376,21 +384,44 @@ const updateSearchKeyword = (index: number, value: string) => {
     }
   }
 
-  // Ensure keyword is a ref-like object with .value
-  // update our local keyword state and trigger search on the composable
   searchKeywords.value[index] = value;
+  hideSuggestionsByBlur.value[index] = false;
   instance.showSuggestions = true;
   instance.search(value);
 };
 
-// Handle entity selection
+// centralize selected entity setting to keep composable and local cache in sync
+const setSelectedEntity = (index: number, entity: SearchResult | null) => {
+  const inst = entitySearchInstances.value[index] as ExtendedEntitySearchInstance | null;
+  if (inst) {
+    try {
+      if (entity) inst.selectEntity(entity);
+      else if (typeof inst.clearSelection === "function") inst.clearSelection();
+    } catch {
+      try {
+        if (inst.selectedEntity && "value" in inst.selectedEntity) inst.selectedEntity.value = entity;
+      } catch {
+        // ignore
+      }
+    }
+  }
+  selectedEntities.value[index] = entity;
+  try {
+    setFieldValue && setFieldValue(`targets.${index}.targetId`, entity ? entity.id : null);
+  } catch {
+    // ignore
+  }
+};
+
 const onEntitySelect = (index: number, entity: SearchResult) => {
   targetsLocal.value[index].targetId = entity.id;
   const searchInstance = entitySearchInstances.value[index] as ExtendedEntitySearchInstance;
   if (searchInstance) {
-    searchInstance.selectEntity(entity);
     searchInstance.showSuggestions = false;
   }
+  hideSuggestionsByBlur.value[index] = false;
+  skipLoadAfterSelect.value[index] = true;
+  setSelectedEntity(index, entity);
   emit("update:modelValue", targetsLocal.value);
 };
 
@@ -402,19 +433,48 @@ const onEntityClear = (index: number) => {
     searchInstance.clearSelection();
     searchInstance.showSuggestions = false;
   }
+  try {
+    setFieldValue && setFieldValue(`targets.${index}.targetId`, null);
+  } catch (e) {
+    // ignore
+  }
+  selectedEntities.value[index] = null;
   emit("update:modelValue", targetsLocal.value);
 };
 
-// Load selected entity by ID
 const loadSelectedEntity = async (index: number, targetId: number, targetType: string) => {
   const entityType = getEntityType(targetType);
   if (!entityType || !targetId) return;
 
   const searchInstance = entitySearchInstances.value[index];
   if (searchInstance) {
-    const entity = await searchInstance.getEntityById(targetId);
-    if (entity) {
-      searchInstance.selectEntity(entity);
+    try {
+      const entity = await searchInstance.getEntityById(targetId);
+      if (entity) {
+        setSelectedEntity(index, entity);
+      } else {
+        const suggestions = getSuggestionsArray(searchInstance);
+        const found = suggestions.find((s: any) => Number(s.id) === Number(targetId));
+        if (found) {
+          setSelectedEntity(index, found);
+        } else {
+          setSelectedEntity(index, { id: targetId, name: `#${targetId}` } as any);
+        }
+      }
+    } catch (err: any) {
+      console.error("Failed to load selected entity for index", index, "id", targetId, err);
+      try {
+        const suggestions = getSuggestionsArray(searchInstance);
+        const found = suggestions.find((s: any) => Number(s.id) === Number(targetId));
+        if (found) {
+          setSelectedEntity(index, found);
+          return;
+        }
+      } catch {
+        // ignore
+      }
+      setSelectedEntity(index, { id: targetId, name: `#${targetId}` } as any);
+      return;
     }
   }
 };
@@ -422,16 +482,23 @@ const loadSelectedEntity = async (index: number, targetId: number, targetType: s
 watch(
   targetsLocal,
   async () => {
-    if (isUpdating.value) return; // prevent recursive updates
+    if (isUpdating.value) return;
     isUpdating.value = true;
     syncMetaStrings();
     initializeEntitySearchInstances();
 
-    // Load selected entities for existing targets
     for (let i = 0; i < targetsLocal.value.length; i++) {
       const target = targetsLocal.value[i];
+      if (skipLoadAfterSelect.value[i]) {
+        skipLoadAfterSelect.value[i] = false;
+        continue;
+      }
       if (target.targetId && target.targetType !== "order") {
-        await loadSelectedEntity(i, target.targetId, target.targetType);
+        try {
+          await loadSelectedEntity(i, target.targetId, target.targetType);
+        } catch (err) {
+          console.error("Error loading selected entity for target", i, err);
+        }
       }
     }
 
@@ -442,17 +509,40 @@ watch(
   { deep: true, immediate: true }
 );
 
-// Watch for target type changes to update entity search instances
 watch(
   () => targetsLocal.value.map((t) => t.targetType),
-  () => {
+  (newVal, oldVal) => {
     initializeEntitySearchInstances();
+    try {
+      for (let i = 0; i < (newVal || []).length; i++) {
+        const prev = (oldVal || [])[i];
+        const curr = newVal[i];
+        if (prev !== curr) {
+          if (targetsLocal.value[i]) {
+            targetsLocal.value[i].targetId = null;
+          }
+          selectedEntities.value[i] = null;
+          const inst = entitySearchInstances.value[i];
+          try {
+            if (inst) {
+              if (typeof inst.clearSelection === "function") inst.clearSelection();
+              if (inst.selectedEntity && "value" in inst.selectedEntity) inst.selectedEntity.value = null;
+            }
+          } catch (e) {
+            // ignore
+          }
+        }
+      }
+      emit("update:modelValue", targetsLocal.value);
+    } catch (e) {
+      // ignore
+    }
   },
   { deep: true }
 );
 
 watch(metaStrings, (newVal) => {
-  if (isUpdating.value) return; // prevent recursive updates
+  if (isUpdating.value) return;
   isUpdating.value = true;
   newVal.forEach((val, idx) => {
     if (val === undefined) return;
