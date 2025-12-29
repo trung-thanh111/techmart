@@ -167,16 +167,13 @@ export const usePromotion = (initialFilters?: PromotionPayloadFilter, mode: "cre
     }
   };
 
-  // Generate coupon code: 4 uppercase letters + 4 random numbers
   const generateCouponCode = (): string => {
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const numbers = "0123456789";
     let code = "";
-    // 4 uppercase letters
     for (let i = 0; i < 4; i++) {
       code += letters.charAt(Math.floor(Math.random() * letters.length));
     }
-    // 4 random numbers
     for (let i = 0; i < 4; i++) {
       code += numbers.charAt(Math.floor(Math.random() * numbers.length));
     }
