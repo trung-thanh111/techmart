@@ -15,7 +15,7 @@ export const usePostTag = (initialFilters?: TagPayloadFilter, mode: "create" | "
   const toast = useAppToast();
 
   const data = ref<IApiOk<IPaginate<IPostTag>>>();
-  const filters = ref<TagPayloadFilter>(initialFilters ?? { keyword: "", perpage: 10, publish: null });
+  const filters = ref<TagPayloadFilter>(initialFilters ?? { keyword: "", perpage: 20, publish: null });
   const page = ref(1);
   const isLoading = ref(false);
   const selectedIds = ref<number[]>([]);

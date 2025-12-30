@@ -67,7 +67,7 @@ export const usePromotion = (initialFilters?: PromotionPayloadFilter, mode: "cre
   const toast = useAppToast();
 
   const data = ref<IApiOk<IPaginate<IPromotion>>>();
-  const filters = ref<PromotionPayloadFilter>(initialFilters ?? { keyword: "", perpage: 10, publish: null });
+  const filters = ref<PromotionPayloadFilter>(initialFilters ?? { keyword: "", perpage: 20, publish: null });
   const page = ref(1);
   const isLoading = ref(false);
   const selectedIds = ref<number[]>([]);

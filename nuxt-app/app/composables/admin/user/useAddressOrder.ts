@@ -10,16 +10,12 @@ import { ADDRESSORDERINDEX } from "~/utils/constants";
 import { useUserService } from "~/services/user/user.service";
 import { slugify } from "#imports";
 
-export const useAddressOrder = (
-  initialFilters?: AddressOrderPayloadFilter,
-  mode: "create" | "update" = "create",
-  options?: { redirectPath?: string }
-) => {
+export const useAddressOrder = (initialFilters?: AddressOrderPayloadFilter, mode: "create" | "update" = "create", options?: { redirectPath?: string }) => {
   const { t } = useI18n();
   const config = useRuntimeConfig();
   const toast = useAppToast();
   const data = ref<IApiOk<IPaginate<IAddressOrder>>>();
-  const filters = ref<AddressOrderPayloadFilter>(initialFilters ?? { keyword: "", perpage: 10, publish: null, user_id: null });
+  const filters = ref<AddressOrderPayloadFilter>(initialFilters ?? { keyword: "", perpage: 20, publish: null, user_id: null });
   const page = ref(1);
   const isLoading = ref(false);
   const selectedIds = ref<number[]>([]);
@@ -37,7 +33,10 @@ export const useAddressOrder = (
     postalCode: z.string({ required_error: "admin.validation.postalCodeRequired" }).trim().min(1, "admin.validation.postalCodeRequired").max(20, "admin.validation.postalCodeMaxLength"),
     countryCode: z.string().max(2, "admin.validation.countryCodeMaxLength").nullable().optional(),
     isDefault: z.boolean().optional(),
-    publish: z.number({ required_error: "admin.validation.statusRequired" }).refine((val) => [0, 1, 2].includes(val), { message: "admin.validation.statusInvalid" }).optional(),
+    publish: z
+      .number({ required_error: "admin.validation.statusRequired" })
+      .refine((val) => [0, 1, 2].includes(val), { message: "admin.validation.statusInvalid" })
+      .optional(),
   };
   const createSchema = z.object({ ...schema });
   const updateSchema = z.object({ ...schema });
@@ -163,7 +162,7 @@ export const useAddressOrder = (
 
   const loadAddressesByUserId = async (userId: number) => {
     if (!userId) return false;
-    
+
     isLoading.value = true;
     try {
       const response = await useAddressOrderService.addressUserById(userId);
@@ -179,7 +178,7 @@ export const useAddressOrder = (
 
   const handleToggleIsDefault = async (item: IAddressOrder) => {
     const originalValue = item.isDefault;
-    
+
     try {
       await useAddressOrderService.update(item.id, { isDefault: item.isDefault });
       toast.success(t("admin.messages.updateSuccess"));

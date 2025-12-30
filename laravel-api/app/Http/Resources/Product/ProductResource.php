@@ -127,15 +127,24 @@ class ProductResource extends JsonResource
                     $targetQuery->whereRaw('1 = 0');
 
                     if ($productId) {
-                        $targetQuery->orWhere('product_id', $productId);
+                        $targetQuery->orWhere(function ($q) use ($productId) {
+                            $q->where('target_type', 'product')
+                                ->where('target_id', $productId);
+                        });
                     }
 
                     if (!empty($variantIds)) {
-                        $targetQuery->orWhereIn('product_variant_id', $variantIds);
+                        $targetQuery->orWhere(function ($q) use ($variantIds) {
+                            $q->where('target_type', 'product_variant')
+                                ->whereIn('target_id', $variantIds);
+                        });
                     }
 
                     if (!empty($catalogueIds)) {
-                        $targetQuery->orWhereIn('product_catalogue_id', $catalogueIds);
+                        $targetQuery->orWhere(function ($q) use ($catalogueIds) {
+                            $q->where('target_type', 'product_catalogue')
+                                ->whereIn('target_id', $catalogueIds);
+                        });
                     }
                 });
             })
@@ -157,16 +166,19 @@ class ProductResource extends JsonResource
 
         foreach ($promotions as $promotion) {
             foreach ($promotion->promotion_targets as $target) {
-                if ($target->product_id && $target->product_id === $productId) {
+                $targetType = $target->target_type ?? null;
+                $targetId = isset($target->target_id) ? (int) $target->target_id : null;
+
+                if ($targetType === 'product' && $targetId === (int) $productId) {
                     $productPromotions->put($promotion->id, $promotion);
                 }
 
-                if ($target->product_variant_id && isset($variantPromotions[$target->product_variant_id])) {
-                    $variantPromotions[$target->product_variant_id]->put($promotion->id, $promotion);
+                if ($targetType === 'product_variant' && $targetId !== null && isset($variantPromotions[$targetId])) {
+                    $variantPromotions[$targetId]->put($promotion->id, $promotion);
                 }
 
-                if ($target->product_catalogue_id && isset($cataloguePromotions[$target->product_catalogue_id])) {
-                    $cataloguePromotions[$target->product_catalogue_id]->put($promotion->id, $promotion);
+                if ($targetType === 'product_catalogue' && $targetId !== null && isset($cataloguePromotions[$targetId])) {
+                    $cataloguePromotions[$targetId]->put($promotion->id, $promotion);
                 }
             }
         }

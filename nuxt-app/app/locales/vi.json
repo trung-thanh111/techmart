@@ -143,6 +143,7 @@
         "related": "Liên quan",
         "season": "Mùa",
         "warranty": "Bảo hành",
+        "warrantyPlaceholder": "Số tháng bảo hành (vd: 12)",
         "relatedPlaceholder": "Chọn liên quan",
         "tag": "Tags",
         "tagPlaceholder": "Chọn tag",

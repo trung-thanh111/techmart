@@ -15,7 +15,7 @@ export const usePopup = (initialFilters?: Record<string, any>, mode: "create" | 
   const toast = useAppToast();
 
   const data = ref<IApiOk<IPaginate<IPopup>>>();
-  const filters = ref<Record<string, any>>(initialFilters ?? { keyword: "", perpage: 10, publish: null });
+  const filters = ref<Record<string, any>>(initialFilters ?? { keyword: "", perpage: 20, publish: null });
   const page = ref(1);
   const isLoading = ref(false);
   const selectedIds = ref<number[]>([]);
@@ -168,7 +168,7 @@ export const usePopup = (initialFilters?: Record<string, any>, mode: "create" | 
 
   const unsetOtherPriorities = async (exceptId: number) => {
     try {
-      const res = await popupService.pagination({ perpage: 100, page: 1, type: "all" });
+      const res = await popupService.pagination({ perpage: 200, page: 1, type: "all" });
       const rows: any[] = res?.data?.data ?? [];
       const toUpdate = rows.filter((r) => r.id && r.id !== exceptId && r.priority === true);
       if (toUpdate.length === 0) return;

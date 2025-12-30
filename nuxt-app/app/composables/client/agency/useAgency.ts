@@ -8,7 +8,7 @@ import type { BasePayloadFilter } from "~/interfaces/base.interface";
 export const useAgency = (initialFilters?: AgencyPayloadFilter) => {
   const { t } = useI18n();
   const data = ref<IApiOk<IPaginate<IAgency>>>();
-  const filters = ref<AgencyPayloadFilter>(initialFilters ?? { keyword: "", perpage: 10, publish: null });
+  const filters = ref<AgencyPayloadFilter>(initialFilters ?? { keyword: "", perpage: 20, publish: null });
   const page = ref(1);
   const isLoading = ref(false);
   const agency = ref<IAgency | null>(null);
@@ -78,9 +78,7 @@ export const useAgency = (initialFilters?: AgencyPayloadFilter) => {
   const getWorkingHours = (input?: Partial<IAgency> | null): Array<{ id: number; dayOfWeek: string; openTime: string; closeTime: string }> => {
     const list = (input as any)?.agencyWorkingHours || (agency.value as any)?.agencyWorkingHours || [];
     if (!Array.isArray(list)) return [];
-    return list
-      .filter((x: any) => x && (x.publish === 2 || x.publish === true))
-      .map((x: any) => ({ id: x.id, dayOfWeek: x.dayOfWeek, openTime: x.openTime, closeTime: x.closeTime }));
+    return list.filter((x: any) => x && (x.publish === 2 || x.publish === true)).map((x: any) => ({ id: x.id, dayOfWeek: x.dayOfWeek, openTime: x.openTime, closeTime: x.closeTime }));
   };
 
   const getMapEmbedSrcFromAddress = (address?: string): string => {

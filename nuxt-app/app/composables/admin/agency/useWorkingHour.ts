@@ -9,25 +9,22 @@ import type { IAgencyWorkingHour, AgencyWorkingHourPayloadFilter } from "~/inter
 import { AGENCYWORKINGHOURINDEX } from "~/utils/constants";
 import { useI18n } from "#imports";
 
-export const useAgencyWorkingHour = (
-  initialFilters?: AgencyWorkingHourPayloadFilter,
-  mode: "create" | "update" = "create"
-) => {
+export const useAgencyWorkingHour = (initialFilters?: AgencyWorkingHourPayloadFilter, mode: "create" | "update" = "create") => {
   const { t } = useI18n();
   const toast = useAppToast();
 
   const data = ref<IApiOk<IPaginate<IAgencyWorkingHour>>>();
-  const filters = ref<AgencyWorkingHourPayloadFilter>(initialFilters ?? { keyword: "", perpage: 10, publish: null });
+  const filters = ref<AgencyWorkingHourPayloadFilter>(initialFilters ?? { keyword: "", perpage: 20, publish: null });
   const page = ref(1);
   const isLoading = ref(false);
   const selectedIds = ref<number[]>([]);
   const selectedItem = ref<IAgencyWorkingHour | null>(null);
 
   const schema = {
-    dayOfWeek: z.string({ required_error: 'admin.validation.dayOfWeekRequired' }).trim().min(1, 'admin.validation.dayOfWeekRequired').max(255, 'admin.validation.dayOfWeekMaxLength'),
-    openTime: z.string().max(255, 'admin.validation.openTimeMaxLength').nullable().optional(),
-    closeTime: z.string().max(255, 'admin.validation.closeTimeMaxLength').nullable().optional(),
-    publish: z.number({ required_error: 'admin.validation.statusRequired' }).refine((val) => [0, 1, 2].includes(val), { message: 'admin.validation.statusInvalid' }),
+    dayOfWeek: z.string({ required_error: "admin.validation.dayOfWeekRequired" }).trim().min(1, "admin.validation.dayOfWeekRequired").max(255, "admin.validation.dayOfWeekMaxLength"),
+    openTime: z.string().max(255, "admin.validation.openTimeMaxLength").nullable().optional(),
+    closeTime: z.string().max(255, "admin.validation.closeTimeMaxLength").nullable().optional(),
+    publish: z.number({ required_error: "admin.validation.statusRequired" }).refine((val) => [0, 1, 2].includes(val), { message: "admin.validation.statusInvalid" }),
   };
   const createSchema = z.object({ ...schema });
   const updateSchema = z.object({ ...schema });
@@ -44,14 +41,14 @@ export const useAgencyWorkingHour = (
       isLoading.value = true;
       try {
         const response = await agencyWorkingHourService.store(payload as Partial<IAgencyWorkingHour>);
-        toast.success(response?.message || t('admin.messages.createSuccess'));
+        toast.success(response?.message || t("admin.messages.createSuccess"));
         if (shouldClose) {
           return navigateTo(AGENCYWORKINGHOURINDEX);
         }
         resetForm();
       } catch (error: any) {
         console.error("Store error:", error);
-        toast.error(error?.response?.data?.message || t('admin.messages.createFailed'));
+        toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
         throw error;
       } finally {
         isLoading.value = false;
@@ -67,7 +64,7 @@ export const useAgencyWorkingHour = (
       return response;
     } catch (error: any) {
       console.error("Lỗi! Không tìm thấy bản ghi: ", error);
-      toast.error(error?.response?.data?.message || t('admin.messages.createFailed'));
+      toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
       throw error;
     }
   };
@@ -78,14 +75,14 @@ export const useAgencyWorkingHour = (
       try {
         const id = Number(useRoute().params.id);
         await agencyWorkingHourService.update(id, payload as Partial<IAgencyWorkingHour>);
-        toast.success(t('admin.messages.updateSuccess'));
+        toast.success(t("admin.messages.updateSuccess"));
         if (shouldClose) {
           return navigateTo(AGENCYWORKINGHOURINDEX);
         }
         // keep on page
       } catch (error: any) {
         console.error("Store error:", error);
-        toast.error(error?.response?.data?.message || t('admin.messages.updateFailed'));
+        toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
       } finally {
         isLoading.value = false;
       }
@@ -98,10 +95,10 @@ export const useAgencyWorkingHour = (
     isLoading.value = true;
     try {
       await agencyWorkingHourService.delete(id);
-      toast.success(t('admin.messages.deleteSuccess'));
+      toast.success(t("admin.messages.deleteSuccess"));
       await fetchData();
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || t('admin.messages.deleteFailed'));
+      toast.error(error?.response?.data?.message || t("admin.messages.deleteFailed"));
     } finally {
       isLoading.value = false;
     }
@@ -112,11 +109,11 @@ export const useAgencyWorkingHour = (
     isLoading.value = true;
     try {
       await agencyWorkingHourService.deleteMultiple(selectedIds.value);
-      toast.success(t('admin.messages.deleteMultipleSuccess', { count: selectedIds.value.length }));
+      toast.success(t("admin.messages.deleteMultipleSuccess", { count: selectedIds.value.length }));
       selectedIds.value = [];
       await fetchData();
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || t('admin.messages.deleteFailed'));
+      toast.error(error?.response?.data?.message || t("admin.messages.deleteFailed"));
     } finally {
       isLoading.value = false;
     }
@@ -142,7 +139,7 @@ export const useAgencyWorkingHour = (
       });
       data.value = response;
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || t('admin.messages.loadDataError'));
+      toast.error(err?.response?.data?.message || t("admin.messages.loadDataError"));
       console.error("Fetch error:", err);
     } finally {
       isLoading.value = false;

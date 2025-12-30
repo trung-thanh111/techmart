@@ -60,43 +60,16 @@
         <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("client.home.popularLightingDesc") }}</p>
       </div>
       <div class="max-w-7xl mx-auto">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div class="relative rounded-lg group overflow-hidden shadow-lg">
-            <img src="/client/images/slide/image_about_technology_ecommerce_1.jpg" loading="lazy" alt="Đèn bàn" class="w-full h-full object-cover" />
-            <a href="#" class="block absolute top-1/2 left-1/2 -translate-x-1/2 md:translate-x-0 md:top-28 md:left-40 bg-white rounded-md p-4 shadow-md w-56 z-20">
-              <span class="text-xs text-red-600 font-medium">Mới</span>
-              <h3 class="text-sm font-semibold mt-1 hover:underline line-clamp-1">Đèn bàn</h3>
-              <p class="text-xs text-gray-500 truncate line-clamp-1">Đèn LED Bàn Học Cảm Ứng</p>
-              <p class="text-sm font-bold mt-2 text-gray-800">238.550 ₫</p>
-              <div class="absolute -bottom-3 -left-3 px-1 bg-white rounded-full shadow-md">
-                <i class="fa-regular fa-circle-dot text-gray-500"></i>
-              </div>
-            </a>
+        <div v-if="featuredProductsLoading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div v-for="n in 3" :key="n" class="animate-pulse">
+            <div class="bg-gray-200 rounded-lg h-64"></div>
           </div>
-          <div class="relative rounded-lg group overflow-hidden shadow-lg">
-            <img src="/client/images/slide/image_about_technology_ecommerce_5.jpg" loading="lazy" alt="Đèn LED" class="w-full h-full object-cover" />
-            <a href="#" class="block absolute top-14 left-6 bg-white rounded-md p-4 shadow-md w-56">
-              <span class="text-xs text-red-600 font-medium">Mới</span>
-              <h3 class="text-sm font-semibold mt-1 hover:underline">Đèn LED</h3>
-              <p class="text-xs text-gray-500 truncate line-clamp-1">Đèn LED Ốp Trần Tròn</p>
-              <p class="text-sm font-bold mt-2 text-gray-800">670.000 ₫</p>
-              <div class="absolute -bottom-5 right-0 translate-x-1/2 -translate-y-1/2 px-1 bg-white rounded-full shadow-md">
-                <i class="fa-regular fa-circle-dot text-gray-500"></i>
-              </div>
-            </a>
-          </div>
-          <div class="relative rounded-lg group overflow-hidden shadow-lg">
-            <img src="/client/images/slide/image_about_technology_ecommerce_11.jpg" loading="lazy" alt="Bình nước" class="w-full h-full object-cover" />
-            <a href="#" class="block absolute bottom-14 right-10 bg-white rounded-md p-4 shadow-md w-56">
-              <span class="text-xs text-red-600 font-medium">Mới</span>
-              <h3 class="text-sm font-semibold mt-1 hover:underline">Bình - Phích nước</h3>
-              <p class="text-xs text-gray-500 truncate line-clamp-1">Phích Dựng Nước 0.7L</p>
-              <p class="text-sm font-bold mt-2 text-gray-800">237.300 ₫</p>
-              <div class="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 px-1 bg-white rounded-full shadow-md">
-                <i class="fa-regular fa-circle-dot text-gray-500"></i>
-              </div>
-            </a>
-          </div>
+        </div>
+        <div v-else-if="featuredProducts.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <ProductCard v-for="product in featuredProducts.slice(0, 3)" :key="product.id" :product="product" :loading="false" />
+        </div>
+        <div v-else class="text-center py-8">
+          <p class="text-gray-500">{{ $t("client.home.noProductsFound") || "Không tìm thấy sản phẩm" }}</p>
         </div>
       </div>
     </section>
@@ -779,9 +752,24 @@ definePageMeta({
 import { useAuth } from "~/composables/auth/useAuth";
 import Partner from "~/components/client/ui/Partner.vue";
 
+// Import product composable
+import { useProduct } from "~/composables/client/product/useProduct";
+
 const { mainOptions, thumbOptions, rightVirticalOptions, postFeaturedOptions, partnerOptions, mainItems, thumbnailItems, rightVirticalItems, postFeaturedItems, partnerItems, mainSlider, thumbSlider, partnerSlider } = useHomeSlider();
 
 const { isAuthenticated, user } = useAuth();
+
+// Product data for first section
+const { list: featuredProducts, isLoading: featuredProductsLoading, fetchList } = useProduct();
+
+// Fetch featured products on page load
+onMounted(async () => {
+  try {
+    await fetchList("featuredLimit");
+  } catch (error) {
+    console.error("Error loading featured products:", error);
+  }
+});
 </script>
 
 <style scoped></style>
