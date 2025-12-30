@@ -9,16 +9,13 @@ import type { BasePayloadFilter, IApiOk, IPaginate } from "~/interfaces/base.int
 import type { IProductCatalogue, CataloguePayloadFilter } from "~/interfaces/product/catalogue.interface";
 import { PRODUCTCATALOGUEINDEX, MAX_FILE_SIZE, ACCEPTED_IMAGE_TYPES } from "~/utils/constants";
 
-export const useProductCatalogue = (
-  initialFilters?: CataloguePayloadFilter,
-  mode: "create" | "update" = "create"
-) => {
+export const useProductCatalogue = (initialFilters?: CataloguePayloadFilter, mode: "create" | "update" = "create") => {
   const { t } = useI18n();
   const config = useRuntimeConfig();
   const toast = useAppToast();
 
   const data = ref<IApiOk<IPaginate<IProductCatalogue>>>();
-  const filters = ref<CataloguePayloadFilter>(initialFilters ?? { keyword: "", perpage: 10, publish: null });
+  const filters = ref<CataloguePayloadFilter>(initialFilters ?? { keyword: "", perpage: 20, publish: null });
   const page = ref(1);
   const isLoading = ref(false);
   const selectedIds = ref<number[]>([]);
@@ -27,14 +24,18 @@ export const useProductCatalogue = (
   const productCatalogueOptions = ref<{ name: string; value: number }[]>([]);
 
   const schema = {
-    name: z.string({ required_error: 'admin.validation.nameRequired' }).trim().min(1, 'admin.validation.nameRequired').max(255, 'admin.validation.nameMaxLength'),
-    description: z.string().max(255, 'admin.validation.descriptionMaxLength').nullable().optional(),
-    order: z.number().min(0, 'admin.validation.orderMin').nullable().optional(),
-    image: z.any().optional().refine((file) => !file || file.size <= MAX_FILE_SIZE, 'admin.common.maxFileSize').refine((file) => !file || ACCEPTED_IMAGE_TYPES.includes(file.type), 'admin.common.acceptedImageTypes'),
-    publish: z.number({ required_error: 'admin.validation.statusRequired' }).refine((val) => [0, 1, 2].includes(val), { message: 'admin.validation.statusInvalid' }),
-    metaTitle: z.string().max(255, 'admin.validation.metaTitleMaxLength').nullable().optional(),
-    metaDescription: z.string().max(255, 'admin.validation.metaDescriptionMaxLength').nullable().optional(),
-    metaKeyword: z.string().max(255, 'admin.validation.metaKeywordMaxLength').nullable().optional(),
+    name: z.string({ required_error: "admin.validation.nameRequired" }).trim().min(1, "admin.validation.nameRequired").max(255, "admin.validation.nameMaxLength"),
+    description: z.string().max(255, "admin.validation.descriptionMaxLength").nullable().optional(),
+    order: z.number().min(0, "admin.validation.orderMin").nullable().optional(),
+    image: z
+      .any()
+      .optional()
+      .refine((file) => !file || file.size <= MAX_FILE_SIZE, "admin.common.maxFileSize")
+      .refine((file) => !file || ACCEPTED_IMAGE_TYPES.includes(file.type), "admin.common.acceptedImageTypes"),
+    publish: z.number({ required_error: "admin.validation.statusRequired" }).refine((val) => [0, 1, 2].includes(val), { message: "admin.validation.statusInvalid" }),
+    metaTitle: z.string().max(255, "admin.validation.metaTitleMaxLength").nullable().optional(),
+    metaDescription: z.string().max(255, "admin.validation.metaDescriptionMaxLength").nullable().optional(),
+    metaKeyword: z.string().max(255, "admin.validation.metaKeywordMaxLength").nullable().optional(),
     parentId: z.number().nullable().optional(),
     isHot: z.boolean().default(false).optional(),
   };
@@ -53,18 +54,18 @@ export const useProductCatalogue = (
       isLoading.value = true;
       try {
         const response = await productCatalogueService.store(payload as Partial<IProductCatalogue>);
-        toast.success(response?.message || t('admin.messages.createSuccess'));
+        toast.success(response?.message || t("admin.messages.createSuccess"));
         if (shouldClose) {
           return navigateTo(PRODUCTCATALOGUEINDEX);
         }
         resetForm();
       } catch (error: any) {
         if (error?.data?.isValidationError) {
-          errorToField(setFieldError, error?.data?.errors, t, 'name');
+          errorToField(setFieldError, error?.data?.errors, t, "name");
           return;
         }
         console.error("Store error:", error);
-        toast.error(error?.response?.data?.message || t('admin.messages.createFailed'));
+        toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
         throw error;
       } finally {
         isLoading.value = false;
@@ -80,7 +81,7 @@ export const useProductCatalogue = (
       return response;
     } catch (error: any) {
       console.error("Lỗi! Không tìm thấy bản ghi: ", error);
-      toast.error(error?.response?.data?.message || t('admin.messages.createFailed'));
+      toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
       throw error;
     }
   };
@@ -91,17 +92,18 @@ export const useProductCatalogue = (
       try {
         const id = Number(useRoute().params.id);
         await productCatalogueService.update(id, payload as Partial<IProductCatalogue>);
-        toast.success(t('admin.messages.updateSuccess'));
+        toast.success(t("admin.messages.updateSuccess"));
         if (shouldClose) {
           return navigateTo(PRODUCTCATALOGUEINDEX);
         }
         // keep on page
       } catch (error: any) {
         if (error?.data?.isValidationError) {
-          errorToField(setFieldError, error?.data?.errors, t, 'name'); return;
+          errorToField(setFieldError, error?.data?.errors, t, "name");
+          return;
         }
         console.error("Store error:", error);
-        toast.error(error?.response?.data?.message || t('admin.messages.updateFailed'));
+        toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
       } finally {
         isLoading.value = false;
       }
@@ -113,9 +115,9 @@ export const useProductCatalogue = (
   const handleToggleIsHot = async (item: any) => {
     try {
       await productCatalogueService.update(item.id, { isHot: item.isHot });
-      toast.success(t('admin.messages.updateSuccess'));
+      toast.success(t("admin.messages.updateSuccess"));
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || t('admin.messages.updateFailed'));
+      toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
       item.isHot = !item.isHot;
     }
   };
@@ -124,10 +126,10 @@ export const useProductCatalogue = (
     isLoading.value = true;
     try {
       await productCatalogueService.delete(id);
-      toast.success(t('admin.messages.deleteSuccess'));
+      toast.success(t("admin.messages.deleteSuccess"));
       await fetchData();
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || t('admin.messages.deleteFailed'));
+      toast.error(error?.response?.data?.message || t("admin.messages.deleteFailed"));
     } finally {
       isLoading.value = false;
     }
@@ -138,11 +140,11 @@ export const useProductCatalogue = (
     isLoading.value = true;
     try {
       await productCatalogueService.deleteMultiple(selectedIds.value);
-      toast.success(t('admin.messages.deleteMultipleSuccess', { count: selectedIds.value.length }));
+      toast.success(t("admin.messages.deleteMultipleSuccess", { count: selectedIds.value.length }));
       selectedIds.value = [];
       await fetchData();
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || t('admin.messages.deleteFailed'));
+      toast.error(error?.response?.data?.message || t("admin.messages.deleteFailed"));
     } finally {
       isLoading.value = false;
     }
@@ -152,9 +154,7 @@ export const useProductCatalogue = (
     try {
       const response = await productCatalogueService.all();
       const rows = response?.data ?? [];
-      productCatalogueOptions.value = (Array.isArray(rows) ? rows : [rows])
-        .map((item: any) => ({ name: item.name, value: Number(item.id) }))
-        .filter((opt: any) => opt.name && !Number.isNaN(opt.value));
+      productCatalogueOptions.value = (Array.isArray(rows) ? rows : [rows]).map((item: any) => ({ name: item.name, value: Number(item.id) })).filter((opt: any) => opt.name && !Number.isNaN(opt.value));
     } catch (error) {
       console.error("Lỗi! khi tải dữ liệu product catalogue all :", error);
     }
@@ -180,7 +180,7 @@ export const useProductCatalogue = (
       });
       data.value = response;
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || t('admin.messages.loadDataError'));
+      toast.error(err?.response?.data?.message || t("admin.messages.loadDataError"));
       console.error("Fetch error:", err);
     } finally {
       isLoading.value = false;

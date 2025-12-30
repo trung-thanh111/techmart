@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { BasePayloadFilter } from '~/interfaces/base.interface';
+import type { BasePayloadFilter } from "~/interfaces/base.interface";
 
 interface Props {
   initialFilters?: Partial<BasePayloadFilter>;
@@ -8,7 +8,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   initialFilters: () => ({
     keyword: "",
-    perpage: 10,
+    perpage: 20,
     publish: null,
   }),
 });

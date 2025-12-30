@@ -8,7 +8,7 @@ import type { BasePayloadFilter } from "~/interfaces/base.interface";
 export const useFaq = (initialFilters?: BasePayloadFilter) => {
   const { t } = useI18n();
   const data = ref<IApiOk<IPaginate<IFaqCatalogue>>>();
-  const filters = ref<BasePayloadFilter>(initialFilters ?? { keyword: "", perpage: 10, publish: 2 });
+  const filters = ref<BasePayloadFilter>(initialFilters ?? { keyword: "", perpage: 20, publish: 2 });
   const page = ref(1);
   const isLoading = ref(false);
   const faq = ref<IFaqCatalogue | null>(null);

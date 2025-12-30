@@ -147,7 +147,7 @@
           <div class="mb-3">
             <label class="form-label">{{ $t("admin.common.form.warranty") }}:</label>
             <Field name="warranty" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-              <InputNumber :modelValue="field.value" @update:modelValue="field.onChange" :min="0" showButtons class="w-full" input-class="!rounded py-[7px] w-full" size="small" />
+              <InputNumber :modelValue="field.value" @update:modelValue="field.onChange" :min="0" showButtons class="w-full" input-class="!rounded py-[7px] w-full" size="small" :placeholder="$t('admin.common.form.warrantyPlaceholder')" />
               <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
             </Field>
           </div>

@@ -15,7 +15,7 @@ export const useUserCatalogue = (initialFilters?: CataloguePayloadFilter, mode: 
   const toast = useAppToast();
 
   const data = ref<IApiOk<IPaginate<IUserCatalogue>>>();
-  const filters = ref<CataloguePayloadFilter>(initialFilters ?? { keyword: "", perpage: 10, publish: null });
+  const filters = ref<CataloguePayloadFilter>(initialFilters ?? { keyword: "", perpage: 20, publish: null });
   const page = ref(1);
   const isLoading = ref(false);
   const selectedIds = ref<number[]>([]);

@@ -18,7 +18,7 @@ export const useInventory = (initialFilters?: InventoryPayloadFilter, mode: "cre
   const toast = useAppToast();
 
   const data = ref<IApiOk<IPaginate<IInventory>>>();
-  const filters = ref<InventoryPayloadFilter>(initialFilters ?? { keyword: "", perpage: 10, publish: null });
+  const filters = ref<InventoryPayloadFilter>(initialFilters ?? { keyword: "", perpage: 20, publish: null });
   const page = ref(1);
   const isLoading = ref(false);
   const selectedIds = ref<number[]>([]);
