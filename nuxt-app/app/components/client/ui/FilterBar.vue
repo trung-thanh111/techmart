@@ -12,7 +12,7 @@
       </div>
       <div class="filter-scroll"></div>
       <Accordion multiple>
-        <AccordionPanel v-for="catalogue in attributeCatalogues" :key="catalogue.id" :value="catalogue.id.toString()">
+        <AccordionPanel v-for="catalogue in attributeCatalogues.filter((cat) => cat.attributes && cat.attributes.length > 0)" :key="catalogue.id" :value="catalogue.id.toString()">
           <LazyAccordionHeader>
             {{ catalogue.name }}
           </LazyAccordionHeader>

@@ -640,12 +640,12 @@ const normalizeVariants = (list: IProductVariant[]) => {
 onMounted(async () => {
   await loadAttributeCatalogues();
 
-  if (props.modelValue && props.modelValue.length > 0) {
-    variantStore.setVariants([...props.modelValue]);
-    hasVariants.value = true;
-    await initializeGroupsFromExistingVariants();
-  } else if (props.initialVariants.length > 0) {
-    variantStore.setVariants([...props.initialVariants]);
+  // Kiểm tra xem có dữ liệu variants nào không
+  const hasExistingVariants = (Array.isArray(props.modelValue) && props.modelValue.length > 0) || (props.initialVariants && props.initialVariants.length > 0);
+  if (hasExistingVariants) {
+    // Ưu tiên modelValue trước, nếu không có thì dùng initialVariants
+    const variantsToUse = Array.isArray(props.modelValue) && props.modelValue.length > 0 ? [...props.modelValue] : [...props.initialVariants];
+    variantStore.setVariants(variantsToUse);
     hasVariants.value = true;
     await initializeGroupsFromExistingVariants();
   }
