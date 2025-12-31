@@ -630,7 +630,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { TOLOGIN, TOAGENCY, TOFAQ, PROFILEINDEX, TODASHBOARD, TOCART } from "~/utils/constants";
 import logo from "~/assets/shared/images/logo/logo-website.png";
@@ -654,7 +654,12 @@ const avatar = computed(() => {
 });
 
 const { handleLogout } = useAuth();
-const { count: cartCount, items: cartItems } = useCart();
+const { count: cartCount, items: cartItems, loadCart } = useCart();
+
+// Load cart khi component mount để đảm bảo hiển thị số lượng ngay từ đầu
+onMounted(async () => {
+  await loadCart();
+});
 
 const getCartItemImage = (item: ICartItem): string => {
   if (item.product?.album) {

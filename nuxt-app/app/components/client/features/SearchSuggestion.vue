@@ -1,7 +1,7 @@
 <template>
   <div class="relative">
     <form @submit.prevent="onSubmit" class="flex rounded overflow-hidden bg-white shadow-sm">
-      <input v-model="keyword" type="text" name="keyword" :placeholder="$t('client.header.search')" class="flex-1 px-4 py-2 text-gray-600 focus:outline-none" @focus="open = true" />
+      <input v-model="keyword" type="text" name="keyword" :placeholder="$t('client.header.search')" class="flex-1 px-4 py-2 text-gray-600 focus:outline-none" @focus="open = true" @blur="handleBlur" />
       <button type="submit" class="bg-[#00b88c] px-3 hover:bg-[#00b88d] transition-colors text-white">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="w-5 h-5">
           <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
@@ -10,8 +10,8 @@
     </form>
     <div v-if="open" class="absolute w-full bg-white shadow-lg mt-1 rounded z-40">
       <div class="px-4 py-2">
-        <p class="text-sm font-semibold text-gray-500 mb-2">Gợi ý</p>
         <div v-if="!keyword.trim()" class="space-y-1">
+          <p v-if="recent.length > 0" class="text-sm font-semibold text-gray-500 mb-2">Tìm Kiếm gần đây</p>
           <div v-for="(item, idx) in recent" :key="item" class="flex items-center justify-between group p-2 rounded hover:bg-gray-100 cursor-pointer">
             <div @click="useRecent(item)" class="flex items-center gap-2 w-full text-gray-700">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="w-5 h-5 text-gray-400">
@@ -28,7 +28,8 @@
           </div>
         </div>
         <div v-else class="space-y-1 max-h-[200px] overflow-y-auto">
-          <div v-if="suggestions.length === 0" class="text-sm text-gray-500 py-2">Không có gợi ý</div>
+          <div v-if="suggestions.length === 0" class="text-sm text-gray-500 py-2">Không tìm thấy sản phẩm phù hợp</div>
+          <div v-else class="text-sm text-gray-500 py-2">Gợi ý</div>
           <div v-for="product in suggestions" :key="product.id" class="flex items-center gap-2 p-2 rounded hover:bg-gray-50">
             <NuxtLink :to="`/product/${product.slug || ''}`" class="flex items-center gap-2 w-full text-gray-700 no-underline">
               <img :src="getProductImage(product)" loading="lazy" alt="" class="w-10 h-8 object-cover rounded flex-shrink-0" />
@@ -140,6 +141,13 @@ const useRecent = (val: string) => {
   keyword.value = val;
   saveRecent(val);
   window.location.href = `/search?keyword=${encodeURIComponent(val)}`;
+};
+
+//out blur khởi in ơut thì open = false sau 150ms
+const handleBlur = () => {
+  setTimeout(() => {
+    open.value = false;
+  }, 150);
 };
 
 const getProductImage = (product: IProduct) => resolveAlbum(product.album || [])[0] || "";
