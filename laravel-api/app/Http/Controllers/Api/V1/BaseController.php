@@ -45,7 +45,7 @@ abstract class BaseController extends Controller
     {
         $countRecord = count($request->ids);
         $response = $this->service->bulkDestroy($request);
-        return ApiResource::message(Lang::get("message.delete_successfully")." ({$countRecord})");
+        return ApiResource::message(Lang::get("message.delete_successfully") . " ({$countRecord})");
     }
 
     public function show(int $id = 0): JsonResponse
@@ -53,7 +53,7 @@ abstract class BaseController extends Controller
         $response = $this->service->show($id);
         return ApiResource::ok($response, Lang::get('message.successfully'));
     }
-    
+
     public function showBySlug(string $slug = ''): JsonResponse
     {
         $response = $this->service->showBySlug($slug);
@@ -69,7 +69,7 @@ abstract class BaseController extends Controller
     public function baseBulkSave(Request $request, string $action = ''): JsonResponse
     {
         $countRecord = count($request->data);
-        $message = $action === 'store' ? Lang::get('message.save_data_successfully')." ({$countRecord})" : Lang::get('message.update_data_successfully') ." ({$countRecord})";
+        $message = $action === 'store' ? Lang::get('message.save_data_successfully') . " ({$countRecord})" : Lang::get('message.update_data_successfully') . " ({$countRecord})";
         $response = $this->service->bulkSave($request, $action);
         return ApiResource::message($message);
     }
@@ -77,7 +77,6 @@ abstract class BaseController extends Controller
     public function baseRestore(request $request, int $id = 0): JsonResponse
     {
         $response = $this->service->restore($request, $id);
-        return ApiResource::ok($response, Lang::get('message.restore_successfully')." ({$id})");
+        return ApiResource::ok($response, Lang::get('message.restore_successfully') . " ({$id})");
     }
-
 }

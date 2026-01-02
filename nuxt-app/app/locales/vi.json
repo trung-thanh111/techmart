@@ -9,6 +9,11 @@
   },
   "admin": {
     "common": {
+      "save_data_successfully": "Lưu dữ liệu thành công",
+      "save_data_failed": "Lưu dữ liệu thất bại",
+      "save_data_error": "Có lỗi xảy ra khi lưu dữ liệu",
+      "save_data_error_message": "Có lỗi xảy ra khi lưu dữ liệu",
+      "save_data_error_message_detail": "Có lỗi xảy ra khi lưu dữ liệu",
       "stock": "Tồn kho",
       "customize": "Tùy chỉnh",
       "price": "Giá",
