@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\Menu\MenuItemController;
+use App\Http\Controllers\Api\V1\Menu\MenuController;
 use App\Http\Controllers\Api\V1\System\PopupController;
 use App\Http\Controllers\Api\V1\System\SystemController;
 use App\Http\Controllers\Api\V1\Cart\CartItemController;
@@ -443,6 +445,30 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
             Route::delete('{id}/detach', [PromotionController::class, 'detach']);
         });
         Route::resource('promotions', PromotionController::class)->except($routeExcept);
+
+        // This is route Menu
+        Route::group(['prefix' => 'menus'], function () {
+            Route::post('bulkStore', [MenuController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [MenuController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [MenuController::class, 'bulkUpdate']);
+            Route::delete('bulkDelete', [MenuController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [MenuController::class, 'attach']);
+            Route::delete('{id}/detach', [MenuController::class, 'detach']);
+        });
+        Route::resource('menus', MenuController::class)->except($routeExcept);
+
+        // This is route MenuItem
+        Route::group(['prefix' => 'menu_items'], function () {
+            Route::post('bulkStore', [MenuItemController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [MenuItemController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [MenuItemController::class, 'bulkUpdate']);
+            Route::delete('bulkDelete', [MenuItemController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [MenuItemController::class, 'attach']);
+            Route::delete('{id}/detach', [MenuItemController::class, 'detach']);
+            Route::post('rebuild-tree', [MenuItemController::class, 'rebuildTree']);
+            Route::post('drag-drop', [MenuItemController::class, 'dragDrop']);
+        });
+        Route::resource('menu_items', MenuItemController::class)->except($routeExcept);
 
         // generate route
 
