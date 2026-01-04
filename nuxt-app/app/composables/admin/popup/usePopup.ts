@@ -63,7 +63,6 @@ export const usePopup = (initialFilters?: Record<string, any>, mode: "create" | 
       try {
         const response = await popupService.store(payload as Partial<IPopup>);
         toast.success(response?.message || t("admin.messages.createSuccess"));
-        // if priority is set true for this new record, unset priority on others
         if ((payload as any).priority === true) {
           const newId = response?.data?.id;
           if (newId) {

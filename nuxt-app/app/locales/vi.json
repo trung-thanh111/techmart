@@ -89,7 +89,16 @@
       "custom": "Tùy chỉnh",
       "type": "Loại",
       "position": "Vị trí",
+      "info": "Thông tin",
       "form": {
+        "header": "Đầu trang",
+        "footer": "Chân trang",
+        "sidebar": "Thanh bên",
+        "profile": "Trang cá nhân",
+        "mobile": "Trên điện thoại",
+        "add": "Thêm",
+        "slug": "Slug",
+        "slugPlaceholder": "Nhập slug",
         "time": "Thời gian",
         "timePlaceholder": "Chọn thời gian",
         "startDate": "Ngày bắt đầu",
@@ -287,6 +296,7 @@
       "viewAll": "Xem tất cả"
     },
     "sidebar": {
+      "menuList": "Danh sách menu",
       "permission": "Phân quyền",
       "statistics": "Thống kê",
       "dashboard": "Bảng điều khiển",
@@ -484,6 +494,24 @@
         "filterTag": "Tag",
         "filterBrand": "Thương hiệu",
         "groupInfo": "Thông tin"
+      },
+      "menu": {
+        "title": "Menu",
+        "breadcrumb": "Quản lý menu",
+        "name": "Tên menu",
+        "slug": "Slug",
+        "position": "Vị trí",
+        "items": "Mục",
+        "create": {
+          "title": "Tạo Menu",
+          "breadcrumb": "Tạo Menu",
+          "groupInfo": "Thông tin menu"
+        },
+        "edit": {
+          "title": "Chỉnh sửa Menu",
+          "breadcrumb": "Chỉnh sửa Menu",
+          "groupInfo": "Thông tin menu"
+        }
       },
       "faqCatalogue": {
         "title": "nhóm câu hỏi thường gặp",

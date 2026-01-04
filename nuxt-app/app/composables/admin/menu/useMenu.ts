@@ -1,0 +1,307 @@
+import z from "zod";
+import { useI18n } from "vue-i18n";
+import { useForm } from "vee-validate";
+import { errorToField, slugify } from "~/utils/helpers";
+import { toTypedSchema } from "@vee-validate/zod";
+import { useAppToast } from "~/composables/useAppToast";
+import { menuService } from "~/services/menu/menu.service";
+import { menuItemService } from "~/services/menu/item.service";
+import type { IApiOk, IPaginate } from "~/interfaces/base.interface";
+import type { IMenu, MenuPayloadFilter } from "~/interfaces/menu/menu.interface";
+import type { BasePayloadFilter } from "~/interfaces/base.interface";
+import { MENUINDEX } from "~/utils/constants";
+
+export const useMenu = (initialFilters?: MenuPayloadFilter, mode: "create" | "update" = "create") => {
+  const { t } = useI18n();
+  const config = useRuntimeConfig();
+  const toast = useAppToast();
+  const data = ref<IApiOk<IPaginate<IMenu>>>();
+  const filters = ref<MenuPayloadFilter>(initialFilters ?? { keyword: "", perpage: 20, publish: null });
+  const page = ref(1);
+  const isLoading = ref(false);
+  const selectedIds = ref<number[]>([]);
+  const selectedItem = ref<IMenu | null>(null);
+  // Options with caching
+  const menuOptions = ref<Array<{ name: string; id: number }>>([]);
+  const menuItemOptions = ref<Array<{ name: string; id: number }>>([]);
+  // Cache flags to avoid reloading using useState
+  const isOptionsLoaded = useState("menu-options-loaded", () => false);
+  const slug = computed(() => slugify(values.name || ""));
+
+  const schema = {
+    name: z.string({ required_error: "admin.validation.nameRequired" }).trim().min(1, "admin.validation.nameRequired").max(255, "admin.validation.nameMaxLength"),
+    slug: z.string().nullable().optional(),
+    position: z.enum(["header", "footer", "sidebar", "profile", "mobile"], {
+      required_error: "admin.validation.positionRequired",
+    }),
+    publish: z.number({ required_error: "admin.validation.statusRequired" }).refine((val) => [0, 1, 2].includes(val), {
+      message: "admin.validation.statusInvalid",
+    }),
+    menuItems: z
+      .array(
+        z.object({
+          id: z.number().optional(),
+          parentId: z.number().nullable().optional(),
+          name: z.string({ required_error: "admin.validation.nameRequired" }).trim().min(1).max(255),
+          slug: z.string().nullable().optional(),
+          icon: z.string().max(255).nullable().optional(),
+          order: z.number().int().nullable().optional(),
+          publish: z.number().refine((val) => [0, 1, 2].includes(val), {
+            message: "admin.validation.statusInvalid",
+          }),
+        })
+      )
+      .optional(),
+  };
+  const createSchema = z.object({ ...schema });
+  const updateSchema = z.object({ ...schema });
+  type TMenuCreate = z.infer<typeof createSchema>;
+  type TMenuUpdate = z.infer<typeof updateSchema>;
+
+  const { handleSubmit, values, errors, setValues, resetForm, setFieldError } = useForm<TMenuCreate | TMenuUpdate>({
+    validationSchema: toTypedSchema(mode === "create" ? createSchema : updateSchema),
+    keepValuesOnUnmount: true,
+    initialValues: {
+      menuItems: [],
+    },
+  });
+
+  const handleStore = (shouldClose = false) => {
+    const wrapped = handleSubmit(async (payload: TMenuCreate | TMenuUpdate) => {
+      isLoading.value = true;
+      try {
+        console.info("payload cretea:", payload);
+        const response = await menuService.store(payload as Partial<IMenu>);
+        toast.success(response?.message || t("admin.messages.createSuccess"));
+        if (shouldClose) {
+          return navigateTo(MENUINDEX);
+        }
+        resetForm();
+      } catch (error: any) {
+        if (error?.data?.isValidationError) {
+          errorToField(setFieldError, error?.data?.errors, t, "name");
+          errorToField(setFieldError, error?.data?.errors, t, "slug");
+          return;
+        }
+        console.error(t("admin.messages.createFailed") + ":", error);
+        toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
+        throw error;
+      } finally {
+        isLoading.value = false;
+      }
+    });
+
+    return wrapped();
+  };
+
+  const show = async (id: number) => {
+    try {
+      const response = await menuService.show(id);
+      return response;
+    } catch (error: any) {
+      console.error("Lỗi! Không tìm thấy bản ghi: ", error);
+      toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
+      throw error;
+    }
+  };
+
+  const handleUpdate = (shouldClose = false) => {
+    const wrapped = handleSubmit(async (payload: TMenuUpdate) => {
+      isLoading.value = true;
+      try {
+        const id = Number(useRoute().params.id);
+
+        const cleanPayload = { ...payload };
+
+        await menuService.update(id, cleanPayload as Partial<IMenu>);
+        toast.success(t("admin.messages.updateSuccess"));
+        if (shouldClose) {
+          return navigateTo(MENUINDEX);
+        }
+      } catch (error: any) {
+        if (error?.data?.isValidationError) {
+          errorToField(setFieldError, error?.data?.errors, t, "name");
+          errorToField(setFieldError, error?.data?.errors, t, "slug");
+          return;
+        }
+        console.error("Cập nhật thất bại:", error);
+        toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
+      } finally {
+        isLoading.value = false;
+      }
+    });
+
+    return wrapped();
+  };
+
+  const handleTogglePublish = async (item: any) => {
+    try {
+      await menuService.update(item.id, { publish: item.publish });
+      toast.success(t("admin.messages.updateSuccess"));
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
+      item.publish = !item.publish;
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    isLoading.value = true;
+    try {
+      await menuService.delete(id);
+      toast.success(t("admin.messages.deleteSuccess"));
+      await fetchData();
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || t("admin.messages.deleteFailed"));
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
+  const handleDeleteMultiple = async () => {
+    if (selectedIds.value.length === 0) return;
+    isLoading.value = true;
+    try {
+      await menuService.deleteMultiple(selectedIds.value);
+      toast.success(t("admin.messages.deleteMultipleSuccess", { count: selectedIds.value.length }));
+      selectedIds.value = [];
+      await fetchData();
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || t("admin.messages.deleteFailed"));
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
+  const setSelectedItem = (item: IMenu) => {
+    selectedItem.value = item;
+  };
+
+  const confirmDelete = async () => {
+    if (!selectedItem.value || !selectedItem.value.id) return;
+    await handleDelete(selectedItem.value.id);
+    selectedItem.value = null;
+  };
+
+  // fetch
+  const fetchData = async () => {
+    isLoading.value = true;
+    try {
+      const { ...rest } = (filters.value as any) || {};
+      const response = await menuService.pagination({
+        ...rest,
+        page: page.value,
+      });
+      data.value = response;
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || t("admin.messages.loadDataError"));
+      console.error("Lỗi! Không tải được dữ liệu:", err);
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
+  const loadMenuItem = async () => {
+    if (menuItemOptions.value.length > 0) return; // Cache hit
+    try {
+      const response = await menuItemService.paginationPublic({
+        type: "all",
+      });
+      const rows = response?.data ?? [];
+      menuItemOptions.value = (Array.isArray(rows) ? rows : [rows]).map((item: any) => ({ id: Number(item.id), name: item.name })).filter((opt: any) => opt.name && !Number.isNaN(opt.id));
+    } catch (error) {
+      console.error("Lỗi khi tải dữ liệu menu catalogue:", error);
+    }
+  };
+
+  const loadMenu = async () => {
+    if (menuOptions.value.length > 0) return; // Cache hit
+    try {
+      const response = await menuService.paginationPublic({
+        type: "all",
+      });
+      const rows = response?.data ?? [];
+      menuOptions.value = (Array.isArray(rows) ? rows : [rows]).map((item: any) => ({ id: Number(item.id), name: item.name })).filter((opt: any) => opt.name && !Number.isNaN(opt.id));
+    } catch (error) {
+      console.error("Lỗi khi tải dữ liệu menu:", error);
+    }
+  };
+
+  const search = async (newFilters: BasePayloadFilter) => {
+    filters.value = { ...filters.value, ...newFilters };
+    page.value = 1;
+    selectedIds.value = [];
+    await fetchData();
+  };
+
+  const setPage = async (newPage: number) => {
+    page.value = newPage;
+    selectedIds.value = [];
+    await fetchData();
+  };
+
+  const updateSelectedIds = (ids: number[]) => {
+    selectedIds.value = ids;
+  };
+
+  const getTotalItems = () => {
+    return data.value?.data?.data?.length || 0;
+  };
+
+  const getAllItemIds = () => {
+    return data.value?.data?.data?.map((item) => item.id) || [];
+  };
+
+  const initializeData = async () => {
+    await fetchData();
+    if (!isOptionsLoaded.value) {
+      await Promise.all([loadMenu()]);
+      isOptionsLoaded.value = true;
+    }
+  };
+
+  const positionOptions = [
+    { label: t("admin.common.form.header"), value: "header" },
+    { label: t("admin.common.form.footer"), value: "footer" },
+    { label: t("admin.common.form.sidebar"), value: "sidebar" },
+    { label: t("admin.common.form.profile"), value: "profile" },
+    { label: t("admin.common.form.mobile"), value: "mobile" },
+  ];
+
+  onMounted(async () => {
+    initializeData();
+  });
+
+  return {
+    data,
+    isLoading,
+    filters,
+    config,
+    page,
+    values,
+    errors,
+    selectedIds,
+    selectedItem,
+    menuItemOptions,
+    menuOptions,
+    positionOptions,
+    slug,
+    setValues,
+    show,
+    handleStore,
+    handleUpdate,
+    handleDelete,
+    handleDeleteMultiple,
+    handleTogglePublish,
+    setSelectedItem,
+    confirmDelete,
+    fetchData,
+    search,
+    setPage,
+    updateSelectedIds,
+    getTotalItems,
+    getAllItemIds,
+  };
+};
+
+export type TMenuCreate = Partial<IMenu>;
+export type TMenuUpdate = TMenuCreate;
