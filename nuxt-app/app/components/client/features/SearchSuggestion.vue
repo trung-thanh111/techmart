@@ -47,7 +47,7 @@
       <div class="w-full max-w-7xl mx-auto">
         <div class="h-px w-full bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
       </div>
-      <div class="px-4 py-2">
+      <div v-if="visibleList.length > 0" class="px-4 py-2">
         <p class="text-sm font-semibold text-gray-500 mb-2">{{ $t("client.header.featuredProducts") }}</p>
         <div class="space-y-1 max-h-[120px] overflow-y-auto">
           <div v-for="product in visibleList" :key="product.id" class="flex items-center justify-between group p-2 rounded hover:bg-gray-100 cursor-pointer">
@@ -72,7 +72,6 @@
 <script setup lang="ts">
 import { ref, watch, computed } from "vue";
 import { useDebounceFn } from "@vueuse/core";
-import { useRouter } from "vue-router";
 import { useCompare } from "~/composables/client/product/useCompare";
 import { useCart } from "~/composables/client/cart/useCart";
 import { useWishlist } from "~/composables/client/product/useWishlist";
@@ -83,7 +82,6 @@ const keyword = ref("");
 const open = ref(false);
 const suggestions = ref<IProduct[]>([]);
 const recent = ref<string[]>([]);
-const router = useRouter();
 
 const { searchProducts, getFeaturedProducts } = useCompare();
 const { addItem } = useCart();
@@ -160,20 +158,20 @@ const getProductPrice = (product: IProduct) => {
   return v?.price || product.priceOrigin || 0;
 };
 
-const isInWishlist = (product: IProduct) => {
-  const variant = product.variant || product.productVariants?.[0];
-  if (!variant) return false;
-  return isProductVariantInWishlist(variant as any);
-};
+// const isInWishlist = (product: IProduct) => {
+//   const variant = product.variant || product.productVariants?.[0];
+//   if (!variant) return false;
+//   return isProductVariantInWishlist(variant as any);
+// };
 
-const handleToggleWishlist = async (product: IProduct) => {
-  await handleToggleWishlistFromProduct(product);
-};
+// const handleToggleWishlist = async (product: IProduct) => {
+//   await handleToggleWishlistFromProduct(product);
+// };
 
-const handleAddToCart = async (product: IProduct) => {
-  let variant = product.variant || product.productVariants?.[0] || null;
-  await addItem(product, variant, 1, false);
-};
+// const handleAddToCart = async (product: IProduct) => {
+//   let variant = product.variant || product.productVariants?.[0] || null;
+//   await addItem(product, variant, 1, false);
+// };
 
 const visibleList = computed(() => {
   if (keyword.value && suggestions.value.length) return suggestions.value;

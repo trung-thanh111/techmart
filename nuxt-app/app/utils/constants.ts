@@ -83,6 +83,10 @@ export const AGENCYINDEX = "/admin/agency/agency";
 export const AGENCYCREATE = "/admin/agency/agency/create";
 export const AGENCYUPDATE = "/admin/agency/agency/update";
 
+export const MENUINDEX = "/admin/menu/menu";
+export const MENUCREATE = "/admin/menu/menu/create";
+export const MENUUPDATE = "/admin/menu/menu/update";
+
 export const BANNERINDEX = "/admin/banner/banner";
 export const BANNERCREATE = "/admin/banner/banner/create";
 export const BANNERUPDATE = "/admin/banner/banner/update";
