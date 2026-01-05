@@ -112,7 +112,6 @@ class MenuItemService extends BaseService implements MenuItemServiceInterface
         $menuItem->parent_id = $data['parent_id'] ?? 0;
         $menuItem->save();
 
-        // Update order for siblings
         $siblings = MenuItem::where('menu_id', $data['menu_id'])
             ->where('parent_id', $data['parent_id'] ?? 0)
             ->where('id', '!=', $data['item_id'])
@@ -129,11 +128,9 @@ class MenuItemService extends BaseService implements MenuItemServiceInterface
             $order++;
         }
 
-        // Update the dragged item's order
         $menuItem->order = $data['position'];
         $menuItem->save();
 
-        // Rebuild nested set tree
         $rebuildRequest = new Request(['menu_id' => $data['menu_id']]);
         $this->rebuildTree($rebuildRequest);
 

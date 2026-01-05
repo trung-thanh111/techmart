@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- Form thêm menu mới -->
     <VeeForm :validation-schema="formSchema" @submit="onAddItem" class="w-full" ref="formRef">
       <div class="flex gap-3 items-center w-full">
         <div class="flex-1">
@@ -57,11 +56,9 @@
     <!-- Danh sách menu -->
     <ul class="list-unstyled root-list mt-3" ref="rootListRef">
       <li v-for="(item, idx) in itemsLocal" :key="item.__localId" class="border rounded p-2 mb-2" :data-id="item.__localId">
-        <!-- Header của menu item -->
         <div class="d-flex items-center justify-content-between">
           <div class="d-flex gap-2 align-items-center">
             <i class="drag-handle ri-drag-move-line cursor-move"></i>
-            <i :class="item.icon || 'ri-layout-grid-line'" class="text-muted"></i>
             <strong>{{ item.name }}</strong>
             <small class="text-muted">({{ item.slug }})</small>
           </div>
@@ -82,16 +79,21 @@
           </div>
         </div>
 
-        <!-- Form chỉnh sửa menu item -->
         <div class="mt-3">
           <div class="flex items-center gap-3">
             <div class="col-md-5">
-              <label class="form-label">Tên</label>
-              <input v-model="item.name" class="w-full form-control" placeholder="Nhập tên menu" />
+              <label class="form-label">
+                Tên
+                <span class="text-danger">*</span>
+              </label>
+              <InputText :model-value="item.name" @update:model-value="(val: any) => handleNameChange(item, val)" class="w-full form-control" placeholder="Nhập tên menu" />
             </div>
             <div class="col-md-4">
-              <label class="form-label">URL / Slug</label>
-              <input v-model="item.slug" class="w-full form-control" placeholder="URL / liên kết" />
+              <label class="form-label">
+                URL / Slug
+                <span class="text-danger">*</span>
+              </label>
+              <InputText :model-value="item.slug" @update:model-value="(val: any) => handleSlugChange(item, val)" class="form-control" />
             </div>
             <div class="col-md-2">
               <label class="form-label">Trạng thái</label>
@@ -102,10 +104,9 @@
           </div>
         </div>
 
-        <!-- Menu con - QUAN TRỌNG: v-if kiểm tra children -->
-        <div v-if="item.children && item.children.length > 0" class="mt-3 ms-4">
+        <div v-if="item.children && item.children.length > 0" class="mt-3">
           <ul class="nested-list list-unstyled ps-0" :data-parent-id="item.__localId">
-            <MenuItemRecursive v-for="(child, cidx) in item.children" :key="child.__localId" :item="child" :index="cidx as any" :parent="item" :is-first="cidx === 0" :is-last="cidx === item.children.length - 1" @refresh="forceRefresh" />
+            <MenuItemRecursive v-for="(child, cidx) in item.children" :key="child.__localId" :item="child" :index="cidx as any" :parent="item" :is-first="cidx === 0" :is-last="cidx === item.children.length - 1" @update="immediateEmitChange" />
           </ul>
         </div>
       </li>
@@ -118,59 +119,106 @@ import { toRaw, nextTick, onMounted, ref, watch } from "vue";
 import { Form as VeeForm, Field } from "vee-validate";
 import z from "zod";
 import { toTypedSchema } from "@vee-validate/zod";
+import { slugify } from "~/utils/helpers";
 import MenuItemRecursive from "./MenuItemRecursive.vue";
 
 const props = defineProps({
   items: {
-    type: Array as () => any[] | undefined,
+    type: Array as () => any[],
     default: () => [],
   },
 });
 
 const emits = defineEmits(["update:items"]);
 
-// Refs
+// ============================================
+// REFS & STATE
+// ============================================
 const rootListRef = ref<HTMLElement | null>(null);
 const formRef = ref<any>(null);
+const itemsLocal = ref<any[]>([]);
+const isEmitting = ref(false);
 
-// Key để force re-render
-const refreshKey = ref(0);
+const debounce = (func: Function, delay: number) => {
+  let timeoutId: number;
+  return (...args: any[]) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func(...args), delay);
+  };
+};
 
-const itemsLocal = ref<any[]>(
-  (props.items as any[])?.map((it: any, i: number) => ({
-    ...(it || {}),
-    __localId: it?.id ?? `n-${i}`,
-    children: it?.children || [], // ĐẢM BẢO children luôn là array
-  })) ?? []
-);
+const initializeItems = (items: any[]): any[] => {
+  if (!Array.isArray(items)) return [];
 
-// Watch props
+  return items.map((it, i) => ({
+    ...it,
+    __localId: it.__localId || it.id || `n-${Date.now()}-${i}-${Math.random().toString(36).substr(2, 9)}`,
+    children: Array.isArray(it.children) ? initializeItems(it.children) : [],
+  }));
+};
+
 watch(
   () => props.items,
   (v) => {
-    itemsLocal.value = ((v as any[])?.map((it: any, i: number) => ({
-      ...(it || {}),
-      __localId: it?.id ?? `n-${i}`,
-      children: it?.children || [],
-    })) ?? []) as any[];
+    if (isEmitting.value) return;
+    itemsLocal.value = initializeItems(v);
   },
-  { deep: true }
+  { deep: true, immediate: true }
 );
 
-// Watch itemsLocal và emit changes
-watch(
-  itemsLocal,
-  (v) => {
-    emits(
-      "update:items",
-      toRaw(v).map(({ __localId, ...rest }) => rest)
-    );
-    nextTick(() => initSortables());
-  },
-  { deep: true }
-);
+const emitChange = () => {
+  if (isEmitting.value) return;
 
-// Schema validation
+  isEmitting.value = true;
+  const cleaned = cleanNestedData(toRaw(itemsLocal.value));
+  emits("update:items", cleaned);
+
+  setTimeout(() => {
+    isEmitting.value = false;
+  }, 50);
+};
+
+// Immediate emit - không debounce
+const immediateEmitChange = () => {
+  emitChange();
+};
+
+const cleanNestedData = (items: any[]): any[] => {
+  if (!Array.isArray(items)) return [];
+
+  return items.map((item) => {
+    const { __localId, __userModifiedSlug, ...rest } = item;
+
+    return {
+      ...rest,
+      children: Array.isArray(item.children) && item.children.length > 0 ? cleanNestedData(item.children) : [],
+    };
+  });
+};
+
+const handleNameChange = (item: any, value: string) => {
+  item.name = value;
+
+  // Auto-generate slug
+  if (!item.__userModifiedSlug) {
+    item.slug = slugify(value || "");
+  }
+
+  // Emit ngay lập tức để không bị out focus
+  immediateEmitChange();
+};
+
+const handleSlugChange = (item: any, value: string) => {
+  item.slug = value;
+  item.__userModifiedSlug = true;
+  immediateEmitChange();
+};
+
+const handlePublishToggle = (item: any, val: boolean) => {
+  item.publish = val ? 2 : 1;
+  immediateEmitChange();
+};
+
 const formSchema = toTypedSchema(
   z.object({
     name: z.string({ required_error: "admin.validation.nameRequired" }).min(1, "admin.validation.nameRequired"),
@@ -179,127 +227,89 @@ const formSchema = toTypedSchema(
   })
 );
 
-/**
- * Thêm menu mới vào root level
- */
 const onAddItem = (values: any, actions: any) => {
-  try {
-    const publishNum = values.publish === undefined ? 2 : values.publish ? 2 : 1;
-    const payload = {
-      id: undefined,
-      name: values.name,
-      slug: values.slug || "",
-      publish: publishNum,
-      icon: "",
-      children: [], // ĐẢM BẢO children là array
-      __localId: `n-${Date.now()}`,
-    };
+  const publishNum = values.publish === undefined ? 2 : values.publish ? 2 : 1;
+  const localId = `n-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
-    itemsLocal.value.push(payload);
+  const newItem = {
+    id: undefined,
+    __localId: localId,
+    name: values.name,
+    slug: values.slug || slugify(values.name),
+    publish: publishNum,
+    order: itemsLocal.value.length + 1,
+    children: [],
+  };
 
-    actions.resetForm({
-      values: { name: "", slug: "", publish: true },
-    });
+  itemsLocal.value.push(newItem);
 
-    console.log("✅ Đã thêm menu mới:", payload.name);
-  } catch (error) {
-    console.error("❌ Lỗi khi thêm menu:", error);
-  }
+  immediateEmitChange();
+  actions.resetForm({ values: { name: "", slug: "", publish: true } });
 };
 
-/**
- * Force refresh component
- */
-const forceRefresh = () => {
-  refreshKey.value++;
-  nextTick(() => {
-    initSortables();
+const removeItem = (idx: number) => {
+  const item = itemsLocal.value[idx];
+  if (!item) return;
+
+  if (item.children?.length > 0) {
+    if (!confirm(`Xóa "${item.name}" sẽ xóa ${item.children.length} menu con. Bạn có chắc?`)) {
+      return;
+    }
+  }
+
+  itemsLocal.value.splice(idx, 1);
+  updateOrder();
+  immediateEmitChange();
+  nextTick(() => initSortables());
+};
+
+const moveUp = (idx: number) => {
+  if (idx === 0) return;
+  [itemsLocal.value[idx - 1], itemsLocal.value[idx]] = [itemsLocal.value[idx], itemsLocal.value[idx - 1]];
+  updateOrder();
+  immediateEmitChange();
+  nextTick(() => initSortables());
+};
+
+const moveDown = (idx: number) => {
+  if (idx === itemsLocal.value.length - 1) return;
+  [itemsLocal.value[idx], itemsLocal.value[idx + 1]] = [itemsLocal.value[idx + 1], itemsLocal.value[idx]];
+  updateOrder();
+  immediateEmitChange();
+  nextTick(() => initSortables());
+};
+
+const updateOrder = () => {
+  itemsLocal.value.forEach((item, index) => {
+    item.order = index + 1;
   });
 };
 
-/**
- * Xóa menu item
- */
-const removeItem = (idx: number) => {
-  const itemName = itemsLocal.value[idx]?.name;
-  itemsLocal.value.splice(idx, 1);
-  console.log(`🗑️ Đã xóa menu: ${itemName}`);
-  forceRefresh();
-};
-
-/**
- * Di chuyển menu lên
- */
-const moveUp = (idx: number) => {
-  if (idx === 0) return;
-  const tmp = itemsLocal.value[idx - 1];
-  itemsLocal.value[idx - 1] = itemsLocal.value[idx];
-  itemsLocal.value[idx] = tmp;
-  forceRefresh();
-};
-
-/**
- * Di chuyển menu xuống
- */
-const moveDown = (idx: number) => {
-  if (idx === itemsLocal.value.length - 1) return;
-  const tmp = itemsLocal.value[idx + 1];
-  itemsLocal.value[idx + 1] = itemsLocal.value[idx];
-  itemsLocal.value[idx] = tmp;
-  forceRefresh();
-};
-
-/**
- * Toggle trạng thái publish
- */
-const handlePublishToggle = (item: any, val: boolean) => {
-  item.publish = val ? 2 : 1;
-};
-
-/**
- * Thêm menu con - FIX CHÍNH Ở ĐÂY
- */
 const addChild = (idx: number) => {
   const parent = itemsLocal.value[idx];
-  if (!parent) {
-    console.error("❌ Không tìm thấy parent menu");
-    return;
-  }
+  if (!parent) return;
 
-  // Đảm bảo children là array
   if (!Array.isArray(parent.children)) {
     parent.children = [];
   }
 
-  // Tạo menu con mới
-  const newChild = {
+  const localId = `n-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+  parent.children.push({
     id: undefined,
+    __localId: localId,
     name: "Menu con",
-    slug: "",
-    icon: "",
+    slug: "menu-con",
     publish: 2,
+    order: parent.children.length + 1,
     children: [],
-    __localId: `n-${Date.now()}`,
-  };
-
-  // Thêm vào children
-  parent.children.push(newChild);
-
-  console.log(`➕ Đã thêm menu con vào: ${parent.name}`, newChild);
-  console.log("📊 Children hiện tại:", parent.children);
-
-  // Force update để Vue detect thay đổi
-  itemsLocal.value = [...itemsLocal.value];
-
-  // Refresh UI
-  nextTick(() => {
-    forceRefresh();
   });
-};
 
-// ============================================
-// DRAG & DROP
-// ============================================
+  // Force reactivity
+  itemsLocal.value = [...itemsLocal.value];
+  immediateEmitChange();
+  nextTick(() => initSortables());
+};
 
 let sortableInstances: any[] = [];
 
@@ -311,62 +321,74 @@ const initSortables = () => {
   if (!Sortable) return;
 
   if (rootListRef.value) {
-    const s = Sortable.create(rootListRef.value, {
-      group: "menu",
-      animation: 150,
-      handle: ".drag-handle",
-      onEnd: () => rebuildFromDom(),
-    });
-    sortableInstances.push(s);
+    sortableInstances.push(
+      Sortable.create(rootListRef.value, {
+        group: "menu",
+        animation: 150,
+        handle: ".drag-handle",
+        onEnd: () => rebuildFromDom(),
+      })
+    );
   }
 
   document.querySelectorAll(".nested-list").forEach((el) => {
-    const s = Sortable.create(el as any, {
-      group: "menu",
-      animation: 150,
-      handle: ".drag-handle",
-      onEnd: () => rebuildFromDom(),
-    });
-    sortableInstances.push(s);
+    sortableInstances.push(
+      Sortable.create(el as any, {
+        group: "menu",
+        animation: 150,
+        handle: ".drag-handle",
+        onEnd: () => rebuildFromDom(),
+      })
+    );
   });
 };
 
 const flattenMap = (arr: any[], map: Record<string, any> = {}) => {
   for (const it of arr) {
-    const id = (it as any).__localId;
-    map[id] = it;
-    if (Array.isArray((it as any).children) && (it as any).children.length) {
-      flattenMap((it as any).children, map);
+    map[it.__localId] = it;
+    if (Array.isArray(it.children) && it.children.length) {
+      flattenMap(it.children, map);
     }
   }
   return map;
 };
 
-const readListFromDom = (ul: Element, map: Record<string, any>) => {
+const readListFromDom = (ul: Element, map: Record<string, any>): any[] => {
   const res: any[] = [];
+
   ul.querySelectorAll(":scope > li").forEach((li) => {
     const id = (li as HTMLElement).dataset.id;
-    if (!id) return;
-    const item = map[id];
-    if (!item) return;
-    const copy = { ...item };
-    const nested = li.querySelector(":scope > .nested-list");
-    if (nested) {
-      copy.children = readListFromDom(nested, map);
-    } else {
-      copy.children = Array.isArray(item.children) ? [...item.children] : [];
-    }
+    if (!id || !map[id]) return;
+
+    const copy = { ...map[id] };
+    const nested = li.querySelector(":scope > div > .nested-list, :scope > .nested-list");
+
+    copy.children = nested ? readListFromDom(nested, map) : Array.isArray(copy.children) ? [...copy.children] : [];
+
     res.push(copy);
   });
+
   return res;
 };
 
 const rebuildFromDom = () => {
   const map = flattenMap(itemsLocal.value, {});
   if (!rootListRef.value) return;
-  const rebuilt = readListFromDom(rootListRef.value, map);
-  itemsLocal.value = rebuilt;
-  forceRefresh();
+
+  itemsLocal.value = readListFromDom(rootListRef.value, map);
+  updateOrderRecursive(itemsLocal.value);
+  emitChange();
+  nextTick(() => initSortables());
+};
+
+const updateOrderRecursive = (items: any[], startOrder: number = 0) => {
+  items.forEach((item, index) => {
+    item.order = startOrder + index + 1;
+
+    if (Array.isArray(item.children) && item.children.length > 0) {
+      updateOrderRecursive(item.children, 0);
+    }
+  });
 };
 
 onMounted(() => {
@@ -387,5 +409,20 @@ onMounted(() => {
 
 .drag-handle:hover {
   opacity: 1;
+}
+
+.nested-list {
+  margin-left: 2rem;
+  border-left: 2px solid #e5e7eb;
+  padding-left: 1rem;
+  margin-top: 0.5rem;
+}
+
+.nested-list .nested-list {
+  margin-left: 1.5rem;
+}
+
+.nested-list:hover {
+  border-left-color: #3b82f6;
 }
 </style>

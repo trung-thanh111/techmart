@@ -51,7 +51,7 @@
           <h5 class="card-title mb-0">{{ $t("admin.page.menu.items") }}</h5>
         </div>
         <div class="card-body">
-          <MenuItemEditor v-model:items="values.menuItems" />
+          <MenuManager :items="values.menuItems" @update:items="values.menuItems = $event" />
         </div>
       </div>
       <div class="flex justify-end gap-3 mt-4 position-sticky bottom-5 z-20">
@@ -69,18 +69,85 @@ import Button from "~/components/admin/custom/Button.vue";
 import Breadcrumb from "~/components/admin/navigation/Breadcrumb.vue";
 import PublishSelect from "~/components/admin/custom/PublishSelect.vue";
 import { useMenu } from "~/composables/admin/menu/useMenu";
-import MenuItemEditor from "~/components/admin/menu/MenuItemEditor.vue";
+import MenuManager from "~/components/admin/menu/MenuManager.vue";
 import { MENUINDEX } from "~/utils/constants";
 
-const { isLoading, values, slug, handleUpdate, show } = useMenu(undefined, "update");
+const { isLoading, values, slug, positionOptions, setValues, handleUpdate, show } = useMenu(undefined, "update");
+const positions = positionOptions;
 const id = Number(useRoute().params.id);
-const positions = [
-  { label: "header", value: "header" },
-  { label: "footer", value: "footer" },
-];
+
+// Function to convert flat menu items to nested structure
+const convertFlatToNested = (flatItems: any[]) => {
+  const itemMap = new Map();
+  const rootItems: any[] = [];
+
+  // First pass: create all items in map
+  flatItems.forEach((item, index) => {
+    const nestedItem = {
+      id: item.id,
+      parentId: item.parentId || 0,
+      name: item.name,
+      slug: item.slug,
+      icon: item.icon,
+      order: item.order,
+      publish: item.publish,
+      __localId: item.id || `n-${index}`,
+      children: [],
+    };
+    itemMap.set(item.id, nestedItem);
+  });
+
+  // Second pass: build tree structure
+  flatItems.forEach((item) => {
+    const nestedItem = itemMap.get(item.id);
+    if ((item.parentId || 0) === 0) {
+      // Root item
+      rootItems.push(nestedItem);
+    } else {
+      // Child item
+      const parent = itemMap.get(item.parentId);
+      if (parent) {
+        parent.children.push(nestedItem);
+      }
+    }
+  });
+
+  return rootItems;
+};
 
 onMounted(async () => {
-  if (id) await show(id);
+  if (id) {
+    const response = await show(id);
+    if (response?.data) {
+      // Transform menuItems from API response to form format
+      const menuData = response.data;
+      const flatMenuItems = (menuData.menuItems || []).map((item: any) => ({
+        id: item.id,
+        parentId: item.parentId || 0,
+        name: item.name,
+        slug: item.slug,
+        icon: item.icon,
+        order: item.order,
+        publish: item.publish,
+      }));
+
+      // Convert flat to nested structure for MenuManager component
+      const nestedMenuItems = convertFlatToNested(flatMenuItems);
+
+      // Validate position value
+      const validPositions: ("header" | "footer" | "sidebar" | "profile" | "mobile")[] = ["header", "footer", "sidebar", "profile", "mobile"];
+      const position = validPositions.includes(menuData.position as any) ? (menuData.position as "header" | "footer" | "sidebar" | "profile" | "mobile") : "header";
+
+      // Set form values
+      setValues({
+        name: menuData.name,
+        slug: menuData.slug,
+        position: position,
+        publish: menuData.publish,
+        menuItems: nestedMenuItems,
+      });
+    }
+  }
 });
 
 definePageMeta({

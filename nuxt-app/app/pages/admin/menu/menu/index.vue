@@ -135,11 +135,11 @@ definePageMeta({
     </div>
   </div>
 
-  <div id="deleteRecord" class="modal fade" tabindex="-1" aria-hidden="true">
+  <div id="deleteRecord" class="modal fade" tabindex="-1" aria-labelledby="deleteRecordLabel" aria-hidden="true">
     <div class="modal-dialog zoomIn">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title text-danger uppercase">{{ $t("admin.common.deleteRecord") }}</h5>
+          <h5 class="modal-title text-danger uppercase" id="deleteRecordLabel">{{ $t("admin.common.deleteRecord") }}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body py-4">
@@ -152,6 +152,36 @@ definePageMeta({
         <div class="modal-footer">
           <Button type="button" variant="cancel" data-bs-dismiss="modal" />
           <Button variant="delete" :loading="isLoading" :label="$t('admin.common.delete')" :disabled="!selectedItem" @click="handleConfirmDeleteSingle" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="deleteMultipleRecord" class="modal fade" tabindex="-1" aria-labelledby="deleteMultipleRecordLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg zoomIn">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-danger uppercase" id="deleteMultipleRecordLabel">{{ $t("admin.common.deleteMultiple") }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body py-4">
+          <h5 class="fs-15">{{ $t("admin.common.confirmDeleteMultiple") }}</h5>
+          <div class="mt-3">
+            <p class="text-muted fz-[12px] mb-2">{{ $t("admin.common.selectedRecords") }} ({{ selectedIds.length }}):</p>
+            <div class="border rounded p-3 bg-light max-h-[300px] overflow-y-auto">
+              <ul class="list-unstyled mb-0">
+                <li v-for="item in data?.data?.data?.filter((i) => selectedIds.includes(i.id))" :key="item.id" class="py-1">
+                  <div class="d-flex align-items-center">
+                    <AppCheckbox :model-value="selectedIds" :value="item.id" @update:model-value="handleSelectedIdsChange" class="me-2" />
+                    <span class="text-danger">{{ item.name }}</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <Button type="button" variant="cancel" data-bs-dismiss="modal" />
+          <Button variant="delete" :loading="isLoading" :label="$t('admin.common.deleteAll')" :disabled="selectedIds.length === 0" @click="handleConfirmDeleteMultiple" />
         </div>
       </div>
     </div>

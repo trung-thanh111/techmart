@@ -5,7 +5,6 @@ import { errorToField, slugify } from "~/utils/helpers";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useAppToast } from "~/composables/useAppToast";
 import { menuService } from "~/services/menu/menu.service";
-import { menuItemService } from "~/services/menu/item.service";
 import type { IApiOk, IPaginate } from "~/interfaces/base.interface";
 import type { IMenu, MenuPayloadFilter } from "~/interfaces/menu/menu.interface";
 import type { BasePayloadFilter } from "~/interfaces/base.interface";
@@ -21,11 +20,6 @@ export const useMenu = (initialFilters?: MenuPayloadFilter, mode: "create" | "up
   const isLoading = ref(false);
   const selectedIds = ref<number[]>([]);
   const selectedItem = ref<IMenu | null>(null);
-  // Options with caching
-  const menuOptions = ref<Array<{ name: string; id: number }>>([]);
-  const menuItemOptions = ref<Array<{ name: string; id: number }>>([]);
-  // Cache flags to avoid reloading using useState
-  const isOptionsLoaded = useState("menu-options-loaded", () => false);
   const slug = computed(() => slugify(values.name || ""));
 
   const schema = {
@@ -37,22 +31,9 @@ export const useMenu = (initialFilters?: MenuPayloadFilter, mode: "create" | "up
     publish: z.number({ required_error: "admin.validation.statusRequired" }).refine((val) => [0, 1, 2].includes(val), {
       message: "admin.validation.statusInvalid",
     }),
-    menuItems: z
-      .array(
-        z.object({
-          id: z.number().optional(),
-          parentId: z.number().nullable().optional(),
-          name: z.string({ required_error: "admin.validation.nameRequired" }).trim().min(1).max(255),
-          slug: z.string().nullable().optional(),
-          icon: z.string().max(255).nullable().optional(),
-          order: z.number().int().nullable().optional(),
-          publish: z.number().refine((val) => [0, 1, 2].includes(val), {
-            message: "admin.validation.statusInvalid",
-          }),
-        })
-      )
-      .optional(),
+    menuItems: z.any().optional(),
   };
+
   const createSchema = z.object({ ...schema });
   const updateSchema = z.object({ ...schema });
   type TMenuCreate = z.infer<typeof createSchema>;
@@ -70,8 +51,17 @@ export const useMenu = (initialFilters?: MenuPayloadFilter, mode: "create" | "up
     const wrapped = handleSubmit(async (payload: TMenuCreate | TMenuUpdate) => {
       isLoading.value = true;
       try {
-        console.info("payload cretea:", payload);
-        const response = await menuService.store(payload as Partial<IMenu>);
+        const finalPayload = {
+          name: payload.name,
+          slug: payload.slug || null,
+          position: payload.position,
+          publish: payload.publish,
+          menu_items: payload.menuItems || [],
+        };
+
+        console.info("📤 Payload gửi lên server:", finalPayload);
+
+        const response = await menuService.store(finalPayload as Partial<IMenu>);
         toast.success(response?.message || t("admin.messages.createSuccess"));
         if (shouldClose) {
           return navigateTo(MENUINDEX);
@@ -83,9 +73,50 @@ export const useMenu = (initialFilters?: MenuPayloadFilter, mode: "create" | "up
           errorToField(setFieldError, error?.data?.errors, t, "slug");
           return;
         }
+
         console.error(t("admin.messages.createFailed") + ":", error);
         toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
         throw error;
+      } finally {
+        isLoading.value = false;
+      }
+    });
+
+    return wrapped();
+  };
+
+  const handleUpdate = (shouldClose = false) => {
+    const wrapped = handleSubmit(async (payload: TMenuUpdate) => {
+      isLoading.value = true;
+
+      try {
+        const id = Number(useRoute().params.id);
+
+        const finalPayload = {
+          name: payload.name,
+          slug: payload.slug || null,
+          position: payload.position,
+          publish: payload.publish,
+          menu_items: payload.menuItems || [],
+        };
+
+        console.info("📤 Payload gửi lên server:", finalPayload);
+
+        await menuService.update(id, finalPayload as Partial<IMenu>);
+        toast.success(t("admin.messages.updateSuccess"));
+
+        if (shouldClose) {
+          return navigateTo(MENUINDEX);
+        }
+      } catch (error: any) {
+        if (error?.data?.isValidationError) {
+          errorToField(setFieldError, error?.data?.errors, t, "name");
+          errorToField(setFieldError, error?.data?.errors, t, "slug");
+          return;
+        }
+
+        console.error("Cập nhật thất bại:", error);
+        toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
       } finally {
         isLoading.value = false;
       }
@@ -99,39 +130,10 @@ export const useMenu = (initialFilters?: MenuPayloadFilter, mode: "create" | "up
       const response = await menuService.show(id);
       return response;
     } catch (error: any) {
-      console.error("Lỗi! Không tìm thấy bản ghi: ", error);
-      toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
+      console.error("Lỗi! Không tìm thấy bản ghi:", error);
+      toast.error(error?.response?.data?.message || t("admin.messages.loadDataError"));
       throw error;
     }
-  };
-
-  const handleUpdate = (shouldClose = false) => {
-    const wrapped = handleSubmit(async (payload: TMenuUpdate) => {
-      isLoading.value = true;
-      try {
-        const id = Number(useRoute().params.id);
-
-        const cleanPayload = { ...payload };
-
-        await menuService.update(id, cleanPayload as Partial<IMenu>);
-        toast.success(t("admin.messages.updateSuccess"));
-        if (shouldClose) {
-          return navigateTo(MENUINDEX);
-        }
-      } catch (error: any) {
-        if (error?.data?.isValidationError) {
-          errorToField(setFieldError, error?.data?.errors, t, "name");
-          errorToField(setFieldError, error?.data?.errors, t, "slug");
-          return;
-        }
-        console.error("Cập nhật thất bại:", error);
-        toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
-      } finally {
-        isLoading.value = false;
-      }
-    });
-
-    return wrapped();
   };
 
   const handleTogglePublish = async (item: any) => {
@@ -200,32 +202,6 @@ export const useMenu = (initialFilters?: MenuPayloadFilter, mode: "create" | "up
     }
   };
 
-  const loadMenuItem = async () => {
-    if (menuItemOptions.value.length > 0) return; // Cache hit
-    try {
-      const response = await menuItemService.paginationPublic({
-        type: "all",
-      });
-      const rows = response?.data ?? [];
-      menuItemOptions.value = (Array.isArray(rows) ? rows : [rows]).map((item: any) => ({ id: Number(item.id), name: item.name })).filter((opt: any) => opt.name && !Number.isNaN(opt.id));
-    } catch (error) {
-      console.error("Lỗi khi tải dữ liệu menu catalogue:", error);
-    }
-  };
-
-  const loadMenu = async () => {
-    if (menuOptions.value.length > 0) return; // Cache hit
-    try {
-      const response = await menuService.paginationPublic({
-        type: "all",
-      });
-      const rows = response?.data ?? [];
-      menuOptions.value = (Array.isArray(rows) ? rows : [rows]).map((item: any) => ({ id: Number(item.id), name: item.name })).filter((opt: any) => opt.name && !Number.isNaN(opt.id));
-    } catch (error) {
-      console.error("Lỗi khi tải dữ liệu menu:", error);
-    }
-  };
-
   const search = async (newFilters: BasePayloadFilter) => {
     filters.value = { ...filters.value, ...newFilters };
     page.value = 1;
@@ -253,10 +229,6 @@ export const useMenu = (initialFilters?: MenuPayloadFilter, mode: "create" | "up
 
   const initializeData = async () => {
     await fetchData();
-    if (!isOptionsLoaded.value) {
-      await Promise.all([loadMenu()]);
-      isOptionsLoaded.value = true;
-    }
   };
 
   const positionOptions = [
@@ -268,7 +240,7 @@ export const useMenu = (initialFilters?: MenuPayloadFilter, mode: "create" | "up
   ];
 
   onMounted(async () => {
-    initializeData();
+    await fetchData();
   });
 
   return {
@@ -281,8 +253,6 @@ export const useMenu = (initialFilters?: MenuPayloadFilter, mode: "create" | "up
     errors,
     selectedIds,
     selectedItem,
-    menuItemOptions,
-    menuOptions,
     positionOptions,
     slug,
     setValues,
