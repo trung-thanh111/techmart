@@ -23,7 +23,9 @@
             </label>
             <Field name="name" v-slot="{ field, errorMessage, meta }">
               <InputText v-bind="field" type="text" class="form-control" placeholder="Nhập tên menu (exp: main menu)" />
-              <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
+              <small v-if="errorMessage && meta.touched" class="text-danger">
+                {{ $t(errorMessage) }}
+              </small>
             </Field>
           </div>
           <div class="mb-3">
@@ -51,7 +53,7 @@
           <h5 class="card-title mb-0">{{ $t("admin.page.menu.items") }}</h5>
         </div>
         <div class="card-body">
-          <MenuItemEditor v-model:items="values.menuItems" />
+          <MenuManager :items="menuItemsNested" @update:items="handleMenuItemsUpdate" />
         </div>
       </div>
       <div class="flex justify-end gap-3 mt-4 position-sticky bottom-5 z-20">
@@ -64,15 +66,27 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
 import { Field } from "vee-validate";
 import Button from "~/components/admin/custom/Button.vue";
 import Breadcrumb from "~/components/admin/navigation/Breadcrumb.vue";
 import PublishSelect from "~/components/admin/custom/PublishSelect.vue";
 import { useMenu } from "~/composables/admin/menu/useMenu";
-import MenuItemEditor from "~/components/admin/menu/MenuItemEditor.vue";
+import MenuManager from "~/components/admin/menu/MenuManager.vue";
 import { MENUINDEX } from "~/utils/constants";
 
-const { isLoading, values, slug, positionOptions, handleStore } = useMenu();
+const { isLoading, values, slug, positionOptions, setValues, handleStore } = useMenu();
+
+const menuItemsNested = ref<any[]>([]);
+
+const handleMenuItemsUpdate = (nestedData: any[]) => {
+  menuItemsNested.value = nestedData;
+
+  setValues({
+    ...values,
+    menuItems: nestedData,
+  });
+};
 
 definePageMeta({
   layout: "admin",

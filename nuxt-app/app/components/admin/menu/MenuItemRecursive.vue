@@ -3,22 +3,21 @@
     <div class="d-flex items-center justify-content-between mb-3">
       <div class="d-flex gap-2 align-items-center">
         <i class="drag-handle ri-drag-move-line cursor-move"></i>
-        <i :class="item.icon || 'ri-layout-grid-line'" class="text-muted"></i>
         <strong>{{ item.name }}</strong>
         <small class="text-muted">({{ item.slug }})</small>
       </div>
 
       <div class="d-flex gap-2">
-        <button type="button" class="btn btn-sm btn-outline-secondary" @click="moveUp" :disabled="isFirst" title="Di chuyển lên">
+        <button type="button" class="btn btn-sm btn-outline-secondary" @click="moveUp" :disabled="isFirst">
           <i class="ri-arrow-up-line"></i>
         </button>
-        <button type="button" class="btn btn-sm btn-outline-secondary" @click="moveDown" :disabled="isLast" title="Di chuyển xuống">
+        <button type="button" class="btn btn-sm btn-outline-secondary" @click="moveDown" :disabled="isLast">
           <i class="ri-arrow-down-line"></i>
         </button>
-        <button type="button" class="btn btn-sm btn-outline-secondary" @click="addChildItem" title="Thêm menu con">
+        <button type="button" class="btn btn-sm btn-outline-secondary" @click="addChildItem">
           <i class="ri-add-line"></i>
         </button>
-        <button type="button" class="btn btn-sm btn-outline-danger" @click="removeThis" title="Xóa menu">
+        <button type="button" class="btn btn-sm btn-outline-danger" @click="removeThis">
           <i class="ri-delete-bin-line"></i>
         </button>
       </div>
@@ -26,31 +25,37 @@
 
     <div class="flex gap-3 items-center w-full">
       <div class="flex-1">
-        <label class="form-label">Tên</label>
-        <input v-model="item.name" class="form-control" placeholder="Nhập tên Menu" />
+        <label class="form-label">
+          Tên
+          <span class="text-danger">*</span>
+        </label>
+        <InputText :model-value="item.name" @update:modelValue="handleNameChange" class="form-control" />
       </div>
       <div class="flex-1">
-        <label class="form-label">Slug</label>
-        <input v-model="item.slug" class="form-control" placeholder="URL / slug menu" />
+        <label class="form-label">
+          Slug
+          <span class="text-danger">*</span>
+        </label>
+        <InputText :model-value="item.slug" @update:modelValue="handleSlugChange" class="form-control" />
       </div>
       <div class="w-28">
         <label class="form-label">Trạng thái</label>
         <div class="mt-1">
-          <ToggleSwitch :modelValue="item.publish === 2" @update:modelValue="(val) => (item.publish = val ? 2 : 1)" class="scale-75" v.tooltip="trạng thái" />
+          <ToggleSwitch :modelValue="item.publish === 2" @update:modelValue="handlePublishChange" class="scale-75" />
         </div>
       </div>
     </div>
-    <!-- recursive  -->
-    <div v-if="item.children && item.children.length > 0" class="mt-3 ms-4">
+
+    <div v-if="item.children && item.children.length > 0" class="mt-3">
       <ul class="nested-list list-unstyled ps-0" :data-parent-id="item.__localId">
-        <MenuItemRecursive v-for="(child, cidx) in item.children" :key="child.__localId" :item="child" :index="cidx as any" :parent="item" :is-first="cidx === 0" :is-last="cidx === item.children.length - 1" @refresh="$emit('refresh')" />
+        <MenuItemRecursive v-for="(child, cidx) in item.children" :key="child.__localId" :item="child" :index="cidx as any" :parent="item" :is-first="cidx === 0" :is-last="cidx === item.children.length - 1" @update="$emit('update')" />
       </ul>
     </div>
   </li>
 </template>
 
 <script setup lang="ts">
-import { nextTick } from "vue";
+import { slugify } from "~/utils/helpers";
 
 const props = defineProps({
   item: {
@@ -75,80 +80,87 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["refresh"]);
+const emit = defineEmits(["update"]);
 
-/**
- * Di chuyển menu lên trên
- */
+const handleNameChange = (value: any) => {
+  props.item.name = value;
+
+  if (!props.item.__userModifiedSlug) {
+    props.item.slug = slugify(value || "");
+  }
+
+  emit("update");
+};
+
+const handleSlugChange = (value: any) => {
+  props.item.slug = value;
+  props.item.__userModifiedSlug = true;
+  emit("update");
+};
+
+const handlePublishChange = (val: boolean) => {
+  props.item.publish = val ? 2 : 1;
+  emit("update");
+};
+
 const moveUp = () => {
   if (!props.parent || props.isFirst) return;
+
   const siblings = props.parent.children;
-  const tmp = siblings[props.index - 1];
-  siblings[props.index - 1] = siblings[props.index];
-  siblings[props.index] = tmp;
-  console.log(`⬆️ Di chuyển "${props.item.name}" lên`);
-  emit("refresh");
+  [siblings[props.index - 1], siblings[props.index]] = [siblings[props.index], siblings[props.index - 1]];
+
+  updateSiblingsOrder(siblings);
+  emit("update");
 };
 
-/**
- * Di chuyển menu xuống dưới
- */
 const moveDown = () => {
   if (!props.parent || props.isLast) return;
+
   const siblings = props.parent.children;
-  const tmp = siblings[props.index + 1];
-  siblings[props.index + 1] = siblings[props.index];
-  siblings[props.index] = tmp;
-  console.log(`⬇️ Di chuyển "${props.item.name}" xuống`);
-  emit("refresh");
+  [siblings[props.index], siblings[props.index + 1]] = [siblings[props.index + 1], siblings[props.index]];
+
+  updateSiblingsOrder(siblings);
+  emit("update");
 };
 
-/**
- * Xóa menu này
- */
+const updateSiblingsOrder = (siblings: any[]) => {
+  siblings.forEach((sibling, idx) => {
+    sibling.order = idx + 1;
+  });
+};
+
 const removeThis = () => {
   if (!props.parent) return;
-  const itemName = props.item.name;
 
-  // Confirm trước khi xóa nếu có menu con
-  if (props.item.children && props.item.children.length > 0) {
-    if (!confirm(`Xóa "${itemName}" sẽ xóa tất cả ${props.item.children.length} menu con. Bạn có chắc?`)) {
+  if (props.item.children?.length > 0) {
+    if (!confirm(`Xóa "${props.item.name}" sẽ xóa ${props.item.children.length} menu con. Bạn có chắc?`)) {
       return;
     }
   }
 
   props.parent.children.splice(props.index, 1);
-  console.log(`🗑️ Đã xóa menu: ${itemName}`);
-  emit("refresh");
+  updateSiblingsOrder(props.parent.children);
+  emit("update");
 };
 
-/**
- * Thêm menu con vào menu này
- */
 const addChildItem = () => {
-  // Đảm bảo children là array
   if (!Array.isArray(props.item.children)) {
     props.item.children = [];
   }
 
-  // Tạo menu con mới
-  const newChild = {
+  const localId = `n-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+  props.item.children.push({
     id: undefined,
+    __localId: localId,
     name: "Menu con",
-    slug: "",
-    icon: "",
+    slug: "menu-con",
     publish: 2,
+    order: props.item.children.length + 1,
     children: [],
-    __localId: `n-${Date.now()}`,
-  };
-
-  // Thêm vào children
-  props.item.children.push(newChild);
-
-  // Emit refresh để cập nhật UI
-  nextTick(() => {
-    emit("refresh");
   });
+
+  emit("update");
 };
 </script>
 
@@ -167,23 +179,18 @@ const addChildItem = () => {
   opacity: 1;
 }
 
-.btn-icon {
-  width: 38px;
-  height: 38px;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.nested-list {
+  margin-left: 2rem;
+  border-left: 2px solid #e5e7eb;
+  padding-left: 1rem;
+  margin-top: 0.5rem;
 }
 
-.row.g-2 {
-  --bs-gutter-x: 0.5rem;
-  --bs-gutter-y: 0.5rem;
+.nested-list .nested-list {
+  margin-left: 1.5rem;
 }
 
-.form-label {
-  margin-bottom: 0.25rem;
-  font-size: 0.875rem;
-  font-weight: 500;
+.nested-list:hover {
+  border-left-color: #3b82f6;
 }
 </style>
