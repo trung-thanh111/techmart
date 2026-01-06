@@ -4,12 +4,13 @@
       <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
         <h4 class="mb-sm-0">{{ $t("admin.common.edit") }}</h4>
         <div class="page-title-right">
-          <Breadcrumb :crumbs="[{ label: $t('admin.page.menu.breadcrumb'), to: '/admin/menu/menu' }, { label: $t('admin.common.edit') }]" />
+          <Breadcrumb :crumbs="[{ label: $t('admin.page.menu.breadcrumb'), to: MENUINDEX }, { label: $t('admin.common.edit') }]" />
         </div>
       </div>
     </div>
   </div>
-  <form @submit.prevent="() => handleUpdate(false)" class="row space-y-4">
+
+  <form @submit.prevent="() => handleUpdate(false)" class="row space-y-4" v-if="!isLoadingData">
     <div class="col-lg-4">
       <div class="card">
         <div class="card-header">
@@ -22,38 +23,51 @@
               <span class="text-danger">*</span>
             </label>
             <Field name="name" v-slot="{ field, errorMessage, meta }">
-              <input v-bind="field" type="text" class="form-control" />
-              <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
+              <InputText v-bind="field" type="text" class="form-control" placeholder="Nhập tên menu" />
+              <small v-if="errorMessage && meta.touched" class="text-danger">
+                {{ $t(errorMessage) }}
+              </small>
             </Field>
           </div>
+
           <div class="mb-3">
             <label class="form-label">{{ $t("admin.common.form.slug") }}:</label>
-            <input :value="slug" class="form-control" readonly />
+            <input :value="slug" class="form-control" readonly placeholder="Slug tự sinh" />
           </div>
+
           <div class="mb-3">
             <label class="form-label">{{ $t("admin.common.form.position") }}:</label>
-            <Field name="position" v-slot="{ field }">
-              <Select v-model="field.value" @update:modelValue="field.onChange" :options="positions" option-label="label" option-value="value" showClear class="w-full" />
+            <Field name="position" v-slot="{ field, errorMessage, meta }">
+              <Select v-model="field.value" @update:modelValue="field.onChange" :options="positionOptions" option-label="label" option-value="value" showClear class="!rounded w-full p-[1px]" size="small" />
+              <small v-if="errorMessage && meta.touched" class="text-danger">
+                {{ $t(errorMessage) }}
+              </small>
             </Field>
           </div>
+
           <div class="mb-3">
             <label class="form-label">{{ $t("admin.common.status") }}</label>
-            <Field name="publish" v-slot="{ field }">
+            <Field name="publish" v-slot="{ field, errorMessage, meta }">
               <PublishSelect :modelValue="field.value" @update:modelValue="field.onChange" />
+              <small v-if="errorMessage && meta.touched" class="text-danger">
+                {{ $t(errorMessage) }}
+              </small>
             </Field>
           </div>
         </div>
       </div>
     </div>
-    <div class="col-lg-8">
+
+    <div class="col-lg-8 mt-0">
       <div class="card">
         <div class="card-header">
           <h5 class="card-title mb-0">{{ $t("admin.page.menu.items") }}</h5>
         </div>
         <div class="card-body">
-          <MenuManager :items="values.menuItems" @update:items="values.menuItems = $event" />
+          <MenuManager :items="menuItemsNested" @update:items="handleMenuItemsUpdate" />
         </div>
       </div>
+
       <div class="flex justify-end gap-3 mt-4 position-sticky bottom-5 z-20">
         <Button type="button" variant="cancel" :to="MENUINDEX" />
         <Button type="button" variant="custom" severity="info" :label="$t('admin.components.buttons.confirm')" :loading="isLoading" @click="() => handleUpdate(false)" />
@@ -61,9 +75,24 @@
       </div>
     </div>
   </form>
+
+  <!-- Loading state -->
+  <div v-else class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body text-center py-5">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p class="mt-3">{{ $t("admin.common.loading") }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
 import { Field } from "vee-validate";
 import Button from "~/components/admin/custom/Button.vue";
 import Breadcrumb from "~/components/admin/navigation/Breadcrumb.vue";
@@ -73,80 +102,116 @@ import MenuManager from "~/components/admin/menu/MenuManager.vue";
 import { MENUINDEX } from "~/utils/constants";
 
 const { isLoading, values, slug, positionOptions, setValues, handleUpdate, show } = useMenu(undefined, "update");
-const positions = positionOptions;
-const id = Number(useRoute().params.id);
 
-// Function to convert flat menu items to nested structure
-const convertFlatToNested = (flatItems: any[]) => {
-  const itemMap = new Map();
+const isLoadingData = ref(true);
+const id = Number(useRoute().params.id);
+const menuItemsNested = ref<any[]>([]);
+
+/**
+ * Convert flat menu items (với parent_id) sang nested structure
+ */
+const convertFlatToNested = (flatItems: any[]): any[] => {
+  if (!Array.isArray(flatItems) || flatItems.length === 0) {
+    return [];
+  }
+
+  const itemMap = new Map<number, any>();
   const rootItems: any[] = [];
 
-  // First pass: create all items in map
-  flatItems.forEach((item, index) => {
+  flatItems.forEach((item) => {
     const nestedItem = {
       id: item.id,
-      parentId: item.parentId || 0,
-      name: item.name,
-      slug: item.slug,
-      icon: item.icon,
-      order: item.order,
-      publish: item.publish,
-      __localId: item.id || `n-${index}`,
+      name: item.name || "",
+      slug: item.slug || "",
+      order: item.order || 0,
+      publish: item.publish || 2,
+      __localId: item.id || `n-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       children: [],
     };
+
     itemMap.set(item.id, nestedItem);
   });
 
-  // Second pass: build tree structure
   flatItems.forEach((item) => {
     const nestedItem = itemMap.get(item.id);
-    if ((item.parentId || 0) === 0) {
-      // Root item
+    if (!nestedItem) return;
+
+    const parentId = item.parent_id || item.parentId || 0;
+
+    if (parentId === 0 || parentId === null) {
       rootItems.push(nestedItem);
     } else {
-      // Child item
-      const parent = itemMap.get(item.parentId);
+      const parent = itemMap.get(parentId);
       if (parent) {
+        if (!Array.isArray(parent.children)) {
+          parent.children = [];
+        }
         parent.children.push(nestedItem);
+      } else {
+        rootItems.push(nestedItem);
       }
     }
   });
 
+  const sortByOrder = (items: any[]) => {
+    items.sort((a, b) => (a.order || 0) - (b.order || 0));
+    items.forEach((item) => {
+      if (Array.isArray(item.children) && item.children.length > 0) {
+        sortByOrder(item.children);
+      }
+    });
+  };
+
+  sortByOrder(rootItems);
+
   return rootItems;
 };
 
+const handleMenuItemsUpdate = (nestedData: any[]) => {
+  menuItemsNested.value = nestedData;
+
+  setValues({
+    ...values,
+    menuItems: nestedData,
+  });
+};
+
 onMounted(async () => {
-  if (id) {
+  if (!id || isNaN(id)) {
+    navigateTo(MENUINDEX);
+    return;
+  }
+
+  isLoadingData.value = true;
+
+  try {
     const response = await show(id);
-    if (response?.data) {
-      // Transform menuItems from API response to form format
-      const menuData = response.data;
-      const flatMenuItems = (menuData.menuItems || []).map((item: any) => ({
-        id: item.id,
-        parentId: item.parentId || 0,
-        name: item.name,
-        slug: item.slug,
-        icon: item.icon,
-        order: item.order,
-        publish: item.publish,
-      }));
 
-      // Convert flat to nested structure for MenuManager component
-      const nestedMenuItems = convertFlatToNested(flatMenuItems);
-
-      // Validate position value
-      const validPositions: ("header" | "footer" | "sidebar" | "profile" | "mobile")[] = ["header", "footer", "sidebar", "profile", "mobile"];
-      const position = validPositions.includes(menuData.position as any) ? (menuData.position as "header" | "footer" | "sidebar" | "profile" | "mobile") : "header";
-
-      // Set form values
-      setValues({
-        name: menuData.name,
-        slug: menuData.slug,
-        position: position,
-        publish: menuData.publish,
-        menuItems: nestedMenuItems,
-      });
+    if (!response?.data) {
+      throw new Error("No data returned");
     }
+
+    const menuData = response.data;
+    const flatMenuItems = menuData.menuItems || [];
+    const nestedMenuItems = convertFlatToNested(flatMenuItems);
+
+    menuItemsNested.value = nestedMenuItems;
+
+    const validPositions = ["header", "footer", "sidebar", "profile", "mobile"];
+    const position = validPositions.includes(menuData.position as any) ? menuData.position : "header";
+
+    setValues({
+      name: menuData.name || "",
+      slug: menuData.slug || null,
+      position: position as "header" | "footer" | "sidebar" | "profile" | "mobile",
+      publish: menuData.publish || 2,
+      menuItems: nestedMenuItems,
+    });
+  } catch (error: any) {
+    console.error("❌ Error loading menu:", error);
+    navigateTo(MENUINDEX);
+  } finally {
+    isLoadingData.value = false;
   }
 });
 

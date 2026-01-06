@@ -6,7 +6,10 @@ import AppCheckbox from "~/components/admin/custom/AppCheckbox.vue";
 import Button from "~/components/admin/custom/Button.vue";
 import { useMenu } from "~/composables/admin/menu/useMenu";
 
-const { data, isLoading, filters, selectedIds, selectedItem, fetchData, setPage, handleDeleteMultiple, handleDelete, setValues, search } = useMenu();
+const { data, isLoading, filters, selectedIds, selectedItem, fetchData, setPage, handleDeleteMultiple, handleDelete, setValues, search, getTotalItems, getAllItemIds } = useMenu();
+
+provide("getTotalItems", getTotalItems);
+provide("getAllItemIds", getAllItemIds);
 
 const handleSelectedIdsChange = (value: boolean | number[]) => {
   if (Array.isArray(value)) selectedIds.value = value;
@@ -21,6 +24,13 @@ const handleConfirmDeleteSingle = async () => {
   await handleDelete(selectedItem.value.id);
   // close modal via bootstrap
   const el = document.getElementById("deleteRecord");
+  if (el) (window as any).bootstrap.Modal.getInstance(el)?.hide();
+};
+
+const handleConfirmDeleteMultiple = async () => {
+  await handleDeleteMultiple();
+  // close modal via bootstrap
+  const el = document.getElementById("deleteMultipleRecord");
   if (el) (window as any).bootstrap.Modal.getInstance(el)?.hide();
 };
 
