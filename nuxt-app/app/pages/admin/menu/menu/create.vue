@@ -34,14 +34,20 @@
           </div>
           <div class="mb-3">
             <label class="form-label">{{ $t("admin.common.form.position") }}:</label>
-            <Field name="position" v-slot="{ field }">
+            <Field name="position" v-slot="{ field, errorMessage, meta }">
               <Select v-model="field.value" @update:modelValue="field.onChange" :options="positionOptions" option-label="label" option-value="value" showClear class="!rounded w-full p-[1px]" size="small" />
+              <small v-if="errorMessage && meta.touched" class="text-danger">
+                {{ $t(errorMessage) }}
+              </small>
             </Field>
           </div>
           <div class="mb-3">
             <label class="form-label">{{ $t("admin.common.status") }}</label>
-            <Field name="publish" v-slot="{ field }">
+            <Field name="publish" v-slot="{ field, errorMessage, meta }">
               <PublishSelect :modelValue="field.value" @update:modelValue="field.onChange" />
+              <small v-if="errorMessage && meta.touched" class="text-danger">
+                {{ $t(errorMessage) }}
+              </small>
             </Field>
           </div>
         </div>

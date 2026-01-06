@@ -59,8 +59,6 @@ export const useMenu = (initialFilters?: MenuPayloadFilter, mode: "create" | "up
           menu_items: payload.menuItems || [],
         };
 
-        console.info("📤 Payload gửi lên server:", finalPayload);
-
         const response = await menuService.store(finalPayload as Partial<IMenu>);
         toast.success(response?.message || t("admin.messages.createSuccess"));
         if (shouldClose) {
@@ -91,7 +89,6 @@ export const useMenu = (initialFilters?: MenuPayloadFilter, mode: "create" | "up
 
       try {
         const id = Number(useRoute().params.id);
-
         const finalPayload = {
           name: payload.name,
           slug: payload.slug || null,
@@ -99,12 +96,8 @@ export const useMenu = (initialFilters?: MenuPayloadFilter, mode: "create" | "up
           publish: payload.publish,
           menu_items: payload.menuItems || [],
         };
-
-        console.info("📤 Payload gửi lên server:", finalPayload);
-
         await menuService.update(id, finalPayload as Partial<IMenu>);
         toast.success(t("admin.messages.updateSuccess"));
-
         if (shouldClose) {
           return navigateTo(MENUINDEX);
         }
@@ -114,7 +107,6 @@ export const useMenu = (initialFilters?: MenuPayloadFilter, mode: "create" | "up
           errorToField(setFieldError, error?.data?.errors, t, "slug");
           return;
         }
-
         console.error("Cập nhật thất bại:", error);
         toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
       } finally {
