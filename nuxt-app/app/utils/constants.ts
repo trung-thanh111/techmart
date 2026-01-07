@@ -106,6 +106,56 @@ export const AGENCYWORKINGHOURUPDATE = "/admin/agency/working_hour/update";
 export const MAX_FILE_SIZE = 5 * 1024 * 1024;
 export const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
 
+// auth
+export const TOLOGIN = "/auth/login";
+export const TOREGISTER = "/auth/register";
+// forgot password (client)
+export const TOFORGOT = "/forgot-password";
+export const TOFORGOTOTP = "/forgot-password/otp";
+export const TOFORGOTRESET = "/forgot-password/reset";
+
+// FE
+export const IMAGEDEFAULT = "/shared/images/defaults/record.jpg";
+export const EMPTYBOX = "/client/images/box-emtpy.png";
+
+export const TOHOME = "/";
+// Profile routes
+export const PROFILEINDEX = "/profile";
+export const PROFILECHANGEPASSWORD = "/profile/change-password";
+export const PROFILEADDRESSORDER = "/profile/address_order";
+export const PROFILEORDERS = "/profile/orders";
+
+// Client routes
+export const TOVOUCHER = "/voucher";
+export const TOWISHLIST = "/wishlist";
+export const TOAGENCY = "/agency";
+export const TOFAQ = "/faq";
+export const TOPOST = "/post";
+export const TOCART = "/cart";
+export const TOPROFILEADDRESSORDERCREATE = "/profile/address_order/create";
+
+export const PROFILEADRESSORDERINDEX = "/profile/address_order";
+export const PROFILEADRESSORDERCREATE = "/profile/address_order/create";
+export const PROFILEADRESSORDERUPDATE = "/profile/address_order/update";
+
+// Policy routes
+export const TOPOLICY = "/policy/privacy_policy";
+
+// Support routes
+export const SUPPORT_BASE = "/support";
+export const SUPPORT_CONTACT = "/support/contact";
+export const SUPPORT_FAQS = "/support/faqs";
+
+// Guide routes
+export const GUIDE_BASE = "/guide";
+export const GUIDE_ORDER = "/guide/order";
+export const GUIDE_MANAGER_ORDER = "/guide/maneger-order";
+export const GUIDE_MANAGER_ACCOUNT = "/guide/maneger-account";
+
+// export const TOFORBIDDEN = "/forbidden";
+// export const TO404 = "/404";
+// export const TO500 = "/500";
+
 // Promotion Constants
 export const PROMOTION_TYPES = [
   { label: "Đơn hàng", value: "order" },
@@ -171,38 +221,3 @@ export const PROMOTION_LOGIC_OPERATORS = [
   { label: "VÀ", value: "AND" },
   { label: "HOẶC", value: "OR" },
 ];
-
-// auth
-export const TOLOGIN = "/auth/login";
-export const TOREGISTER = "/auth/register";
-// forgot password (client)
-export const TOFORGOT = "/forgot-password";
-export const TOFORGOTOTP = "/forgot-password/otp";
-export const TOFORGOTRESET = "/forgot-password/reset";
-
-// FE
-export const IMAGEDEFAULT = "/shared/images/defaults/record.jpg";
-export const EMPTYBOX = "/client/images/box-emtpy.png";
-
-export const TOHOME = "/";
-// Profile routes
-export const PROFILEINDEX = "/profile";
-export const PROFILECHANGEPASSWORD = "/profile/change-password";
-export const PROFILEADDRESSORDER = "/profile/address_order";
-export const PROFILEORDERS = "/profile/orders";
-
-// Client routes
-export const TOVOUCHER = "/voucher";
-export const TOWISHLIST = "/wishlist";
-export const TOAGENCY = "/agency";
-export const TOFAQ = "/faq";
-export const TOPOST = "/post";
-export const TOCART = "/cart";
-export const TOPROFILEADDRESSORDERCREATE = "/profile/address_order/create";
-
-export const PROFILEADRESSORDERINDEX = "/profile/address_order";
-export const PROFILEADRESSORDERCREATE = "/profile/address_order/create";
-export const PROFILEADRESSORDERUPDATE = "/profile/address_order/update";
-// export const TOFORBIDDEN = "/forbidden";
-// export const TO404 = "/404";
-// export const TO500 = "/500";

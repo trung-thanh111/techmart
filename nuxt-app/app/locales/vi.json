@@ -960,6 +960,7 @@
       "breadcrumb": "Kết quả tìm kiếm"
     },
     "common": {
+      "loading": "Đang tải ...",
       "filter": {
         "title": "Sắp xếp",
         "newest": "Mới nhất",

@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 use App\Repositories\System\SystemRepository;
 use App\Http\Resources\System\SystemResource;
 use App\Services\Interfaces\System\SystemServiceInterface;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Lang;
 
 class SystemService extends BaseService implements SystemServiceInterface
 {
@@ -51,6 +53,15 @@ class SystemService extends BaseService implements SystemServiceInterface
         $fillable = $this->repository->getFillable();
         $this->modelData = $request->only($fillable);
         return $this;
+    }
+
+    public function showByKeyword(string $keyword = '')
+    {
+        $model = $this->findByField('keyword', $keyword);
+        if (!$model) {
+            throw new ModelNotFoundException(Lang::get('message.record_not_found'));
+        }
+        return $model;
     }
 
     protected function getResource(Model $resource)

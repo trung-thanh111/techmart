@@ -475,6 +475,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
     });
 
     // FE routes (public) -> match đúng data -> route định nghĩa ở FE (phải giống route FE)
+    Route::get('policy/{keyword}', [SystemController::class, 'getByKeyword']);
     Route::get('product/{slug}', [ProductController::class, 'showBySlug']);
     Route::get('post/{slug}', [PostController::class, 'showBySlug']);
     Route::get('post/category/{slug}', [PostCatalogueController::class, 'showBySlug']);

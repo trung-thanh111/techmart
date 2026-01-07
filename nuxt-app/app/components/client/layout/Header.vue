@@ -1,7 +1,6 @@
 <template>
   <div class="container-header">
     <header class="w-full text-sm font-medium">
-      <!-- Topbar -->
       <div class="bg-gradient-to-r from-[#00b88c] to-[#007c8b] py-2 text-white">
         <div class="max-w-7xl mx-auto flex justify-between items-center py-2 text-md">
           <div class="flex items-center flex-wrap gap-4">
@@ -25,7 +24,7 @@
               </svg>
               <span>{{ $t("client.header.faq") }}</span>
             </NuxtLink>
-            <NuxtLink to="#" class="flex items-center gap-1 hover:text-gray-300 transition-colors">
+            <NuxtLink :to="TOPOLICY" class="flex items-center gap-1 hover:text-gray-300 transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="w-4 h-4">
                 <path d="M256 80C149.9 80 62.4 159.4 49.6 262c9.4-3.8 19.6-6 30.4-6c26.5 0 48 21.5 48 48l0 128c0 26.5-21.5 48-48 48c-44.2 0-80-35.8-80-80l0-16 0-48 0-48C0 146.6 114.6 32 256 32s256 114.6 256 256l0 48 0 48 0 16c0 44.2-35.8 80-80 80c-26.5 0-48-21.5-48-48l0-128c0-26.5 21.5-48 48-48c10.8 0 21 2.1 30.4 6C449.6 159.4 362.1 80 256 80z" />
               </svg>
@@ -52,7 +51,6 @@
               <img :src="logo" loading="lazy" alt="logo" />
             </NuxtLink>
           </div>
-          <!-- Search -->
           <div class="flex-1 max-w-xl relative">
             <SearchSuggestion />
           </div>
@@ -360,7 +358,6 @@
           <!-- Actions -->
         </div>
 
-        <!-- Navigation Menu -->
         <div class="w-full max-w-7xl mx-auto">
           <div class="mt-8 hidden sm:grid grid-cols-2 md:grid-cols-5 text-white text-sm">
             <div class="relative group">
@@ -372,58 +369,65 @@
                 </svg>
                 <span>{{ $t("client.header.categories") }}</span>
               </div>
-              <div class="absolute top-full left-0 z-50 hidden group-hover:flex bg-white text-gray-700 shadow-lg w-full md:w-[1280px] rounded-md transition-all duration-200 ease-in-out">
+              <div class="absolute top-full left-0 z-50 hidden group-hover:flex bg-white text-gray-700 shadow-lg w-full md:w-[1280px] rounded-md transition-all duration-200 ease-in-out" @mouseenter="handleMenuEnter" @mouseleave="handleMenuLeave">
                 <div class="flex-shrink-0 bg-gray-50 w-full md:w-[250px] p-4">
                   <div class="pr-2">
                     <ul class="space-y-2 text-sm">
-                      <li>
-                        <NuxtLink to="#" class="block px-3 py-2 rounded font-semibold text-gray-600 hover:bg-gray-100 hover:text-sky-500 menu-item active" data-tab="nongnghiep">Đèn LED nông nghiệp</NuxtLink>
-                      </li>
-                      <li>
-                        <NuxtLink to="#" class="block px-3 py-2 rounded font-semibold text-gray-600 hover:bg-gray-100 hover:text-sky-500 menu-item" data-tab="ngunghiep">Đèn LED ngư nghiệp</NuxtLink>
-                      </li>
-                      <li>
-                        <NuxtLink to="#" class="block px-3 py-2 rounded font-semibold text-gray-600 hover:bg-gray-100 hover:text-sky-500 menu-item" data-tab="lophoc">Đèn lớp học</NuxtLink>
+                      <li v-for="menuItem in getMenuByLevel(1)" :key="menuItem.id">
+                        <div class="flex items-center justify-between px-3 py-2 rounded font-semibold text-gray-600 hover:bg-gray-100 hover:text-sky-500 cursor-pointer" @mouseenter="handleParentHover(menuItem)">
+                          <span>{{ menuItem.name }}</span>
+                          <svg v-if="menuItem.children && menuItem.children.length > 0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4">
+                            <polyline points="9,18 15,12 9,6" />
+                          </svg>
+                        </div>
                       </li>
                     </ul>
                   </div>
                 </div>
-                <div class="flex-1 p-4 text-sm">
-                  <ul class="grid grid-cols-1 gap-2 tab-content" id="tab-nongnghiep">
-                    <li><NuxtLink to="#" class="block w-full px-3 py-2 rounded hover:bg-gray-100 hover:text-sky-500">Đèn thanh long</NuxtLink></li>
-                    <li><NuxtLink to="#" class="block w-full px-3 py-2 rounded hover:bg-gray-100 hover:text-sky-500">Đèn hoa cúc</NuxtLink></li>
-                    <li><NuxtLink to="#" class="block w-full px-3 py-2 rounded hover:bg-gray-100 hover:text-sky-500">Đèn cây mô</NuxtLink></li>
-                    <li><NuxtLink to="#" class="block w-full px-3 py-2 rounded hover:bg-gray-100 hover:text-sky-500">Đèn nhà kính</NuxtLink></li>
-                    <li><NuxtLink to="#" class="block w-full px-3 py-2 rounded hover:bg-gray-100 hover:text-sky-500">Đèn chăn nuôi</NuxtLink></li>
-                    <li><NuxtLink to="#" class="block w-full px-3 py-2 rounded hover:bg-gray-100 hover:text-sky-500">Đèn trồng rau</NuxtLink></li>
-                  </ul>
-                  <ul class="grid-cols-1 gap-2 hidden tab-content" id="tab-ngunghiep">
-                    <li><NuxtLink to="#" class="block w-full px-3 py-2 rounded hover:bg-gray-100 hover:text-sky-500">Đèn đánh cá</NuxtLink></li>
-                    <li><NuxtLink to="#" class="block w-full px-3 py-2 rounded hover:bg-gray-100 hover:text-sky-500">Đèn phao lưới</NuxtLink></li>
-                    <li><NuxtLink to="#" class="block w-full px-3 py-2 rounded hover:bg-gray-100 hover:text-sky-500">Đèn mồi dụ cá</NuxtLink></li>
-                  </ul>
-                  <ul class="grid-cols-1 gap-2 hidden tab-content" id="tab-lophoc">
-                    <li><NuxtLink to="#" class="block w-full px-3 py-2 rounded hover:bg-gray-100 hover:text-sky-500">Đèn học sinh</NuxtLink></li>
-                    <li><NuxtLink to="#" class="block w-full px-3 py-2 rounded hover:bg-gray-100 hover:text-sky-500">Đèn chống cận</NuxtLink></li>
-                    <li><NuxtLink to="#" class="block w-full px-3 py-2 rounded hover:bg-gray-100 hover:text-sky-500">Đèn bảng trắng</NuxtLink></li>
-                  </ul>
+                <div v-if="hoveredParent && hoveredParent.children && hoveredParent.children.length > 0" class="flex-1 flex">
+                  <div class="flex-1 p-4 text-sm border-r border-gray-200 min-w-0">
+                    <div class="mb-6">
+                      <h4 class="font-semibold text-gray-800 mb-3 text-base">{{ hoveredParent.name }}</h4>
+                      <div class="space-y-2">
+                        <div v-for="childItem in hoveredParent.children.slice(0, 3)" :key="childItem.id" class="relative">
+                          <NuxtLink :to="childItem.slug ? `/${childItem.slug}` : '#'" class="block px-3 py-2 rounded hover:bg-gray-100 hover:text-sky-500 text-sm font-medium truncate">
+                            {{ childItem.name }}
+                          </NuxtLink>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div v-if="hoveredParent.children.some((child) => child.children && child.children.length > 0)" class="flex-1 p-4 text-sm min-w-0">
+                    <div class="space-y-2">
+                      <template v-for="childItem in hoveredParent.children.slice(0, 3)" :key="'grand_' + childItem.id">
+                        <div v-for="grandChild in (childItem.children || []).slice(0, 3)" :key="grandChild.id" class="relative">
+                          <NuxtLink :to="grandChild.slug ? `/${grandChild.slug}` : '#'" class="block px-3 py-2 rounded hover:bg-gray-100 hover:text-sky-500 text-sm font-medium truncate">
+                            {{ grandChild.name }}
+                          </NuxtLink>
+                        </div>
+                      </template>
+                    </div>
+                  </div>
+                  <div v-if="hoveredParent.children.some((child) => child.children?.some((grandChild) => grandChild.children && grandChild.children.length > 0))" class="flex-1 p-4 text-sm min-w-0">
+                    <div class="space-y-2">
+                      <template v-for="childItem in hoveredParent.children.slice(0, 3)" :key="'great_' + childItem.id">
+                        <template v-for="grandChild in (childItem.children || []).slice(0, 3)" :key="'great2_' + grandChild.id">
+                          <div v-for="greatGrandChild in (grandChild.children || []).slice(0, 3)" :key="greatGrandChild.id" class="relative">
+                            <NuxtLink :to="greatGrandChild.slug ? `/${greatGrandChild.slug}` : '#'" class="block px-3 py-2 rounded hover:bg-gray-100 hover:text-sky-500 text-sm font-medium truncate">
+                              {{ greatGrandChild.name }}
+                            </NuxtLink>
+                          </div>
+                        </template>
+                      </template>
+                    </div>
+                  </div>
                 </div>
-                <div class="flex-shrink-0 hidden md:flex items-start justify-center w-[250px] p-4">
-                  <img :src="logoWebsite" class="h-12 object-contain" alt="Logo" loading="lazy" />
+                <div v-if="hoveredParent && hoveredParent.children && hoveredParent.children.length > 0" class="flex-shrink-0 hidden md:flex items-start justify-center w-[200px] p-4">
+                  <img :src="logoWebsite" class="h-8 object-contain" alt="Logo" loading="lazy" />
                 </div>
               </div>
             </div>
-            <div class="flex items-center justify-center cursor-pointer hover:bg-white/10 transition-colors rounded px-2 py-2">
-              <span>{{ $t("client.header.phones") }}</span>
-            </div>
-            <div class="flex items-center justify-center gap-1 cursor-pointer hover:bg-white/10 transition-colors rounded px-2 py-2">
-              <span>{{ $t("client.header.laptops") }}</span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5 text-md"><polyline points="6,9 12,15 18,9" /></svg>
-            </div>
-            <div class="flex items-center justify-center gap-1 cursor-pointer hover:bg-white/10 transition-colors rounded px-2 py-2">
-              <NuxtLink :to="'/post'">{{ $t("client.header.posts") }}</NuxtLink>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5 text-md"><polyline points="6,9 12,15 18,9" /></svg>
-            </div>
+
             <div class="flex items-center justify-center bg-gradient-to-r from-[#a8d444] to-[#b7e354] text-[#005a63] hover:opacity-90 cursor-pointer h-10 px-3 rounded transition-opacity">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 mt-1 text-yellow-300 mr-1"><polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2" /></svg>
               <span>{{ $t("client.header.promotion") }}</span>
@@ -432,14 +436,9 @@
         </div>
       </div>
     </header>
-
-    <!-- Mobile Menu Offcanvas -->
     <div v-if="isMobileMenuOpen" class="fixed inset-0 z-50 md:hidden">
       <div @click="closeMobileMenu" class="absolute inset-0 bg-black/50"></div>
-
-      <!-- Main Menu (Level 1) -->
       <div v-if="!subMenuOpen" class="absolute left-0 top-0 h-full w-80 bg-white shadow-xl transform transition-transform duration-300 ease-in-out">
-        <!-- Header -->
         <div class="flex items-center justify-between px-4 py-2 border-b bg-gradient-to-r from-[#00b88c] to-[#007c8b] text-white">
           <h3 class="text-lg font-semibold">{{ $t("client.header.menu") }}</h3>
           <button @click="closeMobileMenu" class="p-2 hover:bg-white/10 rounded transition-colors">
@@ -458,53 +457,13 @@
                   <line x1="8" y1="21" x2="16" y2="21" />
                   <line x1="12" y1="17" x2="12" y2="21" />
                 </svg>
-                <span class="group-hover:text-sky-600">{{ $t("client.header.electronics") }}</span>
-              </div>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 group-hover:text-sky-600 text-gray-500">
-                <polyline points="9,18 15,12 9,6" />
-              </svg>
-            </div>
-
-            <div @click="openSubMenu('smartphone')" class="flex items-center justify-between p-3 rounded transition-colors cursor-pointer text-gray-500 hover:bg-gray-100 hover:text-sky-600 group">
-              <div class="flex items-center gap-3">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 group-hover:text-sky-600 text-gray-500">
-                  <path d="M3 9l1-5h16l1 5M5 22V12H19V22M2 9h20" />
-                </svg>
-                <span class="group-hover:text-sky-600">{{ $t("client.header.appliances") }}</span>
-              </div>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 group-hover:text-sky-600 text-gray-500">
-                <polyline points="9,18 15,12 9,6" />
-              </svg>
-            </div>
-
-            <div @click="openSubMenu('laptop')" class="flex items-center justify-between p-3 rounded transition-colors cursor-pointer text-gray-500 hover:bg-gray-100 hover:text-sky-600 group">
-              <div class="flex items-center gap-3">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 group-hover:text-sky-600 text-gray-500">
-                  <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z" />
-                  <line x1="16" y1="8" x2="2" y2="22" />
-                  <line x1="17.5" y1="15" x2="9" y2="15" />
-                </svg>
-                <span class="group-hover:text-sky-600">Laptop</span>
-              </div>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 group-hover:text-sky-600 text-gray-500">
-                <polyline points="9,18 15,12 9,6" />
-              </svg>
-            </div>
-            <div @click="openSubMenu('blog')" class="flex items-center justify-between p-3 rounded transition-colors cursor-pointer text-gray-500 hover:bg-gray-100 hover:text-sky-600 group">
-              <div class="flex items-center gap-3">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 group-hover:text-sky-600 text-gray-500">
-                  <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z" />
-                  <line x1="16" y1="8" x2="2" y2="22" />
-                  <line x1="17.5" y1="15" x2="9" y2="15" />
-                </svg>
-                <span class="group-hover:text-sky-600">Blogs</span>
+                <span class="group-hover:text-sky-600">{{ $t("client.header.categories") }}</span>
               </div>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 group-hover:text-sky-600 text-gray-500">
                 <polyline points="9,18 15,12 9,6" />
               </svg>
             </div>
           </div>
-          <!-- Other Links -->
           <div class="border-t border-gray-300 pt-4 space-y-2 text-sm">
             <NuxtLink to="#" class="flex group items-center gap-3 p-3 rounded transition-colors text-gray-500 hover:bg-gray-100 hover:text-sky-600">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-gray-500 group-hover:text-sky-600">
@@ -531,8 +490,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Sub Menu Level 2 (no icon) -->
       <div v-if="subMenuOpen && !productMenuOpen" class="absolute left-0 top-0 h-full w-80 bg-white shadow-xl transform transition-transform duration-300 ease-in-out">
         <div class="flex items-center justify-between p-4 border-b bg-gradient-to-r from-[#00b88c] to-[#007c8b] text-white">
           <div class="flex items-center gap-3">
@@ -545,51 +502,21 @@
           </div>
         </div>
         <div class="p-4 space-y-2">
-          <div v-if="subMenuOpen === 'categories'" class="space-y-2">
-            <div @click="openProductMenu('phones')" class="flex items-center justify-between p-3 rounded transition-colors cursor-pointer text-gray-500 hover:bg-gray-100 hover:text-sky-600 group">
-              <span class="group-hover:text-sky-600 text-sm">{{ $t("client.header.phones") }}</span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 group-hover:text-sky-600 text-gray-500">
-                <polyline points="9,18 15,12 9,6" />
-              </svg>
-            </div>
-            <div @click="openProductMenu('laptops')" class="flex items-center justify-between p-3 rounded transition-colors cursor-pointer text-gray-500 hover:bg-gray-100 hover:text-sky-600 group">
-              <span class="group-hover:text-sky-600 text-sm">{{ $t("client.header.laptops") }}</span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 group-hover:text-sky-600 text-gray-500">
-                <polyline points="9,18 15,12 9,6" />
-              </svg>
-            </div>
-            <NuxtLink to="#" class="flex items-center gap-3 p-3 rounded transition-colors text-gray-500 hover:bg-gray-100 hover:text-sky-600">
-              <span class="group-hover:text-sky-600 text-sm">{{ $t("client.header.accessories") }}</span>
-            </NuxtLink>
-          </div>
-          <div v-if="subMenuOpen === 'smartphone'" class="space-y-2">
-            <NuxtLink to="#" class="flex items-center gap-3 p-3 rounded transition-colors text-gray-500 hover:bg-gray-100 hover:text-sky-600">
-              <span class="group-hover:text-sky-600 text-sm">Nhà bếp</span>
-            </NuxtLink>
-            <NuxtLink to="#" class="flex items-center gap-3 p-3 rounded transition-colors text-gray-500 hover:bg-gray-100 hover:text-sky-600">
-              <span class="group-hover:text-sky-600 text-sm">Vệ sinh</span>
-            </NuxtLink>
-          </div>
-          <div v-if="subMenuOpen === 'laptop'" class="space-y-2">
-            <NuxtLink to="#" class="flex items-center gap-3 p-3 rounded transition-colors text-gray-500 hover:bg-gray-100 hover:text-sky-600">
-              <span class="group-hover:text-sky-600 text-sm">Áo thun</span>
-            </NuxtLink>
-            <NuxtLink to="#" class="flex items-center gap-3 p-3 rounded transition-colors text-gray-500 hover:bg-gray-100 hover:text-sky-600">
-              <span class="group-hover:text-sky-600 text-sm">Quần jean</span>
-            </NuxtLink>
-          </div>
-          <div v-if="subMenuOpen === 'blog'" class="space-y-2">
-            <NuxtLink to="#" class="flex items-center gap-3 p-3 rounded transition-colors text-gray-500 hover:bg-gray-100 hover:text-sky-600">
-              <span class="group-hover:text-sky-600 text-sm">bài viết mới</span>
-            </NuxtLink>
-            <NuxtLink to="#" class="flex items-center gap-3 p-3 rounded transition-colors text-gray-500 hover:bg-gray-100 hover:text-sky-600">
-              <span class="group-hover:text-sky-600 text-sm">bài viết nổi bật</span>
-            </NuxtLink>
+          <div class="space-y-2">
+            <template v-for="menuItem in getMenuByLevel(0)" :key="menuItem.id || 0">
+              <div v-if="menuItem.children && menuItem.children.length > 0" @click="openProductMenu((menuItem.id || 0).toString())" class="flex items-center justify-between p-3 rounded transition-colors cursor-pointer text-gray-500 hover:bg-gray-100 hover:text-sky-600 group">
+                <span class="group-hover:text-sky-600 text-sm">{{ menuItem.name }}</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 group-hover:text-sky-600 text-gray-500">
+                  <polyline points="9,18 15,12 9,6" />
+                </svg>
+              </div>
+              <NuxtLink v-else :to="menuItem.slug ? `/${menuItem.slug}` : '#'" class="flex items-center gap-3 p-3 rounded transition-colors text-gray-500 hover:bg-gray-100 hover:text-sky-600">
+                <span class="group-hover:text-sky-600 text-sm">{{ menuItem.name }}</span>
+              </NuxtLink>
+            </template>
           </div>
         </div>
       </div>
-
-      <!-- Product Menu Level 3 (no icon) -->
       <div v-if="productMenuOpen" class="absolute left-0 top-0 h-full w-80 bg-white shadow-xl transform transition-transform duration-300 ease-in-out">
         <div class="flex items-center justify-between p-4 border-b bg-gradient-to-r from-[#00b88c] to-[#007c8b] text-white">
           <div class="flex items-center gap-3">
@@ -602,27 +529,12 @@
           </div>
         </div>
         <div class="p-4 space-y-2">
-          <div v-if="productMenuOpen === 'phones'" class="space-y-2">
-            <NuxtLink to="#" class="flex items-center gap-3 p-3 rounded transition-colors text-gray-500 hover:bg-gray-100 hover:text-sky-600">
-              <span class="group-hover:text-sky-600 text-sm">iPhone 15 Pro Max</span>
-            </NuxtLink>
-            <NuxtLink to="#" class="flex items-center gap-3 p-3 rounded transition-colors text-gray-500 hover:bg-gray-100 hover:text-sky-600">
-              <span class="group-hover:text-sky-600 text-sm">iPhone 15 Pro</span>
-            </NuxtLink>
-            <NuxtLink to="#" class="flex items-center gap-3 p-3 rounded transition-colors text-gray-500 hover:bg-gray-100 hover:text-sky-600">
-              <span class="group-hover:text-sky-600 text-sm">iPhone 15</span>
-            </NuxtLink>
-          </div>
-          <div v-if="productMenuOpen === 'laptops'" class="space-y-2">
-            <NuxtLink to="#" class="flex items-center gap-3 p-3 rounded transition-colors text-gray-500 hover:bg-gray-100 hover:text-sky-600">
-              <span class="group-hover:text-sky-600 text-sm">MacBook Pro 16"</span>
-            </NuxtLink>
-            <NuxtLink to="#" class="flex items-center gap-3 p-3 rounded transition-colors text-gray-500 hover:bg-gray-100 hover:text-sky-600">
-              <span class="group-hover:text-sky-600 text-sm">MacBook Air 15"</span>
-            </NuxtLink>
-            <NuxtLink to="#" class="flex items-center gap-3 p-3 rounded transition-colors text-gray-500 hover:bg-gray-100 hover:text-sky-600">
-              <span class="group-hover:text-sky-600 text-sm">Dell XPS 13 Plus</span>
-            </NuxtLink>
+          <div class="space-y-2">
+            <template v-for="childItem in getChildren(parseInt(productMenuOpen))" :key="childItem.id">
+              <NuxtLink :to="childItem.slug ? `/${childItem.slug}` : '#'" class="flex items-center gap-3 p-3 rounded transition-colors text-gray-500 hover:bg-gray-100 hover:text-sky-600">
+                <span class="group-hover:text-sky-600 text-sm">{{ childItem.name }}</span>
+              </NuxtLink>
+            </template>
           </div>
         </div>
       </div>
@@ -634,14 +546,15 @@ import { ref, computed, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { TOLOGIN, TOAGENCY, TOFAQ, PROFILEINDEX, TODASHBOARD, TOCART } from "~/utils/constants";
 import logo from "~/assets/shared/images/logo/logo-website.png";
-import codImage from "~/assets/shared/images/logo/cod.png";
 import logoWebsite from "~/assets/shared/images/logo/logo-website.png";
 import { useAuthStore } from "~/stores/auth/auth";
 import { useAuth } from "~/composables/auth/useAuth";
 import { useCart } from "~/composables/client/cart/useCart";
+import { useMenu } from "~/composables/client/menu/useMenu";
 import { formatPrice, resolveAlbum } from "~/utils/helpers";
 import { IMAGEDEFAULT } from "~/utils/constants";
 import type { ICartItem } from "~/interfaces/cart/cartItem.interface";
+import type { IMenuItem } from "~/interfaces/menu/menu.interface";
 import SearchSuggestion from "../features/SearchSuggestion.vue";
 
 const authStore = useAuthStore();
@@ -655,10 +568,11 @@ const avatar = computed(() => {
 
 const { handleLogout } = useAuth();
 const { count: cartCount, items: cartItems, loadCart } = useCart();
+const { menuTree, loadMenu, getMenuByLevel, getChildren } = useMenu();
 
-// Load cart khi component mount để đảm bảo hiển thị số lượng ngay từ đầu
 onMounted(async () => {
   await loadCart();
+  await loadMenu(1);
 });
 
 const getCartItemImage = (item: ICartItem): string => {
@@ -678,29 +592,38 @@ const getCartItemName = (item: ICartItem): string => {
   return productName;
 };
 
-// category
 const isMobileMenuOpen = ref(false);
 const subMenuOpen = ref<string | null>(null);
 const productMenuOpen = ref<string | null>(null);
 
+const hoveredParent = ref<IMenuItem | null>(null);
+const hoveredChild = ref<IMenuItem | null>(null);
+const isMenuHovered = ref(false);
+
 const subMenuTitle = computed(() => {
-  const titles: Record<string, string> = {
-    categories: "Danh mục",
-    smartphone: "Điện thoại",
-    laptop: "Laptop",
-    blog: "Blogs",
-  };
-  const key = subMenuOpen.value ?? "";
-  return titles[key] || "";
+  if (subMenuOpen.value === "categories") {
+    return "Danh mục";
+  }
+  return "";
 });
 
 const productMenuTitle = computed(() => {
-  const titles: Record<string, string> = {
-    phones: "Điện thoại",
-    laptops: "Laptop",
+  if (!productMenuOpen.value) return "";
+
+  const findMenuItemName = (items: any[], id: number): string => {
+    for (const item of items) {
+      if (item.id === id) {
+        return item.name;
+      }
+      if (item.children) {
+        const found = findMenuItemName(item.children, id);
+        if (found) return found;
+      }
+    }
+    return "";
   };
-  const key = productMenuOpen.value ?? "";
-  return titles[key] || "";
+
+  return findMenuItemName(menuTree.value, parseInt(productMenuOpen.value));
 });
 
 const toggleMobileMenu = () => {
@@ -736,6 +659,30 @@ const openProductMenu = (product: string) => {
 const closeProductMenu = () => {
   productMenuOpen.value = null;
 };
+
+// Desktop menu hover handlers
+const handleMenuEnter = () => {
+  isMenuHovered.value = true;
+};
+
+const handleMenuLeave = () => {
+  isMenuHovered.value = false;
+  hoveredParent.value = null;
+  hoveredChild.value = null;
+};
+
+const handleParentHover = (menuItem: IMenuItem) => {
+  if (isMenuHovered.value) {
+    hoveredParent.value = menuItem;
+    hoveredChild.value = null; // Reset child khi hover parent mới
+  }
+};
+
+const handleChildHover = (childItem: IMenuItem) => {
+  if (isMenuHovered.value) {
+    hoveredChild.value = childItem;
+  }
+};
 </script>
 <style scoped>
 .line-clamp-custom-2 {
@@ -744,5 +691,6 @@ const closeProductMenu = () => {
   overflow: hidden;
   text-overflow: ellipsis;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
 }
 </style>
