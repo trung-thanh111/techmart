@@ -60,6 +60,12 @@ abstract class BaseController extends Controller
         return ApiResource::ok($response, Lang::get('message.successfully'));
     }
 
+    public function showByKeyword(string $keyword = ''): JsonResponse
+    {
+        $response = $this->service->showByKeyword($keyword);
+        return ApiResource::ok($response, Lang::get('message.successfully'));
+    }
+
     public function baseRelation(Request $request, int $id = 0, string $action = '')
     {
         $response = $this->service->relation($request, $id, $action);

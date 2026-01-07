@@ -69,4 +69,9 @@ export const systemService = {
     const { privateFetch } = useApi();
     return await privateFetch<IApiOk<ISystem>>(`${ENDPOINT}/systems?type=all`);
   },
+
+  findByKeyword: async (keyword: string): Promise<IApiOk<ISystem>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<ISystem>>(`${ENDPOINT}/policy/${keyword}`);
+  },
 };

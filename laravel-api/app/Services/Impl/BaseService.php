@@ -233,8 +233,6 @@ abstract class BaseService implements BaseServiceInterface
         return $model;
     }
 
-
-
     public function relation(Request $request, int $id = 0, string $action = '')
     {
         try {

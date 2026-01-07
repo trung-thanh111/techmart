@@ -84,7 +84,9 @@ definePageMeta({
                 <td>
                   <NuxtLink class="hover:text-teal-500" :to="`/admin/system/system/${item.id}/edit`">
                     <div class="text-truncate">{{ item.keyword }}</div>
-                    <div class="text-muted small">{{ item.content }}</div>
+                    <div class="text-muted small">
+                      <p class="line-clamp-2" v-html="item.content"></p>
+                    </div>
                   </NuxtLink>
                 </td>
                 <td class="text-center">
