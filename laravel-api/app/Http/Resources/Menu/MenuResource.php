@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\Menu;
 
-use App\Enums\Menu as MenuEnum;
 use App\Http\Resources\Menu\MenuItemResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -23,7 +22,7 @@ class MenuResource extends JsonResource
             'position' => $this->position,
             'publish' => (int) $this->publish,
             'menuItems' => $this->whenLoaded('menu_items', function () {
-                return MenuItemResource::collection($this->menu_items->sortBy(['lft', 'order']));
+                return MenuItemResource::collection($this->menu_items);
             }),
         ];
     }
