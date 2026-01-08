@@ -30,15 +30,14 @@
               </svg>
               <span>{{ $t("client.header.supportPolicy") }}</span>
             </NuxtLink>
-            <NuxtLink to="#" class="flex items-center gap-1 hover:text-gray-300 transition-colors">
+            <!-- <NuxtLink to="#" class="flex items-center gap-1 hover:text-gray-300 transition-colors">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-7 7c0 3.87 3.13 7 7 7s7-3.13 7-7a7 7 0 0 0-7-7z" /></svg>
               <span>{{ $t("client.header.showroom") }}</span>
-            </NuxtLink>
+            </NuxtLink> -->
           </div>
         </div>
       </div>
 
-      <!-- Divider -->
       <div class="w-full max-w-7xl mx-auto">
         <div class="h-px w-full bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
       </div>
@@ -355,78 +354,12 @@
               </div>
             </div>
           </div>
-          <!-- Actions -->
         </div>
 
         <div class="w-full max-w-7xl mx-auto">
           <div class="mt-8 hidden sm:grid grid-cols-2 md:grid-cols-5 text-white text-sm">
-            <div class="relative group">
-              <div class="flex items-center justify-center cursor-pointer px-4 py-2 hover:bg-white/10 hover:text-white transition-colors duration-200 rounded">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5 mt-0.5 mx-2 font-bold">
-                  <line x1="3" y1="6" x2="21" y2="6" />
-                  <line x1="3" y1="12" x2="21" y2="12" />
-                  <line x1="3" y1="18" x2="21" y2="18" />
-                </svg>
-                <span>{{ $t("client.header.categories") }}</span>
-              </div>
-              <div class="absolute top-full left-0 z-50 hidden group-hover:flex bg-white text-gray-700 shadow-lg w-full md:w-[1280px] rounded-md transition-all duration-200 ease-in-out" @mouseenter="handleMenuEnter" @mouseleave="handleMenuLeave">
-                <div class="flex-shrink-0 bg-gray-50 w-full md:w-[250px] p-4">
-                  <div class="pr-2">
-                    <ul class="space-y-2 text-sm">
-                      <li v-for="menuItem in getMenuByLevel(1)" :key="menuItem.id">
-                        <div class="flex items-center justify-between px-3 py-2 rounded font-semibold text-gray-600 hover:bg-gray-100 hover:text-sky-500 cursor-pointer" @mouseenter="handleParentHover(menuItem)">
-                          <span>{{ menuItem.name }}</span>
-                          <svg v-if="menuItem.children && menuItem.children.length > 0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4">
-                            <polyline points="9,18 15,12 9,6" />
-                          </svg>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div v-if="hoveredParent && hoveredParent.children && hoveredParent.children.length > 0" class="flex-1 flex">
-                  <div class="flex-1 p-4 text-sm border-r border-gray-200 min-w-0">
-                    <div class="mb-6">
-                      <h4 class="font-semibold text-gray-800 mb-3 text-base">{{ hoveredParent.name }}</h4>
-                      <div class="space-y-2">
-                        <div v-for="childItem in hoveredParent.children.slice(0, 3)" :key="childItem.id" class="relative">
-                          <NuxtLink :to="childItem.slug ? `/${childItem.slug}` : '#'" class="block px-3 py-2 rounded hover:bg-gray-100 hover:text-sky-500 text-sm font-medium truncate">
-                            {{ childItem.name }}
-                          </NuxtLink>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div v-if="hoveredParent.children.some((child) => child.children && child.children.length > 0)" class="flex-1 p-4 text-sm min-w-0">
-                    <div class="space-y-2">
-                      <template v-for="childItem in hoveredParent.children.slice(0, 3)" :key="'grand_' + childItem.id">
-                        <div v-for="grandChild in (childItem.children || []).slice(0, 3)" :key="grandChild.id" class="relative">
-                          <NuxtLink :to="grandChild.slug ? `/${grandChild.slug}` : '#'" class="block px-3 py-2 rounded hover:bg-gray-100 hover:text-sky-500 text-sm font-medium truncate">
-                            {{ grandChild.name }}
-                          </NuxtLink>
-                        </div>
-                      </template>
-                    </div>
-                  </div>
-                  <div v-if="hoveredParent.children.some((child) => child.children?.some((grandChild) => grandChild.children && grandChild.children.length > 0))" class="flex-1 p-4 text-sm min-w-0">
-                    <div class="space-y-2">
-                      <template v-for="childItem in hoveredParent.children.slice(0, 3)" :key="'great_' + childItem.id">
-                        <template v-for="grandChild in (childItem.children || []).slice(0, 3)" :key="'great2_' + grandChild.id">
-                          <div v-for="greatGrandChild in (grandChild.children || []).slice(0, 3)" :key="greatGrandChild.id" class="relative">
-                            <NuxtLink :to="greatGrandChild.slug ? `/${greatGrandChild.slug}` : '#'" class="block px-3 py-2 rounded hover:bg-gray-100 hover:text-sky-500 text-sm font-medium truncate">
-                              {{ greatGrandChild.name }}
-                            </NuxtLink>
-                          </div>
-                        </template>
-                      </template>
-                    </div>
-                  </div>
-                </div>
-                <div v-if="hoveredParent && hoveredParent.children && hoveredParent.children.length > 0" class="flex-shrink-0 hidden md:flex items-start justify-center w-[200px] p-4">
-                  <img :src="logoWebsite" class="h-8 object-contain" alt="Logo" loading="lazy" />
-                </div>
-              </div>
-            </div>
+            <!-- menu -->
+            <Menu :menu-tree="menuTree" />
 
             <div class="flex items-center justify-center bg-gradient-to-r from-[#a8d444] to-[#b7e354] text-[#005a63] hover:opacity-90 cursor-pointer h-10 px-3 rounded transition-opacity">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 mt-1 text-yellow-300 mr-1"><polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2" /></svg>
@@ -436,109 +369,8 @@
         </div>
       </div>
     </header>
-    <div v-if="isMobileMenuOpen" class="fixed inset-0 z-50 md:hidden">
-      <div @click="closeMobileMenu" class="absolute inset-0 bg-black/50"></div>
-      <div v-if="!subMenuOpen" class="absolute left-0 top-0 h-full w-80 bg-white shadow-xl transform transition-transform duration-300 ease-in-out">
-        <div class="flex items-center justify-between px-4 py-2 border-b bg-gradient-to-r from-[#00b88c] to-[#007c8b] text-white">
-          <h3 class="text-lg font-semibold">{{ $t("client.header.menu") }}</h3>
-          <button @click="closeMobileMenu" class="p-2 hover:bg-white/10 rounded transition-colors">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6">
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-          </button>
-        </div>
-        <div class="p-4 space-y-4">
-          <div class="space-y-2 text-sm">
-            <div @click="openSubMenu('categories')" class="flex items-center justify-between p-3 rounded transition-colors cursor-pointer text-gray-500 hover:bg-gray-100 hover:text-sky-600 group">
-              <div class="flex items-center gap-3">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 group-hover:text-sky-600 text-gray-500">
-                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
-                  <line x1="8" y1="21" x2="16" y2="21" />
-                  <line x1="12" y1="17" x2="12" y2="21" />
-                </svg>
-                <span class="group-hover:text-sky-600">{{ $t("client.header.categories") }}</span>
-              </div>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 group-hover:text-sky-600 text-gray-500">
-                <polyline points="9,18 15,12 9,6" />
-              </svg>
-            </div>
-          </div>
-          <div class="border-t border-gray-300 pt-4 space-y-2 text-sm">
-            <NuxtLink to="#" class="flex group items-center gap-3 p-3 rounded transition-colors text-gray-500 hover:bg-gray-100 hover:text-sky-600">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-gray-500 group-hover:text-sky-600">
-                <polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2" />
-              </svg>
-              <span class="group-hover:text-sky-600">Khuyến mãi</span>
-            </NuxtLink>
-            <NuxtLink to="#" class="flex group items-center gap-3 p-3 rounded transition-colors text-gray-500 hover:bg-gray-100 hover:text-sky-600">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-gray-500 group-hover:text-sky-600">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M9.09 9a3 3 0 1 1 5.82 1c0 2-3 3-3 3" />
-                <line x1="12" y1="17" x2="12" y2="17" />
-              </svg>
-              <span class="group-hover:text-sky-600">Câu hỏi thường gặp</span>
-            </NuxtLink>
-            <NuxtLink to="#" class="flex group items-center gap-3 p-3 rounded transition-colors text-gray-500 hover:bg-gray-100 hover:text-sky-600">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-gray-500 group-hover:text-sky-600">
-                <path d="M4 18v-6a8 8 0 0 1 16 0v6" />
-                <rect x="2" y="18" width="4" height="4" rx="1" />
-                <rect x="18" y="18" width="4" height="4" rx="1" />
-              </svg>
-              <span class="group-hover:text-sky-600">Hỗ trợ chính sách</span>
-            </NuxtLink>
-          </div>
-        </div>
-      </div>
-      <div v-if="subMenuOpen && !productMenuOpen" class="absolute left-0 top-0 h-full w-80 bg-white shadow-xl transform transition-transform duration-300 ease-in-out">
-        <div class="flex items-center justify-between p-4 border-b bg-gradient-to-r from-[#00b88c] to-[#007c8b] text-white">
-          <div class="flex items-center gap-3">
-            <button @click="closeSubMenu" class="p-1 hover:bg-white/10 rounded">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5">
-                <polyline points="15,18 9,12 15,6" />
-              </svg>
-            </button>
-            <h3 class="text-lg font-semibold">{{ subMenuTitle }}</h3>
-          </div>
-        </div>
-        <div class="p-4 space-y-2">
-          <div class="space-y-2">
-            <template v-for="menuItem in getMenuByLevel(0)" :key="menuItem.id || 0">
-              <div v-if="menuItem.children && menuItem.children.length > 0" @click="openProductMenu((menuItem.id || 0).toString())" class="flex items-center justify-between p-3 rounded transition-colors cursor-pointer text-gray-500 hover:bg-gray-100 hover:text-sky-600 group">
-                <span class="group-hover:text-sky-600 text-sm">{{ menuItem.name }}</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 group-hover:text-sky-600 text-gray-500">
-                  <polyline points="9,18 15,12 9,6" />
-                </svg>
-              </div>
-              <NuxtLink v-else :to="menuItem.slug ? `/${menuItem.slug}` : '#'" class="flex items-center gap-3 p-3 rounded transition-colors text-gray-500 hover:bg-gray-100 hover:text-sky-600">
-                <span class="group-hover:text-sky-600 text-sm">{{ menuItem.name }}</span>
-              </NuxtLink>
-            </template>
-          </div>
-        </div>
-      </div>
-      <div v-if="productMenuOpen" class="absolute left-0 top-0 h-full w-80 bg-white shadow-xl transform transition-transform duration-300 ease-in-out">
-        <div class="flex items-center justify-between p-4 border-b bg-gradient-to-r from-[#00b88c] to-[#007c8b] text-white">
-          <div class="flex items-center gap-3">
-            <button @click="closeProductMenu" class="p-1 hover:bg-white/10 rounded">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5">
-                <polyline points="15,18 9,12 15,6" />
-              </svg>
-            </button>
-            <h3 class="text-lg font-semibold">{{ productMenuTitle }}</h3>
-          </div>
-        </div>
-        <div class="p-4 space-y-2">
-          <div class="space-y-2">
-            <template v-for="childItem in getChildren(parseInt(productMenuOpen))" :key="childItem.id">
-              <NuxtLink :to="childItem.slug ? `/${childItem.slug}` : '#'" class="flex items-center gap-3 p-3 rounded transition-colors text-gray-500 hover:bg-gray-100 hover:text-sky-600">
-                <span class="group-hover:text-sky-600 text-sm">{{ childItem.name }}</span>
-              </NuxtLink>
-            </template>
-          </div>
-        </div>
-      </div>
-    </div>
+    <!-- mobile -->
+    <MobileMenu :is-open="isMobileMenuOpen" :menu-tree="menuTree" @close="closeMobileMenu" />
   </div>
 </template>
 <script setup lang="ts">
@@ -546,7 +378,6 @@ import { ref, computed, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { TOLOGIN, TOAGENCY, TOFAQ, PROFILEINDEX, TODASHBOARD, TOCART } from "~/utils/constants";
 import logo from "~/assets/shared/images/logo/logo-website.png";
-import logoWebsite from "~/assets/shared/images/logo/logo-website.png";
 import { useAuthStore } from "~/stores/auth/auth";
 import { useAuth } from "~/composables/auth/useAuth";
 import { useCart } from "~/composables/client/cart/useCart";
@@ -554,12 +385,13 @@ import { useMenu } from "~/composables/client/menu/useMenu";
 import { formatPrice, resolveAlbum } from "~/utils/helpers";
 import { IMAGEDEFAULT } from "~/utils/constants";
 import type { ICartItem } from "~/interfaces/cart/cartItem.interface";
-import type { IMenuItem } from "~/interfaces/menu/menu.interface";
 import SearchSuggestion from "../features/SearchSuggestion.vue";
+import Menu from "../navigation/Menu.vue";
+import MenuMobile from "../navigation/MenuMobile.vue";
 
+// Auth
 const authStore = useAuthStore();
 const { user } = storeToRefs(authStore);
-
 const avatar = computed(() => {
   const img = user.value?.image;
   if (img && img.path) return img.url || "/shared/images/defaults/avatar.jpg";
@@ -568,12 +400,7 @@ const avatar = computed(() => {
 
 const { handleLogout } = useAuth();
 const { count: cartCount, items: cartItems, loadCart } = useCart();
-const { menuTree, loadMenu, getMenuByLevel, getChildren } = useMenu();
-
-onMounted(async () => {
-  await loadCart();
-  await loadMenu(1);
-});
+const { menuTree, loading: menuLoading, loadMenuBySlug } = useMenu();
 
 const getCartItemImage = (item: ICartItem): string => {
   if (item.product?.album) {
@@ -586,53 +413,16 @@ const getCartItemImage = (item: ICartItem): string => {
 const getCartItemName = (item: ICartItem): string => {
   const productName = item.product?.name || "";
   const variantName = item.variant?.name || "";
-  if (variantName) {
-    return `${productName} - ${variantName}`;
-  }
-  return productName;
+  return variantName ? `${productName} - ${variantName}` : productName;
 };
 
 const isMobileMenuOpen = ref(false);
 const subMenuOpen = ref<string | null>(null);
 const productMenuOpen = ref<string | null>(null);
 
-const hoveredParent = ref<IMenuItem | null>(null);
-const hoveredChild = ref<IMenuItem | null>(null);
-const isMenuHovered = ref(false);
-
-const subMenuTitle = computed(() => {
-  if (subMenuOpen.value === "categories") {
-    return "Danh mục";
-  }
-  return "";
-});
-
-const productMenuTitle = computed(() => {
-  if (!productMenuOpen.value) return "";
-
-  const findMenuItemName = (items: any[], id: number): string => {
-    for (const item of items) {
-      if (item.id === id) {
-        return item.name;
-      }
-      if (item.children) {
-        const found = findMenuItemName(item.children, id);
-        if (found) return found;
-      }
-    }
-    return "";
-  };
-
-  return findMenuItemName(menuTree.value, parseInt(productMenuOpen.value));
-});
-
 const toggleMobileMenu = () => {
   isMobileMenuOpen.value = !isMobileMenuOpen.value;
-  if (isMobileMenuOpen.value) {
-    document.body.style.overflow = "hidden";
-  } else {
-    document.body.style.overflow = "";
-  }
+  document.body.style.overflow = isMobileMenuOpen.value ? "hidden" : "";
 };
 
 const closeMobileMenu = () => {
@@ -642,47 +432,10 @@ const closeMobileMenu = () => {
   document.body.style.overflow = "";
 };
 
-const openSubMenu = (menu: string) => {
-  subMenuOpen.value = menu;
-  productMenuOpen.value = null;
-};
-
-const closeSubMenu = () => {
-  subMenuOpen.value = null;
-  productMenuOpen.value = null;
-};
-
-const openProductMenu = (product: string) => {
-  productMenuOpen.value = product;
-};
-
-const closeProductMenu = () => {
-  productMenuOpen.value = null;
-};
-
-// Desktop menu hover handlers
-const handleMenuEnter = () => {
-  isMenuHovered.value = true;
-};
-
-const handleMenuLeave = () => {
-  isMenuHovered.value = false;
-  hoveredParent.value = null;
-  hoveredChild.value = null;
-};
-
-const handleParentHover = (menuItem: IMenuItem) => {
-  if (isMenuHovered.value) {
-    hoveredParent.value = menuItem;
-    hoveredChild.value = null; // Reset child khi hover parent mới
-  }
-};
-
-const handleChildHover = (childItem: IMenuItem) => {
-  if (isMenuHovered.value) {
-    hoveredChild.value = childItem;
-  }
-};
+onMounted(async () => {
+  await loadCart();
+  await loadMenuBySlug("main-menu");
+});
 </script>
 <style scoped>
 .line-clamp-custom-2 {

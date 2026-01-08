@@ -1,18 +1,27 @@
 import { ref, computed } from "vue";
-import { menuItemService } from "~/services/menu/item.service";
-import type { IMenuItem } from "~/interfaces/menu/menu.interface";
+import { menuService } from "~/services/menu/menu.service";
+import { buildTree } from "~/utils/nested-tree";
+import type { IMenu, IMenuItem } from "~/interfaces/menu/menu.interface";
+import type { TreeNode } from "~/utils/nested-tree";
 
 export const useMenu = () => {
-  const menuTree = ref<IMenuItem[]>([]);
+  // State
+  const menu = ref<IMenu | null>(null);
+  const menuTree = ref<TreeNode<IMenuItem>[]>([]);
   const loading = ref(false);
   const error = ref<string | null>(null);
 
-  // Cache để tránh gọi API nhiều lần
-  const treeCache = new Map<number, IMenuItem[]>();
+  const menuCache = new Map<string, { menu: IMenu; tree: TreeNode<IMenuItem>[] }>();
 
-  const loadMenu = async (menuId: number) => {
-    if (treeCache.has(menuId)) {
-      menuTree.value = treeCache.get(menuId) || [];
+  /**
+   * Load menu theo slug và build tree structure
+   */
+  const loadMenuBySlug = async (slug: string) => {
+    // Kiểm tra cache trước
+    if (menuCache.has(slug)) {
+      const cached = menuCache.get(slug)!;
+      menu.value = cached.menu;
+      menuTree.value = cached.tree;
       return;
     }
 
@@ -20,64 +29,113 @@ export const useMenu = () => {
     error.value = null;
 
     try {
-      const response = await menuItemService.paginationPublic({
-        menu_id: menuId,
-        publish: 2,
-        per_page: 1000,
+      const response = await menuService.showBySlug(slug);
+
+      if (!response.data) {
+        throw new Error("Menu not found");
+      }
+
+      menu.value = response.data;
+
+      const items = response.data.menuItems || [];
+      const tree = buildTree<IMenuItem>(items, {
+        idKey: "id",
+        parentKey: "parentId",
+        childrenKey: "children",
+        rootParentValues: [0, null],
       });
 
-      if (response.data?.data && response.data.data.length > 0) {
-        const rootItems = response.data.data.filter((item: any) => item.parentId === 0);
-        menuTree.value = rootItems;
+      menuTree.value = tree;
 
-        // Lưu vào cache
-        treeCache.set(menuId, rootItems);
-      } else {
-        throw new Error("No menu items found");
-      }
+      menuCache.set(slug, { menu: response.data, tree });
     } catch (err) {
       error.value = err instanceof Error ? err.message : "Unknown error";
+      menu.value = null;
       menuTree.value = [];
     } finally {
       loading.value = false;
     }
   };
 
-  const getMenuByLevel = (level: number): IMenuItem[] => {
-    return menuTree.value.filter((item) => item.level === level);
-  };
+  /**
+   * Lấy menu items theo level
+   */
+  const getMenuByLevel = (level: number): TreeNode<IMenuItem>[] => {
+    const collectByLevel = (nodes: TreeNode<IMenuItem>[], targetLevel: number): TreeNode<IMenuItem>[] => {
+      const result: TreeNode<IMenuItem>[] = [];
 
-  const getChildren = (parentId: number): IMenuItem[] => {
-    const findChildren = (items: IMenuItem[]): IMenuItem[] => {
-      for (const item of items) {
-        if (item.id === parentId) {
-          return item.children || [];
+      for (const node of nodes) {
+        if (node.level === targetLevel) {
+          result.push(node);
         }
-        if (item.children) {
-          const children = findChildren(item.children);
-          if (children.length > 0) {
-            return children;
-          }
+        if (node.children && node.children.length > 0) {
+          result.push(...collectByLevel(node.children, targetLevel));
         }
       }
-      return [];
+
+      return result;
     };
 
-    return findChildren(menuTree.value);
+    return collectByLevel(menuTree.value, level);
+  };
+
+  /**
+   * Lấy children của một menu item
+   */
+  const getChildren = (parentId: number): TreeNode<IMenuItem>[] => {
+    const findNode = (nodes: TreeNode<IMenuItem>[], id: number): TreeNode<IMenuItem> | null => {
+      for (const node of nodes) {
+        if (node.id === id) {
+          return node;
+        }
+        if (node.children && node.children.length > 0) {
+          const found = findNode(node.children, id);
+          if (found) return found;
+        }
+      }
+      return null;
+    };
+
+    const node = findNode(menuTree.value, parentId);
+    return node?.children || [];
+  };
+
+  /**
+   * Check xem menu item có children không
+   */
+  const hasChildren = (item: IMenuItem | TreeNode<IMenuItem>): boolean => {
+    return !!(item.children && item.children.length > 0);
+  };
+
+  /**
+   * Giới hạn children hiển thị (tối đa 3 cấp)
+   */
+  const getChildrenWithLimit = (item: TreeNode<IMenuItem>, maxLevel: number = 3): TreeNode<IMenuItem>[] => {
+    if (item.level && item.level >= maxLevel) {
+      return [];
+    }
+    return item.children || [];
   };
 
   const clearCache = () => {
-    treeCache.clear();
+    menuCache.clear();
+    menu.value = null;
     menuTree.value = [];
   };
 
   return {
+    // State
+    menu: computed(() => menu.value),
     menuTree: computed(() => menuTree.value),
     loading: computed(() => loading.value),
     error: computed(() => error.value),
-    loadMenu,
+
+    // Methods
+    loadMenuBySlug,
     getMenuByLevel,
     getChildren,
+    hasChildren,
+    getChildrenWithLimit,
     clearCache,
   };
 };
