@@ -23,10 +23,10 @@ class MenuItemResource extends JsonResource
             'level' => (int) $this->level,
             'name' => $this->name,
             'slug' => $this->slug,
-            'icon' => $this->icon,
+            // 'icon' => $this->icon,
             'order' => (int) $this->order,
             'menuId' => (int) $this->menu_id,
-            'userId' => (int) $this->user_id,
+            // 'userId' => (int) $this->user_id,
             'publish' => (int) $this->publish,
             'children' => $this->whenLoaded('children', function () {
                 return self::collection($this->children);

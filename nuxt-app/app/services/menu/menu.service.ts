@@ -51,4 +51,9 @@ export const menuService = {
     const { publicFetch } = useApi();
     return await publicFetch<IApiOk<IPaginate<IMenu>>>(`${ENDPOINT}/menus`, { params });
   },
+
+  showBySlug: async (slug: string | string, params?: Record<string, any>): Promise<IApiOk<IMenu>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IMenu>>(`${ENDPOINT}/menu/${slug}`, { params });
+  },
 };
