@@ -23,9 +23,7 @@ export const postCatalogueService = {
 
   show: async (id: number | string): Promise<IApiOk<IPostCatalogue>> => {
     const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPostCatalogue>>(
-      `${ENDPOINT}/post_catalogues/${id}`
-    );
+    return await privateFetch<IApiOk<IPostCatalogue>>(`${ENDPOINT}/post_catalogues/${id}`);
   },
 
   update: async (id: number, payload: Partial<IPostCatalogue>): Promise<IApiOk<IPostCatalogue>> => {
@@ -40,7 +38,7 @@ export const postCatalogueService = {
   delete: async (id: number): Promise<IApiMessage> => {
     const { privateFetch } = useApi();
     return await privateFetch<IApiMessage>(`${ENDPOINT}/post_catalogues/${id}`, {
-      method: "DELETE"
+      method: "DELETE",
     });
   },
 
@@ -48,15 +46,13 @@ export const postCatalogueService = {
     const { privateFetch } = useApi();
     return await privateFetch<IApiMessage>(`${ENDPOINT}/post_catalogues/bulkDelete`, {
       body: { ids },
-      method: "DELETE"
+      method: "DELETE",
     });
   },
 
   all: async (): Promise<IApiOk<IPostCatalogue[]>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IPostCatalogue[]>>(
-      `${ENDPOINT}/post_catalogues?type=all&publish=2`
-    );
+    return await publicFetch<IApiOk<IPostCatalogue[]>>(`${ENDPOINT}/post_catalogues?type=all&publish=2`);
   },
 
   paginationPublic: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IPostCatalogue>>> => {
@@ -68,6 +64,6 @@ export const postCatalogueService = {
 
   showBySlug: async (slug: string): Promise<IApiOk<IPostCatalogue>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IPostCatalogue>>(`${ENDPOINT}/post/category/${slug}`);
+    return await publicFetch<IApiOk<IPostCatalogue>>(`${ENDPOINT}/post/${slug}`);
   },
 };

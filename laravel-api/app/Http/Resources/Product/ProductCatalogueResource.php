@@ -14,6 +14,23 @@ class ProductCatalogueResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+
+        if ($request->boolean('simple', false)) {
+            return [
+                'id' => $this->id,
+                'parentId' => (int) $this->parent_id,
+                'name' => $this->name,
+                'slug' => $this->slug,
+                'description' => $this->description,
+                'image' => [
+                    'path' => $this->image ?? null,
+                    'url' => asset("/storage/{$this->image}") ?? null,
+                ],
+                'order' => (int) $this->order,
+                'isHot' => (bool) $this->is_hot,
+                'publish' => (int) $this->publish,
+            ];
+        }
         return [
             'id' => $this->id,
             'parentId' => (int) $this->parent_id,
@@ -24,24 +41,15 @@ class ProductCatalogueResource extends JsonResource
                 'path' => $this->image ?? null,
                 'url' => asset("/storage/{$this->image}") ?? null,
             ],
+            "products" => $this->whenLoaded('products', function () {
+                return ProductResource::collection($this->products);
+            }),
             'order' => (int) $this->order,
             'isHot' => (bool) $this->is_hot,
             'publish' => (int) $this->publish,
             'metaTitle' => $this->meta_title,
             'metaKeyword' => $this->meta_keyword,
             'metaDescription' => $this->meta_description,
-            // 'index' => $this->index,
-            // 'scheme' => $this->scheme,
-            // 'iframe' => $this->iframe,
-            // 'creator' => $this->whenLoaded('users', [
-            //     'id' => $this->users->id,
-            //     'name' => $this->users->name,
-            // ]),
-            // 'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
-            // 'updatedAt' => $this->updated_at?->format('Y-m-d H:i:s'),
-            // 'deletedAt' => $this->deleted_at?->format('Y-m-d H:i:s'),
-            // 'createdAtHuman' => $this->created_at?->diffForHumans(),
-            // 'updatedAtHuman' => $this->updated_at?->diffForHumans(),
         ];
     }
 }

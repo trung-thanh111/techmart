@@ -1,4 +1,5 @@
 import type { BasePayloadFilter } from "../base.interface";
+import type { IProduct } from "./product.interface";
 
 export interface IProductCatalogue {
   id: number;
@@ -13,6 +14,7 @@ export interface IProductCatalogue {
   metaTitle?: string;
   metaKeyword?: string;
   metaDescription?: string;
+  products?: IProduct[];
 }
 
 export interface Option {

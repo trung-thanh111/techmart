@@ -6,24 +6,24 @@
         <div class="bg-white/10 backdrop-blur-lg rounded-md p-6 md:p-8 border border-white/20 shadow-xl">
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center px-2 sm:px-4 lg:px-6">
             <div class="lg:col-span-9">
-              <h2 class="text-4xl md:text-5xl font-bold text-white mb-5">
-                <span class="block bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent">{{ categoryDetail?.name || $t("client.post.categories") }}</span>
+              <h2 class="text-2xl md:text-3xl font-bold text-white mb-2">
+                <span class="block bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent">{{ categoryDetail?.name || $t("client.common.categories") }}</span>
               </h2>
               <p v-if="categoryDetail?.description" class="text-base text-gray-600 mb-8 leading-relaxed line-clamp-3">{{ categoryDetail.description }}</p>
               <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-5">
                 <div>
                   <div class="text-3xl font-bold text-cyan-400 mb-2">{{ categoryPosts.length }}</div>
-                  <div class="text-sm text-gray-400">bài viết</div>
+                  <div class="text-sm text-gray-400">{{ $t("client.page.post") }}</div>
                 </div>
                 <div>
                   <div class="text-3xl font-bold text-cyan-700 mb-2">{{ totalLikesFormatted }}</div>
-                  <div class="text-sm text-gray-400">lượt thích</div>
+                  <div class="text-sm text-gray-400">{{ $t("client.common.like") }}</div>
                 </div>
               </div>
             </div>
             <div class="lg:col-span-3 flex justify-center">
               <div class="relative overflow-hidden">
-                <NuxtImg :src="categoryDetail?.image?.path ? categoryDetail?.image?.url ?? '' : IMAGEDEFAULT" :alt="categoryDetail?.name || 'category'" class="w-[120px] h-[120px] md:w-[160px] md:h-[160px] rounded-full object-cover" sizes="(max-width: 640px) 120px, (max-width: 1024px) 160px, 160px" loading="lazy" />
+                <NuxtImg :src="categoryDetail?.image?.path ? categoryDetail?.image?.url ?? '' : IMAGEDEFAULT" :alt="categoryDetail?.name || 'category'" class="w-[120px] h-[120px] md:w-[160px] md:h-[160px] object-contain" sizes="(max-width: 640px) 120px, (max-width: 1024px) 160px, 160px" loading="lazy" />
               </div>
             </div>
           </div>
@@ -31,15 +31,15 @@
       </div>
     </section>
 
-    <Category description="Khám phá các danh mục công nghệ đa dạng tại Tech Mart Store – từ thiết bị điện tử, gia dụng thông minh đến phụ kiện hiện đại, đáp ứng nhu cầu học tập, làm việc và giải trí của bạn." :items="(postCatalogueList as any)" basePath="/post/category" viewAllLink="/post/categories" viewAllText="Xem tất cả" />
+    <Category description="Khám phá các danh mục công nghệ đa dạng tại Tech Mart Store – từ thiết bị điện tử, gia dụng thông minh đến phụ kiện hiện đại, đáp ứng nhu cầu học tập, làm việc và giải trí của bạn." :items="(postCatalogueList as any)" :basePath="POSTCATEGORY" :viewAllLink="POSTCATEGORIES" :viewAllText="$t('client.common.viewAll')" />
 
     <section class="mx-auto bg-white shadow-md rounded-md py-3 md:py-6 px-3 md:px-6 md:mb-8 mb-4">
       <div>
-        <div v-if="categoryPostsLoading" class="text-sm text-gray-500 p-2">{{ $t("client.post.loading") }}</div>
-        <div v-else-if="categoryPosts.length === 0" class="text-center text-gray-500 py-4">{{ $t("client.post.noPosts") }}</div>
+        <div v-if="categoryPostsLoading" class="text-sm text-gray-500 p-2">{{ $t("client.common.loading") }}</div>
+        <div v-else-if="categoryPosts.length === 0" class="text-center text-gray-500 py-4">{{ $t("client.common.noData") }}</div>
         <ul v-else class="grid gap-4">
           <li v-for="post in categoryPosts" :key="post.id">
-            <NuxtLink :to="`/post/${post.slug}`" :prefetch="false" class="block">
+            <NuxtLink :to="`${TOPOST}/${post.slug}`" :prefetch="false" class="block">
               <div class="bg-white rounded-xl shadow-lg overflow-hidden h-full relative">
                 <div class="flex flex-col lg:flex-row h-full">
                   <div class="lg:w-1/2 relative">
@@ -74,11 +74,9 @@
 
 <script setup lang="ts">
 import Breadcrumb from "~/components/shared/navigation/Breadcrumb.vue";
-import { IMAGEDEFAULT } from "~/utils/constants";
+import { IMAGEDEFAULT, TOPOST, POSTCATEGORY } from "~/utils/constants";
 import { usePostCatalogue } from "~/composables/client/post/usePostCatalogue";
 import { usePost } from "~/composables/client/post/usePost";
-import { Splide, SplideSlide } from "@splidejs/vue-splide";
-import { usePostSlider } from "~/composables/usePostSlider";
 import { useDebounceFn } from "@vueuse/core";
 import Category from "~/components/client/ui/Category.vue";
 
@@ -87,9 +85,7 @@ const slug = computed(() => route.params.slug as string);
 
 const { categoryDetail, fetchBySlug, categoryPosts, categoryPostsLoading, resetCategoryPosts, loadCategoryPostsById } = usePostCatalogue();
 const { postCatalogueList, fetchPostCatalogues } = usePost();
-const { miniCategoryOptions } = usePostSlider();
 
-// compute total likes safely
 const totalLikes = computed<number>(() => {
   try {
     return (categoryPosts.value ?? []).reduce((sum: number, p: any) => sum + (p.like_count ?? p.likeCount ?? 0), 0);
@@ -100,12 +96,12 @@ const totalLikes = computed<number>(() => {
 const totalLikesFormatted = computed(() => totalLikes.value.toLocaleString());
 
 const breadcrumbs = computed(() => [
-  { label: $t("client.post.breadcrumb"), href: "/post" },
-  { label: categoryDetail.value?.name ?? slug.value, href: `/post/category/${categoryDetail.value?.slug ?? slug.value}` },
+  { label: $t("client.page.post"), href: TOPOST },
+  { label: categoryDetail.value?.name ?? slug.value, href: `${POSTCATEGORY}/${categoryDetail.value?.slug ?? slug.value}` },
 ]);
 
-async function loadCategoryData(currSlug: string) {
-  await fetchBySlug(currSlug);
+async function loadCategoryData(slug: string) {
+  await fetchBySlug(slug);
   if (categoryDetail.value?.id) {
     resetCategoryPosts();
     await loadCategoryPostsById(categoryDetail.value.id, 5);

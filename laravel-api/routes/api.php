@@ -480,6 +480,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
     Route::get('menu/{slug}', [MenuController::class, 'showBySlug']);
     Route::get('post/{slug}', [PostController::class, 'showBySlug']);
     Route::get('post/category/{slug}', [PostCatalogueController::class, 'showBySlug']);
+    Route::get('product/category/{slug}', [ProductCatalogueController::class, 'showBySlug']);
     Route::get('agency/{slug}', [AgencyController::class, 'showBySlug']);
     Route::get('faq/{slug}', [FaqController::class, 'showBySlug']);
     Route::get('faq-catalogue/{slug}', [FaqCatalogueController::class, 'showBySlug']);

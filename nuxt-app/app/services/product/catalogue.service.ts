@@ -50,8 +50,20 @@ export const productCatalogueService = {
     });
   },
 
+  paginationPublic: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IProductCatalogue>>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPaginate<IProductCatalogue>>>(`${ENDPOINT}/product_catalogues`, {
+      params,
+    });
+  },
+
   all: async (): Promise<IApiOk<IProductCatalogue>> => {
     const { publicFetch } = useApi();
     return await publicFetch<IApiOk<IProductCatalogue>>(`${ENDPOINT}/product_catalogues?type=all`);
+  },
+
+  showBySlug: async (slug: string): Promise<IApiOk<IProductCatalogue>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IProductCatalogue>>(`${ENDPOINT}/product/category/${slug}`);
   },
 };

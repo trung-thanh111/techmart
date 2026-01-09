@@ -16,10 +16,10 @@ class ProductCatalogueService extends BaseService implements ProductCatalogueSer
 
     protected $repository;
 
-    private const PIPELINE ='default';
+    private const PIPELINE = 'default';
     protected $complexFilter = ['id'];
 
-    protected $with = ['users'];
+    protected $with = ['users', 'products'];
     protected $relationFilter = [];
 
     protected $cacheKeyPrefix = 'product_catalogues';
@@ -63,5 +63,11 @@ class ProductCatalogueService extends BaseService implements ProductCatalogueSer
     protected function getResource(Model $resource)
     {
         return new ProductCatalogueResource($resource);
+    }
+
+    public function paginate(Request $request)
+    {
+        $request->merge(['simple' => true]);
+        return parent::paginate($request);
     }
 }
