@@ -959,8 +959,35 @@
     "search": {
       "breadcrumb": "Kết quả tìm kiếm"
     },
+    "page": {
+      "info": "Thông tin",
+      "profile": "Cá nhân",
+      "policy": "Chính sách",
+      "shop": "Cửa hàng",
+      "post": "Bài viết",
+      "category": "Danh mục",
+      "detail": "Chi tiết",
+      "product": "Sản phẩm",
+      "order": "Đơn hàng",
+      "cart": "Giỏ hàng",
+      "home": "Trang chủ",
+      "compare": "So sánh",
+      "wishlist": "Yêu thích",
+      "search": "Tìm kiếm",
+      "faq": "Câu hỏi thường gặp",
+      "faqCatalogue": "Nhóm câu hỏi",
+      "agency": "Đại lý",
+      "workingTime": "Thời gian làm việc"
+    },
     "common": {
+      "like": "yêu thích",
       "loading": "Đang tải ...",
+      "viewAll": "Xem tất cả",
+      "viewMore": "Xem thêm",
+      "categories": "Danh mục",
+      "description": "Mô tả",
+      "noData": "Không có dữ liệu",
+      "updating": "Đang cập nhật ...",
       "filter": {
         "title": "Sắp xếp",
         "newest": "Mới nhất",

@@ -127,13 +127,19 @@ export const PROFILEORDERS = "/profile/orders";
 
 // Client routes
 export const TOVOUCHER = "/voucher";
+export const TOSHOP = "/shop";
 export const TOWISHLIST = "/wishlist";
 export const TOAGENCY = "/agency";
 export const TOFAQ = "/faq";
 export const TOPOST = "/post";
 export const TOCART = "/cart";
-export const TOPROFILEADDRESSORDERCREATE = "/profile/address_order/create";
 
+export const PRODUCTCATEGORY = "/product/category";
+export const POSTCATEGORY = "/post/category";
+export const PRODUCTCATEGORIES = "/product/categories";
+export const POSTCATEGORIES = "/post/categories";
+
+export const TOPROFILEADDRESSORDERCREATE = "/profile/address_order/create";
 export const PROFILEADRESSORDERINDEX = "/profile/address_order";
 export const PROFILEADRESSORDERCREATE = "/profile/address_order/create";
 export const PROFILEADRESSORDERUPDATE = "/profile/address_order/update";

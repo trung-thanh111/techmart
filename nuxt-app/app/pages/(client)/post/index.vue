@@ -73,7 +73,7 @@
         </template>
       </div>
     </section>
-    <Category :items="(postCatalogueList as any)" basePath="/post/category" viewAllLink="/post/categories" viewAllText="Xem tất cả" />
+    <Category :items="(postCatalogueList as any)" basePath="/post/" viewAllLink="/post/categories" viewAllText="Xem tất cả" />
     <section class="product-accsessory bg-white shadow-md rounded-md py-3 md:py-6 px-2 md:px-6 mb-4 md:mb-6">
       <div class="mb-4 md:mb-5">
         <div class="flex justify-between items-center gap-2">

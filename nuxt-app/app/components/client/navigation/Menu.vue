@@ -16,12 +16,12 @@
             <div class="p-4">
               <ul class="space-y-1">
                 <li v-for="item in level1Items" :key="item.id" @mouseenter="handleLevel1Hover(item)">
-                  <div :class="['flex items-center justify-between px-3 py-2.5 rounded cursor-pointer transition-all duration-150', hoveredLevel1?.id === item.id ? 'bg-sky-50 text-sky-600 font-semibold shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-sky-500']">
+                  <NuxtLink :to="`/${item.slug}`" :class="['flex items-center justify-between px-3 py-2.5 rounded cursor-pointer transition-all duration-150', hoveredLevel1?.id === item.id ? 'bg-sky-50 text-sky-600 font-semibold shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-sky-500']">
                     <span class="text-sm">{{ item.name }}</span>
                     <svg v-if="hasChildren(item)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 flex-shrink-0">
                       <polyline points="9,18 15,12 9,6" />
                     </svg>
-                  </div>
+                  </NuxtLink>
                 </li>
               </ul>
             </div>
