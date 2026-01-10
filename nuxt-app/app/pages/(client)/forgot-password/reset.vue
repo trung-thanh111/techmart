@@ -6,17 +6,17 @@
         <div class="flex flex-col lg:flex-row max-h-[800px] max-w-lg mx-auto shadow-lg">
           <div class="flex flex-col justify-center p-6 lg:p-8 w-full bg-white">
             <div class="w-full">
-              <h2 class="text-xl text-center font-semibold text-cyan-600 mb-1">Tạo mới mật khẩu!</h2>
-              <p class="text-sm text-center text-gray-500 mb-8">Hãy đảm bảo rằng mật khẩu của bạn đủ dài và không tiết lộ với bất kì ai.</p>
+              <h2 class="text-xl text-center font-semibold text-cyan-600 mb-1">{{ $t("client.common.resetPassword") }}</h2>
+              <p class="text-sm text-center text-gray-500 mb-8">{{ $t("client.common.enterNewPassword") }}</p>
               <form class="space-y-4 md:space-y-6" @submit.prevent.stop="onSubmit">
                 <div class="relative">
                   <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
-                    Mật khẩu:
+                    {{ $t("auth.password") }}:
                     <span class="text-red-500">*</span>
                   </label>
                   <Field v-slot="{ field, errorMessage, meta }" name="password" :validate-on-input="true">
                     <div class="relative">
-                      <input v-bind="field" id="password" :type="showPassword ? 'text' : 'password'" placeholder="Nhập mật khẩu" :class="['w-full border rounded px-3 py-2 text-sm focus:outline-none pr-10 transition-colors', errorMessage && meta.touched ? 'border-red-500 focus:border-red-500' : 'border-gray-300 focus:border-sky-500']" />
+                      <input v-bind="field" id="password" :type="showPassword ? 'text' : 'password'" :placeholder="$t('auth.placeholder.enterPassword')" :class="['w-full border rounded px-3 py-2 text-sm focus:outline-none pr-10 transition-colors', errorMessage && meta.touched ? 'border-red-500 focus:border-red-500' : 'border-gray-300 focus:border-sky-500']" />
                       <button type="button" class="absolute right-3 top-2 text-sm text-gray-500 hover:text-gray-700" @click="showPassword = !showPassword" tabindex="-1">
                         <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'" class="w-4 h-4"></i>
                       </button>
@@ -29,12 +29,12 @@
 
                 <div class="relative">
                   <label for="passwordConfirmation" class="block text-sm font-medium text-gray-700 mb-2">
-                    Xác nhận mật khẩu:
+                    {{ $t("auth.confirmPassword") }}:
                     <span class="text-red-500">*</span>
                   </label>
                   <Field v-slot="{ field, errorMessage, meta }" name="passwordConfirmation" :validate-on-input="true">
                     <div class="relative">
-                      <input v-bind="field" id="passwordConfirmation" :type="showConfirmPassword ? 'text' : 'password'" placeholder="Xác nhận mật khẩu" :class="['w-full border rounded px-3 py-2 text-sm focus:outline-none pr-10 transition-colors', errorMessage && meta.touched ? 'border-red-500 focus:border-red-500' : 'border-gray-300 focus:border-sky-500']" />
+                      <input v-bind="field" id="passwordConfirmation" :type="showConfirmPassword ? 'text' : 'password'" :placeholder="$t('auth.placeholder.enterConfirmPassword')" :class="['w-full border rounded px-3 py-2 text-sm focus:outline-none pr-10 transition-colors', errorMessage && meta.touched ? 'border-red-500 focus:border-red-500' : 'border-gray-300 focus:border-sky-500']" />
                       <button type="button" class="absolute right-3 top-2 text-sm text-gray-500 hover:text-gray-700" @click="showConfirmPassword = !showConfirmPassword" tabindex="-1">
                         <i :class="showConfirmPassword ? 'fas fa-eye-slash' : 'fas fa-eye'" class="w-4 h-4"></i>
                       </button>
@@ -81,7 +81,7 @@
 
                 <Button
                   type="submit"
-                  label="Xác nhận"
+                  :label="$t('client.common.confirm')"
                   :loading="isLoading"
                   unstyled
                   class="w-full text-sm font-semibold flex justify-center py-2 px-4 rounded shadow-sm text-white bg-teal-500 hover:bg-teal-600 focus:outline-none mt-5 disabled:opacity-50"
@@ -92,8 +92,8 @@
               </form>
 
               <p class="mt-6 text-center text-sm text-gray-600">
-                Chờ đã, tôi đã nhớ mật khẩu?
-                <a href="/signin" class="text-cyan-600 hover:underline">Tại đây</a>
+                {{ $t("client.common.alreadyHavePassword") }}
+                <NuxtLink :to="TOLOGIN" class="text-cyan-600 hover:underline">{{ $t("client.common.clickHere") }}</NuxtLink>
               </p>
             </div>
           </div>
@@ -103,8 +103,11 @@
   </div>
 </template>
 <script setup lang="ts">
+import { definePageMeta } from "#imports";
+import { ref, computed } from "vue";
 import { Field } from "vee-validate";
 import { useForgotReset } from "~/composables/auth/useForgotReset";
+import { TOLOGIN } from "~/utils/constants";
 
 definePageMeta({
   layout: "client",

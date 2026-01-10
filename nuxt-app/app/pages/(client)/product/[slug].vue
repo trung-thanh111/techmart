@@ -3,12 +3,12 @@
     <div v-if="productDetailLoading" class="flex items-center justify-center min-h-[400px]">
       <div class="text-center">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-        <p class="text-gray-600">Đang tải...</p>
+        <p class="text-gray-600">{{ $t("client.common.loading") }}</p>
       </div>
     </div>
     <div v-else-if="productDetailError" class="flex items-center justify-center min-h-[400px]">
       <div class="text-center">
-        <h2 class="text-xl font-semibold text-gray-800 mb-2">Có lỗi! vui lòng tải lại.</h2>
+        <h2 class="text-xl font-semibold text-gray-800 mb-2">{{ $t("client.header.loadingError") }}</h2>
         <p class="text-gray-600 mb-4">{{ productDetailError }}</p>
       </div>
     </div>
@@ -25,7 +25,7 @@
                       <div class="relative mb-4">
                         <div v-if="discountPercent > 0" class="absolute top-2 left-2 z-10 bg-red-500 text-white font-bold text-xs md:text-sm px-2 py-1 rounded-md shadow-lg">-{{ discountPercent }}%</div>
                         <div class="absolute top-2 right-2 z-10 flex flex-col items-center gap-2">
-                          <div v-tooltip.top="'So sánh sản phẩm'">
+                          <div v-tooltip.top="$t('client.header.compareTooltip')">
                             <Checkbox v-model="isCompareChecked" inputId="compare-checkbox" :binary="true" class="compare-checkbox-large" />
                           </div>
                           <button @click="handleWishlistToggle" :data-product-variant-id="selectedVariant?.id" class="p-2 rounded-full bg-white/80 hover:bg-red-100 transition-colors shadow-md relative group/heart">
@@ -61,15 +61,15 @@
                   <div class="lg:mb-3 p-3">
                     <div class="flex items-center md:justify-between justify-end">
                       <div class="flex items-center justify-between">
-                        <span class="caption font-medium text-sm text-gray-500 mr-[18px] md:block hidden">Chia sẻ</span>
+                        <span class="caption font-medium text-sm text-gray-500 mr-[18px] md:block hidden">{{ $t("action.share") }}</span>
                         <div class="flex items-center space-x-[12px]">
-                          <a aria-label="message-share" class="transition duration-200 ease-in-out hover:opacity-70" href="https://www.facebook.com/dialog/send?app_id=420292729776844&amp;display=popup&amp;link=https://techmart.vn/den-led-ban-hoc-cam-ung-6w-rd-rl-38plus-p-221223003160&amp;redirect_uri=https://techmart.vn/den-led-ban-hoc-cam-ung-6w-rd-rl-38plus-p-221223003160"><NuxtImg src="/client/images/social/messenger.png" alt="facebook message" class="object-cover w-5 h-5" /></a>
+                          <a aria-label="message-share" class="transition duration-200 ease-in-out hover:opacity-70" href="https://www.facebook.com/dialog/send?app_id=420292729776844&amp;display=popup&amp;link=https://techmart.vn/den-led-ban-hoc-cam-ung-6w-rd-rl-38plus-p-221223003160&amp;redirect_uri=https://techmart.vn/den-led-ban-hoc-cam-ung-6w-rd-rl-38plus-p-221223003160"><NuxtImg src="/client/images/social/messenger.png" alt="facebook message" class="object-cover w-5 h-5" loading="lazy" /></a>
                           <a aria-label="facebook-share" class="transition duration-200 ease-in-out hover:opacity-70" href="https://www.facebook.com/sharer/sharer.php?u=https://techmart.vn/den-led-ban-hoc-cam-ung-6w-rd-rl-38plus-p-221223003160">
-                            <NuxtImg src="/client/images/social/facebook.png" alt="facebook share" class="object-cover w-5 h-5" />
+                            <NuxtImg src="/client/images/social/facebook.png" alt="facebook share" class="object-cover w-5 h-5" loading="lazy" />
                           </a>
 
                           <a aria-label="printer-share" class="transition duration-200 ease-in-out hover:opacity-70" href="http://pinterest.com/pin/create/button/?url=https://techmart.vn/den-led-ban-hoc-cam-ung-6w-rd-rl-38plus-p-221223003160">
-                            <NuxtImg src="/client/images/social/zalo.png" alt="sharing printer" class="object-cover w-5 h-5" />
+                            <NuxtImg src="/client/images/social/zalo.png" alt="sharing printer" class="object-cover w-5 h-5" loading="lazy" />
                           </a>
                           <div class="relative">
                             <div class="w-5 h-5 transition duration-200 ease-in-out hover:opacity-70">
@@ -82,7 +82,7 @@
                               </span>
                             </div>
                             <input id="input-copy" type="hidden" />
-                            <div class="absolute top-[0%] bg-green-300 text-white duration-300 py-[4px] px-[12px] w-max left-[160%] hidden">Đã copy link</div>
+                            <div class="absolute top-[0%] bg-green-300 text-white duration-300 py-[4px] px-[12px] w-max left-[160%] hidden">{{ $t("client.common.copiedLink") }}</div>
                           </div>
                         </div>
                       </div>
@@ -90,7 +90,7 @@
                   </div>
                   <div class="p-3 lg:px-4">
                     <div class="rounded-lg border border-gray-300 overflow-hidden">
-                      <h4 class="text-gray-600 body-text font-medium px-4 py-2 bg-gray-200">Khuyến mãi</h4>
+                      <h4 class="text-gray-600 body-text font-medium px-4 py-2 bg-gray-200">{{ $t("client.header.promotionTitle") }}</h4>
                       <div class="max-w-none py-3 px-3 lg:px-4 promotion-content space-y-3">
                         <template v-if="applicablePromotions.length">
                           <div v-for="promotion in applicablePromotions" :key="promotion.id" class="rounded-md border border-sky-100 bg-sky-50/40 p-3 space-y-2">
@@ -98,24 +98,24 @@
                               <div>
                                 <p class="text-base font-semibold text-sky-700 mb-1">{{ promotion.name }}</p>
                                 <p class="text-sm text-gray-600">
-                                  Giảm {{ formatPromotionDiscount(promotion) }}
-                                  <span v-if="promotion.discountType === 'percent' && promotion.maxDiscountValue">(tối đa {{ formatCurrency(promotion.maxDiscountValue) }})</span>
+                                  {{ $t("client.header.discountText") }} {{ formatPromotionDiscount(promotion) }}
+                                  <span v-if="promotion.discountType === 'percent' && promotion.maxDiscountValue">{{ $t("client.header.maxDiscount", { amount: formatCurrency(promotion.maxDiscountValue) }) }}</span>
                                 </p>
-                                <p v-if="promotionWindow(promotion)" class="text-xs text-gray-500">Thời gian: {{ promotionWindow(promotion) }}</p>
+                                <p v-if="promotionWindow(promotion)" class="text-xs text-gray-500">{{ $t("client.header.timeLabel") }} {{ promotionWindow(promotion) }}</p>
                               </div>
                               <span class="inline-flex items-center text-xs font-semibold uppercase tracking-wide bg-sky-500 text-white rounded-full px-3 py-1">Ưu tiên #{{ promotion.priority ?? 0 }}</span>
                             </div>
                             <div v-if="promotion.description" class="text-sm text-gray-600 leading-relaxed prose max-w-none" v-html="promotion.description"></div>
                             <div v-if="promotion.applicableTargets?.length" class="text-xs text-gray-500 flex flex-wrap items-center gap-2">
-                              <span class="font-semibold text-gray-600">Áp dụng cho:</span>
+                              <span class="font-semibold text-gray-600">{{ $t("client.header.appliesTo") }}:</span>
                               <span v-for="target in promotion.applicableTargets" :key="`${promotion.id}-${target.id || target.productVariantId || target.productId || target.productCatalogueId}`" class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-white text-gray-600 border border-gray-200">
-                                <span v-if="target.isGift" class="text-[10px] font-semibold text-pink-600 uppercase">Quà tặng</span>
+                                <span v-if="target.isGift" class="text-[10px] font-semibold text-pink-600 uppercase">{{ $t("client.common.gift") }}</span>
                                 <span>{{ resolvePromotionTargetLabel(target) }}</span>
                               </span>
                             </div>
                           </div>
                         </template>
-                        <p v-else class="text-sm text-gray-500 m-0">Hiện chưa có khuyến mãi cho phiên bản này.</p>
+                        <p v-else class="text-sm text-gray-500 m-0">{{ $t("client.header.noPromotion") }}</p>
                       </div>
                     </div>
                   </div>
@@ -130,17 +130,17 @@
                         <span v-if="selectedVariant?.name" class="normal-case">| {{ selectedVariant.name }}</span>
                       </h1>
                       <div class="text-sm text-gray-500 my-1">
-                        <span>Danh mục:</span>
+                        <span>{{ $t("field.category") }}:</span>
                         <NuxtLink v-for="catalogue in (productDetail.productCatalogues as any[])" :key="catalogue.id" :to="`/product/category/${catalogue.slug}`" class="ml-2 font-semibold text-sky-500 hover:underline">
                           {{ catalogue.name }}
                         </NuxtLink>
                         <template v-if="(productDetail as any).brand">
                           &nbsp;|&nbsp;
-                          <span>Thương hiệu:</span>
+                          <span>{{ $t("field.brand") }}:</span>
                           <NuxtLink :to="`/brand/${(productDetail as any).brand.slug}`" class="ml-2 font-semibold text-sky-500 hover:underline">{{ (productDetail as any).brand.name }}</NuxtLink>
                         </template>
                       </div>
-                      <div v-if="selectedVariant" class="text-xs font-medium text-sky-500 md:text-sm">Sku: {{ selectedVariant.sku }}</div>
+                      <div v-if="selectedVariant" class="text-xs font-medium text-sky-500 md:text-sm">{{ $t("field.sku") }}: {{ selectedVariant.sku }}</div>
                     </div>
                   </div>
                   <div class="mb-4 lg:rounded lg:bg-gray-100 lg:px-4 lg:py-3">
@@ -150,7 +150,7 @@
                         <span v-if="productDetail.priceOrigin" class="mr-4 text-gray-400 line-through body-text text-sm">{{ new Intl.NumberFormat("vi-VN").format(parseFloat(productDetail.priceOrigin.toString())) }}&nbsp;₫</span>
                       </div>
                     </div>
-                    <NuxtLink to="/chinh-sach/chinh-sach-doi-tra" class="inline-flex items-center transition-colors duration-200 ease-in-out text-sky-500 hover:text-sky-600">
+                    <NuxtLink :to="TOEXCHANGEPOLICY" class="inline-flex items-center transition-colors duration-200 ease-in-out text-sky-500 hover:text-sky-600">
                       <span>
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" fill="none" viewBox="0 0 20 21">
                           <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 18a7.5 7.5 0 1 0 0-15 7.5 7.5 0 0 0 0 15z"></path>
@@ -158,7 +158,7 @@
                           <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 11.75v-.625a2.187 2.187 0 1 0-2.188-2.188"></path>
                         </svg>
                       </span>
-                      <span class="ml-1 font-medium caption text-sm text-sky-500">Dễ dàng đổi trả</span>
+                      <span class="ml-1 font-medium caption text-sm text-sky-500">{{ $t("client.header.easyExchange") }}</span>
                     </NuxtLink>
                   </div>
                   <div v-if="Object.keys(attributeGroups).length > 0">
@@ -188,7 +188,7 @@
                 <div class="px-4 pb-3 bg-white">
                   <div class="relative">
                     <div class="flex items-center gap-2 mb-2">
-                      <span class="text-gray-600 text-sm">Số lượng:</span>
+                      <span class="text-gray-600 text-sm">{{ $t("field.quantity") }}</span>
                       <span class="font-medium text-sky-500 text-sm">{{ displayStock }}</span>
                     </div>
                     <div class="flex items-center mt-2 border border-gray-300 rounded overflow-hidden w-max h-[38px]">
@@ -211,8 +211,8 @@
                     <Button :label="$t('client.cart.buyNow')" icon="pi pi-bolt" severity="danger" size="large" @click="handleBuyNow" :loading="isBuyingNow" class="flex items-center justify-center bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-semibold py-4 px-4 rounded-sm transition-all duration-300 ease-in-out transform hover:scale-98 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 uppercase text-sm md:text-base leading-none shadow-md hover:shadow-md" />
                   </div>
                   <div class="font-medium text-gray-500 text-xs description">
-                    <NuxtLink to="#" class="font-bold underline cursor-pointer text-sky-400 hover:text-sky-600">Đăng nhập</NuxtLink>
-                    để hưởng quyền lợi thành viên từ chúng tôi!
+                    <NuxtLink to="#" class="font-bold underline cursor-pointer text-sky-400 hover:text-sky-600">{{ $t("client.header.loginRequired") }}</NuxtLink>
+                    {{ $t("client.header.memberBenefits") }}
                   </div>
                 </div>
                 <div class="px-4 md:px-[24px]" v-if="Object.keys(attributeGroups).length > 0">
@@ -226,7 +226,7 @@
                       </div>
                     </div>
                     <div class="btn-md text-strong-blue-400 inline-flex items-center cursor-pointer duration-200 mt-2">
-                      <a @click.prevent="scrollToTab('specification')" href="#tabs-information" class="text-xs font-medium flex items-center space-x-[6px] text-sky-500">Xem chi tiết</a>
+                      <a @click.prevent="scrollToTab('specification')" href="#tabs-information" class="text-xs font-medium flex items-center space-x-[6px] text-sky-500">{{ $t("action.viewDetail") }}</a>
                       <div class="ml-[4px] flex-shrink-0">
                         <svg class="text-sky-500" xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
                           <g clip-path="url(#clip0_8633_16495)">
@@ -248,7 +248,7 @@
                       <div v-html="productDetail.description"></div>
                     </div>
                     <div class="btn-md text-strong-blue-400 inline-flex items-center cursor-pointer hover:text-strong-blue-500 duration-200 mt-2">
-                      <a @click.prevent="scrollToTab('summary')" href="#tabs-information" class="text-xs font-medium flex items-center space-x-[6px] text-sky-500">Xem chi tiết</a>
+                      <a @click.prevent="scrollToTab('summary')" href="#tabs-information" class="text-xs font-medium flex items-center space-x-[6px] text-sky-500">{{ $t("action.viewDetail") }}</a>
                       <div class="ml-[4px] flex-shrink-0">
                         <svg class="text-sky-500" xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
                           <g clip-path="url(#clip0_8633_16495)">
@@ -287,14 +287,12 @@
                           </defs>
                         </svg>
                       </div>
-                      <div class="relative py-[2px] pl-[14px] pr-2 bg-gradient-to-r from-[#f59e0b] via-[#f97316] to-[#eab308] caption text-white text-sm font-medium min-w-[216px] transform translate-x-[-10px]">Hệ thống kho phân phối TMĐT</div>
+                      <div class="relative py-[2px] pl-[14px] pr-2 bg-gradient-to-r from-[#f59e0b] via-[#f97316] to-[#eab308] caption text-white text-sm font-medium min-w-[216px] transform translate-x-[-10px]">{{ $t("client.header.distributionSystem") }}</div>
                     </div>
                   </div>
                   <div v-if="selectedVariant && agenciesForVariant.length > 0" class="mt-2 text-xs">
                     <div class="text-gray-600 caption">
-                      Có
-                      <span class="font-bold text-gray-700">{{ agenciesForVariant.length }}</span>
-                      cửa hàng có sản phẩm
+                      {{ $t("client.header.storesCount", { count: agenciesForVariant.length }) }}
                     </div>
                     <div class="mt-2 overflow-hidden border border-gray-200 rounded-lg">
                       <div class="h-[280px] xl:h-[320px] overflow-y-auto scrollbar-hide address-agents">
@@ -312,7 +310,7 @@
                             </div>
                             <div class="w-[1px] h-[11px] bg-gray-300"></div>
                             <div class="flex-1">
-                              <NuxtLink v-if="agency.slug" :to="`/he-thong-dai-ly/${agency.slug}`" class="text-gray-800 duration-150 line-clamp-1 description hover:text-[#0180AD]">{{ agency.address }}</NuxtLink>
+                              <NuxtLink v-if="agency.slug" :to="`${TOAGENCYSYSTEM}/${agency.slug}`" class="text-gray-800 duration-150 line-clamp-1 description hover:text-[#0180AD]">{{ agency.address }}</NuxtLink>
                               <span v-else class="text-gray-800 line-clamp-1 description">{{ agency.address }}</span>
                             </div>
                           </div>
@@ -321,7 +319,7 @@
                     </div>
                   </div>
                   <div v-else-if="selectedVariant" class="mt-2 text-sm">
-                    <div class="text-gray-500 caption italic">Chưa có cửa hàng nào có sẵn phiên bản này</div>
+                    <div class="text-gray-500 caption italic">{{ $t("client.header.noStores") }}</div>
                   </div>
                 </div>
                 <div class="px-3 py-4 bg-white rounded-b">
@@ -342,7 +340,7 @@
                         </defs>
                       </svg>
                     </div>
-                    <div class="relative bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-xs text-white font-medium min-w-[160px] transform translate-x-[-10px] translate-y-[1px] pl-[14px] py-1">ĐẠI LÝ PHÂN PHỐI</div>
+                    <div class="relative bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-xs text-white font-medium min-w-[160px] transform translate-x-[-10px] translate-y-[1px] pl-[14px] py-1">{{ $t("client.header.distributionAgent") }}</div>
                   </div>
                   <div class="flex items-center mb-1">
                     <span class="mr-3 text-green-600">
@@ -357,7 +355,7 @@
                         </defs>
                       </svg>
                     </span>
-                    <span class="text-gray-600 caption text-sm">Tư vấn miễn phí</span>
+                    <span class="text-gray-600 caption text-sm">{{ $t("client.header.freeConsultation") }}</span>
                   </div>
                   <div class="flex items-center mb-1">
                     <span class="mr-3 text-green-600">
@@ -365,7 +363,7 @@
                         <path fill="currentColor" d="M4.45 5.778v1.389l.11-.111a.614.614 0 0 1 .884 0 .623.623 0 0 1 0 .888L4.257 9.111a.65.65 0 0 1-.442.195.586.586 0 0 1-.441-.195L2.186 7.917a.623.623 0 0 1 0-.89.614.614 0 0 1 .884 0l.11.112V5.778C3.18 3.972 4.644 2.5 6.438 2.5h1.38c.332 0 .608.278.608.611a.615.615 0 0 1-.607.611h-1.38c-1.078 0-1.989.917-1.989 2.056zm13.39 7.278l-1.186-1.167a.614.614 0 0 0-.884 0l-1.187 1.194a.623.623 0 0 0 0 .89c.248.25.635.25.883 0l.11-.112v1.361a2.045 2.045 0 0 1-2.042 2.056h-1.38a.615.615 0 0 0-.608.61c0 .334.276.612.607.612h1.38c1.795 0 3.258-1.472 3.258-3.278v-1.389l.111.111a.65.65 0 0 0 .442.195.587.587 0 0 0 .441-.195.626.626 0 0 0 .056-.888zm-9.166-.612a.615.615 0 0 0 .608-.61.615.615 0 0 0-.608-.612H2.656a.615.615 0 0 0-.608.611v6.056c0 .333.276.611.608.611h6.018a.615.615 0 0 0 .608-.611v-3.417a.615.615 0 0 0-.608-.61.615.615 0 0 0-.607.61v2.778H3.291v-4.806h5.383zm9.222-3.222V5.806a.615.615 0 0 0-.608-.612.615.615 0 0 0-.607.612v2.777h-4.804V3.778h5.384a.615.615 0 0 0 .607-.611.615.615 0 0 0-.607-.611H11.27a.615.615 0 0 0-.608.61v6.056c0 .334.276.611.608.611h6.018a.615.615 0 0 0 .608-.61z"></path>
                       </svg>
                     </span>
-                    <span class="text-gray-600 caption text-sm">Đổi trả dễ dàng</span>
+                    <span class="text-gray-600 caption text-sm">{{ $t("client.header.easyReturn") }}</span>
                   </div>
                   <div class="flex items-center mb-2.5">
                     <span class="mr-3 text-green-600">
@@ -374,10 +372,10 @@
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 10.583L9.8 13.5l3.2-5"></path>
                       </svg>
                     </span>
-                    <span class="text-gray-600 caption text-sm">Bảo hành từ 2-5 năm</span>
+                    <span class="text-gray-600 caption text-sm">{{ $t("client.header.warrantyYears") }}</span>
                   </div>
-                  <NuxtLink to="/chinh-sach/" class="text-sm flex items-center space-x-[6px] text-sky-500">
-                    <span class="underline">Xem chính sách</span>
+                  <NuxtLink :to="TOPOLICY" class="text-sm flex items-center space-x-[6px] text-sky-500">
+                    <span class="underline">{{ $t("action.viewPolicy") }}</span>
                     <span>
                       <svg xmlns="http://www.w3.org/2000/svg" width="7" height="10" fill="none" viewBox="0 0 7 10">
                         <path fill="currentColor" d="M1.04.16L.71.487a.543.543 0 0 0-.16.387c0 .147.058.284.16.387l3.737 3.737-3.74 3.74a.543.543 0 0 0-.16.387c0 .147.057.284.16.387l.327.328c.214.213.56.213.774 0l4.47-4.454a.56.56 0 0 0 .175-.388v-.002a.559.559 0 0 0-.175-.386L1.82.16a.553.553 0 0 0-.78 0z"></path>
@@ -385,7 +383,7 @@
                     </span>
                   </NuxtLink>
                 </div>
-                <NuxtLink to="tel:19002098" class="block w-full h-[158px]"><NuxtImg src="/client/images/contact/contact-advice.webp" alt="contact" loading="lazy" class="object-cover w-full h-full" /></NuxtLink>
+                <NuxtLink :to="HOTLINE" class="block w-full h-[158px]"><NuxtImg src="/client/images/contact/contact-advice.webp" alt="contact" loading="lazy" class="object-cover w-full h-full" /></NuxtLink>
               </div>
             </div>
           </div>
@@ -403,7 +401,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
                   </svg>
                 </span>
-                <span class="hidden md:inline">Mô tả sản phẩm</span>
+                <span class="hidden md:inline">{{ $t("client.header.productDescription") }}</span>
               </div>
               <div id="tab-info-specification" class="flex-1 flex-shrink-0 p-2 md:p-3 font-semibold text-center whitespace-normal duration-75 cursor-pointer tabs_item text-gray-700 bg-white hover:bg-gradient-to-r hover:from-sky-500 hover:to-sky-600 hover:text-white" @click="activeTab = 'specification'">
                 <span class="inline-block md:hidden">
@@ -411,7 +409,7 @@
                     <path d="M9.75 3v1.5M14.25 3v1.5M3.75 7.5h16.5M6 10.5v8.25a.75.75 0 00.75.75h10.5a.75.75 0 00.75-.75V10.5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                 </span>
-                <span class="hidden md:inline">Thông số kỹ thuật</span>
+                <span class="hidden md:inline">{{ $t("client.header.specifications") }}</span>
               </div>
               <div id="tab-info-document" class="flex-1 flex-shrink-0 p-2 md:p-3 font-semibold text-center whitespace-normal duration-75 cursor-pointer tabs_item text-gray-700 bg-white hover:bg-gradient-to-r hover:from-sky-500 hover:to-sky-600 hover:text-white" @click="activeTab = 'faq'">
                 <span class="inline-block md:hidden">
@@ -419,7 +417,7 @@
                     <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM169.8 165.3c7.9-22.3 29.1-37.3 52.8-37.3l58.3 0c34.9 0 63.1 28.3 63.1 63.1c0 22.6-12.1 43.5-31.7 54.8L280 264.4c-.2 13-10.9 23.6-24 23.6c-13.3 0-24-10.7-24-24l0-13.5c0-8.6 4.6-16.5 12.1-20.8l44.3-25.4c4.7-2.7 7.6-7.7 7.6-13.1c0-8.4-6.8-15.1-15.1-15.1l-58.3 0c-3.4 0-6.4 2.1-7.5 5.3l-.4 1.2c-4.4 12.5-18.2 19-30.6 14.6s-19-18.2-14.6-30.6l.4-1.2zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z" />
                   </svg>
                 </span>
-                <span class="hidden md:inline">Câu hỏi thường gặp</span>
+                <span class="hidden md:inline">{{ $t("nav.faq") }}</span>
               </div>
               <div id="tab-info-rating" class="flex-1 flex-shrink-0 p-2 md:p-3 font-semibold text-center whitespace-normal duration-75 cursor-pointer tabs_item text-gray-700 bg-white hover:bg-gradient-to-r hover:from-sky-500 hover:to-sky-600 hover:text-white" @click="activeTab = 'rating'">
                 <span class="inline-block md:hidden">
@@ -427,7 +425,7 @@
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.966a1 1 0 00.95.69h4.178c.969 0 1.371 1.24.588 1.81l-3.386 2.46a1 1 0 00-.364 1.118l1.286 3.966c.3.921-.755 1.688-1.54 1.118L10 14.347l-3.386 2.46c-.784.57-1.838-.197-1.539-1.118l1.286-3.966a1 1 0 00-.364-1.118L2.611 9.393c-.783-.57-.38-1.81.588-1.81h4.178a1 1 0 00.95-.69l1.286-3.966z" />
                   </svg>
                 </span>
-                <span class="hidden md:inline">Đánh giá</span>
+                <span class="hidden md:inline">{{ $t("client.product.rating") }}</span>
               </div>
             </div>
           </div>
@@ -441,10 +439,10 @@
                   <div v-if="!isDescriptionExpanded" class="overflow-blur-content absolute bottom-0 left-0 w-full h-full max-h-20 transparent-NuxtImg bg-gradient-to-t from-white"></div>
                   <div class="prose markup-custom list-striped">
                     <div class="prose max-w-none" v-if="productDetail.description" v-html="productDetail.description"></div>
-                    <div v-else class="my-5 text-center text-gray-500">Không có mô tả</div>
+                    <div v-else class="my-5 text-center text-gray-500">{{ $t("client.header.noDescription") }}</div>
                   </div>
                   <div v-if="(productDetail as any).productTags && (productDetail as any).productTags.length > 0" class="flex flex-col gap-1 mt-5 justify-center items-start w-full bg-white dark:bg-transparent px-4 py-4 shadow-xl rounded-lg">
-                    <p class="font-medium text-xl text-gray-500 mb-2">Tags</p>
+                    <p class="font-medium text-xl text-gray-500 mb-2">{{ $t("client.common.tags") }}</p>
                     <div class="flex flex-wrap gap-2">
                       <NuxtLink v-for="tag in ((productDetail as any).productTags as any[])" :key="tag.id" :to="`/product/tag/${tag.slug}`" class="px-3 py-1 text-[12px] bg-[#d9dfe3] max-w-max rounded font-semibold text-[#7281a3] hover:bg-sky-100 hover:text-sky-600 transition-colors">#{{ tag.name }}</NuxtLink>
                     </div>
@@ -453,7 +451,7 @@
                 <div class="flex justify-center mt-6 sm:mt-8">
                   <div class="relative z-10">
                     <button type="button" @click="isDescriptionExpanded = !isDescriptionExpanded" class="toggleBtn w-full flex items-center justify-center bg-gradient-to-r from-sky-700 to-sky-600 hover:from-sky-600 hover:to-sky-500 text-white rounded-xs transition-all duration-300 ease-in-out transform focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-1 text-sm leading-none shadow-md hover:shadow-md font-semibold py-[12px] px-[24px]">
-                      <span class="whitespace-nowrap">{{ isDescriptionExpanded ? "Thu gọn" : "Xem thêm" }}</span>
+                      <span class="whitespace-nowrap">{{ isDescriptionExpanded ? $t("action.collapse") : $t("action.expand") }}</span>
                     </button>
                   </div>
                 </div>
@@ -477,7 +475,7 @@
                         </div>
                       </div>
                     </div>
-                    <div v-else class="my-5 text-center text-gray-500">Không có thông số kỹ thuật</div>
+                    <div v-else class="my-5 text-center text-gray-500">{{ $t("client.header.noSpecFound") }}</div>
                     &nbsp;
                   </div>
                 </div>
@@ -493,7 +491,7 @@
                       <button type="button" class="flex items-center justify-between w-full px-4 py-3 text-left text-base font-semibold text-gray-800 hover:text-cyan-600 transition" :aria-expanded="openFaq === id" @click="openFaq === id ? (openFaq = null) : (openFaq = id)">
                         <div class="flex items-center space-x-3">
                           <div class="w-8 h-8 flex items-center justify-center bg-cyan-100 text-cyan-600 font-bold rounded-md text-sm">
-                            {{ id + 1 }}
+                            {{ (id as number) + 1 }}
                           </div>
                           <span class="line-clamp-2">{{ faq.question }}</span>
                         </div>
@@ -507,7 +505,7 @@
                 </template>
               </div>
             </div>
-            <div v-else class="my-5 text-center text-gray-500">Không có dữ liệu</div>
+            <div v-else class="my-5 text-center text-gray-500">{{ $t("client.common.noData") }}</div>
           </div>
           <div class="text-gray-600 text-base" v-if="activeTab === 'rating'">
             <div class="p-4">
@@ -752,7 +750,7 @@
               </div>
             </div>
           </div>
-          <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">Các thiết bị chiếu sáng được ưa chuộng nhất tại Tech mart Store, nâng cao trải nghiệm sống của hàng ngàn khách hàng.</p>
+          <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("client.header.lighting_description") }}</p>
         </div>
         <div class="col-span-5 min-w-0">
           <Splide :options="productRelatedOptions(relatedProducts.length)" id="product-related-slide">
@@ -778,7 +776,14 @@ import { useWishlist } from "~/composables/client/product/useWishlist";
 import { useCompare } from "~/composables/client/product/useCompare";
 import { useCart } from "~/composables/client/cart/useCart";
 import type { IPromotion, IPromotionTarget } from "~/interfaces/promotion/promotion.interface";
+import { TOEXCHANGEPOLICY, TOAGENCYSYSTEM, HOTLINE, TOPOLICIES, TOCART } from "~/utils/constants";
+import { useRoute } from "vue-router";
+import { computed, nextTick, onMounted, ref, watch } from "vue";
+import { navigateTo } from "#app";
+import { definePageMeta } from "#imports";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
 const route = useRoute();
 type PromotionWithTargets = IPromotion & { applicableTargets: IPromotionTarget[] };
 
@@ -827,7 +832,7 @@ const showLightbox = (index: number) => {
 
 // Computed
 const breadcrumbs = computed(() => [
-  { label: $t("client.shop.breadcrumb"), href: "/shop" },
+  { label: t("client.page.shop"), href: "/shop" },
   { label: productDetail.value?.name || "...", href: route.fullPath },
 ]);
 

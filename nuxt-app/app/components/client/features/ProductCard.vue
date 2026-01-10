@@ -23,8 +23,8 @@
       <div class="h-full flex flex-col relative overflow-hidden z-10">
         <div class="absolute z-10 group-hover:backdrop-blur-sm group-hover:bg-white/30 transition-all duration-300 pointer-events-none rounded-lg"></div>
         <div class="relative h-[260px] overflow-hidden z-0">
-          <img :src="mainImage" loading="lazy" :alt="product?.name || $t('client.productCard.mainImage')" class="w-full h-full object-contain transition-opacity duration-300 group-hover:opacity-0" />
-          <img v-if="subImage" :src="subImage" loading="lazy" :alt="product?.name || $t('client.productCard.subImage')" class="w-full h-full object-contain absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <NuxtImg :src="mainImage" loading="lazy" :alt="product?.name || $t('client.productCard.mainImage')" class="w-full h-full object-contain transition-opacity duration-300 group-hover:opacity-0" />
+          <NuxtImg v-if="subImage" :src="subImage" loading="lazy" :alt="product?.name || $t('client.productCard.subImage')" class="w-full h-full object-contain absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </div>
         <div class="px-1 flex-grow flex flex-col justify-between z-0">
           <h3 class="text-sm font-medium text-gray-500 h-10 overflow-hidden leading-5 line-clamp-2">
@@ -123,6 +123,6 @@ const handleAddToCart = async () => {
   } else if (props.product?.productVariants && props.product.productVariants.length > 0) {
     variant = props.product.productVariants[0];
   }
-  await addItem(props.product, variant, 1, false);
+  await addItem(props.product, variant || null, 1, false);
 };
 </script>

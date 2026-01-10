@@ -12,10 +12,15 @@
   </section>
 </template>
 <script setup lang="ts">
+import { ref, onMounted } from "vue";
+import { useI18n } from "vue-i18n";
 import type { IBrand } from "~/interfaces/brand/brand.interface";
 import { brandService } from "~/services/brand/brand.service";
+import { useShopSlider } from "~/composables/useShopSlider";
 
 const { partnerOptions, AutoScroll } = useShopSlider();
+
+const { t } = useI18n();
 
 const props = defineProps<{
   logos?: { src: string; alt?: string }[];
@@ -38,7 +43,7 @@ onMounted(async () => {
         }))
         .filter((item) => !!item.src);
     } catch (e) {
-      console.error("Failed to load brand logos", e);
+      console.error(t("client.common.errorLoading"), e);
     }
   }
 });

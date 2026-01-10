@@ -40,6 +40,8 @@ import { computed, ref, onMounted } from "vue";
 import { useCompare } from "~/composables/client/product/useCompare";
 import ProductCardCompare from "~/components/client/features/ProductCardCompare.vue";
 import { useRoute } from "vue-router";
+import { TOCOMPARE } from "~/utils/constants";
+import { navigateTo } from "#app";
 
 const { compareList, compareCount, isFull, isEmpty, removeFromCompare, clearAll } = useCompare();
 const route = useRoute();
@@ -69,7 +71,7 @@ const openSearchModal = () => {
 };
 
 const goToComparePage = () => {
-  navigateTo("/product/compare");
+  navigateTo(TOCOMPARE);
 };
 
 onMounted(() => {

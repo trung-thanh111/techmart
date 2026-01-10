@@ -22,7 +22,7 @@ const isLoading = ref(false);
 body {
   font-family: "Inter", sans-serif;
   line-height: 1.6;
-  overflow-x: hidden; /* tránh tràn ngang gây khoảng trống trái/phải */
+  overflow-x: hidden;
 }
 
 #app {

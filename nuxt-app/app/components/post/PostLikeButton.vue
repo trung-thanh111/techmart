@@ -6,7 +6,7 @@
     <svg v-else class="w-5 h-5 sm:w-4 sm:h-4 transition-all duration-200 scale-110" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
       <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
     </svg>
-    <span class="text-xs sm:text-sm">{{ likeCount }} {{ $t("client.postDetail.likes") }}</span>
+    <span class="text-xs sm:text-sm">{{ likeCount }} {{ $t("client.post.likes") }}</span>
     <div v-if="isLoading" class="ml-1">
       <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-current"></div>
     </div>

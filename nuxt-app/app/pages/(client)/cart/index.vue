@@ -12,7 +12,7 @@
             </div>
             <h3 class="text-xl font-semibold text-gray-700 mb-2">{{ $t("client.cart.empty") }}</h3>
             <p class="text-gray-500 mb-6">{{ $t("client.cart.emptyDesc") }}</p>
-            <Button :label="$t('client.cart.shopping')" icon="pi pi-arrow-left" @click="navigateTo('/shop')" />
+            <Button :label="$t('client.cart.shopping')" icon="pi pi-arrow-left" @click="navigateTo(TOSHOP)" />
           </div>
 
           <div v-else class="grid grid-cols-12 gap-6 mb-5">
@@ -53,7 +53,7 @@
                         <div class="flex gap-2 md:gap-4 min-w-0">
                           <NuxtImg :src="getProductImage(item)" :alt="getProductName(item)" class="w-14 h-14 md:w-20 md:h-20 object-cover rounded max-w-full" loading="lazy" />
                           <div class="min-w-0 flex-1">
-                            <NuxtLink :to="`/product/${item.product?.slug || ''}`" class="font-medium mb-1 text-xs md:text-sm hover:text-teal-600 line-clamp-custom-2">
+                            <NuxtLink :to="`${PRODUCT}/${item.product?.slug || ''}`" class="font-medium mb-1 text-xs md:text-sm hover:text-teal-600 line-clamp-custom-2">
                               {{ getProductName(item) }}
                             </NuxtLink>
                             <p class="text-xs text-gray-500 truncate">{{ getVariantInfo(item) }}</p>
@@ -97,7 +97,7 @@
               <div class="mt-6 bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
                 <div class="p-4">
                   <div class="flex justify-between items-center gap-2 md:gap-4">
-                    <Button :label="$t('client.cart.shopping')" outlined @click="navigateTo('/shop')" class="!flex items-center gap-1 md:gap-2 px-2 md:px-4 py-1 md:py-2 text-xs md:text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-sm transition-colors duration-200">
+                    <Button :label="$t('client.cart.shopping')" outlined @click="navigateTo(TOSHOP)" class="!flex items-center gap-1 md:gap-2 px-2 md:px-4 py-1 md:py-2 text-xs md:text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-sm transition-colors duration-200">
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                       </svg>
@@ -269,13 +269,15 @@
 </template>
 
 <script setup lang="ts">
+import { ref, computed, onMounted } from "vue";
+import { definePageMeta, navigateTo } from "#imports";
+import { useToast } from "primevue/usetoast";
+import { useI18n } from "vue-i18n";
 import Breadcrumb from "~/components/shared/navigation/Breadcrumb.vue";
 import { useCart } from "~/composables/client/cart/useCart";
 import { formatPrice, resolveAlbum } from "~/utils/helpers";
-import { IMAGEDEFAULT } from "~/utils/constants";
+import { IMAGEDEFAULT, TOSHOP, PRODUCT } from "~/utils/constants";
 import type { ICartItem } from "~/interfaces/cart/cartItem.interface";
-import { useToast } from "primevue/usetoast";
-import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const toast = useToast();

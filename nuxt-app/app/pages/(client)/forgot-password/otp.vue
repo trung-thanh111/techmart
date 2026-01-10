@@ -11,13 +11,13 @@
               </svg>
             </div>
           </div>
-          <h2 class="text-xl text-center font-semibold text-cyan-600 mb-2">Xác thực email của bạn!</h2>
-          <p class="text-sm text-center text-gray-500 my-1">Hãy điền thông tin được gửi đến mail.</p>
+          <h2 class="text-xl text-center font-semibold text-cyan-600 mb-2">{{ $t("client.common.verifyEmail") }}</h2>
+          <p class="text-sm text-center text-gray-500 my-1">{{ $t("client.common.fillInfoSentToEmail") }}</p>
           <p class="font-semibold text-sm text-gray-800 text-center mb-6">{{ values.email }}</p>
           <form class="space-y-4" @submit.prevent.stop="onSubmit">
             <div>
               <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
-                OTP:
+                {{ $t("client.common.otp") }}:
                 <span class="text-red-500">*</span>
               </label>
               <Field v-slot="{ field, errorMessage, meta }" name="code" :validate-on-input="true">
@@ -40,7 +40,7 @@
 
             <Button
               type="submit"
-              label="Xác nhận"
+              :label="$t('client.common.confirm')"
               :loading="isLoading"
               unstyled
               class="w-full text-sm font-semibold flex justify-center py-2 px-4 rounded shadow-sm text-white bg-teal-500 hover:bg-teal-600 focus:outline-none mt-5 disabled:opacity-50"
@@ -65,6 +65,7 @@
 import { Field } from "vee-validate";
 import InputOtp from "primevue/inputotp";
 import { useForgotVerify } from "~/composables/auth/useForgotVerify";
+import { definePageMeta } from "#imports";
 
 definePageMeta({
   layout: "client",

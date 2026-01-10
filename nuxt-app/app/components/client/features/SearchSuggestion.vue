@@ -1,7 +1,7 @@
 <template>
   <div class="relative">
     <form @submit.prevent="onSubmit" class="flex rounded overflow-hidden bg-white shadow-sm">
-      <input v-model="keyword" type="text" name="keyword" :placeholder="$t('client.header.search')" class="flex-1 px-4 py-2 text-gray-600 focus:outline-none" @focus="open = true" @blur="handleBlur" />
+      <input v-model="keyword" type="text" name="keyword" :placeholder="$t('client.nav.search')" class="flex-1 px-4 py-2 text-gray-600 focus:outline-none" @focus="open = true" @blur="handleBlur" />
       <button type="submit" class="bg-[#00b88c] px-3 hover:bg-[#00b88d] transition-colors text-white">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="w-5 h-5">
           <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
@@ -11,7 +11,7 @@
     <div v-if="open" class="absolute w-full bg-white shadow-lg mt-1 rounded z-40">
       <div class="px-4 py-2">
         <div v-if="!keyword.trim()" class="space-y-1">
-          <p v-if="recent.length > 0" class="text-sm font-semibold text-gray-500 mb-2">Tìm Kiếm gần đây</p>
+          <p v-if="recent.length > 0" class="text-sm font-semibold text-gray-500 mb-2">{{ $t("client.search.recentSearches") }}</p>
           <div v-for="(item, idx) in recent" :key="item" class="flex items-center justify-between group p-2 rounded hover:bg-gray-100 cursor-pointer">
             <div @click="useRecent(item)" class="flex items-center gap-2 w-full text-gray-700">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="w-5 h-5 text-gray-400">
@@ -28,14 +28,14 @@
           </div>
         </div>
         <div v-else class="space-y-1 max-h-[200px] overflow-y-auto">
-          <div v-if="suggestions.length === 0" class="text-sm text-gray-500 py-2">Không tìm thấy sản phẩm phù hợp</div>
-          <div v-else class="text-sm text-gray-500 py-2">Gợi ý</div>
+          <div v-if="suggestions.length === 0" class="text-sm text-gray-500 py-2">{{ $t("client.search.noResults") }}</div>
+          <div v-else class="text-sm text-gray-500 py-2">{{ $t("client.search.suggestions") }}</div>
           <div v-for="product in suggestions" :key="product.id" class="flex items-center gap-2 p-2 rounded hover:bg-gray-50">
             <NuxtLink :to="`/product/${product.slug || ''}`" class="flex items-center gap-2 w-full text-gray-700 no-underline">
               <img :src="getProductImage(product)" loading="lazy" alt="" class="w-10 h-8 object-cover rounded flex-shrink-0" />
               <div class="flex-1 min-w-0">
                 <p class="text-sm font-normal text-gray-800 truncate">{{ getProductDisplayName(product) }}</p>
-                <p class="text-xs text-red-600 mt-1">{{ getProductPrice(product) ? formatPrice(getProductPrice(product)) : "Đang cập nhật..." }}</p>
+                <p class="text-xs text-red-600 mt-1">{{ getProductPrice(product) ? formatPrice(getProductPrice(product)) : $t("client.search.updating") }}</p>
               </div>
             </NuxtLink>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="w-4 h-4 flex-shrink-0 text-gray-400">
@@ -48,7 +48,7 @@
         <div class="h-px w-full bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
       </div>
       <div v-if="visibleList.length > 0" class="px-4 py-2">
-        <p class="text-sm font-semibold text-gray-500 mb-2">{{ $t("client.header.featuredProducts") }}</p>
+        <p class="text-sm font-semibold text-gray-500 mb-2">{{ $t("client.common.featuredProducts") }}</p>
         <div class="space-y-1 max-h-[120px] overflow-y-auto">
           <div v-for="product in visibleList" :key="product.id" class="flex items-center justify-between group p-2 rounded hover:bg-gray-100 cursor-pointer">
             <NuxtLink :to="`/product/${product.slug || ''}`" class="flex items-center gap-2 max-w-[90%] text-gray-400 no-underline">
@@ -56,7 +56,7 @@
               <img :src="getProductImage(product)" loading="lazy" alt="" class="w-10 h-8 object-cover rounded flex-shrink-0" />
               <div class="flex-1 min-w-0">
                 <p class="text-sm font-normal text-gray-800 truncate">{{ getProductDisplayName(product) }}</p>
-                <p class="text-xs text-red-600 mt-1">{{ getProductPrice(product) ? formatPrice(getProductPrice(product)) : "Đang cập nhật..." }}</p>
+                <p class="text-xs text-red-600 mt-1">{{ getProductPrice(product) ? formatPrice(getProductPrice(product)) : $t("client.search.updating") }}</p>
               </div>
             </NuxtLink>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="w-4 h-4 flex-shrink-0 text-gray-400">
@@ -75,8 +75,11 @@ import { useDebounceFn } from "@vueuse/core";
 import { useCompare } from "~/composables/client/product/useCompare";
 import { useCart } from "~/composables/client/cart/useCart";
 import { useWishlist } from "~/composables/client/product/useWishlist";
-import { resolveAlbum } from "~/utils/helpers";
+import { resolveAlbum, formatPrice } from "~/utils/helpers";
 import type { IProduct } from "~/interfaces/product/product.interface";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const keyword = ref("");
 const open = ref(false);

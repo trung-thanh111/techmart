@@ -5,15 +5,15 @@
       <div class="flex items-center">
         <div class="backdrop-blur-md bg-gray-200/40 p-8 rounded-lg shadow-lg w-full">
           <h1 class="text-xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00ca9b] mb-2">
-            {{ isLoading ? "Đang tải..." : policy ? getPolicyTitle(policy.keyword as any) : "Không tìm thấy!" }}
+            {{ isLoading ? $t("client.common.loading") : policy ? getPolicyTitle(policy.keyword as any) : $t("client.common.notFound") }}
           </h1>
           <div class="h-1 max-w-64 my-2 relative">
             <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-white via-green-300 to-green-300"></div>
           </div>
           <p class="text-xs md:text-sm leading-6 mt-2 text-gray-900">
-            Nếu bạn có thắc mắc liên quan đến chính sách, cách chúng tôi hỗ trợ bạn chi tiết hơn có thể
-            <NuxtLink to="#" class="underline text-sky-500">liên hệ ngay</NuxtLink>
-            với chúng tôi.
+            {{ $t("client.common.policyContactText") }}
+            <NuxtLink to="#" class="underline text-sky-500">{{ $t("client.common.contactUs") }}</NuxtLink>
+            {{ $t("client.common.withUs") }}
           </p>
         </div>
       </div>
@@ -32,20 +32,20 @@
             <NuxtImg src="/client/images/bg-title-policy.png" alt="image-policy-bg" loading="lazy" class="w-full h-auto object-cover" />
             <div class="absolute inset-0 flex flex-col justify-center items-center gap-2">
               <div class="text-lg md:text-[24px] font-semibold uppercase">
-                {{ isLoading ? "Đang tải..." : policy ? "Chính sách " + getPolicyTitle(policy.keyword as any) : "Không có dữ liệu!" }}
+                {{ isLoading ? $t("client.common.loading") : policy ? "Chính sách " + getPolicyTitle(policy.keyword as any) : $t("client.common.noData") }}
               </div>
-              <p class="text-sm text-gray-600">Cập nhật lần cuối: {{ policy ? new Date(policy.updatedAt).toLocaleDateString("vi-VN") : "" }}</p>
+              <p class="text-sm text-gray-600">{{ $t("client.common.lastUpdated") }} {{ policy ? new Date(policy.updatedAt).toLocaleDateString("vi-VN") : "" }}</p>
             </div>
           </div>
           <div class="prose" v-if="isLoading">
-            <div class="text-center text-gray-500">Đang tải nội dung...</div>
+            <div class="text-center text-gray-500">{{ $t("client.common.loadingContent") }}</div>
           </div>
           <div class="prose" v-else-if="policy && policy.content" v-html="policy.content"></div>
           <div class="prose" v-else-if="error">
             <div class="text-center text-red-500">{{ error }}</div>
           </div>
           <div class="prose" v-else>
-            <div class="text-center text-gray-500">Nội dung đang được cập nhật...</div>
+            <div class="text-center text-gray-500">{{ $t("client.common.updatingContent") }}</div>
           </div>
         </div>
       </main>
@@ -54,10 +54,13 @@
 </template>
 <script setup lang="ts">
 import type { ISystem } from "~/interfaces/system/system.interface";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { systemService } from "~/services/system/system.service";
 import { getPolicyTitle } from "~/utils/system/policy";
 import SidebarPolicy from "~/components/client/navigation/SidebarPolicy.vue";
+import { useRoute, useRouter } from "vue-router";
+import { TOPRIVACYPOLICY } from "~/utils/constants";
+import { definePageMeta } from "#imports";
 
 const route = useRoute();
 const router = useRouter();
@@ -88,7 +91,7 @@ onMounted(async () => {
   const keyword = route.params.keyword as string;
 
   if (!keyword) {
-    await router.replace("/policy/privacy_policy");
+    await router.replace(TOPRIVACYPOLICY);
     return;
   }
 

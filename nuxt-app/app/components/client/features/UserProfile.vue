@@ -1,1 +1,0 @@
-<!-- UserProfile.vue - placeholder --> 

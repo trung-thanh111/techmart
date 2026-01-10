@@ -27,16 +27,15 @@ import { computed } from "vue";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/stores/auth/auth";
 import { formatDate } from "@/utils/helpers";
+import { DEFAULTAVATAR } from "~/utils/constants";
 
 const authStore = useAuthStore();
 const { user } = storeToRefs(authStore);
 
-const DEFAULT_AVATAR = "/shared/images/defaults/avatar.jpg";
-
 const avatar = computed(() => {
   const img = user.value?.image;
-  if (img && img.path) return img.url || DEFAULT_AVATAR;
-  return DEFAULT_AVATAR;
+  if (img && img.path) return img.url || DEFAULTAVATAR;
+  return DEFAULTAVATAR;
 });
 
 const formattedJoinedAt = computed(() => {

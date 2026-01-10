@@ -18,22 +18,22 @@
             <div class="py-1">
               <button @click="replyToComment" class="flex items-center w-full px-4 py-2 text-xs text-gray-700 hover:bg-gray-100">
                 <i class="fa-solid fa-reply text-gray-400 text-sm mr-2"></i>
-                <span>Trả lời</span>
+                <span>{{ $t("client.action.reply") }}</span>
               </button>
               <button v-if="canHide" @click="hideComment" class="flex items-center w-full px-4 py-2 text-xs text-gray-700 hover:bg-gray-100">
                 <i class="fas fa-eye-slash text-gray-400 text-sm mr-2"></i>
-                <span>Ẩn bình luận</span>
+                <span>{{ $t("client.action.hide") }}</span>
               </button>
               <button class="flex items-center w-full px-4 py-2 text-xs text-gray-700 hover:bg-gray-100">
                 <i class="fa-solid fa-circle-exclamation text-gray-400 text-sm mr-2"></i>
-                <span>Báo cáo</span>
+                <span>{{ $t("client.action.report") }}</span>
               </button>
             </div>
             <div v-if="canDelete" class="border-t border-gray-200">
               <div class="py-1">
                 <button @click="openDeleteModal" class="flex items-center w-full px-4 py-2 text-xs text-red-700 hover:bg-red-100">
                   <i class="fa-solid fa-trash text-sm mr-2"></i>
-                  <span>Xóa</span>
+                  <span>{{ $t("client.action.delete") }}</span>
                 </button>
               </div>
             </div>
@@ -50,14 +50,14 @@
         <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
         </svg>
-        <span>{{ state.likeCount }} thích</span>
+        <span>{{ state.likeCount }} {{ $t("client.post.likes") }}</span>
       </button>
-      <span v-if="!isRoot && replyCount > 0" class="text-gray-500">bình luận ({{ replyCount }})</span>
+      <span v-if="!isRoot && replyCount > 0" class="text-gray-500">{{ $t("client.post.comment") }} ({{ replyCount }})</span>
       <button v-if="isRoot && replyCount > 0" @click="isExpanded = !isExpanded" class="hover:underline hover:text-sky-600">
-        <span v-if="!isExpanded">Hiển thị {{ replyCount }} phản hồi</span>
-        <span v-else>Ẩn phản hồi</span>
+        <span v-if="!isExpanded">{{ $t("client.post.showReplies", { count: replyCount }) }}</span>
+        <span v-else>{{ $t("client.post.hideReplies") }}</span>
       </button>
-      <button @click="replyToComment" class="hover:underline hover:text-sky-500">trả lời</button>
+      <button @click="replyToComment" class="hover:underline hover:text-sky-500">{{ $t("client.action.reply") }}</button>
     </div>
 
     <!-- đệ quy chính nó -> hiển thị cmt reply -->
@@ -77,15 +77,15 @@
             </div>
           </div>
           <div>
-            <h3 class="text-base font-semibold text-gray-900">Xóa bình luận</h3>
-            <p class="mt-2 text-sm text-gray-600">Bạn có chắc chắn muốn xóa bình luận này?</p>
+            <h3 class="text-base font-semibold text-gray-900">{{ $t("client.post.deleteComment") }}</h3>
+            <p class="mt-2 text-sm text-gray-600">{{ $t("client.post.confirmDeleteComment") }}</p>
             <div class="mt-4">
-              <p class="text-[12px] text-gray-500 mb-1">Bình luận</p>
+              <p class="text-[12px] text-gray-500 mb-1">{{ $t("client.post.comment") }}</p>
               <input :value="node.content" type="text" class="w-full border border-red-300 rounded px-3 py-2 text-sm text-red-600 bg-red-50" readonly />
             </div>
             <div class="mt-5 flex justify-end gap-3">
-              <button type="button" class="px-4 py-1 rounded border border-gray-300 bg-white text-gray-700 text-xs hover:bg-gray-50" @click="closeDeleteModal">Hủy</button>
-              <button type="button" class="px-4 py-1 rounded bg-red-600 text-white text-xs hover:bg-red-700 disabled:opacity-50" @click="deleteComment">Xóa</button>
+              <button type="button" class="px-4 py-1 rounded border border-gray-300 bg-white text-gray-700 text-xs hover:bg-gray-50" @click="closeDeleteModal">{{ $t("client.action.cancel") }}</button>
+              <button type="button" class="px-4 py-1 rounded bg-red-600 text-white text-xs hover:bg-red-700 disabled:opacity-50" @click="deleteComment">{{ $t("client.action.delete") }}</button>
             </div>
           </div>
         </div>
@@ -95,7 +95,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import { useAuth } from "~/composables/auth/useAuth";
 import { postCommentService } from "~/services/post/comment.service";
 import { useAppToast } from "~/composables/useAppToast";

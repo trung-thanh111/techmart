@@ -1,14 +1,14 @@
 <template>
   <div class="main-content rounded-lg h-screen overflow-hidden">
     <div class="relative w-full h-full">
-      <nuxt-img src="/client/images/bg-auth.png" alt="image-background" class="w-full h-full object-cover" loading="lazy" />
+      <NuxtImg src="/client/images/bg-auth.png" alt="image-background" class="w-full h-full object-cover" loading="lazy" />
       <div class="absolute inset-0 flex items-center justify-center">
         <div class="flex flex-col lg:flex-row max-w-4xl w-full mx-auto overflow-hidden lg:h-[560px]">
           <div class="relative lg:w-1/2 hidden lg:block h-full">
-            <nuxt-img src="/client/images/showroom/image-showroom.jpg" alt="Nền đăng nhập" class="absolute inset-0 w-full h-full object-cover z-0" loading="lazy" />
+            <NuxtImg src="/client/images/showroom/image-showroom.jpg" alt="background đăng nhập" class="absolute inset-0 w-full h-full object-cover z-0" loading="lazy" />
             <div class="absolute inset-0 bg-sky-200/80 opacity-90 z-10"></div>
             <div class="relative z-40 flex flex-col p-6 lg:p-8 h-full">
-              <nuxt-img src="/shared/images/logo/logo-website.png" alt="Logo" class="w-40 h-8 mb-6" loading="lazy" />
+              <NuxtImg src="/shared/images/logo/logo-website.png" alt="Logo" class="w-40 h-8 mb-6" loading="lazy" />
               <div class="flex-grow"></div>
               <i class="fas fa-quote-left text-4xl text-teal-500 mb-2"></i>
               <div class="overflow-blur-content absolute bottom-0 left-0 w-full h-full max-h-40 transparent-img bg-gradient-to-t from-gray-500"></div>
@@ -20,8 +20,8 @@
             </div>
           </div>
           <div class="flex flex-col justify-center p-6 lg:p-8 w-full lg:w-1/2 bg-white max-w-xs sm:max-w-sm md:max-w-md mx-auto">
-            <h2 class="text-xl font-semibold text-cyan-600 mb-1 text-center">Chào mừng trở lại!</h2>
-            <p class="text-sm text-gray-500 mb-6 text-center">Đăng nhập để tiếp tục sử dụng bạn nhé.</p>
+            <h2 class="text-xl font-semibold text-cyan-600 mb-1 text-center">{{ $t("auth.welcomeBack") }}</h2>
+            <p class="text-sm text-gray-500 mb-6 text-center">{{ $t("auth.loginDescription") }}</p>
 
             <form @submit.prevent="handleLogin" class="space-y-6">
               <!-- field -->
@@ -75,7 +75,7 @@
                 }"
               />
               <div class="text-center mt-4">
-                <p class="text-xs text-gray-600 mb-4">Hoặc đăng nhập bằng</p>
+                <p class="text-xs text-gray-600 mb-4">{{ $t("auth.orLoginWith") }}</p>
                 <div class="flex justify-center gap-2">
                   <a href="#" tabindex="-1" class="bg-blue-600 text-white w-8 h-8 flex items-center justify-center rounded-full hover:bg-blue-700"><i class="fab fa-facebook-f"></i></a>
                   <a href="#" tabindex="-1" class="bg-red-600 text-white w-8 h-8 flex items-center justify-center rounded-full hover:bg-red-700"><i class="fab fa-google"></i></a>
@@ -86,8 +86,8 @@
             </form>
 
             <p class="mt-6 text-center text-sm text-gray-600">
-              Chưa có tài khoản?
-              <NuxtLink :to="TOREGISTER" class="text-cyan-600 hover:underline">Đăng ký</NuxtLink>
+              {{ $t("auth.noAccount") }}
+              <NuxtLink :to="TOREGISTER" class="text-cyan-600 hover:underline">{{ $t("auth.register") }}</NuxtLink>
             </p>
           </div>
         </div>
@@ -102,16 +102,16 @@ import { TOREGISTER, TOFORGOT } from "~/utils/constants";
 import { useLogin } from "~/composables/auth/useLogin";
 import { useAuthSlider } from "~/composables/useAuthSlider";
 
-definePageMeta({
-  middleware: "auth-redirect",
-  layout: "auth",
-});
-
 // States
 const showPassword = ref(false);
 const { authOptions, loginItems } = useAuthSlider();
 
 const { handleLogin, isLoading } = useLogin();
+
+definePageMeta({
+  middleware: "auth-redirect",
+  layout: "auth",
+});
 </script>
 
 <style>

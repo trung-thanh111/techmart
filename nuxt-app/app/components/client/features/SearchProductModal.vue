@@ -43,15 +43,15 @@
         </div>
 
         <div v-if="!isLoading && ((searchQuery && searchResults.length === 0) || (!searchQuery && featuredProducts.length === 0))" class="text-center py-8 text-gray-500">
-          <p>{{ searchQuery ? "Không tìm thấy sản phẩm" : "Không có sản phẩm nổi bật" }}</p>
+          <p>{{ searchQuery ? $t("client.searchModal.noResults") : $t("client.searchModal.noFeaturedProducts") }}</p>
         </div>
       </div>
     </div>
 
     <template #footer>
       <div v-if="selectionMode === 'checkbox' && selectedProducts.length > 0" class="flex justify-between items-center">
-        <span class="text-sm text-gray-600">{{ selectedProducts.length }} sản phẩm đã chọn</span>
-        <Button label="Thêm vào so sánh" icon="pi pi-check" @click="handleAddSelected" :disabled="isAdding" />
+        <span class="text-sm text-gray-600">{{ $t("client.searchModal.selectedProducts", { count: selectedProducts.length }) }}</span>
+        <Button :label="$t('client.searchModal.addToCompare')" icon="pi pi-check" @click="handleAddSelected" :disabled="isAdding" />
       </div>
     </template>
   </Dialog>
@@ -65,6 +65,9 @@ import { useToast } from "primevue/usetoast";
 import { useDebounceFn } from "@vueuse/core";
 import { productService } from "~/services/product/product.service";
 import type { IProduct } from "~/interfaces/product/product.interface";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 interface Props {
   modelValue: boolean;
@@ -156,8 +159,8 @@ const toggleSelection = (product: IProduct) => {
     if (selectedProducts.value.length + currentCount >= 3) {
       toast.add({
         severity: "warn",
-        summary: "Thông báo",
-        detail: "Chỉ được chọn tối đa 3 sản phẩm",
+        summary: t("client.common.info"),
+        detail: t("client.searchModal.maxProductsWarning"),
         life: 3000,
       });
       return;
@@ -202,8 +205,8 @@ const addProductToCompare = async (product: IProduct) => {
         console.error("Error loading product detail:", error);
         toast.add({
           severity: "error",
-          summary: "Lỗi",
-          detail: "Không thể tải thông tin sản phẩm",
+          summary: t("client.message.error"),
+          detail: t("client.searchModal.productLoadError"),
           life: 3000,
         });
         return;
@@ -215,8 +218,8 @@ const addProductToCompare = async (product: IProduct) => {
     if (!firstVariant || !firstVariant.id) {
       toast.add({
         severity: "error",
-        summary: "Lỗi",
-        detail: "Sản phẩm không có phiên bản",
+        summary: t("client.message.error"),
+        detail: t("client.searchModal.noVariantError"),
         life: 3000,
       });
       return;
@@ -233,8 +236,8 @@ const addProductToCompare = async (product: IProduct) => {
     console.error("Error adding product to compare:", error);
     toast.add({
       severity: "error",
-      summary: "Lỗi",
-      detail: "Không thể thêm sản phẩm vào danh sách so sánh",
+      summary: t("client.message.error"),
+      detail: t("client.searchModal.addError"),
       life: 3000,
     });
   }
