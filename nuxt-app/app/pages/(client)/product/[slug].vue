@@ -417,7 +417,7 @@
                     <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM169.8 165.3c7.9-22.3 29.1-37.3 52.8-37.3l58.3 0c34.9 0 63.1 28.3 63.1 63.1c0 22.6-12.1 43.5-31.7 54.8L280 264.4c-.2 13-10.9 23.6-24 23.6c-13.3 0-24-10.7-24-24l0-13.5c0-8.6 4.6-16.5 12.1-20.8l44.3-25.4c4.7-2.7 7.6-7.7 7.6-13.1c0-8.4-6.8-15.1-15.1-15.1l-58.3 0c-3.4 0-6.4 2.1-7.5 5.3l-.4 1.2c-4.4 12.5-18.2 19-30.6 14.6s-19-18.2-14.6-30.6l.4-1.2zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z" />
                   </svg>
                 </span>
-                <span class="hidden md:inline">{{ $t("nav.faq") }}</span>
+                <span class="hidden md:inline">{{ $t("client.nav.faq") }}</span>
               </div>
               <div id="tab-info-rating" class="flex-1 flex-shrink-0 p-2 md:p-3 font-semibold text-center whitespace-normal duration-75 cursor-pointer tabs_item text-gray-700 bg-white hover:bg-gradient-to-r hover:from-sky-500 hover:to-sky-600 hover:text-white" @click="activeTab = 'rating'">
                 <span class="inline-block md:hidden">
@@ -511,17 +511,17 @@
             <div class="p-4">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white rounded-md shadow-md p-3 mb-5">
                 <div class="space-y-4">
-                  <h2 class="text-2xl font-bold text-gray-700">Đánh Giá Khách Hàng</h2>
-                  <p class="text-gray-600 text-sm">Chiếc ghế này sử dụng chất liệu đệm an toàn, thân thiện với môi trường, mang lại cảm giác êm ái và dễ chịu khi sử dụng.</p>
+                  <h2 class="text-2xl font-bold text-gray-700">{{ $t("client.product.customerReviewsTitle") }}</h2>
+                  <p class="text-gray-600 text-sm">{{ $t("client.product.customerReviewsDescription") }}</p>
                   <p class="text-gray-600 text-sm">Vải bọc cao cấp, mềm mại nhưng vẫn bền đẹp theo thời gian, với nhiều tông màu đa dạng để bạn dễ dàng lựa chọn theo phong cách nội thất.</p>
                 </div>
                 <div class="">
                   <div class="flex items-center justify-between mb-2">
                     <div>
                       <p class="text-sm text-gray-500">
-                        Dựa trên
+                        {{ $t("client.product.basedOn") }}
                         <span class="text-sky-500">254</span>
-                        đánh giá
+                        {{ $t("client.product.reviews") }}
                       </p>
                       <p class="text-3xl font-bold text-gray-900">4.0</p>
                     </div>
@@ -578,9 +578,9 @@
               </div>
               <!-- RIGHT: Ratings -->
               <div class="max-w-2xl mx-auto">
-                <h1 class="text-2xl font-bold text-gray-600 mb-4 text-center tracking-wide">Cảm nghĩ của bạn</h1>
+                <h1 class="text-2xl font-bold text-gray-600 mb-4 text-center tracking-wide">{{ $t("client.product.yourThoughtsTitle") }}</h1>
                 <form class="rounded-md bg-gray-100 overflow-hidden shadow-md">
-                  <textarea class="w-full p-4 text-gray-600 placeholder-gray-500 focus:outline-none resize-none bg-gray-100" rows="4" placeholder="Bạn đang nghĩ gì ..." required></textarea>
+                  <textarea class="w-full p-4 text-gray-600 placeholder-gray-500 focus:outline-none resize-none bg-gray-100" rows="4" :placeholder="$t('client.product.yourThoughtsPlaceholder')" required></textarea>
                   <div class="flex items-center justify-between bg-gray-300 px-4 py-2">
                     <div class="flex items-center space-x-4 text-gray-600">
                       <!-- Image icon -->
@@ -600,7 +600,7 @@
               </div>
               <!-- COMMENT LIST -->
               <div class="max-w-2xl mx-auto space-y-4 mt-6">
-                <h1 class="text-xl font-bold text-gray-500 mb-4">Đánh giá của mọi người (23)</h1>
+                <h1 class="text-xl font-bold text-gray-500 mb-4">{{ $t("client.product.reviewsTitle", { count: 23 }) }}</h1>
                 <!-- Comment Card -->
                 <div v-for="product_reviews in 5" :key="product_reviews" class="bg-white border border-gray-200 p-4 rounded-lg shadow-sm">
                   <div class="flex items-center justify-between mb-2">
@@ -624,29 +624,29 @@
                           <div class="py-1">
                             <NuxtLink to="pages-profile.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                               <i class="fa-regular fa-user text-gray-400 text-md mr-2"></i>
-                              <span>Profile</span>
+                              <span>{{ $t("client.product.userMenu.profile") }}</span>
                             </NuxtLink>
 
                             <NuxtLink to="apps-chat.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                               <i class="fa-regular fa-comment-dots text-gray-400 text-md mr-2"></i>
-                              <span>Messages</span>
+                              <span>{{ $t("client.product.userMenu.messages") }}</span>
                             </NuxtLink>
 
                             <NuxtLink to="apps-tasks-kanban.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                               <i class="fa-regular fa-calendar-check text-gray-400 text-md mr-2"></i>
-                              <span>Taskboard</span>
+                              <span>{{ $t("client.product.userMenu.taskboard") }}</span>
                             </NuxtLink>
 
                             <NuxtLink to="pages-faqs.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                               <i class="fa-solid fa-life-ring text-gray-400 text-md mr-2"></i>
-                              <span>Help</span>
+                              <span>{{ $t("client.product.userMenu.help") }}</span>
                             </NuxtLink>
                           </div>
                           <div class="border-t border-gray-200"></div>
                           <div class="py-1">
                             <NuxtLink to="auth-logout-basic.html" class="flex items-center px-4 py-2 text-sm text-red-700 hover:bg-red-100">
                               <i class="fa-solid fa-arrow-right-from-bracket text-md mr-2"></i>
-                              <span>Logout</span>
+                              <span>{{ $t("client.product.userMenu.logout") }}</span>
                             </NuxtLink>
                           </div>
                         </div>
@@ -659,9 +659,9 @@
                       <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                         <path d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8l0-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5l0 3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20-.1-.1s0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5l0 3.3c0 28.5 11.9 55.8 32.8 75.2L256 430.7 431.2 268c20.9-19.4 32.8-46.7 32.8-75.2l0-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z" />
                       </svg>
-                      <span>11 thích</span>
+                      <span>11 {{ $t("client.product.likes") }}</span>
                     </span>
-                    <button class="hover:underline hover:text-sky-500">trả lời</button>
+                    <button class="hover:underline hover:text-sky-500">{{ $t("client.product.reply") }}</button>
                   </div>
                 </div>
 
@@ -688,29 +688,29 @@
                           <div class="py-1">
                             <NuxtLink to="pages-profile.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                               <i class="fa-regular fa-user text-gray-400 text-md mr-2"></i>
-                              <span>Profile</span>
+                              <span>{{ $t("client.product.userMenu.profile") }}</span>
                             </NuxtLink>
 
                             <NuxtLink to="apps-chat.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                               <i class="fa-regular fa-comment-dots text-gray-400 text-md mr-2"></i>
-                              <span>Messages</span>
+                              <span>{{ $t("client.product.userMenu.messages") }}</span>
                             </NuxtLink>
 
                             <NuxtLink to="apps-tasks-kanban.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                               <i class="fa-regular fa-calendar-check text-gray-400 text-md mr-2"></i>
-                              <span>Taskboard</span>
+                              <span>{{ $t("client.product.userMenu.taskboard") }}</span>
                             </NuxtLink>
 
                             <NuxtLink to="pages-faqs.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                               <i class="fa-solid fa-life-ring text-gray-400 text-md mr-2"></i>
-                              <span>Help</span>
+                              <span>{{ $t("client.product.userMenu.help") }}</span>
                             </NuxtLink>
                           </div>
                           <div class="border-t border-gray-200"></div>
                           <div class="py-1">
                             <NuxtLink to="auth-logout-basic.html" class="flex items-center px-4 py-2 text-sm text-red-700 hover:bg-red-100">
                               <i class="fa-solid fa-arrow-right-from-bracket text-md mr-2"></i>
-                              <span>Logout</span>
+                              <span>{{ $t("client.product.userMenu.logout") }}</span>
                             </NuxtLink>
                           </div>
                         </div>
@@ -723,9 +723,9 @@
                       <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                         <path d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8l0-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5l0 3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20-.1-.1s0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5l0 3.3c0 28.5 11.9 55.8 32.8 75.2L256 430.7 431.2 268c20.9-19.4 32.8-46.7 32.8-75.2l0-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z" />
                       </svg>
-                      <span>11 thích</span>
+                      <span>11 {{ $t("client.product.likes") }}</span>
                     </span>
-                    <button class="hover:underline hover:text-sky-500">trả lời</button>
+                    <button class="hover:underline hover:text-sky-500">{{ $t("client.product.reply") }}</button>
                   </div>
                 </div>
               </div>
@@ -744,13 +744,13 @@
         <div class="mb-4 md:mb-8">
           <div class="flex justify-between items-center space-x-2">
             <div class="head-section-product">
-              <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-xl md:text-3xl font-bold">Có thể bạn sẽ thích</h2>
+              <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-xl md:text-3xl font-bold">{{ $t("client.product.youMightLike") }}</h2>
               <div class="h-1 max-w-48 my-1 md:my-2 relative">
                 <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-white via-green-300 to-green-300"></div>
               </div>
             </div>
           </div>
-          <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("client.header.lighting_description") }}</p>
+          <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("client.header.lightingDescription") }}</p>
         </div>
         <div class="col-span-5 min-w-0">
           <Splide :options="productRelatedOptions(relatedProducts.length)" id="product-related-slide">
@@ -776,7 +776,7 @@ import { useWishlist } from "~/composables/client/product/useWishlist";
 import { useCompare } from "~/composables/client/product/useCompare";
 import { useCart } from "~/composables/client/cart/useCart";
 import type { IPromotion, IPromotionTarget } from "~/interfaces/promotion/promotion.interface";
-import { TOEXCHANGEPOLICY, TOAGENCYSYSTEM, HOTLINE, TOPOLICIES, TOCART } from "~/utils/constants";
+import { TOEXCHANGEPOLICY, TOAGENCYSYSTEM, HOTLINE, TOCART } from "~/utils/constants";
 import { useRoute } from "vue-router";
 import { computed, nextTick, onMounted, ref, watch } from "vue";
 import { navigateTo } from "#app";
@@ -832,7 +832,7 @@ const showLightbox = (index: number) => {
 
 // Computed
 const breadcrumbs = computed(() => [
-  { label: t("client.page.shop"), href: "/shop" },
+  { label: t("client.page.shop"), href: TOSHOP },
   { label: productDetail.value?.name || "...", href: route.fullPath },
 ]);
 

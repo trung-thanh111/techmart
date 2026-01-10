@@ -53,7 +53,7 @@
           <div class="py-2 text-center h-[42px]">
             <template v-if="product?.warranty">
               <span class="inline-flex items-center bg-sky-50 w-full rounded-sm px-2 py-1 text-[10px] text-sky-700">
-                {{ `Bảo hành ${product.warranty} tháng tại các cơ sở` }}
+                {{ $t("client.productCard.warrantyText", { months: product.warranty }) }}
               </span>
             </template>
           </div>

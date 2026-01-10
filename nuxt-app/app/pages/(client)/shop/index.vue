@@ -51,8 +51,8 @@
         <div class="flex-1 w-full">
           <div class="flex justify-between items-center mb-3 md:mb-4">
             <span class="text-xs md:text-sm">
-              Hiển thị
-              <span class="text-sky-400 underline">{{ totalProducts }} kết quả</span>
+              {{ $t("client.common.display") }}
+              <span class="text-sky-400 underline">{{ totalProducts }} {{ $t("client.common.results") }}</span>
             </span>
             <FilterSort :sort="filters.sort" :setSort="setSort" />
           </div>
@@ -200,7 +200,7 @@ const next = async () => {
   splideRef.value?.splide?.go("+");
 };
 
-const breadcrumbs = [{ label: t("nav.shop"), href: TOSHOP }];
+const breadcrumbs = [{ label: t("client.nav.shop"), href: TOSHOP }];
 
 definePageMeta({ layout: "client" });
 </script>

@@ -78,32 +78,32 @@ definePageMeta({ layout: "client" });
         <form class="mx-auto max-w-xl my-2 md:my-4" id="formContact">
           <div class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
             <div class="sm:col-span-2">
-              <label for="company" class="block text-sm font-semibold leading-6 text-gray-900">{{ $t("client.faq.fullName") }}</label>
+              <label for="company" class="block text-sm font-semibold leading-6 text-gray-900">{{ $t("client.common.form.fullName") }}</label>
               <div class="mt-1.5">
-                <input required type="text" name="company" id="company" autocomplete="organization" placeholder="Your Company Name" class="block w-full border border-gray-200 rounded-md px-3 py-2 focus:outline-none text-gray-900 shadow-sm placeholder:text-gray-400 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 text-sm" />
+                <input required type="text" name="company" id="company" autocomplete="organization" :placeholder="$t('client.common.form.fullNamePlaceholder')" class="block w-full border border-gray-200 rounded-md px-3 py-2 focus:outline-none text-gray-900 shadow-sm placeholder:text-gray-400 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 text-sm" />
               </div>
             </div>
             <div class="sm:col-span-2">
-              <label for="email" class="block text-sm font-semibold leading-6 text-gray-900">{{ $t("client.faq.email") }}</label>
+              <label for="email" class="block text-sm font-semibold leading-6 text-gray-900">{{ $t("client.common.form.email") }}</label>
               <div class="mt-1.5">
-                <input required type="email" name="email" id="email" autocomplete="email" placeholder="Your Email Address" class="block w-full border border-gray-200 rounded-md px-3 py-2 focus:outline-none text-gray-900 shadow-sm placeholder:text-gray-400 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 text-sm" />
+                <input required type="email" name="email" id="email" autocomplete="email" :placeholder="$t('client.common.form.emailPlaceholder')" class="block w-full border border-gray-200 rounded-md px-3 py-2 focus:outline-none text-gray-900 shadow-sm placeholder:text-gray-400 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 text-sm" />
               </div>
             </div>
             <div class="sm:col-span-2">
-              <label for="phone" class="block text-sm font-semibold leading-6 text-gray-900">{{ $t("client.faq.subject") }}</label>
+              <label for="phone" class="block text-sm font-semibold leading-6 text-gray-900">{{ $t("client.common.form.subject") }}</label>
               <div class="mt-1.5">
-                <input required type="tel" name="phone" id="phone" autocomplete="tel" placeholder="Your Phone Number" class="block w-full border border-gray-200 rounded-md px-3 py-2 focus:outline-none text-gray-900 shadow-sm placeholder:text-gray-400 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 text-sm" />
+                <input required type="tel" name="phone" id="phone" autocomplete="tel" :placeholder="$t('client.common.form.subjectPlaceholder')" class="block w-full border border-gray-200 rounded-md px-3 py-2 focus:outline-none text-gray-900 shadow-sm placeholder:text-gray-400 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 text-sm" />
               </div>
             </div>
             <div class="sm:col-span-2">
-              <label for="message" class="block text-sm font-semibold leading-6 text-gray-900">{{ $t("client.faq.content") }}</label>
+              <label for="message" class="block text-sm font-semibold leading-6 text-gray-900">{{ $t("client.common.form.content") }}</label>
               <div class="mt-1.5">
-                <textarea name="message" id="message" rows="4" placeholder="Share your thoughts..." class="block w-full border border-gray-200 rounded-md px-3 py-2 focus:outline-none text-gray-900 shadow-sm placeholder:text-gray-400 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 text-sm"></textarea>
+                <textarea name="message" id="message" rows="4" :placeholder="$t('client.common.form.contentPlaceholder')" class="block w-full border border-gray-200 rounded-md px-3 py-2 focus:outline-none text-gray-900 shadow-sm placeholder:text-gray-400 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 text-sm"></textarea>
               </div>
             </div>
           </div>
           <div class="mt-6 flex justify-end">
-            <button type="submit" class="inline-block bg-cyan-600 text-white rounded-sm py-1 md:py-2 px-4 md:px-6 hover:bg-cyan-700 transition">{{ $t("client.faq.confirm") }}</button>
+            <button type="submit" class="inline-block bg-cyan-600 text-white rounded-sm py-1 md:py-2 px-4 md:px-6 hover:bg-cyan-700 transition">{{ $t("client.common.form.confirm") }}</button>
           </div>
         </form>
       </div>

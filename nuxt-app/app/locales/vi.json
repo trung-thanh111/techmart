@@ -958,6 +958,8 @@
   },
   "client": {
     "common": {
+      "price": "Giá",
+      "display": "Hiển thị ",
       "noData": "Không có dữ liệu",
       "viewAll": "Xem tất cả",
       "viewMore": "Xem thêm",
@@ -1337,6 +1339,13 @@
       "mainImage": "Ảnh chính",
       "subImage": "Ảnh phụ"
     },
+    "productCard": {
+      "sampleProductName": "Tên sản phẩm mẫu",
+      "bestSeller": "Bán chạy",
+      "goodPrice": "Giá tốt",
+      "hotSale": "Cháy hàng",
+      "warrantyText": "Bảo hành {months} tháng tại các cơ sở"
+    },
     "post": {
       "breadcrumb": "Bài viết",
       "featured": "Nổi bật",
@@ -1389,7 +1398,27 @@
       "itemsAddedToCart": "{count} sản phẩm đã thêm vào giỏ hàng",
       "selectItemsToCheckout": "Vui lòng chọn sản phẩm cần thanh toán",
       "errorSync": "Có lỗi khi đồng bộ giỏ hàng. Vui lòng kiểm tra lại.",
-      "productNotFound": "Không tìm thấy sản phẩm"
+      "productNotFound": "Không tìm thấy sản phẩm",
+      "removeItem": "Xóa sản phẩm",
+      "clearCart": "Xóa giỏ hàng",
+      "removeItemConfirm": "Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?",
+      "clearCartConfirm": "Bạn có chắc chắn muốn xóa tất cả sản phẩm trong giỏ hàng?",
+      "clearCartWarning": "Hành động này không thể hoàn tác.",
+      "unitPrice": "Đơn giá",
+      "quantity": "Số lượng",
+      "total": "Thành tiền",
+      "order": "Đơn hàng",
+      "coupon": "Mã giảm giá",
+      "couponPlaceholder": "Nhập mã giảm giá",
+      "applyCoupon": "Áp dụng",
+      "subtotal": "Thành tiền",
+      "discount": "Giảm giá",
+      "shipping": "Phí vận chuyển",
+      "taxPercent": "Thuế VAT ({percent}%)",
+      "grandTotal": "Tổng tiền",
+      "proceedToCheckout": "Tiến hành thanh toán",
+      "error": "Lỗi",
+      "cancel": "Hủy"
     },
     "profile": {
       "breadcrumb": "Quản lý tài khoản",
@@ -1453,6 +1482,8 @@
       }
     },
     "faq": {
+      "title": "Câu hỏi thường gặp",
+      "viewDetails": "Xem chi tiết",
       "breadcrumb": "Câu hỏi thường gặp",
       "breadcrumbDetail": "Câu hỏi",
       "havingQuestions": "Bạn đang gặp thắc mắc",
@@ -1466,6 +1497,7 @@
       "faqGroup": "Nhóm câu hỏi"
     },
     "agency": {
+      "searchPlaceholder": "Tìm kiếm đại lý",
       "breadcrumb": "Hệ thống đại lý",
       "breadcrumbDetail": "Đại lý",
       "distributionTitle": "Hệ thống phân phối và đại lý Tech Mart",
@@ -1612,14 +1644,49 @@
       "noSpecFound": "Không tìm thấy thông số kỹ thuật",
       "exploreCategories": "Khám phá các danh mục công nghệ đa dạng tại Tech Mart Store – từ thiết bị điện tử, gia dụng thông minh đến phụ kiện hiện đại, đáp ứng nhu cầu học tập, làm việc và giải trí của bạn.",
       "price": "Giá",
-      "filter": "Bộ lọc",
+      "productCount": "sản phẩm",
+      "display": "Hiển thị",
+      "results": "kết quả"
+    },
+    "search": {
+      "recentSearches": "Tìm kiếm gần đây",
+      "noResults": "Không tìm thấy sản phẩm phù hợp",
+      "suggestions": "Gợi ý",
+      "updating": "Đang cập nhật...",
+      "breadcrumb": "Tìm kiếm",
       "selectPriceRange": "Chọn khoảng giá",
       "under1000000": "Dưới 1.000.000đ",
       "from2000000to5000000": "Từ 2.000.000đ - 5.000.000đ",
       "from5000000to10000000": "Từ 5.000.000đ - 10.000.000đ",
       "over10000000": "Trên 10.000.000đ",
       "cataloguePlaceholder": "Danh mục",
-      "brandPlaceholder": "Thương hiệu"
+      "brandPlaceholder": "Thương hiệu",
+      "filter": {
+        "newest": "Mới nhất",
+        "oldest": "Cũ nhất",
+        "price_high": "Giá: Cao đến thấp",
+        "price_low": "Giá: Thấp đến cao",
+        "best_seller": "Bán chạy nhất"
+      },
+      "form": {
+        "fullName": "Họ tên",
+        "fullNamePlaceholder": "Tên công ty của bạn",
+        "email": "Email",
+        "emailPlaceholder": "Địa chỉ email của bạn",
+        "subject": "Chủ đề",
+        "subjectPlaceholder": "Số điện thoại của bạn",
+        "content": "Nội dung",
+        "contentPlaceholder": "Chia sẻ suy nghĩ của bạn...",
+        "confirm": "Xác nhận"
+      }
+    },
+    "wishlist": {
+      "title": "Danh sách yêu thích",
+      "description": "Các sản phẩm bạn đã thêm vào danh sách yêu thích",
+      "breadcrumb": "Yêu thích",
+      "loading": "Đang tải danh sách yêu thích...",
+      "noItems": "Chưa có sản phẩm nào trong danh sách yêu thích",
+      "loadMore": "Tải thêm"
     },
     "page": {
       "shop": "Cửa hàng"
@@ -1630,12 +1697,6 @@
       "promotion": "Khuyến mãi",
       "faq": "Câu hỏi thường gặp",
       "supportPolicy": "Hỗ trợ & chính sách"
-    },
-    "search": {
-      "recentSearches": "Tìm kiếm gần đây",
-      "noResults": "Không tìm thấy sản phẩm phù hợp",
-      "suggestions": "Gợi ý",
-      "updating": "Đang cập nhật..."
     },
     "utilityTool": {
       "chat": "Chat",
@@ -1727,6 +1788,26 @@
     "orRegisterWith": "Hoặc đăng ký bằng",
     "noAccount": "Chưa có tài khoản?",
     "hasAccount": "Đã có tài khoản?",
-    "agreeTerms": "Bằng cách đăng ký, bạn đã đồng ý với điều khoản & chính sách"
+    "agreeTerms": "Bằng cách đăng ký, bạn đã đồng ý với điều khoản & chính sách",
+    "product": {
+      "customerReviewsTitle": "Đánh Giá Khách Hàng",
+      "customerReviewsDescription": "Chiếc ghế này sử dụng chất liệu đệm an toàn, thân thiện với môi trường, mang lại cảm giác êm ái và dễ chịu khi sử dụng.",
+      "yourThoughtsTitle": "Cảm nghĩ của bạn",
+      "yourThoughtsPlaceholder": "Bạn đang nghĩ gì ...",
+      "reviewsTitle": "Đánh giá của mọi người ({count})",
+      "basedOn": "Dựa trên",
+      "reviews": "đánh giá",
+      "likes": "thích",
+      "reply": "trả lời",
+      "youMightLike": "Có thể bạn sẽ thích",
+      "rating": "Đánh giá",
+      "userMenu": {
+        "profile": "Profile",
+        "messages": "Messages",
+        "taskboard": "Taskboard",
+        "help": "Help",
+        "logout": "Logout"
+      }
+    }
   }
 }

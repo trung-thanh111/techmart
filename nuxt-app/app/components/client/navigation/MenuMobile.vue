@@ -31,7 +31,7 @@
                         <line x1="8" y1="21" x2="16" y2="21" />
                         <line x1="12" y1="17" x2="12" y2="21" />
                       </svg>
-                      <span class="group-hover:text-sky-600">{{ $t("nav.categories") }}</span>
+                      <span class="group-hover:text-sky-600">{{ $t("client.nav.categories") }}</span>
                     </div>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 group-hover:text-sky-600 text-gray-500">
                       <polyline points="9,18 15,12 9,6" />
