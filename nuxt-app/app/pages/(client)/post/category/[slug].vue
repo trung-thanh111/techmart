@@ -31,7 +31,7 @@
       </div>
     </section>
 
-    <Category description="Khám phá các danh mục công nghệ đa dạng tại Tech Mart Store – từ thiết bị điện tử, gia dụng thông minh đến phụ kiện hiện đại, đáp ứng nhu cầu học tập, làm việc và giải trí của bạn." :items="(postCatalogueList as any)" :basePath="POSTCATEGORY" :viewAllLink="POSTCATEGORIES" :viewAllText="$t('client.common.viewAll')" />
+    <Category :description="$t('client.common.exploreProducts')" :items="(postCatalogueList as any)" :basePath="POSTCATEGORY" :viewAllLink="POSTCATEGORIES" :viewAllText="$t('client.common.viewAll')" />
 
     <section class="mx-auto bg-white shadow-md rounded-md py-3 md:py-6 px-3 md:px-6 md:mb-8 mb-4">
       <div>
@@ -50,7 +50,7 @@
                   </div>
                   <div class="lg:w-1/2 p-6 flex flex-col justify-center">
                     <div class="flex items-center mb-4">
-                      <span v-if="post.isHot == 1" class="bg-red-100 text-red-600 text-xs font-medium px-2 py-1 rounded-full mr-3">HOT</span>
+                      <span v-if="post.isHot == 1" class="bg-red-100 text-red-600 text-xs font-medium px-2 py-1 rounded-full mr-3">{{ $t("client.post.hot") }}</span>
                     </div>
                     <h4 class="text-xl lg:text-2xl font-bold text-gray-800 mb-4 leading-tight line-clamp-2">{{ post.name }}</h4>
                     <p class="text-gray-600 mb-5 leading-relaxed ml-5 line-clamp-2">{{ post.description }}</p>
@@ -74,12 +74,18 @@
 
 <script setup lang="ts">
 import Breadcrumb from "~/components/shared/navigation/Breadcrumb.vue";
-import { IMAGEDEFAULT, TOPOST, POSTCATEGORY } from "~/utils/constants";
+import { IMAGEDEFAULT, TOPOST, POSTCATEGORY, POSTCATEGORIES } from "~/utils/constants";
 import { usePostCatalogue } from "~/composables/client/post/usePostCatalogue";
 import { usePost } from "~/composables/client/post/usePost";
 import { useDebounceFn } from "@vueuse/core";
 import Category from "~/components/client/ui/Category.vue";
+import { useRoute } from "vue-router";
+import { computed, watch } from "vue";
+import { useI18n } from "vue-i18n";
+import { onMounted } from "vue";
+import { definePageMeta } from "#imports";
 
+const { t } = useI18n();
 const route = useRoute();
 const slug = computed(() => route.params.slug as string);
 
@@ -96,7 +102,7 @@ const totalLikes = computed<number>(() => {
 const totalLikesFormatted = computed(() => totalLikes.value.toLocaleString());
 
 const breadcrumbs = computed(() => [
-  { label: $t("client.page.post"), href: TOPOST },
+  { label: t("client.page.post"), href: TOPOST },
   { label: categoryDetail.value?.name ?? slug.value, href: `${POSTCATEGORY}/${categoryDetail.value?.slug ?? slug.value}` },
 ]);
 

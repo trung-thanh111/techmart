@@ -17,46 +17,46 @@
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
       <div class="grid gap-4">
         <a href="#" class="block">
-          <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image.jpg" alt="" />
+          <NuxtImg class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image.jpg" alt="Collection image 1" loading="lazy" />
         </a>
         <a href="#" class="block">
-          <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-1.jpg" alt="" />
+          <NuxtImg class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-1.jpg" alt="Collection image 2" loading="lazy" />
         </a>
         <a href="#" class="block">
-          <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-2.jpg" alt="" />
-        </a>
-      </div>
-      <div class="grid gap-4">
-        <a href="#" class="block">
-          <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-3.jpg" alt="" />
-        </a>
-        <a href="#" class="block">
-          <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-4.jpg" alt="" />
-        </a>
-        <a href="#" class="block">
-          <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-5.jpg" alt="" />
+          <NuxtImg class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-2.jpg" alt="Collection image 3" loading="lazy" />
         </a>
       </div>
       <div class="grid gap-4">
         <a href="#" class="block">
-          <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-6.jpg" alt="" />
+          <NuxtImg class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-3.jpg" alt="Collection image 4" loading="lazy" />
         </a>
         <a href="#" class="block">
-          <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-7.jpg" alt="" />
+          <NuxtImg class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-4.jpg" alt="Collection image 5" loading="lazy" />
         </a>
         <a href="#" class="block">
-          <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-8.jpg" alt="" />
+          <NuxtImg class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-5.jpg" alt="Collection image 6" loading="lazy" />
         </a>
       </div>
       <div class="grid gap-4">
         <a href="#" class="block">
-          <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-9.jpg" alt="" />
+          <NuxtImg class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-6.jpg" alt="Collection image 7" loading="lazy" />
         </a>
         <a href="#" class="block">
-          <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-10.jpg" alt="" />
+          <NuxtImg class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-7.jpg" alt="Collection image 8" loading="lazy" />
         </a>
         <a href="#" class="block">
-          <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-11.jpg" alt="" />
+          <NuxtImg class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-8.jpg" alt="Collection image 9" loading="lazy" />
+        </a>
+      </div>
+      <div class="grid gap-4">
+        <a href="#" class="block">
+          <NuxtImg class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-9.jpg" alt="Collection image 10" loading="lazy" />
+        </a>
+        <a href="#" class="block">
+          <NuxtImg class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-10.jpg" alt="Collection image 11" loading="lazy" />
+        </a>
+        <a href="#" class="block">
+          <NuxtImg class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-11.jpg" alt="Collection image 12" loading="lazy" />
         </a>
       </div>
     </div>

@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { definePageMeta } from "#imports";
+import { ref, watch, computed } from "vue";
+import { useI18n } from "vue-i18n";
 import AppPagination from "~/components/admin/navigation/AppPagination.vue";
 import CommitMent from "~/components/client/ui/CommitMent.vue";
 import Breadcrumb from "~/components/shared/navigation/Breadcrumb.vue";
 import { useAgency } from "~/composables/client/agency/useAgency";
+import { TOAGENCY } from "~/utils/constants";
 
+const { t } = useI18n();
 const { data, isLoading, filters, search, setPage, getCoverUrl, formatPhone } = useAgency({
   keyword: "",
   perpage: 12,
@@ -81,7 +85,7 @@ const closeMap = (): void => {
 
 const totalAgencies = computed(() => data.value?.data?.total || 0);
 const hasData = computed(() => agencies.value.length > 0);
-const breadcrumbs = [{ label: $t('client.agency.breadcrumb'), href: "/agency" }];
+const breadcrumbs = [{ label: t("client.agency.breadcrumb"), href: TOAGENCY }];
 
 definePageMeta({ layout: "client" });
 </script>
@@ -91,11 +95,11 @@ definePageMeta({ layout: "client" });
     <Breadcrumb :crumbs="breadcrumbs" />
     <section class="relative w-full mb-0">
       <div class="w-full h-48 md:h-64 rounded-lg overflow-hidden mb-0">
-        <img src="/client/images/showroom/image-showroom.jpg" class="w-full h-full object-cover" alt="cover" loading="lazy" />
+        <NuxtImg src="/client/images/showroom/image-showroom.jpg" class="w-full h-full object-cover" alt="cover" loading="lazy" />
       </div>
       <div class="w-full rounded-b-lg bg-gradient-to-r from-[#1786c9] to-[#1ecba0] px-4 py-8 flex flex-col items-center justify-center text-center -mt-2">
-        <h1 class="text-white text-xl md:text-4xl font-bold mb-2">{{ $t('client.agency.distributionTitle') }}</h1>
-        <p class="text-white/90 text-xs md:text-base max-w-2xl mb-2">{{ $t('client.agency.distributionDesc') }}</p>
+        <h1 class="text-white text-xl md:text-4xl font-bold mb-2">{{ $t("client.agency.distributionTitle") }}</h1>
+        <p class="text-white/90 text-xs md:text-base max-w-2xl mb-2">{{ $t("client.agency.distributionDesc") }}</p>
       </div>
     </section>
     <section>
@@ -117,18 +121,18 @@ definePageMeta({ layout: "client" });
     <section v-if="agencies.length" class="mb-4">
       <div>
         <span class="text-sm text-gray-600">
-          {{ $t('client.agency.currentAgencies') }}
-          <span class="text-sky-400 underline">{{ totalAgencies }} {{ $t('client.agency.agenciesNationwide') }}</span>
+          {{ $t("client.agency.currentAgencies") }}
+          <span class="text-sky-400 underline">{{ totalAgencies }} {{ $t("client.agency.agenciesNationwide") }}</span>
         </span>
       </div>
     </section>
     <section>
-      <div v-if="isLoading" class="flex items-center justify-center py-10 text-gray-400">{{ $t('client.agency.loading') }}</div>
-      <div v-else-if="!hasData" class="text-center py-5 text-gray-400">{{ $t('client.agency.noData') }}</div>
+      <div v-if="isLoading" class="flex items-center justify-center py-10 text-gray-400">{{ $t("client.common.loading") }}</div>
+      <div v-else-if="!hasData" class="text-center py-5 text-gray-400">{{ $t("client.common.noData") }}</div>
       <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 md:gap-6 gap-4">
         <div v-for="agency in agencies" :key="agency.id" class="bg-white rounded-lg shadow-md p-4 flex flex-col items-center hover:shadow-xl transition-shadow group">
           <NuxtImg :src="getCoverUrl(agency)" :alt="agency.name" class="w-20 h-20 rounded-full object-cover mb-3 border-2 border-gray-200 group-hover:border-sky-500 transition-all" loading="lazy" />
-          <NuxtLink :to="`/agency/${agency.slug}`" class="text-lg font-semibold text-gray-800 group-hover:text-sky-600 mb-1">
+          <NuxtLink :to="`${TOAGENCY}/${agency.slug}`" class="text-lg font-semibold text-gray-800 group-hover:text-sky-600 mb-1">
             {{ agency.name }}
           </NuxtLink>
           <p class="text-gray-500 text-sm mb-1 text-center flex items-center justify-center gap-1">
@@ -149,19 +153,19 @@ definePageMeta({ layout: "client" });
               <svg class="w-3.5 h-3.5 text-sky-400 mr-1" fill="currentColor" viewBox="0 0 384 512">
                 <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
               </svg>
-              {{ $t('client.agency.directions') }}
+              {{ $t("client.agency.directions") }}
             </button>
             <button v-else-if="agency.address" @click="openMap(agency.address)" class="inline-flex items-center cursor-pointer gap-1 px-3 py-1.5 rounded bg-sky-50 text-sky-600 text-xs font-semibold hover:bg-sky-100 transition">
               <svg class="w-3.5 h-3.5 text-sky-400 mr-1" fill="currentColor" viewBox="0 0 384 512">
                 <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
               </svg>
-              {{ $t('client.agency.directions') }}
+              {{ $t("client.agency.directions") }}
             </button>
             <span v-else class="inline-flex items-center gap-1 px-3 py-1.5 rounded bg-gray-50 text-gray-400 text-xs">
               <svg class="w-3.5 h-3.5 mr-1" fill="currentColor" viewBox="0 0 384 512">
                 <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
               </svg>
-              {{ $t('client.agency.noMapLink') }}
+              {{ $t("client.agency.noMapLink") }}
             </span>
           </div>
         </div>

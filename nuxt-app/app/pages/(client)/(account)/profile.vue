@@ -15,10 +15,9 @@
 import Breadcrumb from "~/components/shared/navigation/Breadcrumb.vue";
 import Sidebar from "~/components/client/navigation/SidebarProfile.vue";
 import ProfileHeader from "~/components/client/navigation/ProfileHeader.vue";
+import { PROFILEINDEX } from "~/utils/constants";
 
-const breadcrumbs = [
-  { label: $t('client.profile.breadcrumb'), href: '/profile' },
-];
+const breadcrumbs = [{ label: $t("client.profile.breadcrumb"), href: PROFILEINDEX }];
 
 definePageMeta({
   layout: "client",
@@ -26,7 +25,4 @@ definePageMeta({
 });
 </script>
 
-<style scoped>
-</style>
-
-
+<style scoped></style>

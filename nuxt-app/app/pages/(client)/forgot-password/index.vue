@@ -6,9 +6,9 @@
         <div class="flex flex-col lg:flex-row max-h-[800px] max-w-lg mx-auto shadow-lg">
           <div class="flex flex-col justify-center p-6 lg:p-8 w-full bg-white">
             <div class="w-full">
-              <h2 class="text-xl text-center font-semibold text-cyan-600 mb-1">Quên mật khẩu!</h2>
-              <p class="text-sm text-center text-gray-500 mb-8">Hãy xác thực thông tin để có thể đăng nhập lại nhé.</p>
-              <span class="inline-flex items-center rounded-md bg-[#fef4e4] px-3 py-2 text-xs text-[#d29c40] mb-5">Nhập chính xác email của bạn và hướng dẫn sẽ gửi cho bạn ngay!</span>
+              <h2 class="text-xl text-center font-semibold text-cyan-600 mb-1">{{ $t("client.common.forgotPassword") }}</h2>
+              <p class="text-sm text-center text-gray-500 mb-8">{{ $t("client.common.verifyInfo") }}</p>
+              <span class="inline-flex items-center rounded-md bg-[#fef4e4] px-3 py-2 text-xs text-[#d29c40] mb-5">{{ $t("client.common.enterCorrectEmail") }}</span>
               <form @submit.prevent="handleVerify" novalidate class="space-y-4">
                 <div class="relative">
                   <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
@@ -25,7 +25,7 @@
 
                 <Button
                   type="submit"
-                  label="Xác thực"
+                  :label="$t('client.common.verify')"
                   :loading="isLoading"
                   unstyled
                   class="w-full text-sm font-semibold flex justify-center py-2 px-4 rounded shadow-sm text-white bg-teal-500 hover:bg-teal-600 focus:outline-none mt-5 disabled:opacity-50"
@@ -36,8 +36,8 @@
               </form>
 
               <p class="mt-6 text-center text-sm text-gray-600">
-                Chờ đã, tôi đã mật khẩu?
-                <NuxtLink :to="TOLOGIN" class="text-cyan-600 hover:underline">Tại đây</NuxtLink>
+                {{ $t("client.common.alreadyHavePassword") }}
+                <NuxtLink :to="TOLOGIN" class="text-cyan-600 hover:underline">{{ $t("client.common.clickHere") }}</NuxtLink>
               </p>
             </div>
           </div>
@@ -47,6 +47,7 @@
   </div>
 </template>
 <script setup lang="ts">
+import { definePageMeta } from "#imports";
 import { Field } from "vee-validate";
 import { useForgot } from "~/composables/auth/useForgot";
 import { TOLOGIN } from "~/utils/constants";

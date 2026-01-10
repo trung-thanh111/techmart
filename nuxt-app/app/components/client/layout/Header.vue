@@ -7,9 +7,9 @@
             <div class="flex items-center gap-1">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.72 19.72 0 0 1 2.09 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13 1.05.37 2.07.72 3.06a2 2 0 0 1-.45 2.11l-1.27 1.27a16 16 0 0 0 6.29 6.29l1.27-1.27a2 2 0 0 1 2.11-.45c.99.35 2.01.59 3.06.72A2 2 0 0 1 22 16.92z" /></svg>
               <div class="flex gap-1">
-                <span>{{ $t("client.header.hotline") }}:</span>
-                <NuxtLink to="#" data-tippy-content="hotline" class="hover:text-gray-300 transition-colors">19002098 -</NuxtLink>
-                <NuxtLink to="#" class="hover:text-gray-300 transition-colors">0898109810</NuxtLink>
+                <span>{{ $t("client.header.hotlineLabel") }}</span>
+                <NuxtLink to="#" data-tippy-content="hotline" class="hover:text-gray-300 transition-colors">{{ $t("client.header.hotline1") }} -</NuxtLink>
+                <NuxtLink to="#" class="hover:text-gray-300 transition-colors">{{ $t("client.header.hotline2") }}</NuxtLink>
               </div>
             </div>
             <NuxtLink :to="TOAGENCY" class="flex items-center gap-1 hover:text-gray-300 transition-colors">
@@ -74,8 +74,8 @@
                   <circle cx="12" cy="7" r="4" />
                 </svg>
                 <div>
-                  <span class="hover:underline">{{ $t("client.header.login") }}</span>
-                  <p class="font-light text-xs">{{ $t("client.header.account") }}</p>
+                  <span class="hover:underline">{{ $t("auth.login") }}</span>
+                  <p class="font-light text-xs">{{ $t("client.nav.account") }}</p>
                 </div>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5 mt-1.5"><polyline points="6,9 12,15 18,9" /></svg>
               </NuxtLink>
@@ -84,7 +84,7 @@
                   <span class="text-right">
                     <span class="hidden xl:inline-block font-medium">{{ user?.name }}</span>
                     <span class="hidden xl:block font-normal text-[10px]">
-                      {{ user?.userCatalogueId === 1 ? "Khách hàng" : "Quản trị viên" }}
+                      {{ user?.userCatalogueId === 1 ? $t("client.header.customer") : $t("client.header.admin") }}
                     </span>
                   </span>
                   <NuxtImg class="rounded-full w-9 h-9 object-cover" :src="avatar" :alt="'Avatar ' + user?.name" loading="lazy" />
@@ -100,13 +100,13 @@
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                         <circle cx="12" cy="7" r="4" />
                       </svg>
-                      <span>{{ $t("client.header.info") }}</span>
+                      <span>{{ $t("client.nav.info") }}</span>
                     </NuxtLink>
                     <NuxtLink :to="TOWISHLIST" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="w-4 h-4 text-gray-400 cursor-pointer mr-2">
                         <path d="M462.3 62.6C407 7.6 324.8-10.6 256 47.9 187.2-10.6 105-7.6 49.7 62.6-16.6 145.3 23.8 268.7 130.4 357.1L239 469.6c9.4 9.4 24.6 9.4 33.9 0l108.6-112.5C488.2 268.7 528.6 145.3 462.3 62.6z" />
                       </svg>
-                      <span>{{ $t("client.header.wishlist") }}</span>
+                      <span>{{ $t("client.nav.wishlist") }}</span>
                     </NuxtLink>
                     <NuxtLink to="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-gray-400 mr-2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
@@ -160,7 +160,7 @@
                         <polyline points="16,17 21,12 16,7" />
                         <line x1="21" y1="12" x2="9" y2="12" />
                       </svg>
-                      <span>{{ $t("client.header.logout") }}</span>
+                      <span>{{ $t("client.nav.logout") }}</span>
                     </button>
                   </div>
                 </div>
@@ -180,7 +180,7 @@
                 <div class="w-full rounded-md border-0 shadow-xl font-normal">
                   <div class="w-full max-w-md rounded-lg shadow-lg overflow-hidden text-sm">
                     <div class="px-4 py-2 bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-white font-medium">
-                      {{ $t("client.header.quickView") }}
+                      {{ $t("action.quickView") }}
                     </div>
                     <div class="max-h-[300px] overflow-y-auto">
                       <div v-for="item in cartItems" :key="item.id" class="flex items-start px-4 py-3 border-b border-gray-100 hover:bg-gray-50">
@@ -199,7 +199,7 @@
                     <div class="flex items-center justify-between px-4 py-3 border-t border-gray-100">
                       <p class="text-gray-500 text-sm">{{ $t("client.cart.itemsInCart", { count: cartCount }) }}</p>
                       <NuxtLink :to="TOCART" class="bg-info-500 hover:bg-info-600 text-white font-medium p-2 rounded text-sm transition-all duration-200">
-                        {{ $t("client.header.viewCart") }}
+                        {{ $t("action.viewCart") }}
                       </NuxtLink>
                     </div>
                   </div>
@@ -227,9 +227,9 @@
                   <polyline points="10,9 9,9 8,9" />
                 </svg>
                 <span class="font-normal">
-                  Tra cứu
+                  {{ $t("client.header.track") }}
                   <br />
-                  đơn hàng
+                  {{ $t("client.header.order") }}
                 </span>
               </NuxtLink>
               <div class="relative inline-block text-left group">
@@ -239,26 +239,26 @@
                     <circle cx="12" cy="7" r="4" />
                   </svg>
                   <div>
-                    <span class="hover:underline">Đăng nhập</span>
-                    <p class="font-normal text-sm">Tài khoản</p>
+                    <span class="hover:underline">{{ $t("auth.login") }}</span>
+                    <p class="font-normal text-sm">{{ $t("client.header.account") }}</p>
                   </div>
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5 mt-1.5"><polyline points="6,9 12,15 18,9" /></svg>
                 </NuxtLink>
                 <div class="absolute top-full right-0 w-full h-3 group-hover:block hidden z-0"></div>
                 <div class="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 hidden group-hover:block transition-all duration-300 ease-in-out">
                   <div class="w-full bg-white rounded-md border-0 shadow-xl font-normal ring-black/10 divide-y divide-gray-100">
-                    <div class="px-4 py-2 text-sm text-gray-500 font-semibold">Xin chào! Thanh Trung.</div>
+                    <div class="px-4 py-2 text-sm text-gray-500 font-semibold">{{ $t("auth.hello", { name: "Thanh Trung" }) }}</div>
                     <div class="py-1">
                       <NuxtLink to="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-gray-400 mr-2">
                           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                           <circle cx="12" cy="7" r="4" />
                         </svg>
-                        <span>Profile</span>
+                        <span>{{ $t("client.nav.info") }}</span>
                       </NuxtLink>
                       <NuxtLink to="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-gray-400 mr-2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
-                        <span>Messages</span>
+                        <span>{{ $t("client.header.messages") }}</span>
                       </NuxtLink>
                       <NuxtLink to="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-gray-400 mr-2">
@@ -267,7 +267,7 @@
                           <line x1="8" y1="2" x2="8" y2="6" />
                           <line x1="3" y1="10" x2="21" y2="10" />
                         </svg>
-                        <span>Taskboard</span>
+                        <span>{{ $t("client.header.taskboard") }}</span>
                       </NuxtLink>
                       <NuxtLink to="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-gray-400 mr-2">
@@ -275,7 +275,7 @@
                           <circle cx="12" cy="16" r="1" />
                           <path d="M12 13v-3" />
                         </svg>
-                        <span>Help</span>
+                        <span>{{ $t("client.header.help") }}</span>
                       </NuxtLink>
                     </div>
                     <div class="border-t border-gray-500"></div>
@@ -286,7 +286,7 @@
                           <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
                         </svg>
                         <span>
-                          Balance :
+                          {{ $t("client.header.balance") }} :
                           <b>$5971.67</b>
                         </span>
                       </NuxtLink>
@@ -295,8 +295,8 @@
                           <circle cx="12" cy="12" r="3" />
                           <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1" />
                         </svg>
-                        <span>Settings</span>
-                        <span class="absolute right-4 top-1/2 transform -translate-y-1/2 text-xs bg-green-100 text-green-600 px-2 py-0.5 rounded-full">New</span>
+                        <span>{{ $t("client.nav.settings") }}</span>
+                        <span class="absolute right-4 top-1/2 transform -translate-y-1/2 text-xs bg-green-100 text-green-600 px-2 py-0.5 rounded-full">{{ $t("client.header.new") }}</span>
                       </NuxtLink>
                       <NuxtLink to="#" class="flex items-center px-4 py-2 text-sm text-red-700 hover:bg-red-100">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 mr-2">
@@ -304,7 +304,7 @@
                           <polyline points="16,17 21,12 16,7" />
                           <line x1="21" y1="12" x2="9" y2="12" />
                         </svg>
-                        <span>Logout</span>
+                        <span>{{ $t("auth.logout") }}</span>
                       </NuxtLink>
                     </div>
                   </div>
@@ -324,7 +324,7 @@
                   <div class="w-full rounded-md border-0 shadow-xl font-normal">
                     <div class="w-full max-w-md rounded-lg shadow-lg overflow-hidden text-sm">
                       <div class="px-4 py-2 bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-white font-medium">
-                        {{ $t("client.header.quickView") }}
+                        {{ $t("action.quickView") }}
                       </div>
                       <div class="max-h-[300px] overflow-y-auto">
                         <div v-for="item in cartItems" :key="item.id" class="flex items-start px-4 py-3 border-b border-gray-100 hover:bg-gray-50">
@@ -345,7 +345,7 @@
                       <div class="flex items-center justify-between px-4 py-3 border-t border-gray-100">
                         <span class="text-gray-500 text-sm">{{ $t("client.cart.itemsInCart", { count: cartCount }) }}</span>
                         <NuxtLink :to="TOCART" class="!bg-info-500 hover:!bg-info-600 text-white font-medium p-2 rounded text-sm transition-all duration-200">
-                          {{ $t("client.header.viewCart") }}
+                          {{ $t("action.viewCart") }}
                         </NuxtLink>
                       </div>
                     </div>
@@ -363,20 +363,21 @@
 
             <div class="flex items-center justify-center bg-gradient-to-r from-[#a8d444] to-[#b7e354] text-[#005a63] hover:opacity-90 cursor-pointer h-10 px-3 rounded transition-opacity">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 mt-1 text-yellow-300 mr-1"><polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2" /></svg>
-              <span>{{ $t("client.header.promotion") }}</span>
+              <span>{{ $t("client.common.promotion") }}</span>
             </div>
           </div>
         </div>
       </div>
     </header>
     <!-- mobile -->
-    <MobileMenu :is-open="isMobileMenuOpen" :menu-tree="menuTree" @close="closeMobileMenu" />
+    <MenuMobile :is-open="isMobileMenuOpen" :menu-tree="menuTree" @close="closeMobileMenu" />
   </div>
 </template>
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
 import { storeToRefs } from "pinia";
-import { TOLOGIN, TOAGENCY, TOFAQ, PROFILEINDEX, TODASHBOARD, TOCART } from "~/utils/constants";
+import { useI18n } from "vue-i18n";
+import { TOLOGIN, TOAGENCY, TOFAQ, PROFILEINDEX, TODASHBOARD, TOCART, TOPOLICY, TOWISHLIST } from "~/utils/constants";
 import logo from "~/assets/shared/images/logo/logo-website.png";
 import { useAuthStore } from "~/stores/auth/auth";
 import { useAuth } from "~/composables/auth/useAuth";
@@ -388,6 +389,8 @@ import type { ICartItem } from "~/interfaces/cart/cartItem.interface";
 import SearchSuggestion from "../features/SearchSuggestion.vue";
 import Menu from "../navigation/Menu.vue";
 import MenuMobile from "../navigation/MenuMobile.vue";
+
+const { t } = useI18n();
 
 // Auth
 const authStore = useAuthStore();

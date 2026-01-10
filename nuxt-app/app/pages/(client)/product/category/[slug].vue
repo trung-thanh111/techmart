@@ -13,7 +13,7 @@
               <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-5">
                 <div>
                   <div class="text-3xl font-bold text-cyan-400 mb-2">{{ (categoryDetail as any)?.products?.length || 0 }}</div>
-                  <div class="text-sm text-gray-400">sản phẩm</div>
+                  <div class="text-sm text-gray-400">{{ $t("client.common.productCount") }}</div>
                 </div>
               </div>
             </div>
@@ -27,7 +27,7 @@
       </div>
     </section>
 
-    <Category :title="$t('client.common.categories')" description="Khám phá các danh mục công nghệ đa dạng tại Tech Mart Store – từ thiết bị điện tử, gia dụng thông minh đến phụ kiện hiện đại, đáp ứng nhu cầu học tập, làm việc và giải trí của bạn." :items="(productCatalogueList as any)" :basePath="PRODUCTCATEGORY" :viewAllLink="TOSHOP" :viewAllText="$t('client.common.viewAll')" />
+    <Category :title="$t('client.common.categories')" :description="$t('client.header.exploreCategories')" :items="(productCatalogueList as any)" :basePath="PRODUCTCATEGORY" :viewAllLink="TOSHOP" :viewAllText="$t('client.common.viewAll')" />
 
     <section class="mx-auto bg-white shadow-md rounded-md py-3 md:py-6 px-3 md:px-6 md:mb-8 mb-4">
       <div>
@@ -44,6 +44,11 @@
 </template>
 
 <script setup lang="ts">
+import { useRoute } from "vue-router";
+import { computed, watch } from "vue";
+import { useI18n } from "vue-i18n";
+import { onMounted } from "vue";
+import { definePageMeta } from "#imports";
 import Breadcrumb from "~/components/shared/navigation/Breadcrumb.vue";
 import Category from "~/components/client/ui/Category.vue";
 import ProductCard from "~/components/client/features/ProductCard.vue";
@@ -52,6 +57,7 @@ import { useProductCatalogue } from "~/composables/client/product/useProductCata
 import { useProduct } from "~/composables/client/product/useProduct";
 import { useDebounceFn } from "@vueuse/core";
 
+const { t } = useI18n();
 const route = useRoute();
 const slug = computed(() => route.params.slug as string);
 
@@ -59,7 +65,7 @@ const { categoryDetail, fetchBySlug } = useProductCatalogue() as any;
 const { productCatalogueList, fetchProductCatalogues } = useProduct();
 
 const breadcrumbs = computed(() => [
-  { label: $t("client.page.shop"), href: TOSHOP },
+  { label: t("client.page.shop"), href: TOSHOP },
   { label: categoryDetail.value?.name ?? slug.value, href: `${PRODUCTCATEGORY}/${categoryDetail.value?.slug ?? slug.value}` },
 ]);
 

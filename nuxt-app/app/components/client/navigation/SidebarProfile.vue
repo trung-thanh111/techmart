@@ -73,8 +73,10 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, h } from "vue";
 import { useRoute } from "vue-router";
+import { useI18n } from "vue-i18n";
 import { PROFILEINDEX, PROFILECHANGEPASSWORD, PROFILEADDRESSORDER, PROFILEORDERS, TOWISHLIST, TOVOUCHER } from "~/utils/constants";
 
+const { t } = useI18n();
 const isSidebarOpen = ref(false);
 const isSidebarCollapsed = ref(false);
 const isDesktop = ref(false);
@@ -97,32 +99,32 @@ const handleResize = () => {
 
 const sidebarSections = [
   {
-    title: $t("client.sidebar.personal"),
+    title: t("client.sidebar.personal"),
     items: [
-      { label: $t("client.sidebar.information"), to: PROFILEINDEX },
-      { label: $t("client.sidebar.changePassword"), to: PROFILECHANGEPASSWORD },
-      { label: $t("client.sidebar.addressOrder"), to: PROFILEADDRESSORDER },
-      { label: $t("client.sidebar.myOrders"), to: PROFILEORDERS },
-      { label: $t("client.sidebar.wishlists"), to: TOWISHLIST },
-      { label: $t("client.sidebar.myVouchers"), to: TOVOUCHER },
+      { label: t("client.sidebar.information"), to: PROFILEINDEX },
+      { label: t("client.sidebar.changePassword"), to: PROFILECHANGEPASSWORD },
+      { label: t("client.sidebar.addressOrder"), to: PROFILEADDRESSORDER },
+      { label: t("client.sidebar.myOrders"), to: PROFILEORDERS },
+      { label: t("client.sidebar.wishlists"), to: TOWISHLIST },
+      { label: t("client.sidebar.myVouchers"), to: TOVOUCHER },
     ],
   },
   {
-    title: $t("client.sidebar.settings"),
+    title: t("client.sidebar.settings"),
     items: [
-      { label: $t("client.sidebar.apiKeys"), to: "#" },
-      { label: $t("client.sidebar.notifications"), to: "#" },
-      { label: $t("client.sidebar.accountSecurity"), to: "#" },
-      { label: $t("client.sidebar.activityHistory"), to: "#" },
+      { label: t("client.sidebar.apiKeys"), to: "#" },
+      { label: t("client.sidebar.notifications"), to: "#" },
+      { label: t("client.sidebar.accountSecurity"), to: "#" },
+      { label: t("client.sidebar.activityHistory"), to: "#" },
     ],
   },
   {
-    title: $t("client.sidebar.support"),
+    title: t("client.sidebar.support"),
     items: [
-      { label: $t("client.sidebar.supportCenter"), to: "#" },
-      { label: $t("client.sidebar.privacyPolicy"), to: "#" },
+      { label: t("client.sidebar.supportCenter"), to: "#" },
+      { label: t("client.sidebar.privacyPolicy"), to: "#" },
       {
-        label: $t("client.sidebar.logout"),
+        label: t("client.sidebar.logout"),
         to: "#",
         class: "text-red-500 hover:bg-red-50 rounded-md",
       },

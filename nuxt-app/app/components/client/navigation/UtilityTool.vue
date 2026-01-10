@@ -25,7 +25,7 @@
 
     <!-- Modal -->
     <button data-open-modal="modalVoucher" class="fixed bottom-36 left-6 z-50 bg-white rounded-full shadow-md hover:scale-105 transition-all">
-      <nuxtImg src="/client/images/icon-voucher.png" alt="Mở Ưu Đãi" class="w-12 h-12 object-contain" format="webp" lazy />
+      <NuxtImg src="/client/images/icon-voucher.png" alt="Mở Ưu Đãi" class="w-12 h-12 object-contain" format="webp" loading="lazy" />
     </button>
     <div id="modalVoucher" data-modal-id="modalVoucher" class="modal fixed inset-0 bg-gray-100/60 bg-opacity-50 items-center justify-center z-50 hidden">
       <!-- Modal Container -->
@@ -41,7 +41,7 @@
           <div v-for="(voucher, index) in 3" :key="index" class="voucher-item flex flex-col bg-sky-100/50 p-2 rounded-lg shadow-sm">
             <div class="flex items-center">
               <div class="voucher-img w-24 h-24 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
-                <img src="/client/images/products/iphone-16-pro-max.webp" alt="Voucher" class="object-cover w-full h-full" />
+                <NuxtImg src="/client/images/products/iphone-16-pro-max.webp" alt="Voucher" class="object-cover w-full h-full" loading="lazy" />
               </div>
               <div class="w-[2px] h-[90px] border-l border-dashed border-gray-300 mx-3"></div>
               <div class="flex-1">
@@ -49,7 +49,7 @@
                 <div class="grid grid-cols-3 gap-2 items-center mb-2">
                   <div class="voucher-code-box col-span-2 flex items-center bg-gray-100 px-2 py-[6px] rounded border border-gray-300">
                     <span class="text-sky-600 mr-2">📋</span>
-                    <span class="voucher-code font-mono text-sm text-gray-700">AMTRAN10</span>
+                    <span class="voucher-code font-mono text-sm text-gray-700">{{ $t("client.utilityTool.voucherCode") }}</span>
                   </div>
                   <button @click="toggleCondition(index)" class="btn-copy-code bg-gradient-to-r from-sky-700 to-sky-600 hover:from-sky-600 hover:to-sky-500 text-white py-2 px-3 rounded text-sm font-medium">{{ $t("client.utilityTool.copy") }}</button>
                 </div>
@@ -60,7 +60,7 @@
                 </div>
               </div>
             </div>
-            <div v-show="showConditions[index]" class="voucher-condition border border-sky-400 rounded-md text-sm text-gray-600 mt-3 p-2">sdfsdfsdfdsfsdf</div>
+            <div v-show="showConditions[index]" class="voucher-condition border border-sky-400 rounded-md text-sm text-gray-600 mt-3 p-2">{{ $t("client.utilityTool.voucherCondition") }}</div>
           </div>
         </div>
       </div>
@@ -73,7 +73,7 @@
           <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z" />
         </svg>
       </div>
-      <a href="#" class="block absolute right-0 w-0 opacity-0 text-white text-base font-semibold group-hover:w-[70%] group-hover:opacity-100 transition-all duration-300 pr-3">0900001111</a>
+      <a href="#" class="block absolute right-0 w-0 opacity-0 text-white text-base font-semibold group-hover:w-[70%] group-hover:opacity-100 transition-all duration-300 pr-3">{{ $t("client.utilityTool.phoneNumber") }}</a>
     </button>
 
     <!-- Drawer -->
@@ -147,8 +147,11 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 import CompareBar from "~/components/client/navigation/CompareBar.vue";
 import SearchProductModal from "~/components/client/features/SearchProductModal.vue";
+
+const { t } = useI18n();
 
 const showConditions = ref([false, false, false]);
 const showDrawer = ref(false);

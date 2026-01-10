@@ -9,7 +9,7 @@
             <!-- Main Slider -->
             <Splide ref="mainSlider" :options="mainOptions" class="mb-2 max-h-[400px]" id="hero-slide-left-main">
               <SplideSlide v-for="(item, index) in mainItems" :key="`main-${index}`">
-                <img :src="item.image" loading="lazy" :alt="`Slide ${index + 1}`" class="w-full h-[200px] sm:h-[250px] md:h-[300px] lg:h-[400px] object-cover rounded-lg" />
+                <NuxtImg :src="item.image" loading="lazy" :alt="`Slide ${index + 1}`" class="w-full h-[200px] sm:h-[250px] md:h-[300px] lg:h-[400px] object-cover rounded-lg" />
               </SplideSlide>
             </Splide>
 
@@ -32,7 +32,7 @@
       <div class="md:col-span-1">
         <Splide :options="rightVirticalOptions" class="h-full" id="right-vertical-slider">
           <SplideSlide v-for="(item, index) in rightVirticalItems" :key="`right-${index}`">
-            <img :src="item.image" loading="lazy" :alt="item.alt" class="w-full h-[200px] sm:h-[200px] md:h-[250px] lg:h-auto object-cover rounded-lg shadow-sm hover:opacity-90 transition-all" />
+            <NuxtImg :src="item.image" loading="lazy" :alt="item.alt || 'Banner image'" class="w-full h-[200px] sm:h-[200px] md:h-[250px] lg:h-auto object-cover rounded-lg shadow-sm hover:opacity-90 transition-all" />
           </SplideSlide>
         </Splide>
       </div>
@@ -135,7 +135,7 @@
                 <ul class="space-y-3 text-sm text-gray-600">
                   <li v-for="(product_similar, id) in 3" :key="id">
                     <a href="#" class="flex items-center gap-3 p-2 rounded-lg transition hover:bg-gray-50">
-                      <img src="/client/images/products/iphone-16-pro-max.webp" loading="lazy" alt="Ốp lưng silicon" class="w-12 h-12 object-cover rounded-md" />
+                      <NuxtImg src="/client/images/products/iphone-16-pro-max.webp" loading="lazy" alt="Ốp lưng silicon" class="w-12 h-12 object-cover rounded-md" />
                       <div class="flex-1">
                         <h4 class="font-medium text-gray-700 transition line-clamp-1 group-hover:text-sky-500">Ốp lưng silicon iPhone</h4>
                         <span class="text-xs text-gray-500 line-clamp-1">Chống sốc, chống bám vân tay</span>
@@ -395,7 +395,7 @@
       <div class="flex flex-col lg:flex-row justify-between items-start gap-4">
         <div class="w-full lg:w-1/5 h-[150px] lg:h-[858px] md:-mx-3 lg:mx-0">
           <div class="relative h-full w-full overflow-hidden shadow-md">
-            <img src="/client/images/slide/test11.jpg" loading="lazy" alt="Banner giới thiệu" class="object-cover w-full h-full" />
+            <NuxtImg src="/client/images/slide/test11.jpg" loading="lazy" alt="Banner giới thiệu" class="object-cover w-full h-full" />
             <div class="absolute w-full max-w-[300px] inset-0 bg-black/20 flex items-end justify-center py-4">
               <div class="mx-auto mt-6 hidden lg:block">
                 <a href="#" class="relative flex items-center justify-center px-6 py-2 overflow-hidden font-medium text-md transition-all bg-gradient-to-r from-sky-500 to-cyan-400 rounded-md shadow-lg group hover:scale-105 hover:from-sky-600 hover:to-cyan-500 focus:outline-none focus:ring-2 focus:ring-sky-400">
@@ -744,10 +744,6 @@ import CollectionProduct from "~/components/client/features/Collection.vue";
 import ButtonViewMore from "~/components/client/ui/Button.vue";
 import { useHomeSlider } from "~/composables/useHomeSlider";
 
-definePageMeta({
-  layout: "client",
-});
-
 // Import auth composable
 import { useAuth } from "~/composables/auth/useAuth";
 import Partner from "~/components/client/ui/Partner.vue";
@@ -769,6 +765,10 @@ onMounted(async () => {
   } catch (error) {
     console.error("Error loading featured products:", error);
   }
+});
+
+definePageMeta({
+  layout: "client",
 });
 </script>
 

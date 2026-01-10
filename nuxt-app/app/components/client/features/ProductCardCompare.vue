@@ -8,7 +8,7 @@
 
     <div class="flex flex-col items-center">
       <div class="w-20 h-20 mb-2 flex items-center justify-center overflow-hidden rounded">
-        <img :src="item.image" :alt="item.fullName" class="w-full h-full object-contain" />
+        <NuxtImg :src="item.image" :alt="item.fullName" class="w-full h-full object-contain" loading="lazy" />
       </div>
 
       <div class="text-center w-full">

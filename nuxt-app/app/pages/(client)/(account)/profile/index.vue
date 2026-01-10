@@ -88,10 +88,10 @@
         </div>
         <div>
           <label for="description" class="block text-sm text-gray-600 mb-1">
-            {{ $t("admin.common.form.description") }}
+            {{ $t("client.profile.description") }}
           </label>
           <Field name="description" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-            <Textarea v-bind="field" id="description" rows="4" :placeholder="$t('admin.common.form.descriptionPlaceholder')" class="base-input"></Textarea>
+            <Textarea v-bind="field" id="description" rows="4" :placeholder="$t('client.profile.descriptionPlaceholder')" class="base-input"></Textarea>
             <small v-if="errorMessage && meta.touched" class="text-red-500 text-xs">
               {{ $t(errorMessage) }}
             </small>

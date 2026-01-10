@@ -116,6 +116,7 @@ export const TOFORGOTRESET = "/forgot-password/reset";
 
 // FE
 export const IMAGEDEFAULT = "/shared/images/defaults/record.jpg";
+export const DEFAULTAVATAR = "/shared/images/defaults/avatar.jpg";
 export const EMPTYBOX = "/client/images/box-emtpy.png";
 
 export const TOHOME = "/";
@@ -124,28 +125,46 @@ export const PROFILEINDEX = "/profile";
 export const PROFILECHANGEPASSWORD = "/profile/change-password";
 export const PROFILEADDRESSORDER = "/profile/address_order";
 export const PROFILEORDERS = "/profile/orders";
+export const PROFILEADDRESSORDERCREATE = "/profile/address_order/create";
+export const PROFILEADDRESSORDERUPDATE = (id: string | number) => `/profile/address_order/${id}/update`;
 
 // Client routes
 export const TOVOUCHER = "/voucher";
 export const TOSHOP = "/shop";
 export const TOWISHLIST = "/wishlist";
 export const TOAGENCY = "/agency";
+export const TOAGENCYSYSTEM = "/agency";
 export const TOFAQ = "/faq";
 export const TOPOST = "/post";
 export const TOCART = "/cart";
+export const TOCOMPARE = "/product/compare";
 
+export const PRODUCT = "/product";
 export const PRODUCTCATEGORY = "/product/category";
 export const POSTCATEGORY = "/post/category";
 export const PRODUCTCATEGORIES = "/product/categories";
 export const POSTCATEGORIES = "/post/categories";
 
+// Post route constants
+export const TOPOSTDETAIL = (slug: string) => `/post/${slug}`;
+export const TOPOSTCATEGORY = "/post/category";
+
 export const TOPROFILEADDRESSORDERCREATE = "/profile/address_order/create";
-export const PROFILEADRESSORDERINDEX = "/profile/address_order";
+export const PROFILEADDRESSORDERINDEX = "/profile/address_order";
 export const PROFILEADRESSORDERCREATE = "/profile/address_order/create";
 export const PROFILEADRESSORDERUPDATE = "/profile/address_order/update";
 
 // Policy routes
+export const TOSEARCH = "/search";
 export const TOPOLICY = "/policy/privacy_policy";
+export const TOPOLICIES = "/policy";
+export const TOEXCHANGEPOLICY = "/policy/return_policy";
+export const TOWARRANTYPOLICY = "/policy/warranty_policy";
+export const TOLIVERYPOLICY = "/policy/delivery_policy";
+export const TOPRIVACYPOLICY = "/policy/privacy_policy";
+
+// Contact
+export const HOTLINE = "tel:19002098";
 
 // Support routes
 export const SUPPORT_BASE = "/support";

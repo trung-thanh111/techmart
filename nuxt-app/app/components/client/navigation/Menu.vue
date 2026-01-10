@@ -6,7 +6,7 @@
         <line x1="3" y1="12" x2="21" y2="12" />
         <line x1="3" y1="18" x2="21" y2="18" />
       </svg>
-      <span>{{ $t("client.header.categories") }}</span>
+      <span>{{ $t("client.nav.categories") }}</span>
     </button>
     <div v-if="isOpen && hasAnyChildren" class="fixed inset-0 bg-black/20 backdrop-blur-sm z-40" @click="handleMenuClose" />
     <Transition enter-active-class="transition-all duration-200 ease-out" enter-from-class="opacity-0 translate-y-2" enter-to-class="opacity-100 translate-y-0" leave-active-class="transition-all duration-150 ease-in" leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 translate-y-2">
@@ -44,7 +44,7 @@
                     </li>
                   </ul>
                   <div v-if="hoveredLevel1.slug" class="mt-4 pt-3 border-t border-gray-100">
-                    <NuxtLink :to="`/${hoveredLevel1.slug}`" class="text-xs text-sky-600 hover:text-sky-700 font-medium hover:underline">Xem tất cả {{ hoveredLevel1.name }}</NuxtLink>
+                    <NuxtLink :to="`/${hoveredLevel1.slug}`" class="text-xs text-sky-600 hover:text-sky-700 font-medium hover:underline">{{ $t("common.viewAll") }} {{ hoveredLevel1.name }}</NuxtLink>
                   </div>
                 </div>
               </div>
@@ -64,7 +64,7 @@
                     </li>
                   </ul>
                   <div v-if="hoveredLevel2.slug" class="mt-4 pt-3 border-t border-gray-100">
-                    <NuxtLink :to="`/${hoveredLevel2.slug}`" class="text-xs text-sky-600 hover:text-sky-700 font-medium hover:underline">Xem tất cả {{ hoveredLevel2.name }}</NuxtLink>
+                    <NuxtLink :to="`/${hoveredLevel2.slug}`" class="text-xs text-sky-600 hover:text-sky-700 font-medium hover:underline">{{ $t("common.viewAll") }} {{ hoveredLevel2.name }}</NuxtLink>
                   </div>
                 </div>
               </div>
@@ -81,7 +81,7 @@
                     </li>
                   </ul>
                   <div v-if="hoveredLevel3.slug" class="mt-4 pt-3 border-t border-gray-100">
-                    <NuxtLink :to="`/${hoveredLevel3.slug}`" class="text-xs text-sky-600 hover:text-sky-700 font-medium hover:underline">Xem tất cả {{ hoveredLevel3.name }}</NuxtLink>
+                    <NuxtLink :to="`/${hoveredLevel3.slug}`" class="text-xs text-sky-600 hover:text-sky-700 font-medium hover:underline">{{ $t("common.viewAll") }} {{ hoveredLevel3.name }}</NuxtLink>
                   </div>
                 </div>
               </div>

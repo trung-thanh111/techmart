@@ -3,7 +3,7 @@
     <Breadcrumb :crumbs="breadcrumbs" />
     <section class="bg-gradient-to-r from-sky-700 via-cyan-600 to-green-500 text-white py-3 md:py-6 lg:py-12 px-3 md:px-6 mb-4 md:mb-8 rounded-md shadow-md">
       <div class="max-w-3xl mx-auto text-center">
-        <h2 class="text-2xl sm:text-4xl font-bold mb-2">{{ title || "Nhóm câu hỏi" }}</h2>
+        <h2 class="text-2xl sm:text-4xl font-bold mb-2">{{ title || $t("client.faq.faqGroup") }}</h2>
         <p class="text-sm md:text-base">{{ $t("client.faq.groupDescription") }}</p>
       </div>
     </section>
@@ -34,11 +34,15 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { definePageMeta } from "#imports";
+import { TOFAQ } from "~/utils/constants";
+import { ref, onMounted, computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import Breadcrumb from "~/components/shared/navigation/Breadcrumb.vue";
 import { useFaq } from "~/composables/client/faq/useFaq";
 
+const { t } = useI18n();
 const route = useRoute();
 const slug = computed(() => String(route.params.slug || ""));
 const opened = ref<Record<number, boolean>>({});
@@ -59,8 +63,8 @@ onMounted(async () => {
 });
 
 const breadcrumbs = computed(() => [
-  { label: $t("client.faq.breadcrumbDetail"), href: "/faq" },
-  { label: title.value, href: `/faq/${slug.value}` },
+  { label: t("client.faq.breadcrumbDetail"), href: TOFAQ },
+  { label: title.value, href: `${TOFAQ}/${slug.value}` },
 ]);
 
 definePageMeta({ layout: "client" });

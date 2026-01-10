@@ -103,7 +103,7 @@ const fetchCatalogues = async () => {
     }));
     return catalogues.value;
   } catch (e) {
-    console.error("[wishlist] fetchCatalogues error:", e);
+    console.error("fetchCatalogues error:", e);
     return [];
   }
 };
@@ -128,7 +128,7 @@ const fetchBrands = async () => {
       }));
     return brands.value;
   } catch (e) {
-    console.error("[wishlist] fetchBrands error:", e);
+    console.error("fetchBrands error:", e);
     return [];
   }
 };

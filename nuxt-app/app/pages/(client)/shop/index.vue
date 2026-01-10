@@ -2,7 +2,7 @@
   <div class="main-content max-w-7xl mx-auto px-2 sm:px-4">
     <Breadcrumb :crumbs="breadcrumbs" />
     <section class="my-2">
-      <div v-if="isLoading" class="text-gray-500 text-sm text-center">Đang tải...</div>
+      <div v-if="isLoading" class="text-gray-500 text-sm text-center">{{ $t("client.common.loading") }}</div>
       <div v-else>
         <div v-for="(bannerTop, index) in bannerShopTops" :key="bannerTop.id" class="overflow-hidden grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div v-for="(imageUrl, i) in resolveAlbum(bannerTop.album || [])" :key="i" class="mb-2 last:mb-0">
@@ -15,16 +15,16 @@
     <div class="w-full max-w-7xl mx-auto py-2 mb-3">
       <div class="h-px w-full bg-gradient-to-r from-transparent via-[rgba(32,141,128,0.3)] to-transparent"></div>
     </div>
-    <Category description="Khám phá các danh mục sản phẩm đa dạng tại Tech Mart Store – từ thiết bị điện tử, gia dụng thông minh đến phụ kiện hiện đại, đáp ứng nhu cầu học tập, làm việc và giải trí của bạn." :items="(productCatalogueList as any)" basePath="/product/category" />
+    <Category :description="$t('client.common.exploreProducts')" :items="(productCatalogueList as any)" :basePath="PRODUCTCATEGORY" />
     <section class="product-accsessory bg-white shadow-md rounded-md py-3 md:py-6 px-2 md:px-6 mb-4">
       <div class="mb-4 flex flex-wrap justify-between items-center gap-2">
         <div>
-          <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-lg md:text-2xl font-bold">Khởi động mùa hè cùng</h2>
+          <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-lg md:text-2xl font-bold">{{ $t("client.common.summerSeason") }}</h2>
           <div class="h-1 max-w-72 my-2 relative">
             <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-white via-green-300 to-green-300"></div>
           </div>
         </div>
-        <a href="#" class="text-sm md:text-base relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] font-medium after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#007c8b] after:to-[#00b88c] after:transition-all after:duration-300 hover:after:w-full">Xem tất cả</a>
+        <a href="#" class="text-sm md:text-base relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] font-medium after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#007c8b] after:to-[#00b88c] after:transition-all after:duration-300 hover:after:w-full">{{ $t("client.common.viewAll") }}</a>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
         <div class="md:col-span-2">
@@ -33,7 +33,7 @@
               <NuxtImg :src="imageUrl" :alt="`${bannerSeason.name || 'Banner Season'} ${i + 1}`" loading="lazy" class="object-cover w-full h-full rounded-lg" />
             </div>
             <div class="absolute w-full inset-0 bg-black/20 flex items-end justify-center py-4">
-              <a href="#" class="relative flex items-center justify-center md:px-6 md:py-2 py-1 px-3 font-medium text-sm md:text-base transition-all bg-gradient-to-r from-sky-500 to-cyan-400 rounded-md shadow-lg hover:scale-105 hover:from-sky-600 hover:to-cyan-500 focus:outline-none focus:ring-2 focus:ring-sky-400 text-white">Khám phá</a>
+              <a href="#" class="relative flex items-center justify-center md:px-6 md:py-2 py-1 px-3 font-medium text-sm md:text-base transition-all bg-gradient-to-r from-sky-500 to-cyan-400 rounded-md shadow-lg hover:scale-105 hover:from-sky-600 hover:to-cyan-500 focus:outline-none focus:ring-2 focus:ring-sky-400 text-white">{{ $t("client.common.explore") }}</a>
             </div>
           </div>
         </div>
@@ -51,8 +51,8 @@
         <div class="flex-1 w-full">
           <div class="flex justify-between items-center mb-3 md:mb-4">
             <span class="text-xs md:text-sm">
-              Hiển thị
-              <span class="text-sky-400 underline">{{ totalProducts }} kết quả</span>
+              {{ $t("client.common.display") }}
+              <span class="text-sky-400 underline">{{ totalProducts }} {{ $t("client.common.results") }}</span>
             </span>
             <FilterSort :sort="filters.sort" :setSort="setSort" />
           </div>
@@ -76,7 +76,7 @@
             <template v-else>
               <div class="flex flex-col items-center justify-center py-10 text-center text-gray-500">
                 <NuxtImg :src="EMPTYBOX" alt="" class="object-contain" />
-                <p class="text-sm text-center">Không có sản phẩm phù hợp với bộ lọc bạn chọn.</p>
+                <p class="text-sm text-center">{{ $t("client.common.noProductsMatchFilter") }}</p>
               </div>
             </template>
           </div>
@@ -90,7 +90,7 @@
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
         <div class="lg:col-span-8 bg-white shadow-md rounded-md py-3 md:py-6 px-2 md:px-6 mb-4">
           <div class="flex justify-between items-center mb-2">
-            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-lg font-bold">Giới thiệu sản phẩm</h2>
+            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-lg font-bold">{{ $t("client.common.productIntroduction") }}</h2>
             <div class="h-1 max-w-64 my-2 relative">
               <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-white via-green-300 to-green-300"></div>
             </div>
@@ -103,8 +103,8 @@
         <div class="lg:col-span-4 min-w-0 bg-white shadow-md rounded-md py-3 md:py-6 px-2 md:px-6 mb-4">
           <div class="posts-shop">
             <div class="flex justify-between items-center mb-2">
-              <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-lg font-bold">Sự kiện sản phẩm</h2>
-              <NuxtLink :to="TOPOST" class="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] text-sm font-medium after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#007c8b] after:to-[#00b88c] after:transition-all after:duration-300 hover:after:w-full">Xem tất cả</NuxtLink>
+              <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-lg font-bold">{{ $t("client.common.productEvents") }}</h2>
+              <NuxtLink :to="TOPOST" class="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] text-sm font-medium after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#007c8b] after:to-[#00b88c] after:transition-all after:duration-300 hover:after:w-full">{{ $t("client.common.viewAll") }}</NuxtLink>
             </div>
             <div class="space-y-4 mt-8 relative border-l border-dashed border-sky-500 pl-4">
               <NuxtLink v-for="post in posts" :key="post.id" :to="`${TOPOST}/${post.slug}`">
@@ -132,9 +132,12 @@ import FilterBar from "~/components/client/ui/FilterBar.vue";
 import ProductCard from "~/components/client/features/ProductCard.vue";
 import { Splide, SplideSlide } from "@splidejs/vue-splide";
 import FilterSort from "~/components/client/features/FilterSort.vue";
-import { EMPTYBOX, IMAGEDEFAULT, TOPOST } from "#imports";
+import { EMPTYBOX, IMAGEDEFAULT, TOPOST, TOSHOP, PRODUCTCATEGORY, definePageMeta } from "#imports";
 import { resolveAlbum } from "~/utils/helpers";
+import { computed, nextTick, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
 const { banners, catalogues, products, summerProducts, posts, bannerSeason, totalProducts, hasMore, isLoading, initializeData, loadMore, filters, setSort, setFilter } = useShop();
 
 initializeData();
@@ -197,7 +200,7 @@ const next = async () => {
   splideRef.value?.splide?.go("+");
 };
 
-const breadcrumbs = [{ label: "shop", href: "/shop" }];
+const breadcrumbs = [{ label: t("client.nav.shop"), href: TOSHOP }];
 
 definePageMeta({ layout: "client" });
 </script>

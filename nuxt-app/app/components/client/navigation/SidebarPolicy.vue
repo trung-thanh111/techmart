@@ -20,7 +20,7 @@
           {{ section.title }}
         </p>
         <nav class="space-y-1">
-          <div v-if="section.title === 'Chính sách' && isLoading" class="flex p-2 text-sm md:p-3 text-gray-400">Đang tải...</div>
+          <div v-if="section.title === $t('client.sidebarPolicy.policy') && isLoading" class="flex p-2 text-sm md:p-3 text-gray-400">{{ $t("client.sidebarPolicy.loading") }}</div>
           <NuxtLink v-else v-for="item in section.items" :key="item.path" :to="item.path" :class="['flex p-2 text-sm md:p-3 font-normal text-center whitespace-normal duration-75 cursor-pointer tabs_item', $route.path === item.path ? 'font-medium bg-gradient-to-r from-sky-500 to-sky-600 text-white' : 'text-gray-700 bg-white hover:bg-gradient-to-r hover:from-sky-500 hover:to-sky-600 hover:text-white']" @click="!isDesktop && (isSidebarOpen = false)">
             {{ item.title }}
           </NuxtLink>

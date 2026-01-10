@@ -7,7 +7,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
-          Bỏ lọc
+          {{ $t("client.common.resetFilters") }}
         </button>
       </div>
       <div class="filter-scroll"></div>
@@ -46,17 +46,17 @@
 
       <Accordion multiple>
         <AccordionPanel value="price">
-          <AccordionHeader>Giá tiền</AccordionHeader>
+          <AccordionHeader>{{ $t("client.common.price") }}</AccordionHeader>
           <AccordionContent>
             <div class="flex flex-col gap-3 py-2">
               <Slider v-model="priceRange" range :min="minPrice" :max="maxPrice" class="w-full" />
               <div class="flex items-center justify-between gap-3">
                 <div class="flex flex-col w-1/2">
-                  <label class="text-sm text-gray-500">Giá tối thiểu</label>
+                  <label class="text-sm text-gray-500">{{ $t("client.common.minimumPrice") }}</label>
                   <InputNumber v-model="priceRange[0]" :min="minPrice" :max="priceRange[1]" mode="currency" currency="VND" locale="vi-VN" inputClass="w-full" />
                 </div>
                 <div class="flex flex-col w-1/2">
-                  <label class="text-sm text-gray-500">Giá tối đa</label>
+                  <label class="text-sm text-gray-500">{{ $t("client.common.maximumPrice") }}</label>
                   <InputNumber v-model="priceRange[1]" :min="priceRange[0]" :max="maxPrice" mode="currency" currency="VND" locale="vi-VN" inputClass="w-full" />
                 </div>
               </div>
@@ -114,7 +114,7 @@ const fetchAttributeCatalogues = async () => {
       selectedAttributes.value[item.slug] = [];
     });
   } catch (e) {
-    console.error("Lỗi khi load attribute catalogues:", e);
+    console.error($t("client.common.errorLoading"), e);
   }
 };
 
@@ -126,7 +126,7 @@ const fetchBrands = async () => {
     });
     brands.value = res.data || [];
   } catch (e) {
-    console.error("Lỗi khi load brands:", e);
+    console.error($t("client.common.errorLoading"), e);
   }
 };
 

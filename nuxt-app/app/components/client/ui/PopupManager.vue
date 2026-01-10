@@ -6,7 +6,7 @@
       </NuxtLink>
       <div class="px-2">
         <h3 class="text-lg font-semibold mb-2">{{ headerText }}</h3>
-        <div v-if="currentPopup.type" class="text-sm text-gray-500 mb-2">{{ $t(`admin.page.popup.type.${currentPopup.type}`) || currentPopup.type }}</div>
+        <div v-if="currentPopup.type" class="text-sm text-gray-500 mb-2">{{ $t(`client.popup.type.${currentPopup.type}`) || currentPopup.type }}</div>
         <div class="prose max-w-none" v-html="getHtmlContent(currentPopup)"></div>
       </div>
     </div>

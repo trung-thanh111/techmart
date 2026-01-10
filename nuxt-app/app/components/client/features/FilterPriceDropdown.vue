@@ -1,7 +1,7 @@
 <template>
   <div ref="dropdownRef" class="relative inline-block group">
     <Button unstyled @click="toggleDropdown" class="flex items-center gap-2 px-3 py-1.5 border border-gray-300 rounded text-sm transition select-none" :class="[hasActivePrice ? 'bg-sky-50 border-sky-500 text-sky-600' : 'text-gray-600 hover:border-sky-500 hover:text-sky-500']">
-      <span>Giá tiền</span>
+      <span>{{ $t("client.common.price") }}</span>
       <i class="pi pi-chevron-down text-xs"></i>
     </Button>
 
@@ -13,7 +13,7 @@
           </Button>
         </div>
         <div class="border-t border-gray-200 pt-4">
-          <label class="block text-sm font-medium text-gray-700 mb-3">Chọn khoảng giá</label>
+          <label class="block text-sm font-medium text-gray-700 mb-3">{{ $t("client.common.selectPriceRange") }}</label>
           <div class="flex flex-wrap items-center gap-2">
             <InputNumber v-model="localMinPrice" inputClass="flex-1 min-w-0 px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-sky-500" mode="currency" currency="VND" locale="vi-VN" :min="0" :max="localMaxPrice" placeholder="0" class="flex-1 min-w-[100px]" />
             <span class="text-gray-500">-</span>
@@ -31,6 +31,9 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const props = defineProps<{
   priceRange: [number, number];
@@ -45,10 +48,10 @@ const maxPrice = 300000000;
 const showDropdown = ref(false);
 
 const priceOptions = [
-  { label: "Dưới 1.000.000", min: minPrice, max: 1000000 },
-  { label: "Từ 2.000.000 đến 5.000.000", min: 2000000, max: 5000000 },
-  { label: "Từ 5.000.000 đến 10.000.000", min: 5000000, max: 10000000 },
-  { label: "Trên 10.000.000", min: 10000000, max: maxPrice },
+  { label: t("client.common.under1000000"), min: minPrice, max: 1000000 },
+  { label: t("client.common.from2000000to5000000"), min: 2000000, max: 5000000 },
+  { label: t("client.common.from5000000to10000000"), min: 5000000, max: 10000000 },
+  { label: t("client.common.over10000000"), min: 10000000, max: maxPrice },
 ];
 
 const localMinPrice = ref(props.priceRange[0]);

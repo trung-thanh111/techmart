@@ -73,7 +73,7 @@
         </template>
       </div>
     </section>
-    <Category :items="(postCatalogueList as any)" basePath="/post/" viewAllLink="/post/categories" viewAllText="Xem tất cả" />
+    <Category :items="(postCatalogueList as any)" basePath="TOPOST" :viewAllLink="TOPOSTCATEGORY" :viewAllText="$t('client.common.viewAll')" />
     <section class="product-accsessory bg-white shadow-md rounded-md py-3 md:py-6 px-2 md:px-6 mb-4 md:mb-6">
       <div class="mb-4 md:mb-5">
         <div class="flex justify-between items-center gap-2">
@@ -85,8 +85,8 @@
       <div v-if="mostLikedLoading" class="text-sm text-gray-500 p-2">{{ $t("client.post.loading") }}</div>
       <div v-else-if="!mostLikedItems || mostLikedItems.length === 0" class="text-sm text-gray-500 p-2">{{ $t("client.post.noPosts") }}</div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-        <NuxtLink v-for="(post, index) in mostLikedItems" :key="post.id" :to="`/post/${post.slug}`" class="flex items-center gap-2 md:gap-3 p-2 md:p-3 rounded-md hover:bg-gray-50 transition">
-          <div class="text-2xl md:text-4xl font-bold text-gray-500">#{{ index + 1 }}</div>
+        <NuxtLink v-for="(post, index) in mostLikedItems" :key="post.id" :to="`${TOPOST}/${post.slug}`" class="flex items-center gap-2 md:gap-3 p-2 md:p-3 rounded-md hover:bg-gray-50 transition">
+          <div class="text-2xl md:text-4xl font-bold text-gray-500">#{{ (index as number) + 1 }}</div>
           <div class="flex-1">
             <p class="text-sm md:text-lg font-medium text-gray-800 leading-snug hover:text-cyan-600 transition line-clamp-2">{{ post.name }}</p>
             <p class="text-xs md:text-sm text-gray-500 mt-1">{{ post.creator?.name }}</p>
@@ -143,7 +143,7 @@
           <div class="bg-white rounded-lg p-3 md:p-4 border border-gray-200 mb-3 md:mb-5">
             <h2 class="text-base md:text-lg font-semibold text-gray-800 mb-2 md:mb-4">{{ $t("client.post.quickView") }}</h2>
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-2 gap-2 mb-3 md:mb-4">
-              <NuxtLink v-for="post in hotQuickItems" :key="post.id" :to="`/post/${post.slug}`" class="group block">
+              <NuxtLink v-for="post in hotQuickItems" :key="post.id" :to="`${TOPOST}/${post.slug}`" class="group block">
                 <NuxtImg :src="post.image?.path ? post.image?.url ?? '' : IMAGEDEFAULT" :alt="post.name" class="rounded-md object-cover w-full h-16 md:w-[145px] md:h-[80px]" loading="lazy" />
                 <span class="text-xs md:text-sm text-gray-800 font-medium group-hover:text-cyan-600 transition-colors line-clamp-2">{{ post.name }}</span>
               </NuxtLink>
@@ -171,17 +171,21 @@
 <script setup lang="ts">
 import { usePostSlider } from "~/composables/usePostSlider";
 import { usePost } from "~/composables/client/post/usePost";
+import { IMAGEDEFAULT, TOPOST, TOPOSTCATEGORY } from "~/utils/constants";
 import Breadcrumb from "~/components/shared/navigation/Breadcrumb.vue";
 import Category from "~/components/client/ui/Category.vue";
+import { definePageMeta } from "#imports";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
 const { isLoading, fetchList, loadLatest, latestItems, latestPage, latestLastPage, latestLoading, loadHotQuick, hotQuickItems, hotQuickPage, hotQuickLastPage, hotQuickLoading, tagList, fetchTags, fetchPostCatalogues, postCatalogueList, fetchHotCataloguePosts, fetchPostsByCatalogueId, byCatalogueCache, byCatalogueLoading, mostLikedItems, mostLikedLoading, fetchMostLiked } = usePost();
 const { postSlideHotOptions, postProductOptions } = usePostSlider();
-const { miniCategoryOptions } = useSlider();
+
 const featuredPosts = await fetchList("featured");
 const featuredPostLimits = await fetchList("featuredLimit");
 await Promise.all([fetchTags(), fetchPostCatalogues(), fetchHotCataloguePosts(), fetchPostsByCatalogueId(3), loadLatest(), loadHotQuick(), fetchMostLiked()]);
 
-const breadcrumbs = [{ label: $t("client.post.breadcrumb"), href: "/post" }];
+const breadcrumbs = [{ label: t("client.post.breadcrumb"), href: TOPOST }];
 definePageMeta({
   layout: "client",
 });

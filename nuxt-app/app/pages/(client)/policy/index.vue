@@ -3,5 +3,8 @@
 </template>
 
 <script setup lang="ts">
-navigateTo("/policy/privacy_policy", { replace: true });
+import { navigateTo } from "#app";
+import { TOPRIVACYPOLICY } from "~/utils/constants";
+
+navigateTo(TOPRIVACYPOLICY, { replace: true });
 </script>
