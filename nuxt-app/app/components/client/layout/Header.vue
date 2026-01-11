@@ -180,7 +180,7 @@
                 <div class="w-full rounded-md border-0 shadow-xl font-normal">
                   <div class="w-full max-w-md rounded-lg shadow-lg overflow-hidden text-sm">
                     <div class="px-4 py-2 bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-white font-medium">
-                      {{ $t("action.quickView") }}
+                      {{ $t("client.action.quickView") }}
                     </div>
                     <div class="max-h-[300px] overflow-y-auto">
                       <div v-for="item in cartItems" :key="item.id" class="flex items-start px-4 py-3 border-b border-gray-100 hover:bg-gray-50">
@@ -199,7 +199,7 @@
                     <div class="flex items-center justify-between px-4 py-3 border-t border-gray-100">
                       <p class="text-gray-500 text-sm">{{ $t("client.cart.itemsInCart", { count: cartCount }) }}</p>
                       <NuxtLink :to="TOCART" class="bg-info-500 hover:bg-info-600 text-white font-medium p-2 rounded text-sm transition-all duration-200">
-                        {{ $t("action.viewCart") }}
+                        {{ $t("client.action.viewCart") }}
                       </NuxtLink>
                     </div>
                   </div>
@@ -324,7 +324,7 @@
                   <div class="w-full rounded-md border-0 shadow-xl font-normal">
                     <div class="w-full max-w-md rounded-lg shadow-lg overflow-hidden text-sm">
                       <div class="px-4 py-2 bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-white font-medium">
-                        {{ $t("action.quickView") }}
+                        {{ $t("client.action.quickView") }}
                       </div>
                       <div class="max-h-[300px] overflow-y-auto">
                         <div v-for="item in cartItems" :key="item.id" class="flex items-start px-4 py-3 border-b border-gray-100 hover:bg-gray-50">
@@ -345,7 +345,7 @@
                       <div class="flex items-center justify-between px-4 py-3 border-t border-gray-100">
                         <span class="text-gray-500 text-sm">{{ $t("client.cart.itemsInCart", { count: cartCount }) }}</span>
                         <NuxtLink :to="TOCART" class="!bg-info-500 hover:!bg-info-600 text-white font-medium p-2 rounded text-sm transition-all duration-200">
-                          {{ $t("action.viewCart") }}
+                          {{ $t("client.action.viewCart") }}
                         </NuxtLink>
                       </div>
                     </div>

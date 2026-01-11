@@ -24,7 +24,7 @@
                   <ProductCardCompare v-if="compareList[i - 1]" :item="compareList[i - 1]!" @remove="() => handleRemoveProduct(compareList[i - 1]!.variantId)" class="bg-white rounded-lg" />
                   <button v-else @click="openSearchModal" class="border-2 border-dashed border-gray-400 rounded-lg p-4 flex flex-col items-center justify-center min-h-[120px] hover:border-sky-400 hover:bg-sky-900/20 transition-colors">
                     <span class="text-4xl text-gray-400 mb-2">+</span>
-                    <span class="text-sm text-gray-400">{{ $t("action.addProduct") }}</span>
+                    <span class="text-sm text-gray-400">{{ $t("client.action.addProduct") }}</span>
                   </button>
                 </template>
               </div>

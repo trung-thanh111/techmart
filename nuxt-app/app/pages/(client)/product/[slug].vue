@@ -61,7 +61,7 @@
                   <div class="lg:mb-3 p-3">
                     <div class="flex items-center md:justify-between justify-end">
                       <div class="flex items-center justify-between">
-                        <span class="caption font-medium text-sm text-gray-500 mr-[18px] md:block hidden">{{ $t("action.share") }}</span>
+                        <span class="caption font-medium text-sm text-gray-500 mr-[18px] md:block hidden">{{ $t("client.action.share") }}</span>
                         <div class="flex items-center space-x-[12px]">
                           <a aria-label="message-share" class="transition duration-200 ease-in-out hover:opacity-70" href="https://www.facebook.com/dialog/send?app_id=420292729776844&amp;display=popup&amp;link=https://techmart.vn/den-led-ban-hoc-cam-ung-6w-rd-rl-38plus-p-221223003160&amp;redirect_uri=https://techmart.vn/den-led-ban-hoc-cam-ung-6w-rd-rl-38plus-p-221223003160"><NuxtImg src="/client/images/social/messenger.png" alt="facebook message" class="object-cover w-5 h-5" loading="lazy" /></a>
                           <a aria-label="facebook-share" class="transition duration-200 ease-in-out hover:opacity-70" href="https://www.facebook.com/sharer/sharer.php?u=https://techmart.vn/den-led-ban-hoc-cam-ung-6w-rd-rl-38plus-p-221223003160">
@@ -226,7 +226,7 @@
                       </div>
                     </div>
                     <div class="btn-md text-strong-blue-400 inline-flex items-center cursor-pointer duration-200 mt-2">
-                      <a @click.prevent="scrollToTab('specification')" href="#tabs-information" class="text-xs font-medium flex items-center space-x-[6px] text-sky-500">{{ $t("action.viewDetail") }}</a>
+                      <a @click.prevent="scrollToTab('specification')" href="#tabs-information" class="text-xs font-medium flex items-center space-x-[6px] text-sky-500">{{ $t("client.action.viewDetail") }}</a>
                       <div class="ml-[4px] flex-shrink-0">
                         <svg class="text-sky-500" xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
                           <g clip-path="url(#clip0_8633_16495)">
@@ -248,7 +248,7 @@
                       <div v-html="productDetail.description"></div>
                     </div>
                     <div class="btn-md text-strong-blue-400 inline-flex items-center cursor-pointer hover:text-strong-blue-500 duration-200 mt-2">
-                      <a @click.prevent="scrollToTab('summary')" href="#tabs-information" class="text-xs font-medium flex items-center space-x-[6px] text-sky-500">{{ $t("action.viewDetail") }}</a>
+                      <a @click.prevent="scrollToTab('summary')" href="#tabs-information" class="text-xs font-medium flex items-center space-x-[6px] text-sky-500">{{ $t("client.action.viewDetail") }}</a>
                       <div class="ml-[4px] flex-shrink-0">
                         <svg class="text-sky-500" xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
                           <g clip-path="url(#clip0_8633_16495)">
@@ -375,7 +375,7 @@
                     <span class="text-gray-600 caption text-sm">{{ $t("client.header.warrantyYears") }}</span>
                   </div>
                   <NuxtLink :to="TOPOLICY" class="text-sm flex items-center space-x-[6px] text-sky-500">
-                    <span class="underline">{{ $t("action.viewPolicy") }}</span>
+                    <span class="underline">{{ $t("client.action.viewPolicy") }}</span>
                     <span>
                       <svg xmlns="http://www.w3.org/2000/svg" width="7" height="10" fill="none" viewBox="0 0 7 10">
                         <path fill="currentColor" d="M1.04.16L.71.487a.543.543 0 0 0-.16.387c0 .147.058.284.16.387l3.737 3.737-3.74 3.74a.543.543 0 0 0-.16.387c0 .147.057.284.16.387l.327.328c.214.213.56.213.774 0l4.47-4.454a.56.56 0 0 0 .175-.388v-.002a.559.559 0 0 0-.175-.386L1.82.16a.553.553 0 0 0-.78 0z"></path>
@@ -451,7 +451,7 @@
                 <div class="flex justify-center mt-6 sm:mt-8">
                   <div class="relative z-10">
                     <button type="button" @click="isDescriptionExpanded = !isDescriptionExpanded" class="toggleBtn w-full flex items-center justify-center bg-gradient-to-r from-sky-700 to-sky-600 hover:from-sky-600 hover:to-sky-500 text-white rounded-xs transition-all duration-300 ease-in-out transform focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-1 text-sm leading-none shadow-md hover:shadow-md font-semibold py-[12px] px-[24px]">
-                      <span class="whitespace-nowrap">{{ isDescriptionExpanded ? $t("action.collapse") : $t("action.expand") }}</span>
+                      <span class="whitespace-nowrap">{{ isDescriptionExpanded ? $t("client.action.collapse") : $t("client.action.expand") }}</span>
                     </button>
                   </div>
                 </div>
