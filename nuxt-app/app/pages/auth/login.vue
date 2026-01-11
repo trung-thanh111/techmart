@@ -87,7 +87,7 @@
 
             <p class="mt-6 text-center text-sm text-gray-600">
               {{ $t("auth.noAccount") }}
-              <NuxtLink :to="TOREGISTER" class="text-cyan-600 hover:underline">{{ $t("auth.register") }}</NuxtLink>
+              <NuxtLink :to="TOREGISTER" class="text-cyan-600 hover:underline">{{ $t("auth.register.title") }}</NuxtLink>
             </p>
           </div>
         </div>

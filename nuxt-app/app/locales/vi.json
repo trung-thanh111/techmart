@@ -1027,7 +1027,14 @@
       "enterNewPassword": "Nhập mật khẩu mới của bạn",
       "passwordResetSuccess": "Mật khẩu đã được đặt lại thành công!",
       "backToLogin": "Quay lại đăng nhập",
-      "copiedLink": "Đã copy link"
+      "copiedLink": "Đã copy link",
+      "form": {
+        "email": "Email",
+        "fullName": "Họ tên",
+        "subject": "Chủ đề",
+        "content": "Nội dung",
+        "confirm": "Xác nhận"
+      }
     },
     "action": {
       "save": "Lưu",
@@ -1083,6 +1090,7 @@
     },
     "nav": {
       "home": "Trang chủ",
+      "account": "Tài khoản",
       "product": "Sản phẩm",
       "post": "Bài viết",
       "category": "Danh mục",
@@ -1494,7 +1502,10 @@
       "contactTitle": "Liên hệ ngay",
       "groupDescription": "Tổng hợp các câu hỏi thuộc nhóm này",
       "noQuestions": "Chưa có câu hỏi",
-      "faqGroup": "Nhóm câu hỏi"
+      "faqGroup": "Nhóm câu hỏi",
+      "faqTitle": "Câu hỏi thường gặp",
+      "loading": "Đang tải...",
+      "noData": "Không có dữ liệu"
     },
     "agency": {
       "searchPlaceholder": "Tìm kiếm đại lý",
@@ -1524,6 +1535,13 @@
       "priceLowToHigh": "Giá: Thấp đến Cao",
       "priceHighToLow": "Giá: Cao đến Thấp",
       "topRated": "Đánh giá cao",
+      "superSale": "Siêu Sales",
+      "bestSellers": "Bán chạy nhất",
+      "gamingSetup": "Cấu hình gamming",
+      "noProductsFound": "Không tìm thấy sản phẩm",
+      "integrateAI": "Tích hợp AI",
+      "explore": "Khám phá",
+      "newExperience": "Trải nghiệm mới",
       "smartShopping": "Mua Sắm Công Nghệ",
       "smartConvenient": "Thông Minh, Tiện Lợi",
       "discoverThousands": "Khám phá hàng nghìn sản phẩm công nghệ chính hãng từ các thương hiệu uy tín. Giao nhanh, thanh toán tiện lợi, bảo hành rõ ràng.",
@@ -1646,7 +1664,11 @@
       "price": "Giá",
       "productCount": "sản phẩm",
       "display": "Hiển thị",
-      "results": "kết quả"
+      "results": "kết quả",
+      "easyExchange": "Dễ dàng đổi trả",
+      "loginRequired": "Đăng nhập",
+      "memberBenefits": "để hưởng quyền lợi thành viên từ chúng tôi!",
+      "specifications": "Thông số kỹ thuật"
     },
     "search": {
       "recentSearches": "Tìm kiếm gần đây",
