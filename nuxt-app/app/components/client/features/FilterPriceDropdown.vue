@@ -97,16 +97,23 @@ const handleClose = () => {
 
 // Close dropdown when clicking outside
 const dropdownRef = ref<HTMLElement | null>(null);
+
+const handleClickOutside = (event: MouseEvent) => {
+  const target = event.target as HTMLElement;
+  if (dropdownRef.value && !dropdownRef.value.contains(target)) {
+    showDropdown.value = false;
+  }
+};
+
 onMounted(() => {
-  const handleClickOutside = (event: MouseEvent) => {
-    const target = event.target as HTMLElement;
-    if (dropdownRef.value && !dropdownRef.value.contains(target)) {
-      showDropdown.value = false;
-    }
-  };
-  document.addEventListener("click", handleClickOutside);
-  onBeforeUnmount(() => {
+  if (import.meta.client) {
+    document.addEventListener("click", handleClickOutside);
+  }
+});
+
+onBeforeUnmount(() => {
+  if (import.meta.client) {
     document.removeEventListener("click", handleClickOutside);
-  });
+  }
 });
 </script>

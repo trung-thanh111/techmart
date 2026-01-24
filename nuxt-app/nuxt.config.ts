@@ -84,6 +84,7 @@ export default defineNuxtConfig({
   experimental: {
     payloadExtraction: false,
     viewTransition: false,
+    asyncContext: true,
   },
 
   routeRules: {
@@ -100,12 +101,19 @@ export default defineNuxtConfig({
       },
       watch: {
         usePolling: false,
-        ignored: ["**/node_modules/**", "**/.git/**", "**/dist/**", "**/.nuxt/**"],
+        ignored: ["**/node_modules/**", "**/.git/**", "**/dist/**", "**/.nuxt/**", "**/public/**"],
       },
     },
+    warmup: {
+      clientFiles: ["./app/components/**/*.vue", "./app/layouts/**/*.vue", "./app/pages/(client)/**/*.vue"],
+    },
     optimizeDeps: {
-      include: ["vue", "vue-router", "@pinia/nuxt", "primevue"],
-      exclude: ["@nuxt/devtools-kit"],
+      include: ["vue", "vue-router", "@vueuse/core", "pinia", "primevue/button", "primevue/datatable", "primevue/inputtext", "primevue/dialog", "primevue/dropdown", "primevue/calendar", "primevue/fileupload", "primevue/paginator", "primevue/toast", "@splidejs/vue-splide", "zod", "vee-validate", "fuzzysort", "extend"],
+      exclude: ["ckeditor5", "@ckeditor/ckeditor5-vue", "@nuxt/devtools-kit"],
+    },
+    esbuild: {
+      target: "esnext",
+      treeShaking: true,
     },
     css: {
       devSourcemap: false,
