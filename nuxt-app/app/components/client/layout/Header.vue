@@ -360,9 +360,19 @@
           <div class="mt-8 hidden sm:grid grid-cols-2 md:grid-cols-5 text-white text-sm">
             <!-- menu -->
             <Menu :menu-tree="menuTree" />
-
+            <NuxtLink :to="TOSHOP">
+              <div class="flex items-center justify-center cursor-pointer h-10 px-3 rounded transition-opacity">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mt-0.5 text-white mr-2">
+                  <path d="M3 9L5 3h14l2 6" />
+                  <path d="M3 9h18" />
+                  <rect x="4" y="9" width="16" height="11" rx="2" />
+                  <path d="M10 20v-6h4v6" />
+                </svg>
+                <span>{{ $t("client.common.shop") }}</span>
+              </div>
+            </NuxtLink>
             <div class="flex items-center justify-center bg-gradient-to-r from-[#a8d444] to-[#b7e354] text-[#005a63] hover:opacity-90 cursor-pointer h-10 px-3 rounded transition-opacity">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 mt-1 text-yellow-300 mr-1"><polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2" /></svg>
+              <svg viewBox="0 0 512 512" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 mt-1 text-yellow-300 mr-1"><polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2" /></svg>
               <span>{{ $t("client.common.promotion") }}</span>
             </div>
           </div>

@@ -958,6 +958,7 @@
   },
   "client": {
     "common": {
+      "shop": "Cửa hàng",
       "price": "Giá",
       "display": "Hiển thị ",
       "noData": "Không có dữ liệu",

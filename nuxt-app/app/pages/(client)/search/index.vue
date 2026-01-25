@@ -67,22 +67,18 @@ const { products, totalProducts, filters, fetchProducts, setSort } = useShop();
 
 const perpage = 20;
 
-const load = async (page = 1) => {
-  filters.value.keyword = queryKeyword.value || "";
-  await fetchProducts(page, perpage, false);
-};
-
-watch(
-  () => route.query.keyword,
-  (val) => {
-    queryKeyword.value = (val as string) || "";
-    load(1);
-  }
+const { status } = await useAsyncData(
+  "search-products",
+  async () => {
+    const q = (route.query.keyword as string) || "";
+    queryKeyword.value = q;
+    filters.value.keyword = q;
+    return await fetchProducts(1, perpage, false);
+  },
+  {
+    watch: [() => route.query.keyword],
+  },
 );
-
-onMounted(async () => {
-  await load(1);
-});
 
 const breadcrumbs = computed(() => [{ label: t("client.search.breadcrumb"), href: TOSEARCH }]);
 

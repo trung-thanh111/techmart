@@ -39,9 +39,11 @@ trait HasQuery
     public function scopeKeyword($query, array $keyword = [])
     {
         if (!empty($keyword['q'])) {
-            foreach ($keyword['fields'] as $field) {
-                $query->orWhere($field, 'like', '%' . $keyword['q'] . '%');
-            }
+            $query->where(function ($subQuery) use ($keyword) {
+                foreach ($keyword['fields'] as $field) {
+                    $subQuery->orWhere($field, 'like', '%' . $keyword['q'] . '%');
+                }
+            });
         }
         return $query;
     }
