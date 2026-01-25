@@ -23,9 +23,7 @@ export const attributeCatalogueService = {
 
   show: async (id: number | string): Promise<IApiOk<IAttributeCatalogue>> => {
     const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IAttributeCatalogue>>(
-      `${ENDPOINT}/attribute_catalogues/${id}`
-    );
+    return await privateFetch<IApiOk<IAttributeCatalogue>>(`${ENDPOINT}/attribute_catalogues/${id}`);
   },
 
   update: async (id: number, payload: Partial<IAttributeCatalogue>): Promise<IApiOk<IAttributeCatalogue>> => {
@@ -40,7 +38,7 @@ export const attributeCatalogueService = {
   delete: async (id: number): Promise<IApiMessage> => {
     const { privateFetch } = useApi();
     return await privateFetch<IApiMessage>(`${ENDPOINT}/attribute_catalogues/${id}`, {
-      method: "DELETE"
+      method: "DELETE",
     });
   },
 
@@ -48,14 +46,12 @@ export const attributeCatalogueService = {
     const { privateFetch } = useApi();
     return await privateFetch<IApiMessage>(`${ENDPOINT}/attribute_catalogues/bulkDelete`, {
       body: { ids },
-      method: "DELETE"
+      method: "DELETE",
     });
   },
 
   all: async (): Promise<IApiOk<IAttributeCatalogue>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IAttributeCatalogue>>(
-      `${ENDPOINT}/attribute_catalogues?type=all`
-    );
+    return await publicFetch<IApiOk<IAttributeCatalogue>>(`${ENDPOINT}/attribute_catalogues?type=all`);
   },
 };

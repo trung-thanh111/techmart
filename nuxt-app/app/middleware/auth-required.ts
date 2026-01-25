@@ -8,7 +8,7 @@ export default defineNuxtRouteMiddleware(() => {
 
   if (!authStore.isAuthenticated) {
     if (toast) {
-      toast.warning("Quyền bảo mật", {
+      toast.warning("Bảo mật", {
         description: "Bạn cần đăng nhập để tiếp tục.",
       });
     }

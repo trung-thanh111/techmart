@@ -216,7 +216,7 @@ export const useProduct = () => {
     try {
       const currentViewCount = productDetail.value?.viewCount || 0;
       const newViewCount = currentViewCount + 1;
-      await productService.update(productId, { viewCount: newViewCount });
+      await productService.incrementViewCount(productId, newViewCount);
       if (productDetail.value) {
         productDetail.value.viewCount = newViewCount;
       }

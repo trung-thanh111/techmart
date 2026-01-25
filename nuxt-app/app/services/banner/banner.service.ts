@@ -65,4 +65,14 @@ export const bannerService = {
       params,
     });
   },
+
+  showPublic: async (id: number | string): Promise<IApiOk<IBanner>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IBanner>>(`${ENDPOINT}/banners/${id}`);
+  },
+
+  allPublic: async (): Promise<IApiOk<IBanner>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IBanner>>(`${ENDPOINT}/banners?type=all&publish=2`);
+  },
 };

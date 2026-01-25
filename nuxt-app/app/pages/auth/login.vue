@@ -109,7 +109,7 @@ const { authOptions, loginItems } = useAuthSlider();
 const { handleLogin, isLoading } = useLogin();
 
 definePageMeta({
-  middleware: "auth-redirect",
+  middleware: "guest",
   layout: "auth",
 });
 </script>
