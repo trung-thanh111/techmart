@@ -8,7 +8,7 @@
 
     <div v-if="isSidebarOpen" class="fixed inset-0 bg-black/30 z-40 md:hidden" @click="isSidebarOpen = false"></div>
 
-    <aside :class="['transition-all duration-300 bg-white border-r border-gray-200 sticky md:static top-0 flex-shrink-0', isSidebarOpen ? 'fixed z-50 top-0 left-0 h-full md:relative md:translate-x-0' : 'md:relative', !isSidebarOpen && 'md:block hidden', 'w-[95vw] md:w-64 p-4']" v-show="isSidebarOpen || isDesktop">
+    <aside :class="['transition-all duration-300 bg-white border-r border-gray-200 sticky md:static top-0 flex-shrink-0', isSidebarOpen ? 'fixed z-20 top-0 left-0 h-full md:relative md:translate-x-0' : 'md:relative', !isSidebarOpen && 'md:block hidden', 'w-[95vw] md:w-64 p-4']" v-show="isSidebarOpen || isDesktop">
       <button class="md:hidden flex items-center justify-end w-full mb-2 text-gray-500 hover:text-sky-600 focus:outline-none" @click="isSidebarOpen = false">
         <svg class="w-6 h-6" fill="none" stroke-width="2" viewBox="0 0 24 24">
           <line x1="18" y1="6" x2="6" y2="18" />

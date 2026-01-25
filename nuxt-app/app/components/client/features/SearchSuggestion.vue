@@ -134,14 +134,22 @@ const onSubmit = async () => {
   const q = (keyword.value || "").trim();
   if (!q) return;
   saveRecent(q);
-  // Use direct navigation to ensure page loads in all environments
-  window.location.href = `/search?keyword=${encodeURIComponent(q)}`;
+  open.value = false;
+  // Use Nuxt router to navigate without page reload
+  navigateTo({
+    path: "/search",
+    query: { keyword: q },
+  });
 };
 
 const useRecent = (val: string) => {
   keyword.value = val;
   saveRecent(val);
-  window.location.href = `/search?keyword=${encodeURIComponent(val)}`;
+  open.value = false;
+  navigateTo({
+    path: "/search",
+    query: { keyword: val },
+  });
 };
 
 //out blur khởi in ơut thì open = false sau 150ms
