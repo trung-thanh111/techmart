@@ -59,6 +59,16 @@ class ProductController extends BaseController
         return $this->baseRestore($request, $id);
     }
 
+    public function updateView(int $id): JsonResponse
+    {
+        // Safe update for view_count only
+        $payload = request()->only(['view_count']);
+        if(!empty($payload)){
+             $this->service->update($id, $payload);
+        }
+        return ApiResource::ok(null, Lang::get('message.update_data_successfully'));
+    }
+
     protected function getService()
     {
         return $this->service;

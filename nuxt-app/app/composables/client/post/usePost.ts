@@ -216,7 +216,7 @@ export const usePost = () => {
     try {
       const currentViewCount = postDetail.value?.viewCount || 0;
       const newViewCount = currentViewCount + 1;
-      await postService.update(postId, { viewCount: newViewCount });
+      await postService.incrementViewCount(postId, newViewCount);
       if (postDetail.value) {
         postDetail.value.viewCount = newViewCount;
       }

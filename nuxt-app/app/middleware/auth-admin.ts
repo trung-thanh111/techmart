@@ -1,17 +1,16 @@
-import { useAuthStore } from "~/stores/auth/auth";
+import { useAdminAuthStore } from "~/stores/auth/adminAuth";
 import { useAppToast } from "~/composables/useAppToast";
-import { TOHOME } from "~/utils/constants";
 
 export default defineNuxtRouteMiddleware(() => {
   const toast = useAppToast();
-  const authStore = useAuthStore();
+  const authStore = useAdminAuthStore();
 
-  if (!authStore.isAdmin) {
+  if (!authStore.isAuthenticated || !authStore.isAdmin) {
     if (toast) {
-      toast.warning("Quyền bảo mật", {
-        description: "Bạn không có quyền truy cập trang.",
+      toast.warning("Bảo mật", {
+        description: "Bạn không có quyền truy cập trang quản trị.",
       });
     }
-    return navigateTo(TOHOME);
+    return navigateTo("/auth/admin/login");
   }
 });

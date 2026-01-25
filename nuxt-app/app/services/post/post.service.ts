@@ -113,4 +113,17 @@ export const postService = {
     const { publicFetch } = useApi();
     return await publicFetch<IApiOk<IPost[]>>(`${ENDPOINT}/posts?type=all&publish=2&sort=like_count,desc&limit=6`);
   },
+
+  showPublic: async (id: number | string): Promise<IApiOk<IPost>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPost>>(`${ENDPOINT}/posts/${id}`);
+  },
+
+  incrementViewCount: async (id: number, viewCount: number): Promise<IApiOk<any>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<any>>(`${ENDPOINT}/posts/${id}/view`, {
+      method: "PUT",
+      body: { view_count: viewCount },
+    });
+  },
 };

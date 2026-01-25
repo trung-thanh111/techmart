@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue";
-import { popupService } from "~/services/admin/popup.service";
+import { popupService } from "~/services/system/popup.service";
 import type { IPopup } from "~/interfaces/system/popup.interface";
 
 const visible = ref(false);

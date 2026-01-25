@@ -61,4 +61,9 @@ export const brandService = {
       params,
     });
   },
+
+  allPublic: async (): Promise<IApiOk<IBrand>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IBrand>>(`${ENDPOINT}/brands?type=all`);
+  },
 };

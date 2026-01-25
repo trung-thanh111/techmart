@@ -38,4 +38,5 @@ return [
     'user_not_logged_in' => 'Người dùng chưa đăng nhập',
     'change_password_success' => 'Đổi mật khẩu thành công',
     'change_password_error' => 'Có lỗi xảy ra khi đổi mật khẩu',
+    'permission_denied_admin_on_client' => 'Tài khoản quản trị không được phép đăng nhập tại đây.',
 ];

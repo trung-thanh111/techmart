@@ -46,12 +46,30 @@ export const useApi = () => {
   const publicFetch = createFetch();
 
   const privateFetch = createFetch({
-    onRequest({ options }) {
+    async onRequest({ options }) {
       const auth = useAuthStore();
+
+      // Check for token expiry
+      if (auth.accessToken && auth.expireAt && Date.now() > auth.expireAt) {
+        try {
+          // Dynamic import to avoid circular dependency
+          const { authService } = await import("~/services/auth/auth.service");
+          await authService.refresh();
+        } catch (e) {
+          // If refresh fails, let the request proceed (it will 401) or logout
+          // We let it proceed to fail gracefully or let onResponseError handle it
+          console.error("Token refresh failed", e);
+        }
+      }
+
       const accessToken = auth.accessToken;
 
       if (!accessToken) {
+        // If it's a public endpoint called via privateFetch, we might want to allow it?
+        // But privateFetch implies auth.
         console.warn("Không tìm thấy accessToken");
+        // We throw immediately? Or let it fail 401?
+        // Throwing saves a request.
         throw createError({
           statusCode: 401,
           statusMessage: "Unauthorized",

@@ -958,6 +958,9 @@
   },
   "client": {
     "common": {
+      "male": "Nam",
+      "female": "Nữ",
+      "other": "Khác",
       "shop": "Cửa hàng",
       "price": "Giá",
       "display": "Hiển thị ",

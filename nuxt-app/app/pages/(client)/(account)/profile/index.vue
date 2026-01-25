@@ -112,7 +112,7 @@
       </div>
       <div class="col-span-1 md:col-span-3 text-center">
         <label for="image" class="block text-left text-sm text-gray-600 mb-2">{{ $t("client.profile.form.image") }}</label>
-        <SingleImageUpload :initial-url="currentImageUrl" :note="$t('client.profile.form.imageNote')" @selected="(f)=> setValues({ ...(values as any), image: f } as any)" />
+        <SingleImageUpload :initial-url="currentImageUrl" :note="$t('client.profile.form.imageNote')" @selected="(f) => setValues({ ...(values as any), image: f } as any)" />
         <small>{{ $t("client.profile.form.clickToUpload") }}</small>
       </div>
     </form>
@@ -122,30 +122,31 @@
 <script setup lang="ts">
 import { Field } from "vee-validate";
 import SingleImageUpload from "~/components/admin/custom/SingleImageUpload.vue";
-import { useUser } from "~/composables/admin/user/useUser";
+import { useProfile } from "~/composables/client/user/useProfile";
 import { useAuthStore } from "~/stores/auth/auth";
 
-const { isLoading, genderOptions, show, handleUpdateProfile, setValues, values } = useUser(undefined, "update");
+const { isLoading, genderOptions, fetchProfile, handleUpdateProfile, setValues, values } = useProfile();
 const authStore = useAuthStore();
+const data = ref<any>(null);
 
-const id = authStore.user?.id || 0;
-const { data } = await show(id);
+// Fetch Profile on mount
+const init = async () => {
+  const user = await fetchProfile();
+  data.value = user;
+  if (user && user.image) {
+    currentImageUrl.value = user.image.path ? user.image.url || null : null;
+  }
+};
+
+onMounted(() => {
+  init();
+});
 
 const currentImageUrl = ref<string | null>(null);
-currentImageUrl.value = data?.image?.path ? data?.image?.url || null : null;
 
-setValues({
-  name: data.name,
-  email: data.email,
-  lastName: data.lastName,
-  firstName: data.firstName,
-  description: data.description,
-  birthday: data.birthday,
-  gender: data.gender,
-  phone: data.phone,
-  address: data.address,
-  publish: data.publish || 0,
-  userCatalogueId: data.userCatalogueId,
+definePageMeta({
+  middleware: "auth-required",
+  layout: "client",
 });
 </script>
 
