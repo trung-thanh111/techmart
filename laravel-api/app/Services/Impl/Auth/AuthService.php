@@ -130,32 +130,14 @@ class AuthService implements AuthServiceInterface
                 'email' => $request->string('email'),
                 'password' => $request->string('password')
             ];
-            
+
             if (!$accessToken = $auth->attempt($credentials)) {
                 throw new AuthenticationException(Lang::get('message.auth_failed'));
             }
 
-            // Check Admin Role
-            if ($guard === 'admin') {
-                $user = $auth->user();
-                if (!$user->is_admin) { // Using the accessor
-                    $auth->logout();
-                    throw new AuthenticationException(Lang::get('message.permission_denied'));
-                }
-            }
-            
-            // Block Admin on Client (User) login
-            if ($guard === 'api') {
-                $user = $auth->user();
-                if ($user->is_admin) {
-                     $auth->logout();
-                     throw new AuthenticationException(Lang::get('message.permission_denied_admin_on_client'));
-                }
-            }
-
             $this->accessToken = $accessToken;
         }
-        
+
         return $this;
     }
 
@@ -214,9 +196,9 @@ class AuthService implements AuthServiceInterface
         // The user said: "k lẻ admin mỗi lần vào phải đăng nhập lại ... còn riêng user thì có remember".
         // They WANT simultaneous login.
         // So I should STOP deleting all tokens. Just create a new one.
-        
+
         // $this->csrfTokenRepository->deleteCsrfTokenByUserid($auth->user()->id); // CHANGED: Don't delete all.
-        
+
         if (!$csrfToken = $this->csrfTokenRepository->create($payload)) {
             throw new ModelNotFoundException(Lang::get('message.model_not_found'));
         }
@@ -229,7 +211,7 @@ class AuthService implements AuthServiceInterface
     {
         $auth = $this->getAuth($guard);
         $cookieName = $this->getCookieName($guard);
-        
+
         return [
             'data' => [
                 'accessToken' => $this->accessToken,
@@ -294,9 +276,9 @@ class AuthService implements AuthServiceInterface
 
         $cookieName = $this->getCookieName($guard);
         $refreshToken = $request->cookie($cookieName);
-        
+
         if (!$refreshToken) {
-             throw new ModelNotFoundException(Lang::get('message.token_not_found') . ' (Cookie missing)');
+            throw new ModelNotFoundException(Lang::get('message.token_not_found') . ' (Cookie missing)');
         }
 
         if (!$result = $this->refreshTokenRepository->findValidRefreshToken($refreshToken)) {
@@ -341,12 +323,12 @@ class AuthService implements AuthServiceInterface
         }
         return false;
     }
-    
+
     public function logout(string $guard = 'api'): void
     {
         $auth = $this->getAuth($guard);
         // xóa refresh token logic if needed?
         $auth->logout();
-        $auth->invalidate(true); 
+        $auth->invalidate(true);
     }
 }
