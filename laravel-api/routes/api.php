@@ -64,7 +64,7 @@ Route::group(['prefix' => 'v1/auth'], function () {
 });
 
 // Admin Auth routes
-Route::group(['prefix' => 'v1/admin/auth'], function () {
+Route::group(['prefix' => 'v1/auth'], function () {
     Route::post('refresh', [\App\Http\Controllers\Api\V1\Auth\AdminAuthController::class, 'refresh']);
     Route::middleware(['convert'])->group(function () {
         Route::post('login', [\App\Http\Controllers\Api\V1\Auth\AdminAuthController::class, 'login']);
@@ -236,14 +236,14 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
             Route::patch('bulkUpdate', [BannerController::class, 'bulkUpdate']);
         });
         Route::resource('banners', BannerController::class)->except(array_merge($routeExcept, ['index', 'show']));
-        
+
         // Other Admin Resources
         Route::resource('systems', SystemController::class)->except(array_merge($routeExcept, ['index', 'show']));
         Route::resource('popups', PopupController::class)->except(array_merge($routeExcept, ['index', 'show']));
         Route::resource('promotions', PromotionController::class)->except(array_merge($routeExcept, ['index', 'show']));
         Route::resource('menus', MenuController::class)->except(array_merge($routeExcept, ['index', 'show']));
         Route::resource('menu_items', MenuItemController::class)->except(array_merge($routeExcept, ['index', 'show']));
-         
+
         // Admin specific Logic for MenuItems
         Route::post('menu_items/rebuild-tree', [MenuItemController::class, 'rebuildTree']);
         Route::post('menu_items/drag-drop', [MenuItemController::class, 'dragDrop']);
@@ -266,7 +266,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
 
     // USER ROUTES (Logged In User)
     Route::middleware(['jwt:api', 'convert'])->group(function () use ($routeExcept) {
-        
+
         Route::get('profile', [\App\Http\Controllers\Api\V1\User\ProfileController::class, 'show']);
         Route::put('profile', [\App\Http\Controllers\Api\V1\User\ProfileController::class, 'update']);
         Route::patch('profile', [\App\Http\Controllers\Api\V1\User\ProfileController::class, 'update']);
@@ -281,8 +281,8 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
 
         // Address Orders
         Route::group(['prefix' => 'address_orders'], function () {
-             Route::post('bulkStore', [AddressOrderController::class, 'bulkStore']);
-             Route::delete('bulkDelete', [AddressOrderController::class, 'bulkDelete']);
+            Route::post('bulkStore', [AddressOrderController::class, 'bulkStore']);
+            Route::delete('bulkDelete', [AddressOrderController::class, 'bulkDelete']);
         });
         Route::resource('address_orders', AddressOrderController::class)->except($routeExcept);
 
@@ -290,7 +290,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
         Route::resource('post_comments', PostCommentController::class)->except($routeExcept);
         Route::resource('post_likes', PostLikeController::class)->except($routeExcept);
         Route::resource('post_comment_likes', PostCommentLikeController::class)->except($routeExcept);
-        
+
         // Products View Count Update? (If handled via update)
         // If Client uses update for view count, we might need a specific route or allow update?
         // Usually update is restricted. View count should be a separate public endpoint `products/{id}/view`.
@@ -299,19 +299,19 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
     });
 
     // PUBLIC ROUTES (No Auth or Optional Auth)
-    Route::middleware(['convert'])->group(function() use ($routeExcept) {
+    Route::middleware(['convert'])->group(function () use ($routeExcept) {
         Route::get('products', [ProductController::class, 'index']);
         Route::get('products/{id}', [ProductController::class, 'show']);
         Route::get('products', [ProductController::class, 'index']);
         Route::get('products/{id}', [ProductController::class, 'show']);
         Route::get('products', [ProductController::class, 'index']);
         Route::get('products/{id}', [ProductController::class, 'show']);
-        Route::put('products/{id}/view', [ProductController::class, 'updateView']); 
-        
+        Route::put('products/{id}/view', [ProductController::class, 'updateView']);
+
         // Fix for removed resource routes
         Route::get('brands', [BrandController::class, 'index']);
         Route::get('brands/{id}', [BrandController::class, 'show']);
-        
+
         Route::get('product_catalogues', [ProductCatalogueController::class, 'index']);
         Route::get('product_catalogues/{id}', [ProductCatalogueController::class, 'show']);
 
@@ -330,9 +330,9 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
         Route::get('attribute_catalogues', [AttributeCatalogueController::class, 'index']);
         Route::get('attribute_catalogues/{id}', [AttributeCatalogueController::class, 'show']);
 
-         Route::get('attributes', [AttributeController::class, 'index']);
+        Route::get('attributes', [AttributeController::class, 'index']);
         Route::get('attributes/{id}', [AttributeController::class, 'show']);
-        
+
         Route::get('posts', [PostController::class, 'index']);
         Route::get('posts/{id}', [PostController::class, 'show']);
         Route::put('posts/{id}/view', [PostController::class, 'updateView']);

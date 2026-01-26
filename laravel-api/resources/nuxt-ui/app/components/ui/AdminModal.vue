@@ -1,0 +1,1 @@
+<!-- AdminModal.vue - placeholder --> 

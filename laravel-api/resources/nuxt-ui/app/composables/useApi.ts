@@ -1,0 +1,88 @@
+import type { FetchOptions } from "ofetch";
+import { TOLOGIN } from "~/utils/constants";
+import { useAuthStore } from "~/stores/auth/auth";
+
+// Kiểu response chung
+export interface ApiResponse<T = any> {
+  data: T;
+  message?: string;
+  status: number;
+}
+
+// Hàm tạo fetch với base config
+const createFetch = (options: FetchOptions = {}) => {
+  const config = useRuntimeConfig();
+
+  return $fetch.create({
+    baseURL: config.public.baseUrl,
+    timeout: 10000, // ms
+    credentials: "include", // Để gửi cookie
+    ...options,
+    onResponseError({ request, response }) {
+      console.error("API Error:", request, response);
+      if (response.status === 401) {
+        navigateTo(TOLOGIN);
+      }
+      if (response.status === 422) {
+        throw createError({
+          statusCode: 422,
+          statusMessage: response._data?.message,
+          data: {
+            isValidationError: true,
+            errors: response._data?.errors || {},
+          },
+        });
+      }
+      throw createError({
+        statusCode: response.status,
+        statusMessage: response._data?.message || "API Error",
+        data: response._data,
+      });
+    },
+  });
+};
+
+export const useApi = () => {
+  const publicFetch = createFetch();
+
+  const privateFetch = createFetch({
+    async onRequest({ options }) {
+      const auth = useAuthStore();
+
+      // Check for token expiry
+      if (auth.accessToken && auth.expireAt && Date.now() > auth.expireAt) {
+        try {
+          // Dynamic import to avoid circular dependency
+          const { authService } = await import("~/services/auth/auth.service");
+          await authService.refresh();
+        } catch (e) {
+          // If refresh fails, let the request proceed (it will 401) or logout
+          // We let it proceed to fail gracefully or let onResponseError handle it
+          console.error("Token refresh failed", e);
+        }
+      }
+
+      const accessToken = auth.accessToken;
+
+      if (!accessToken) {
+        // If it's a public endpoint called via privateFetch, we might want to allow it?
+        // But privateFetch implies auth.
+        console.warn("Không tìm thấy accessToken");
+        // We throw immediately? Or let it fail 401?
+        // Throwing saves a request.
+        throw createError({
+          statusCode: 401,
+          statusMessage: "Unauthorized",
+        });
+      }
+      const headers = new Headers(options.headers as HeadersInit);
+      headers.set("Authorization", `Bearer ${accessToken}`);
+      options.headers = headers;
+    },
+  });
+
+  return {
+    publicFetch,
+    privateFetch,
+  };
+};
