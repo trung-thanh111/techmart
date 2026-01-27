@@ -39,7 +39,7 @@
                     <div class="mb-3">
                         <label class="form-label">{{ $t("admin.common.form.description") }}</label>
                         <Field name="description" v-slot="{ field }">
-                            <textarea v-bind="field" rows="4" class="form-control" :placeholder="$t('admin.common.form.descriptionPlaceholder')" />
+                            <CKEditor :model-value="field.value" @update:model-value="field.onChange" :placeholder="$t('admin.common.form.descriptionPlaceholder')" height="h-32" />
                         </Field>
                     </div>
                 </div>
@@ -88,6 +88,7 @@ import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
 import PublishSelect from "~/components/custom/PublishSelect.vue";
 import { usePromotionCatalogue } from "~/composables/promotion/usePromotionCatalogue";
 import SingleImageUpload from "~/components/custom/SingleImageUpload.vue";
+import CKEditor from "~/components/custom/CKEditor.vue";
 
 const { handleStore, setValues, values, isLoading, config, slug } = usePromotionCatalogue();
 

@@ -6,16 +6,16 @@ import { formData } from "~/utils/formData";
 const ENDPOINT = "/api/v1/profile";
 
 export const profileService = {
-  getProfile: async (): Promise<IApiOk<IUser>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IUser>>(ENDPOINT);
-  },
+    getProfile: async (): Promise<IApiOk<IUser>> => {
+        const { privateFetch } = useApi();
+        return await privateFetch<IApiOk<IUser>>(ENDPOINT);
+    },
 
-  updateProfile: async (payload: Partial<IUser>): Promise<IApiOk<IUser>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IUser>>(ENDPOINT, {
-      method: "PUT", // Matches route definition
-      body: formData(payload),
-    });
-  },
+    updateProfile: async (payload: Partial<IUser>): Promise<IApiOk<IUser>> => {
+        const { privateFetch } = useApi();
+        return await privateFetch<IApiOk<IUser>>(ENDPOINT, {
+            method: "PUT", // Matches route definition
+            body: formData(payload),
+        });
+    },
 };

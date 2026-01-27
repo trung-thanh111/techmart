@@ -31,6 +31,7 @@ class ProductService extends BaseService implements ProductServiceInterface
         'product_catalogues',
         'product_tags',
         'product_variants',
+        'brands',
     ];
 
     protected $cacheKeyPrefix = 'products';

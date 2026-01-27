@@ -171,7 +171,7 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Mô tả</label>
-                    <textarea v-model="attributeForm.description" rows="4" class="form-control" placeholder="Nhập mô tả thuộc tính" />
+                    <CKEditor v-model="attributeForm.description" :placeholder="'Nhập mô tả thuộc tính'" height="h-32" />
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Trạng thái</label>
@@ -196,6 +196,7 @@ import { attributeService } from "~/services/attribute/attribute.service";
 import Button from "~/components/custom/Button.vue";
 import PublishSelect from "~/components/custom/PublishSelect.vue";
 import { slugify } from "~/utils/helpers";
+import CKEditor from "~/components/custom/CKEditor.vue";
 
 const toast = useToast();
 const variantStore = useProductVariantStore();

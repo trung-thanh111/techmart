@@ -1,1 +1,1 @@
-<!-- AdminButton.vue - placeholder --> 
+<!-- AdminButton.vue - placeholder -->

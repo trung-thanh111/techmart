@@ -64,7 +64,7 @@
                         </label>
                         <Field name="description" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
                             <div class="w-full">
-                                <CKEditor v-model="field.value" @update:modelValue="field.onChange" class="h-64" />
+                                <CKEditor v-model="field.value" @update:modelValue="field.onChange" height="h-32" />
                                 <small v-if="errorMessage && meta.touched" class="text-danger">
                                     {{ $t(errorMessage) }}
                                 </small>

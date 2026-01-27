@@ -29,7 +29,7 @@
                     <div class="mb-3">
                         <label class="form-label">{{ $t("admin.common.form.content") }}</label>
                         <Field name="content" v-slot="{ field }">
-                            <textarea v-bind="field" rows="6" class="form-control" :placeholder="$t('admin.common.form.contentPlaceholder')" />
+                            <CKEditor :model-value="field.value" @update:model-value="field.onChange" :placeholder="$t('admin.common.form.contentPlaceholder')" height="h-64" />
                         </Field>
                     </div>
                 </div>
@@ -68,6 +68,7 @@ import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
 import PublishSelect from "~/components/custom/PublishSelect.vue";
 import { useSystem } from "~/composables/system/useSystem";
 import { SYSTEMINDEX } from "~/utils/constants";
+import CKEditor from "~/components/custom/CKEditor.vue";
 
 const { handleStore, setValues, values, isLoading } = useSystem();
 

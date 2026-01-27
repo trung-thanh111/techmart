@@ -1,7 +1,7 @@
 <template>
   <div class="main-content rounded-lg">
     <div class="relative w-full h-full">
-      <nuxt-img src="/client/images/bg-auth.png" alt="image-background" class="w-full h-full object-cover" loading="lazy" />
+      <NuxtImg src="/client/images/bg-auth.png" alt="image-background" class="w-full h-full object-cover" loading="lazy" />
       <div class="absolute inset-0 flex items-center justify-center">
         <div class="flex flex-col justify-center p-6 lg:p-8 w-full max-w-xs sm:max-w-sm md:max-w-md bg-white shadow-lg rounded-lg mx-auto">
           <div class="flex justify-center mb-6">
@@ -24,7 +24,7 @@
                 <div class="flex justify-center">
                   <InputOtp
                     :modelValue="field.value"
-                    @update:modelValue="(val:any) => field.onChange(val)"
+                    @update:modelValue="(val: any) => field.onChange(val)"
                     @blur="field.onBlur"
                     :length="6"
                     integerOnly

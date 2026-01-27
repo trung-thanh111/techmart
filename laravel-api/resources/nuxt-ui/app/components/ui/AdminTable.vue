@@ -1,1 +1,1 @@
-<!-- AdminTable.vue - placeholder --> 
+<!-- AdminTable.vue - placeholder -->

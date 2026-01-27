@@ -3,15 +3,15 @@ import { useAppToast } from "~/composables/useAppToast";
 import { TOLOGIN } from "~/utils/constants";
 
 export default defineNuxtRouteMiddleware(() => {
-  const authStore = useAuthStore();
-  const toast = useAppToast();
+    const authStore = useAuthStore();
+    const toast = useAppToast();
 
-  if (!authStore.isAuthenticated) {
-    if (toast) {
-      toast.warning("Bảo mật", {
-        description: "Bạn cần đăng nhập để tiếp tục.",
-      });
+    if (!authStore.isAuthenticated) {
+        if (toast) {
+            toast.warning("Bảo mật", {
+                description: "Bạn cần đăng nhập để tiếp tục.",
+            });
+        }
+        return navigateTo(TOLOGIN);
     }
-    return navigateTo(TOLOGIN);
-  }
 });

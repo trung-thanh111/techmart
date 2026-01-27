@@ -10,200 +10,200 @@ import type { IUserCatalogue, CataloguePayloadFilter } from "~/interfaces/user/c
 import { USERCATALOGUEINDEX } from "~/utils/constants";
 
 export const useUserCatalogue = (initialFilters?: CataloguePayloadFilter, mode: "create" | "update" = "create") => {
-  const { t } = useI18n();
-  const config = useRuntimeConfig();
-  const toast = useAppToast();
+    const { t } = useI18n();
+    const config = useRuntimeConfig();
+    const toast = useAppToast();
 
-  const data = ref<IApiOk<IPaginate<IUserCatalogue>>>();
-  const filters = ref<CataloguePayloadFilter>(initialFilters ?? { keyword: "", perpage: 20, publish: null });
-  const page = ref(1);
-  const isLoading = ref(false);
-  const selectedIds = ref<number[]>([]);
-  const selectedItem = ref<IUserCatalogue | null>(null);
-  const slug = computed(() => slugify(values.name || ""));
+    const data = ref<IApiOk<IPaginate<IUserCatalogue>>>();
+    const filters = ref<CataloguePayloadFilter>(initialFilters ?? { keyword: "", perpage: 20, publish: null });
+    const page = ref(1);
+    const isLoading = ref(false);
+    const selectedIds = ref<number[]>([]);
+    const selectedItem = ref<IUserCatalogue | null>(null);
+    const slug = computed(() => slugify(values.name || ""));
 
-  const schema = {
-    name: z.string({ required_error: "admin.validation.nameRequired" }).trim().min(1, "admin.validation.nameRequired").max(255, "admin.validation.nameMaxLength"),
-    description: z.string().nullable().optional(),
-    publish: z.number({ required_error: "admin.validation.statusRequired" }).refine((val) => [0, 1, 2].includes(val), { message: "admin.validation.statusInvalid" }),
-  };
-  const createSchema = z.object({ ...schema });
-  const updateSchema = z.object({ ...schema });
-  type TUserCatalogueCreate = z.infer<typeof createSchema>;
-  type TUserCatalogueUpdate = z.infer<typeof updateSchema>;
+    const schema = {
+        name: z.string({ required_error: "admin.validation.nameRequired" }).trim().min(1, "admin.validation.nameRequired").max(255, "admin.validation.nameMaxLength"),
+        description: z.string().nullable().optional(),
+        publish: z.number({ required_error: "admin.validation.statusRequired" }).refine((val) => [0, 1, 2].includes(val), { message: "admin.validation.statusInvalid" }),
+    };
+    const createSchema = z.object({ ...schema });
+    const updateSchema = z.object({ ...schema });
+    type TUserCatalogueCreate = z.infer<typeof createSchema>;
+    type TUserCatalogueUpdate = z.infer<typeof updateSchema>;
 
-  const { handleSubmit, values, errors, setValues, resetForm, setFieldError } = useForm<any>({
-    validationSchema: toTypedSchema(mode === "create" ? createSchema : updateSchema),
-  });
-
-  // store
-  const handleStore = (shouldClose = false) => {
-    const wrapped = handleSubmit(async (payload: TUserCatalogueCreate) => {
-      isLoading.value = true;
-      try {
-        const response = await userCatalogueService.store(payload as Partial<IUserCatalogue>);
-        toast.success(response?.message || t("admin.messages.createSuccess"));
-        if (shouldClose) {
-          return navigateTo(USERCATALOGUEINDEX);
-        }
-        resetForm();
-      } catch (error: any) {
-        if (error?.data?.isValidationError) {
-          errorToField(setFieldError, error?.data?.errors, t, "name");
-          return;
-        }
-        console.error("Store error:", error);
-        toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
-        throw error;
-      } finally {
-        isLoading.value = false;
-      }
+    const { handleSubmit, values, errors, setValues, resetForm, setFieldError } = useForm<any>({
+        validationSchema: toTypedSchema(mode === "create" ? createSchema : updateSchema),
     });
 
-    return wrapped();
-  };
+    // store
+    const handleStore = (shouldClose = false) => {
+        const wrapped = handleSubmit(async (payload: TUserCatalogueCreate) => {
+            isLoading.value = true;
+            try {
+                const response = await userCatalogueService.store(payload as Partial<IUserCatalogue>);
+                toast.success(response?.message || t("admin.messages.createSuccess"));
+                if (shouldClose) {
+                    return navigateTo(USERCATALOGUEINDEX);
+                }
+                resetForm();
+            } catch (error: any) {
+                if (error?.data?.isValidationError) {
+                    errorToField(setFieldError, error?.data?.errors, t, "name");
+                    return;
+                }
+                console.error("Store error:", error);
+                toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
+                throw error;
+            } finally {
+                isLoading.value = false;
+            }
+        });
 
-  const show = async (id: number) => {
-    try {
-      const response = await userCatalogueService.show(id);
-      return response;
-    } catch (error: any) {
-      console.error("Lỗi! Không tìm thấy bản ghi: ", error);
-      toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
-      throw error;
-    }
-  };
+        return wrapped();
+    };
 
-  const handleUpdate = (shouldClose = false) => {
-    const wrapped = handleSubmit(async (payload: TUserCatalogueUpdate) => {
-      isLoading.value = true;
-      try {
-        const id = Number(useRoute().params.id);
-        await userCatalogueService.update(id, payload as Partial<IUserCatalogue>);
-        toast.success(t("admin.messages.updateSuccess"));
-        if (shouldClose) {
-          return navigateTo(USERCATALOGUEINDEX);
+    const show = async (id: number) => {
+        try {
+            const response = await userCatalogueService.show(id);
+            return response;
+        } catch (error: any) {
+            console.error("Lỗi! Không tìm thấy bản ghi: ", error);
+            toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
+            throw error;
         }
-        // keep on page
-      } catch (error: any) {
-        console.error("Store error:", error);
-        toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
-      } finally {
-        isLoading.value = false;
-      }
-    });
+    };
 
-    return wrapped();
-  };
+    const handleUpdate = (shouldClose = false) => {
+        const wrapped = handleSubmit(async (payload: TUserCatalogueUpdate) => {
+            isLoading.value = true;
+            try {
+                const id = Number(useRoute().params.id);
+                await userCatalogueService.update(id, payload as Partial<IUserCatalogue>);
+                toast.success(t("admin.messages.updateSuccess"));
+                if (shouldClose) {
+                    return navigateTo(USERCATALOGUEINDEX);
+                }
+                // keep on page
+            } catch (error: any) {
+                console.error("Store error:", error);
+                toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
+            } finally {
+                isLoading.value = false;
+            }
+        });
 
-  const handleDelete = async (id: number) => {
-    isLoading.value = true;
-    try {
-      await userCatalogueService.delete(id);
-      toast.success(t("admin.messages.deleteSuccess"));
-      await fetchData();
-    } catch (error: any) {
-      toast.error(error?.response?.data?.message || t("admin.messages.deleteFailed"));
-    } finally {
-      isLoading.value = false;
-    }
-  };
+        return wrapped();
+    };
 
-  const handleDeleteMultiple = async () => {
-    if (selectedIds.value.length === 0) return;
-    isLoading.value = true;
-    try {
-      await userCatalogueService.deleteMultiple(selectedIds.value);
-      toast.success(t("admin.messages.deleteMultipleSuccess", { count: selectedIds.value.length }));
-      selectedIds.value = [];
-      await fetchData();
-    } catch (error: any) {
-      toast.error(error?.response?.data?.message || t("admin.messages.deleteFailed"));
-    } finally {
-      isLoading.value = false;
-    }
-  };
+    const handleDelete = async (id: number) => {
+        isLoading.value = true;
+        try {
+            await userCatalogueService.delete(id);
+            toast.success(t("admin.messages.deleteSuccess"));
+            await fetchData();
+        } catch (error: any) {
+            toast.error(error?.response?.data?.message || t("admin.messages.deleteFailed"));
+        } finally {
+            isLoading.value = false;
+        }
+    };
 
-  const setSelectedItem = (item: IUserCatalogue) => {
-    selectedItem.value = item;
-  };
+    const handleDeleteMultiple = async () => {
+        if (selectedIds.value.length === 0) return;
+        isLoading.value = true;
+        try {
+            await userCatalogueService.deleteMultiple(selectedIds.value);
+            toast.success(t("admin.messages.deleteMultipleSuccess", { count: selectedIds.value.length }));
+            selectedIds.value = [];
+            await fetchData();
+        } catch (error: any) {
+            toast.error(error?.response?.data?.message || t("admin.messages.deleteFailed"));
+        } finally {
+            isLoading.value = false;
+        }
+    };
 
-  const confirmDelete = async () => {
-    if (!selectedItem.value) return;
-    await handleDelete(selectedItem.value.id);
-    selectedItem.value = null;
-  };
+    const setSelectedItem = (item: IUserCatalogue) => {
+        selectedItem.value = item;
+    };
 
-  // fetch
-  const fetchData = async () => {
-    isLoading.value = true;
-    try {
-      const response = await userCatalogueService.pagination({
-        ...filters.value,
-        page: page.value,
-      });
-      data.value = response;
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message || t("admin.messages.loadDataError"));
-      console.error("Fetch error:", err);
-    } finally {
-      isLoading.value = false;
-    }
-  };
+    const confirmDelete = async () => {
+        if (!selectedItem.value) return;
+        await handleDelete(selectedItem.value.id);
+        selectedItem.value = null;
+    };
 
-  const search = async (newFilters: BasePayloadFilter) => {
-    filters.value = { ...filters.value, ...newFilters };
-    page.value = 1;
-    selectedIds.value = [];
-    await fetchData();
-  };
+    // fetch
+    const fetchData = async () => {
+        isLoading.value = true;
+        try {
+            const response = await userCatalogueService.pagination({
+                ...filters.value,
+                page: page.value,
+            });
+            data.value = response;
+        } catch (err: any) {
+            toast.error(err?.response?.data?.message || t("admin.messages.loadDataError"));
+            console.error("Fetch error:", err);
+        } finally {
+            isLoading.value = false;
+        }
+    };
 
-  const setPage = async (newPage: number) => {
-    page.value = newPage;
-    selectedIds.value = [];
-    await fetchData();
-  };
+    const search = async (newFilters: BasePayloadFilter) => {
+        filters.value = { ...filters.value, ...newFilters };
+        page.value = 1;
+        selectedIds.value = [];
+        await fetchData();
+    };
 
-  const updateSelectedIds = (ids: number[]) => {
-    selectedIds.value = ids;
-  };
+    const setPage = async (newPage: number) => {
+        page.value = newPage;
+        selectedIds.value = [];
+        await fetchData();
+    };
 
-  const getTotalItems = () => {
-    return data.value?.data?.data?.length || 0;
-  };
+    const updateSelectedIds = (ids: number[]) => {
+        selectedIds.value = ids;
+    };
 
-  const getAllItemIds = () => {
-    return data.value?.data?.data?.map((item) => item.id) || [];
-  };
+    const getTotalItems = () => {
+        return data.value?.data?.data?.length || 0;
+    };
 
-  onMounted(fetchData);
+    const getAllItemIds = () => {
+        return data.value?.data?.data?.map((item) => item.id) || [];
+    };
 
-  return {
-    data,
-    isLoading,
-    filters,
-    page,
-    values,
-    errors,
-    config,
-    slug,
-    selectedIds,
-    selectedItem,
-    setValues,
-    show,
-    handleStore,
-    handleUpdate,
-    handleDelete,
-    handleDeleteMultiple,
-    setSelectedItem,
-    confirmDelete,
-    fetchData,
-    search,
-    setPage,
-    updateSelectedIds,
-    getTotalItems,
-    getAllItemIds,
-  };
+    onMounted(fetchData);
+
+    return {
+        data,
+        isLoading,
+        filters,
+        page,
+        values,
+        errors,
+        config,
+        slug,
+        selectedIds,
+        selectedItem,
+        setValues,
+        show,
+        handleStore,
+        handleUpdate,
+        handleDelete,
+        handleDeleteMultiple,
+        setSelectedItem,
+        confirmDelete,
+        fetchData,
+        search,
+        setPage,
+        updateSelectedIds,
+        getTotalItems,
+        getAllItemIds,
+    };
 };
 
 export type TUserCatalogueCreate = Partial<IUserCatalogue>;

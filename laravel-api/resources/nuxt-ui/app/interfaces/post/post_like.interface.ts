@@ -1,10 +1,10 @@
 export interface IPostLike {
-  id: number;
-  postId: number;
-  userId: number;
+    id: number;
+    postId: number;
+    userId: number;
 }
 
 export interface IPostLikeResponse {
-  isLiked: boolean;
-  likeCount: number;
+    isLiked: boolean;
+    likeCount: number;
 }

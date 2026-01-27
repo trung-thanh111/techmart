@@ -47,7 +47,7 @@
                     <div class="mb-3">
                         <label class="form-label">{{ $t("admin.common.form.description") }}</label>
                         <Field name="description" v-slot="{ field }">
-                            <textarea v-bind="field" rows="4" class="form-control" :placeholder="$t('admin.common.form.descriptionPlaceholder')" />
+                            <CKEditor :model-value="field.value" @update:model-value="field.onChange" :placeholder="$t('admin.common.form.descriptionPlaceholder')" height="h-32" />
                         </Field>
                     </div>
                 </div>
@@ -105,6 +105,7 @@ import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
 import { usePostTag } from "~/composables/post/usePostTag";
 import { slugify } from "~/utils/helpers";
 import AppCheckbox from "~/components/custom/AppCheckbox.vue";
+import CKEditor from "~/components/custom/CKEditor.vue";
 
 const { config, isLoading, values, slug, show, handleUpdate, setValues } = usePostTag(undefined, "update");
 
