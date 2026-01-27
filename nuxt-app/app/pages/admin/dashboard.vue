@@ -6,8 +6,8 @@
           <div class="col-12">
             <div class="d-flex align-items-lg-center flex-lg-row flex-column">
               <div class="flex-grow-1">
-                <h4 class="fs-16 mb-1">{{ $t('admin.page.dashboard.welcome') }}</h4>
-                <p class="text-muted mb-0">{{ $t('admin.page.dashboard.subtitle') }}</p>
+                <h4 class="fs-16 mb-1">{{ $t("admin.page.dashboard.welcome") }}</h4>
+                <p class="text-muted mb-0">{{ $t("admin.page.dashboard.subtitle") }}</p>
               </div>
               <div class="mt-3 mt-lg-0">
                 <form action="javascript:void(0);">
@@ -24,7 +24,7 @@
                     <div class="col-auto">
                       <button type="button" class="btn btn-soft-success material-shadow-none">
                         <i class="ri-add-circle-line align-middle me-1"></i>
-                        {{ $t('admin.page.dashboard.addProduct') }}
+                        {{ $t("admin.page.dashboard.addProduct") }}
                       </button>
                     </div>
                     <!--end col-->
@@ -50,7 +50,7 @@
               <div class="card-body">
                 <div class="d-flex align-items-center">
                   <div class="flex-grow-1 overflow-hidden">
-                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">{{ $t('admin.page.dashboard.totalEarnings') }}</p>
+                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">{{ $t("admin.page.dashboard.totalEarnings") }}</p>
                   </div>
                   <div class="flex-shrink-0">
                     <h5 class="text-success fs-14 mb-0">
@@ -66,7 +66,7 @@
                       <span class="counter-value" data-target="559.25">0</span>
                       k
                     </h4>
-                    <a href="#" class="text-decoration-underline">{{ $t('admin.page.dashboard.viewNetEarnings') }}</a>
+                    <a href="#" class="text-decoration-underline">{{ $t("admin.page.dashboard.viewNetEarnings") }}</a>
                   </div>
                   <div class="avatar-sm flex-shrink-0">
                     <span class="avatar-title bg-success-subtle rounded fs-3">
@@ -83,7 +83,7 @@
               <div class="card-body">
                 <div class="d-flex align-items-center">
                   <div class="flex-grow-1 overflow-hidden">
-                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">{{ $t('admin.page.dashboard.orders') }}</p>
+                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">{{ $t("admin.page.dashboard.orders") }}</p>
                   </div>
                   <div class="flex-shrink-0">
                     <h5 class="text-danger fs-14 mb-0">
@@ -95,7 +95,7 @@
                 <div class="d-flex align-items-end justify-content-between mt-4">
                   <div>
                     <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="36894">0</span></h4>
-                    <a href="#" class="text-decoration-underline">{{ $t('admin.page.dashboard.viewAllOrders') }}</a>
+                    <a href="#" class="text-decoration-underline">{{ $t("admin.page.dashboard.viewAllOrders") }}</a>
                   </div>
                   <div class="avatar-sm flex-shrink-0">
                     <span class="avatar-title bg-info-subtle rounded fs-3">
@@ -116,7 +116,7 @@
               <div class="card-body">
                 <div class="d-flex align-items-center">
                   <div class="flex-grow-1 overflow-hidden">
-                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">{{ $t('admin.page.dashboard.customers') }}</p>
+                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">{{ $t("admin.page.dashboard.customers") }}</p>
                   </div>
                   <div class="flex-shrink-0">
                     <h5 class="text-success fs-14 mb-0">
@@ -131,7 +131,7 @@
                       <span class="counter-value" data-target="183.35">0</span>
                       M
                     </h4>
-                    <a href="#" class="text-decoration-underline">{{ $t('admin.page.dashboard.viewDetails') }}</a>
+                    <a href="#" class="text-decoration-underline">{{ $t("admin.page.dashboard.viewDetails") }}</a>
                   </div>
                   <div class="avatar-sm flex-shrink-0">
                     <span class="avatar-title bg-warning-subtle rounded fs-3">
@@ -152,7 +152,7 @@
               <div class="card-body">
                 <div class="d-flex align-items-center">
                   <div class="flex-grow-1 overflow-hidden">
-                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">{{ $t('admin.page.dashboard.myBalance') }}</p>
+                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">{{ $t("admin.page.dashboard.myBalance") }}</p>
                   </div>
                   <div class="flex-shrink-0">
                     <h5 class="text-muted fs-14 mb-0">+0.00 %</h5>
@@ -165,7 +165,7 @@
                       <span class="counter-value" data-target="165.89">0</span>
                       k
                     </h4>
-                    <a href="#" class="text-decoration-underline">{{ $t('admin.page.dashboard.withdraw') }}</a>
+                    <a href="#" class="text-decoration-underline">{{ $t("admin.page.dashboard.withdraw") }}</a>
                   </div>
                   <div class="avatar-sm flex-shrink-0">
                     <span class="avatar-title bg-primary-subtle rounded fs-3">
@@ -186,7 +186,7 @@
           <div class="col-xl-8">
             <div class="card">
               <div class="card-header border-0 align-items-center d-flex">
-                <h4 class="card-title mb-0 flex-grow-1">{{ $t('admin.page.dashboard.revenue') }}</h4>
+                <h4 class="card-title mb-0 flex-grow-1">{{ $t("admin.page.dashboard.revenue") }}</h4>
                 <div>
                   <button type="button" class="btn btn-soft-secondary material-shadow-none btn-sm">ALL</button>
                   <button type="button" class="btn btn-soft-secondary material-shadow-none btn-sm">1M</button>
@@ -201,7 +201,7 @@
                   <div class="col-6 col-sm-3">
                     <div class="p-3 border border-dashed border-start-0">
                       <h5 class="mb-1"><span class="counter-value" data-target="7585">0</span></h5>
-                      <p class="text-muted mb-0">{{ $t('admin.page.dashboard.ordersCount') }}</p>
+                      <p class="text-muted mb-0">{{ $t("admin.page.dashboard.ordersCount") }}</p>
                     </div>
                   </div>
                   <!--end col-->
@@ -212,14 +212,14 @@
                         <span class="counter-value" data-target="22.89">0</span>
                         k
                       </h5>
-                      <p class="text-muted mb-0">{{ $t('admin.page.dashboard.income') }}</p>
+                      <p class="text-muted mb-0">{{ $t("admin.page.dashboard.income") }}</p>
                     </div>
                   </div>
                   <!--end col-->
                   <div class="col-6 col-sm-3">
                     <div class="p-3 border border-dashed border-start-0">
                       <h5 class="mb-1"><span class="counter-value" data-target="367">0</span></h5>
-                      <p class="text-muted mb-0">{{ $t('admin.page.dashboard.refunds') }}</p>
+                      <p class="text-muted mb-0">{{ $t("admin.page.dashboard.refunds") }}</p>
                     </div>
                   </div>
                   <!--end col-->
@@ -229,7 +229,7 @@
                         <span class="counter-value" data-target="18.92">0</span>
                         %
                       </h5>
-                      <p class="text-muted mb-0">{{ $t('admin.page.dashboard.conversionRate') }}</p>
+                      <p class="text-muted mb-0">{{ $t("admin.page.dashboard.conversionRate") }}</p>
                     </div>
                   </div>
                   <!--end col-->
@@ -252,9 +252,9 @@
             <!-- card -->
             <div class="card card-height-100">
               <div class="card-header align-items-center d-flex">
-                <h4 class="card-title mb-0 flex-grow-1">{{ $t('admin.page.dashboard.salesByRegion') }}</h4>
+                <h4 class="card-title mb-0 flex-grow-1">{{ $t("admin.page.dashboard.salesByRegion") }}</h4>
                 <div class="flex-shrink-0">
-                  <button type="button" class="btn btn-soft-primary material-shadow-none btn-sm">{{ $t('admin.page.dashboard.exportReport') }}</button>
+                  <button type="button" class="btn btn-soft-primary material-shadow-none btn-sm">{{ $t("admin.page.dashboard.exportReport") }}</button>
                 </div>
               </div>
               <!-- end card header -->
@@ -300,23 +300,23 @@
           <div class="col-xl-6">
             <div class="card">
               <div class="card-header align-items-center d-flex">
-                <h4 class="card-title mb-0 flex-grow-1">{{ $t('admin.page.dashboard.bestSellingProducts') }}</h4>
+                <h4 class="card-title mb-0 flex-grow-1">{{ $t("admin.page.dashboard.bestSellingProducts") }}</h4>
                 <div class="flex-shrink-0">
                   <div class="dropdown card-header-dropdown">
                     <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <span class="fw-semibold text-uppercase fs-12">{{ $t('admin.page.dashboard.sortBy') }}</span>
+                      <span class="fw-semibold text-uppercase fs-12">{{ $t("admin.page.dashboard.sortBy") }}</span>
                       <span class="text-muted">
-                        {{ $t('admin.page.dashboard.today') }}
+                        {{ $t("admin.page.dashboard.today") }}
                         <i class="mdi mdi-chevron-down ms-1"></i>
                       </span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end">
-                      <a class="dropdown-item" href="#">{{ $t('admin.page.dashboard.today') }}</a>
-                      <a class="dropdown-item" href="#">{{ $t('admin.page.dashboard.yesterday') }}</a>
-                      <a class="dropdown-item" href="#">{{ $t('admin.page.dashboard.last7Days') }}</a>
-                      <a class="dropdown-item" href="#">{{ $t('admin.page.dashboard.last30Days') }}</a>
-                      <a class="dropdown-item" href="#">{{ $t('admin.page.dashboard.thisMonth') }}</a>
-                      <a class="dropdown-item" href="#">{{ $t('admin.page.dashboard.lastMonth') }}</a>
+                      <a class="dropdown-item" href="#">{{ $t("admin.page.dashboard.today") }}</a>
+                      <a class="dropdown-item" href="#">{{ $t("admin.page.dashboard.yesterday") }}</a>
+                      <a class="dropdown-item" href="#">{{ $t("admin.page.dashboard.last7Days") }}</a>
+                      <a class="dropdown-item" href="#">{{ $t("admin.page.dashboard.last30Days") }}</a>
+                      <a class="dropdown-item" href="#">{{ $t("admin.page.dashboard.thisMonth") }}</a>
+                      <a class="dropdown-item" href="#">{{ $t("admin.page.dashboard.lastMonth") }}</a>
                     </div>
                   </div>
                 </div>
@@ -331,7 +331,7 @@
                         <td>
                           <div class="d-flex align-items-center">
                             <div class="avatar-sm bg-light rounded p-1 me-2">
-                              <nuxt-img src="/admin/images/products/img-1.png" alt="" class="img-fluid d-block" />
+                              <NuxtImg src="/admin/images/products/img-1.png" alt="" class="img-fluid d-block" />
                             </div>
                             <div>
                               <h5 class="fs-14 my-1"><a href="apps-ecommerce-product-details.html" class="text-reset">Branded T-Shirts</a></h5>
@@ -341,26 +341,26 @@
                         </td>
                         <td>
                           <h5 class="fs-14 my-1 fw-normal">$29.00</h5>
-                          <span class="text-muted">{{ $t('admin.page.dashboard.price') }}</span>
+                          <span class="text-muted">{{ $t("admin.page.dashboard.price") }}</span>
                         </td>
                         <td>
                           <h5 class="fs-14 my-1 fw-normal">62</h5>
-                          <span class="text-muted">{{ $t('admin.page.dashboard.ordersCount') }}</span>
+                          <span class="text-muted">{{ $t("admin.page.dashboard.ordersCount") }}</span>
                         </td>
                         <td>
                           <h5 class="fs-14 my-1 fw-normal">510</h5>
-                          <span class="text-muted">{{ $t('admin.page.dashboard.stock') }}</span>
+                          <span class="text-muted">{{ $t("admin.page.dashboard.stock") }}</span>
                         </td>
                         <td>
                           <h5 class="fs-14 my-1 fw-normal">$1,798</h5>
-                          <span class="text-muted">{{ $t('admin.page.dashboard.total') }}</span>
+                          <span class="text-muted">{{ $t("admin.page.dashboard.total") }}</span>
                         </td>
                       </tr>
                       <tr>
                         <td>
                           <div class="d-flex align-items-center">
                             <div class="avatar-sm bg-light rounded p-1 me-2">
-                              <nuxt-img src="/admin/images/products/img-2.png" alt="" class="img-fluid d-block" />
+                              <NuxtImg src="/admin/images/products/img-2.png" alt="" class="img-fluid d-block" />
                             </div>
                             <div>
                               <h5 class="fs-14 my-1"><a href="apps-ecommerce-product-details.html" class="text-reset">Bentwood Chair</a></h5>
@@ -370,26 +370,26 @@
                         </td>
                         <td>
                           <h5 class="fs-14 my-1 fw-normal">$85.20</h5>
-                          <span class="text-muted">{{ $t('admin.page.dashboard.price') }}</span>
+                          <span class="text-muted">{{ $t("admin.page.dashboard.price") }}</span>
                         </td>
                         <td>
                           <h5 class="fs-14 my-1 fw-normal">35</h5>
-                          <span class="text-muted">{{ $t('admin.page.dashboard.ordersCount') }}</span>
+                          <span class="text-muted">{{ $t("admin.page.dashboard.ordersCount") }}</span>
                         </td>
                         <td>
                           <h5 class="fs-14 my-1 fw-normal"><span class="badge bg-danger-subtle text-danger">Hết hàng</span></h5>
-                          <span class="text-muted">{{ $t('admin.page.dashboard.stock') }}</span>
+                          <span class="text-muted">{{ $t("admin.page.dashboard.stock") }}</span>
                         </td>
                         <td>
                           <h5 class="fs-14 my-1 fw-normal">$2982</h5>
-                          <span class="text-muted">{{ $t('admin.page.dashboard.total') }}</span>
+                          <span class="text-muted">{{ $t("admin.page.dashboard.total") }}</span>
                         </td>
                       </tr>
                       <tr>
                         <td>
                           <div class="d-flex align-items-center">
                             <div class="avatar-sm bg-light rounded p-1 me-2">
-                              <nuxt-img src="/admin/images/products/img-3.png" alt="" class="img-fluid d-block" />
+                              <NuxtImg src="/admin/images/products/img-3.png" alt="" class="img-fluid d-block" />
                             </div>
                             <div>
                               <h5 class="fs-14 my-1"><a href="apps-ecommerce-product-details.html" class="text-reset">Borosil Paper Cup</a></h5>
@@ -399,26 +399,26 @@
                         </td>
                         <td>
                           <h5 class="fs-14 my-1 fw-normal">$14.00</h5>
-                          <span class="text-muted">{{ $t('admin.page.dashboard.price') }}</span>
+                          <span class="text-muted">{{ $t("admin.page.dashboard.price") }}</span>
                         </td>
                         <td>
                           <h5 class="fs-14 my-1 fw-normal">80</h5>
-                          <span class="text-muted">{{ $t('admin.page.dashboard.ordersCount') }}</span>
+                          <span class="text-muted">{{ $t("admin.page.dashboard.ordersCount") }}</span>
                         </td>
                         <td>
                           <h5 class="fs-14 my-1 fw-normal">749</h5>
-                          <span class="text-muted">{{ $t('admin.page.dashboard.stock') }}</span>
+                          <span class="text-muted">{{ $t("admin.page.dashboard.stock") }}</span>
                         </td>
                         <td>
                           <h5 class="fs-14 my-1 fw-normal">$1120</h5>
-                          <span class="text-muted">{{ $t('admin.page.dashboard.total') }}</span>
+                          <span class="text-muted">{{ $t("admin.page.dashboard.total") }}</span>
                         </td>
                       </tr>
                       <tr>
                         <td>
                           <div class="d-flex align-items-center">
                             <div class="avatar-sm bg-light rounded p-1 me-2">
-                              <nuxt-img src="/admin/images/products/img-4.png" alt="" class="img-fluid d-block" />
+                              <NuxtImg src="/admin/images/products/img-4.png" alt="" class="img-fluid d-block" />
                             </div>
                             <div>
                               <h5 class="fs-14 my-1"><a href="apps-ecommerce-product-details.html" class="text-reset">One Seater Sofa</a></h5>
@@ -428,26 +428,26 @@
                         </td>
                         <td>
                           <h5 class="fs-14 my-1 fw-normal">$127.50</h5>
-                          <span class="text-muted">{{ $t('admin.page.dashboard.price') }}</span>
+                          <span class="text-muted">{{ $t("admin.page.dashboard.price") }}</span>
                         </td>
                         <td>
                           <h5 class="fs-14 my-1 fw-normal">56</h5>
-                          <span class="text-muted">{{ $t('admin.page.dashboard.ordersCount') }}</span>
+                          <span class="text-muted">{{ $t("admin.page.dashboard.ordersCount") }}</span>
                         </td>
                         <td>
                           <h5 class="fs-14 my-1 fw-normal"><span class="badge bg-danger-subtle text-danger">Hết hàng</span></h5>
-                          <span class="text-muted">{{ $t('admin.page.dashboard.stock') }}</span>
+                          <span class="text-muted">{{ $t("admin.page.dashboard.stock") }}</span>
                         </td>
                         <td>
                           <h5 class="fs-14 my-1 fw-normal">$7140</h5>
-                          <span class="text-muted">{{ $t('admin.page.dashboard.total') }}</span>
+                          <span class="text-muted">{{ $t("admin.page.dashboard.total") }}</span>
                         </td>
                       </tr>
                       <tr>
                         <td>
                           <div class="d-flex align-items-center">
                             <div class="avatar-sm bg-light rounded p-1 me-2">
-                              <nuxt-img src="/admin/images/products/img-5.png" alt="" class="img-fluid d-block" />
+                              <NuxtImg src="/admin/images/products/img-5.png" alt="" class="img-fluid d-block" />
                             </div>
                             <div>
                               <h5 class="fs-14 my-1"><a href="apps-ecommerce-product-details.html" class="text-reset">Stillbird Helmet</a></h5>
@@ -457,19 +457,19 @@
                         </td>
                         <td>
                           <h5 class="fs-14 my-1 fw-normal">$54</h5>
-                          <span class="text-muted">{{ $t('admin.page.dashboard.price') }}</span>
+                          <span class="text-muted">{{ $t("admin.page.dashboard.price") }}</span>
                         </td>
                         <td>
                           <h5 class="fs-14 my-1 fw-normal">74</h5>
-                          <span class="text-muted">{{ $t('admin.page.dashboard.ordersCount') }}</span>
+                          <span class="text-muted">{{ $t("admin.page.dashboard.ordersCount") }}</span>
                         </td>
                         <td>
                           <h5 class="fs-14 my-1 fw-normal">805</h5>
-                          <span class="text-muted">{{ $t('admin.page.dashboard.stock') }}</span>
+                          <span class="text-muted">{{ $t("admin.page.dashboard.stock") }}</span>
                         </td>
                         <td>
                           <h5 class="fs-14 my-1 fw-normal">$3996</h5>
-                          <span class="text-muted">{{ $t('admin.page.dashboard.total') }}</span>
+                          <span class="text-muted">{{ $t("admin.page.dashboard.total") }}</span>
                         </td>
                       </tr>
                     </tbody>
@@ -479,11 +479,11 @@
                 <div class="align-items-center mt-4 pt-2 justify-content-between row text-center text-sm-start">
                   <div class="col-sm">
                     <div class="text-muted">
-                      {{ $t('admin.page.dashboard.showing') }}
+                      {{ $t("admin.page.dashboard.showing") }}
                       <span class="fw-semibold">5</span>
-                      {{ $t('admin.page.dashboard.of') }}
+                      {{ $t("admin.page.dashboard.of") }}
                       <span class="fw-semibold">25</span>
-                      {{ $t('admin.page.dashboard.results') }}
+                      {{ $t("admin.page.dashboard.results") }}
                     </div>
                   </div>
                   <div class="col-sm-auto mt-3 mt-sm-0">
@@ -513,19 +513,19 @@
           <div class="col-xl-6">
             <div class="card card-height-100">
               <div class="card-header align-items-center d-flex">
-                <h4 class="card-title mb-0 flex-grow-1">{{ $t('admin.page.dashboard.topSellers') }}</h4>
+                <h4 class="card-title mb-0 flex-grow-1">{{ $t("admin.page.dashboard.topSellers") }}</h4>
                 <div class="flex-shrink-0">
                   <div class="dropdown card-header-dropdown">
                     <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <span class="text-muted">
-                        {{ $t('admin.page.dashboard.report') }}
+                        {{ $t("admin.page.dashboard.report") }}
                         <i class="mdi mdi-chevron-down ms-1"></i>
                       </span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end">
-                      <a class="dropdown-item" href="#">{{ $t('admin.page.dashboard.downloadReport') }}</a>
-                      <a class="dropdown-item" href="#">{{ $t('admin.page.dashboard.export') }}</a>
-                      <a class="dropdown-item" href="#">{{ $t('admin.page.dashboard.import') }}</a>
+                      <a class="dropdown-item" href="#">{{ $t("admin.page.dashboard.downloadReport") }}</a>
+                      <a class="dropdown-item" href="#">{{ $t("admin.page.dashboard.export") }}</a>
+                      <a class="dropdown-item" href="#">{{ $t("admin.page.dashboard.import") }}</a>
                     </div>
                   </div>
                 </div>
@@ -540,7 +540,7 @@
                         <td>
                           <div class="d-flex align-items-center">
                             <div class="flex-shrink-0 me-2">
-                              <nuxt-img src="/admin/images/companies/img-1.png" alt="" class="avatar-sm p-2" />
+                              <NuxtImg src="/admin/images/companies/img-1.png" alt="" class="avatar-sm p-2" />
                             </div>
                             <div>
                               <h5 class="fs-14 my-1 fw-medium">
@@ -551,11 +551,11 @@
                           </div>
                         </td>
                         <td>
-                          <span class="text-muted">{{ $t('admin.page.dashboard.category') }}</span>
+                          <span class="text-muted">{{ $t("admin.page.dashboard.category") }}</span>
                         </td>
                         <td>
                           <p class="mb-0">8547</p>
-                          <span class="text-muted">{{ $t('admin.page.dashboard.stock') }}</span>
+                          <span class="text-muted">{{ $t("admin.page.dashboard.stock") }}</span>
                         </td>
                         <td>
                           <span class="text-muted">$541200</span>
@@ -572,7 +572,7 @@
                         <td>
                           <div class="d-flex align-items-center">
                             <div class="flex-shrink-0 me-2">
-                              <nuxt-img src="/admin/images/companies/img-2.png" alt="" class="avatar-sm p-2" />
+                              <NuxtImg src="/admin/images/companies/img-2.png" alt="" class="avatar-sm p-2" />
                             </div>
                             <div class="flex-grow-1">
                               <h5 class="fs-14 my-1 fw-medium"><a href="apps-ecommerce-seller-details.html" class="text-reset">Digitech Galaxy</a></h5>
@@ -581,11 +581,11 @@
                           </div>
                         </td>
                         <td>
-                          <span class="text-muted">{{ $t('admin.page.dashboard.watches') }}</span>
+                          <span class="text-muted">{{ $t("admin.page.dashboard.watches") }}</span>
                         </td>
                         <td>
                           <p class="mb-0">895</p>
-                          <span class="text-muted">{{ $t('admin.page.dashboard.stock') }}</span>
+                          <span class="text-muted">{{ $t("admin.page.dashboard.stock") }}</span>
                         </td>
                         <td>
                           <span class="text-muted">$75030</span>
@@ -602,7 +602,7 @@
                         <td>
                           <div class="d-flex align-items-center">
                             <div class="flex-shrink-0 me-2">
-                              <nuxt-img src="/admin/images/companies/img-3.png" alt="" class="avatar-sm p-2" />
+                              <NuxtImg src="/admin/images/companies/img-3.png" alt="" class="avatar-sm p-2" />
                             </div>
                             <div class="flex-gow-1">
                               <h5 class="fs-14 my-1 fw-medium"><a href="apps-ecommerce-seller-details.html" class="text-reset">Nesta Technologies</a></h5>
@@ -611,11 +611,11 @@
                           </div>
                         </td>
                         <td>
-                          <span class="text-muted">{{ $t('admin.page.dashboard.carAccessories') }}</span>
+                          <span class="text-muted">{{ $t("admin.page.dashboard.carAccessories") }}</span>
                         </td>
                         <td>
                           <p class="mb-0">3470</p>
-                          <span class="text-muted">{{ $t('admin.page.dashboard.stock') }}</span>
+                          <span class="text-muted">{{ $t("admin.page.dashboard.stock") }}</span>
                         </td>
                         <td>
                           <span class="text-muted">$45600</span>
@@ -632,7 +632,7 @@
                         <td>
                           <div class="d-flex align-items-center">
                             <div class="flex-shrink-0 me-2">
-                              <nuxt-img src="/admin/images/companies/img-8.png" alt="" class="avatar-sm p-2" />
+                              <NuxtImg src="/admin/images/companies/img-8.png" alt="" class="avatar-sm p-2" />
                             </div>
                             <div class="flex-grow-1">
                               <h5 class="fs-14 my-1 fw-medium"><a href="apps-ecommerce-seller-details.html" class="text-reset">Zoetic Fashion</a></h5>
@@ -641,11 +641,11 @@
                           </div>
                         </td>
                         <td>
-                          <span class="text-muted">{{ $t('admin.page.dashboard.clothing') }}</span>
+                          <span class="text-muted">{{ $t("admin.page.dashboard.clothing") }}</span>
                         </td>
                         <td>
                           <p class="mb-0">5488</p>
-                          <span class="text-muted">{{ $t('admin.page.dashboard.stock') }}</span>
+                          <span class="text-muted">{{ $t("admin.page.dashboard.stock") }}</span>
                         </td>
                         <td>
                           <span class="text-muted">$29456</span>
@@ -662,7 +662,7 @@
                         <td>
                           <div class="d-flex align-items-center">
                             <div class="flex-shrink-0 me-2">
-                              <nuxt-img src="/admin/images/companies/img-5.png" alt="" class="avatar-sm p-2" />
+                              <NuxtImg src="/admin/images/companies/img-5.png" alt="" class="avatar-sm p-2" />
                             </div>
                             <div class="flex-grow-1">
                               <h5 class="fs-14 my-1 fw-medium">
@@ -673,11 +673,11 @@
                           </div>
                         </td>
                         <td>
-                          <span class="text-muted">{{ $t('admin.page.dashboard.furniture') }}</span>
+                          <span class="text-muted">{{ $t("admin.page.dashboard.furniture") }}</span>
                         </td>
                         <td>
                           <p class="mb-0">4100</p>
-                          <span class="text-muted">{{ $t('admin.page.dashboard.stock') }}</span>
+                          <span class="text-muted">{{ $t("admin.page.dashboard.stock") }}</span>
                         </td>
                         <td>
                           <span class="text-muted">$11260</span>
@@ -698,11 +698,11 @@
                 <div class="align-items-center mt-4 pt-2 justify-content-between row text-center text-sm-start">
                   <div class="col-sm">
                     <div class="text-muted">
-                      {{ $t('admin.page.dashboard.showing') }}
+                      {{ $t("admin.page.dashboard.showing") }}
                       <span class="fw-semibold">5</span>
-                      {{ $t('admin.page.dashboard.of') }}
+                      {{ $t("admin.page.dashboard.of") }}
                       <span class="fw-semibold">25</span>
-                      {{ $t('admin.page.dashboard.results') }}
+                      {{ $t("admin.page.dashboard.results") }}
                     </div>
                   </div>
                   <div class="col-sm-auto mt-3 mt-sm-0">
@@ -738,19 +738,19 @@
           <div class="col-xl-4">
             <div class="card card-height-100">
               <div class="card-header align-items-center d-flex">
-                <h4 class="card-title mb-0 flex-grow-1">{{ $t('admin.page.dashboard.visitsBySource') }}</h4>
+                <h4 class="card-title mb-0 flex-grow-1">{{ $t("admin.page.dashboard.visitsBySource") }}</h4>
                 <div class="flex-shrink-0">
                   <div class="dropdown card-header-dropdown">
                     <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <span class="text-muted">
-                        {{ $t('admin.page.dashboard.report') }}
+                        {{ $t("admin.page.dashboard.report") }}
                         <i class="mdi mdi-chevron-down ms-1"></i>
                       </span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end">
-                      <a class="dropdown-item" href="#">{{ $t('admin.page.dashboard.downloadReport') }}</a>
-                      <a class="dropdown-item" href="#">{{ $t('admin.page.dashboard.export') }}</a>
-                      <a class="dropdown-item" href="#">{{ $t('admin.page.dashboard.import') }}</a>
+                      <a class="dropdown-item" href="#">{{ $t("admin.page.dashboard.downloadReport") }}</a>
+                      <a class="dropdown-item" href="#">{{ $t("admin.page.dashboard.export") }}</a>
+                      <a class="dropdown-item" href="#">{{ $t("admin.page.dashboard.import") }}</a>
                     </div>
                   </div>
                 </div>
@@ -768,11 +768,11 @@
           <div class="col-xl-8">
             <div class="card">
               <div class="card-header align-items-center d-flex">
-                <h4 class="card-title mb-0 flex-grow-1">{{ $t('admin.page.dashboard.recentOrders') }}</h4>
+                <h4 class="card-title mb-0 flex-grow-1">{{ $t("admin.page.dashboard.recentOrders") }}</h4>
                 <div class="flex-shrink-0">
                   <button type="button" class="btn btn-soft-info btn-sm material-shadow-none">
                     <i class="ri-file-list-3-line align-middle"></i>
-                    {{ $t('admin.page.dashboard.createReport') }}
+                    {{ $t("admin.page.dashboard.createReport") }}
                   </button>
                 </div>
               </div>
@@ -783,13 +783,13 @@
                   <table class="table table-borderless table-centered align-middle table-nowrap mb-0">
                     <thead class="text-muted table-light">
                       <tr>
-                        <th scope="col">{{ $t('admin.page.dashboard.orderCode') }}</th>
-                        <th scope="col">{{ $t('admin.page.dashboard.customer') }}</th>
-                        <th scope="col">{{ $t('admin.page.dashboard.product') }}</th>
-                        <th scope="col">{{ $t('admin.page.dashboard.amount') }}</th>
-                        <th scope="col">{{ $t('admin.page.dashboard.seller') }}</th>
-                        <th scope="col">{{ $t('admin.page.dashboard.status') }}</th>
-                        <th scope="col">{{ $t('admin.page.dashboard.rating') }}</th>
+                        <th scope="col">{{ $t("admin.page.dashboard.orderCode") }}</th>
+                        <th scope="col">{{ $t("admin.page.dashboard.customer") }}</th>
+                        <th scope="col">{{ $t("admin.page.dashboard.product") }}</th>
+                        <th scope="col">{{ $t("admin.page.dashboard.amount") }}</th>
+                        <th scope="col">{{ $t("admin.page.dashboard.seller") }}</th>
+                        <th scope="col">{{ $t("admin.page.dashboard.status") }}</th>
+                        <th scope="col">{{ $t("admin.page.dashboard.rating") }}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -800,23 +800,23 @@
                         <td>
                           <div class="d-flex align-items-center">
                             <div class="flex-shrink-0 me-2">
-                              <nuxt-img src="/admin/images/users/avatar-1.jpg" alt="" class="avatar-xs rounded-circle material-shadow" />
+                              <NuxtImg src="/admin/images/users/avatar-1.jpg" alt="" class="avatar-xs rounded-circle material-shadow" />
                             </div>
                             <div class="flex-grow-1">Alex Smith</div>
                           </div>
                         </td>
-                        <td>{{ $t('admin.page.dashboard.clothing') }}</td>
+                        <td>{{ $t("admin.page.dashboard.clothing") }}</td>
                         <td>
                           <span class="text-success">$109.00</span>
                         </td>
                         <td>Zoetic Fashion</td>
                         <td>
-                          <span class="badge bg-success-subtle text-success">{{ $t('admin.page.dashboard.paid') }}</span>
+                          <span class="badge bg-success-subtle text-success">{{ $t("admin.page.dashboard.paid") }}</span>
                         </td>
                         <td>
                           <h5 class="fs-14 fw-medium mb-0">
                             5.0
-                            <span class="text-muted fs-11 ms-1">(61 {{ $t('admin.page.dashboard.votes') }})</span>
+                            <span class="text-muted fs-11 ms-1">(61 {{ $t("admin.page.dashboard.votes") }})</span>
                           </h5>
                         </td>
                       </tr>
@@ -828,23 +828,23 @@
                         <td>
                           <div class="d-flex align-items-center">
                             <div class="flex-shrink-0 me-2">
-                              <nuxt-img src="/admin/images/users/avatar-2.jpg" alt="" class="avatar-xs rounded-circle material-shadow" />
+                              <NuxtImg src="/admin/images/users/avatar-2.jpg" alt="" class="avatar-xs rounded-circle material-shadow" />
                             </div>
                             <div class="flex-grow-1">Jansh Brown</div>
                           </div>
                         </td>
-                        <td>{{ $t('admin.page.dashboard.furniture') }}</td>
+                        <td>{{ $t("admin.page.dashboard.furniture") }}</td>
                         <td>
                           <span class="text-success">$149.00</span>
                         </td>
                         <td>Micro Design</td>
                         <td>
-                          <span class="badge bg-warning-subtle text-warning">{{ $t('admin.page.dashboard.pending') }}</span>
+                          <span class="badge bg-warning-subtle text-warning">{{ $t("admin.page.dashboard.pending") }}</span>
                         </td>
                         <td>
                           <h5 class="fs-14 fw-medium mb-0">
                             4.5
-                            <span class="text-muted fs-11 ms-1">(61 {{ $t('admin.page.dashboard.votes') }})</span>
+                            <span class="text-muted fs-11 ms-1">(61 {{ $t("admin.page.dashboard.votes") }})</span>
                           </h5>
                         </td>
                       </tr>
@@ -856,23 +856,23 @@
                         <td>
                           <div class="d-flex align-items-center">
                             <div class="flex-shrink-0 me-2">
-                              <nuxt-img src="/admin/images/users/avatar-3.jpg" alt="" class="avatar-xs rounded-circle material-shadow" />
+                              <NuxtImg src="/admin/images/users/avatar-3.jpg" alt="" class="avatar-xs rounded-circle material-shadow" />
                             </div>
                             <div class="flex-grow-1">Ayaan Bowen</div>
                           </div>
                         </td>
-                        <td>{{ $t('admin.page.dashboard.carAccessories') }}</td>
+                        <td>{{ $t("admin.page.dashboard.carAccessories") }}</td>
                         <td>
                           <span class="text-success">$215.00</span>
                         </td>
                         <td>Nesta Technologies</td>
                         <td>
-                          <span class="badge bg-success-subtle text-success">{{ $t('admin.page.dashboard.paid') }}</span>
+                          <span class="badge bg-success-subtle text-success">{{ $t("admin.page.dashboard.paid") }}</span>
                         </td>
                         <td>
                           <h5 class="fs-14 fw-medium mb-0">
                             4.9
-                            <span class="text-muted fs-11 ms-1">(89 {{ $t('admin.page.dashboard.votes') }})</span>
+                            <span class="text-muted fs-11 ms-1">(89 {{ $t("admin.page.dashboard.votes") }})</span>
                           </h5>
                         </td>
                       </tr>
@@ -884,23 +884,23 @@
                         <td>
                           <div class="d-flex align-items-center">
                             <div class="flex-shrink-0 me-2">
-                              <nuxt-img src="/admin/images/users/avatar-4.jpg" alt="" class="avatar-xs rounded-circle material-shadow" />
+                              <NuxtImg src="/admin/images/users/avatar-4.jpg" alt="" class="avatar-xs rounded-circle material-shadow" />
                             </div>
                             <div class="flex-grow-1">Prezy Mark</div>
                           </div>
                         </td>
-                        <td>{{ $t('admin.page.dashboard.furniture') }}</td>
+                        <td>{{ $t("admin.page.dashboard.furniture") }}</td>
                         <td>
                           <span class="text-success">$199.00</span>
                         </td>
                         <td>Syntyce Solutions</td>
                         <td>
-                          <span class="badge bg-danger-subtle text-danger">{{ $t('admin.page.dashboard.unpaid') }}</span>
+                          <span class="badge bg-danger-subtle text-danger">{{ $t("admin.page.dashboard.unpaid") }}</span>
                         </td>
                         <td>
                           <h5 class="fs-14 fw-medium mb-0">
                             4.3
-                            <span class="text-muted fs-11 ms-1">(47 {{ $t('admin.page.dashboard.votes') }})</span>
+                            <span class="text-muted fs-11 ms-1">(47 {{ $t("admin.page.dashboard.votes") }})</span>
                           </h5>
                         </td>
                       </tr>
@@ -912,23 +912,23 @@
                         <td>
                           <div class="d-flex align-items-center">
                             <div class="flex-shrink-0 me-2">
-                              <nuxt-img src="/admin/images/users/avatar-6.jpg" alt="" class="avatar-xs rounded-circle material-shadow" />
+                              <NuxtImg src="/admin/images/users/avatar-6.jpg" alt="" class="avatar-xs rounded-circle material-shadow" />
                             </div>
                             <div class="flex-grow-1">Vihan Hudda</div>
                           </div>
                         </td>
-                        <td>{{ $t('admin.page.dashboard.category') }}</td>
+                        <td>{{ $t("admin.page.dashboard.category") }}</td>
                         <td>
                           <span class="text-success">$330.00</span>
                         </td>
                         <td>iTest Factory</td>
                         <td>
-                          <span class="badge bg-success-subtle text-success">{{ $t('admin.page.dashboard.paid') }}</span>
+                          <span class="badge bg-success-subtle text-success">{{ $t("admin.page.dashboard.paid") }}</span>
                         </td>
                         <td>
                           <h5 class="fs-14 fw-medium mb-0">
                             4.7
-                            <span class="text-muted fs-11 ms-1">(161 {{ $t('admin.page.dashboard.votes') }})</span>
+                            <span class="text-muted fs-11 ms-1">(161 {{ $t("admin.page.dashboard.votes") }})</span>
                           </h5>
                         </td>
                       </tr>
@@ -956,7 +956,7 @@
         <div class="card h-100 rounded-0">
           <div class="card-body p-0">
             <div class="p-3">
-              <h6 class="text-muted mb-0 text-uppercase fw-semibold">{{ $t('admin.page.dashboard.recentActivity') }}</h6>
+              <h6 class="text-muted mb-0 text-uppercase fw-semibold">{{ $t("admin.page.dashboard.recentActivity") }}</h6>
             </div>
             <div data-simplebar style="max-height: 410px" class="p-3 pt-0">
               <div class="acitivity-timeline acitivity-main">
@@ -967,9 +967,9 @@
                     </div>
                   </div>
                   <div class="flex-grow-1 ms-3">
-                    <h6 class="mb-1 lh-base">{{ $t('admin.page.dashboard.purchaseBy') }} James Price</h6>
-                    <p class="text-muted mb-1">{{ $t('admin.page.dashboard.productName') }}</p>
-                    <small class="mb-0 text-muted">02:14 PM {{ $t('admin.page.dashboard.today') }}</small>
+                    <h6 class="mb-1 lh-base">{{ $t("admin.page.dashboard.purchaseBy") }} James Price</h6>
+                    <p class="text-muted mb-1">{{ $t("admin.page.dashboard.productName") }}</p>
+                    <small class="mb-0 text-muted">02:14 PM {{ $t("admin.page.dashboard.today") }}</small>
                   </div>
                 </div>
                 <div class="acitivity-item py-3 d-flex">
@@ -980,31 +980,33 @@
                   </div>
                   <div class="flex-grow-1 ms-3">
                     <h6 class="mb-1 lh-base">
-                      {{ $t('admin.page.dashboard.addedNew') }}
-                      <span class="fw-semibold">{{ $t('admin.page.dashboard.fashionCollection') }}</span>
+                      {{ $t("admin.page.dashboard.addedNew") }}
+                      <span class="fw-semibold">{{ $t("admin.page.dashboard.fashionCollection") }}</span>
                     </h6>
-                    <p class="text-muted mb-1">{{ $t('admin.page.dashboard.by') }} Nesta Technologies</p>
+                    <p class="text-muted mb-1">{{ $t("admin.page.dashboard.by") }} Nesta Technologies</p>
                     <div class="d-inline-flex gap-2 border border-dashed p-2 mb-2">
                       <a href="apps-ecommerce-product-details.html" class="bg-light rounded p-1">
-                        <nuxt-img src="/admin/images/products/img-8.png" alt="" class="img-fluid d-block" />
+                        <NuxtImg src="/admin/images/products/img-8.png" alt="" class="img-fluid d-block" />
                       </a>
                       <a href="apps-ecommerce-product-details.html" class="bg-light rounded p-1">
-                        <nuxt-img src="/admin/images/products/img-2.png" alt="" class="img-fluid d-block" />
+                        <NuxtImg src="/admin/images/products/img-2.png" alt="" class="img-fluid d-block" />
                       </a>
                       <a href="apps-ecommerce-product-details.html" class="bg-light rounded p-1">
-                        <nuxt-img src="/admin/images/products/img-10.png" alt="" class="img-fluid d-block" />
+                        <NuxtImg src="/admin/images/products/img-10.png" alt="" class="img-fluid d-block" />
                       </a>
                     </div>
-                    <p class="mb-0 text-muted"><small>9:47 PM {{ $t('admin.page.dashboard.yesterday') }}</small></p>
+                    <p class="mb-0 text-muted">
+                      <small>9:47 PM {{ $t("admin.page.dashboard.yesterday") }}</small>
+                    </p>
                   </div>
                 </div>
                 <div class="acitivity-item py-3 d-flex">
                   <div class="flex-shrink-0">
-                    <nuxt-img src="/admin/images/users/avatar-2.jpg" alt="" class="avatar-xs rounded-circle acitivity-avatar material-shadow" />
+                    <NuxtImg src="/admin/images/users/avatar-2.jpg" alt="" class="avatar-xs rounded-circle acitivity-avatar material-shadow" />
                   </div>
                   <div class="flex-grow-1 ms-3">
-                    <h6 class="mb-1 lh-base">Natasha Carey {{ $t('admin.page.dashboard.likedProduct') }}</h6>
-                    <p class="text-muted mb-1">{{ $t('admin.page.dashboard.allowUsersLike') }}</p>
+                    <h6 class="mb-1 lh-base">Natasha Carey {{ $t("admin.page.dashboard.likedProduct") }}</h6>
+                    <p class="text-muted mb-1">{{ $t("admin.page.dashboard.allowUsersLike") }}</p>
                     <small class="mb-0 text-muted">25 Thg 12, 2021</small>
                   </div>
                 </div>
@@ -1018,10 +1020,10 @@
                   </div>
                   <div class="flex-grow-1 ms-3">
                     <h6 class="mb-1 lh-base">
-                      {{ $t('admin.page.dashboard.todayOffer') }}
+                      {{ $t("admin.page.dashboard.todayOffer") }}
                       <a href="apps-ecommerce-seller-details.html" class="link-secondary">Digitech Galaxy</a>
                     </h6>
-                    <p class="text-muted mb-2">{{ $t('admin.page.dashboard.offerDescription') }}</p>
+                    <p class="text-muted mb-2">{{ $t("admin.page.dashboard.offerDescription") }}</p>
                     <small class="mb-0 text-muted">12 Thg 12, 2021</small>
                   </div>
                 </div>
@@ -1034,8 +1036,8 @@
                     </div>
                   </div>
                   <div class="flex-grow-1 ms-3">
-                    <h6 class="mb-1 lh-base">{{ $t('admin.page.dashboard.favoriteProduct') }}</h6>
-                    <p class="text-muted mb-2">Esther James {{ $t('admin.page.dashboard.likedProductBy') }}</p>
+                    <h6 class="mb-1 lh-base">{{ $t("admin.page.dashboard.favoriteProduct") }}</h6>
+                    <p class="text-muted mb-2">Esther James {{ $t("admin.page.dashboard.likedProductBy") }}</p>
                     <small class="mb-0 text-muted">25 Thg 11, 2021</small>
                   </div>
                 </div>
@@ -1049,11 +1051,11 @@
                   </div>
                   <div class="flex-grow-1 ms-3">
                     <h6 class="mb-1 lh-base">
-                      {{ $t('admin.page.dashboard.flashSale') }}
-                      <span class="text-primary">{{ $t('admin.page.dashboard.tomorrow') }}</span>
+                      {{ $t("admin.page.dashboard.flashSale") }}
+                      <span class="text-primary">{{ $t("admin.page.dashboard.tomorrow") }}</span>
                     </h6>
                     <p class="text-muted mb-0">
-                      {{ $t('admin.page.dashboard.flashSaleBy') }}
+                      {{ $t("admin.page.dashboard.flashSaleBy") }}
                       <a href="javascript:void(0);" class="link-secondary fw-medium">Zoetic Fashion</a>
                     </p>
                     <small class="mb-0 text-muted">22 Thg 10, 2021</small>
@@ -1068,22 +1070,22 @@
                     </div>
                   </div>
                   <div class="flex-grow-1 ms-3">
-                    <h6 class="mb-1 lh-base">{{ $t('admin.page.dashboard.monthlySalesReport') }}</h6>
+                    <h6 class="mb-1 lh-base">{{ $t("admin.page.dashboard.monthlySalesReport") }}</h6>
                     <p class="text-muted mb-2">
-                      <span class="text-danger">{{ $t('admin.page.dashboard.daysLeft') }}</span>
-                      {{ $t('admin.page.dashboard.toSubmit') }}
-                      <a href="javascript:void(0);" class="link-warning text-decoration-underline">{{ $t('admin.page.dashboard.reportGenerator') }}</a>
+                      <span class="text-danger">{{ $t("admin.page.dashboard.daysLeft") }}</span>
+                      {{ $t("admin.page.dashboard.toSubmit") }}
+                      <a href="javascript:void(0);" class="link-warning text-decoration-underline">{{ $t("admin.page.dashboard.reportGenerator") }}</a>
                     </p>
                     <small class="mb-0 text-muted">15 Thg 10</small>
                   </div>
                 </div>
                 <div class="acitivity-item d-flex">
                   <div class="flex-shrink-0">
-                    <nuxt-img src="/admin/images/users/avatar-3.jpg" alt="" class="avatar-xs rounded-circle acitivity-avatar material-shadow" />
+                    <NuxtImg src="/admin/images/users/avatar-3.jpg" alt="" class="avatar-xs rounded-circle acitivity-avatar material-shadow" />
                   </div>
                   <div class="flex-grow-1 ms-3">
-                    <h6 class="mb-1 lh-base">Frank Hook {{ $t('admin.page.dashboard.commented') }}</h6>
-                    <p class="text-muted mb-2 fst-italic">" {{ $t('admin.page.dashboard.comment') }} "</p>
+                    <h6 class="mb-1 lh-base">Frank Hook {{ $t("admin.page.dashboard.commented") }}</h6>
+                    <p class="text-muted mb-2 fst-italic">" {{ $t("admin.page.dashboard.comment") }} "</p>
                     <small class="mb-0 text-muted">26 Thg 8, 2021</small>
                   </div>
                 </div>
@@ -1091,76 +1093,76 @@
             </div>
 
             <div class="p-3 mt-2">
-              <h6 class="text-muted mb-3 text-uppercase fw-semibold">{{ $t('admin.page.dashboard.top10Categories') }}</h6>
+              <h6 class="text-muted mb-3 text-uppercase fw-semibold">{{ $t("admin.page.dashboard.top10Categories") }}</h6>
 
               <ol class="ps-3 text-muted">
                 <li class="py-1">
                   <a href="#" class="text-muted">
-                    {{ $t('admin.page.dashboard.mobileAccessories') }}
+                    {{ $t("admin.page.dashboard.mobileAccessories") }}
                     <span class="float-end">(10,294)</span>
                   </a>
                 </li>
                 <li class="py-1">
                   <a href="#" class="text-muted">
-                    {{ $t('admin.page.dashboard.desktop') }}
+                    {{ $t("admin.page.dashboard.desktop") }}
                     <span class="float-end">(6,256)</span>
                   </a>
                 </li>
                 <li class="py-1">
                   <a href="#" class="text-muted">
-                    {{ $t('admin.page.dashboard.electronics') }}
+                    {{ $t("admin.page.dashboard.electronics") }}
                     <span class="float-end">(3,479)</span>
                   </a>
                 </li>
                 <li class="py-1">
                   <a href="#" class="text-muted">
-                    {{ $t('admin.page.dashboard.homeFurniture') }}
+                    {{ $t("admin.page.dashboard.homeFurniture") }}
                     <span class="float-end">(2,275)</span>
                   </a>
                 </li>
                 <li class="py-1">
                   <a href="#" class="text-muted">
-                    {{ $t('admin.page.dashboard.groceries') }}
+                    {{ $t("admin.page.dashboard.groceries") }}
                     <span class="float-end">(1,950)</span>
                   </a>
                 </li>
                 <li class="py-1">
                   <a href="#" class="text-muted">
-                    {{ $t('admin.page.dashboard.fashion') }}
+                    {{ $t("admin.page.dashboard.fashion") }}
                     <span class="float-end">(1,582)</span>
                   </a>
                 </li>
                 <li class="py-1">
                   <a href="#" class="text-muted">
-                    {{ $t('admin.page.dashboard.homeAppliances') }}
+                    {{ $t("admin.page.dashboard.homeAppliances") }}
                     <span class="float-end">(1,037)</span>
                   </a>
                 </li>
                 <li class="py-1">
                   <a href="#" class="text-muted">
-                    {{ $t('admin.page.dashboard.beautyToysOthers') }}
+                    {{ $t("admin.page.dashboard.beautyToysOthers") }}
                     <span class="float-end">(924)</span>
                   </a>
                 </li>
                 <li class="py-1">
                   <a href="#" class="text-muted">
-                    {{ $t('admin.page.dashboard.foodDrinks') }}
+                    {{ $t("admin.page.dashboard.foodDrinks") }}
                     <span class="float-end">(701)</span>
                   </a>
                 </li>
                 <li class="py-1">
                   <a href="#" class="text-muted">
-                    {{ $t('admin.page.dashboard.toysGames') }}
+                    {{ $t("admin.page.dashboard.toysGames") }}
                     <span class="float-end">(239)</span>
                   </a>
                 </li>
               </ol>
               <div class="mt-3 text-center">
-                <a href="javascript:void(0);" class="text-muted text-decoration-underline">{{ $t('admin.page.dashboard.viewAllCategories') }}</a>
+                <a href="javascript:void(0);" class="text-muted text-decoration-underline">{{ $t("admin.page.dashboard.viewAllCategories") }}</a>
               </div>
             </div>
             <div class="p-3">
-              <h6 class="text-muted mb-3 text-uppercase fw-semibold">{{ $t('admin.page.dashboard.productReviews') }}</h6>
+              <h6 class="text-muted mb-3 text-uppercase fw-semibold">{{ $t("admin.page.dashboard.productReviews") }}</h6>
               <!-- Swiper
                     <div class="swiper vertical-swiper" style="height: 250px">
                       <div class="swiper-wrapper">
@@ -1170,7 +1172,7 @@
                               <div class="d-flex">
                                 <div class="flex-shrink-0 avatar-sm">
                                   <div class="avatar-title bg-light rounded material-shadow">
-                                    <nuxt-img src="/admin/images/companies/img-1.png" alt="" height="30" />
+                                    <NuxtImg src="/admin/images/companies/img-1.png" alt="" height="30" />
                                   </div>
                                 </div>
                                 <div class="flex-grow-1 ms-3">
@@ -1198,7 +1200,7 @@
                             <div class="card-body">
                               <div class="d-flex">
                                 <div class="flex-shrink-0">
-                                  <nuxt-img src="/admin/images/users/avatar-3.jpg" alt="" class="avatar-sm rounded material-shadow" />
+                                  <NuxtImg src="/admin/images/users/avatar-3.jpg" alt="" class="avatar-sm rounded material-shadow" />
                                 </div>
                                 <div class="flex-grow-1 ms-3">
                                   <div>
@@ -1226,7 +1228,7 @@
                               <div class="d-flex">
                                 <div class="flex-shrink-0 avatar-sm">
                                   <div class="avatar-title bg-light rounded">
-                                    <nuxt-img src="/admin/images/companies/img-8.png" alt="" height="30" />
+                                    <NuxtImg src="/admin/images/companies/img-8.png" alt="" height="30" />
                                   </div>
                                 </div>
                                 <div class="flex-grow-1 ms-3">
@@ -1254,7 +1256,7 @@
                             <div class="card-body">
                               <div class="d-flex">
                                 <div class="flex-shrink-0">
-                                  <nuxt-img src="/admin/images/users/avatar-2.jpg" alt="" class="avatar-sm rounded material-shadow" />
+                                  <NuxtImg src="/admin/images/users/avatar-2.jpg" alt="" class="avatar-sm rounded material-shadow" />
                                 </div>
                                 <div class="flex-grow-1 ms-3">
                                   <div>
@@ -1281,7 +1283,7 @@
             </div>
 
             <div class="p-3">
-              <h6 class="text-muted mb-3 text-uppercase fw-semibold">{{ $t('admin.page.dashboard.customerReviews') }}</h6>
+              <h6 class="text-muted mb-3 text-uppercase fw-semibold">{{ $t("admin.page.dashboard.customerReviews") }}</h6>
               <div class="bg-light px-3 py-2 rounded-2 mb-2">
                 <div class="d-flex align-items-center">
                   <div class="flex-grow-1">
@@ -1300,9 +1302,9 @@
               </div>
               <div class="text-center">
                 <div class="text-muted">
-                  {{ $t('admin.page.dashboard.totalReviews') }}
+                  {{ $t("admin.page.dashboard.totalReviews") }}
                   <span class="fw-medium">5.50k</span>
-                  {{ $t('admin.page.dashboard.reviews') }}
+                  {{ $t("admin.page.dashboard.reviews") }}
                 </div>
               </div>
 
@@ -1310,7 +1312,7 @@
                 <div class="row align-items-center g-2">
                   <div class="col-auto">
                     <div class="p-1">
-                      <h6 class="mb-0">5 {{ $t('admin.page.dashboard.stars') }}</h6>
+                      <h6 class="mb-0">5 {{ $t("admin.page.dashboard.stars") }}</h6>
                     </div>
                   </div>
                   <div class="col">
@@ -1331,7 +1333,7 @@
                 <div class="row align-items-center g-2">
                   <div class="col-auto">
                     <div class="p-1">
-                      <h6 class="mb-0">4 {{ $t('admin.page.dashboard.stars') }}</h6>
+                      <h6 class="mb-0">4 {{ $t("admin.page.dashboard.stars") }}</h6>
                     </div>
                   </div>
                   <div class="col">
@@ -1352,7 +1354,7 @@
                 <div class="row align-items-center g-2">
                   <div class="col-auto">
                     <div class="p-1">
-                      <h6 class="mb-0">3 {{ $t('admin.page.dashboard.stars') }}</h6>
+                      <h6 class="mb-0">3 {{ $t("admin.page.dashboard.stars") }}</h6>
                     </div>
                   </div>
                   <div class="col">
@@ -1373,7 +1375,7 @@
                 <div class="row align-items-center g-2">
                   <div class="col-auto">
                     <div class="p-1">
-                      <h6 class="mb-0">2 {{ $t('admin.page.dashboard.stars') }}</h6>
+                      <h6 class="mb-0">2 {{ $t("admin.page.dashboard.stars") }}</h6>
                     </div>
                   </div>
                   <div class="col">
@@ -1395,7 +1397,7 @@
                 <div class="row align-items-center g-2">
                   <div class="col-auto">
                     <div class="p-1">
-                      <h6 class="mb-0">1 {{ $t('admin.page.dashboard.stars') }}</h6>
+                      <h6 class="mb-0">1 {{ $t("admin.page.dashboard.stars") }}</h6>
                     </div>
                   </div>
                   <div class="col">
@@ -1417,13 +1419,13 @@
 
             <div class="card sidebar-alert bg-light border-0 text-center mx-4 mb-0 mt-3">
               <div class="card-body">
-                <nuxt-img src="/admin/images/giftbox.png" alt="Hộp quà" />
+                <NuxtImg src="/admin/images/giftbox.png" alt="Hộp quà" />
                 <div class="mt-4">
-                  <h5>{{ $t('admin.page.dashboard.inviteNewSeller') }}</h5>
-                  <p class="text-muted lh-base">{{ $t('admin.page.dashboard.inviteDescription') }}</p>
+                  <h5>{{ $t("admin.page.dashboard.inviteNewSeller") }}</h5>
+                  <p class="text-muted lh-base">{{ $t("admin.page.dashboard.inviteDescription") }}</p>
                   <button type="button" class="btn btn-primary btn-label rounded-pill">
                     <i class="ri-mail-fill label-icon align-middle rounded-pill fs-16 me-2"></i>
-                    {{ $t('admin.page.dashboard.inviteNow') }}
+                    {{ $t("admin.page.dashboard.inviteNow") }}
                   </button>
                 </div>
               </div>

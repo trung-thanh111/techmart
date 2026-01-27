@@ -133,7 +133,7 @@
                             {{ $t("admin.common.form.address") }}
                         </label>
                         <Field name="address" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-                            <textarea v-bind="field" id="address" rows="3" :placeholder="$t('admin.common.form.addressPlaceholder')" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
+                            <CKEditor :model-value="field.value" @update:model-value="field.onChange" :placeholder="$t('admin.common.form.addressPlaceholder')" height="h-32" />
                             <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
                         </Field>
                     </div>
@@ -142,7 +142,7 @@
                             {{ $t("admin.common.form.description") }}
                         </label>
                         <Field name="description" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-                            <textarea v-bind="field" id="description" rows="3" :placeholder="$t('admin.common.form.descriptionPlaceholder')" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
+                            <CKEditor :model-value="field.value" @update:model-value="field.onChange" :placeholder="$t('admin.common.form.descriptionPlaceholder')" height="h-32" />
                             <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
                         </Field>
                     </div>
@@ -200,6 +200,7 @@ import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
 import { USERINDEX } from "~/utils/constants";
 import { useUser } from "~/composables/user/useUser";
 import SingleImageUpload from "~/components/custom/SingleImageUpload.vue";
+import CKEditor from "~/components/custom/CKEditor.vue";
 
 const { isLoading, showPassword, genderOptions, handleStore, userCatalogueOptions, setValues, values } = useUser();
 

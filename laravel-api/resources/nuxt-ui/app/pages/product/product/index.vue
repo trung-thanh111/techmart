@@ -99,7 +99,7 @@ definePageMeta({
                                 </td>
                                 <td>
                                     <NuxtLink class="hover:text-teal-500 flex items-center gap-2" :to="`/product/product/${item.id}/edit`">
-                                        <NuxtImg :src="item.album && item.album.length > 0 ? `${config.public.baseUrl}/storage/${item.album[0]?.path}` : '/shared/images/defaults/record.jpg'" alt="image-record" class="rounded-md w-[120px] h-[70px] object-contain" loading="lazy" />
+                                        <NuxtImg :src="item.album && item.album.length > 0 ? `${config.public.baseUrl}/storage/${item.album[0]?.path}` : '/images/defaults/record.jpg'" alt="image-record" class="rounded-md w-[120px] h-[70px] object-contain" width="120" height="70" loading="lazy" />
                                         {{ item.name }}
                                     </NuxtLink>
                                 </td>

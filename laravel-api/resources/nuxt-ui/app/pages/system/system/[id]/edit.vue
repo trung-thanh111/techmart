@@ -29,7 +29,7 @@
                     <div class="mb-3">
                         <label class="form-label">{{ $t("admin.common.form.content") }}</label>
                         <Field name="content" v-slot="{ field }">
-                            <textarea v-bind="field" rows="6" class="form-control" :placeholder="$t('admin.common.form.contentPlaceholder')" />
+                            <CKEditor :model-value="field.value" @update:model-value="field.onChange" :placeholder="$t('admin.common.form.contentPlaceholder')" height="h-64" />
                         </Field>
                     </div>
                 </div>
@@ -68,22 +68,13 @@ import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
 import PublishSelect from "~/components/custom/PublishSelect.vue";
 import { useSystem } from "~/composables/system/useSystem";
 import { SYSTEMINDEX } from "~/utils/constants";
+import CKEditor from "~/components/custom/CKEditor.vue";
 
 const { isLoading, show, handleUpdate, setValues } = useSystem(undefined, "update");
 
 const id = Number(useRoute().params.id);
-
-// #region agent log
-fetch("http://127.0.0.1:7242/ingest/0cc9012d-e8c7-4b3a-93fd-395427feb6af", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ sessionId: "debug-session", runId: "pre-fix", hypothesisId: "D", location: "pages/system/[id]/edit.vue:setup", message: "calling show from edit", data: { id }, timestamp: Date.now() }) }).catch(() => {});
-// #endregion
-
-const resp = await show(id);
-
-// #region agent log
-fetch("http://127.0.0.1:7242/ingest/0cc9012d-e8c7-4b3a-93fd-395427feb6af", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ sessionId: "debug-session", runId: "pre-fix", hypothesisId: "E", location: "pages/system/[id]/edit.vue:setup", message: "show returned", data: { resp }, timestamp: Date.now() }) }).catch(() => {});
-// #endregion
-
-const record = resp?.data ?? resp ?? null;
+const { data } = await show(id);
+const record = data;
 
 setValues({
     keyword: record?.keyword ?? "",

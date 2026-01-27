@@ -5,54 +5,47 @@ import { useApi } from "~/composables/useApi";
 const ENDPOINT = "/api/v1";
 
 export const inventoryService = {
-  pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IInventory>>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPaginate<IInventory>>>(`${ENDPOINT}/inventorys`, {
-      params,
-    });
-  },
+    pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IInventory>>> => {
+        const { privateFetch } = useApi();
+        return await privateFetch<IApiOk<IPaginate<IInventory>>>(`${ENDPOINT}/inventorys`, {
+            params,
+        });
+    },
 
-  store: async (payload: Partial<IInventory>): Promise<IApiOk<IInventory>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IInventory>>(`${ENDPOINT}/inventorys`, {
-      method: "POST",
-      body: payload,
-    });
-  },
+    store: async (payload: Partial<IInventory>): Promise<IApiOk<IInventory>> => {
+        const { privateFetch } = useApi();
+        return await privateFetch<IApiOk<IInventory>>(`${ENDPOINT}/inventorys`, {
+            method: "POST",
+            body: payload,
+        });
+    },
 
-  show: async (id: number | string): Promise<IApiOk<IInventory>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IInventory>>(`${ENDPOINT}/inventorys/${id}`);
-  },
+    show: async (id: number | string): Promise<IApiOk<IInventory>> => {
+        const { privateFetch } = useApi();
+        return await privateFetch<IApiOk<IInventory>>(`${ENDPOINT}/inventorys/${id}`);
+    },
 
-  update: async (id: number, payload: Partial<IInventory>): Promise<IApiOk<IInventory>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IInventory>>(`${ENDPOINT}/inventorys/${id}`, {
-      method: "POST",
-      body: payload,
-      params: { _method: "PATCH" },
-    });
-  },
+    update: async (id: number, payload: Partial<IInventory>): Promise<IApiOk<IInventory>> => {
+        const { privateFetch } = useApi();
+        return await privateFetch<IApiOk<IInventory>>(`${ENDPOINT}/inventorys/${id}`, {
+            method: "POST",
+            body: payload,
+            params: { _method: "PATCH" },
+        });
+    },
 
-  delete: async (id: number): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/inventorys/${id}`, {
-      method: "DELETE",
-    });
-  },
+    delete: async (id: number): Promise<IApiMessage> => {
+        const { privateFetch } = useApi();
+        return await privateFetch<IApiMessage>(`${ENDPOINT}/inventorys/${id}`, {
+            method: "DELETE",
+        });
+    },
 
-  deleteMultiple: async (ids: number[]): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/inventorys/bulkDelete`, {
-      body: { ids },
-      method: "DELETE",
-    });
-  },
-
-  paginationPublic: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IInventory>>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IPaginate<IInventory>>>(`${ENDPOINT}/inventorys`, {
-      params,
-    });
-  },
+    deleteMultiple: async (ids: number[]): Promise<IApiMessage> => {
+        const { privateFetch } = useApi();
+        return await privateFetch<IApiMessage>(`${ENDPOINT}/inventorys/bulkDelete`, {
+            body: { ids },
+            method: "DELETE",
+        });
+    },
 };

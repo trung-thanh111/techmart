@@ -2,9 +2,9 @@
   <div class="app-menu navbar-menu bg-sidebar-dark" id="sidebar-admin">
     <div class="navbar-brand-box" style="margin: 10px 0">
       <NuxtLink :to="TODASHBOARD" class="logo logo-dark">
-        <span class="logo-sm"><nuxt-img src="/shared/images/logo/logo-website.png" loading="lazy" alt="logo-sm" /></span>
+        <span class="logo-sm"><NuxtImg src="/shared/images/logo/logo-website.png" loading="lazy" alt="logo-sm" /></span>
         <span class="logo-lg">
-          <nuxt-img src="/shared/images/logo/logo-website.png" loading="lazy" alt="logo-lg" />
+          <NuxtImg src="/shared/images/logo/logo-website.png" loading="lazy" alt="logo-lg" />
         </span>
       </NuxtLink>
       <button type="button" class="btn" style="float: right; margin-top: 4px">

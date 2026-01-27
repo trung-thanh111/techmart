@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\Impl\Attribute;
 
 use Illuminate\Http\Request;
@@ -8,19 +9,20 @@ use App\Repositories\Attribute\AttributeCatalogueRepository;
 use App\Http\Resources\Attribute\AttributeCatalogueResource;
 use App\Services\Interfaces\Attribute\AttributeCatalogueServiceInterface;
 
-class AttributeCatalogueService extends BaseService implements AttributeCatalogueServiceInterface {
+class AttributeCatalogueService extends BaseService implements AttributeCatalogueServiceInterface
+{
 
-protected $repository;
+    protected $repository;
 
-protected $complexFilter = ['id'];
+    protected $complexFilter = ['id'];
 
-protected $with = ['attributes'];
-protected $relationFilter = [];
+    protected $with = ['attributes'];
+    protected $relationFilter = [];
 
-protected $cacheKeyPrefix = 'attribute_catalogues';
-protected $cacheTags = ['attribute_catalogues:collection'];
+    protected $cacheKeyPrefix = 'attribute_catalogues';
+    protected $cacheTags = ['attribute_catalogues:collection'];
 
-protected $useUpload = false;
+    protected $useUpload = false;
 
     public function __construct(
         AttributeCatalogueRepository $repository
@@ -28,7 +30,8 @@ protected $useUpload = false;
         $this->repository = $repository;
     }
 
-    protected function getRepository(){
+    protected function getRepository()
+    {
         return $this->repository;
     }
 
@@ -36,18 +39,21 @@ protected $useUpload = false;
      * nhiệm vụ bắt data từ client post lên (dạng thô, chuỗi, file, ....)
      *
      */
-    protected function prepareModelData(Request $request): self {
+    protected function prepareModelData(Request $request): self
+    {
 
         return $this->initializeBasicModelData($request);
     }
 
-    protected function initializeBasicModelData(Request $request): self {
+    protected function initializeBasicModelData(Request $request): self
+    {
         $fillable = $this->repository->getFillable();
         $this->modelData = $request->only($fillable);
         return $this;
     }
 
-    protected function getResource(Model $resource){
+    protected function getResource(Model $resource)
+    {
         return new AttributeCatalogueResource($resource);
     }
 
@@ -56,5 +62,4 @@ protected $useUpload = false;
         $request->merge(['simple' => true]);
         return parent::paginate($request);
     }
-
 }

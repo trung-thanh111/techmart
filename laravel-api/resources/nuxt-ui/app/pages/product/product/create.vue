@@ -46,7 +46,7 @@
                         <label class="form-label" for="description">{{ $t("admin.common.form.description") }}</label>
                         <Field name="description" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
                             <div class="w-full">
-                                <CKEditor v-model="field.value" @update:modelValue="field.onChange" class="h-64" />
+                                <CKEditor :model-value="field.value" @update:model-value="field.onChange" height="h-64" />
                                 <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
                             </div>
                         </Field>
@@ -254,7 +254,7 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">{{ $t("admin.common.form.description") }}</label>
-                <textarea v-model="catalogueForm.description" rows="4" class="form-control" :placeholder="$t('admin.common.form.descriptionPlaceholder')" />
+                <CKEditor v-model="catalogueForm.description" :placeholder="$t('admin.common.form.descriptionPlaceholder')" />
             </div>
             <div class="mb-3">
                 <label class="form-label">{{ $t("admin.common.status") }}</label>
@@ -283,7 +283,7 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">{{ $t("admin.common.form.description") }}</label>
-                <textarea v-model="tagForm.description" rows="4" class="form-control" :placeholder="$t('admin.common.form.descriptionPlaceholder')" />
+                <CKEditor v-model="tagForm.description" :placeholder="$t('admin.common.form.descriptionPlaceholder')" />
             </div>
             <div class="mb-3">
                 <label class="form-label">{{ $t("admin.common.status") }}</label>

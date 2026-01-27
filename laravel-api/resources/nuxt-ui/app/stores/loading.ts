@@ -1,20 +1,20 @@
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia";
 
-export const useLoadingStore = defineStore('loading', {
-  state: () => ({
-    isLoading: false,
-    message: ''
-  }),
+export const useLoadingStore = defineStore("loading", {
+    state: () => ({
+        isLoading: false,
+        message: "",
+    }),
 
-  actions: {
-    show(message: string = '') {
-      this.isLoading = true
-      this.message = message
+    actions: {
+        show(message: string = "") {
+            this.isLoading = true;
+            this.message = message;
+        },
+
+        hide() {
+            this.isLoading = false;
+            this.message = "";
+        },
     },
-
-    hide() {
-      this.isLoading = false
-      this.message = ''
-    }
-  }
-})
+});

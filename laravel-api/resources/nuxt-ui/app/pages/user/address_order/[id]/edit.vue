@@ -85,7 +85,7 @@
                             <span class="text-danger">*</span>
                         </label>
                         <Field name="address" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-                            <textarea v-bind="field" id="address" rows="3" :placeholder="$t('admin.common.form.addressPlaceholder')" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
+                            <CKEditor :model-value="field.value" @update:model-value="field.onChange" :placeholder="$t('admin.common.form.addressPlaceholder')" height="h-32" />
                             <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
                         </Field>
                     </div>
@@ -172,6 +172,7 @@ import Button from "~/components/custom/Button.vue";
 import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
 import { useAddressOrder } from "~/composables/user/useAddressOrder";
 import { ADDRESSORDERINDEX } from "~/utils/constants";
+import CKEditor from "~/components/custom/CKEditor.vue";
 
 const { config, isLoading, slug, show, handleUpdate, values, setValues } = useAddressOrder(undefined, "update");
 

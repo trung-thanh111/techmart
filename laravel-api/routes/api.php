@@ -114,7 +114,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
             Route::put('bulkUpdate', [AttributeCatalogueController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [AttributeCatalogueController::class, 'bulkUpdate']);
         });
-        Route::resource('attribute_catalogues', AttributeCatalogueController::class)->except(array_merge($routeExcept, ['index', 'show']));
+        Route::resource('attribute_catalogues', AttributeCatalogueController::class)->except($routeExcept);
 
         // Attributes
         Route::group(['prefix' => 'attributes'], function () {
@@ -125,7 +125,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
             Route::put('bulkUpdate', [AttributeController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [AttributeController::class, 'bulkUpdate']);
         });
-        Route::resource('attributes', AttributeController::class)->except(array_merge($routeExcept, ['index', 'show']));
+        Route::resource('attributes', AttributeController::class)->except($routeExcept);
 
         // Permissions
         Route::group(['prefix' => 'permissions'], function () {
@@ -136,7 +136,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
             Route::put('bulkUpdate', [PermissionController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [PermissionController::class, 'bulkUpdate']);
         });
-        Route::resource('permissions', PermissionController::class)->except(array_merge($routeExcept, ['index', 'show']));
+        Route::resource('permissions', PermissionController::class)->except($routeExcept);
 
         // Post Catalogue (Admin Write)
         Route::group(['prefix' => 'post_catalogues'], function () {
@@ -147,7 +147,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
             Route::put('bulkUpdate', [PostCatalogueController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [PostCatalogueController::class, 'bulkUpdate']);
         });
-        Route::resource('post_catalogues', PostCatalogueController::class)->except(array_merge($routeExcept, ['index', 'show'])); // Public read
+        Route::resource('post_catalogues', PostCatalogueController::class)->except($routeExcept); // Public read
 
         // Posts (Admin Write)
         Route::group(['prefix' => 'posts'], function () {
@@ -158,7 +158,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
             Route::put('bulkUpdate', [PostController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [PostController::class, 'bulkUpdate']);
         });
-        Route::resource('posts', PostController::class)->except(array_merge($routeExcept, ['index', 'show'])); // Public read
+        Route::resource('posts', PostController::class)->except($routeExcept); // Public read
 
         // Product Catalogue (Admin Write)
         Route::group(['prefix' => 'product_catalogues'], function () {
@@ -169,7 +169,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
             Route::put('bulkUpdate', [ProductCatalogueController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [ProductCatalogueController::class, 'bulkUpdate']);
         });
-        Route::resource('product_catalogues', ProductCatalogueController::class)->except(array_merge($routeExcept, ['index', 'show']));
+        Route::resource('product_catalogues', ProductCatalogueController::class)->except($routeExcept);
 
         // Products (Admin Write)
         Route::group(['prefix' => 'products'], function () {
@@ -180,7 +180,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
             Route::put('bulkUpdate', [ProductController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [ProductController::class, 'bulkUpdate']);
         });
-        Route::resource('products', ProductController::class)->except(array_merge($routeExcept, ['index', 'show']));
+        Route::resource('products', ProductController::class)->except($routeExcept);
 
         // Brands
         Route::group(['prefix' => 'brands'], function () {
@@ -191,7 +191,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
             Route::put('bulkUpdate', [BrandController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [BrandController::class, 'bulkUpdate']);
         });
-        Route::resource('brands', BrandController::class)->except(array_merge($routeExcept, ['index', 'show']));
+        Route::resource('brands', BrandController::class)->except($routeExcept);
 
         // Product Variants
         Route::group(['prefix' => 'product_variants'], function () {
@@ -202,7 +202,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
             Route::put('bulkUpdate', [ProductVariantController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [ProductVariantController::class, 'bulkUpdate']);
         });
-        Route::resource('product_variants', ProductVariantController::class)->except(array_merge($routeExcept, ['index', 'show']));
+        Route::resource('product_variants', ProductVariantController::class)->except($routeExcept);
 
         // Users & Catalogues
         Route::group(['prefix' => 'user_catalogues'], function () {
@@ -214,7 +214,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
             Route::patch('bulkUpdate', [UserCatalogueController::class, 'bulkUpdate']);
             Route::get('{id}/permissions', [UserCatalogueController::class, 'getPermissions']);
         });
-        Route::resource('user_catalogues', UserCatalogueController::class)->except(array_merge($routeExcept, ['index', 'show']));
+        Route::resource('user_catalogues', UserCatalogueController::class)->except($routeExcept);
 
         Route::group(['prefix' => 'users'], function () {
             Route::delete('bulkDelete', [UserController::class, 'bulkDelete']);
@@ -224,7 +224,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
             Route::put('bulkUpdate', [UserController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [UserController::class, 'bulkUpdate']);
         });
-        Route::resource('users', UserController::class)->except(array_merge($routeExcept, ['index', 'show']));
+        Route::resource('users', UserController::class)->except($routeExcept);
 
         // Banners (Admin Write)
         Route::group(['prefix' => 'banners'], function () {
@@ -235,31 +235,31 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
             Route::put('bulkUpdate', [BannerController::class, 'bulkUpdate']);
             Route::patch('bulkUpdate', [BannerController::class, 'bulkUpdate']);
         });
-        Route::resource('banners', BannerController::class)->except(array_merge($routeExcept, ['index', 'show']));
+        Route::resource('banners', BannerController::class)->except($routeExcept);
 
         // Other Admin Resources
-        Route::resource('systems', SystemController::class)->except(array_merge($routeExcept, ['index', 'show']));
-        Route::resource('popups', PopupController::class)->except(array_merge($routeExcept, ['index', 'show']));
-        Route::resource('promotions', PromotionController::class)->except(array_merge($routeExcept, ['index', 'show']));
-        Route::resource('menus', MenuController::class)->except(array_merge($routeExcept, ['index', 'show']));
-        Route::resource('menu_items', MenuItemController::class)->except(array_merge($routeExcept, ['index', 'show']));
+        Route::resource('systems', SystemController::class)->except($routeExcept);
+        Route::resource('popups', PopupController::class)->except($routeExcept);
+        Route::resource('promotions', PromotionController::class)->except($routeExcept);
+        Route::resource('menus', MenuController::class)->except($routeExcept);
+        Route::resource('menu_items', MenuItemController::class)->except($routeExcept);
 
         // Admin specific Logic for MenuItems
         Route::post('menu_items/rebuild-tree', [MenuItemController::class, 'rebuildTree']);
         Route::post('menu_items/drag-drop', [MenuItemController::class, 'dragDrop']);
 
-        Route::resource('inventorys', InventoryController::class)->except(array_merge($routeExcept, ['index', 'show']));
-        Route::resource('agencies', AgencyController::class)->except(array_merge($routeExcept, ['index', 'show']));
-        Route::resource('agency_working_hours', AgencyWorkingHourController::class)->except(array_merge($routeExcept, ['index', 'show']));
-        Route::resource('images', ImageController::class)->except(array_merge($routeExcept, ['index', 'show']));
-        Route::resource('mails', MailController::class)->except(array_merge($routeExcept, ['index', 'show']));
-        Route::resource('faq_catalogues', FaqCatalogueController::class)->except(array_merge($routeExcept, ['index', 'show']));
-        Route::resource('faqs', FaqController::class)->except(array_merge($routeExcept, ['index', 'show']));
-        Route::resource('banner_pages', BannerPageController::class)->except(array_merge($routeExcept, ['index', 'show']));
-        Route::resource('banner_positions', BannerPositionController::class)->except(array_merge($routeExcept, ['index', 'show']));
-        Route::resource('promotion_catalogues', PromotionCatalogueController::class)->except(array_merge($routeExcept, ['index', 'show']));
-        Route::resource('product_tags', ProductTagController::class)->except(array_merge($routeExcept, ['index', 'show']));
-        Route::resource('post_tags', PostTagController::class)->except(array_merge($routeExcept, ['index', 'show']));
+        Route::resource('inventorys', InventoryController::class)->except($routeExcept);
+        Route::resource('agencies', AgencyController::class)->except($routeExcept);
+        Route::resource('agency_working_hours', AgencyWorkingHourController::class)->except($routeExcept);
+        Route::resource('images', ImageController::class)->except($routeExcept);
+        Route::resource('mails', MailController::class)->except($routeExcept);
+        Route::resource('faq_catalogues', FaqCatalogueController::class)->except($routeExcept);
+        Route::resource('faqs', FaqController::class)->except($routeExcept);
+        Route::resource('banner_pages', BannerPageController::class)->except($routeExcept);
+        Route::resource('banner_positions', BannerPositionController::class)->except($routeExcept);
+        Route::resource('promotion_catalogues', PromotionCatalogueController::class)->except($routeExcept);
+        Route::resource('product_tags', ProductTagController::class)->except($routeExcept);
+        Route::resource('post_tags', PostTagController::class)->except($routeExcept);
 
         // ... Add other admin resources here
     });

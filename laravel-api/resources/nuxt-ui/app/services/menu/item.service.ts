@@ -5,57 +5,56 @@ import { useApi } from "~/composables/useApi";
 const ENDPOINT = "/api/v1";
 
 export const menuItemService = {
-  store: async (payload: Partial<IMenuItem>): Promise<IApiOk<IMenuItem>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IMenuItem>>(`${ENDPOINT}/menu_items`, {
-      method: "POST",
-      body: payload,
-    });
-  },
+    pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IMenuItem>>> => {
+        const { privateFetch } = useApi();
+        return await privateFetch<IApiOk<IPaginate<IMenuItem>>>(`${ENDPOINT}/menu_items`, { params });
+    },
 
-  bulkStore: async (data: any[]): Promise<IApiOk<IMenuItem[]>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IMenuItem[]>>(`${ENDPOINT}/menu_items/bulkStore`, {
-      method: "POST",
-      body: { data },
-    });
-  },
+    store: async (payload: Partial<IMenuItem>): Promise<IApiOk<IMenuItem>> => {
+        const { privateFetch } = useApi();
+        return await privateFetch<IApiOk<IMenuItem>>(`${ENDPOINT}/menu_items`, {
+            method: "POST",
+            body: payload,
+        });
+    },
 
-  update: async (id: number, payload: Partial<IMenuItem>): Promise<IApiOk<IMenuItem>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IMenuItem>>(`${ENDPOINT}/menu_items/${id}`, {
-      method: "POST",
-      body: payload,
-      params: { _method: "PATCH" },
-    });
-  },
+    bulkStore: async (data: any[]): Promise<IApiOk<IMenuItem[]>> => {
+        const { privateFetch } = useApi();
+        return await privateFetch<IApiOk<IMenuItem[]>>(`${ENDPOINT}/menu_items/bulkStore`, {
+            method: "POST",
+            body: { data },
+        });
+    },
 
-  delete: async (id: number): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/menu_items/${id}`, {
-      method: "DELETE",
-    });
-  },
+    update: async (id: number, payload: Partial<IMenuItem>): Promise<IApiOk<IMenuItem>> => {
+        const { privateFetch } = useApi();
+        return await privateFetch<IApiOk<IMenuItem>>(`${ENDPOINT}/menu_items/${id}`, {
+            method: "POST",
+            body: payload,
+            params: { _method: "PATCH" },
+        });
+    },
 
-  rebuildTree: async (payload: any): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/menu_items/rebuild-tree`, {
-      method: "POST",
-      body: payload,
-    });
-  },
+    delete: async (id: number): Promise<IApiMessage> => {
+        const { privateFetch } = useApi();
+        return await privateFetch<IApiMessage>(`${ENDPOINT}/menu_items/${id}`, {
+            method: "DELETE",
+        });
+    },
 
-  dragDrop: async (payload: any): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/menu_items/drag-drop`, {
-      method: "POST",
-      body: payload,
-    });
-  },
+    rebuildTree: async (payload: any): Promise<IApiMessage> => {
+        const { privateFetch } = useApi();
+        return await privateFetch<IApiMessage>(`${ENDPOINT}/menu_items/rebuild-tree`, {
+            method: "POST",
+            body: payload,
+        });
+    },
 
-  //
-  paginationPublic: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IMenuItem>>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IPaginate<IMenuItem>>>(`${ENDPOINT}/menu_items`, { params });
-  },
+    dragDrop: async (payload: any): Promise<IApiMessage> => {
+        const { privateFetch } = useApi();
+        return await privateFetch<IApiMessage>(`${ENDPOINT}/menu_items/drag-drop`, {
+            method: "POST",
+            body: payload,
+        });
+    },
 };

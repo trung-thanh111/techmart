@@ -1,7 +1,7 @@
 <template>
   <div class="main-content rounded-lg">
     <div class="relative w-full h-full">
-      <nuxt-img src="/client/images/bg-auth.png" alt="image-background" class="w-full h-full object-cover" loading="lazy" />
+      <NuxtImg src="/client/images/bg-auth.png" alt="image-background" class="w-full h-full object-cover" loading="lazy" />
       <div class="absolute inset-0 flex items-center justify-center">
         <div class="flex flex-col lg:flex-row max-h-[800px] max-w-lg mx-auto shadow-lg">
           <div class="flex flex-col justify-center p-6 lg:p-8 w-full bg-white">

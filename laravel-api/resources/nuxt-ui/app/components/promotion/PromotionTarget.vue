@@ -152,7 +152,7 @@
             </Accordion>
         </div>
         <Dialog v-model:visible="showMetadataDialog" :header="$t('admin.page.promotion.editMetadataTitle')" modal class="w-11/12 max-w-2xl">
-            <textarea v-model="currentMetadataContent" class="w-full border rounded p-2" rows="8" :placeholder="$t('admin.page.promotion.editMetadataPlaceholder')"></textarea>
+            <CKEditor v-model="currentMetadataContent" :placeholder="$t('admin.page.promotion.editMetadataPlaceholder')" height="h-32" />
             <template #footer>
                 <div class="flex justify-end gap-2">
                     <Button @click="closeMetadataDialog" variant="custom" severity="secondary" :label="$t('admin.components.buttons.cancel')"></Button>
@@ -178,6 +178,7 @@ import { useAppToast } from "~/composables/useAppToast";
 import { useI18n } from "vue-i18n";
 import { useEntitySearch, type EntityType, type SearchResult } from "~/composables/promotion/useEntitySearch";
 import { formatPrice } from "~/utils/helpers";
+import CKEditor from "~/components/custom/CKEditor.vue";
 
 interface Props {
     modelValue: any[];

@@ -1,1 +1,1 @@
-<!-- ConfirmDialog.vue - placeholder --> 
+<!-- ConfirmDialog.vue - placeholder -->

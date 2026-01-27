@@ -1,8 +1,8 @@
-import type { UploadResponse } from '~/interfaces/upload/image.interface';
-import { useApi } from '~/composables/useApi';
-import type { ApiResponse } from '~/composables/useApi';
+import type { UploadResponse } from "~/interfaces/upload/image.interface";
+import { useApi } from "~/composables/useApi";
+import type { ApiResponse } from "~/composables/useApi";
 
-const ENDPOINT = '/api/v1';
+const ENDPOINT = "/api/v1";
 
 export const uploadService = {
     /**
@@ -17,10 +17,10 @@ export const uploadService = {
         Array.from(files).forEach((file, index) => {
             fd.append(`file[${index}]`, file);
         });
-        fd.append('sessionId', sessionId);
+        fd.append("sessionId", sessionId);
 
         const res = await privateFetch<ApiResponse<UploadResponse>>(`${ENDPOINT}/upload-temp`, {
-            method: 'POST',
+            method: "POST",
             body: fd,
         });
         return res?.data as UploadResponse;
@@ -39,12 +39,12 @@ export const uploadService = {
      * @param maxSize number in bytes (default: 5MB)
      * @param allowedTypes string[] (default: image types)
      */
-    validateFile: (file: File, maxSize: number = 5 * 1024 * 1024, allowedTypes: string[] = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg']): { valid: boolean; error?: string } => {
+    validateFile: (file: File, maxSize: number = 5 * 1024 * 1024, allowedTypes: string[] = ["image/jpeg", "image/png", "image/webp", "image/jpg"]): { valid: boolean; error?: string } => {
         // Check file type
         if (!allowedTypes.includes(file.type)) {
             return {
                 valid: false,
-                error: `File ${file.name} không đúng định dạng. Chỉ chấp nhận: ${allowedTypes.map(t => t.replace('image/', '').toUpperCase()).join(', ')}`
+                error: `File ${file.name} không đúng định dạng. Chỉ chấp nhận: ${allowedTypes.map((t) => t.replace("image/", "").toUpperCase()).join(", ")}`,
             };
         }
 
@@ -52,7 +52,7 @@ export const uploadService = {
         if (file.size > maxSize) {
             return {
                 valid: false,
-                error: `File ${file.name} quá lớn. Kích thước tối đa: ${Math.round(maxSize / (1024 * 1024))}MB`
+                error: `File ${file.name} quá lớn. Kích thước tối đa: ${Math.round(maxSize / (1024 * 1024))}MB`,
             };
         }
 
@@ -65,11 +65,11 @@ export const uploadService = {
      * @param maxSize number in bytes
      * @param allowedTypes string[]
      */
-    validateFiles: (files: File[] | FileList, maxSize: number = 5 * 1024 * 1024, allowedTypes: string[] = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg']): { valid: boolean; errors: string[]; validFiles: File[] } => {
+    validateFiles: (files: File[] | FileList, maxSize: number = 5 * 1024 * 1024, allowedTypes: string[] = ["image/jpeg", "image/png", "image/webp", "image/jpg"]): { valid: boolean; errors: string[]; validFiles: File[] } => {
         const errors: string[] = [];
         const validFiles: File[] = [];
 
-        Array.from(files).forEach(file => {
+        Array.from(files).forEach((file) => {
             const validation = uploadService.validateFile(file, maxSize, allowedTypes);
             if (validation.valid) {
                 validFiles.push(file);
@@ -81,7 +81,7 @@ export const uploadService = {
         return {
             valid: errors.length === 0,
             errors,
-            validFiles
+            validFiles,
         };
-    }
+    },
 };

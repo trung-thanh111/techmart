@@ -50,7 +50,7 @@
                         </label>
                         <Field name="content" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
                             <div class="w-full">
-                                <CKEditor v-model="field.value" @update:modelValue="field.onChange" class="h-64" />
+                                <CKEditor v-model="field.value" @update:modelValue="field.onChange" height="h-64" />
                                 <small v-if="errorMessage && meta.touched" class="text-danger">
                                     {{ $t(errorMessage) }}
                                 </small>
@@ -62,7 +62,7 @@
                             {{ $t("admin.common.form.description") }}
                         </label>
                         <Field name="description" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-                            <textarea v-bind="field" id="description" rows="3" :placeholder="$t('admin.common.form.descriptionPlaceholder')" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
+                            <CKEditor :model-value="field.value" @update:model-value="field.onChange" :placeholder="$t('admin.common.form.descriptionPlaceholder')" height="h-32" />
                             <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
                         </Field>
                     </div>

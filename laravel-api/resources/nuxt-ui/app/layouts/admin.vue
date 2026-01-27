@@ -23,18 +23,6 @@ import Footer from "~/components/layout/Footer.vue";
 import Sidebar from "~/components/layout/Sidebar.vue";
 // Admin assets
 useHead({
-    title: "Techmart quản trị",
-    link: [
-        { rel: "icon", type: "image/x-icon", href: "/logo-favicon.png" },
-        { rel: "preconnect", href: "https://fonts.googleapis.com" },
-        { rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: "" },
-        { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" },
-        { rel: "stylesheet", href: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css", media: "print", onload: "this.media='all'" },
-        { rel: "stylesheet", href: "/css/bootstrap.min.css" },
-        { rel: "stylesheet", href: "/css/icons.min.css" },
-        { rel: "stylesheet", href: "/css/app.min.css" },
-        { rel: "stylesheet", href: "/css/custom.min.css" },
-    ],
     script: [
         { src: "/libs/bootstrap/js/bootstrap.bundle.min.js", defer: false },
         { src: "/libs/simplebar/simplebar.min.js", defer: false },

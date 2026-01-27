@@ -63,7 +63,7 @@
                                     <!-- item -->
                                     <a href="javascript:void(0);" class="dropdown-item notify-item py-2">
                                         <div class="d-flex">
-                                            <nuxt-img src="/images/users/avatar-2.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic" />
+                                            <NuxtImg src="/images/users/avatar-2.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic" loading="lazy" />
                                             <div class="flex-grow-1">
                                                 <h6 class="m-0">Angela Bernier</h6>
                                                 <span class="fs-11 mb-0 text-muted">{{ $t("admin.header.manager") }}</span>
@@ -73,7 +73,7 @@
                                     <!-- item -->
                                     <a href="javascript:void(0);" class="dropdown-item notify-item py-2">
                                         <div class="d-flex">
-                                            <nuxt-img src="/images/users/avatar-3.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic" />
+                                            <NuxtImg src="/images/users/avatar-3.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic" width="32" height="32" />
                                             <div class="flex-grow-1">
                                                 <h6 class="m-0">David Grasso</h6>
                                                 <span class="fs-11 mb-0 text-muted">{{ $t("admin.header.webDesigner") }}</span>
@@ -83,7 +83,7 @@
                                     <!-- item -->
                                     <a href="javascript:void(0);" class="dropdown-item notify-item py-2">
                                         <div class="d-flex">
-                                            <nuxt-img src="/images/users/avatar-5.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic" />
+                                            <NuxtImg src="/images/users/avatar-5.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic" width="32" height="32" />
                                             <div class="flex-grow-1">
                                                 <h6 class="m-0">Mike Bunch</h6>
                                                 <span class="fs-11 mb-0 text-muted">{{ $t("admin.header.reactDeveloper") }}</span>
@@ -122,7 +122,7 @@
 
                     <div class="dropdown ms-1 topbar-head-dropdown header-item">
                         <button type="button" class="btn btn-icon btn-topbar material-shadow-none btn-ghost-secondary rounded-circle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <nuxt-img id="header-lang-img" :src="currentLocale?.flag" :alt="currentLocale?.name" height="20" width="30" class="rounded" />
+                            <NuxtImg id="header-lang-img" :src="currentLocale?.flag" :alt="currentLocale?.name" height="20" width="30" class="rounded" />
                         </button>
                         <div class="dropdown-menu dropdown-menu-end">
                             <div class="dropdown-header">
@@ -130,7 +130,7 @@
                             </div>
                             <a v-for="locale in locales" :key="locale.code" href="javascript:void(0);" class="dropdown-item notify-item" :class="{ active: locale.code === (currentLocale?.code || 'vi') }" @click="switchLanguage(locale.code as 'vi' | 'en')">
                                 <div class="d-flex align-items-center">
-                                    <nuxt-img :src="locale.flag" :alt="locale.name" height="20" width="32" class="me-2 rounded" />
+                                    <NuxtImg :src="locale.flag" :alt="locale.name" height="20" width="32" class="me-2 rounded" />
                                     <span>{{ locale.name }}</span>
                                 </div>
                             </a>
@@ -221,7 +221,7 @@
 
                                         <div class="text-reset notification-item d-block dropdown-item position-relative">
                                             <div class="d-flex">
-                                                <nuxt-img src="/images/users/avatar-2.jpg" class="me-3 rounded-circle avatar-xs flex-shrink-0" alt="user-pic" />
+                                                <NuxtImg src="/images/users/avatar-2.jpg" class="me-3 rounded-circle avatar-xs flex-shrink-0" alt="user-pic" width="32" height="32" />
                                                 <div class="flex-grow-1">
                                                     <a href="#!" class="stretched-link">
                                                         <h6 class="mt-0 mb-1 fs-13 fw-semibold">Angela Bernier</h6>
@@ -278,7 +278,7 @@
 
                                         <div class="text-reset notification-item d-block dropdown-item position-relative">
                                             <div class="d-flex">
-                                                <nuxt-img src="/images/users/avatar-8.jpg" class="me-3 rounded-circle avatar-xs flex-shrink-0" alt="user-pic" />
+                                                <NuxtImg src="/images/users/avatar-8.jpg" class="me-3 rounded-circle avatar-xs flex-shrink-0" alt="user-pic" width="32" height="32" />
                                                 <div class="flex-grow-1">
                                                     <a href="#!" class="stretched-link">
                                                         <h6 class="mt-0 mb-1 fs-13 fw-semibold">Maureen Gibson</h6>
@@ -315,7 +315,7 @@
                                     <div data-simplebar style="max-height: 300px" class="pe-2">
                                         <div class="text-reset notification-item d-block dropdown-item">
                                             <div class="d-flex">
-                                                <nuxt-img src="/images/users/avatar-3.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic" />
+                                                <NuxtImg src="/images/users/avatar-3.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic" />
                                                 <div class="flex-grow-1">
                                                     <a href="#!" class="stretched-link">
                                                         <h6 class="mt-0 mb-1 fs-13 fw-semibold">James Lemire</h6>
@@ -341,7 +341,7 @@
 
                                         <div class="text-reset notification-item d-block dropdown-item">
                                             <div class="d-flex">
-                                                <nuxt-img src="/images/users/avatar-2.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic" />
+                                                <NuxtImg src="/images/users/avatar-2.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic" />
                                                 <div class="flex-grow-1">
                                                     <a href="#!" class="stretched-link">
                                                         <h6 class="mt-0 mb-1 fs-13 fw-semibold">Angela Bernier</h6>
@@ -367,7 +367,7 @@
 
                                         <div class="text-reset notification-item d-block dropdown-item">
                                             <div class="d-flex">
-                                                <nuxt-img src="/images/users/avatar-6.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic" />
+                                                <NuxtImg src="/images/users/avatar-6.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic" />
                                                 <div class="flex-grow-1">
                                                     <a href="#!" class="stretched-link">
                                                         <h6 class="mt-0 mb-1 fs-13 fw-semibold">Kenneth Brown</h6>
@@ -393,7 +393,7 @@
 
                                         <div class="text-reset notification-item d-block dropdown-item">
                                             <div class="d-flex">
-                                                <nuxt-img src="/images/users/avatar-8.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic" />
+                                                <NuxtImg src="/images/users/avatar-8.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic" />
                                                 <div class="flex-grow-1">
                                                     <a href="#!" class="stretched-link">
                                                         <h6 class="mt-0 mb-1 fs-13 fw-semibold">Maureen Gibson</h6>
@@ -441,7 +441,7 @@
                     <div class="dropdown ms-sm-3 header-item">
                         <button type="button" class="btn material-shadow-none" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="d-flex align-items-center">
-                                <nuxt-img class="rounded-circle header-profile-user" src="/images/users/avatar-1.jpg" alt="Header Avatar" />
+                                <NuxtImg class="rounded-circle header-profile-user" src="/images/users/avatar-1.jpg" alt="Header Avatar" width="32" height="32" fetchpriority="high" />
                                 <span class="text-start ms-xl-2">
                                     <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">Thanh Trung</span>
                                     <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">Founder</span>

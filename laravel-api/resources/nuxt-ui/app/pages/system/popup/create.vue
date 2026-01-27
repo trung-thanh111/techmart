@@ -36,7 +36,7 @@
                     <div class="mb-3" v-if="values.type !== 'form'">
                         <label class="form-label">{{ $t("admin.common.form.content") }}</label>
                         <Field name="content" v-slot="{ field }">
-                            <CKEditor v-model="field.value" @update:modelValue="field.onChange" class="h-64" />
+                            <CKEditor v-model="field.value" @update:modelValue="field.onChange" height="h-64" />
                         </Field>
                     </div>
 

@@ -17,7 +17,7 @@
     <div class="card-body">
       <div class="d-flex justify-content-between align-items-center mb-3">
         <div class="d-flex align-items-center gap-2">
-          <AppCheckbox :model-value="isAllSelected" @update:model-value="handleSelectAll" size="large" />
+          <AppCheckbox :model-value="isAllSelected" @update:modelValue="handleSelectAll as any" size="large" />
           <span class="text-muted">{{ $t("admin.page.userCatalogue.permissions.selectAll") }}</span>
         </div>
         <div class="d-flex align-items-center gap-2">
@@ -31,7 +31,7 @@
             <div class="d-flex justify-content-between align-items-center">
               <h6 class="mb-0 text-uppercase">{{ module }}</h6>
               <div class="d-flex align-items-center gap-2">
-                <AppCheckbox :model-value="isModuleSelected(module)" @update:model-value="(val) => handleSelectModule(module, val)" size="large" />
+                <AppCheckbox :model-value="isModuleSelected(module as any)" @update:modelValue="(val) => handleSelectModule(module as any, val as any)" size="large" />
                 <span class="text-muted small">{{ $t("admin.page.userCatalogue.permissions.selectModule") }}</span>
               </div>
             </div>
@@ -40,7 +40,7 @@
             <div class="row g-3">
               <div v-for="permission in permissions" :key="permission.id" class="col-md-6 col-lg-4">
                 <div class="form-check d-flex align-items-start gap-2">
-                  <AppCheckbox :model-value="selectedPermissionIds" :value="permission.id" @update:model-value="handlePermissionIdsChange" size="large" class="mt-1" />
+                  <AppCheckbox :model-value="selectedPermissionIds" :value="permission.id" @update:modelValue="handlePermissionIdsChange as any" size="large" class="mt-1" />
                   <label class="form-check-label flex-grow-1" :for="`permission-${permission.id}`">
                     <div class="text-base">{{ permission.title }}</div>
                     <small class="text-muted d-block">{{ permission.name }}</small>
@@ -82,6 +82,7 @@ import Button from "~/components/admin/custom/Button.vue";
 import { userCatalogueService } from "~/services/user/catalogue.service";
 import { useAppToast } from "~/composables/useAppToast";
 import { USERCATALOGUEINDEX } from "~/utils/constants";
+import { permissionService } from "~/services/user/permission.service";
 
 const { t } = useI18n();
 const route = useRoute();
@@ -150,11 +151,9 @@ const fetchPermissions = async () => {
 const handleSave = async () => {
   isSaving.value = true;
   try {
-    // Lấy permissions hiện tại từ data đã load
     const currentPermissionIds = permissionsData.value?.assignedPermissionIds || [];
     const newPermissionIds = selectedPermissionIds.value;
 
-    // Tính toán diff: permissions cần detach và attach
     const permissionsToDetach = currentPermissionIds.filter((id: number) => !newPermissionIds.includes(id));
     const permissionsToAttach = newPermissionIds.filter((id: number) => !currentPermissionIds.includes(id));
 

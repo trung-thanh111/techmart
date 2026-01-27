@@ -1,1 +1,1 @@
-<!-- AdminModal.vue - placeholder --> 
+<!-- AdminModal.vue - placeholder -->

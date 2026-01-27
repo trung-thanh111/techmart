@@ -60,9 +60,9 @@ class AuthService implements AuthServiceInterface
         return auth($guard);
     }
 
-    private function getCookieName(string $guard): string
+    private function getCookieName(): string
     {
-        return $guard === 'admin' ? 'adminRefreshToken' : 'refreshToken';
+        return 'refreshToken';
     }
 
     public function authenticate(AuthRequest $request, string $guard = 'api')
@@ -71,7 +71,6 @@ class AuthService implements AuthServiceInterface
         try {
             // Validate Admin Role if guard is admin
             if ($guard === 'admin') {
-                // Pre-check can be done here or after attempt. After attempt is safer for credentials check first.
             }
 
             return $this->beginTransaction()
@@ -149,8 +148,6 @@ class AuthService implements AuthServiceInterface
             'refresh_token' => Str::uuid(),
             'user_id' => $auth->user()->id,
             'expires_at' => $expiresAt,
-            // We might want to store which guard this token is for if we want STRICT database separation,
-            // but for now, we just rely on the cookie holding it.
         ];
         if (!$refreshToken = $this->refreshTokenRepository->create($payload)) {
             throw new ModelNotFoundException(Lang::get('message.model_not_found'));
@@ -167,38 +164,6 @@ class AuthService implements AuthServiceInterface
             'csrf_token' => Str::uuid(),
             'user_id' => $auth->user()->id,
         ];
-
-        // Ensure we don't wipe out tokens for other sessions if possible, but here it deletes by user_id
-        // which might be an issue if User and Admin are same ID (same table). 
-        // Ideally we should distinguish or just allow it (logging in as one invalidates the other's CSRF?).
-        // For now, let's keep it simple. If I log in as Admin, I might invalidate my User session's CSRF if they share strict checking.
-        // User asked for "Separate".
-        // If we delete by UserID, we kill both sessions if they are the same user.
-        // Let's NOT delete all tokens, or maybe filter?
-        // Repository pattern might need update to delete only for this context if we stored context.
-        // However, CSRF token is usually per session/request. 
-        // For clean separation, maybe we shouldn't delete *all* tokens but strictly the one we are replacing?
-        // But we are creating a new one. The previous implementation deleted *all* tokens for that user.
-        // This implies single session per user.
-        // If we want Admin and User concurrent login for same account, we shouldn't delete ALL.
-        // But maybe we SHOULD delete all to prevent stale tokens.
-        // Let's stick to current logic (delete all) -> effectively creates single session enforcement PER USER ID.
-        // To allow both, we need to NOT delete all.
-        // I will Temporarily COMMENT OUT deleteCsrfTokenByUserid or ensure it's correct.
-        // Actually, if I am Admin and I login, I get a CSRF token. If I am User, I get another. 
-        // If both stored in DB under user_id... retrieving one by token string is fine (`findByCsrfToken`).
-        // But `deleteCsrfTokenByUserid` wipes them.
-        // FIX: Only delete EXPIRED tokens or old tokens?
-        // Since I can't easily change the repo right now without more files, I will leave the delete.
-        // NOTE: This means logging in as Admin *might* log you out of Client if logic checks DB existence of other tokens.
-        // But `checkHeaderToken` checks if `X-CSRF` exists in DB.
-        // So yes, logging in as Admin will invalidate User session if they share the same User ID.
-        // The user said: "k lẻ admin mỗi lần vào phải đăng nhập lại ... còn riêng user thì có remember".
-        // They WANT simultaneous login.
-        // So I should STOP deleting all tokens. Just create a new one.
-
-        // $this->csrfTokenRepository->deleteCsrfTokenByUserid($auth->user()->id); // CHANGED: Don't delete all.
-
         if (!$csrfToken = $this->csrfTokenRepository->create($payload)) {
             throw new ModelNotFoundException(Lang::get('message.model_not_found'));
         }
@@ -220,7 +185,7 @@ class AuthService implements AuthServiceInterface
                 'csrfToken' => $this->csrfToken,
                 'user' => new UserResource($auth->user()),
             ],
-            'authCookie' => Cookie::make($cookieName, $this->refreshToken, self::REFRESH_TOKEN_TIME_TO_LIVE * 24 * 60, '/', null, null, true, false, 'Lax'),
+            'authCookie' => Cookie::make($cookieName, $this->refreshToken, self::REFRESH_TOKEN_TIME_TO_LIVE * 24 * 60, '/', null, true, true, false, 'Lax'),
         ];
     }
 
@@ -324,11 +289,13 @@ class AuthService implements AuthServiceInterface
         return false;
     }
 
-    public function logout(string $guard = 'api'): void
+    public function logout(string $guard = 'api'): \Symfony\Component\HttpFoundation\Cookie
     {
         $auth = $this->getAuth($guard);
-        // xóa refresh token logic if needed?
+        $cookieName = $this->getCookieName($guard);
         $auth->logout();
         $auth->invalidate(true);
+
+        return Cookie::forget($cookieName);
     }
 }

@@ -7,19 +7,19 @@
           <!--             <div class="navbar-brand-box horizontal-logo">
               <NuxtLink to="/admin" class="logo logo-dark">
                 <span class="logo-sm">
-                  <nuxt-img src="/logo-favicon.png" alt="Techmart" height="22" />
+                  <NuxtImg src="/logo-favicon.png" alt="Techmart" height="22" />
                 </span>
                 <span class="logo-lg">
-                  <nuxt-img src="/logo-favicon.png" alt="Techmart" height="17" />
+                  <NuxtImg src="/logo-favicon.png" alt="Techmart" height="17" />
                 </span>
               </NuxtLink>
   
               <NuxtLink to="/admin" class="logo logo-light">
                 <span class="logo-sm">
-                  <nuxt-img src="/logo-favicon.png" alt="Techmart" height="22" />
+                  <NuxtImg src="/logo-favicon.png" alt="Techmart" height="22" />
                 </span>
                 <span class="logo-lg">
-                  <nuxt-img src="/logo-favicon.png" alt="Techmart" height="17" />
+                  <NuxtImg src="/logo-favicon.png" alt="Techmart" height="17" />
                 </span>
               </NuxtLink>
             </div> -->
@@ -40,74 +40,74 @@
             <div class="dropdown-menu dropdown-menu-lg" id="search-dropdown">
               <div data-simplebar style="max-height: 320px">
                 <div class="dropdown-header">
-                  <h6 class="text-overflow text-muted mb-0 text-uppercase">{{ $t('admin.header.recentSearches') }}</h6>
+                  <h6 class="text-overflow text-muted mb-0 text-uppercase">{{ $t("admin.header.recentSearches") }}</h6>
                 </div>
                 <div class="dropdown-item bg-transparent text-wrap">
                   <a href="index.html" class="btn btn-soft-secondary btn-sm rounded-pill">
-                    {{ $t('admin.header.howToSetup') }}
+                    {{ $t("admin.header.howToSetup") }}
                     <i class="mdi mdi-magnify ms-1"></i>
                   </a>
                   <a href="index.html" class="btn btn-soft-secondary btn-sm rounded-pill">
-                    {{ $t('admin.header.buttons') }}
+                    {{ $t("admin.header.buttons") }}
                     <i class="mdi mdi-magnify ms-1"></i>
                   </a>
                 </div>
                 <!-- item-->
                 <div class="dropdown-header mt-2">
-                  <h6 class="text-overflow text-muted mb-1 text-uppercase">{{ $t('admin.header.pages') }}</h6>
+                  <h6 class="text-overflow text-muted mb-1 text-uppercase">{{ $t("admin.header.pages") }}</h6>
                 </div>
 
                 <!-- item-->
                 <a href="javascript:void(0);" class="dropdown-item notify-item">
                   <i class="ri-bubble-chart-line align-middle fs-18 text-muted me-2"></i>
-                  <span>{{ $t('admin.header.analyticsDashboard') }}</span>
+                  <span>{{ $t("admin.header.analyticsDashboard") }}</span>
                 </a>
 
                 <!-- item-->
                 <a href="javascript:void(0);" class="dropdown-item notify-item">
                   <i class="ri-lifebuoy-line align-middle fs-18 text-muted me-2"></i>
-                  <span>{{ $t('admin.header.helpCenter') }}</span>
+                  <span>{{ $t("admin.header.helpCenter") }}</span>
                 </a>
 
                 <!-- item-->
                 <a href="javascript:void(0);" class="dropdown-item notify-item">
                   <i class="ri-user-settings-line align-middle fs-18 text-muted me-2"></i>
-                  <span>{{ $t('admin.header.myAccountSettings') }}</span>
+                  <span>{{ $t("admin.header.myAccountSettings") }}</span>
                 </a>
 
                 <!-- item-->
                 <div class="dropdown-header mt-2">
-                  <h6 class="text-overflow text-muted mb-2 text-uppercase">{{ $t('admin.header.members') }}</h6>
+                  <h6 class="text-overflow text-muted mb-2 text-uppercase">{{ $t("admin.header.members") }}</h6>
                 </div>
 
                 <div class="notification-list">
                   <!-- item -->
                   <a href="javascript:void(0);" class="dropdown-item notify-item py-2">
                     <div class="d-flex">
-                      <nuxt-img src="/admin/images/users/avatar-2.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic" />
+                      <NuxtImg src="/admin/images/users/avatar-2.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic" />
                       <div class="flex-grow-1">
                         <h6 class="m-0">Angela Bernier</h6>
-                        <span class="fs-11 mb-0 text-muted">{{ $t('admin.header.manager') }}</span>
+                        <span class="fs-11 mb-0 text-muted">{{ $t("admin.header.manager") }}</span>
                       </div>
                     </div>
                   </a>
                   <!-- item -->
                   <a href="javascript:void(0);" class="dropdown-item notify-item py-2">
                     <div class="d-flex">
-                      <nuxt-img src="/admin/images/users/avatar-3.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic" />
+                      <NuxtImg src="/admin/images/users/avatar-3.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic" />
                       <div class="flex-grow-1">
                         <h6 class="m-0">David Grasso</h6>
-                        <span class="fs-11 mb-0 text-muted">{{ $t('admin.header.webDesigner') }}</span>
+                        <span class="fs-11 mb-0 text-muted">{{ $t("admin.header.webDesigner") }}</span>
                       </div>
                     </div>
                   </a>
                   <!-- item -->
                   <a href="javascript:void(0);" class="dropdown-item notify-item py-2">
                     <div class="d-flex">
-                      <nuxt-img src="/admin/images/users/avatar-5.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic" />
+                      <NuxtImg src="/admin/images/users/avatar-5.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic" />
                       <div class="flex-grow-1">
                         <h6 class="m-0">Mike Bunch</h6>
-                        <span class="fs-11 mb-0 text-muted">{{ $t('admin.header.reactDeveloper') }}</span>
+                        <span class="fs-11 mb-0 text-muted">{{ $t("admin.header.reactDeveloper") }}</span>
                       </div>
                     </div>
                   </a>
@@ -116,7 +116,7 @@
 
               <div class="text-center pt-3 pb-1">
                 <a href="pages-search-results.html" class="btn btn-primary btn-sm">
-                  {{ $t('admin.header.viewAllResults') }}
+                  {{ $t("admin.header.viewAllResults") }}
                   <i class="ri-arrow-right-line ms-1"></i>
                 </a>
               </div>
@@ -143,22 +143,15 @@
 
           <div class="dropdown ms-1 topbar-head-dropdown header-item">
             <button type="button" class="btn btn-icon btn-topbar material-shadow-none btn-ghost-secondary rounded-circle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <nuxt-img id="header-lang-img" :src="currentLocale?.flag" :alt="currentLocale?.name" height="20" width="30" class="rounded" />
+              <NuxtImg id="header-lang-img" :src="currentLocale?.flag" :alt="currentLocale?.name" height="20" width="30" class="rounded" />
             </button>
             <div class="dropdown-menu dropdown-menu-end">
               <div class="dropdown-header">
-                <h6 class="text-overflow text-muted mb-0 text-uppercase">{{ $t('admin.header.select') }} {{ $t('admin.header.language') }}</h6>
+                <h6 class="text-overflow text-muted mb-0 text-uppercase">{{ $t("admin.header.select") }} {{ $t("admin.header.language") }}</h6>
               </div>
-              <a 
-                v-for="locale in locales" 
-                :key="locale.code"
-                href="javascript:void(0);" 
-                class="dropdown-item notify-item"
-                :class="{ active: locale.code === (currentLocale?.code || 'vi') }"
-                @click="switchLanguage(locale.code as 'vi' | 'en')"
-              >
+              <a v-for="locale in locales" :key="locale.code" href="javascript:void(0);" class="dropdown-item notify-item" :class="{ active: locale.code === (currentLocale?.code || 'vi') }" @click="switchLanguage(locale.code as 'vi' | 'en')">
                 <div class="d-flex align-items-center">
-                  <nuxt-img :src="locale.flag" :alt="locale.name" height="20" width="32" class="me-2 rounded" />
+                  <NuxtImg :src="locale.flag" :alt="locale.name" height="20" width="32" class="me-2 rounded" />
                   <span>{{ locale.name }}</span>
                 </div>
               </a>
@@ -189,10 +182,10 @@
                 <div class="p-3">
                   <div class="row align-items-center">
                     <div class="col">
-                      <h6 class="m-0 fs-16 fw-semibold text-white">{{ $t('admin.header.notifications') }}</h6>
+                      <h6 class="m-0 fs-16 fw-semibold text-white">{{ $t("admin.header.notifications") }}</h6>
                     </div>
                     <div class="col-auto dropdown-tabs">
-                      <span class="badge bg-light text-body fs-13">4 {{ $t('admin.header.new') }}</span>
+                      <span class="badge bg-light text-body fs-13">4 {{ $t("admin.header.new") }}</span>
                     </div>
                   </div>
                 </div>
@@ -200,13 +193,13 @@
                 <div class="px-2 pt-2">
                   <ul class="nav nav-tabs dropdown-tabs nav-tabs-custom" data-dropdown-tabs="true" id="notificationItemsTab" role="tablist">
                     <li class="nav-item waves-effect waves-light">
-                      <a class="nav-link active" data-bs-toggle="tab" href="#all-noti-tab" role="tab" aria-selected="true">{{ $t('admin.header.all') }} (4)</a>
+                      <a class="nav-link active" data-bs-toggle="tab" href="#all-noti-tab" role="tab" aria-selected="true">{{ $t("admin.header.all") }} (4)</a>
                     </li>
                     <li class="nav-item waves-effect waves-light">
-                      <a class="nav-link" data-bs-toggle="tab" href="#messages-tab" role="tab" aria-selected="false">{{ $t('admin.header.messages') }}</a>
+                      <a class="nav-link" data-bs-toggle="tab" href="#messages-tab" role="tab" aria-selected="false">{{ $t("admin.header.messages") }}</a>
                     </li>
                     <li class="nav-item waves-effect waves-light">
-                      <a class="nav-link" data-bs-toggle="tab" href="#alerts-tab" role="tab" aria-selected="false">{{ $t('admin.header.alerts') }}</a>
+                      <a class="nav-link" data-bs-toggle="tab" href="#alerts-tab" role="tab" aria-selected="false">{{ $t("admin.header.alerts") }}</a>
                     </li>
                   </ul>
                 </div>
@@ -234,7 +227,7 @@
                           <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
                             <span>
                               <i class="mdi mdi-clock-outline"></i>
-                              {{ $t('admin.header.justNow') }}
+                              {{ $t("admin.header.justNow") }}
                             </span>
                           </p>
                         </div>
@@ -249,7 +242,7 @@
 
                     <div class="text-reset notification-item d-block dropdown-item position-relative">
                       <div class="d-flex">
-                        <nuxt-img src="/admin/images/users/avatar-2.jpg" class="me-3 rounded-circle avatar-xs flex-shrink-0" alt="user-pic" />
+                        <NuxtImg src="/admin/images/users/avatar-2.jpg" class="me-3 rounded-circle avatar-xs flex-shrink-0" alt="user-pic" />
                         <div class="flex-grow-1">
                           <a href="#!" class="stretched-link">
                             <h6 class="mt-0 mb-1 fs-13 fw-semibold">Angela Bernier</h6>
@@ -260,7 +253,7 @@
                           <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
                             <span>
                               <i class="mdi mdi-clock-outline"></i>
-                              48 {{ $t('admin.header.minAgo') }}
+                              48 {{ $t("admin.header.minAgo") }}
                             </span>
                           </p>
                         </div>
@@ -291,7 +284,7 @@
                           <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
                             <span>
                               <i class="mdi mdi-clock-outline"></i>
-                              2 {{ $t('admin.header.hrsAgo') }}
+                              2 {{ $t("admin.header.hrsAgo") }}
                             </span>
                           </p>
                         </div>
@@ -306,7 +299,7 @@
 
                     <div class="text-reset notification-item d-block dropdown-item position-relative">
                       <div class="d-flex">
-                        <nuxt-img src="/admin/images/users/avatar-8.jpg" class="me-3 rounded-circle avatar-xs flex-shrink-0" alt="user-pic" />
+                        <NuxtImg src="/admin/images/users/avatar-8.jpg" class="me-3 rounded-circle avatar-xs flex-shrink-0" alt="user-pic" />
                         <div class="flex-grow-1">
                           <a href="#!" class="stretched-link">
                             <h6 class="mt-0 mb-1 fs-13 fw-semibold">Maureen Gibson</h6>
@@ -317,7 +310,7 @@
                           <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
                             <span>
                               <i class="mdi mdi-clock-outline"></i>
-                              4 {{ $t('admin.header.hrsAgo') }}
+                              4 {{ $t("admin.header.hrsAgo") }}
                             </span>
                           </p>
                         </div>
@@ -332,7 +325,7 @@
 
                     <div class="my-3 text-center view-all">
                       <button type="button" class="btn btn-soft-success waves-effect waves-light">
-                        {{ $t('admin.header.viewAll') }}
+                        {{ $t("admin.header.viewAll") }}
                         <i class="ri-arrow-right-line align-middle"></i>
                       </button>
                     </div>
@@ -343,7 +336,7 @@
                   <div data-simplebar style="max-height: 300px" class="pe-2">
                     <div class="text-reset notification-item d-block dropdown-item">
                       <div class="d-flex">
-                        <nuxt-img src="/admin/images/users/avatar-3.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic" />
+                        <NuxtImg src="/admin/images/users/avatar-3.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic" />
                         <div class="flex-grow-1">
                           <a href="#!" class="stretched-link">
                             <h6 class="mt-0 mb-1 fs-13 fw-semibold">James Lemire</h6>
@@ -354,7 +347,7 @@
                           <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
                             <span>
                               <i class="mdi mdi-clock-outline"></i>
-                              30 {{ $t('admin.header.minAgo') }}
+                              30 {{ $t("admin.header.minAgo") }}
                             </span>
                           </p>
                         </div>
@@ -369,7 +362,7 @@
 
                     <div class="text-reset notification-item d-block dropdown-item">
                       <div class="d-flex">
-                        <nuxt-img src="/admin/images/users/avatar-2.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic" />
+                        <NuxtImg src="/admin/images/users/avatar-2.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic" />
                         <div class="flex-grow-1">
                           <a href="#!" class="stretched-link">
                             <h6 class="mt-0 mb-1 fs-13 fw-semibold">Angela Bernier</h6>
@@ -380,7 +373,7 @@
                           <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
                             <span>
                               <i class="mdi mdi-clock-outline"></i>
-                              2 {{ $t('admin.header.hrsAgo') }}
+                              2 {{ $t("admin.header.hrsAgo") }}
                             </span>
                           </p>
                         </div>
@@ -395,7 +388,7 @@
 
                     <div class="text-reset notification-item d-block dropdown-item">
                       <div class="d-flex">
-                        <nuxt-img src="/admin/images/users/avatar-6.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic" />
+                        <NuxtImg src="/admin/images/users/avatar-6.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic" />
                         <div class="flex-grow-1">
                           <a href="#!" class="stretched-link">
                             <h6 class="mt-0 mb-1 fs-13 fw-semibold">Kenneth Brown</h6>
@@ -406,7 +399,7 @@
                           <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
                             <span>
                               <i class="mdi mdi-clock-outline"></i>
-                              10 {{ $t('admin.header.hrsAgo') }}
+                              10 {{ $t("admin.header.hrsAgo") }}
                             </span>
                           </p>
                         </div>
@@ -421,7 +414,7 @@
 
                     <div class="text-reset notification-item d-block dropdown-item">
                       <div class="d-flex">
-                        <nuxt-img src="/admin/images/users/avatar-8.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic" />
+                        <NuxtImg src="/admin/images/users/avatar-8.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic" />
                         <div class="flex-grow-1">
                           <a href="#!" class="stretched-link">
                             <h6 class="mt-0 mb-1 fs-13 fw-semibold">Maureen Gibson</h6>
@@ -432,7 +425,7 @@
                           <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
                             <span>
                               <i class="mdi mdi-clock-outline"></i>
-                              3 {{ $t('admin.header.daysAgo') }}
+                              3 {{ $t("admin.header.daysAgo") }}
                             </span>
                           </p>
                         </div>
@@ -447,7 +440,7 @@
 
                     <div class="my-3 text-center view-all">
                       <button type="button" class="btn btn-soft-success waves-effect waves-light">
-                        {{ $t('admin.header.viewAll') }}
+                        {{ $t("admin.header.viewAll") }}
                         <i class="ri-arrow-right-line align-middle"></i>
                       </button>
                     </div>
@@ -456,10 +449,10 @@
                 <div class="tab-pane fade p-4" id="alerts-tab" role="tabpanel" aria-labelledby="alerts-tab"></div>
                 <div class="notification-actions" id="notification-actions">
                   <div class="d-flex text-muted justify-content-center">
-                    {{ $t('admin.header.select') }}
+                    {{ $t("admin.header.select") }}
                     <div id="select-content" class="text-body fw-semibold px-1">0</div>
-                    {{ $t('admin.header.result') }}
-                    <button type="button" class="btn btn-link link-danger p-0 ms-3" data-bs-toggle="modal" data-bs-target="#removeNotificationModal">{{ $t('admin.header.remove') }}</button>
+                    {{ $t("admin.header.result") }}
+                    <button type="button" class="btn btn-link link-danger p-0 ms-3" data-bs-toggle="modal" data-bs-target="#removeNotificationModal">{{ $t("admin.header.remove") }}</button>
                   </div>
                 </div>
               </div>
@@ -469,7 +462,7 @@
           <div class="dropdown ms-sm-3 header-item">
             <button type="button" class="btn material-shadow-none" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <span class="d-flex align-items-center">
-                <nuxt-img class="rounded-circle header-profile-user" src="/admin/images/users/avatar-1.jpg" alt="Header Avatar" />
+                <NuxtImg class="rounded-circle header-profile-user" src="/admin/images/users/avatar-1.jpg" alt="Header Avatar" />
                 <span class="text-start ms-xl-2">
                   <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">Thanh Trung</span>
                   <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">Founder</span>
@@ -478,43 +471,43 @@
             </button>
             <div class="dropdown-menu dropdown-menu-end">
               <!-- item-->
-              <h6 class="dropdown-header">{{ $t('admin.header.welcome') }} Trung!</h6>
+              <h6 class="dropdown-header">{{ $t("admin.header.welcome") }} Trung!</h6>
               <a class="dropdown-item" href="pages-profile.html">
                 <i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i>
-                <span class="align-middle">{{ $t('admin.header.profile') }}</span>
+                <span class="align-middle">{{ $t("admin.header.profile") }}</span>
               </a>
               <a class="dropdown-item" href="apps-chat.html">
                 <i class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i>
-                <span class="align-middle">{{ $t('admin.header.messages') }}</span>
+                <span class="align-middle">{{ $t("admin.header.messages") }}</span>
               </a>
               <a class="dropdown-item" href="apps-tasks-kanban.html">
                 <i class="mdi mdi-calendar-check-outline text-muted fs-16 align-middle me-1"></i>
-                <span class="align-middle">{{ $t('user.taskboard') }}</span>
+                <span class="align-middle">{{ $t("user.taskboard") }}</span>
               </a>
               <a class="dropdown-item" href="pages-faqs.html">
                 <i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i>
-                <span class="align-middle">{{ $t('user.help') }}</span>
+                <span class="align-middle">{{ $t("user.help") }}</span>
               </a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="pages-profile.html">
                 <i class="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i>
                 <span class="align-middle">
-                  {{ $t('user.balance') }} :
+                  {{ $t("user.balance") }} :
                   <b>$5971.67</b>
                 </span>
               </a>
               <a class="dropdown-item" href="pages-profile-settings.html">
                 <span class="badge bg-success-subtle text-success mt-1 float-end">New</span>
                 <i class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i>
-                <span class="align-middle">{{ $t('user.settings') }}</span>
+                <span class="align-middle">{{ $t("user.settings") }}</span>
               </a>
               <a class="dropdown-item" href="/">
                 <i class="mdi mdi-home-outline text-muted fs-18 align-middle me-1"></i>
-                <span class="align-middle">{{ $t('user.home') }}</span>
+                <span class="align-middle">{{ $t("user.home") }}</span>
               </a>
               <a class="dropdown-item text-danger cursor-pointer" @click="handleLogout">
                 <i class="mdi mdi-logout fs-16 align-middle me-1"></i>
-                <span class="align-middle" data-key="t-logout">{{ $t('user.logout') }}</span>
+                <span class="align-middle" data-key="t-logout">{{ $t("user.logout") }}</span>
               </a>
             </div>
           </div>
