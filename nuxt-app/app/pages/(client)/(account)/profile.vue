@@ -12,12 +12,12 @@
 </template>
 
 <script setup lang="ts">
-import Breadcrumb from "~/components/shared/navigation/Breadcrumb.vue";
-import Sidebar from "~/components/client/navigation/SidebarProfile.vue";
-import ProfileHeader from "~/components/client/navigation/ProfileHeader.vue";
+import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
+import Sidebar from "~/components//navigation/SidebarProfile.vue";
+import ProfileHeader from "~/components//navigation/ProfileHeader.vue";
 import { PROFILEINDEX } from "~/utils/constants";
 
-const breadcrumbs = [{ label: $t("client.profile.breadcrumb"), href: PROFILEINDEX }];
+const breadcrumbs = [{ label: $t("profile.breadcrumb"), href: PROFILEINDEX }];
 
 definePageMeta({
   layout: "client",

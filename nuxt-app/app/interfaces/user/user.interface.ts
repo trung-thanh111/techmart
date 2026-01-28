@@ -61,3 +61,39 @@ export interface PayloadFilter {
 export interface UserPayloadFilter extends BasePayloadFilter {
   user_catalogue_id: number | null;
 }
+
+export interface ILoginPayload {
+  email: string;
+  password: string;
+  remember?: boolean;
+}
+
+export interface IRegisterPayload {
+  email: string;
+  password: string;
+  name: string;
+  phone?: string;
+  address?: string;
+}
+
+export interface IForgotRequest {
+  email: string;
+}
+
+export interface IForgotVerify {
+  email: string;
+  otp: string;
+}
+
+export interface IForgotReset {
+  email: string;
+  otp: string;
+  password: string;
+  password_confirmation: string;
+}
+
+export interface IChangePasswordPayload {
+  current_password: string;
+  password: string;
+  password_confirmation: string;
+}

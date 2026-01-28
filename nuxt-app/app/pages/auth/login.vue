@@ -1,14 +1,14 @@
 <template>
   <div class="main-content rounded-lg h-screen overflow-hidden">
     <div class="relative w-full h-full">
-      <NuxtImg src="/client/images/bg-auth.png" alt="image-background" class="w-full h-full object-cover" loading="lazy" />
+      <NuxtImg src="/images/bg-auth.png" alt="image-background" class="w-full h-full object-cover" loading="lazy" />
       <div class="absolute inset-0 flex items-center justify-center">
         <div class="flex flex-col lg:flex-row max-w-4xl w-full mx-auto overflow-hidden lg:h-[560px]">
           <div class="relative lg:w-1/2 hidden lg:block h-full">
-            <NuxtImg src="/client/images/showroom/image-showroom.jpg" alt="background đăng nhập" class="absolute inset-0 w-full h-full object-cover z-0" loading="lazy" />
+            <NuxtImg src="/images/showroom/image-showroom.jpg" alt="background đăng nhập" class="absolute inset-0 w-full h-full object-cover z-0" loading="lazy" />
             <div class="absolute inset-0 bg-sky-200/80 opacity-90 z-10"></div>
             <div class="relative z-40 flex flex-col p-6 lg:p-8 h-full">
-              <NuxtImg src="/shared/images/logo/logo-website.png" alt="Logo" class="w-40 h-8 mb-6" loading="lazy" />
+              <NuxtImg src="/images/logo/logo-website.png" alt="Logo" class="w-40 h-8 mb-6" loading="lazy" />
               <div class="flex-grow"></div>
               <i class="fas fa-quote-left text-4xl text-teal-500 mb-2"></i>
               <div class="overflow-blur-content absolute bottom-0 left-0 w-full h-full max-h-40 transparent-img bg-gradient-to-t from-gray-500"></div>

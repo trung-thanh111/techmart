@@ -3,7 +3,6 @@ export default defineAppConfig({
   description: "Công nghệ tiên tiến, giá cả hợp lý",
   features: {
     auth: true,
-    // admin: true,
     client: true,
   },
 });

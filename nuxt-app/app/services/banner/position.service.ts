@@ -1,33 +1,58 @@
 import type { IApiOk, IApiMessage, IPaginate } from "~/interfaces/base.interface";
 import type { IPosition } from "~/interfaces/banner/position.interface";
 import { useApi } from "~/composables/useApi";
+import { API_VERSION } from "~/utils/apiConfig";
 
-const ENDPOINT = "/api/v1";
+const endpoint = {
+  collection: `${API_VERSION.version1}/banner_positions`,
+  resource: `${API_VERSION.version1}/banner_position`,
+} as const;
 
 export const positionService = {
   pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IPosition>>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPaginate<IPosition>>>(`${ENDPOINT}/banner_positions`, {
-      params,
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPaginate<IPosition>>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        publish: 2,
+        sort: "id,desc",
+        deleted_at: null,
+        ...params,
+      },
+    });
+  },
+
+  all: async (): Promise<IApiOk<IPosition[]>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPosition[]>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        type: "all",
+        publish: 2,
+        sort: "id,desc",
+        deleted_at: null,
+      },
+    });
+  },
+
+  show: async (id: number | string): Promise<IApiOk<IPosition>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPosition>>(`${endpoint.collection}/${id}`, {
+      method: "GET",
     });
   },
 
   store: async (payload: Partial<IPosition>): Promise<IApiOk<IPosition>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPosition>>(`${ENDPOINT}/banner_positions`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPosition>>(endpoint.collection, {
       method: "POST",
       body: payload,
     });
   },
 
-  show: async (id: number | string): Promise<IApiOk<IPosition>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPosition>>(`${ENDPOINT}/banner_positions/${id}`);
-  },
-
   update: async (id: number, payload: Partial<IPosition>): Promise<IApiOk<IPosition>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPosition>>(`${ENDPOINT}/banner_positions/${id}`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPosition>>(`${endpoint.collection}/${id}`, {
       method: "POST",
       body: payload,
       params: { _method: "PATCH" },
@@ -35,24 +60,17 @@ export const positionService = {
   },
 
   delete: async (id: number): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/banner_positions/${id}`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiMessage>(`${endpoint.collection}/${id}`, {
       method: "DELETE",
     });
   },
 
   deleteMultiple: async (ids: number[]): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/banner_positions/bulkDelete`, {
-      body: { ids },
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiMessage>(`${endpoint.collection}/bulkDelete`, {
       method: "DELETE",
-    });
-  },
-
-  all: async (): Promise<IApiOk<IPosition[]>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPosition[]>>(`${ENDPOINT}/banner_positions`, {
-      params: { type: "all" },
+      body: { ids },
     });
   },
 };

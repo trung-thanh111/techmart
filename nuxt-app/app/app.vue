@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-import LoadingSkeleton from "~/components/shared/ui/LoadingSkeleton.vue";
+import LoadingSkeleton from "~/components/ui//LoadingSkeleton.vue";
 
 const isLoading = ref(false);
 </script>

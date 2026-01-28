@@ -3,33 +3,58 @@ import type { IPost } from "~/interfaces/post/post.interface";
 import { useApi } from "~/composables/useApi";
 import { formData } from "~/utils/formData";
 import { buildRelationParams } from "~/utils/helpers";
+import { API_VERSION } from "~/utils/apiConfig";
 
-const ENDPOINT = "/api/v1";
+const endpoint = {
+  collection: `${API_VERSION.version1}/posts`,
+  resource: `${API_VERSION.version1}/post`,
+} as const;
 
 export const postService = {
   pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IPost>>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPaginate<IPost>>>(`${ENDPOINT}/posts`, {
-      params,
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPaginate<IPost>>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        publish: 2,
+        sort: "id,desc",
+        deleted_at: null,
+        ...params,
+      },
+    });
+  },
+
+  all: async (): Promise<IApiOk<IPost[]>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPost[]>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        type: "all",
+        publish: 2,
+        sort: "id,desc",
+        deleted_at: null,
+      },
+    });
+  },
+
+  show: async (id: number | string): Promise<IApiOk<IPost>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPost>>(`${endpoint.collection}/${id}`, {
+      method: "GET",
     });
   },
 
   store: async (payload: Partial<IPost>): Promise<IApiOk<IPost>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPost>>(`${ENDPOINT}/posts`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPost>>(endpoint.collection, {
       method: "POST",
       body: formData(payload),
     });
   },
 
-  show: async (id: number | string): Promise<IApiOk<IPost>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPost>>(`${ENDPOINT}/posts/${id}`);
-  },
-
   update: async (id: number, payload: Partial<IPost>): Promise<IApiOk<IPost>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPost>>(`${ENDPOINT}/posts/${id}`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPost>>(`${endpoint.collection}/${id}`, {
       method: "POST",
       body: formData(payload),
       params: { _method: "PATCH" },
@@ -37,48 +62,72 @@ export const postService = {
   },
 
   delete: async (id: number): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/posts/${id}`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiMessage>(`${endpoint.collection}/${id}`, {
       method: "DELETE",
     });
   },
 
   deleteMultiple: async (ids: number[]): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/posts/bulkDelete`, {
-      body: { ids },
-      method: "DELETE",
-    });
-  },
-
-  all: async (): Promise<IApiOk<IPost[]>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IPost[]>>(`${ENDPOINT}/posts?type=all&publish=2`);
+    return await publicFetch<IApiMessage>(`${endpoint.collection}/bulkDelete`, {
+      method: "DELETE",
+      body: { ids },
+    });
   },
 
   getFeatured: async (): Promise<IApiOk<IPost[]>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IPost[]>>(`${ENDPOINT}/posts?type=all&publish=2&is_hot=1&sort=id,desc`);
+    return await publicFetch<IApiOk<IPost[]>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        type: "all",
+        publish: 2,
+        is_hot: 1,
+        sort: "id,desc",
+        deleted_at: null,
+      },
+    });
   },
 
   getFeaturedLimit: async (): Promise<IApiOk<IPost[]>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IPost[]>>(`${ENDPOINT}/posts?type=all&publish=2&is_hot=1&sort=id,asc&limit=5`);
+    return await publicFetch<IApiOk<IPost[]>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        type: "all",
+        publish: 2,
+        is_hot: 1,
+        sort: "id,asc",
+        limit: 5,
+        deleted_at: null,
+      },
+    });
   },
 
   getLatest: async (): Promise<IApiOk<IPost[]>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IPost[]>>(`${ENDPOINT}/posts?type=all&publish=2&sort=published_at,desc`);
+    return await publicFetch<IApiOk<IPost[]>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        type: "all",
+        publish: 2,
+        sort: "published_at,desc",
+        deleted_at: null,
+      },
+    });
   },
 
   getByHotCatalogue: async (): Promise<IApiOk<IPost[]>> => {
     const { publicFetch } = useApi();
     const relationParams = buildRelationParams({ post_catalogues: 1 }, "is_hot");
-    return await publicFetch<IApiOk<IPost[]>>(`${ENDPOINT}/posts`, {
+    return await publicFetch<IApiOk<IPost[]>>(endpoint.collection, {
+      method: "GET",
       params: {
         type: "all",
         publish: 2,
         sort: "id,desc",
+        deleted_at: null,
         ...relationParams,
       },
     });
@@ -87,41 +136,35 @@ export const postService = {
   getByCatalogueId: async (catalogueId: number): Promise<IApiOk<IPost[]>> => {
     const { publicFetch } = useApi();
     const relationParams = buildRelationParams({ post_catalogues: catalogueId }, "id");
-    return await publicFetch<IApiOk<IPost[]>>(`${ENDPOINT}/posts`, {
+    return await publicFetch<IApiOk<IPost[]>>(endpoint.collection, {
+      method: "GET",
       params: {
         type: "all",
         publish: 2,
         sort: "id,desc",
+        deleted_at: null,
         ...relationParams,
       },
     });
   },
 
-  paginationPublic: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IPost>>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IPaginate<IPost>>>(`${ENDPOINT}/posts`, {
-      params,
-    });
-  },
-
-  showBySlug: async (slug: string): Promise<IApiOk<IPost>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IPost>>(`${ENDPOINT}/post/${slug}`);
-  },
-
   getMostLiked: async (): Promise<IApiOk<IPost[]>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IPost[]>>(`${ENDPOINT}/posts?type=all&publish=2&sort=like_count,desc&limit=6`);
-  },
-
-  showPublic: async (id: number | string): Promise<IApiOk<IPost>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IPost>>(`${ENDPOINT}/posts/${id}`);
+    return await publicFetch<IApiOk<IPost[]>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        type: "all",
+        publish: 2,
+        sort: "like_count,desc",
+        limit: 6,
+        deleted_at: null,
+      },
+    });
   },
 
   incrementViewCount: async (id: number, viewCount: number): Promise<IApiOk<any>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<any>>(`${ENDPOINT}/posts/${id}/view`, {
+    return await publicFetch<IApiOk<any>>(`${endpoint.collection}/${id}/view`, {
       method: "PUT",
       body: { view_count: viewCount },
     });

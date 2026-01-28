@@ -3,15 +3,15 @@
     <div v-if="postDetailLoading" class="flex items-center justify-center min-h-[400px]">
       <div class="text-center">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-        <p class="text-gray-600">{{ $t("client.post.loading") }}</p>
+        <p class="text-gray-600">{{ $t("post.loading") }}</p>
       </div>
     </div>
     <div v-else-if="postDetailError" class="flex items-center justify-center min-h-[400px]">
       <div class="text-center">
         <div class="text-red-500 text-6xl mb-4">⚠️</div>
-        <h2 class="text-xl font-semibold text-gray-800 mb-2">{{ $t("client.post.cannotLoadPost") }}</h2>
+        <h2 class="text-xl font-semibold text-gray-800 mb-2">{{ $t("post.cannotLoadPost") }}</h2>
         <p class="text-gray-600 mb-4">{{ postDetailError }}</p>
-        <NuxtLink :to="TOPOST" class="inline-block bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">{{ $t("client.post.backToList") }}</NuxtLink>
+        <NuxtLink :to="TOPOST" class="inline-block bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">{{ $t("post.backToList") }}</NuxtLink>
       </div>
     </div>
     <div v-else-if="postDetail">
@@ -20,23 +20,23 @@
         <div class="grid grid-cols-12 gap-4">
           <div class="col-span-12 lg:col-span-9 bg-white rounded-lg shadow-md p-2">
             <div class="h-[40vw] max-h-[400px] min-h-[180px] overflow-hidden rounded-xl">
-              <NuxtImg :src="postDetail?.image?.url || '/public/images/posts/post-home-4.jpg'" :alt="postDetail?.name || 'Cover'" class="w-full h-full object-cover object-center" loading="lazy" />
+              <NuxtImg :src="postDetail?.image?.url || '/images/posts/post-home-4.jpg'" :alt="postDetail?.name || 'Cover'" class="w-full h-full object-cover object-center" loading="lazy" />
             </div>
             <div class="max-w-4xl mx-auto px-2 sm:px-4 -mt-16 sm:-mt-24 relative z-10">
               <div class="bg-white shadow-xl rounded-2xl p-3 sm:p-6 md:p-8">
                 <div class="flex flex-wrap gap-3 items-center mb-4">
-                  <span v-for="catalogue in postDetail?.postCatalogues as any || []" :key="catalogue.id" class="bg-red-500 text-white text-xs font-medium px-3 py-1 rounded-full">
+                  <span v-for="catalogue in (postDetail?.postCatalogues as any) || []" :key="catalogue.id" class="bg-red-500 text-white text-xs font-medium px-3 py-1 rounded-full">
                     {{ catalogue.name }}
                   </span>
-                  <span v-for="tag in postDetail?.tags as any || []" :key="tag.id" class="bg-sky-100 text-sky-600 text-xs font-medium px-3 py-1 rounded-full">#{{ tag.name }}</span>
+                  <span v-for="tag in (postDetail?.tags as any) || []" :key="tag.id" class="bg-sky-100 text-sky-600 text-xs font-medium px-3 py-1 rounded-full">#{{ tag.name }}</span>
                 </div>
                 <h1 class="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 leading-snug mb-4 break-words">
                   {{ postDetail?.name || "Đang tải..." }}
                 </h1>
                 <div class="flex items-center text-sm text-gray-500 mb-6">
-                  <NuxtImg :src="postDetail?.creator?.avatar || '/public/images/social/zalo.png'" :alt="postDetail?.creator?.name || 'Author'" class="w-8 h-8 rounded-full mr-3 border border-gray-300" loading="lazy" />
+                  <NuxtImg :src="postDetail?.creator?.avatar || '/images/social/zalo.png'" :alt="postDetail?.creator?.name || 'Author'" class="w-8 h-8 rounded-full mr-3 border border-gray-300" loading="lazy" />
                   <div>
-                    <p class="text-red-600 font-semibold">{{ postDetail?.creator?.name || $t("client.post.author") }}</p>
+                    <p class="text-red-600 font-semibold">{{ postDetail?.creator?.name || $t("post.author") }}</p>
                     <div class="flex items-center text-gray-400">
                       <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M6 2a1 1 0 0 0-1 1v1H5a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3h-.01V3a1 1 0 1 0-2 0v1H8V3a1 1 0 0 0-1-1H6z" /></svg>
                       <span>{{ postDetail?.publishedAtHuman }}</span>
@@ -45,7 +45,7 @@
                 </div>
                 <div v-if="toc.length" class="mb-5 bg-sky-50 border-l-4 border-sky-400 rounded-md">
                   <div class="flex items-center justify-between w-full px-5 py-3 cursor-pointer" @click="isTocOpen = !isTocOpen">
-                    <p class="font-semibold text-sky-700 text-lg">{{ $t("client.post.tableOfContent") }}</p>
+                    <p class="font-semibold text-sky-700 text-lg">{{ $t("post.tableOfContent") }}</p>
                     <svg class="w-4 h-4 shrink-0 transition-transform" :class="isTocOpen ? 'rotate-180' : ''" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                     </svg>
@@ -63,8 +63,8 @@
                   </transition>
                 </div>
                 <div v-if="contentWithIds" class="text-gray-700 space-y-3 sm:space-y-4 text-base leading-relaxed break-words prose prose-lg max-w-none" v-html="contentWithIds"></div>
-                <div v-else-if="postDetailLoading" class="text-gray-500 italic">{{ $t("client.post.loadingContent") }}</div>
-                <div v-else class="text-gray-500 italic">{{ $t("client.post.noContent") }}</div>
+                <div v-else-if="postDetailLoading" class="text-gray-500 italic">{{ $t("post.loadingContent") }}</div>
+                <div v-else class="text-gray-500 italic">{{ $t("post.noContent") }}</div>
                 <div class="flex flex-wrap items-center justify-between mt-3 gap-1 sm:gap-0">
                   <div class="flex items-center gap-5">
                     <PostLikeButton :post-id="postDetail.id" :is-liked="isLiked" :like-count="likeCount" :is-loading="isLikeLoading" @toggle="handleToggleLike" />
@@ -72,19 +72,19 @@
                       <svg class="w-5 h-5 sm:w-4 sm:h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
                         <path d="M320 96C239.2 96 174.5 132.8 127.4 176.6C80.6 220.1 49.3 272 34.4 307.7C31.1 315.6 31.1 324.4 34.4 332.3C49.3 368 80.6 420 127.4 463.4C174.5 507.1 239.2 544 320 544C400.8 544 465.5 507.2 512.6 463.4C559.4 419.9 590.7 368 605.6 332.3C608.9 324.4 608.9 315.6 605.6 307.7C590.7 272 559.4 220 512.6 176.6C465.5 132.9 400.8 96 320 96zM176 320C176 240.5 240.5 176 320 176C399.5 176 464 240.5 464 320C464 399.5 399.5 464 320 464C240.5 464 176 399.5 176 320zM320 256C320 291.3 291.3 320 256 320C244.5 320 233.7 317 224.3 311.6C223.3 322.5 224.2 333.7 227.2 344.8C240.9 396 293.6 426.4 344.8 412.7C396 399 426.4 346.3 412.7 295.1C400.5 249.4 357.2 220.3 311.6 224.3C316.9 233.6 320 244.4 320 256z" />
                       </svg>
-                      <span class="text-xs sm:text-sm">{{ postDetail.viewCount }} {{ $t("client.post.views") }}</span>
+                      <span class="text-xs sm:text-sm">{{ postDetail.viewCount }} {{ $t("post.views") }}</span>
                     </div>
                   </div>
                   <div class="flex items-center space-x-1 sm:space-x-2 md:space-x-3">
-                    <span class="caption font-medium text-gray-500 mr-2 md:mr-3 hidden sm:block text-xs sm:text-sm">{{ $t("client.post.share") }}</span>
+                    <span class="caption font-medium text-gray-500 mr-2 md:mr-3 hidden sm:block text-xs sm:text-sm">{{ $t("post.share") }}</span>
                     <NuxtLink aria-label="message-share" class="hover:opacity-70">
-                      <img src="/assets/client/images/social/messenger.png" alt="facebook message" class="object-cover w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" loading="lazy" />
+                      <img src="/images/social/messenger.png" alt="facebook message" class="object-cover w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" loading="lazy" />
                     </NuxtLink>
                     <NuxtLink aria-label="facebook-share" class="hover:opacity-70">
-                      <img src="/assets/client/images/social/facebook.png" alt="facebook share" class="object-cover w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" loading="lazy" />
+                      <img src="/images/social/facebook.png" alt="facebook share" class="object-cover w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" loading="lazy" />
                     </NuxtLink>
                     <NuxtLink aria-label="printer-share" class="hover:opacity-70">
-                      <img src="/assets/client/images/social/zalo.png" alt="sharing zalo" class="object-cover w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" loading="lazy" />
+                      <img src="/images/social/zalo.png" alt="sharing zalo" class="object-cover w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" loading="lazy" />
                     </NuxtLink>
                     <div class="relative">
                       <div class="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 hover:opacity-70">
@@ -97,7 +97,7 @@
                         </span>
                       </div>
                       <input id="input-copy" type="hidden" />
-                      <div class="absolute top-0 bg-green-300 text-white duration-300 py-1 px-3 w-max left-[160%] hidden">{{ $t("client.post.copiedLink") }}</div>
+                      <div class="absolute top-0 bg-green-300 text-white duration-300 py-1 px-3 w-max left-[160%] hidden">{{ $t("post.copiedLink") }}</div>
                     </div>
                   </div>
                 </div>
@@ -105,10 +105,10 @@
                   <div class="h-[2px] w-full bg-gradient-to-r from-transparent via-[rgba(32,141,128,0.3)] to-transparent"></div>
                 </div>
                 <div id="comment-form" class="max-w-full mt-5">
-                  <h1 class="text-2xl font-bold text-gray-600 mb-4 tracking-wide">{{ $t("client.post.yourThoughts") }}</h1>
+                  <h1 class="text-2xl font-bold text-gray-600 mb-4 tracking-wide">{{ $t("post.yourThoughts") }}</h1>
                   <form @submit.prevent="handleSubmitComment" class="rounded-md bg-gray-100 overflow-hidden shadow-md">
                     <div class="relative">
-                      <Field name="content" as="textarea" class="w-full p-2 text-gray-600 placeholder-gray-500 focus:outline-none resize-none bg-gray-100" :class="{ 'border-red-500': false }" rows="4" :placeholder="replyToId ? $t('client.post.replyingTo', { user: replyToUser }) : $t('client.post.whatAreYouThinking')" />
+                      <Field name="content" as="textarea" class="w-full p-2 text-gray-600 placeholder-gray-500 focus:outline-none resize-none bg-gray-100" :class="{ 'border-red-500': false }" rows="4" :placeholder="replyToId ? $t('post.replyingTo', { user: replyToUser }) : $t('post.whatAreYouThinking')" />
                     </div>
                     <div class="flex items-center justify-between bg-gray-200 px-4 py-2">
                       <div class="flex items-center space-x-4 text-gray-600">
@@ -127,16 +127,16 @@
                     </div>
                   </form>
                   <div v-if="auth.isAuthenticated === false" class="flex justify-center text-sm gap-1 py-2 text-gray-600">
-                    <p>{{ $t("client.post.loginRequired") }}</p>
+                    <p>{{ $t("post.loginRequired") }}</p>
                     <NuxtLink :to="TOLOGIN" class="text-sky-500 hover:text-underline">{{ $t("auth.login") }}</NuxtLink>
                   </div>
                 </div>
                 <!-- list cmt -->
                 <div class="max-w-full mx-auto space-y-4 mt-5">
-                  <h1 v-if="totalComments > 0" class="text-xl font-bold text-gray-500 mb-4">{{ $t("client.post.comment") }} ({{ totalComments }})</h1>
+                  <h1 v-if="totalComments > 0" class="text-xl font-bold text-gray-500 mb-4">{{ $t("post.comment") }} ({{ totalComments }})</h1>
                   <div v-if="isCommentLoading" class="text-center py-8">
                     <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                    <p class="mt-2 text-gray-500">{{ $t("client.common.loading") }}</p>
+                    <p class="mt-2 text-gray-500">{{ $t("common.loading") }}</p>
                   </div>
                   <div v-else-if="rootComments.length === 0" class="text-center py-8 text-sm text-gray-500">
                     <p>Chưa có bình luận nào. Hãy là người đầu tiên bình luận!</p>
@@ -151,21 +151,21 @@
           <!-- Sidebar -->
           <div class="col-span-12 lg:col-span-3">
             <div class="bg-white rounded-lg p-3 md:p-4 border border-gray-200 mb-3 md:mb-5">
-              <h2 class="text-base md:text-lg font-semibold text-gray-800 mb-2 md:mb-4">{{ $t("client.action.quickView") }}</h2>
+              <h2 class="text-base md:text-lg font-semibold text-gray-800 mb-2 md:mb-4">{{ $t("action.quickView") }}</h2>
               <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-2 gap-2 mb-3 md:mb-4">
                 <NuxtLink v-for="post in (hotQuickItems || []).slice(0, 6)" :key="post.id" :to="TOPOSTDETAIL(post.slug as any)" class="group space-y-1 block">
-                  <NuxtImg :src="post.image?.url || '/public/images/posts/post-home-5.jpg'" :alt="post.name" class="rounded-md object-cover w-full h-16 md:w-[145px] md:h-[80px]" loading="lazy" />
+                  <NuxtImg :src="post.image?.url || '/images/posts/post-home-5.jpg'" :alt="post.name" class="rounded-md object-cover w-full h-16 md:w-[145px] md:h-[80px]" loading="lazy" />
                   <span class="text-xs md:text-sm text-gray-800 font-medium group-hover:text-cyan-600 transition-colors line-clamp-2">
                     {{ post.name }}
                   </span>
                 </NuxtLink>
               </div>
-              <NuxtLink :to="TOPOST" class="block w-full text-center text-xs md:text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 rounded py-2 transition">{{ $t("client.common.viewAll") }} ({{ (hotQuickItems || []).length }})</NuxtLink>
+              <NuxtLink :to="TOPOST" class="block w-full text-center text-xs md:text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 rounded py-2 transition">{{ $t("common.viewAll") }} ({{ (hotQuickItems || []).length }})</NuxtLink>
             </div>
             <div class="bg-white rounded-lg p-3 md:p-4 border border-gray-200">
               <h2 class="text-base md:text-lg font-semibold text-gray-800 mb-2 md:mb-4">
                 <span class="text-sky-600">#</span>
-                {{ $t("client.post.tags") }}
+                {{ $t("post.tags") }}
               </h2>
               <div class="flex flex-wrap gap-2">
                 <NuxtLink v-for="tag in tagList || []" :key="tag.id" :to="`/post?tag=${tag.slug}`" class="px-2 md:px-3 py-1 text-xs md:text-[12px] bg-[#d9dfe3] max-w-max rounded font-semibold text-[#7281a3] hover:bg-[#c8d1d9] transition-colors">#{{ tag.name }}</NuxtLink>
@@ -175,15 +175,15 @@
         </div>
       </section>
       <section v-if="relateds.length > 0" class="mx-auto bg-white rounded-md shadow sm:py-1 mb-2 md:py-2 px-1 sm:px-3 md:px-6 md:mb-6 sm:mb-3">
-        <h2 class="inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] text-lg sm:text-xl md:text-2xl font-bold mb-4">{{ $t("client.post.relatedPosts") }}</h2>
+        <h2 class="inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] text-lg sm:text-xl md:text-2xl font-bold mb-4">{{ $t("post.relatedPosts") }}</h2>
         <Splide :options="postRelatedOptions(relateds.length)" id="post-related-slide">
           <SplideSlide v-for="relatedItem in relateds" :key="relatedItem.id">
             <NuxtLink :to="TOPOSTDETAIL(encodeURIComponent(relatedItem.slug))">
               <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100 hover:border-cyan-200 flex flex-col h-full">
                 <div class="relative overflow-hidden aspect-[16/9] w-full">
-                  <NuxtImg :src="relatedItem.image?.url || '/public/images/posts/post-home-3.jpg'" :alt="relatedItem.name" class="w-full h-full object-cover object-center rounded-t-xl" loading="lazy" />
+                  <NuxtImg :src="relatedItem.image?.url || '/images/posts/post-home-3.jpg'" :alt="relatedItem.name" class="w-full h-full object-cover object-center rounded-t-xl" loading="lazy" />
                   <div v-if="relatedItem.isHot" class="absolute top-2 left-2 bg-white/10 backdrop-blur-sm rounded-lg px-2 py-1">
-                    <span class="text-red-500 font-bold text-xs">{{ $t("client.post.hot") }}</span>
+                    <span class="text-red-500 font-bold text-xs">{{ $t("post.hot") }}</span>
                   </div>
                 </div>
                 <div class="p-3 sm:p-4 flex flex-col flex-1">
@@ -209,15 +209,15 @@
 <script setup lang="ts">
 import { Field } from "vee-validate";
 import { TOPOST, TOPOSTDETAIL, TOLOGIN } from "~/utils/constants";
-import Breadcrumb from "~/components/shared/navigation/Breadcrumb.vue";
+import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
 import CommentTree from "~/components/post/CommentTree.vue";
 import PostLikeButton from "~/components/post/PostLikeButton.vue";
 import { buildToc, type TocItem } from "~/composables/useToc";
 import { usePostSlider } from "~/composables/usePostSlider";
-import { usePost } from "~/composables/client/post/usePost";
-import { usePostComment } from "~/composables/client/post/usePostComment";
-import { usePostLike } from "~/composables/client/post/usePostLike";
-import { usePostCommentLike } from "~/composables/client/post/usePostCommentLike";
+import { usePost } from "~/composables/post/usePost";
+import { usePostComment } from "~/composables/post/usePostComment";
+import { usePostLike } from "~/composables/post/usePostLike";
+import { usePostCommentLike } from "~/composables/post/usePostCommentLike";
 import { useAuthStore } from "~/stores/auth/auth";
 import { useSeo } from "~/composables/useSeo";
 import { computed, nextTick, ref, watch, watchEffect } from "vue";
@@ -282,7 +282,7 @@ watch(
       contentWithIds.value = "";
     }
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 watch(
@@ -291,11 +291,11 @@ watch(
     if (!newSlug || newSlug === oldSlug) return;
     await initForSlug(newSlug);
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 const breadcrumbs = computed(() => [
-  { label: t("client.post.breadcrumb"), href: TOPOST },
+  { label: t("post.breadcrumb"), href: TOPOST },
   { label: postDetail.value?.name || slug.value, href: TOPOSTDETAIL(slug.value) },
 ]);
 

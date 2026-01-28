@@ -1,33 +1,59 @@
 import type { IApiOk, IApiMessage, IPaginate } from "~/interfaces/base.interface";
 import type { IProduct } from "~/interfaces/product/product.interface";
 import { useApi } from "~/composables/useApi";
+import { API_VERSION } from "~/utils/apiConfig";
 
-const ENDPOINT = "/api/v1";
+const endpoint = {
+  collection: `${API_VERSION.version1}/products`,
+  resource: `${API_VERSION.version1}/product`,
+} as const;
 
 export const productService = {
   pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IProduct>>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPaginate<IProduct>>>(`${ENDPOINT}/products`, {
-      params,
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPaginate<IProduct>>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        publish: 2,
+        sort: "id,desc",
+        deleted_at: null,
+        ...params,
+      },
+    });
+  },
+
+  all: async (): Promise<IApiOk<IProduct[]>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IProduct[]>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        type: "all",
+        publish: 2,
+        sort: "id,desc",
+        deleted_at: null,
+      },
+    });
+  },
+
+  show: async (id: number | string, relations?: string[]): Promise<IApiOk<IProduct>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IProduct>>(`${endpoint.collection}/${id}`, {
+      method: "GET",
+      params: relations ? { with: relations } : undefined,
     });
   },
 
   store: async (payload: Partial<IProduct>): Promise<IApiOk<IProduct>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IProduct>>(`${ENDPOINT}/products`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IProduct>>(endpoint.collection, {
       method: "POST",
       body: payload,
     });
   },
 
-  show: async (id: number | string): Promise<IApiOk<IProduct>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IProduct>>(`${ENDPOINT}/products/${id}`);
-  },
-
   update: async (id: number, payload: Partial<IProduct>): Promise<IApiOk<IProduct>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IProduct>>(`${ENDPOINT}/products/${id}`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IProduct>>(`${endpoint.collection}/${id}`, {
       method: "POST",
       body: payload,
       params: { _method: "PATCH" },
@@ -35,61 +61,37 @@ export const productService = {
   },
 
   delete: async (id: number): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/products/${id}`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiMessage>(`${endpoint.collection}/${id}`, {
       method: "DELETE",
     });
   },
 
   deleteMultiple: async (ids: number[]): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/products/bulkDelete`, {
-      body: { ids },
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiMessage>(`${endpoint.collection}/bulkDelete`, {
       method: "DELETE",
-    });
-  },
-
-  all: async (): Promise<IApiOk<IProduct>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IProduct>>(`${ENDPOINT}/products?type=all`);
-  },
-
-  paginationPublic: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IProduct>>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IPaginate<IProduct>>>(`${ENDPOINT}/products`, {
-      params,
+      body: { ids },
     });
   },
 
   getSummerProducts: async (limit = 3): Promise<IApiOk<IProduct[]>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IProduct[]>>(`${ENDPOINT}/products`, {
+    return await publicFetch<IApiOk<IProduct[]>>(endpoint.collection, {
+      method: "GET",
       params: {
         season: "summer",
         publish: 2,
         sort: "id,desc",
+        deleted_at: null,
         perpage: limit,
       },
     });
   },
 
-  showBySlug: async (slug: string, relations?: string[]): Promise<IApiOk<IProduct[]>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IProduct[]>>(`${ENDPOINT}/product/${slug}`, {
-      params: relations ? { with: relations } : undefined,
-    });
-  },
-
-  showPublic: async (id: number | string, relations?: string[]): Promise<IApiOk<IProduct>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IProduct>>(`${ENDPOINT}/products/${id}`, {
-      params: relations ? { with: relations } : undefined,
-    });
-  },
-
   incrementViewCount: async (id: number, viewCount: number): Promise<IApiOk<any>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<any>>(`${ENDPOINT}/products/${id}/view`, {
+    return await publicFetch<IApiOk<any>>(`${endpoint.collection}/${id}/view`, {
       method: "PUT",
       body: { view_count: viewCount },
     });
@@ -97,41 +99,68 @@ export const productService = {
 
   getFeatured: async (): Promise<IApiOk<IProduct[]>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IProduct[]>>(`${ENDPOINT}/products?type=all&publish=2&is_hot=1&sort=id,desc`);
+    return await publicFetch<IApiOk<IProduct[]>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        type: "all",
+        publish: 2,
+        deleted_at: null,
+        is_hot: 1,
+        sort: "id,desc",
+      },
+    });
   },
 
   getFeaturedLimit: async (): Promise<IApiOk<IProduct[]>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IProduct[]>>(`${ENDPOINT}/products?type=all&publish=2&is_hot=1&sort=id,asc&limit=5`);
+    return await publicFetch<IApiOk<IProduct[]>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        type: "all",
+        publish: 2,
+        deleted_at: null,
+        is_hot: 1,
+        sort: "id,asc",
+        limit: 5,
+      },
+    });
   },
 
   getLatest: async (): Promise<IApiOk<IProduct[]>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IProduct[]>>(`${ENDPOINT}/products?type=all&publish=2&sort=created_at,desc`);
+    return await publicFetch<IApiOk<IProduct[]>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        type: "all",
+        publish: 2,
+        deleted_at: null,
+        sort: "created_at,desc",
+      },
+    });
   },
 
   getByHotCatalogue: async (): Promise<IApiOk<IProduct[]>> => {
     const { publicFetch } = useApi();
-    // Assuming logic similar to post
-    return await publicFetch<IApiOk<IProduct[]>>(`${ENDPOINT}/products`, {
+    return await publicFetch<IApiOk<IProduct[]>>(endpoint.collection, {
+      method: "GET",
       params: {
         type: "all",
         publish: 2,
+        deleted_at: null,
         sort: "id,desc",
-        is_hot: 1, // simplified? Or need relation? Post used buildRelationParams.
-        // Let's assume flat filter works for now or I need to import buildRelationParams.
-        // File didn't have buildRelationParams imported.
-        // I will import it if needed or use simplified query.
+        is_hot: 1,
       },
     });
   },
 
   getByCatalogueId: async (catalogueId: number): Promise<IApiOk<IProduct[]>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IProduct[]>>(`${ENDPOINT}/products`, {
+    return await publicFetch<IApiOk<IProduct[]>>(endpoint.collection, {
+      method: "GET",
       params: {
         type: "all",
         publish: 2,
+        deleted_at: null,
         sort: "id,desc",
         product_catalogue_id: catalogueId,
       },
@@ -140,6 +169,15 @@ export const productService = {
 
   getMostLiked: async (): Promise<IApiOk<IProduct[]>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IProduct[]>>(`${ENDPOINT}/products?type=all&publish=2&sort=wishlist_count,desc&limit=6`);
+    return await publicFetch<IApiOk<IProduct[]>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        type: "all",
+        publish: 2,
+        deleted_at: null,
+        sort: "wishlist_count,desc",
+        limit: 6,
+      },
+    });
   },
 };

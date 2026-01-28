@@ -8,11 +8,11 @@
       <div class="relative w-full bg-white text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] p-6 md:px-8 overflow-hidden rounded-b-lg">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center flex-wrap">
           <div>
-            <h2 class="text-2xl md:text-3xl font-semibold mb-1 text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f]">{{ $t("client.common.searchResults") }}</h2>
+            <h2 class="text-2xl md:text-3xl font-semibold mb-1 text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f]">{{ $t("common.searchResults") }}</h2>
             <p class="text-sm text-gray-600 md:text-md">
-              {{ $t("client.common.found") }}
+              {{ $t("common.found") }}
               <span class="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f]">{{ totalProducts }}</span>
-              {{ $t("client.common.results") }}
+              {{ $t("common.results") }}
             </p>
           </div>
         </div>
@@ -27,8 +27,8 @@
     <div class="flex justify-between items-center mb-4">
       <div>
         <span class="text-sm">
-          {{ $t("client.common.showing") }}
-          <span class="text-sky-400 underline">{{ totalProducts }} {{ $t("client.common.results") }}</span>
+          {{ $t("common.showing") }}
+          <span class="text-sky-400 underline">{{ totalProducts }} {{ $t("common.results") }}</span>
         </span>
       </div>
       <div class="relative inline-block group">
@@ -42,8 +42,8 @@
 
     <div v-if="!products || products.length === 0" class="flex flex-col items-center justify-center py-16">
       <NuxtImg :src="EMPTYBOX" alt="Không tìm thấy" loading="lazy" class="w-64 h-64 mb-6 object-cover" />
-      <h3 class="text-xl uppercase font-bold text-gray-700 mb-1">{{ $t("client.common.noProductsFound") }}</h3>
-      <p class="text-gray-500 text-sm mb-4">{{ $t("client.common.tryDifferentKeyword") }}</p>
+      <h3 class="text-xl uppercase font-bold text-gray-700 mb-1">{{ $t("common.noProductsFound") }}</h3>
+      <p class="text-gray-500 text-sm mb-4">{{ $t("common.tryDifferentKeyword") }}</p>
     </div>
   </div>
 </template>
@@ -51,10 +51,10 @@
 <script setup lang="ts">
 import { onMounted, ref, watch, computed } from "vue";
 import { useRoute } from "vue-router";
-import Breadcrumb from "~/components/shared/navigation/Breadcrumb.vue";
-import ProductCard from "~/components/client/features/ProductCard.vue";
-import FilterSort from "~/components/client/features/FilterSort.vue";
-import { useShop } from "~/composables/client/shop/useShop";
+import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
+import ProductCard from "~/components//features/ProductCard.vue";
+import FilterSort from "~/components//features/FilterSort.vue";
+import { useShop } from "~/composables/shop/useShop";
 import { EMPTYBOX, TOSEARCH } from "~/utils/constants";
 import { definePageMeta } from "#imports";
 import { useI18n } from "vue-i18n";
@@ -80,7 +80,7 @@ const { status } = await useAsyncData(
   },
 );
 
-const breadcrumbs = computed(() => [{ label: t("client.search.breadcrumb"), href: TOSEARCH }]);
+const breadcrumbs = computed(() => [{ label: t("search.breadcrumb"), href: TOSEARCH }]);
 
 definePageMeta({
   layout: "client",

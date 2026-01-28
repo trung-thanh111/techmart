@@ -1,33 +1,58 @@
 import type { IApiOk, IApiMessage, IPaginate } from "~/interfaces/base.interface";
 import type { IBanner } from "~/interfaces/banner/banner.interface";
 import { useApi } from "~/composables/useApi";
+import { API_VERSION } from "~/utils/apiConfig";
 
-const ENDPOINT = "/api/v1";
+const endpoint = {
+  collection: `${API_VERSION.version1}/banners`,
+  resource: `${API_VERSION.version1}/banner`,
+} as const;
 
 export const bannerService = {
   pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IBanner>>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPaginate<IBanner>>>(`${ENDPOINT}/banners`, {
-      params,
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPaginate<IBanner>>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        publish: 2,
+        sort: "id,desc",
+        deleted_at: null,
+        ...params,
+      },
+    });
+  },
+
+  all: async (): Promise<IApiOk<IBanner[]>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IBanner[]>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        type: "all",
+        publish: 2,
+        sort: "id,desc",
+        deleted_at: null,
+      },
+    });
+  },
+
+  show: async (id: number | string): Promise<IApiOk<IBanner>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IBanner>>(`${endpoint.collection}/${id}`, {
+      method: "GET",
     });
   },
 
   store: async (payload: Partial<IBanner>): Promise<IApiOk<IBanner>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IBanner>>(`${ENDPOINT}/banners`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IBanner>>(endpoint.collection, {
       method: "POST",
       body: payload,
     });
   },
 
-  show: async (id: number | string): Promise<IApiOk<IBanner>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IBanner>>(`${ENDPOINT}/banners/${id}`);
-  },
-
   update: async (id: number, payload: Partial<IBanner>): Promise<IApiOk<IBanner>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IBanner>>(`${ENDPOINT}/banners/${id}`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IBanner>>(`${endpoint.collection}/${id}`, {
       method: "POST",
       body: payload,
       params: { _method: "PATCH" },
@@ -35,44 +60,57 @@ export const bannerService = {
   },
 
   delete: async (id: number): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/banners/${id}`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiMessage>(`${endpoint.collection}/${id}`, {
       method: "DELETE",
     });
   },
 
   deleteMultiple: async (ids: number[]): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/banners/bulkDelete`, {
-      body: { ids },
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiMessage>(`${endpoint.collection}/bulkDelete`, {
       method: "DELETE",
+      body: { ids },
     });
   },
 
-  all: async (): Promise<IApiOk<IBanner>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IBanner>>(`${ENDPOINT}/banners?type=all`);
-  },
-
-  getByType: async (banner_type: string): Promise<IApiOk<IBanner[]>> => {
+  getByType: async (bannerType: string): Promise<IApiOk<IBanner[]>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IBanner[]>>(`${ENDPOINT}/banners?type=all&banner_type=${banner_type}&position=main_slider&publish=2`);
+    return await publicFetch<IApiOk<IBanner[]>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        type: "all",
+        banner_type: bannerType,
+        position: "main_slider", // Spec from previous code, confirm if generic or specific?
+        // User didn't specify, but I will keep previous logic.
+        publish: 2,
+        deleted_at: null,
+      },
+    });
   },
 
   fetch: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IBanner>>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IPaginate<IBanner>>>(`${ENDPOINT}/banners`, {
-      params,
+    return await publicFetch<IApiOk<IPaginate<IBanner>>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        publish: 2,
+        sort: "id,desc",
+        deleted_at: null,
+        ...params,
+      },
     });
   },
 
-  showPublic: async (id: number | string): Promise<IApiOk<IBanner>> => {
+  allPublic: async (): Promise<IApiOk<IBanner[]>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IBanner>>(`${ENDPOINT}/banners/${id}`);
-  },
-
-  allPublic: async (): Promise<IApiOk<IBanner>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IBanner>>(`${ENDPOINT}/banners?type=all&publish=2`);
+    return await publicFetch<IApiOk<IBanner[]>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        type: "all",
+        publish: 2,
+        deleted_at: null,
+      },
+    });
   },
 };

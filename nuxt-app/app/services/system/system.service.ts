@@ -1,33 +1,58 @@
 import type { IApiOk, IApiMessage, IPaginate } from "~/interfaces/base.interface";
 import type { ISystem } from "~/interfaces/system/system.interface";
 import { useApi } from "~/composables/useApi";
+import { API_VERSION } from "~/utils/apiConfig";
 
-const ENDPOINT = "/api/v1";
+const endpoint = {
+  collection: `${API_VERSION.version1}/systems`,
+  resource: `${API_VERSION.version1}/system`,
+} as const;
 
 export const systemService = {
   pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<ISystem>>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPaginate<ISystem>>>(`${ENDPOINT}/systems`, {
-      params,
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPaginate<ISystem>>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        publish: 2,
+        sort: "id,desc",
+        deleted_at: null,
+        ...params,
+      },
+    });
+  },
+
+  all: async (): Promise<IApiOk<ISystem[]>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<ISystem[]>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        type: "all",
+        publish: 2,
+        sort: "id,desc",
+        deleted_at: null,
+      },
+    });
+  },
+
+  show: async (id: number | string): Promise<IApiOk<ISystem>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<ISystem>>(`${endpoint.collection}/${id}`, {
+      method: "GET",
     });
   },
 
   store: async (payload: Partial<ISystem>): Promise<IApiOk<ISystem>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<ISystem>>(`${ENDPOINT}/systems`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<ISystem>>(endpoint.collection, {
       method: "POST",
       body: payload,
     });
   },
 
-  show: async (id: number | string): Promise<IApiOk<ISystem>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<ISystem>>(`${ENDPOINT}/systems/${id}`);
-  },
-
   update: async (id: number, payload: Partial<ISystem>): Promise<IApiOk<ISystem>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<ISystem>>(`${ENDPOINT}/systems/${id}`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<ISystem>>(`${endpoint.collection}/${id}`, {
       method: "POST",
       body: payload,
       params: { _method: "PATCH" },
@@ -35,43 +60,47 @@ export const systemService = {
   },
 
   delete: async (id: number): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/systems/${id}`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiMessage>(`${endpoint.collection}/${id}`, {
       method: "DELETE",
     });
   },
 
   deleteMultiple: async (ids: number[]): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/systems/bulkDelete`, {
-      body: { ids },
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiMessage>(`${endpoint.collection}/bulkDelete`, {
       method: "DELETE",
+      body: { ids },
     });
   },
 
-  bulkStore: async (payload: any): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/systems/bulkStore`, {
+  bulkStore: async (payload: any): Promise<IApiOk<any>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<any>>(`${endpoint.collection}/bulkStore`, {
       method: "POST",
       body: payload,
     });
   },
 
-  bulkUpdate: async (payload: any): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/systems/bulkUpdate`, {
-      method: "PUT",
-      body: payload,
+  bulkUpdate: async (payload: any): Promise<IApiOk<any>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<any>>(`${endpoint.collection}/bulkUpdate`, {
+      method: "POST",
+      body: payload, // Usually bulkUpdate implies list of updates
+      params: { _method: "PATCH" },
     });
   },
 
-  all: async (): Promise<IApiOk<ISystem>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<ISystem>>(`${ENDPOINT}/systems?type=all`);
-  },
-
-  findByKeyword: async (keyword: string): Promise<IApiOk<ISystem>> => {
+  findByKeyword: async (keyword: string): Promise<IApiOk<ISystem[]>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<ISystem>>(`${ENDPOINT}/policy/${keyword}`);
+    return await publicFetch<IApiOk<ISystem[]>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        keyword,
+        type: "all",
+        publish: 2,
+        deleted_at: null,
+      },
+    });
   },
 };

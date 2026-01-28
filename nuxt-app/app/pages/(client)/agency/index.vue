@@ -2,10 +2,10 @@
 import { definePageMeta } from "#imports";
 import { ref, watch, computed } from "vue";
 import { useI18n } from "vue-i18n";
-import AppPagination from "~/components/admin/navigation/AppPagination.vue";
-import CommitMent from "~/components/client/ui/CommitMent.vue";
-import Breadcrumb from "~/components/shared/navigation/Breadcrumb.vue";
-import { useAgency } from "~/composables/client/agency/useAgency";
+import AppPagination from "~/components/navigation/AppPagination.vue";
+import CommitMent from "~/components/ui/CommitMent.vue";
+import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
+import { useAgency } from "~/composables/agency/useAgency";
 import { TOAGENCY } from "~/utils/constants";
 
 const { t } = useI18n();
@@ -24,7 +24,7 @@ watch(
   () => filters.value?.keyword,
   (v) => {
     if (v !== keyword.value) keyword.value = v ?? "";
-  }
+  },
 );
 
 const onSearch = () => {
@@ -46,7 +46,7 @@ watch(
       // reset về trang 1 khi search mới
       search({ keyword: v ?? "", publish: 2, perpage: 12 });
     }, debounceMs);
-  }
+  },
 );
 
 watch(
@@ -54,7 +54,7 @@ watch(
   (val) => {
     agencies.value = (val?.data?.data as any) || [];
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 const activeMapIframe = ref<string | null>(null);
@@ -85,7 +85,7 @@ const closeMap = (): void => {
 
 const totalAgencies = computed(() => data.value?.data?.total || 0);
 const hasData = computed(() => agencies.value.length > 0);
-const breadcrumbs = [{ label: t("client.agency.breadcrumb"), href: TOAGENCY }];
+const breadcrumbs = [{ label: t("agency.breadcrumb"), href: TOAGENCY }];
 
 definePageMeta({ layout: "client" });
 </script>
@@ -95,11 +95,11 @@ definePageMeta({ layout: "client" });
     <Breadcrumb :crumbs="breadcrumbs" />
     <section class="relative w-full mb-0">
       <div class="w-full h-48 md:h-64 rounded-lg overflow-hidden mb-0">
-        <NuxtImg src="/client/images/showroom/image-showroom.jpg" class="w-full h-full object-cover" alt="cover" loading="lazy" />
+        <NuxtImg src="/images/showroom/image-showroom.jpg" class="w-full h-full object-cover" alt="cover" loading="lazy" />
       </div>
       <div class="w-full rounded-b-lg bg-gradient-to-r from-[#1786c9] to-[#1ecba0] px-4 py-8 flex flex-col items-center justify-center text-center -mt-2">
-        <h1 class="text-white text-xl md:text-4xl font-bold mb-2">{{ $t("client.agency.distributionTitle") }}</h1>
-        <p class="text-white/90 text-xs md:text-base max-w-2xl mb-2">{{ $t("client.agency.distributionDesc") }}</p>
+        <h1 class="text-white text-xl md:text-4xl font-bold mb-2">{{ $t("agency.distributionTitle") }}</h1>
+        <p class="text-white/90 text-xs md:text-base max-w-2xl mb-2">{{ $t("agency.distributionDesc") }}</p>
       </div>
     </section>
     <section>
@@ -109,7 +109,7 @@ definePageMeta({ layout: "client" });
     <section class="w-full bg-white rounded-lg shadow md:p-4 p-2 flex flex-col md:flex-row items-center gap-2 md:gap-4 md:my-8 my-4 z-10 relative">
       <form id="searchHome" class="flex rounded overflow-hidden bg-white shadow-sm" @submit.prevent="onSearch">
         <InputGroup>
-          <InputText v-model="filters.keyword" :placeholder="$t('client.agency.searchPlaceholder')" class="flex-1" size="small" />
+          <InputText v-model="filters.keyword" :placeholder="$t('agency.searchPlaceholder')" class="flex-1" size="small" />
           <button type="submit" class="bg-sky-600 px-3 md:px-4 transition-all hover:bg-sky-700">
             <svg aria-hidden="true" focusable="false" class="md:w-4 md:h-4 h-3 w-3 text-white" fill="currentColor" viewBox="0 0 512 512">
               <path d="M505 442.7L405.3 343c28.4-34.9 45.5-79 45.5-127C450.8 96.5 354.3 0 232.9 0S15 96.5 15 216.1s96.5 216.1 216.1 216.1c48 0 92.1-17.1 127-45.5l99.7 99.7c10 10 26.2 10 36.2 0l11.3-11.3c10-10 10-26.2 0-36.2zM232.9 368.1c-83.9 0-152-68.1-152-152s68.1-152 152-152 152 68.1 152 152-68.1 152-152 152z" />
@@ -121,14 +121,14 @@ definePageMeta({ layout: "client" });
     <section v-if="agencies.length" class="mb-4">
       <div>
         <span class="text-sm text-gray-600">
-          {{ $t("client.agency.currentAgencies") }}
-          <span class="text-sky-400 underline">{{ totalAgencies }} {{ $t("client.agency.agenciesNationwide") }}</span>
+          {{ $t("agency.currentAgencies") }}
+          <span class="text-sky-400 underline">{{ totalAgencies }} {{ $t("agency.agenciesNationwide") }}</span>
         </span>
       </div>
     </section>
     <section>
-      <div v-if="isLoading" class="flex items-center justify-center py-10 text-gray-400">{{ $t("client.common.loading") }}</div>
-      <div v-else-if="!hasData" class="text-center py-5 text-gray-400">{{ $t("client.common.noData") }}</div>
+      <div v-if="isLoading" class="flex items-center justify-center py-10 text-gray-400">{{ $t("common.loading") }}</div>
+      <div v-else-if="!hasData" class="text-center py-5 text-gray-400">{{ $t("common.noData") }}</div>
       <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 md:gap-6 gap-4">
         <div v-for="agency in agencies" :key="agency.id" class="bg-white rounded-lg shadow-md p-4 flex flex-col items-center hover:shadow-xl transition-shadow group">
           <NuxtImg :src="getCoverUrl(agency)" :alt="agency.name" class="w-20 h-20 rounded-full object-cover mb-3 border-2 border-gray-200 group-hover:border-sky-500 transition-all" loading="lazy" />
@@ -153,19 +153,19 @@ definePageMeta({ layout: "client" });
               <svg class="w-3.5 h-3.5 text-sky-400 mr-1" fill="currentColor" viewBox="0 0 384 512">
                 <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
               </svg>
-              {{ $t("client.agency.directions") }}
+              {{ $t("agency.directions") }}
             </button>
             <button v-else-if="agency.address" @click="openMap(agency.address)" class="inline-flex items-center cursor-pointer gap-1 px-3 py-1.5 rounded bg-sky-50 text-sky-600 text-xs font-semibold hover:bg-sky-100 transition">
               <svg class="w-3.5 h-3.5 text-sky-400 mr-1" fill="currentColor" viewBox="0 0 384 512">
                 <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
               </svg>
-              {{ $t("client.agency.directions") }}
+              {{ $t("agency.directions") }}
             </button>
             <span v-else class="inline-flex items-center gap-1 px-3 py-1.5 rounded bg-gray-50 text-gray-400 text-xs">
               <svg class="w-3.5 h-3.5 mr-1" fill="currentColor" viewBox="0 0 384 512">
                 <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
               </svg>
-              {{ $t("client.agency.noMapLink") }}
+              {{ $t("agency.noMapLink") }}
             </span>
           </div>
         </div>
@@ -174,7 +174,7 @@ definePageMeta({ layout: "client" });
     <Teleport to="body">
       <div v-if="activeMapIframe" class="fixed inset-0 bg-black/50 flex items-center justify-center z-[9999]" @click.self="closeMap" style="isolation: isolate">
         <div class="bg-white rounded-lg w-11/12 md:w-4/5 lg:w-3/4 h-96 md:h-[500px] relative shadow-2xl">
-          <button @click="closeMap" class="absolute top-3 right-3 bg-white rounded-full w-8 h-8 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors z-10 shadow-lg" :title="$t('client.agency.closeMap')">
+          <button @click="closeMap" class="absolute top-3 right-3 bg-white rounded-full w-8 h-8 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors z-10 shadow-lg" :title="$t('agency.closeMap')">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>

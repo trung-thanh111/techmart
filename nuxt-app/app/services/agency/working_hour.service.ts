@@ -1,61 +1,44 @@
-import type { IApiOk, IApiMessage, IPaginate } from "~/interfaces/base.interface";
+import type { IApiOk, IPaginate } from "~/interfaces/base.interface";
 import type { IAgencyWorkingHour } from "~/interfaces/agency/working_hour.interface";
 import { useApi } from "~/composables/useApi";
-import { formData } from "~/utils/formData";
+import { API_VERSION } from "~/utils/apiConfig";
 
-const ENDPOINT = "/api/v1";
+const endpoint = {
+  collection: `${API_VERSION.version1}/agency_working_hours`,
+  resource: `${API_VERSION.version1}/agency_working_hour`,
+} as const;
 
 export const agencyWorkingHourService = {
   pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IAgencyWorkingHour>>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPaginate<IAgencyWorkingHour>>>(`${ENDPOINT}/agency_working_hours`, {
-      params,
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPaginate<IAgencyWorkingHour>>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        publish: 2,
+        sort: "id,desc",
+        deleted_at: null,
+        ...params,
+      },
     });
   },
 
-  store: async (payload: Partial<IAgencyWorkingHour>): Promise<IApiOk<IAgencyWorkingHour>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IAgencyWorkingHour>>(`${ENDPOINT}/agency_working_hours`, {
-      method: "POST",
-      body: formData(payload),
+  all: async (): Promise<IApiOk<IAgencyWorkingHour[]>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IAgencyWorkingHour[]>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        type: "all",
+        publish: 2,
+        sort: "id,desc",
+        deleted_at: null,
+      },
     });
   },
 
   show: async (id: number | string): Promise<IApiOk<IAgencyWorkingHour>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IAgencyWorkingHour>>(
-      `${ENDPOINT}/agency_working_hours/${id}`
-    );
-  },
-
-  update: async (id: number, payload: Partial<IAgencyWorkingHour>): Promise<IApiOk<IAgencyWorkingHour>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IAgencyWorkingHour>>(`${ENDPOINT}/agency_working_hours/${id}`, {
-      method: "POST",
-      body: formData(payload),
-      params: { _method: "PATCH" },
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IAgencyWorkingHour>>(`${endpoint.collection}/${id}`, {
+      method: "GET",
     });
-  },
-
-  delete: async (id: number): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/agency_working_hours/${id}`, {
-      method: "DELETE"
-    });
-  },
-
-  deleteMultiple: async (ids: number[]): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/agency_working_hours/bulkDelete`, {
-      body: { ids },
-      method: "DELETE"
-    });
-  },
-
-  all: async (): Promise<IApiOk<IAgencyWorkingHour>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IAgencyWorkingHour>>(
-      `${ENDPOINT}/agency_working_hours?type=all`
-    );
   },
 };

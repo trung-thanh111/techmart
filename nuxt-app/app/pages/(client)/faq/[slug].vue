@@ -3,17 +3,17 @@
     <Breadcrumb :crumbs="breadcrumbs" />
     <section class="bg-gradient-to-r from-sky-700 via-cyan-600 to-green-500 text-white py-3 md:py-6 lg:py-12 px-3 md:px-6 mb-4 md:mb-8 rounded-md shadow-md">
       <div class="max-w-3xl mx-auto text-center">
-        <h2 class="text-2xl sm:text-4xl font-bold mb-2">{{ title || $t("client.faq.faqGroup") }}</h2>
-        <p class="text-sm md:text-base">{{ $t("client.faq.groupDescription") }}</p>
+        <h2 class="text-2xl sm:text-4xl font-bold mb-2">{{ title || $t("faq.faqGroup") }}</h2>
+        <p class="text-sm md:text-base">{{ $t("faq.groupDescription") }}</p>
       </div>
     </section>
     <section class="mx-auto px-4 bg-white shadow-md rounded-md sm:py-3 md:py-6 sm:px-3 md:px-6 md:mb-8 sm:mb-4">
       <div class="mx-auto max-w-4xl">
         <template v-if="isLoading">
-          <div class="text-center text-gray-400 py-8">{{ $t("client.faq.loading") }}</div>
+          <div class="text-center text-gray-400 py-8">{{ $t("faq.loading") }}</div>
         </template>
         <template v-else-if="!faqs.length">
-          <div class="text-center text-gray-400 py-8">{{ $t("client.faq.noQuestions") }}</div>
+          <div class="text-center text-gray-400 py-8">{{ $t("faq.noQuestions") }}</div>
         </template>
         <template v-else>
           <div v-for="(item, idx) in faqs" :key="item.id" class="bg-white rounded-md border border-gray-100 hover:border-cyan-500 shadow transition hover:shadow-lg overflow-hidden lg:mb-3 md:mb-2 mb-1">
@@ -39,8 +39,8 @@ import { TOFAQ } from "~/utils/constants";
 import { ref, onMounted, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
-import Breadcrumb from "~/components/shared/navigation/Breadcrumb.vue";
-import { useFaq } from "~/composables/client/faq/useFaq";
+import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
+import { useFaq } from "~/composables/faq/useFaq";
 
 const { t } = useI18n();
 const route = useRoute();
@@ -63,7 +63,7 @@ onMounted(async () => {
 });
 
 const breadcrumbs = computed(() => [
-  { label: t("client.faq.breadcrumbDetail"), href: TOFAQ },
+  { label: t("faq.breadcrumbDetail"), href: TOFAQ },
   { label: title.value, href: `${TOFAQ}/${slug.value}` },
 ]);
 

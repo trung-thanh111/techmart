@@ -1,72 +1,44 @@
-import type { IApiOk, IApiMessage, IPaginate } from "~/interfaces/base.interface";
+import type { IApiOk, IPaginate } from "~/interfaces/base.interface";
 import type { IAgency } from "~/interfaces/agency/agency.interface";
 import { useApi } from "~/composables/useApi";
-import { formData } from "~/utils/formData";
+import { API_VERSION } from "~/utils/apiConfig";
 
-const ENDPOINT = "/api/v1";
+const endpoint = {
+  collection: `${API_VERSION.version1}/agencies`,
+  resource: `${API_VERSION.version1}/agency`,
+} as const;
 
 export const agencyService = {
   pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IAgency>>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPaginate<IAgency>>>(`${ENDPOINT}/agencies`, {
-      params,
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPaginate<IAgency>>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        publish: 2,
+        sort: "id,desc",
+        deleted_at: null,
+        ...params,
+      },
     });
   },
 
-  store: async (payload: Partial<IAgency>): Promise<IApiOk<IAgency>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IAgency>>(`${ENDPOINT}/agencies`, {
-      method: "POST",
-      body: formData(payload),
+  all: async (): Promise<IApiOk<IAgency[]>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IAgency[]>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        type: "all",
+        publish: 2,
+        sort: "id,desc",
+        deleted_at: null,
+      },
     });
   },
 
   show: async (id: number | string): Promise<IApiOk<IAgency>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IAgency>>(
-      `${ENDPOINT}/agencies/${id}`
-    );
-  },
-
-  update: async (id: number, payload: Partial<IAgency>): Promise<IApiOk<IAgency>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IAgency>>(`${ENDPOINT}/agencies/${id}`, {
-      method: "POST",
-      body: formData(payload),
-      params: { _method: "PATCH" },
-    });
-  },
-
-  delete: async (id: number): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/agencies/${id}`, {
-      method: "DELETE"
-    });
-  },
-
-  deleteMultiple: async (ids: number[]): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/agencies/bulkDelete`, {
-      body: { ids },
-      method: "DELETE"
-    });
-  },
-
-  all: async (): Promise<IApiOk<IAgency>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IAgency>>(`${ENDPOINT}/agencies?type=all`);
-  },
-
-  // FE
-  paginationPublic: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IAgency>>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IPaginate<IAgency>>>(`${ENDPOINT}/agencies`, {
-      params,
+    return await publicFetch<IApiOk<IAgency>>(`${endpoint.collection}/${id}`, {
+      method: "GET",
     });
-  },
-
-  showBySlug: async (slug: string): Promise<IApiOk<IAgency>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IAgency>>(`${ENDPOINT}/agency/${slug}`);
   },
 };

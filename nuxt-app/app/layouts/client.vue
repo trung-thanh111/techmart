@@ -11,8 +11,8 @@
 </template>
 
 <script setup>
-import Head from "~/components/client/layout/Head.vue";
-import Header from "~/components/client/layout/Header.vue";
-import Footer from "~/components/client/layout/Footer.vue";
-import PopupManager from "~/components/client/ui/PopupManager.vue";
+import Head from "~/components//layout/Head.vue";
+import Header from "~/components//layout/Header.vue";
+import Footer from "~/components//layout/Footer.vue";
+import PopupManager from "~/components/ui/PopupManager.vue";
 </script>

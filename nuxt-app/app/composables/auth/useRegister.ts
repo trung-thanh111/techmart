@@ -4,7 +4,7 @@ import { toTypedSchema } from "@vee-validate/zod";
 import { authService } from "~/services/auth/auth.service";
 import { useAuthStore } from "~/stores/auth/auth";
 import { useAppToast } from "~/composables/useAppToast";
-import { TODASHBOARD, TOHOME } from "~/utils/constants";
+import { TOHOME } from "~/utils/constants";
 
 const registerSchema = z
   .object({

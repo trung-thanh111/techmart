@@ -11,6 +11,6 @@ export default defineNuxtRouteMiddleware(() => {
         description: "Bạn không có quyền truy cập trang quản trị.",
       });
     }
-    return navigateTo("/auth/admin/login");
+    return navigateTo(TOHOME);
   }
 });

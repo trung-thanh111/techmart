@@ -290,12 +290,6 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
         Route::resource('post_comments', PostCommentController::class)->except($routeExcept);
         Route::resource('post_likes', PostLikeController::class)->except($routeExcept);
         Route::resource('post_comment_likes', PostCommentLikeController::class)->except($routeExcept);
-
-        // Products View Count Update? (If handled via update)
-        // If Client uses update for view count, we might need a specific route or allow update?
-        // Usually update is restricted. View count should be a separate public endpoint `products/{id}/view`.
-        // For now, if client uses `update`, we are in trouble unless we allow it.
-        // I will NOT add `products` resource here to avoid conflict.
     });
 
     // PUBLIC ROUTES (No Auth or Optional Auth)
@@ -361,14 +355,14 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
 
     // FE routes (public) -> match đúng data -> route định nghĩa ở FE (phải giống route FE)
     Route::get('policy/{keyword}', [SystemController::class, 'getByKeyword']);
-    Route::get('product/{slug}', [ProductController::class, 'showBySlug']);
-    Route::get('menu/{slug}', [MenuController::class, 'showBySlug']);
-    Route::get('post/{slug}', [PostController::class, 'showBySlug']);
-    Route::get('post/category/{slug}', [PostCatalogueController::class, 'showBySlug']);
-    Route::get('product/category/{slug}', [ProductCatalogueController::class, 'showBySlug']);
-    Route::get('agency/{slug}', [AgencyController::class, 'showBySlug']);
-    Route::get('faq/{slug}', [FaqController::class, 'showBySlug']);
-    Route::get('faq-catalogue/{slug}', [FaqCatalogueController::class, 'showBySlug']);
+    Route::get('product/{id}', [ProductController::class, 'show']);
+    Route::get('menu/{id}', [MenuController::class, 'show']);
+    Route::get('post/{id}', [PostController::class, 'show']);
+    Route::get('post/category/{id}', [PostCatalogueController::class, 'show']);
+    Route::get('product/category/{id}', [ProductCatalogueController::class, 'show']);
+    Route::get('agency/{id}', [AgencyController::class, 'show']);
+    Route::get('faq/{id}', [FaqController::class, 'show']);
+    Route::get('faq-catalogue/{id}', [FaqCatalogueController::class, 'show']);
 
     // This is route Cart
     Route::middleware(['convert'])->group(function () use ($routeExcept) {

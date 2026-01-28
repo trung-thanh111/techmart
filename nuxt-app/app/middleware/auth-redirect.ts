@@ -1,6 +1,6 @@
 import { useAuthStore } from "~/stores/auth/auth";
 import { useAppToast } from "~/composables/useAppToast";
-import { TODASHBOARD, TOHOME, TOLOGIN, TOREGISTER } from "~/utils/constants";
+import { TOHOME, TOLOGIN, TOREGISTER } from "~/utils/constants";
 
 export default defineNuxtRouteMiddleware((to) => {
   const authStore = useAuthStore();
@@ -12,6 +12,6 @@ export default defineNuxtRouteMiddleware((to) => {
         description: "Bạn đã đăng nhập, chuyển hướng...",
       });
     }
-    return navigateTo(authStore.isAdmin ? TODASHBOARD : TOHOME);
+    return navigateTo(TOHOME);
   }
 });

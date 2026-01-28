@@ -2,58 +2,76 @@ import type { IApiOk, IApiMessage, IPaginate } from "~/interfaces/base.interface
 import type { IPopup } from "~/interfaces/system/popup.interface";
 import { useApi } from "~/composables/useApi";
 import { formData } from "~/utils/formData";
+import { API_VERSION } from "~/utils/apiConfig";
 
-const ENDPOINT = "/api/v1";
+const endpoint = {
+  collection: `${API_VERSION.version1}/popups`,
+  resource: `${API_VERSION.version1}/popup`,
+} as const;
 
 export const popupService = {
   pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IPopup>>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPaginate<IPopup>>>(`${ENDPOINT}/popups`, {
-      params,
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPaginate<IPopup>>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        publish: 2,
+        sort: "id,desc",
+        deleted_at: null,
+        ...params,
+      },
     });
   },
 
-  store: async (payload: Partial<IPopup>): Promise<IApiOk<IPopup>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPopup>>(`${ENDPOINT}/popups`, {
-      method: "POST",
-      body: formData(payload as Record<string, any>),
+  all: async (): Promise<IApiOk<IPopup[]>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPopup[]>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        type: "all",
+        publish: 2,
+        sort: "id,desc",
+        deleted_at: null,
+      },
     });
   },
 
   show: async (id: number | string): Promise<IApiOk<IPopup>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPopup>>(`${ENDPOINT}/popups/${id}`);
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPopup>>(`${endpoint.collection}/${id}`, {
+      method: "GET",
+    });
+  },
+
+  store: async (payload: Partial<IPopup>): Promise<IApiOk<IPopup>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPopup>>(endpoint.collection, {
+      method: "POST",
+      body: formData(payload),
+    });
   },
 
   update: async (id: number, payload: Partial<IPopup>): Promise<IApiOk<IPopup>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPopup>>(`${ENDPOINT}/popups/${id}`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPopup>>(`${endpoint.collection}/${id}`, {
       method: "POST",
-      body: formData(payload as Record<string, any>),
+      body: formData(payload),
       params: { _method: "PATCH" },
     });
   },
 
   delete: async (id: number): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/popups/${id}`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiMessage>(`${endpoint.collection}/${id}`, {
       method: "DELETE",
     });
   },
 
   deleteMultiple: async (ids: number[]): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/popups/bulkDelete`, {
-      body: { ids },
-      method: "DELETE",
-    });
-  },
-  // public listing for frontend
-  all: async (params?: Record<string, any>): Promise<IApiOk<IPopup[]>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IPopup[]>>(`${ENDPOINT}/popups`, {
-      params: { type: "all", publish: 2, ...params },
+    return await publicFetch<IApiMessage>(`${endpoint.collection}/bulkDelete`, {
+      method: "DELETE",
+      body: { ids },
     });
   },
 };

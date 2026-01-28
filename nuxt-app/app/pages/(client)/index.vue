@@ -48,16 +48,16 @@
       <div class="mb-4 md:mb-8">
         <div class="flex justify-between items-center space-x-2">
           <div class="head-section-product">
-            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-xl md:text-3xl font-bold">{{ $t("client.home.eraOfTech") }}</h2>
+            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-xl md:text-3xl font-bold">{{ $t("home.eraOfTech") }}</h2>
             <div class="h-1 max-w-64 md:my-2 my-1 relative">
               <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-white via-green-300 to-green-300"></div>
             </div>
           </div>
           <div class="group flex items-center space-x-2">
-            <a href="#" class="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] font-medium after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#007c8b] after:to-[#00b88c] after:transition-all after:duration-300 group-hover:after:w-full md:text-base text-sm">{{ $t("client.home.viewAll") }}</a>
+            <a href="#" class="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] font-medium after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#007c8b] after:to-[#00b88c] after:transition-all after:duration-300 group-hover:after:w-full md:text-base text-sm">{{ $t("home.viewAll") }}</a>
           </div>
         </div>
-        <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("client.home.popularLightingDesc") }}</p>
+        <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("home.popularLightingDesc") }}</p>
       </div>
       <div class="max-w-7xl mx-auto">
         <div v-if="featuredProductsLoading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -69,7 +69,7 @@
           <ProductCard v-for="product in featuredProducts.slice(0, 3)" :key="product.id" :product="product" :loading="false" />
         </div>
         <div v-else class="text-center py-8">
-          <p class="text-gray-500">{{ $t("client.home.noProductsFound") || "Không tìm thấy sản phẩm" }}</p>
+          <p class="text-gray-500">{{ $t("home.noProductsFound") || "Không tìm thấy sản phẩm" }}</p>
         </div>
       </div>
     </section>
@@ -78,7 +78,7 @@
       <div class="mb-4 md:mb-8">
         <div class="flex justify-between items-center space-x-2">
           <div>
-            <h2 class="text-white text-xl sm:text-3xl font-bold">{{ $t("client.home.superSale") }}</h2>
+            <h2 class="text-white text-xl sm:text-3xl font-bold">{{ $t("home.superSale") }}</h2>
             <div class="h-1 max-w-48 md:my-2 my-1 relative">
               <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-white via-green-300 to-green-300"></div>
             </div>
@@ -96,7 +96,7 @@
           </div>
         </div>
         <div class="flex justify-between items-center">
-          <p class="text-white/90 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("client.home.popularLightingDesc") }}</p>
+          <p class="text-white/90 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("home.popularLightingDesc") }}</p>
         </div>
       </div>
 
@@ -110,7 +110,7 @@
       <div class="mb-4 md:mb-8">
         <div class="flex justify-between items-center space-x-2">
           <div class="head-section-product">
-            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-xl md:text-3xl font-bold">{{ $t("client.home.bestSellers") }}</h2>
+            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-xl md:text-3xl font-bold">{{ $t("home.bestSellers") }}</h2>
             <div class="h-1 max-w-48 my-1 md:my-2 relative">
               <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-white via-green-300 to-green-300"></div>
             </div>
@@ -135,7 +135,7 @@
                 <ul class="space-y-3 text-sm text-gray-600">
                   <li v-for="(product_similar, id) in 3" :key="id">
                     <a href="#" class="flex items-center gap-3 p-2 rounded-lg transition hover:bg-gray-50">
-                      <NuxtImg src="/client/images/products/iphone-16-pro-max.webp" loading="lazy" alt="Ốp lưng silicon" class="w-12 h-12 object-cover rounded-md" />
+                      <NuxtImg src="/images/products/iphone-16-pro-max.webp" loading="lazy" alt="Ốp lưng silicon" class="w-12 h-12 object-cover rounded-md" />
                       <div class="flex-1">
                         <h4 class="font-medium text-gray-700 transition line-clamp-1 group-hover:text-sky-500">Ốp lưng silicon iPhone</h4>
                         <span class="text-xs text-gray-500 line-clamp-1">Chống sốc, chống bám vân tay</span>
@@ -151,7 +151,7 @@
             </div>
           </div>
         </div>
-        <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("client.home.popularLightingDesc") }}</p>
+        <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("home.popularLightingDesc") }}</p>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -164,13 +164,13 @@
       <div class="mb-4 md:mb-8">
         <div class="flex justify-between items-center space-x-2">
           <div class="head-section-product">
-            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-xl md:text-3xl font-bold">{{ $t("client.home.gamingSetup") }}</h2>
+            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-xl md:text-3xl font-bold">{{ $t("home.gamingSetup") }}</h2>
             <div class="h-1 max-w-48 my-1 md:my-2 relative">
               <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-white via-green-300 to-green-300"></div>
             </div>
           </div>
         </div>
-        <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("client.home.popularLightingDesc") }}</p>
+        <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("home.popularLightingDesc") }}</p>
       </div>
       <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 md:gap-4 gap-2">
         <!-- Left column -->
@@ -178,7 +178,7 @@
           <!-- Left column -->
           <div class="grid grid-rows-2 md:gap-4 gap-2">
             <!-- Item 1 -->
-            <div class="relative bg-cover bg-no-repeat bg-center text-white rounded-2xl h-32 sm:h-48 p-4 flex flex-col justify-between shadow-lg" style="background-image: url('/client/images/slide/slide_home_sub.webp')">
+            <div class="relative bg-cover bg-no-repeat bg-center text-white rounded-2xl h-32 sm:h-48 p-4 flex flex-col justify-between shadow-lg" style="background-image: url(&quot;/images/slide/slide_home_sub.webp&quot;)">
               <div class="absolute inset-0 bg-black/10 rounded-2xl backdrop-brightness-[.85] z-0"></div>
               <div class="relative z-10 flex flex-col justify-between h-full">
                 <div>
@@ -190,7 +190,7 @@
                 </div>
               </div>
             </div>
-            <div class="relative bg-cover bg-center text-white rounded-2xl h-32 sm:h-48 p-4 flex flex-col justify-between shadow-lg" style="background-image: url('/client/images/slide/slide_home_sub_2.webp')">
+            <div class="relative bg-cover bg-center text-white rounded-2xl h-32 sm:h-48 p-4 flex flex-col justify-between shadow-lg" style="background-image: url(&quot;/images/slide/slide_home_sub_2.webp&quot;)">
               <div class="absolute inset-0 bg-black/10 rounded-2xl backdrop-brightness-[.85] z-0"></div>
               <div class="relative z-10 flex flex-col justify-between h-full">
                 <div>
@@ -204,7 +204,7 @@
             </div>
           </div>
           <div class="grid grid-rows-2 md:gap-4 gap-2">
-            <div class="relative bg-cover bg-center text-white rounded-2xl h-32 sm:h-48 p-4 flex flex-col justify-between shadow-lg" style="background-image: url('/client/images/slide/slide_home_sub_3.webp')">
+            <div class="relative bg-cover bg-center text-white rounded-2xl h-32 sm:h-48 p-4 flex flex-col justify-between shadow-lg" style="background-image: url(&quot;/images/slide/slide_home_sub_3.webp&quot;)">
               <div class="absolute inset-0 bg-black/10 rounded-2xl backdrop-brightness-[.85] z-0"></div>
               <div class="relative z-10 flex flex-col justify-between h-full">
                 <div>
@@ -216,7 +216,7 @@
                 </div>
               </div>
             </div>
-            <div class="relative bg-cover bg-center text-white rounded-2xl h-32 sm:h-48 p-4 flex flex-col justify-between shadow-lg" style="background-image: url('/client/images/slide/slide_home_sub_4.webp')">
+            <div class="relative bg-cover bg-center text-white rounded-2xl h-32 sm:h-48 p-4 flex flex-col justify-between shadow-lg" style="background-image: url(&quot;/images/slide/slide_home_sub_4.webp&quot;)">
               <div class="absolute inset-0 bg-black/30 rounded-2xl backdrop-brightness-[.85] z-0"></div>
               <div class="relative z-10 flex flex-col justify-between h-full">
                 <div>
@@ -230,7 +230,7 @@
             </div>
           </div>
         </div>
-        <div class="relative bg-contain bg-center text-white rounded-2xl min-h-[264px] sm:min-h-[392px] p-4 sm:p-6 flex flex-col justify-between shadow-xl" style="background-image: url('/client/images/slide/slide_home_sub_3.jpg')">
+        <div class="relative bg-contain bg-center text-white rounded-2xl min-h-[264px] sm:min-h-[392px] p-4 sm:p-6 flex flex-col justify-between shadow-xl" style="background-image: url(&quot;/images/slide/slide_home_sub_3.jpg&quot;)">
           <div class="absolute inset-0 bg-black/30 rounded-2xl backdrop-brightness-[.85] z-0"></div>
           <div class="relative z-10 flex flex-col justify-between h-full text-right">
             <div>
@@ -238,7 +238,7 @@
               <p class="text-xs">Vào Trận mọi lúc</p>
             </div>
             <div class="text-right">
-              <a href="#" class="text-xs sm:text-sm font-medium inline-block hover:text-sky-500 underline">{{ $t("client.home.viewNow") }}</a>
+              <a href="#" class="text-xs sm:text-sm font-medium inline-block hover:text-sky-500 underline">{{ $t("home.viewNow") }}</a>
             </div>
           </div>
         </div>
@@ -310,7 +310,7 @@
             </div>
           </div>
         </div>
-        <p class="text-white/90 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("client.home.popularLightingDesc") }}</p>
+        <p class="text-white/90 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("home.popularLightingDesc") }}</p>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         <ProductCard v-for="product in 10" :key="product.id" :product="product" />
@@ -322,7 +322,7 @@
       <div class="mb-4 md:mb-8">
         <div class="flex justify-between items-center space-x-2">
           <div class="head-section-product">
-            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-xl md:text-3xl font-bold">{{ $t("client.home.integrateAI") }}</h2>
+            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-xl md:text-3xl font-bold">{{ $t("home.integrateAI") }}</h2>
             <div class="h-1 max-w-48 my-1 md:my-2 relative">
               <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-white via-green-300 to-green-300"></div>
             </div>
@@ -390,12 +390,12 @@
             </div>
           </div>
         </div>
-        <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("client.home.popularLightingDesc") }}</p>
+        <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("home.popularLightingDesc") }}</p>
       </div>
       <div class="flex flex-col lg:flex-row justify-between items-start gap-4">
         <div class="w-full lg:w-1/5 h-[150px] lg:h-[858px] md:-mx-3 lg:mx-0">
           <div class="relative h-full w-full overflow-hidden shadow-md">
-            <NuxtImg src="/client/images/slide/test11.jpg" loading="lazy" alt="Banner giới thiệu" class="object-cover w-full h-full" />
+            <NuxtImg src="/images/slide/test11.jpg" loading="lazy" alt="Banner giới thiệu" class="object-cover w-full h-full" />
             <div class="absolute w-full max-w-[300px] inset-0 bg-black/20 flex items-end justify-center py-4">
               <div class="mx-auto mt-6 hidden lg:block">
                 <a href="#" class="relative flex items-center justify-center px-6 py-2 overflow-hidden font-medium text-md transition-all bg-gradient-to-r from-sky-500 to-cyan-400 rounded-md shadow-lg group hover:scale-105 hover:from-sky-600 hover:to-cyan-500 focus:outline-none focus:ring-2 focus:ring-sky-400">
@@ -406,7 +406,7 @@
                     <span class="absolute top-0 right-0 w-5 h-5 rotate-45 translate-x-1/2 -translate-y-1/2 bg-white"></span>
                   </span>
                   <span class="absolute bottom-0 left-0 w-full h-full transition-all duration-500 ease-in-out delay-200 -translate-x-full bg-sky-600 rounded-md group-hover:translate-x-0"></span>
-                  <span class="relative text-center text-white transition-colors duration-200 ease-in-out group-hover:text-white drop-shadow">{{ $t("client.home.explore") }}</span>
+                  <span class="relative text-center text-white transition-colors duration-200 ease-in-out group-hover:text-white drop-shadow">{{ $t("home.explore") }}</span>
                 </a>
               </div>
             </div>
@@ -423,30 +423,30 @@
     <section class="bg-gradient-to-b from-white to-sky-50 relative rounded-md py-3 md:py-6 px-3 md:px-6 md:mb-8 mb-4">
       <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 items-center gap-6 md:gap-12">
         <div class="space-y-3 md:space-y-6">
-          <span class="inline-block bg-sky-100 text-sky-600 font-semibold text-xs md:px-3 px-3 py-1 rounded-full uppercase tracking-wide">{{ $t("client.home.newExperience") }}</span>
+          <span class="inline-block bg-sky-100 text-sky-600 font-semibold text-xs md:px-3 px-3 py-1 rounded-full uppercase tracking-wide">{{ $t("home.newExperience") }}</span>
           <h2 class="text-xl md:text-3xl font-extrabold text-gray-800 leading-tight">
-            {{ $t("client.home.smartShopping") }}
+            {{ $t("home.smartShopping") }}
             <br class="" />
-            <span class="text-sky-600">{{ $t("client.home.smartConvenient") }}</span>
+            <span class="text-sky-600">{{ $t("home.smartConvenient") }}</span>
             💡
           </h2>
-          <p class="text-gray-600 text-sm md:text-base leading-relaxed max-w-md">{{ $t("client.home.discoverThousands") }}</p>
+          <p class="text-gray-600 text-sm md:text-base leading-relaxed max-w-md">{{ $t("home.discoverThousands") }}</p>
           <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-gray-700 mt-2 md:mt-4">
             <li class="flex items-center gap-2">
               <i class="fas fa-shipping-fast text-sky-500"></i>
-              {{ $t("client.home.fast2h") }}
+              {{ $t("home.fast2h") }}
             </li>
             <li class="flex items-center gap-2">
               <i class="fas fa-shield-alt text-emerald-500"></i>
-              {{ $t("client.home.nationwideWarranty") }}
+              {{ $t("home.nationwideWarranty") }}
             </li>
             <li class="flex items-center gap-2">
               <i class="fas fa-credit-card text-purple-500"></i>
-              {{ $t("client.home.installment0") }}
+              {{ $t("home.installment0") }}
             </li>
             <li class="flex items-center gap-2">
               <i class="fas fa-headset text-pink-500"></i>
-              {{ $t("client.home.support247") }}
+              {{ $t("home.support247") }}
             </li>
           </ul>
           <div class="max-w-[120px] md:max-w-[180px]">
@@ -458,13 +458,13 @@
                 <span class="absolute top-0 right-0 w-5 h-5 rotate-45 translate-x-1/2 -translate-y-1/2 bg-white"></span>
               </span>
               <span class="absolute bottom-0 left-0 w-full h-full transition-all duration-500 ease-in-out delay-200 -translate-x-full bg-sky-600 rounded-md group-hover:translate-x-0"></span>
-              <span class="relative text-center text-white transition-colors duration-200 ease-in-out group-hover:text-white drop-shadow text-sm md:text-base">{{ $t("client.home.explore") }}</span>
+              <span class="relative text-center text-white transition-colors duration-200 ease-in-out group-hover:text-white drop-shadow text-sm md:text-base">{{ $t("home.explore") }}</span>
             </a>
           </div>
         </div>
         <div class="relative">
           <div class="relative z-10">
-            <img src="/client/images/slide/buy_smart_2.jpg" loading="lazy" alt="Mua sắm công nghệ" class="w-full max-w-lg mx-auto rounded-3xl shadow-xl" />
+            <img src="/images/slide/buy_smart_2.jpg" loading="lazy" alt="Mua sắm công nghệ" class="w-full max-w-lg mx-auto rounded-3xl shadow-xl" />
           </div>
           <div class="absolute top-0 z-20 left-0 -translate-x-4 -translate-y-4 bg-white shadow px-4 py-2 rounded-full text-sm font-medium text-sky-600 flex items-center gap-2">
             <i class="fas fa-bolt text-yellow-400"></i>
@@ -551,7 +551,7 @@
       <div class="flex flex-col lg:flex-row justify-between items-start gap-4">
         <div class="w-full lg:w-1/5 h-[150px] lg:h-[858px] md:-mx-3 lg:mx-0">
           <div class="relative h-full w-full overflow-hidden shadow-md">
-            <img src="/client/images/slide/image_about_accessory_1.jpg" loading="lazy" alt="Banner giới thiệu" class="object-cover w-full h-full" />
+            <img src="/images/slide/image_about_accessory_1.jpg" loading="lazy" alt="Banner giới thiệu" class="object-cover w-full h-full" />
             <div class="absolute w-full max-w-[300px] inset-0 bg-black/20 flex items-end justify-center py-4">
               <div class="mx-auto mt-6 hidden lg:block">
                 <a href="#" class="relative flex items-center justify-center px-6 py-2 overflow-hidden font-medium text-md transition-all bg-gradient-to-r from-sky-500 to-cyan-400 rounded-md shadow-lg group hover:scale-105 hover:from-sky-600 hover:to-cyan-500 focus:outline-none focus:ring-2 focus:ring-sky-400">
@@ -591,11 +591,11 @@
     <section class="relative bg-white shadow-md rounded-md py-3 md:py-6 px-3 md:px-6 md:mb-8 mb-4">
       <div class="text-center md:mb-8 mb-4 relative">
         <div class="inline-block md:mb-4 mb-2">
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#8dc63f] via-[#0097cc] to-[rgba(43,57,144,0.91)] text-sm font-semibold tracking-wider uppercase">{{ $t("client.home.competitiveAdvantage") }}</span>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#8dc63f] via-[#0097cc] to-[rgba(43,57,144,0.91)] text-sm font-semibold tracking-wider uppercase">{{ $t("home.competitiveAdvantage") }}</span>
         </div>
         <h2 class="text-2xl md:text-4xl font-black text-gray-700 mb-2 leading-tight">
-          {{ $t("client.home.whyChooseUs") }}
-          <a href="#" class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] animate-glow">{{ $t("client.home.us") }}</a>
+          {{ $t("home.whyChooseUs") }}
+          <a href="#" class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] animate-glow">{{ $t("home.us") }}</a>
           <span class="text-2xl md:text-4xl">?</span>
         </h2>
         <p class="text-sm text-gray-600 max-w-3xl mx-auto leading-relaxed">Trải nghiệm sự khác biệt với những giải pháp công nghệ tiên tiến nhất, được thiết kế để biến tầm nhìn thương mại điện tử của bạn thành hiện thực</p>
@@ -672,7 +672,7 @@
           <a href="#" class="relative inline-flex items-center md:px-6 md:py-2 px-3 py-1 text-white font-bold text-sm md:text-base rounded-full hover:shadow-xl transition-all duration-500 transform hover:scale-110 group overflow-hidden">
             <span class="absolute inset-0 bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
             <span class="relative flex items-center">
-              {{ $t("client.home.shopNow") }}
+              {{ $t("home.shopNow") }}
               <i class="fas fa-arrow-right ml-3 group-hover:translate-x-2 transition-transform duration-300"></i>
             </span>
           </a>
@@ -686,16 +686,16 @@
       <div class="mb-4 md:mb-8">
         <div class="flex justify-between items-center space-x-2">
           <div class="head-section-product">
-            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-xl md:text-3xl font-bold">{{ $t("client.home.featuredEvents") }}</h2>
+            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-xl md:text-3xl font-bold">{{ $t("home.featuredEvents") }}</h2>
             <div class="h-1 max-w-48 my-1 md:my-2 relative">
               <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-white via-green-300 to-green-300"></div>
             </div>
           </div>
           <div class="group flex items-center space-x-2">
-            <a href="#" class="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] font-medium text-sm md:text-base after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#007c8b] after:to-[#00b88c] after:transition-all after:duration-300 group-hover:after:w-full">{{ $t("client.home.viewAll") }}</a>
+            <a href="#" class="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] font-medium text-sm md:text-base after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#007c8b] after:to-[#00b88c] after:transition-all after:duration-300 group-hover:after:w-full">{{ $t("home.viewAll") }}</a>
           </div>
         </div>
-        <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("client.home.popularLightingDesc") }}</p>
+        <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("home.popularLightingDesc") }}</p>
       </div>
       <div class="grid grid-cols-1 lg:grid-cols-2 md:gap-6 gap-4">
         <Splide :options="postFeaturedOptions" id="featured-posts">
@@ -707,7 +707,7 @@
                 <h3 class="text-lg md:text-xl font-bold text-gray-800 hover:text-cyan-600 transition-colors md:mb-2 mb-1 line-clamp-1">{{ item.title }}</h3>
                 <p class="text-gray-600 hover:text-gray-500 transition-colors text-sm md:mb-4 mb-2 line-clamp-2">{{ item.description }}</p>
                 <div class="text-right hover:scale-105 transition-transform duration-300">
-                  <a href="#" class="text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] font-medium text-sm md:text-base">{{ $t("client.home.readMore") }}</a>
+                  <a href="#" class="text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] font-medium text-sm md:text-base">{{ $t("home.readMore") }}</a>
                 </div>
               </div>
             </a>
@@ -717,7 +717,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 md:gap-6 gap-4">
           <div v-for="(post_homes, id) in 4" :key="id" class="bg-gray-100 rounded-lg shadow-lg overflow-hidden">
             <a href="#" class="block cursor-pointer">
-              <img src="/client/images/posts/post-home-2.jpg" loading="lazy" alt="Post" class="w-full object-cover" />
+              <img src="/images/posts/post-home-2.jpg" loading="lazy" alt="Post" class="w-full object-cover" />
               <div class="relative p-2">
                 <a href="#" class="absolute top-0 left-0 -translate-y-8 translate-x-4 inline-block bg-sky-100/80 text-sky-600 font-semibold text-[8px] md:text-[10px] px-4 py-1 rounded-full uppercase shadow-lg tracking-wide">công nghệ</a>
                 <h3 class="text-lg font-medium text-gray-800 hover:text-cyan-600 transition-colors line-clamp-1">Bài viết nổi bật: Công nghệ AI thay đổi cuộc sống thế nào?</h3>
@@ -738,18 +738,18 @@
 </template>
 
 <script setup>
-import CommitMent from "~/components/client/ui/CommitMent.vue";
-import ProductCard from "~/components/client/features/ProductCard.vue";
-import CollectionProduct from "~/components/client/features/Collection.vue";
-import ButtonViewMore from "~/components/client/ui/Button.vue";
+import CommitMent from "~/components/ui/CommitMent.vue";
+import ProductCard from "~/components/features/ProductCard.vue";
+import CollectionProduct from "~/components/features/Collection.vue";
+import ButtonViewMore from "~/components/ui/Button.vue";
 import { useHomeSlider } from "~/composables/useHomeSlider";
 
 // Import auth composable
 import { useAuth } from "~/composables/auth/useAuth";
-import Partner from "~/components/client/ui/Partner.vue";
+import Partner from "~/components/ui/Partner.vue";
 
 // Import product composable
-import { useProduct } from "~/composables/client/product/useProduct";
+import { useProduct } from "~/composables/product/useProduct";
 
 const { mainOptions, thumbOptions, rightVirticalOptions, postFeaturedOptions, partnerOptions, mainItems, thumbnailItems, rightVirticalItems, postFeaturedItems, partnerItems, mainSlider, thumbSlider, partnerSlider } = useHomeSlider();
 

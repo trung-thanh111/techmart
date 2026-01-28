@@ -4,8 +4,8 @@ import { toTypedSchema } from "@vee-validate/zod";
 import { authService } from "~/services/auth/auth.service";
 import { useAuthStore } from "~/stores/auth/auth";
 import { useAppToast } from "~/composables/useAppToast";
-import { useCart } from "~/composables/client/cart/useCart";
-import { TODASHBOARD, TOHOME } from "~/utils/constants";
+import { useCart } from "~/composables/cart/useCart";
+import { TOHOME } from "~/utils/constants";
 
 const loginSchema = z.object({
   email: z.string({ required_error: "Bạn chưa nhập Email" }).email("Email không hợp lệ"),
@@ -51,11 +51,10 @@ export const useLogin = () => {
         await syncCartAfterLogin();
       } catch (cartError) {
         console.warn("Lỗi đồng bộ cart:", cartError);
-        // Không block login nếu cart sync fail
       }
 
       toast.success("Đăng nhập thành công");
-      await navigateTo(auth.isAdmin ? TODASHBOARD : TOHOME);
+      await navigateTo(TOHOME);
     } catch (e: any) {
       console.error("Login error:", e);
       const errorMessage = e?.data?.message || e?.response?.data?.message || e?.message || "Đăng nhập thất bại";

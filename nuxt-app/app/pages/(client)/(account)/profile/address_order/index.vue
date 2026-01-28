@@ -1,23 +1,23 @@
 <template>
   <div class="w-100">
-    <h1 class="text-xl md:text-2xl font-semibold text-gray-800 mb-1">{{ $t("client.profile.addressList") }}</h1>
-    <p class="text-xs text-gray-500 mb-5 md:mb-10">{{ $t("client.profile.addressListDesc") }}</p>
+    <h1 class="text-xl md:text-2xl font-semibold text-gray-800 mb-1">{{ $t("profile.addressList") }}</h1>
+    <p class="text-xs text-gray-500 mb-5 md:mb-10">{{ $t("profile.addressListDesc") }}</p>
     <form class="mb-10">
       <div class="flex justify-between items-center mb-4 gap-2">
-        <h2 class="text-xs md:text-sm font-semibold text-gray-700">{{ $t("client.profile.list") }}</h2>
+        <h2 class="text-xs md:text-sm font-semibold text-gray-700">{{ $t("profile.list") }}</h2>
       </div>
-      <div v-if="isLoading" class="text-xs text-center text-gray-500 py-5">{{ $t("client.profile.loadingAddress") }}</div>
-      <div v-else-if="!addresses.length" class="text-xs text-center text-gray-500 py-5">{{ $t("client.profile.noAddress") }}</div>
+      <div v-if="isLoading" class="text-xs text-center text-gray-500 py-5">{{ $t("profile.loadingAddress") }}</div>
+      <div v-else-if="!addresses.length" class="text-xs text-center text-gray-500 py-5">{{ $t("profile.noAddress") }}</div>
       <TransitionGroup name="address" tag="div">
         <div v-for="item in addresses" :key="item.id" class="voucher-item relative flex flex-col bg-sky-50 md:ps-3 ps-2 md:mb-3 mb-2 rounded-lg shadow-sm">
-          <div v-if="item.isDefault" class="absolute top-0 right-0 bg-teal-500 text-white md:text-[10px] text-[8px] py-1 md:py-1.5 uppercase font-semibold px-2 rounded-bl-md">{{ $t("client.profile.default") }}</div>
+          <div v-if="item.isDefault" class="absolute top-0 right-0 bg-teal-500 text-white md:text-[10px] text-[8px] py-1 md:py-1.5 uppercase font-semibold px-2 rounded-bl-md">{{ $t("profile.default") }}</div>
           <div class="flex items-center">
             <div class="w-20 h-20 rounded-lg bg-white p-0 hidden md:flex items-center justify-center flex-shrink-0 overflow-hidden">
               <div v-if="buildMapEmbedSrc(item)">
                 <iframe :src="buildMapEmbedSrc(item)" class="w-full h-full" style="border: 0" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
               </div>
               <div v-else>
-                <NuxtImg src="/shared/images/defaults/record.jpg" alt="Map preview" class="w-full h-full object-cover" loading="lazy" />
+                <NuxtImg src="/images/defaults/record.jpg" alt="Map preview" class="w-full h-full object-cover" loading="lazy" />
               </div>
             </div>
             <div class="hidden md:block w-[2px] h-[90px] border-l border-1 border-gray-300 mx-3"></div>
@@ -39,8 +39,8 @@
               <div class="flex justify-between items-center text-xs">
                 <a class="hover:underline" :href="item.phone ? `tel:${item.phone}` : '#'">(+84) {{ item.phone?.replace(/^0/, "") || "N/A" }}</a>
                 <div class="flex items-center gap-3">
-                  <NuxtLink :to="`/profile/address_order/${item.id}/update`" class="text-sky-500 font-medium underline flex items-center cursor-pointer">{{ $t("client.profile.customize") }}</NuxtLink>
-                  <button type="button" @click="() => openDeleteModal(item)" class="text-red-500 font-medium underline flex items-center cursor-pointer">{{ $t("client.profile.delete") }}</button>
+                  <NuxtLink :to="`/profile/address_order/${item.id}/update`" class="text-sky-500 font-medium underline flex items-center cursor-pointer">{{ $t("profile.customize") }}</NuxtLink>
+                  <button type="button" @click="() => openDeleteModal(item)" class="text-red-500 font-medium underline flex items-center cursor-pointer">{{ $t("profile.delete") }}</button>
                 </div>
               </div>
             </div>
@@ -57,15 +57,15 @@
                   </div>
                 </div>
                 <div>
-                  <h3 class="text-base font-semibold text-gray-900">{{ $t("client.profile.deleteRecord") }}</h3>
-                  <p class="mt-2 text-sm text-gray-600">{{ $t("client.profile.deleteConfirm") }}</p>
+                  <h3 class="text-base font-semibold text-gray-900">{{ $t("profile.deleteRecord") }}</h3>
+                  <p class="mt-2 text-sm text-gray-600">{{ $t("profile.deleteConfirm") }}</p>
                   <div v-if="selectedItem" class="mt-4">
-                    <p class="text-[12px] text-gray-500 mb-1">{{ $t("client.profile.record") }}</p>
+                    <p class="text-[12px] text-gray-500 mb-1">{{ $t("profile.record") }}</p>
                     <input :value="item.address" type="text" class="w-full border border-red-300 rounded px-3 py-2 text-sm text-red-600 bg-red-50" readonly />
                   </div>
                   <div class="mt-5 flex justify-end gap-3">
-                    <button type="button" class="px-4 py-1 rounded border border-gray-300 bg-white text-gray-700 text-xs hover:bg-gray-50" @click="closeDeleteModal">{{ $t("client.profile.cancel") }}</button>
-                    <button type="button" class="px-4 py-1 rounded bg-red-600 text-white text-xs hover:bg-red-700 disabled:opacity-50" :disabled="isLoading || !selectedItem" @click="handleConfirmDelete">{{ $t("client.profile.delete") }}</button>
+                    <button type="button" class="px-4 py-1 rounded border border-gray-300 bg-white text-gray-700 text-xs hover:bg-gray-50" @click="closeDeleteModal">{{ $t("profile.cancel") }}</button>
+                    <button type="button" class="px-4 py-1 rounded bg-red-600 text-white text-xs hover:bg-red-700 disabled:opacity-50" :disabled="isLoading || !selectedItem" @click="handleConfirmDelete">{{ $t("profile.delete") }}</button>
                   </div>
                 </div>
               </div>
@@ -77,7 +77,7 @@
         <NuxtLink :to="PROFILEADDRESSORDERCREATE" class="block border-1 border-dashed border-gray-300 rounded-lg p-3 text-center hover:border-sky-400 hover:bg-sky-50 transition-colors">
           <div class="flex items-center justify-center gap-2 text-sky-600">
             <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 0 0 144c0 17.7-14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z" /></svg>
-            <span class="text-sm">{{ $t("client.profile.addAddress") }}</span>
+            <span class="text-sm">{{ $t("profile.addAddress") }}</span>
           </div>
         </NuxtLink>
       </div>
