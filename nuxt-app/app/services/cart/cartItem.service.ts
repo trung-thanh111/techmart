@@ -1,21 +1,25 @@
 import type { IApiOk, IApiMessage } from "~/interfaces/base.interface";
 import type { ICartItem, CartItemPayload } from "~/interfaces/cart/cartItem.interface";
 import { useApi } from "~/composables/useApi";
+import { API_VERSION } from "~/utils/apiConfig";
 
-const ENDPOINT = "/api/v1";
+const endpoint = {
+  collection: `${API_VERSION.version1}/cart_items`,
+  resource: `${API_VERSION.version1}/cart_item`,
+} as const;
 
 export const cartItemService = {
   store: async (payload: Partial<CartItemPayload>): Promise<IApiOk<ICartItem>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<ICartItem>>(`${ENDPOINT}/cart_items`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<ICartItem>>(endpoint.collection, {
       method: "POST",
       body: payload,
     });
   },
 
   update: async (id: number, payload: Partial<CartItemPayload>): Promise<IApiOk<ICartItem>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<ICartItem>>(`${ENDPOINT}/cart_items/${id}`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<ICartItem>>(`${endpoint.collection}/${id}`, {
       method: "POST",
       body: payload,
       params: { _method: "PATCH" },
@@ -23,15 +27,15 @@ export const cartItemService = {
   },
 
   delete: async (id: number): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/cart_items/${id}`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiMessage>(`${endpoint.collection}/${id}`, {
       method: "DELETE",
     });
   },
 
   storeGuest: async (payload: Partial<CartItemPayload>): Promise<IApiOk<ICartItem>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<ICartItem>>(`${ENDPOINT}/cart_items`, {
+    return await publicFetch<IApiOk<ICartItem>>(endpoint.collection, {
       method: "POST",
       body: payload,
     });
@@ -39,7 +43,7 @@ export const cartItemService = {
 
   updateGuest: async (id: number, payload: Partial<CartItemPayload>): Promise<IApiOk<ICartItem>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<ICartItem>>(`${ENDPOINT}/cart_items/${id}`, {
+    return await publicFetch<IApiOk<ICartItem>>(`${endpoint.collection}/${id}`, {
       method: "POST",
       body: payload,
       params: { _method: "PATCH" },
@@ -48,7 +52,7 @@ export const cartItemService = {
 
   deleteGuest: async (id: number): Promise<IApiMessage> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiMessage>(`${ENDPOINT}/cart_items/${id}`, {
+    return await publicFetch<IApiMessage>(`${endpoint.collection}/${id}`, {
       method: "DELETE",
     });
   },

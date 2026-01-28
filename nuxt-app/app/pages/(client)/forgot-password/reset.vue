@@ -1,22 +1,22 @@
 <template>
   <div class="main-content rounded-lg">
     <div class="relative w-full h-full">
-      <NuxtImg src="/client/images/bg-auth.png" alt="image-background" class="w-full h-full object-cover" loading="lazy" />
+      <NuxtImg src="/images/bg-auth.png" alt="image-background" class="w-full h-full object-cover" loading="lazy" />
       <div class="absolute inset-0 flex items-center justify-center">
-        <div class="flex flex-col lg:flex-row max-h-[800px] max-w-lg mx-auto shadow-lg">
+        <div class="flex flex-col lg:flex-row max-h-[800px] max-w-lg mx-auto shadow-lg" style="width: 30%">
           <div class="flex flex-col justify-center p-6 lg:p-8 w-full bg-white">
             <div class="w-full">
-              <h2 class="text-xl text-center font-semibold text-cyan-600 mb-1">{{ $t("client.common.resetPassword") }}</h2>
-              <p class="text-sm text-center text-gray-500 mb-8">{{ $t("client.common.enterNewPassword") }}</p>
+              <h2 class="text-xl text-center font-semibold text-cyan-600 mb-1">{{ $t("common.resetPassword") }}</h2>
+              <p class="text-sm text-center text-gray-500 mb-8">{{ $t("common.enterNewPassword") }}</p>
               <form class="space-y-4 md:space-y-6" @submit.prevent.stop="onSubmit">
                 <div class="relative">
                   <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
-                    {{ $t("auth.password") }}:
+                    {{ $t("auth.form.password") }}:
                     <span class="text-red-500">*</span>
                   </label>
                   <Field v-slot="{ field, errorMessage, meta }" name="password" :validate-on-input="true">
                     <div class="relative">
-                      <input v-bind="field" id="password" :type="showPassword ? 'text' : 'password'" :placeholder="$t('auth.placeholder.enterPassword')" :class="['w-full border rounded px-3 py-2 text-sm focus:outline-none pr-10 transition-colors', errorMessage && meta.touched ? 'border-red-500 focus:border-red-500' : 'border-gray-300 focus:border-sky-500']" />
+                      <input v-bind="field" id="password" :type="showPassword ? 'text' : 'password'" :placeholder="$t('auth.form.passwordPlaceholder')" :class="['w-full border rounded px-3 py-2 text-sm focus:outline-none pr-10 transition-colors', errorMessage && meta.touched ? 'border-red-500 focus:border-red-500' : 'border-gray-300 focus:border-sky-500']" />
                       <button type="button" class="absolute right-3 top-2 text-sm text-gray-500 hover:text-gray-700" @click="showPassword = !showPassword" tabindex="-1">
                         <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'" class="w-4 h-4"></i>
                       </button>
@@ -29,12 +29,12 @@
 
                 <div class="relative">
                   <label for="passwordConfirmation" class="block text-sm font-medium text-gray-700 mb-2">
-                    {{ $t("auth.confirmPassword") }}:
+                    {{ $t("auth.form.confirmPassword") }}:
                     <span class="text-red-500">*</span>
                   </label>
                   <Field v-slot="{ field, errorMessage, meta }" name="passwordConfirmation" :validate-on-input="true">
                     <div class="relative">
-                      <input v-bind="field" id="passwordConfirmation" :type="showConfirmPassword ? 'text' : 'password'" :placeholder="$t('auth.placeholder.enterConfirmPassword')" :class="['w-full border rounded px-3 py-2 text-sm focus:outline-none pr-10 transition-colors', errorMessage && meta.touched ? 'border-red-500 focus:border-red-500' : 'border-gray-300 focus:border-sky-500']" />
+                      <input v-bind="field" id="passwordConfirmation" :type="showConfirmPassword ? 'text' : 'password'" :placeholder="$t('auth.form.confirmPasswordPlaceholder')" :class="['w-full border rounded px-3 py-2 text-sm focus:outline-none pr-10 transition-colors', errorMessage && meta.touched ? 'border-red-500 focus:border-red-500' : 'border-gray-300 focus:border-sky-500']" />
                       <button type="button" class="absolute right-3 top-2 text-sm text-gray-500 hover:text-gray-700" @click="showConfirmPassword = !showConfirmPassword" tabindex="-1">
                         <i :class="showConfirmPassword ? 'fas fa-eye-slash' : 'fas fa-eye'" class="w-4 h-4"></i>
                       </button>
@@ -81,7 +81,7 @@
 
                 <Button
                   type="submit"
-                  :label="$t('client.common.confirm')"
+                  :label="$t('common.confirm')"
                   :loading="isLoading"
                   unstyled
                   class="w-full text-sm font-semibold flex justify-center py-2 px-4 rounded shadow-sm text-white bg-teal-500 hover:bg-teal-600 focus:outline-none mt-5 disabled:opacity-50"
@@ -92,8 +92,8 @@
               </form>
 
               <p class="mt-6 text-center text-sm text-gray-600">
-                {{ $t("client.common.alreadyHavePassword") }}
-                <NuxtLink :to="TOLOGIN" class="text-cyan-600 hover:underline">{{ $t("client.common.clickHere") }}</NuxtLink>
+                {{ $t("common.alreadyHavePassword") }}
+                <NuxtLink :to="TOLOGIN" class="text-cyan-600 hover:underline">{{ $t("common.clickHere") }}</NuxtLink>
               </p>
             </div>
           </div>
@@ -103,19 +103,20 @@
   </div>
 </template>
 <script setup lang="ts">
-import { definePageMeta } from "#imports";
 import { ref, computed } from "vue";
 import { Field } from "vee-validate";
 import { useForgotReset } from "~/composables/auth/useForgotReset";
 import { TOLOGIN } from "~/utils/constants";
+import { useAuthSlider } from "~/composables/useAuthSlider";
 
 definePageMeta({
-  layout: "client",
+  layout: "auth",
 });
 
 const showPassword = ref(false);
 const showConfirmPassword = ref(false);
 const { onSubmit, isLoading, values } = useForgotReset();
+const { authOptions, forgotItems } = useAuthSlider();
 
 const passwordValue = computed(() => values.password || "");
 

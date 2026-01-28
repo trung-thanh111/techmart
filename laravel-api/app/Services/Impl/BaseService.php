@@ -219,14 +219,22 @@ abstract class BaseService implements BaseServiceInterface
         return $this;
     }
 
-    public function show(int $id = 0)
+    public function show($id)
     {
-        return $this->checkModelExists($id)->getResult();
-    }
+        $field = request()->input('field') ?? request()->input('column');
+        if ($field) {
+            $model = $this->findByField($field, $id);
+            if (!$model) {
+                throw new ModelNotFoundException(Lang::get('message.record_not_found'));
+            }
+            return $model;
+        }
 
-    public function showBySlug(string $slug = '')
-    {
-        $model = $this->findByField('slug', $slug);
+        if (is_numeric($id)) {
+            return $this->checkModelExists($id)->getResult();
+        }
+
+        $model = $this->findByField('slug', $id);
         if (!$model) {
             throw new ModelNotFoundException(Lang::get('message.record_not_found'));
         }

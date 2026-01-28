@@ -5,13 +5,13 @@
       <div class="mb-4 md:mb-8">
         <div class="flex justify-between items-center space-x-2">
           <div class="head-section-product">
-            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-xl md:text-3xl font-bold">{{ $t("client.wishlist.title") }}</h2>
+            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-xl md:text-3xl font-bold">{{ $t("wishlist.title") }}</h2>
             <div class="h-1 max-w-48 my-1 md:my-2 relative">
               <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-white via-green-300 to-green-300"></div>
             </div>
           </div>
         </div>
-        <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("client.wishlist.description") }}</p>
+        <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("wishlist.description") }}</p>
       </div>
 
       <div v-if="!isLoading && wishlistGrouped.length > 0" class="mb-4 md:mb-6">
@@ -27,12 +27,12 @@
       <div v-if="isLoading" class="flex items-center justify-center min-h-[400px]">
         <div class="text-center">
           <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p class="text-gray-600">{{ $t("client.wishlist.loading") }}</p>
+          <p class="text-gray-600">{{ $t("wishlist.loading") }}</p>
         </div>
       </div>
       <div v-else-if="filteredProducts.length === 0" class="flex items-center justify-center min-h-[400px]">
         <div class="text-center">
-          <p class="text-gray-600">{{ $t("client.wishlist.noItems") }}</p>
+          <p class="text-gray-600">{{ $t("wishlist.noItems") }}</p>
         </div>
       </div>
       <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -41,18 +41,18 @@
       <div v-if="hasMore && filteredProducts.length > 5" class="w-full flex justify-center mt-4 md:mt-6">
         <button @click="loadMore" type="button" class="relative flex items-center py-1.5 px-4 overflow-hidden font-medium transition-all bg-sky-500 rounded group">
           <span class="absolute inset-0 transition-all duration-500 ease-in-out delay-200 -translate-x-full bg-sky-600 rounded-md group-hover:translate-x-0"></span>
-          <span class="relative w-full text-xs sm:text-sm md:text-base text-center text-white transition-colors duration-200 ease-in-out group-hover:text-white">{{ $t("client.wishlist.loadMore") }}</span>
+          <span class="relative w-full text-xs sm:text-sm md:text-base text-center text-white transition-colors duration-200 ease-in-out group-hover:text-white">{{ $t("wishlist.loadMore") }}</span>
         </button>
       </div>
     </section>
   </div>
 </template>
 <script setup lang="ts">
-import Breadcrumb from "~/components/shared/navigation/Breadcrumb.vue";
-import ProductCardWishlist from "~/components/client/features/ProductCardWishlist.vue";
-import FilterWishlist from "~/components/client/features/FilterWishlist.vue";
-import FilterSort from "~/components/client/features/FilterSort.vue";
-import { useWishlist } from "~/composables/client/product/useWishlist";
+import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
+import ProductCardWishlist from "~/components//features/ProductCardWishlist.vue";
+import FilterWishlist from "~/components//features/FilterWishlist.vue";
+import FilterSort from "~/components//features/FilterSort.vue";
+import { useWishlist } from "~/composables/product/useWishlist";
 import { productCatalogueService } from "~/services/product/catalogue.service";
 import { brandService } from "~/services/brand/brand.service";
 import type { IWishlistGrouped } from "~/interfaces/product/wishlist.interface";
@@ -111,7 +111,7 @@ const fetchCatalogues = async () => {
 const fetchBrands = async () => {
   if (brands.value.length) return brands.value;
   try {
-    const res = await brandService.paginationPublic({
+    const res = await brandService.pagination({
       type: "all",
       publish: 2,
       sort: "created_at,desc",
@@ -235,7 +235,7 @@ onBeforeUnmount(() => {
   }
 });
 
-const breadcrumbs = computed(() => [{ label: $t("client.wishlist.breadcrumb"), href: "/wishlist" }]);
+const breadcrumbs = computed(() => [{ label: $t("wishlist.breadcrumb"), href: "/wishlist" }]);
 
 definePageMeta({
   layout: "client",

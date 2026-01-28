@@ -1,33 +1,58 @@
 import type { IApiOk, IApiMessage, IPaginate } from "~/interfaces/base.interface";
 import type { IPermission } from "~/interfaces/user/permission.interface";
 import { useApi } from "~/composables/useApi";
+import { API_VERSION } from "~/utils/apiConfig";
 
-const ENDPOINT = "/api/v1";
+const endpoint = {
+  collection: `${API_VERSION.version1}/permissions`,
+  resource: `${API_VERSION.version1}/permission`,
+} as const;
 
 export const permissionService = {
   pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IPermission>>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPaginate<IPermission>>>(`${ENDPOINT}/permissions`, {
-      params,
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPaginate<IPermission>>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        publish: 2,
+        sort: "id,desc",
+        deleted_at: null,
+        ...params,
+      },
+    });
+  },
+
+  all: async (): Promise<IApiOk<IPermission[]>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPermission[]>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        type: "all",
+        publish: 2,
+        sort: "id,desc",
+        deleted_at: null,
+      },
+    });
+  },
+
+  show: async (id: number | string): Promise<IApiOk<IPermission>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPermission>>(`${endpoint.collection}/${id}`, {
+      method: "GET",
     });
   },
 
   store: async (payload: Partial<IPermission>): Promise<IApiOk<IPermission>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPermission>>(`${ENDPOINT}/permissions`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPermission>>(endpoint.collection, {
       method: "POST",
       body: payload,
     });
   },
 
-  show: async (id: number | string): Promise<IApiOk<IPermission>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPermission>>(`${ENDPOINT}/permissions/${id}`);
-  },
-
   update: async (id: number, payload: Partial<IPermission>): Promise<IApiOk<IPermission>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPermission>>(`${ENDPOINT}/permissions/${id}`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPermission>>(`${endpoint.collection}/${id}`, {
       method: "POST",
       body: payload,
       params: { _method: "PATCH" },
@@ -35,24 +60,17 @@ export const permissionService = {
   },
 
   delete: async (id: number): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/permissions/${id}`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiMessage>(`${endpoint.collection}/${id}`, {
       method: "DELETE",
     });
   },
 
   deleteMultiple: async (ids: number[]): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/permissions/bulkDelete`, {
-      body: { ids },
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiMessage>(`${endpoint.collection}/bulkDelete`, {
       method: "DELETE",
-    });
-  },
-
-  all: async (): Promise<IApiOk<IPermission[]>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPermission[]>>(`${ENDPOINT}/permissions`, {
-      params: { type: "all" },
+      body: { ids },
     });
   },
 };

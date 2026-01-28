@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api\V1\Post;
 
 use Illuminate\Http\JsonResponse;
@@ -9,7 +10,9 @@ use App\Http\Requests\Post\Post\BulkStoreRequest;
 use App\Http\Requests\Post\Post\BulkUpdateRequest;
 use App\Http\Requests\Post\Post\StoreRequest;
 use App\Http\Requests\Post\Post\UpdateRequest;
+use App\Http\Resources\ApiResource;
 use App\Services\Interfaces\Post\PostServiceInterface as PostService;
+use Illuminate\Support\Facades\Lang;
 
 class PostController extends BaseController
 {
@@ -61,16 +64,12 @@ class PostController extends BaseController
         return $this->service;
     }
 
-    public function showBySlug(string $slug = ''): JsonResponse
-    {
-        return parent::showBySlug($slug);
-    }
+
     public function updateView(int $id): JsonResponse
     {
-        // Safe update for view_count only
         $payload = request()->only(['view_count']);
-        if(!empty($payload)){
-             $this->service->update($id, $payload);
+        if (!empty($payload)) {
+            $this->service->update($id, $payload);
         }
         return ApiResource::ok(null, Lang::get('message.update_data_successfully'));
     }

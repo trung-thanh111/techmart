@@ -1,50 +1,46 @@
 import type { IApiOk, IApiMessage, IPaginate } from "~/interfaces/base.interface";
 import type { ICart, CartPayload } from "~/interfaces/cart/cart.interface";
 import { useApi } from "~/composables/useApi";
+import { API_VERSION } from "~/utils/apiConfig";
 
-const ENDPOINT = "/api/v1";
+const endpoint = {
+  collection: `${API_VERSION.version1}/carts`,
+  resource: `${API_VERSION.version1}/cart`,
+} as const;
 
 export const cartService = {
   pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<ICart>>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPaginate<ICart>>>(`${ENDPOINT}/carts`, {
-      params,
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPaginate<ICart>>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        publish: 2,
+        sort: "id,desc",
+        deleted_at: null,
+        ...params,
+      },
     });
   },
 
   store: async (payload: Partial<CartPayload>): Promise<IApiOk<ICart>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<ICart>>(`${ENDPOINT}/carts`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<ICart>>(endpoint.collection, {
       method: "POST",
       body: payload,
     });
   },
 
   show: async (id: number | string): Promise<IApiOk<ICart>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<ICart>>(`${ENDPOINT}/carts/${id}`);
-  },
-
-  update: async (id: number, payload: Partial<CartPayload>): Promise<IApiOk<ICart>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<ICart>>(`${ENDPOINT}/carts/${id}`, {
-      method: "POST",
-      body: payload,
-      params: { _method: "PATCH" },
-    });
-  },
-
-  delete: async (id: number): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/carts/${id}`, {
-      method: "DELETE",
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<ICart>>(`${endpoint.collection}/${id}`, {
+      method: "GET",
     });
   },
 
   showByGuestId: async (guestId: string): Promise<IApiOk<ICart | null>> => {
     const { publicFetch } = useApi();
     try {
-      const response = await publicFetch<IApiOk<any>>(`${ENDPOINT}/carts`, {
+      const response = await publicFetch<IApiOk<any>>(endpoint.collection, {
         params: {
           guest_id: guestId,
           perpage: 1,
@@ -52,7 +48,6 @@ export const cartService = {
       });
       let cartArray: ICart[] = [];
 
-      // Handle different response structures
       if (Array.isArray(response.data)) {
         cartArray = response.data;
       } else if (response.data?.data && Array.isArray(response.data.data)) {
@@ -61,13 +56,15 @@ export const cartService = {
         cartArray = response.data.data.data;
       }
 
-      if (cartArray.length > 0 && cartArray[0]) {
-        return { ...response, data: cartArray[0] };
-      }
-      return { ...response, data: null };
+      const data = cartArray.length > 0 && cartArray[0] ? cartArray[0] : null;
+
+      return {
+        ...response,
+        data,
+      } as IApiOk<ICart | null>;
     } catch (error: any) {
       if (error?.statusCode === 404 || error?.code === 404) {
-        return { data: null, success: false, message: "Cart not found" };
+        return { data: null, success: false, message: "Cart not found" } as any;
       }
       throw error;
     }
@@ -75,7 +72,7 @@ export const cartService = {
 
   storeGuest: async (payload: Partial<CartPayload>): Promise<IApiOk<ICart>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<ICart>>(`${ENDPOINT}/carts`, {
+    return await publicFetch<IApiOk<ICart>>(endpoint.collection, {
       method: "POST",
       body: payload,
     });

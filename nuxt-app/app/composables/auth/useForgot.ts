@@ -26,9 +26,9 @@ export const useForgot = () => {
   const handleVerify = handleSubmit(async (payload) => {
     isLoading.value = true;
     try {
-      const res = await authService.forgotRequest(payload.email);
-      toast.success(res?.data?.message || "Mã OTP đã được gửi. Kiểm tra hộp thư của bạn!");
-        await router.push({ path: TOFORGOTOTP, query: { email: payload.email } });
+      const res = await authService.forgotRequest(payload);
+      toast.success(res?.message || "Mã OTP đã được gửi. Kiểm tra hộp thư của bạn!");
+      await router.push({ path: TOFORGOTOTP, query: { email: payload.email } });
     } catch (e: any) {
       toast.error(e?.response?.data?.message || "Gửi mã thất bại");
     } finally {

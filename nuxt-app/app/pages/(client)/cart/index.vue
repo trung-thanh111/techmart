@@ -1,6 +1,6 @@
 <template>
   <div class="main-content max-w-7xl mx-auto">
-    <Breadcrumb :crumbs="[{ label: $t('client.cart.breadcrumb'), href: '/cart' }]" />
+    <Breadcrumb :crumbs="[{ label: $t('cart.breadcrumb'), href: '/cart' }]" />
     <section>
       <article>
         <div class="container mx-auto">
@@ -10,9 +10,9 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
               </svg>
             </div>
-            <h3 class="text-xl font-semibold text-gray-700 mb-2">{{ $t("client.cart.empty") }}</h3>
-            <p class="text-gray-500 mb-6">{{ $t("client.cart.emptyDesc") }}</p>
-            <Button :label="$t('client.cart.shopping')" icon="pi pi-arrow-left" @click="navigateTo(TOSHOP)" />
+            <h3 class="text-xl font-semibold text-gray-700 mb-2">{{ $t("cart.empty") }}</h3>
+            <p class="text-gray-500 mb-6">{{ $t("cart.emptyDesc") }}</p>
+            <Button :label="$t('cart.shopping')" icon="pi pi-arrow-left" @click="navigateTo(TOSHOP)" />
           </div>
 
           <div v-else class="grid grid-cols-12 gap-6 mb-5">
@@ -31,10 +31,10 @@
                           </span>
                         </label>
                       </th>
-                      <th class="w-[52%] px-1 md:px-2">{{ $t("client.cart.product") }}</th>
-                      <th class="w-[16%] px-1 md:px-2 text-center">{{ $t("client.cart.unitPrice") }}</th>
-                      <th class="w-[14%] px-1 md:px-2 text-center">{{ $t("client.cart.quantity") }}</th>
-                      <th class="w-[16%] px-1 md:px-2 text-center">{{ $t("client.cart.total") }}</th>
+                      <th class="w-[52%] px-1 md:px-2">{{ $t("cart.product") }}</th>
+                      <th class="w-[16%] px-1 md:px-2 text-center">{{ $t("cart.unitPrice") }}</th>
+                      <th class="w-[14%] px-1 md:px-2 text-center">{{ $t("cart.quantity") }}</th>
+                      <th class="w-[16%] px-1 md:px-2 text-center">{{ $t("cart.total") }}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -59,7 +59,7 @@
                             <p class="text-xs text-gray-500 truncate">{{ getVariantInfo(item) }}</p>
                             <Button @click.stop.prevent="handleRemoveItem(item.id!)" class="text-xs inline-flex items-center px-1 py-0.5 gap-1 rounded-md" outlined severity="danger" size="small">
                               <i class="fa-solid fa-trash text-xs"></i>
-                              {{ $t("client.cart.removeItem") }}
+                              {{ $t("cart.removeItem") }}
                             </Button>
                           </div>
                         </div>
@@ -97,17 +97,17 @@
               <div class="mt-6 bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
                 <div class="p-4">
                   <div class="flex justify-between items-center gap-2 md:gap-4">
-                    <Button :label="$t('client.cart.shopping')" outlined @click="navigateTo(TOSHOP)" class="!flex items-center gap-1 md:gap-2 px-2 md:px-4 py-1 md:py-2 text-xs md:text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-sm transition-colors duration-200">
+                    <Button :label="$t('cart.shopping')" outlined @click="navigateTo(TOSHOP)" class="!flex items-center gap-1 md:gap-2 px-2 md:px-4 py-1 md:py-2 text-xs md:text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-sm transition-colors duration-200">
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                       </svg>
-                      <span>{{ $t("client.cart.shopping") }}</span>
+                      <span>{{ $t("cart.shopping") }}</span>
                     </Button>
-                    <Button :label="$t('client.cart.clearCart')" severity="danger" @click.stop.prevent="handleClearCart" class="!flex items-center gap-1 md:gap-2 px-2 md:px-4 py-1 md:py-2 text-xs md:text-sm font-medium text-white bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 rounded-sm transition-all duration-200 transform shadow-sm">
+                    <Button :label="$t('cart.clearCart')" severity="danger" @click.stop.prevent="handleClearCart" class="!flex items-center gap-1 md:gap-2 px-2 md:px-4 py-1 md:py-2 text-xs md:text-sm font-medium text-white bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 rounded-sm transition-all duration-200 transform shadow-sm">
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                       </svg>
-                      <span>{{ $t("client.cart.clearCart") }}</span>
+                      <span>{{ $t("cart.clearCart") }}</span>
                     </Button>
                   </div>
                   <div class="mt-2 md:mt-4 border-t border-gray-100">
@@ -115,7 +115,7 @@
                       <svg class="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
-                      <span>{{ $t("client.cart.cartSaved") }}</span>
+                      <span>{{ $t("cart.cartSaved") }}</span>
                     </div>
                   </div>
                 </div>
@@ -126,12 +126,12 @@
               <div class="bg-white rounded-sm shadow-sm border border-gray-100 overflow-hidden sticky top-4">
                 <div class="bg-gradient-to-r from-teal-500 to-teal-600 p-3">
                   <div class="flex items-center justify-between">
-                    <h2 class="text-white text-sm md:text-base font-bold">{{ $t("client.cart.order") }}</h2>
+                    <h2 class="text-white text-sm md:text-base font-bold">{{ $t("cart.order") }}</h2>
                     <div class="flex items-center gap-2">
                       <svg class="md:w-5 md:h-5 w-4 h-4 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                       </svg>
-                      <span class="text-white/80 md:text-sm text-xs">{{ $t("client.cart.itemsInCart", { count: selectedCount }) }}</span>
+                      <span class="text-white/80 md:text-sm text-xs">{{ $t("cart.itemsInCart", { count: selectedCount }) }}</span>
                     </div>
                   </div>
                 </div>
@@ -142,7 +142,7 @@
                       <svg class="w-16 h-16 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                       </svg>
-                      <p class="text-sm text-center">{{ $t("client.cart.selectItemsToCheckout") }}</p>
+                      <p class="text-sm text-center">{{ $t("cart.selectItemsToCheckout") }}</p>
                     </div>
 
                     <div v-for="item in selectedItems" :key="item.id" class="flex items-start gap-4 bg-gray-50 border border-gray-100 hover:border-sky-500 rounded-sm">
@@ -174,53 +174,53 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
                       </svg>
                       <h3 class="text-sm font-semibold text-amber-800">
-                        {{ $t("client.cart.coupon") }}
+                        {{ $t("cart.coupon") }}
                       </h3>
                     </div>
 
                     <div class="flex gap-2">
-                      <InputText v-model="couponCode" :placeholder="$t('client.cart.couponPlaceholder')" :disabled="selectedCount === 0" class="flex-1 text-sm md:px-3 px-2 md:py-2 py-1.5 !border-amber-300 focus:!ring-1 focus:!ring-amber-500 focus:!border-transparent !rounded-none !shadow-none" />
-                      <Button :label="$t('client.cart.applyCoupon')" @click="applyCoupon" :disabled="selectedCount === 0" class="border-0 md:px-4 px-3 md:py-2 py-1.5 !bg-amber-600 text-white md:text-sm text-xs font-medium !rounded-none transition-colors hover:!brightness-110 focus:!ring-1 focus:!ring-amber-500 focus:!outline-none" />
+                      <InputText v-model="couponCode" :placeholder="$t('cart.couponPlaceholder')" :disabled="selectedCount === 0" class="flex-1 text-sm md:px-3 px-2 md:py-2 py-1.5 !border-amber-300 focus:!ring-1 focus:!ring-amber-500 focus:!border-transparent !rounded-none !shadow-none" />
+                      <Button :label="$t('cart.applyCoupon')" @click="applyCoupon" :disabled="selectedCount === 0" class="border-0 md:px-4 px-3 md:py-2 py-1.5 !bg-amber-600 text-white md:text-sm text-xs font-medium !rounded-none transition-colors hover:!brightness-110 focus:!ring-1 focus:!ring-amber-500 focus:!outline-none" />
                     </div>
                   </div>
 
                   <!-- Order Totals -->
                   <div class="mt-5 space-y-3">
                     <div class="flex items-center justify-between text-sm">
-                      <span class="text-gray-600">{{ $t("client.cart.subtotal") }}:</span>
+                      <span class="text-gray-600">{{ $t("cart.subtotal") }}:</span>
                       <span class="font-medium">{{ formatPrice(selectedTotalPrice) }}</span>
                     </div>
                     <div class="flex items-center justify-between text-sm">
-                      <span class="text-gray-600">{{ $t("client.cart.discount") }}:</span>
+                      <span class="text-gray-600">{{ $t("cart.discount") }}:</span>
                       <span class="text-green-600 font-medium">− {{ formatPrice(0) }}</span>
                     </div>
                     <div class="flex items-center justify-between text-sm">
-                      <span class="text-gray-600">{{ $t("client.cart.shipping") }}:</span>
+                      <span class="text-gray-600">{{ $t("cart.shipping") }}:</span>
                       <span class="font-medium">{{ formatPrice(selectedCount > 0 ? 25000 : 0) }}</span>
                     </div>
                     <div class="flex items-center justify-between text-sm">
-                      <span class="text-gray-600">{{ $t("client.cart.taxPercent", { percent: 5 }) }}:</span>
+                      <span class="text-gray-600">{{ $t("cart.taxPercent", { percent: 5 }) }}:</span>
                       <span class="font-medium">{{ formatPrice(selectedCount > 0 ? Math.round(selectedTotalPrice * 0.05) : 0) }}</span>
                     </div>
                     <div class="border-t border-gray-200 pt-3 mt-4">
                       <div class="flex items-center justify-between">
-                        <span class="md:text-lg text-base font-bold text-gray-900">{{ $t("client.cart.grandTotal") }}:</span>
+                        <span class="md:text-lg text-base font-bold text-gray-900">{{ $t("cart.grandTotal") }}:</span>
                         <span class="md:text-xl text-lg font-bold text-red-600">
                           {{ formatPrice(selectedCount > 0 ? selectedTotalPrice + 25000 + Math.round(selectedTotalPrice * 0.05) : 0) }}
                         </span>
                       </div>
-                      <p class="text-xs text-gray-500 mt-1">{{ $t("client.cart.taxIncluded") }}</p>
+                      <p class="text-xs text-gray-500 mt-1">{{ $t("cart.taxIncluded") }}</p>
                     </div>
                   </div>
 
                   <!-- Checkout Button -->
                   <div class="mt-6">
-                    <Button :label="$t('client.cart.proceedToCheckout')" @click="handleCheckout" :disabled="selectedCount === 0" class="w-full !bg-gradient-to-r !from-teal-500 !to-teal-600 hover:!from-teal-600 hover:!to-teal-700 text-white py-2 px-4 rounded-sm font-semibold text-base shadow uppercase" />
+                    <Button :label="$t('cart.proceedToCheckout')" @click="handleCheckout" :disabled="selectedCount === 0" class="w-full !bg-gradient-to-r !from-teal-500 !to-teal-600 hover:!from-teal-600 hover:!to-teal-700 text-white py-2 px-4 rounded-sm font-semibold text-base shadow uppercase" />
                     <div class="mt-4 flex items-center justify-center gap-2 text-xs text-gray-500">
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                       </svg>
-                      <span>{{ $t("client.cart.securePayment") }}</span>
+                      <span>{{ $t("cart.securePayment") }}</span>
                     </div>
                   </div>
                 </div>
@@ -232,38 +232,38 @@
     </section>
   </div>
 
-  <Dialog v-model:visible="showDeleteItemDialog" :header="t('client.cart.removeItem')" :modal="true" :style="{ width: '450px' }" :closable="true" @hide="selectedItemToDelete = null">
+  <Dialog v-model:visible="showDeleteItemDialog" :header="t('cart.removeItem')" :modal="true" :style="{ width: '450px' }" :closable="true" @hide="selectedItemToDelete = null">
     <div class="flex flex-col gap-4">
       <div class="flex items-center gap-3">
         <i class="pi pi-exclamation-triangle text-2xl text-red-500"></i>
-        <span class="text-base">{{ t("client.cart.removeItemConfirm") }}</span>
+        <span class="text-base">{{ t("cart.removeItemConfirm") }}</span>
       </div>
       <div v-if="selectedItemToDelete" class="mt-2">
-        <p class="text-sm text-gray-600 mb-2">{{ t("client.cart.product") }}:</p>
+        <p class="text-sm text-gray-600 mb-2">{{ t("cart.product") }}:</p>
         <div class="p-2 bg-gray-50 border border-red-200 rounded">
           <p class="font-medium text-red-500 text-sm">{{ getProductName(selectedItemToDelete) }}</p>
         </div>
       </div>
     </div>
     <template #footer>
-      <Button :label="t('client.cart.cancel')" severity="secondary" outlined @click="showDeleteItemDialog = false" class="px-3 py-1.5 text-xs rounded" />
-      <Button :label="t('client.cart.removeItem')" severity="danger" :loading="isLoading" @click="handleConfirmDeleteItem" class="px-3 py-1.5 text-xs rounded" />
+      <Button :label="t('cart.cancel')" severity="secondary" outlined @click="showDeleteItemDialog = false" class="px-3 py-1.5 text-xs rounded" />
+      <Button :label="t('cart.removeItem')" severity="danger" :loading="isLoading" @click="handleConfirmDeleteItem" class="px-3 py-1.5 text-xs rounded" />
     </template>
   </Dialog>
 
-  <Dialog v-model:visible="showClearCartDialog" :header="t('client.cart.clearCart')" :modal="true" :style="{ width: '450px' }" :closable="true" @hide="showClearCartDialog = false">
+  <Dialog v-model:visible="showClearCartDialog" :header="t('cart.clearCart')" :modal="true" :style="{ width: '450px' }" :closable="true" @hide="showClearCartDialog = false">
     <div class="flex flex-col gap-4">
       <div class="flex items-center gap-3">
         <i class="pi pi-exclamation-triangle text-2xl text-red-500"></i>
-        <span class="text-base">{{ t("client.cart.clearCartConfirm") }}</span>
+        <span class="text-base">{{ t("cart.clearCartConfirm") }}</span>
       </div>
       <div class="mt-2">
-        <p class="text-sm text-gray-600">{{ t("client.cart.clearCartWarning") }}</p>
+        <p class="text-sm text-gray-600">{{ t("cart.clearCartWarning") }}</p>
       </div>
     </div>
     <template #footer>
-      <Button :label="t('client.cart.cancel')" severity="secondary" outlined @click="showClearCartDialog = false" class="px-3 py-1.5 text-xs rounded" />
-      <Button :label="t('client.cart.clearCart')" severity="danger" :loading="isLoading" @click="handleConfirmClearCart" class="px-3 py-1.5 text-xs rounded" />
+      <Button :label="t('cart.cancel')" severity="secondary" outlined @click="showClearCartDialog = false" class="px-3 py-1.5 text-xs rounded" />
+      <Button :label="t('cart.clearCart')" severity="danger" :loading="isLoading" @click="handleConfirmClearCart" class="px-3 py-1.5 text-xs rounded" />
     </template>
   </Dialog>
 </template>
@@ -273,8 +273,8 @@ import { ref, computed, onMounted } from "vue";
 import { definePageMeta, navigateTo } from "#imports";
 import { useToast } from "primevue/usetoast";
 import { useI18n } from "vue-i18n";
-import Breadcrumb from "~/components/shared/navigation/Breadcrumb.vue";
-import { useCart } from "~/composables/client/cart/useCart";
+import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
+import { useCart } from "~/composables/cart/useCart";
 import { formatPrice, resolveAlbum } from "~/utils/helpers";
 import { IMAGEDEFAULT, TOSHOP, PRODUCT } from "~/utils/constants";
 import type { ICartItem } from "~/interfaces/cart/cartItem.interface";
@@ -384,8 +384,8 @@ const handleCheckout = () => {
   if (selectedCount.value === 0) {
     toast.add({
       severity: "warn",
-      summary: t("client.cart.error"),
-      detail: t("client.cart.selectAtLeastOne"),
+      summary: t("cart.error"),
+      detail: t("cart.selectAtLeastOne"),
       life: 3000,
     });
     return;

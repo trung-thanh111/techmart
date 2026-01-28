@@ -1,14 +1,14 @@
 <template>
   <div class="main-content rounded-lg">
     <div class="relative w-full h-full">
-      <NuxtImg src="/client/images/bg-auth.png" alt="image-background" class="w-full h-full object-cover" loading="lazy" />
+      <NuxtImg src="/images/bg-auth.png" alt="image-background" class="w-full h-full object-cover" loading="lazy" />
       <div class="absolute inset-0 flex items-center justify-center">
         <div class="flex flex-col lg:flex-row max-h-[800px] max-w-lg mx-auto shadow-lg">
           <div class="flex flex-col justify-center p-6 lg:p-8 w-full bg-white">
             <div class="w-full">
-              <h2 class="text-xl text-center font-semibold text-cyan-600 mb-1">{{ $t("client.common.forgotPassword") }}</h2>
-              <p class="text-sm text-center text-gray-500 mb-8">{{ $t("client.common.verifyInfo") }}</p>
-              <span class="inline-flex items-center rounded-md bg-[#fef4e4] px-3 py-2 text-xs text-[#d29c40] mb-5">{{ $t("client.common.enterCorrectEmail") }}</span>
+              <h2 class="text-xl text-center font-semibold text-cyan-600 mb-1">{{ $t("common.forgotPassword") }}</h2>
+              <p class="text-sm text-center text-gray-500 mb-8">{{ $t("common.verifyInfo") }}</p>
+              <span class="inline-flex items-center rounded-md bg-[#fef4e4] px-3 py-2 text-xs text-[#d29c40] mb-5">{{ $t("common.enterCorrectEmail") }}</span>
               <form @submit.prevent="handleVerify" novalidate class="space-y-4">
                 <div class="relative">
                   <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
@@ -25,7 +25,7 @@
 
                 <Button
                   type="submit"
-                  :label="$t('client.common.verify')"
+                  :label="$t('common.verify')"
                   :loading="isLoading"
                   unstyled
                   class="w-full text-sm font-semibold flex justify-center py-2 px-4 rounded shadow-sm text-white bg-teal-500 hover:bg-teal-600 focus:outline-none mt-5 disabled:opacity-50"
@@ -36,8 +36,8 @@
               </form>
 
               <p class="mt-6 text-center text-sm text-gray-600">
-                {{ $t("client.common.alreadyHavePassword") }}
-                <NuxtLink :to="TOLOGIN" class="text-cyan-600 hover:underline">{{ $t("client.common.clickHere") }}</NuxtLink>
+                {{ $t("common.alreadyHavePassword") }}
+                <NuxtLink :to="TOLOGIN" class="text-cyan-600 hover:underline">{{ $t("common.clickHere") }}</NuxtLink>
               </p>
             </div>
           </div>

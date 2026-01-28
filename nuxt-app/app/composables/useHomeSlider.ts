@@ -125,11 +125,7 @@ export function useHomeSlider() {
   };
 
   // Slides data
-  const mainItems: SlideItem[] = [
-    { image: "/client/images/slide/hero-slide-left-1.webp" }, 
-    { image: "/client/images/slide/hero-slide-left-2.webp" }, 
-    { image: "/client/images/slide/hero-slide-left-3.webp" }
-  ];
+  const mainItems: SlideItem[] = [{ image: "/images/slide/hero-slide-left-1.webp" }, { image: "/images/slide/hero-slide-left-2.webp" }, { image: "/images/slide/hero-slide-left-3.webp" }];
 
   const thumbnailItems: ThumbnailItem[] = [
     {
@@ -155,28 +151,28 @@ export function useHomeSlider() {
   ];
 
   const rightVirticalItems: SlideItem[] = [
-    { image: "/client/images/slide/hero-slide-right-1.webp", alt: "Banner Right 1" },
-    { image: "/client/images/slide/hero-slide-right-2.webp", alt: "Banner Right 2" },
-    { image: "/client/images/slide/slide_hero_r_3.png", alt: "Banner Right 3" },
-    { image: "/client/images/slide/slide_hero_r_3.png", alt: "Banner Right 4" },
-    { image: "/client/images/slide/slide_hero_r_3.png", alt: "Banner Right 5" },
+    { image: "/images/slide/hero-slide-right-1.webp", alt: "Banner Right 1" },
+    { image: "/images/slide/hero-slide-right-2.webp", alt: "Banner Right 2" },
+    { image: "/images/slide/slide_hero_r_3.png", alt: "Banner Right 3" },
+    { image: "/images/slide/slide_hero_r_3.png", alt: "Banner Right 4" },
+    { image: "/images/slide/slide_hero_r_3.png", alt: "Banner Right 5" },
   ];
 
   const postFeaturedItems: PostItem[] = [
     {
-      image: "/client/images/posts/post-home-1.jpg",
+      image: "/images/posts/post-home-1.jpg",
       category: "Công nghệ",
       title: "Bài viết nổi bật: Công nghệ AI thay đổi cuộc sống thế nào1",
       description: "Trí tuệ nhân tạo đang làm thay đổi cách chúng ta sống, làm việc và giao tiếp. Cùng tìm hiểu những đột phá mới nhất trong lĩnh vực này. Trí tuệ nhân tạo đang làm thay đổi cách chúng ta sống, làm việc và giao tiếp. Cùng tìm hiểu những đột phá mới nhất trong lĩnh vực này.",
     },
     {
-      image: "/client/images/posts/post-home-2.jpg",
+      image: "/images/posts/post-home-2.jpg",
       category: "Công nghệ2",
       title: "Bài viết nổi bật: Công nghệ AI thay đổi cuộc sống thế nào2",
       description: "Trí tuệ nhân tạo đang làm thay đổi cách chúng ta sống, làm việc và giao tiếp. Cùng tìm hiểu những đột phá mới nhất trong lĩnh vực này. Trí tuệ nhân tạo đang làm thay đổi cách chúng ta sống, làm việc và giao tiếp. Cùng tìm hiểu những đột phá mới nhất trong lĩnh vực này.",
     },
     {
-      image: "/client/images/posts/post-home-1.jpg",
+      image: "/images/posts/post-home-1.jpg",
       category: "Công nghệ3",
       title: "Bài viết nổi bật: Công nghệ AI thay đổi cuộc sống thế nào3",
       description: "Trí tuệ nhân tạo đang làm thay đổi cách chúng ta sống, làm việc và giao tiếp. Cùng tìm hiểu những đột phá mới nhất trong lĩnh vực này. Trí tuệ nhân tạo đang làm thay đổi cách chúng ta sống, làm việc và giao tiếp. Cùng tìm hiểu những đột phá mới nhất trong lĩnh vực này.",

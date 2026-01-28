@@ -25,8 +25,8 @@
 </template>
 
 <script setup>
-import bgImage from "/client/images/bg-auth.png";
-import errorImage from "/client/images/404-error.png";
+import bgImage from "/images/bg-auth.png";
+import errorImage from "/images/404-error.png";
 
 defineProps({
   error: Object

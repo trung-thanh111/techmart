@@ -1,1 +1,0 @@
-<!-- AdminTable.vue - placeholder --> 

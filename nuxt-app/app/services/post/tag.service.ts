@@ -1,33 +1,58 @@
 import type { IApiOk, IApiMessage, IPaginate } from "~/interfaces/base.interface";
 import type { IPostTag } from "~/interfaces/post/tag.interface";
 import { useApi } from "~/composables/useApi";
+import { API_VERSION } from "~/utils/apiConfig";
 
-const ENDPOINT = "/api/v1";
+const endpoint = {
+  collection: `${API_VERSION.version1}/post_tags`,
+  resource: `${API_VERSION.version1}/post_tag`,
+} as const;
 
 export const postTagService = {
   pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IPostTag>>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPaginate<IPostTag>>>(`${ENDPOINT}/post_tags`, {
-      params,
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPaginate<IPostTag>>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        publish: 2,
+        sort: "id,desc",
+        deleted_at: null,
+        ...params,
+      },
+    });
+  },
+
+  all: async (): Promise<IApiOk<IPostTag[]>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPostTag[]>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        type: "all",
+        publish: 2,
+        sort: "id,desc",
+        deleted_at: null,
+      },
+    });
+  },
+
+  show: async (id: number | string): Promise<IApiOk<IPostTag>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPostTag>>(`${endpoint.collection}/${id}`, {
+      method: "GET",
     });
   },
 
   store: async (payload: Partial<IPostTag>): Promise<IApiOk<IPostTag>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPostTag>>(`${ENDPOINT}/post_tags`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPostTag>>(endpoint.collection, {
       method: "POST",
       body: payload,
     });
   },
 
-  show: async (id: number | string): Promise<IApiOk<IPostTag>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPostTag>>(`${ENDPOINT}/post_tags/${id}`);
-  },
-
   update: async (id: number, payload: Partial<IPostTag>): Promise<IApiOk<IPostTag>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPostTag>>(`${ENDPOINT}/post_tags/${id}`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPostTag>>(`${endpoint.collection}/${id}`, {
       method: "POST",
       body: payload,
       params: { _method: "PATCH" },
@@ -35,29 +60,9 @@ export const postTagService = {
   },
 
   delete: async (id: number): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/post_tags/${id}`, {
-      method: "DELETE",
-    });
-  },
-
-  deleteMultiple: async (ids: number[]): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/post_tags/bulkDelete`, {
-      body: { ids },
-      method: "DELETE",
-    });
-  },
-
-  all: async (): Promise<IApiOk<IPostTag[]>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IPostTag[]>>(`${ENDPOINT}/post_tags?type=all&publish=2`);
-  },
-
-  paginationPublic: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IPostTag>>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IPaginate<IPostTag>>>(`${ENDPOINT}/post_tags`, {
-      params,
+    return await publicFetch<IApiMessage>(`${endpoint.collection}/${id}`, {
+      method: "DELETE",
     });
   },
 };

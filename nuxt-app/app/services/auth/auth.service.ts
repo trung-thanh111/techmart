@@ -1,88 +1,32 @@
 import type { IApiOk, IApiMessage } from "~/interfaces/base.interface";
-import type { TLoginRequest } from "~/composables/auth/useLogin";
-import type { TRegisterRequest } from "~/composables/auth/useRegister";
-import type { IAuthSuccessResponse } from "~/interfaces/user/user.interface";
+import type { IUser, IAuthSuccessResponse, ILoginPayload, IRegisterPayload, IForgotRequest, IForgotVerify, IForgotReset, IChangePasswordPayload } from "~/interfaces/user/user.interface";
 import { useApi } from "~/composables/useApi";
-import { useAuthStore } from "~/stores/auth/auth";
+import { API_VERSION } from "~/utils/apiConfig";
 
-const ENDPOINT = "/api/v1/auth";
-const VERIFY_ENDPOINT = "/api/v1/email-verification";
-const FORGOT_ENDPOINT = "/api/v1/password/forgot";
-const CHANGE_PASSWORD_ENDPOINT = "/api/v1/password/change";
+const endpoint = {
+  login: `${API_VERSION.version1}/auth/login`,
+  logout: `${API_VERSION.version1}/auth/logout`,
+  refresh: `${API_VERSION.version1}/auth/refresh`,
+  me: `${API_VERSION.version1}/auth/me`,
+  register: `${API_VERSION.version1}/auth/register`,
+  forgotRequest: `${API_VERSION.version1}/password/forgot/request`,
+  forgotVerify: `${API_VERSION.version1}/password/forgot/verify`,
+  forgotResend: `${API_VERSION.version1}/password/forgot/resend`,
+  forgotReset: `${API_VERSION.version1}/password/forgot/reset`,
+  changePassword: `${API_VERSION.version1}/password/change`,
+} as const;
 
 export const authService = {
-  me: async (): Promise<IApiOk<IAuthSuccessResponse>> => {
+  me: async (): Promise<IApiOk<IUser>> => {
     const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IAuthSuccessResponse>>(`${ENDPOINT}/me`);
-  },
-
-  login: async (payload: TLoginRequest): Promise<IApiOk<IAuthSuccessResponse>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IAuthSuccessResponse>>(`${ENDPOINT}/login`, {
-      method: "POST",
-      body: payload,
+    return await privateFetch<IApiOk<IUser>>(endpoint.me, {
+      method: "GET",
     });
   },
 
-  // Kiểu trả về khi register có thể không chứa token nếu cần xác thực email
-  register: async (payload: TRegisterRequest): Promise<any> => {
+  login: async (payload: ILoginPayload): Promise<IApiOk<IAuthSuccessResponse>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<any>(`${ENDPOINT}/register`, {
-      method: "POST",
-      body: payload,
-    });
-  },
-
-  logout: async (): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/logout`, {
-      method: "POST",
-    });
-  },
-
-  // Status verification by email
-  verifyStatus: async (email: string): Promise<{ data: { verified: boolean } }> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<any>(`${VERIFY_ENDPOINT}/status?email=${encodeURIComponent(email)}`);
-  },
-
-  // Forgot password flow
-  forgotRequest: async (email: string): Promise<any> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<any>(`${FORGOT_ENDPOINT}/request`, {
-      method: "POST",
-      body: { email },
-    });
-  },
-
-  forgotResend: async (email: string): Promise<any> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<any>(`${FORGOT_ENDPOINT}/resend`, {
-      method: "POST",
-      body: { email },
-    });
-  },
-
-  forgotVerify: async (payload: { email: string; code: string }): Promise<any> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<any>(`${FORGOT_ENDPOINT}/verify`, {
-      method: "POST",
-      body: payload,
-    });
-  },
-
-  forgotReset: async (payload: { email: string; code: string; password: string; passwordConfirmation: string }): Promise<any> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<any>(`${FORGOT_ENDPOINT}/reset`, {
-      method: "POST",
-      body: payload,
-    });
-  },
-
-  // Change password
-  changePassword: async (payload: { passwordOld: string; password: string; passwordConfirmation: string }): Promise<any> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<any>(`${CHANGE_PASSWORD_ENDPOINT}`, {
+    return await publicFetch<IApiOk<IAuthSuccessResponse>>(endpoint.login, {
       method: "POST",
       body: payload,
     });
@@ -90,13 +34,70 @@ export const authService = {
 
   refresh: async (): Promise<IApiOk<IAuthSuccessResponse>> => {
     const { publicFetch } = useApi();
-    const auth = useAuthStore();
-    return await publicFetch<IApiOk<IAuthSuccessResponse>>(`${ENDPOINT}/refresh`, {
+    return await publicFetch<IApiOk<IAuthSuccessResponse>>(endpoint.refresh, {
       method: "POST",
-      headers: {
-        "X-CSRF-TOKEN": auth.csrfToken || "",
-      },
-      credentials: "include",
+    });
+  },
+
+  logout: async (): Promise<IApiMessage> => {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiMessage>(endpoint.logout, {
+      method: "POST",
+    });
+  },
+
+  register: async (payload: IRegisterPayload): Promise<IApiOk<any>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<any>>(endpoint.register, {
+      method: "POST",
+      body: payload,
+    });
+  },
+
+  verifyStatus: async (): Promise<IApiOk<any>> => {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiOk<any>>(`${API_VERSION.version1}/auth/status`, {
+      method: "GET",
+    });
+  },
+
+  forgotRequest: async (payload: IForgotRequest): Promise<IApiMessage> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiMessage>(endpoint.forgotRequest, {
+      method: "POST",
+      body: payload,
+    });
+  },
+
+  forgotResend: async (payload: IForgotRequest): Promise<IApiMessage> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiMessage>(endpoint.forgotResend, {
+      method: "POST",
+      body: payload,
+    });
+  },
+
+  forgotVerify: async (payload: IForgotVerify): Promise<IApiMessage> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiMessage>(endpoint.forgotVerify, {
+      method: "POST",
+      body: payload,
+    });
+  },
+
+  forgotReset: async (payload: IForgotReset): Promise<IApiOk<any>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<any>>(endpoint.forgotReset, {
+      method: "POST",
+      body: payload,
+    });
+  },
+
+  changePassword: async (payload: IChangePasswordPayload): Promise<IApiMessage> => {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiMessage>(endpoint.changePassword, {
+      method: "POST",
+      body: payload,
     });
   },
 };

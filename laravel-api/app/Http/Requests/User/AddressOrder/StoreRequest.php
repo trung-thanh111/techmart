@@ -29,6 +29,7 @@ class StoreRequest extends BaseRequest
             "email" => "nullable|email|max:255",
             "address" => "required|string|max:255",
             "state" => "nullable|string|max:100",
+            "city" => "nullable|string|max:100",
             "postal_code" => "required|string|max:20",
             "country_code" => "nullable|string|max:2",
             "is_default" => "boolean",
@@ -40,7 +41,8 @@ class StoreRequest extends BaseRequest
     {
         $this->merge([
             'slug' => generate_slug($this->title),
-            'user_id' => auth(Common::API)->user()->id,
+            'user_id' => auth(Common::API)->id() ?? auth(Common::Admin)->id(),
+            'publish' => $this->publish ?? 2,
         ]);
     }
 

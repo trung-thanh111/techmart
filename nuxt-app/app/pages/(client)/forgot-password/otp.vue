@@ -1,7 +1,7 @@
 <template>
   <div class="main-content rounded-lg">
     <div class="relative w-full h-full">
-      <NuxtImg src="/client/images/bg-auth.png" alt="image-background" class="w-full h-full object-cover" loading="lazy" />
+      <NuxtImg src="/images/bg-auth.png" alt="image-background" class="w-full h-full object-cover" loading="lazy" />
       <div class="absolute inset-0 flex items-center justify-center">
         <div class="flex flex-col justify-center p-6 lg:p-8 w-full max-w-xs sm:max-w-sm md:max-w-md bg-white shadow-lg rounded-lg mx-auto">
           <div class="flex justify-center mb-6">
@@ -11,13 +11,13 @@
               </svg>
             </div>
           </div>
-          <h2 class="text-xl text-center font-semibold text-cyan-600 mb-2">{{ $t("client.common.verifyEmail") }}</h2>
-          <p class="text-sm text-center text-gray-500 my-1">{{ $t("client.common.fillInfoSentToEmail") }}</p>
+          <h2 class="text-xl text-center font-semibold text-cyan-600 mb-2">{{ $t("common.verifyEmail") }}</h2>
+          <p class="text-sm text-center text-gray-500 my-1">{{ $t("common.fillInfoSentToEmail") }}</p>
           <p class="font-semibold text-sm text-gray-800 text-center mb-6">{{ values.email }}</p>
           <form class="space-y-4" @submit.prevent.stop="onSubmit">
             <div>
               <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
-                {{ $t("client.common.otp") }}:
+                {{ $t("common.otp") }}:
                 <span class="text-red-500">*</span>
               </label>
               <Field v-slot="{ field, errorMessage, meta }" name="code" :validate-on-input="true">
@@ -40,7 +40,7 @@
 
             <Button
               type="submit"
-              :label="$t('client.common.confirm')"
+              :label="$t('common.confirm')"
               :loading="isLoading"
               unstyled
               class="w-full text-sm font-semibold flex justify-center py-2 px-4 rounded shadow-sm text-white bg-teal-500 hover:bg-teal-600 focus:outline-none mt-5 disabled:opacity-50"

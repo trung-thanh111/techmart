@@ -26,8 +26,8 @@ export const useSeo = () => {
         { name: "robots", content: seo.robots },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
       ],
-      link: [{ rel: "stylesheet", href: "/client/css/customize.css" }],
-      script: [{ src: "https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js" }, { src: "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" }, { src: "/client/js/interface.js" }],
+      link: [{ rel: "stylesheet", href: "/css/customize.css" }],
+      script: [{ src: "https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js" }, { src: "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" }, { src: "//js/interface.js" }],
     });
 
     useSeoMeta({

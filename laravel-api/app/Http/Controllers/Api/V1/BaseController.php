@@ -48,15 +48,9 @@ abstract class BaseController extends Controller
         return ApiResource::message(Lang::get("message.delete_successfully") . " ({$countRecord})");
     }
 
-    public function show(int $id = 0): JsonResponse
+    public function show($id): JsonResponse
     {
         $response = $this->service->show($id);
-        return ApiResource::ok($response, Lang::get('message.successfully'));
-    }
-
-    public function showBySlug(string $slug = ''): JsonResponse
-    {
-        $response = $this->service->showBySlug($slug);
         return ApiResource::ok($response, Lang::get('message.successfully'));
     }
 

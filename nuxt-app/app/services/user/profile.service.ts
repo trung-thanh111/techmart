@@ -2,20 +2,27 @@ import type { IApiOk } from "~/interfaces/base.interface";
 import type { IUser } from "~/interfaces/user/user.interface";
 import { useApi } from "~/composables/useApi";
 import { formData } from "~/utils/formData";
+import { API_VERSION } from "~/utils/apiConfig";
 
-const ENDPOINT = "/api/v1/profile";
+const endpoint = {
+  me: `${API_VERSION.version1}/auth/me`,
+  users: `${API_VERSION.version1}/users`,
+} as const;
 
 export const profileService = {
   getProfile: async (): Promise<IApiOk<IUser>> => {
     const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IUser>>(ENDPOINT);
+    return await privateFetch<IApiOk<IUser>>(endpoint.me, {
+      method: "GET",
+    });
   },
 
   updateProfile: async (payload: Partial<IUser>): Promise<IApiOk<IUser>> => {
     const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IUser>>(ENDPOINT, {
-      method: "PUT", // Matches route definition
+    return await privateFetch<IApiOk<IUser>>(endpoint.me, {
+      method: "POST",
       body: formData(payload),
+      params: { _method: "PATCH" },
     });
   },
 };

@@ -1,43 +1,62 @@
-import type { IApiOk, IApiMessage, IPaginate } from "~/interfaces/base.interface";
-import type { IPostLike, IPostLikeResponse } from "~/interfaces/post/post_like.interface";
+import type { IApiOk, IApiMessage } from "~/interfaces/base.interface";
+import type { IPostLike } from "~/interfaces/post/post_like.interface";
 import { useApi } from "~/composables/useApi";
+import { API_VERSION } from "~/utils/apiConfig";
 
-const ENDPOINT = "/api/v1";
+const endpoint = {
+  collection: `${API_VERSION.version1}/post_likes`,
+} as const;
 
 export const postLikeService = {
-  store: async (postId: number): Promise<IApiOk<IPostLike>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPostLike>>(`${ENDPOINT}/post_likes`, {
+  store: async (payload: Partial<IPostLike>): Promise<IApiOk<IPostLike>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPostLike>>(endpoint.collection, {
       method: "POST",
-      body: { post_id: postId },
+      body: payload,
     });
   },
 
-  update: async (id: number, postId: number): Promise<IApiOk<IPostLike>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPostLike>>(`${ENDPOINT}/post_likes/${id}`, {
-      method: "PATCH",
-      body: { post_id: postId },
+  update: async (id: number, payload: Partial<IPostLike>): Promise<IApiOk<IPostLike>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPostLike>>(`${endpoint.collection}/${id}`, {
+      method: "POST",
+      body: payload,
+      params: { _method: "PATCH" },
     });
   },
 
   delete: async (id: number): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/post_likes/${id}`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiMessage>(`${endpoint.collection}/${id}`, {
       method: "DELETE",
     });
   },
 
-  list: async (params: Record<string, any>): Promise<IApiOk<IPaginate<IPostLike>>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPaginate<IPostLike>>>(`${ENDPOINT}/post_likes`, { params });
+  list: async (params?: any): Promise<IApiOk<IPostLike[]>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPostLike[]>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        publish: 2,
+        sort: "id,desc",
+        deleted_at: null,
+        ...params,
+      },
+    });
   },
 
-  // nếu trả về số bản ghi > 0 là đã like, còn < 0 là chưa like
-  checkLiked: async (postId: number, userId: number): Promise<{ liked: boolean; records: IPostLike[] }> => {
-    const { privateFetch } = useApi();
-    const res = await privateFetch<IApiOk<IPaginate<IPostLike>>>(`${ENDPOINT}/post_likes`, { params: { post_id: postId, user_id: userId } });
-    const records: IPostLike[] = Array.isArray(res?.data?.data) ? res.data.data : [];
-    return { liked: records.length > 0, records };
+  checkLiked: async (postId: number, userId: number): Promise<IApiOk<boolean>> => {
+    const { publicFetch } = useApi();
+    const response = await publicFetch<IApiOk<IPostLike[]>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        post_id: postId,
+        user_id: userId,
+      },
+    });
+    return {
+      ...response,
+      data: response.data.length > 0,
+    };
   },
 };

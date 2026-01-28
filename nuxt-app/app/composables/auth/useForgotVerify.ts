@@ -51,8 +51,8 @@ export const useForgotVerify = () => {
     try {
       isLoading.value = true;
       const res = await authService.forgotVerify(payload);
-      toast.success(res?.data?.message || "Xác thực thành công");
-          await router.push({ path: TOFORGOTRESET, query: { email: payload.email, code: payload.code } });
+      toast.success(res?.message || "Xác thực thành công");
+      await router.push({ path: TOFORGOTRESET, query: { email: payload.email, code: payload.code } });
     } catch (e: any) {
       toast.error(e?.response?.data?.message || "Mã OTP không hợp lệ");
     } finally {
@@ -63,8 +63,8 @@ export const useForgotVerify = () => {
   const resend = async () => {
     if (canResendIn.value > 0) return;
     try {
-      const res = await authService.forgotResend(values.email);
-      toast.success(res?.data?.message || "Đã gửi lại mã OTP");
+      const res = await authService.forgotResend({ email: values.email });
+      toast.success(res?.message || "Đã gửi lại mã OTP");
       startResendCountdown(60);
     } catch (e: any) {
       toast.error(e?.response?.data?.message || "Gửi lại thất bại");

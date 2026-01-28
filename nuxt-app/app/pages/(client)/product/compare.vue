@@ -6,7 +6,7 @@
         <div v-if="compareList.length === 0" class="text-center py-12">
           <div class="flex flex-col items-center justify-center py-10 text-center text-gray-500">
             <NuxtImg :src="EMPTYBOX" alt="Empty comparison" class="object-contain" loading="lazy" />
-            <p class="text-sm text-center mb-3">{{ $t("client.common.emptyProduct") }}</p>
+            <p class="text-sm text-center mb-3">{{ $t("common.emptyProduct") }}</p>
             <Button label="Cửa hàng" icon="pi pi-arrow-left" severity="info" @click="goToShop" />
           </div>
         </div>
@@ -16,15 +16,15 @@
             <div class="overflow-x-auto">
               <div class="grid grid-cols-4 gap-4 min-w-[800px]">
                 <div class="font-semibold text-gray-700">
-                  <h2 class="text-xl font-semibold text-gray-800 mb-6">{{ $t("client.common.product") }}</h2>
-                  <span class="md:hidden">{{ $t("client.common.product").slice(0, 2) }}</span>
+                  <h2 class="text-xl font-semibold text-gray-800 mb-6">{{ $t("common.product") }}</h2>
+                  <span class="md:hidden">{{ $t("common.product").slice(0, 2) }}</span>
                 </div>
 
                 <template v-for="i in 3" :key="i">
                   <ProductCardCompare v-if="compareList[i - 1]" :item="compareList[i - 1]!" @remove="() => handleRemoveProduct(compareList[i - 1]!.variantId)" class="bg-white rounded-lg" />
                   <button v-else @click="openSearchModal" class="border-2 border-dashed border-gray-400 rounded-lg p-4 flex flex-col items-center justify-center min-h-[120px] hover:border-sky-400 hover:bg-sky-900/20 transition-colors">
                     <span class="text-4xl text-gray-400 mb-2">+</span>
-                    <span class="text-sm text-gray-400">{{ $t("client.action.addProduct") }}</span>
+                    <span class="text-sm text-gray-400">{{ $t("action.addProduct") }}</span>
                   </button>
                 </template>
               </div>
@@ -34,10 +34,10 @@
           <section class="bg-white rounded-lg shadow-md p-4 md:p-6 mb-5">
             <div v-if="isLoadingSpecs" class="text-center py-8">
               <ProgressSpinner />
-              <p class="text-gray-500 mt-4">{{ $t("client.common.loading") }}</p>
+              <p class="text-gray-500 mt-4">{{ $t("common.loading") }}</p>
             </div>
             <div v-else-if="specifications.length === 0" class="text-center py-8 text-gray-500">
-              <p>{{ $t("client.common.noSpec") }}</p>
+              <p>{{ $t("common.noSpec") }}</p>
             </div>
             <div v-else class="overflow-x-auto">
               <table class="w-full border-collapse" style="table-layout: fixed">
@@ -78,11 +78,11 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from "vue";
-import { useCompare } from "~/composables/client/product/useCompare";
+import { useCompare } from "~/composables/product/useCompare";
 import { TOSHOP, TOCOMPARE } from "~/utils/constants";
-import ProductCardCompare from "~/components/client/features/ProductCardCompare.vue";
-import SearchProductModal from "~/components/client/features/SearchProductModal.vue";
-import Breadcrumb from "~/components/shared/navigation/Breadcrumb.vue";
+import ProductCardCompare from "~/components//features/ProductCardCompare.vue";
+import SearchProductModal from "~/components//features/SearchProductModal.vue";
+import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
 import { EMPTYBOX } from "~/utils/constants";
 import { useI18n } from "vue-i18n";
 import { navigateTo } from "#app";
@@ -96,8 +96,8 @@ const isLoadingSpecs = ref(false);
 const productDetails = ref<Map<number, any>>(new Map());
 
 const breadcrumbs = computed(() => [
-  { label: t("client.page.shop"), href: TOSHOP },
-  { label: t("client.utilityTool.compareProduct"), href: TOCOMPARE },
+  { label: t("page.shop"), href: TOSHOP },
+  { label: t("utilityTool.compareProduct"), href: TOCOMPARE },
 ]);
 
 interface SpecificationRow {
@@ -190,7 +190,7 @@ watch(
     if (compareList.value.length > 0) {
       loadAllProductDetails();
     }
-  }
+  },
 );
 
 onMounted(() => {

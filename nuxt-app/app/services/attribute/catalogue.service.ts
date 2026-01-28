@@ -2,33 +2,58 @@ import type { IApiOk, IApiMessage, IPaginate } from "~/interfaces/base.interface
 import type { IAttributeCatalogue } from "~/interfaces/attribute/catalogue.interface";
 import { useApi } from "~/composables/useApi";
 import { formData } from "~/utils/formData";
+import { API_VERSION } from "~/utils/apiConfig";
 
-const ENDPOINT = "/api/v1";
+const endpoint = {
+  collection: `${API_VERSION.version1}/attribute_catalogues`,
+  resource: `${API_VERSION.version1}/attribute_catalogue`,
+} as const;
 
 export const attributeCatalogueService = {
   pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IAttributeCatalogue>>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPaginate<IAttributeCatalogue>>>(`${ENDPOINT}/attribute_catalogues`, {
-      params,
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPaginate<IAttributeCatalogue>>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        publish: 2,
+        sort: "id,desc",
+        deleted_at: null,
+        ...params,
+      },
+    });
+  },
+
+  all: async (): Promise<IApiOk<IAttributeCatalogue[]>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IAttributeCatalogue[]>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        type: "all",
+        publish: 2,
+        sort: "id,desc",
+        deleted_at: null,
+      },
+    });
+  },
+
+  show: async (id: number | string): Promise<IApiOk<IAttributeCatalogue>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IAttributeCatalogue>>(`${endpoint.collection}/${id}`, {
+      method: "GET",
     });
   },
 
   store: async (payload: Partial<IAttributeCatalogue>): Promise<IApiOk<IAttributeCatalogue>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IAttributeCatalogue>>(`${ENDPOINT}/attribute_catalogues`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IAttributeCatalogue>>(endpoint.collection, {
       method: "POST",
       body: formData(payload),
     });
   },
 
-  show: async (id: number | string): Promise<IApiOk<IAttributeCatalogue>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IAttributeCatalogue>>(`${ENDPOINT}/attribute_catalogues/${id}`);
-  },
-
   update: async (id: number, payload: Partial<IAttributeCatalogue>): Promise<IApiOk<IAttributeCatalogue>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IAttributeCatalogue>>(`${ENDPOINT}/attribute_catalogues/${id}`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IAttributeCatalogue>>(`${endpoint.collection}/${id}`, {
       method: "POST",
       body: formData(payload),
       params: { _method: "PATCH" },
@@ -36,22 +61,17 @@ export const attributeCatalogueService = {
   },
 
   delete: async (id: number): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/attribute_catalogues/${id}`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiMessage>(`${endpoint.collection}/${id}`, {
       method: "DELETE",
     });
   },
 
   deleteMultiple: async (ids: number[]): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/attribute_catalogues/bulkDelete`, {
-      body: { ids },
-      method: "DELETE",
-    });
-  },
-
-  all: async (): Promise<IApiOk<IAttributeCatalogue>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IAttributeCatalogue>>(`${ENDPOINT}/attribute_catalogues?type=all`);
+    return await publicFetch<IApiMessage>(`${endpoint.collection}/bulkDelete`, {
+      method: "DELETE",
+      body: { ids },
+    });
   },
 };

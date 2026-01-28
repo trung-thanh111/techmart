@@ -7,23 +7,23 @@
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center px-2 sm:px-4 lg:px-6">
             <div class="lg:col-span-9">
               <h2 class="text-2xl md:text-3xl font-bold text-white mb-2">
-                <span class="block bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent">{{ categoryDetail?.name || $t("client.common.categories") }}</span>
+                <span class="block bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent">{{ categoryDetail?.name || $t("common.categories") }}</span>
               </h2>
               <p v-if="categoryDetail?.description" class="text-base text-gray-600 mb-8 leading-relaxed line-clamp-3">{{ categoryDetail.description }}</p>
               <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-5">
                 <div>
                   <div class="text-3xl font-bold text-cyan-400 mb-2">{{ categoryPosts.length }}</div>
-                  <div class="text-sm text-gray-400">{{ $t("client.page.post") }}</div>
+                  <div class="text-sm text-gray-400">{{ $t("page.post") }}</div>
                 </div>
                 <div>
                   <div class="text-3xl font-bold text-cyan-700 mb-2">{{ totalLikesFormatted }}</div>
-                  <div class="text-sm text-gray-400">{{ $t("client.common.like") }}</div>
+                  <div class="text-sm text-gray-400">{{ $t("common.like") }}</div>
                 </div>
               </div>
             </div>
             <div class="lg:col-span-3 flex justify-center">
               <div class="relative overflow-hidden">
-                <NuxtImg :src="categoryDetail?.image?.path ? categoryDetail?.image?.url ?? '' : IMAGEDEFAULT" :alt="categoryDetail?.name || 'category'" class="w-[120px] h-[120px] md:w-[160px] md:h-[160px] object-contain" sizes="(max-width: 640px) 120px, (max-width: 1024px) 160px, 160px" loading="lazy" />
+                <NuxtImg :src="categoryDetail?.image?.path ? (categoryDetail?.image?.url ?? '') : IMAGEDEFAULT" :alt="categoryDetail?.name || 'category'" class="w-[120px] h-[120px] md:w-[160px] md:h-[160px] object-contain" sizes="(max-width: 640px) 120px, (max-width: 1024px) 160px, 160px" loading="lazy" />
               </div>
             </div>
           </div>
@@ -31,26 +31,26 @@
       </div>
     </section>
 
-    <Category :description="$t('client.common.exploreProducts')" :items="(postCatalogueList as any)" :basePath="POSTCATEGORY" :viewAllLink="POSTCATEGORIES" :viewAllText="$t('client.common.viewAll')" />
+    <Category :description="$t('common.exploreProducts')" :items="postCatalogueList as any" :basePath="POSTCATEGORY" :viewAllLink="POSTCATEGORIES" :viewAllText="$t('common.viewAll')" />
 
     <section class="mx-auto bg-white shadow-md rounded-md py-3 md:py-6 px-3 md:px-6 md:mb-8 mb-4">
       <div>
-        <div v-if="categoryPostsLoading" class="text-sm text-gray-500 p-2">{{ $t("client.common.loading") }}</div>
-        <div v-else-if="categoryPosts.length === 0" class="text-center text-gray-500 py-4">{{ $t("client.common.noData") }}</div>
+        <div v-if="categoryPostsLoading" class="text-sm text-gray-500 p-2">{{ $t("common.loading") }}</div>
+        <div v-else-if="categoryPosts.length === 0" class="text-center text-gray-500 py-4">{{ $t("common.noData") }}</div>
         <ul v-else class="grid gap-4">
           <li v-for="post in categoryPosts" :key="post.id">
             <NuxtLink :to="`${TOPOST}/${post.slug}`" :prefetch="false" class="block">
               <div class="bg-white rounded-xl shadow-lg overflow-hidden h-full relative">
                 <div class="flex flex-col lg:flex-row h-full">
                   <div class="lg:w-1/2 relative">
-                    <NuxtImg :src="post.image?.path ? post.image?.url ?? '' : IMAGEDEFAULT" :alt="post.name" class="h-32 lg:h-[250px] w-full object-cover" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 600px" loading="lazy" />
+                    <NuxtImg :src="post.image?.path ? (post.image?.url ?? '') : IMAGEDEFAULT" :alt="post.name" class="h-32 lg:h-[250px] w-full object-cover" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 600px" loading="lazy" />
                   </div>
                   <div class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
                     <NuxtImg :src="post.creator?.avatar ?? post.image?.url ?? IMAGEDEFAULT" :alt="post.creator?.name ?? post.name" class="w-12 h-12 lg:w-20 lg:h-20 rounded-full border-3 border-sky-400 shadow-2xl object-cover" sizes="(max-width: 640px) 48px, 80px" loading="lazy" />
                   </div>
                   <div class="lg:w-1/2 p-6 flex flex-col justify-center">
                     <div class="flex items-center mb-4">
-                      <span v-if="post.isHot == 1" class="bg-red-100 text-red-600 text-xs font-medium px-2 py-1 rounded-full mr-3">{{ $t("client.post.hot") }}</span>
+                      <span v-if="post.isHot == 1" class="bg-red-100 text-red-600 text-xs font-medium px-2 py-1 rounded-full mr-3">{{ $t("post.hot") }}</span>
                     </div>
                     <h4 class="text-xl lg:text-2xl font-bold text-gray-800 mb-4 leading-tight line-clamp-2">{{ post.name }}</h4>
                     <p class="text-gray-600 mb-5 leading-relaxed ml-5 line-clamp-2">{{ post.description }}</p>
@@ -73,12 +73,12 @@
 </template>
 
 <script setup lang="ts">
-import Breadcrumb from "~/components/shared/navigation/Breadcrumb.vue";
+import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
 import { IMAGEDEFAULT, TOPOST, POSTCATEGORY, POSTCATEGORIES } from "~/utils/constants";
-import { usePostCatalogue } from "~/composables/client/post/usePostCatalogue";
-import { usePost } from "~/composables/client/post/usePost";
+import { usePostCatalogue } from "~/composables/post/usePostCatalogue";
+import { usePost } from "~/composables/post/usePost";
 import { useDebounceFn } from "@vueuse/core";
-import Category from "~/components/client/ui/Category.vue";
+import Category from "~/components/ui/Category.vue";
 import { useRoute } from "vue-router";
 import { computed, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -89,7 +89,7 @@ const { t } = useI18n();
 const route = useRoute();
 const slug = computed(() => route.params.slug as string);
 
-const { categoryDetail, fetchBySlug, categoryPosts, categoryPostsLoading, resetCategoryPosts, loadCategoryPostsById } = usePostCatalogue();
+const { categoryDetail, fetchById, categoryPosts, categoryPostsLoading, resetCategoryPosts, loadCategoryPostsById } = usePostCatalogue();
 const { postCatalogueList, fetchPostCatalogues } = usePost();
 
 const totalLikes = computed<number>(() => {
@@ -102,12 +102,12 @@ const totalLikes = computed<number>(() => {
 const totalLikesFormatted = computed(() => totalLikes.value.toLocaleString());
 
 const breadcrumbs = computed(() => [
-  { label: t("client.page.post"), href: TOPOST },
+  { label: t("page.post"), href: TOPOST },
   { label: categoryDetail.value?.name ?? slug.value, href: `${POSTCATEGORY}/${categoryDetail.value?.slug ?? slug.value}` },
 ]);
 
 async function loadCategoryData(slug: string) {
-  await fetchBySlug(slug);
+  await fetchById(slug);
   if (categoryDetail.value?.id) {
     resetCategoryPosts();
     await loadCategoryPostsById(categoryDetail.value.id, 5);
@@ -127,7 +127,7 @@ watch(
   useDebounceFn(async (val?: string) => {
     if (!val) return;
     await loadCategoryData(val);
-  }, 300)
+  }, 300),
 );
 
 definePageMeta({

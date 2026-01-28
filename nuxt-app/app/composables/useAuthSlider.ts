@@ -39,9 +39,22 @@ export function useAuthSlider() {
     },
   ];
 
+  const forgotItems: AuthItem[] = [
+    {
+      title: " Quên mật khẩu? Đừng lo lắng, hãy làm theo các bước để khôi phục tài khoản an toàn! ",
+    },
+    {
+      title: " Bảo mật là ưu tiên hàng đầu. Chúng tôi giúp bạn lấy lại mật khẩu chỉ trong vài phút. ",
+    },
+    {
+      title: " Hãy đảm bảo mật khẩu mới đủ mạnh để bảo vệ thông tin cá nhân của bạn tốt nhất! ",
+    },
+  ];
+
   return {
     authOptions,
     loginItems,
     registerItems,
+    forgotItems,
   };
 }

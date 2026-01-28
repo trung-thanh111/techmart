@@ -2,43 +2,58 @@ import type { IApiOk, IApiMessage, IPaginate } from "~/interfaces/base.interface
 import type { IFaq } from "~/interfaces/faq/faq.interface";
 import { useApi } from "~/composables/useApi";
 import { formData } from "~/utils/formData";
+import { API_VERSION } from "~/utils/apiConfig";
 
-const ENDPOINT = "/api/v1";
+const endpoint = {
+  collection: `${API_VERSION.version1}/faqs`,
+  resource: `${API_VERSION.version1}/faq`,
+} as const;
 
 export const faqService = {
   pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IFaq>>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPaginate<IFaq>>>(`${ENDPOINT}/faqs`, {
-      params,
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPaginate<IFaq>>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        publish: 2,
+        sort: "id,desc",
+        deleted_at: null,
+        ...params,
+      },
     });
   },
 
-  // FE public
-  paginationPublic: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IFaq>>> => {
+  all: async (): Promise<IApiOk<IFaq[]>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IPaginate<IFaq>>>(`${ENDPOINT}/faqs`, {
-      params,
+    return await publicFetch<IApiOk<IFaq[]>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        type: "all",
+        publish: 2,
+        sort: "id,desc",
+        deleted_at: null,
+      },
+    });
+  },
+
+  show: async (id: number | string): Promise<IApiOk<IFaq>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IFaq>>(`${endpoint.collection}/${id}`, {
+      method: "GET",
     });
   },
 
   store: async (payload: Partial<IFaq>): Promise<IApiOk<IFaq>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IFaq>>(`${ENDPOINT}/faqs`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IFaq>>(endpoint.collection, {
       method: "POST",
       body: formData(payload),
     });
   },
 
-  show: async (id: number | string): Promise<IApiOk<IFaq>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IFaq>>(
-      `${ENDPOINT}/faqs/${id}`
-    );
-  },
-
   update: async (id: number, payload: Partial<IFaq>): Promise<IApiOk<IFaq>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IFaq>>(`${ENDPOINT}/faqs/${id}`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IFaq>>(`${endpoint.collection}/${id}`, {
       method: "POST",
       body: formData(payload),
       params: { _method: "PATCH" },
@@ -46,27 +61,17 @@ export const faqService = {
   },
 
   delete: async (id: number): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/faqs/${id}`, {
-      method: "DELETE"
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiMessage>(`${endpoint.collection}/${id}`, {
+      method: "DELETE",
     });
   },
 
   deleteMultiple: async (ids: number[]): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/faqs/bulkDelete`, {
-      body: { ids },
-      method: "DELETE"
-    });
-  },
-
-  all: async (): Promise<IApiOk<IFaq>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IFaq>>(`${ENDPOINT}/faqs?type=all`);
-  },
-
-  showBySlug: async (slug: string): Promise<IApiOk<IFaq>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IFaq>>(`${ENDPOINT}/faq/${slug}`);
+    return await publicFetch<IApiMessage>(`${endpoint.collection}/bulkDelete`, {
+      method: "DELETE",
+      body: { ids },
+    });
   },
 };

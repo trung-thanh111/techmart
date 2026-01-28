@@ -12,7 +12,8 @@ use Illuminate\Support\Str;
 
 class BaseRequest extends FormRequest
 {
-    protected function failedValidation(Validator $validator) {
+    protected function failedValidation(Validator $validator)
+    {
         $errors = collect($validator->errors()->toArray())
             ->map(fn($messages) => $messages[0])
             ->toArray();

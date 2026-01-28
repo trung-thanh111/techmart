@@ -2,33 +2,45 @@ import type { IApiOk, IApiMessage, IPaginate } from "~/interfaces/base.interface
 import type { IBrand } from "~/interfaces/brand/brand.interface";
 import { useApi } from "~/composables/useApi";
 import { formData } from "~/utils/formData";
+import { API_VERSION } from "~/utils/apiConfig";
 
-const ENDPOINT = "/api/v1";
+const endpoint = {
+  collection: `${API_VERSION.version1}/brands`,
+  resource: `${API_VERSION.version1}/brand`,
+} as const;
 
 export const brandService = {
   pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IBrand>>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IPaginate<IBrand>>>(`${ENDPOINT}/brands`, {
-      params,
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IPaginate<IBrand>>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        publish: 2,
+        sort: "id,desc",
+        deleted_at: null,
+        ...params,
+      },
     });
   },
 
   store: async (payload: Partial<IBrand>): Promise<IApiOk<IBrand>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IBrand>>(`${ENDPOINT}/brands`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IBrand>>(endpoint.collection, {
       method: "POST",
       body: formData(payload),
     });
   },
 
   show: async (id: number | string): Promise<IApiOk<IBrand>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IBrand>>(`${ENDPOINT}/brands/${id}`);
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IBrand>>(`${endpoint.collection}/${id}`, {
+      method: "GET",
+    });
   },
 
   update: async (id: number, payload: Partial<IBrand>): Promise<IApiOk<IBrand>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IBrand>>(`${ENDPOINT}/brands/${id}`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IBrand>>(`${endpoint.collection}/${id}`, {
       method: "POST",
       body: formData(payload),
       params: { _method: "PATCH" },
@@ -36,34 +48,43 @@ export const brandService = {
   },
 
   delete: async (id: number): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/brands/${id}`, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiMessage>(`${endpoint.collection}/${id}`, {
       method: "DELETE",
     });
   },
 
   deleteMultiple: async (ids: number[]): Promise<IApiMessage> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiMessage>(`${ENDPOINT}/brands/bulkDelete`, {
-      body: { ids },
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiMessage>(`${endpoint.collection}/bulkDelete`, {
       method: "DELETE",
+      body: { ids },
     });
   },
 
-  all: async (): Promise<IApiOk<IBrand>> => {
+  all: async (): Promise<IApiOk<IBrand[]>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IBrand>>(`${ENDPOINT}/brands?type=all`);
-  },
-
-  paginationPublic: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IBrand>>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IPaginate<IBrand>>>(`${ENDPOINT}/brands`, {
-      params,
+    return await publicFetch<IApiOk<IBrand[]>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        type: "all",
+        publish: 2,
+        sort: "id,desc",
+        deleted_at: null,
+      },
     });
   },
 
-  allPublic: async (): Promise<IApiOk<IBrand>> => {
+  allPublic: async (limit = 10): Promise<IApiOk<IBrand[]>> => {
     const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IBrand>>(`${ENDPOINT}/brands?type=all`);
+    return await publicFetch<IApiOk<IBrand[]>>(endpoint.collection, {
+      method: "GET",
+      params: {
+        perpage: limit,
+        publish: 2,
+        sort: "id,desc",
+        deleted_at: null,
+      },
+    });
   },
 };
