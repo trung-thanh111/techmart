@@ -2,8 +2,10 @@
   <div class="w-100">
     <h1 class="text-xl md:text-2xl font-semibold text-gray-800 mb-1">{{ $t("profile.addAddress") }}</h1>
     <p class="text-xs text-gray-500 mb-5 md:mb-10">{{ $t("profile.addAddressDesc") }}</p>
-    <form @submit.prevent="handleStore" class="space-y-4">
+
+    <form @submit.prevent="onSubmit" class="space-y-4">
       <h2 class="text-sm font-semibold text-gray-700">{{ $t("profile.information") }}</h2>
+
       <div class="bg-white rounded-md">
         <div class="mb-3">
           <label class="block text-sm text-gray-700 mb-1">
@@ -105,19 +107,36 @@ import { useAuthStore } from "~/stores/auth/auth";
 
 const { t } = useI18n();
 
-const { isLoading, handleStore, getAddressesByUserId, data } = useAddressOrder(undefined, "create", { redirectPath: "/profile/address_order" });
+const { isLoading, handleStore, getAddressesByUserId, data } = useAddressOrder(undefined, "create", {
+  redirectPath: PROFILEADDRESSORDERINDEX,
+});
+
 const authStore = useAuthStore();
 const userId = authStore.user?.id || 0;
 
+const onSubmit = async () => {
+  try {
+    await handleStore();
+  } catch (error) {
+    console.error("Error creating address:", error);
+  }
+};
+
 onMounted(async () => {
   if (!userId) return;
-  await getAddressesByUserId(userId);
-  const total = Array.isArray(data.value?.data) ? data.value?.data.length : 0;
-  if (total && total >= 3) {
-    return navigateTo(PROFILEADDRESSORDERINDEX);
+
+  try {
+    await getAddressesByUserId(userId);
+
+    const total = Array.isArray(data.value?.data) ? data.value?.data.length : 0;
+
+    if (total && total >= 3) {
+      return navigateTo(PROFILEADDRESSORDERINDEX);
+    }
+  } catch (error) {
+    console.error("Error checking address limit:", error);
   }
 });
-
 definePageMeta({
   middleware: ["auth-required"],
 });

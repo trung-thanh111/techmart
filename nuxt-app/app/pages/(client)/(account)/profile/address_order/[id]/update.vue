@@ -3,7 +3,11 @@
     <h1 class="text-xl md:text-2xl font-semibold text-gray-800 mb-1">{{ $t("profile.updateAddress") }}</h1>
     <p class="text-xs text-gray-500 mb-5 md:mb-10">{{ $t("profile.updateAddressDesc") }}</p>
 
-    <form @submit.prevent="handleUpdate(false)" class="space-y-4">
+    <div v-if="isLoadingData" class="flex justify-center items-center py-10">
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-sky-500 border-t-transparent"></div>
+    </div>
+
+    <form v-else @submit.prevent="onSubmit" class="space-y-4">
       <h2 class="text-sm font-semibold text-gray-700">{{ $t("profile.information") }}</h2>
 
       <div class="bg-white rounded-md">
@@ -17,7 +21,6 @@
             <small v-if="errorMessage && meta.touched" class="text-red-500 text-xs">{{ $t(errorMessage) }}</small>
           </Field>
         </div>
-
         <div class="mb-3">
           <label class="block text-sm text-gray-700 mb-1">
             {{ $t("profile.fullName") }}
@@ -28,7 +31,6 @@
             <small v-if="errorMessage && meta.touched" class="text-red-500 text-xs">{{ $t(errorMessage) }}</small>
           </Field>
         </div>
-
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
           <div>
             <label class="block text-sm text-gray-700 mb-1">{{ $t("profile.email") }}</label>
@@ -48,7 +50,6 @@
             </Field>
           </div>
         </div>
-
         <div class="mb-3">
           <label class="block text-sm text-gray-700 mb-1">
             {{ $t("profile.address") }}
@@ -59,7 +60,6 @@
             <small v-if="errorMessage && meta.touched" class="text-red-500 text-xs">{{ $t(errorMessage) }}</small>
           </Field>
         </div>
-
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
           <div>
             <label class="block text-sm text-gray-700 mb-1">{{ $t("profile.countryCode") }}</label>
@@ -111,18 +111,58 @@ import { useAddressOrder } from "~/composables/user/useAddressOrder";
 import { PROFILEADDRESSORDERINDEX } from "~/utils/constants";
 
 const { t } = useI18n();
-
-const { isLoading, setValues, show, handleUpdate } = useAddressOrder(undefined, "update", { redirectPath: PROFILEADDRESSORDERINDEX });
-
 const route = useRoute();
 const id = Number(route.params.id);
+
+const { isLoading, setValues, show, handleUpdate } = useAddressOrder(undefined, "update", {
+  redirectPath: PROFILEADDRESSORDERINDEX,
+});
+
 const address = ref<any>(null);
+const isLoadingData = ref(true);
+
+const onSubmit = async () => {
+  try {
+    await handleUpdate(false);
+    await navigateTo(PROFILEADDRESSORDERINDEX);
+  } catch (error) {
+    console.error("Error updating address:", error);
+  }
+};
 
 onMounted(async () => {
-  if (!id) return;
-  const res = await show(id);
-  address.value = res?.data || null;
-  if (address.value) setValues(address.value);
+  try {
+    if (!id || isNaN(id)) {
+      console.error("Invalid address ID");
+      await navigateTo(PROFILEADDRESSORDERINDEX);
+      return;
+    }
+
+    const res = await show(id);
+    address.value = res?.data || null;
+
+    if (address.value) {
+      setValues({
+        title: address.value.title || "",
+        fullName: address.value.fullName || "",
+        email: address.value.email || "",
+        phone: address.value.phone || "",
+        address: address.value.address || "",
+        countryCode: address.value.countryCode || "",
+        state: address.value.state || "",
+        city: address.value.city || "",
+        postalCode: address.value.postalCode || "",
+        isDefault: address.value.isDefault || false,
+      });
+    } else {
+      await navigateTo(PROFILEADDRESSORDERINDEX);
+    }
+  } catch (error) {
+    console.error("Error loading address data:", error);
+    await navigateTo(PROFILEADDRESSORDERINDEX);
+  } finally {
+    isLoadingData.value = false;
+  }
 });
 
 definePageMeta({
@@ -130,4 +170,14 @@ definePageMeta({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+</style>
