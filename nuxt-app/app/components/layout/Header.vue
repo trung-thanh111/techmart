@@ -226,28 +226,42 @@
                 </span>
               </NuxtLink>
               <div class="relative inline-block text-left group">
-                <NuxtLink to="#" class="flex items-center gap-1">
+                <NuxtLink v-if="!user" :to="TOLOGIN" class="flex items-center gap-1">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6 mt-1.5">
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                     <circle cx="12" cy="7" r="4" />
                   </svg>
                   <div>
                     <span class="hover:underline">{{ $t("auth.login") }}</span>
-                    <p class="font-normal text-sm">{{ $t("header.account") }}</p>
+                    <p class="font-light text-xs">{{ $t("nav.account") }}</p>
                   </div>
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5 mt-1.5"><polyline points="6,9 12,15 18,9" /></svg>
                 </NuxtLink>
+                <div v-else class="flex items-center gap-1 cursor-pointer">
+                  <NuxtImg class="rounded-full w-9 h-9 object-cover" :src="avatar" :alt="'Avatar ' + user?.name" loading="lazy" />
+                  <div class="text-xs">
+                    <p class="font-medium truncate max-w-[100px]">{{ user?.name }}</p>
+                    <p class="font-light">{{ user?.userCatalogueId === 1 ? $t("header.customer") : $t("header.admin") }}</p>
+                  </div>
+                </div>
+
                 <div class="absolute top-full right-0 w-full h-3 group-hover:block hidden z-0"></div>
-                <div class="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 hidden group-hover:block transition-all duration-300 ease-in-out">
+                <div v-if="user" class="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 hidden group-hover:block transition-all duration-300 ease-in-out">
                   <div class="w-full bg-white rounded-md border-0 shadow-xl font-normal ring-black/10 divide-y divide-gray-100">
-                    <div class="px-4 py-2 text-sm text-gray-500 font-semibold">{{ $t("auth.hello", { name: "Thanh Trung" }) }}</div>
+                    <div class="px-4 py-2 text-sm text-gray-500 font-semibold">{{ $t("header.hello", { name: user?.name }) }}</div>
                     <div class="py-1">
-                      <NuxtLink to="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                      <NuxtLink :to="PROFILEINDEX" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-gray-400 mr-2">
                           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                           <circle cx="12" cy="7" r="4" />
                         </svg>
                         <span>{{ $t("nav.info") }}</span>
+                      </NuxtLink>
+                      <NuxtLink :to="TOWISHLIST" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="w-4 h-4 text-gray-400 cursor-pointer mr-2">
+                          <path d="M462.3 62.6C407 7.6 324.8-10.6 256 47.9 187.2-10.6 105-7.6 49.7 62.6-16.6 145.3 23.8 268.7 130.4 357.1L239 469.6c9.4 9.4 24.6 9.4 33.9 0l108.6-112.5C488.2 268.7 528.6 145.3 462.3 62.6z" />
+                        </svg>
+                        <span>{{ $t("nav.wishlist") }}</span>
                       </NuxtLink>
                       <NuxtLink to="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-gray-400 mr-2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
@@ -263,10 +277,8 @@
                         <span>{{ $t("header.taskboard") }}</span>
                       </NuxtLink>
                       <NuxtLink to="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-gray-400 mr-2">
-                          <circle cx="12" cy="12" r="10" />
-                          <circle cx="12" cy="16" r="1" />
-                          <path d="M12 13v-3" />
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-4 h-4 text-gray-400 mr-2" viewBox="0 0 512 512">
+                          <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336l24 0 0-64-24 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l48 0c13.3 0 24 10.7 24 24l0 88 8 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-80 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z" />
                         </svg>
                         <span>{{ $t("header.help") }}</span>
                       </NuxtLink>
@@ -284,21 +296,20 @@
                         </span>
                       </NuxtLink>
                       <NuxtLink to="#" class="relative flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-gray-400 mr-2">
-                          <circle cx="12" cy="12" r="3" />
-                          <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1" />
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-4 h-4 text-gray-400 mr-2" viewBox="0 0 512 512">
+                          <path d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5 57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z" />
                         </svg>
-                        <span>{{ $t("nav.settings") }}</span>
+                        <span>{{ $t("header.settings") }}</span>
                         <span class="absolute right-4 top-1/2 transform -translate-y-1/2 text-xs bg-green-100 text-green-600 px-2 py-0.5 rounded-full">{{ $t("header.new") }}</span>
                       </NuxtLink>
-                      <NuxtLink to="#" class="flex items-center px-4 py-2 text-sm text-red-700 hover:bg-red-100">
+                      <button @click="handleLogout" class="flex items-center px-4 py-2 text-sm text-red-700 hover:bg-red-100 w-full text-left">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 mr-2">
                           <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
                           <polyline points="16,17 21,12 16,7" />
                           <line x1="21" y1="12" x2="9" y2="12" />
                         </svg>
-                        <span>{{ $t("auth.logout") }}</span>
-                      </NuxtLink>
+                        <span>{{ $t("nav.logout") }}</span>
+                      </button>
                     </div>
                   </div>
                 </div>

@@ -91,14 +91,16 @@ import { PROFILEADDRESSORDERCREATE } from "~/utils/constants";
 import { useAuthStore } from "~/stores/auth/auth";
 import type { IAddressOrder } from "~/interfaces/user/address_order.interface";
 
-const { data, isLoading, addressUserById, handleToggleIsDefault, selectedItem, setSelectedItem, confirmDelete } = useAddressOrder();
+const { data, isLoading, getAddressesByUserId, handleToggleIsDefault, selectedItem, setSelectedItem, confirmDelete } = useAddressOrder();
 const authStore = useAuthStore();
 const id = authStore.user?.id || 0;
 const showDeleteModal = ref(false);
 
 const addresses = computed((): IAddressOrder[] => {
-  const dataValue = data.value?.data;
-  return Array.isArray(dataValue) ? dataValue : [];
+  const rawData = data.value?.data as any;
+  if (Array.isArray(rawData)) return rawData;
+  if (rawData && Array.isArray(rawData.data)) return rawData.data;
+  return [];
 });
 
 const composeAddress = (item: IAddressOrder) => {
@@ -126,11 +128,11 @@ const closeDeleteModal = () => {
 const handleConfirmDelete = async () => {
   await confirmDelete();
   closeDeleteModal();
-  await addressUserById(id);
+  await getAddressesByUserId(id);
 };
 
 onMounted(() => {
-  addressUserById(id);
+  getAddressesByUserId(id);
 });
 </script>
 

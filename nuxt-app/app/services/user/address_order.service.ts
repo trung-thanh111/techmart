@@ -10,8 +10,8 @@ const endpoint = {
 
 export const addressOrderService = {
   pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IAddressOrder>>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IPaginate<IAddressOrder>>>(endpoint.collection, {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiOk<IPaginate<IAddressOrder>>>(endpoint.collection, {
       method: "GET",
       params: {
         publish: 2,
@@ -23,23 +23,23 @@ export const addressOrderService = {
   },
 
   store: async (payload: Partial<IAddressOrder>): Promise<IApiOk<IAddressOrder>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IAddressOrder>>(endpoint.collection, {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiOk<IAddressOrder>>(endpoint.collection, {
       method: "POST",
       body: payload,
     });
   },
 
   show: async (id: number | string): Promise<IApiOk<IAddressOrder>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IAddressOrder>>(`${endpoint.collection}/${id}`, {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiOk<IAddressOrder>>(`${endpoint.collection}/${id}`, {
       method: "GET",
     });
   },
 
   update: async (id: number, payload: Partial<IAddressOrder>): Promise<IApiOk<IAddressOrder>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IAddressOrder>>(`${endpoint.collection}/${id}`, {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiOk<IAddressOrder>>(`${endpoint.collection}/${id}`, {
       method: "POST",
       body: payload,
       params: { _method: "PATCH" },
@@ -47,29 +47,28 @@ export const addressOrderService = {
   },
 
   delete: async (id: number): Promise<IApiMessage> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiMessage>(`${endpoint.collection}/${id}`, {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiMessage>(`${endpoint.collection}/${id}`, {
       method: "DELETE",
     });
   },
 
   deleteMultiple: async (ids: number[]): Promise<IApiMessage> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiMessage>(`${endpoint.collection}/bulkDelete`, {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiMessage>(`${endpoint.collection}/bulkDelete`, {
       method: "DELETE",
       body: { ids },
     });
   },
 
   addressUserById: async (userId: number): Promise<IApiOk<IAddressOrder[]>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IAddressOrder[]>>(endpoint.collection, {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiOk<IAddressOrder[]>>(endpoint.collection, {
       method: "GET",
       params: {
         user_id: userId,
-        publish: 2,
         sort: "id,desc",
-        deleted_at: null,
+        publish: 2,
       },
     });
   },

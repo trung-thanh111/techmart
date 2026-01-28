@@ -75,7 +75,7 @@ export const useProfile = () => {
         delete payload.image;
       }
 
-      const response = await profileService.updateProfile(authStore.user.id, payload);
+      const response = await profileService.updateProfile(payload);
       if (response) {
         if (toast)
           toast.success(t("common.success"), {
@@ -87,7 +87,7 @@ export const useProfile = () => {
       }
     } catch (error: any) {
       if (toast)
-        toast.error(t("common.error"), {
+        toast.error(t("message.error"), {
           description: error?.message || t("common.update_error"),
         });
     } finally {

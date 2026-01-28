@@ -114,7 +114,7 @@ const fetchAttributeCatalogues = async () => {
       selectedAttributes.value[item.slug] = [];
     });
   } catch (e) {
-    console.error($t("common.errorLoading"), e);
+    console.error($t("message.errorLoading"), e);
   }
 };
 
@@ -126,7 +126,7 @@ const fetchBrands = async () => {
     });
     brands.value = res.data || [];
   } catch (e) {
-    console.error($t("common.errorLoading"), e);
+    console.error($t("message.errorLoading"), e);
   }
 };
 

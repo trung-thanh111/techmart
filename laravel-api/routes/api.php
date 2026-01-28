@@ -281,8 +281,12 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
 
         // Address Orders
         Route::group(['prefix' => 'address_orders'], function () {
-            Route::post('bulkStore', [AddressOrderController::class, 'bulkStore']);
             Route::delete('bulkDelete', [AddressOrderController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [AddressOrderController::class, 'attach']);
+            Route::delete('{id}/detach', [AddressOrderController::class, 'detach']);
+            Route::post('bulkStore', [AddressOrderController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [AddressOrderController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [AddressOrderController::class, 'bulkUpdate']);
         });
         Route::resource('address_orders', AddressOrderController::class)->except($routeExcept);
 

@@ -1,6 +1,8 @@
 <?php
 namespace App\Enums;
 
-enum Common: string {
+enum Common: string
+{
     public const API = 'api';
+    public const Admin = 'admin';
 }

@@ -57,14 +57,16 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
           <div>
             <label class="block text-sm text-gray-700 mb-1">{{ $t("profile.countryCode") }}</label>
-            <Field name="countryCode" v-slot="{ field }">
+            <Field name="countryCode" v-slot="{ field, errorMessage, meta }">
               <input v-bind="field" type="text" maxlength="2" :placeholder="$t('profile.addressForm.countryCodePlaceholder')" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-sky-500" />
+              <small v-if="errorMessage && meta.touched" class="text-red-500 text-xs">{{ $t(errorMessage) }}</small>
             </Field>
           </div>
           <div>
             <label class="block text-sm text-gray-700 mb-1">{{ $t("profile.state") }}</label>
-            <Field name="state" v-slot="{ field }">
+            <Field name="state" v-slot="{ field, errorMessage, meta }">
               <input v-bind="field" type="text" :placeholder="$t('profile.addressForm.statePlaceholder')" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-sky-500" />
+              <small v-if="errorMessage && meta.touched" class="text-red-500 text-xs">{{ $t(errorMessage) }}</small>
             </Field>
           </div>
           <div>
@@ -103,13 +105,13 @@ import { useAuthStore } from "~/stores/auth/auth";
 
 const { t } = useI18n();
 
-const { isLoading, handleStore, addressUserById, data } = useAddressOrder(undefined, "create", { redirectPath: "/profile/address_order" });
+const { isLoading, handleStore, getAddressesByUserId, data } = useAddressOrder(undefined, "create", { redirectPath: "/profile/address_order" });
 const authStore = useAuthStore();
 const userId = authStore.user?.id || 0;
 
 onMounted(async () => {
   if (!userId) return;
-  await addressUserById(userId);
+  await getAddressesByUserId(userId);
   const total = Array.isArray(data.value?.data) ? data.value?.data.length : 0;
   if (total && total >= 3) {
     return navigateTo(PROFILEADDRESSORDERINDEX);

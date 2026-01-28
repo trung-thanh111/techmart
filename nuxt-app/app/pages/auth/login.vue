@@ -66,7 +66,7 @@
               </div>
               <Button
                 type="submit"
-                :label="$t('admin.common.form.submit')"
+                :label="$t('auth.form.submit')"
                 :loading="isLoading"
                 unstyled
                 class="w-full text-sm font-semibold flex justify-center py-2 px-4 rounded shadow-sm text-white bg-teal-500 hover:bg-teal-600 focus:outline-none mt-5 disabled:opacity-50"

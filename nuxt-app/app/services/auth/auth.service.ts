@@ -9,11 +9,11 @@ const endpoint = {
   refresh: `${API_VERSION.version1}/auth/refresh`,
   me: `${API_VERSION.version1}/auth/me`,
   register: `${API_VERSION.version1}/auth/register`,
-  forgotRequest: `${API_VERSION.version1}/auth/forgot-password/request`,
-  forgotVerify: `${API_VERSION.version1}/auth/forgot-password/verify`,
-  forgotResend: `${API_VERSION.version1}/auth/forgot-password/resend`,
-  forgotReset: `${API_VERSION.version1}/auth/forgot-password/reset`,
-  changePassword: `${API_VERSION.version1}/auth/change-password`,
+  forgotRequest: `${API_VERSION.version1}/password/forgot/request`,
+  forgotVerify: `${API_VERSION.version1}/password/forgot/verify`,
+  forgotResend: `${API_VERSION.version1}/password/forgot/resend`,
+  forgotReset: `${API_VERSION.version1}/password/forgot/reset`,
+  changePassword: `${API_VERSION.version1}/password/change`,
 } as const;
 
 export const authService = {

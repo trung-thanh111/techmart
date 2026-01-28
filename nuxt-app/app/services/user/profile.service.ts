@@ -17,9 +17,9 @@ export const profileService = {
     });
   },
 
-  updateProfile: async (id: number, payload: Partial<IUser>): Promise<IApiOk<IUser>> => {
+  updateProfile: async (payload: Partial<IUser>): Promise<IApiOk<IUser>> => {
     const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IUser>>(`${endpoint.users}/${id}`, {
+    return await privateFetch<IApiOk<IUser>>(endpoint.me, {
       method: "POST",
       body: formData(payload),
       params: { _method: "PATCH" },

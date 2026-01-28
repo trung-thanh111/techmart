@@ -43,7 +43,7 @@ onMounted(async () => {
         }))
         .filter((item) => !!item.src);
     } catch (e) {
-      console.error(t("common.errorLoading"), e);
+      console.error(t("message.errorLoading"), e);
     }
   }
 });

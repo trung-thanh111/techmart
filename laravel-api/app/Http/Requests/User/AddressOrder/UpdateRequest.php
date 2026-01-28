@@ -41,6 +41,7 @@ class UpdateRequest extends BaseRequest
             "email" => "nullable|email|max:255|{$sometime}",
             "address" => "required|string|max:255|{$sometime}",
             "state" => "nullable|string|max:100|{$sometime}",
+            "city" => "nullable|string|max:100|{$sometime}",
             "postal_code" => "required|string|max:20|{$sometime}",
             "country_code" => "nullable|string|max:2|{$sometime}",
             "is_default" => "boolean|{$sometime}",
@@ -51,8 +52,9 @@ class UpdateRequest extends BaseRequest
     public function prepareForValidation()
     {
         $this->merge([
-            'user_id' => auth(Common::API)->user()->id,
-            ...($this->has('title') && !$this->has('slug') ? ['slug' => Str::slug($this->title)] : [])
+            'user_id' => auth(Common::API)->id() ?? auth(Common::Admin)->id(),
+            ...($this->has('title') && !$this->has('slug') ? ['slug' => Str::slug($this->title)] : []),
+            'publish' => $this->publish ?? 2,
         ]);
     }
 

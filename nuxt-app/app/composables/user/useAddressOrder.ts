@@ -23,14 +23,24 @@ export const useAddressOrder = (initialFilters?: any, type: "create" | "update" 
 
   // Schema Validation
   const schema = z.object({
-    title: z.string().min(1, t("validate.required", { field: t("profile.titleLabel") })),
-    fullName: z.string().min(1, t("validate.required", { field: t("profile.fullName") })),
+    title: z.string({ required_error: t("validation.required", { field: t("profile.titleLabel") }) }).min(1, t("validation.required", { field: t("profile.titleLabel") })),
+    fullName: z.string({ required_error: t("validation.required", { field: t("profile.fullName") }) }).min(1, t("validation.required", { field: t("profile.fullName") })),
     email: z.string().email(t("validate.email")).nullable().optional(),
-    phone: z.string().min(1, t("validate.required", { field: t("profile.phone") })),
-    address: z.string().min(1, t("validate.required", { field: t("profile.address") })),
-    countryCode: z.string().nullable().optional(),
-    state: z.string().nullable().optional(),
-    postalCode: z.string().min(1, t("validate.required", { field: t("profile.postalCode") })),
+    phone: z.string({ required_error: t("validation.required", { field: t("profile.phone") }) }).min(1, t("validation.required", { field: t("profile.phone") })),
+    address: z.string({ required_error: t("validation.required", { field: t("profile.address") }) }).min(1, t("validation.required", { field: t("profile.address") })),
+    countryCode: z
+      .string({ required_error: t("validation.required", { field: t("profile.countryCode") }) })
+      .nullable()
+      .optional(),
+    state: z
+      .string({ required_error: t("validation.required", { field: t("profile.state") }) })
+      .nullable()
+      .optional(),
+    city: z
+      .string({ required_error: t("validation.required", { field: t("profile.city") }) })
+      .nullable()
+      .optional(),
+    postalCode: z.string({ required_error: t("validation.required", { field: t("profile.postalCode") }) }).min(1, t("validation.required", { field: t("profile.postalCode") })),
     isDefault: z.boolean().optional(),
   });
 
@@ -39,7 +49,7 @@ export const useAddressOrder = (initialFilters?: any, type: "create" | "update" 
   });
 
   // Actions
-  const addressUserById = async (userId: number) => {
+  const getAddressesByUserId = async (userId: number) => {
     isLoading.value = true;
     try {
       const response = await addressOrderService.addressUserById(userId);
@@ -66,7 +76,7 @@ export const useAddressOrder = (initialFilters?: any, type: "create" | "update" 
   const handleStore = handleSubmit(async (values) => {
     isLoading.value = true;
     try {
-      const payload: Partial<IAddressOrder> = {
+      const payload: any = {
         title: values.title,
         fullName: values.fullName,
         email: values.email || undefined,
@@ -86,7 +96,7 @@ export const useAddressOrder = (initialFilters?: any, type: "create" | "update" 
         }
       }
     } catch (error: any) {
-      toast.error(t("common.error"), { description: error?.message || t("profile.addError") });
+      toast.error(t("message.error"), { description: error?.message || t("profile.addError") });
     } finally {
       isLoading.value = false;
     }
@@ -108,16 +118,16 @@ export const useAddressOrder = (initialFilters?: any, type: "create" | "update" 
 
       isLoading.value = true;
       try {
-        const payload: Partial<IAddressOrder> = {
+        const payload: any = {
           title: values.title,
-          fullName: values.fullName,
+          full_name: values.fullName,
           email: values.email || undefined,
           phone: values.phone,
           address: values.address,
-          countryCode: values.countryCode || undefined,
+          country_code: values.countryCode || undefined,
           state: values.state || undefined,
-          postalCode: values.postalCode,
-          isDefault: values.isDefault,
+          postal_code: values.postalCode,
+          is_default: values.isDefault,
         };
 
         const response = await addressOrderService.update(Number(id), payload);
@@ -128,7 +138,7 @@ export const useAddressOrder = (initialFilters?: any, type: "create" | "update" 
           }
         }
       } catch (error: any) {
-        toast.error(t("common.error"), { description: error?.message || t("profile.updateError") });
+        toast.error(t("message.error"), { description: error?.message || t("profile.updateError") });
       } finally {
         isLoading.value = false;
       }
@@ -136,11 +146,21 @@ export const useAddressOrder = (initialFilters?: any, type: "create" | "update" 
 
   const handleToggleIsDefault = async (item: IAddressOrder) => {
     if (!item.id) return;
+
+    const originalValue = item.isDefault;
+
     try {
       await addressOrderService.update(item.id, { isDefault: item.isDefault });
       toast.success(t("common.success"));
-    } catch (error) {
-      toast.error(t("common.error"));
+      const addresses = data.value?.data;
+      if (Array.isArray(addresses)) {
+        addresses.forEach((address: IAddressOrder) => {
+          address.isDefault = address.id === item.id ? item.isDefault : false;
+        });
+      }
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || t("common.error"));
+      item.isDefault = originalValue;
     }
   };
 
@@ -151,7 +171,7 @@ export const useAddressOrder = (initialFilters?: any, type: "create" | "update" 
       await addressOrderService.delete(selectedItem.value.id);
       toast.success(t("common.success"), { description: t("profile.deleteSuccess") });
     } catch (error: any) {
-      toast.error(t("common.error"), { description: error?.message || t("profile.deleteError") });
+      toast.error(t("message.error"), { description: error?.message || t("profile.deleteError") });
     } finally {
       isLoading.value = false;
       selectedItem.value = null;
@@ -167,7 +187,7 @@ export const useAddressOrder = (initialFilters?: any, type: "create" | "update" 
     data,
     selectedItem,
     values,
-    addressUserById,
+    getAddressesByUserId,
     show,
     handleStore,
     handleUpdate,

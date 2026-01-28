@@ -7,19 +7,19 @@
         </div>
         <div class="h-px w-full bg-gradient-to-r from-transparent via-white/30 to-transparent mb-4"></div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-4 py-5">
-          <div class="space-y-2">
-            <h3 class="font-bold uppercase mb-2">{{ $t("footer.supportCustomer") }}</h3>
+          <div class="space-y-2 text-sm">
+            <h3 class="font-bold uppercase mb-2 text-base">{{ $t("footer.supportCustomer") }}</h3>
             <p>
               {{ $t("footer.hotline") }}:
-              <a :href="`tel:${$t('footer.hotlineNumber')}`" class="!text-red-500 font-semibold hover:text-gray-300 underline underline-offset-2 text-sm md:text-base">{{ $t("footer.hotlineNumber") }}</a>
+              <a :href="`tel:${$t('footer.hotlineNumber')}`" class="!text-red-500 font-semibold hover:text-gray-300 underline underline-offset-2">{{ $t("footer.hotlineNumber") }}</a>
             </p>
             <p>
               {{ $t("footer.complaints") }}:
-              <a :href="`tel:${$t('footer.complaintsNumber')}`" class="hover:text-gray-300 underline underline-offset-2 text-sm md:text-base">{{ $t("footer.complaintsNumber") }}</a>
+              <a :href="`tel:${$t('footer.complaintsNumber')}`" class="hover:text-gray-300 underline underline-offset-2">{{ $t("footer.complaintsNumber") }}</a>
             </p>
             <p>
               {{ $t("footer.email") }}:
-              <a :href="`mailto:${$t('footer.emailAddress')}`" class="hover:text-gray-300 underline underline-offset-2 text-sm md:text-base">{{ $t("footer.emailAddress") }}</a>
+              <a :href="`mailto:${$t('footer.emailAddress')}`" class="hover:text-gray-300 underline underline-offset-2">{{ $t("footer.emailAddress") }}</a>
             </p>
             <p>
               {{ $t("footer.serviceTime") }}:
@@ -32,7 +32,7 @@
             <h3 class="font-bold uppercase mb-2">{{ $t("footer.aboutUs") }}</h3>
             <ul class="space-y-2">
               <li v-for="item in aboutLinks" :key="item.text">
-                <a :href="item.href" class="font-normal hover:text-gray-300 underline underline-offset-2 text-sm md:text-base">
+                <a :href="item.href" class="font-normal hover:text-gray-300 underline underline-offset-2 text-sm">
                   {{ $t(item.text) }}
                 </a>
               </li>
@@ -42,7 +42,7 @@
             <h3 class="font-bold uppercase mb-2">{{ $t("footer.customerCare") }}</h3>
             <ul class="space-y-2">
               <li v-for="item in supportLinks" :key="item.text">
-                <a :href="item.href" class="font-normal hover:text-gray-300 underline underline-offset-2 text-sm md:text-base">
+                <a :href="item.href" class="font-normal hover:text-gray-300 underline underline-offset-2 text-sm">
                   {{ $t(item.text) }}
                 </a>
               </li>

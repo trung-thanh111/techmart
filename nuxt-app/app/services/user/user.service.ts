@@ -11,8 +11,8 @@ const endpoint = {
 
 export const userService = {
   pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IUser>>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IPaginate<IUser>>>(endpoint.collection, {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiOk<IPaginate<IUser>>>(endpoint.collection, {
       method: "GET",
       params: {
         publish: 2,
@@ -37,8 +37,8 @@ export const userService = {
   },
 
   show: async (id: number | string): Promise<IApiOk<IUser>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IUser>>(`${endpoint.collection}/${id}`, {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiOk<IUser>>(`${endpoint.collection}/${id}`, {
       method: "GET",
     });
   },

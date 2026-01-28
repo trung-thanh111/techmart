@@ -8,6 +8,10 @@
     "logout": "Đăng xuất"
   },
   "common": {
+    "success": "Thành công",
+    "error": "Có lỗi xảy ra",
+    "failed": "Thất bại",
+    "clickToUpload": "Click để tải lên",
     "male": "Nam",
     "female": "Nữ",
     "other": "Khác",
@@ -282,6 +286,10 @@
     "fileTooLarge": "File vượt quá {max}MB",
     "fileTypeInvalid": "Loại file không được hỗ trợ"
   },
+  "validate": {
+    "required": "{field} không được để trống",
+    "email": "Email không hợp lệ"
+  },
   "message": {
     "success": "Thành công",
     "error": "Có lỗi xảy ra",
@@ -459,6 +467,22 @@
     "cancel": "Hủy"
   },
   "profile": {
+    "cancel": "Hủy",
+    "delete": "Xóa",
+    "addSuccess": "Thêm thành công",
+    "updateSuccess": "Cập nhật thành công",
+    "deleteSuccess": "Xóa thành công",
+    "addError": "Thêm thất bại",
+    "updateError": "Cập nhật thất bại",
+    "deleteError": "Xóa thất bại",
+    "fullName": "Họ và tên",
+    "email": "Email",
+    "phone": "Số điện thoại",
+    "address": "Địa chỉ",
+    "countryCode": "Mã quốc gia",
+    "state": "Tỉnh/Thành phố",
+    "postalCode": "Mã bưu chính",
+    "defaultAddress": "Đặt làm mặc định",
     "breadcrumb": "Quản lý tài khoản",
     "addAddress": "Thêm mới địa chỉ",
     "addAddressDesc": "Vui lòng nhập thông tin địa chỉ nhận hàng của bạn.",
@@ -830,7 +854,7 @@
       "fullNamePlaceholder": "Họ tên của bạn",
       "confirmPassword": "Xác nhận mật khẩu",
       "confirmPasswordPlaceholder": "Xác nhận mật khẩu",
-      "registerButton": "Đăng ký"
+      "register": "Đăng ký"
     },
     "welcomeBack": "Chào mừng trở lại!",
     "loginDescription": "Đăng nhập để tiếp tục sử dụng bạn nhé.",
