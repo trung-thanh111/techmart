@@ -5,20 +5,21 @@ import { formData } from "~/utils/formData";
 import { API_VERSION } from "~/utils/apiConfig";
 
 const endpoint = {
-  profile: `${API_VERSION.version1}/user/profile`,
+  me: `${API_VERSION.version1}/auth/me`,
+  users: `${API_VERSION.version1}/users`,
 } as const;
 
 export const profileService = {
   getProfile: async (): Promise<IApiOk<IUser>> => {
     const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IUser>>(endpoint.profile, {
+    return await privateFetch<IApiOk<IUser>>(endpoint.me, {
       method: "GET",
     });
   },
 
-  updateProfile: async (payload: Partial<IUser>): Promise<IApiOk<IUser>> => {
+  updateProfile: async (id: number, payload: Partial<IUser>): Promise<IApiOk<IUser>> => {
     const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IUser>>(endpoint.profile, {
+    return await privateFetch<IApiOk<IUser>>(`${endpoint.users}/${id}`, {
       method: "POST",
       body: formData(payload),
       params: { _method: "PATCH" },

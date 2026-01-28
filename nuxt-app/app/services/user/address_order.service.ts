@@ -4,8 +4,8 @@ import { useApi } from "~/composables/useApi";
 import { API_VERSION } from "~/utils/apiConfig";
 
 const endpoint = {
-  collection: `${API_VERSION.version1}/address_deliveries`,
-  resource: `${API_VERSION.version1}/address_delivery`,
+  collection: `${API_VERSION.version1}/address_orders`,
+  resource: `${API_VERSION.version1}/address_order`,
 } as const;
 
 export const addressOrderService = {

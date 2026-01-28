@@ -100,7 +100,7 @@
         <div class="flex justify-end gap-3 mt-4 sticky bottom-6 z-50">
           <Button
             type="submit"
-            :label="$t('admin.common.confirm')"
+            :label="$t('common.confirm')"
             :loading="isLoading"
             unstyled
             class="max-w-[160px] text-sm flex justify-center py-1.5 px-4 rounded shadow-sm text-white bg-teal-500 hover:bg-teal-600 focus:outline-none mt-5 disabled:opacity-50"
@@ -121,7 +121,7 @@
 
 <script setup lang="ts">
 import { Field } from "vee-validate";
-import SingleImageUpload from "~/components/admin/custom/SingleImageUpload.vue";
+import SingleImageUpload from "~/components/custom/SingleImageUpload.vue";
 import { useProfile } from "~/composables/user/useProfile";
 import { useAuthStore } from "~/stores/auth/auth";
 

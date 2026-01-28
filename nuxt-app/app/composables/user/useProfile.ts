@@ -11,7 +11,6 @@ export const useProfile = () => {
   const { t } = useI18n();
   const isLoading = ref(false);
 
-  // Validation Schema
   const schema = z.object({
     name: z.string().min(1, t("validate.required", { field: t("profile.form.name") })),
     email: z
@@ -42,11 +41,8 @@ export const useProfile = () => {
     try {
       const res = await profileService.getProfile();
       if (res?.data) {
-        const user = res.data; // Response wrapper might vary, check api resource
-        // ApiResource::ok(new UserResource($user)) -> { data: user, message: ... }
-        // So res.data IS the user object (UserResource transforms it).
-
-        authStore.user = user; // Sync store
+        const user = res.data;
+        authStore.user = user;
 
         setValues({
           name: user.name,
@@ -70,12 +66,20 @@ export const useProfile = () => {
   const updateProfile = handleSubmit(async (values) => {
     isLoading.value = true;
     try {
-      const response = await profileService.updateProfile(values);
-      // Check response code or status. ApiResource::ok uses 200.
+      if (!authStore.user?.id) {
+        throw new Error(t("common.user_not_found"));
+      }
+
+      const payload = { ...values };
+      if (payload.image && !(payload.image instanceof File)) {
+        delete payload.image;
+      }
+
+      const response = await profileService.updateProfile(authStore.user.id, payload);
       if (response) {
         if (toast)
-          toast.success(t("admin.common.success"), {
-            description: t("admin.common.update_success"),
+          toast.success(t("common.success"), {
+            description: t("common.update_success"),
           });
         if (response.data) {
           authStore.user = response.data;
@@ -83,8 +87,8 @@ export const useProfile = () => {
       }
     } catch (error: any) {
       if (toast)
-        toast.error(t("admin.common.error"), {
-          description: error?.message || t("admin.common.update_error"),
+        toast.error(t("common.error"), {
+          description: error?.message || t("common.update_error"),
         });
     } finally {
       isLoading.value = false;
