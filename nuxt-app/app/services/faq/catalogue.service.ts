@@ -42,36 +42,4 @@ export const faqCatalogueService = {
       method: "GET",
     });
   },
-
-  store: async (payload: Partial<IFaqCatalogue>): Promise<IApiOk<IFaqCatalogue>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IFaqCatalogue>>(endpoint.collection, {
-      method: "POST",
-      body: formData(payload),
-    });
-  },
-
-  update: async (id: number, payload: Partial<IFaqCatalogue>): Promise<IApiOk<IFaqCatalogue>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IFaqCatalogue>>(`${endpoint.collection}/${id}`, {
-      method: "POST",
-      body: formData(payload),
-      params: { _method: "PATCH" },
-    });
-  },
-
-  delete: async (id: number): Promise<IApiMessage> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiMessage>(`${endpoint.collection}/${id}`, {
-      method: "DELETE",
-    });
-  },
-
-  deleteMultiple: async (ids: number[]): Promise<IApiMessage> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiMessage>(`${endpoint.collection}/bulkDelete`, {
-      method: "DELETE",
-      body: { ids },
-    });
-  },
 };

@@ -102,21 +102,6 @@ export const usePostTag = (initialFilters?: TagPayloadFilter, mode: "create" | "
     }
   };
 
-  const handleDeleteMultiple = async () => {
-    if (selectedIds.value.length === 0) return;
-    isLoading.value = true;
-    try {
-      await postTagService.deleteMultiple(selectedIds.value);
-      toast.success(t("admin.messages.deleteMultipleSuccess", { count: selectedIds.value.length }));
-      selectedIds.value = [];
-      await fetchData();
-    } catch (error: any) {
-      toast.error(error?.response?.data?.message || t("admin.messages.deleteFailed"));
-    } finally {
-      isLoading.value = false;
-    }
-  };
-
   const handleToggleIsHot = async (item: any) => {
     try {
       const res = await postTagService.update(item.id, { isHot: item.isHot });
@@ -199,7 +184,7 @@ export const usePostTag = (initialFilters?: TagPayloadFilter, mode: "create" | "
     handleStore,
     handleUpdate,
     handleDelete,
-    handleDeleteMultiple,
+
     handleToggleIsHot,
     setSelectedItem,
     confirmDelete,

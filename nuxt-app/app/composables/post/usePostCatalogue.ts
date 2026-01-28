@@ -130,21 +130,6 @@ export const usePostCatalogue = (initialFilters?: CataloguePayloadFilter, mode: 
     }
   };
 
-  const handleDeleteMultiple = async () => {
-    if (selectedIds.value.length === 0) return;
-    isLoading.value = true;
-    try {
-      await postCatalogueService.deleteMultiple(selectedIds.value);
-      toast.success(t("admin.messages.deleteMultipleSuccess", { count: selectedIds.value.length }));
-      selectedIds.value = [];
-      await fetchData();
-    } catch (error: any) {
-      toast.error(error?.response?.data?.message || t("admin.messages.deleteFailed"));
-    } finally {
-      isLoading.value = false;
-    }
-  };
-
   const loadpostCatalogue = async () => {
     try {
       const response = await postCatalogueService.all();
@@ -277,7 +262,7 @@ export const usePostCatalogue = (initialFilters?: CataloguePayloadFilter, mode: 
     handleStore,
     handleUpdate,
     handleDelete,
-    handleDeleteMultiple,
+
     handleToggleIsHot,
     setSelectedItem,
     confirmDelete,

@@ -81,8 +81,7 @@ export const bannerService = {
       params: {
         type: "all",
         banner_type: bannerType,
-        position: "main_slider", // Spec from previous code, confirm if generic or specific?
-        // User didn't specify, but I will keep previous logic.
+        position: "main_slider",
         publish: 2,
         deleted_at: null,
       },
@@ -98,18 +97,6 @@ export const bannerService = {
         sort: "id,desc",
         deleted_at: null,
         ...params,
-      },
-    });
-  },
-
-  allPublic: async (): Promise<IApiOk<IBanner[]>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IBanner[]>>(endpoint.collection, {
-      method: "GET",
-      params: {
-        type: "all",
-        publish: 2,
-        deleted_at: null,
       },
     });
   },

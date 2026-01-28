@@ -1,5 +1,5 @@
 import type { IApiOk, IApiMessage } from "~/interfaces/base.interface";
-import type { IPostLike } from "~/interfaces/post/like.interface";
+import type { IPostLike } from "~/interfaces/post/post_like.interface";
 import { useApi } from "~/composables/useApi";
 import { API_VERSION } from "~/utils/apiConfig";
 

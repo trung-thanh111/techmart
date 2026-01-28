@@ -2,7 +2,6 @@ import type { IApiOk, IApiMessage } from "~/interfaces/base.interface";
 import type { IUser, IAuthSuccessResponse, ILoginPayload, IRegisterPayload, IForgotRequest, IForgotVerify, IForgotReset, IChangePasswordPayload } from "~/interfaces/user/user.interface";
 import { useApi } from "~/composables/useApi";
 import { API_VERSION } from "~/utils/apiConfig";
-import { useAuthStore } from "~/stores/auth/auth";
 
 const endpoint = {
   login: `${API_VERSION.version1}/auth/login`,
@@ -15,7 +14,6 @@ const endpoint = {
   forgotResend: `${API_VERSION.version1}/auth/forgot-password/resend`,
   forgotReset: `${API_VERSION.version1}/auth/forgot-password/reset`,
   changePassword: `${API_VERSION.version1}/auth/change-password`,
-  csrf: "/sanctum/csrf-cookie",
 } as const;
 
 export const authService = {
@@ -28,9 +26,6 @@ export const authService = {
 
   login: async (payload: ILoginPayload): Promise<IApiOk<IAuthSuccessResponse>> => {
     const { publicFetch } = useApi();
-    const authStore = useAuthStore();
-    await authStore.getCsrfToken();
-
     return await publicFetch<IApiOk<IAuthSuccessResponse>>(endpoint.login, {
       method: "POST",
       body: payload,

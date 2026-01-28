@@ -66,12 +66,4 @@ export const productCatalogueService = {
       method: "DELETE",
     });
   },
-
-  deleteMultiple: async (ids: number[]): Promise<IApiMessage> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiMessage>(`${endpoint.collection}/bulkDelete`, {
-      method: "DELETE",
-      body: { ids },
-    });
-  },
 };

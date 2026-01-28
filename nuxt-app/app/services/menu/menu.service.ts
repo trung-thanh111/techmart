@@ -41,36 +41,4 @@ export const menuService = {
       method: "GET",
     });
   },
-
-  store: async (payload: Partial<IMenu>): Promise<IApiOk<IMenu>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IMenu>>(endpoint.collection, {
-      method: "POST",
-      body: payload,
-    });
-  },
-
-  update: async (id: number, payload: Partial<IMenu>): Promise<IApiOk<IMenu>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IMenu>>(`${endpoint.collection}/${id}`, {
-      method: "POST",
-      body: payload,
-      params: { _method: "PATCH" },
-    });
-  },
-
-  delete: async (id: number): Promise<IApiMessage> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiMessage>(`${endpoint.collection}/${id}`, {
-      method: "DELETE",
-    });
-  },
-
-  deleteMultiple: async (ids: number[]): Promise<IApiMessage> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiMessage>(`${endpoint.collection}/bulkDelete`, {
-      method: "DELETE",
-      body: { ids },
-    });
-  },
 };

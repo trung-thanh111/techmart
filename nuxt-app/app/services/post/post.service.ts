@@ -44,38 +44,6 @@ export const postService = {
     });
   },
 
-  store: async (payload: Partial<IPost>): Promise<IApiOk<IPost>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IPost>>(endpoint.collection, {
-      method: "POST",
-      body: formData(payload),
-    });
-  },
-
-  update: async (id: number, payload: Partial<IPost>): Promise<IApiOk<IPost>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IPost>>(`${endpoint.collection}/${id}`, {
-      method: "POST",
-      body: formData(payload),
-      params: { _method: "PATCH" },
-    });
-  },
-
-  delete: async (id: number): Promise<IApiMessage> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiMessage>(`${endpoint.collection}/${id}`, {
-      method: "DELETE",
-    });
-  },
-
-  deleteMultiple: async (ids: number[]): Promise<IApiMessage> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiMessage>(`${endpoint.collection}/bulkDelete`, {
-      method: "DELETE",
-      body: { ids },
-    });
-  },
-
   getFeatured: async (): Promise<IApiOk<IPost[]>> => {
     const { publicFetch } = useApi();
     return await publicFetch<IApiOk<IPost[]>>(endpoint.collection, {
