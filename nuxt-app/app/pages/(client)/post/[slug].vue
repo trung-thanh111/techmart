@@ -229,7 +229,7 @@ const { t } = useI18n();
 const { setPageSeo } = useSeo();
 const { postRelatedOptions } = usePostSlider();
 const { rootComments, totalComments, isLoading: isCommentLoading, isSubmitting, createComment, resetForm, loadComments } = usePostComment();
-const { tagList, hotQuickItems, postDetail, postDetailLoading, postDetailError, fetchTags, loadHotQuick, fetchDetailBySlug, trackView } = usePost();
+const { tagList, hotQuickItems, postDetail, postDetailLoading, postDetailError, fetchTags, loadHotQuick, fetchById, trackView } = usePost();
 const { isLiked, likeCount, isLoading: isLikeLoading, toggleLike, getLikeStatus, setCurrent, resetAll: resetPostLikes } = usePostLike();
 const { resetAll: resetCommentLikes } = usePostCommentLike();
 
@@ -252,7 +252,7 @@ const initForSlug = async (targetSlug: string) => {
   resetPostLikes();
   resetCommentLikes();
   const common = Promise.all([fetchTags(), loadHotQuick()]);
-  await fetchDetailBySlug(targetSlug);
+  await fetchById(targetSlug);
   await common;
   if (token !== loadToken) return;
   const id = postDetail.value?.id;

@@ -787,7 +787,7 @@ const { t } = useI18n();
 const route = useRoute();
 type PromotionWithTargets = IPromotion & { applicableTargets: IPromotionTarget[] };
 
-const { productDetail, productDetailLoading, productDetailError, trackView, fetchDetailBySlug } = useProduct();
+const { productDetail, productDetailLoading, productDetailError, trackView, fetchById } = useProduct();
 const { productImageMainOptions, productImageThumbnailOptions, productRelatedOptions } = useProductSlider();
 const { toggleWishlist, isVariantInWishlist, checkVariantWishlistStatus, fetchWishlist, getWishlistVariantIdsByProductId } = useWishlist();
 const { addToCompare, removeFromCompare, isInCompare } = useCompare();
@@ -1070,7 +1070,7 @@ const handleBuyNow = async () => {
 onMounted(async () => {
   const slug = route.params.slug as string;
   if (slug) {
-    await fetchDetailBySlug(slug);
+    await fetchById(slug);
 
     // Load wishlist nếu đã đăng nhập
     if (authStore.isAuthenticated) {

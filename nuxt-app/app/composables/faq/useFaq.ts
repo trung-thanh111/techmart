@@ -32,7 +32,7 @@ export const useFaq = (initialFilters?: BasePayloadFilter) => {
     }
   };
 
-  const fetchDetailBySlug = async (slug: string): Promise<IFaqCatalogue | null> => {
+  const fetchById = async (slug: string): Promise<IFaqCatalogue | null> => {
     if (!slug) return null;
     isLoading.value = true;
     try {
@@ -77,7 +77,7 @@ export const useFaq = (initialFilters?: BasePayloadFilter) => {
     filters,
     page,
     faq,
-    fetchDetailBySlug,
+    fetchById,
     fetchData,
     search,
     setPage,

@@ -44,7 +44,6 @@ export const useProduct = () => {
     try {
       const response = await productService.pagination({
         ...filters,
-        publish: 2,
         page,
         perpage: perPage,
       });
@@ -156,7 +155,7 @@ export const useProduct = () => {
     if (isLatestLoaded.value && latestPage.value === 1) return; // Cache hit for first page
     latestLoading.value = true;
     try {
-      const res = await fetchPaginate({ keyword: "", perpage: 5, publish: 2, sort: "published_at,desc" }, latestPage.value, 5);
+      const res = await fetchPaginate({ keyword: "", perpage: 5, sort: "published_at,desc" }, latestPage.value, 5);
       const pg = res?.data;
       if (pg) {
         latestItems.value = [...latestItems.value, ...pg.data];
@@ -176,8 +175,6 @@ export const useProduct = () => {
     try {
       const relation = buildRelationParams({ product_catalogues: 1 }, "is_hot");
       const res = await productService.pagination({
-        publish: 2,
-        sort: "id,desc",
         ...relation,
         page: hotQuickPage.value,
         perpage: 6,
@@ -195,7 +192,7 @@ export const useProduct = () => {
     }
   };
 
-  const fetchDetailBySlug = async (slug: string): Promise<IProduct | null> => {
+  const fetchById = async (slug: string): Promise<IProduct | null> => {
     if (!slug) return null;
     productDetailLoading.value = true;
     productDetailError.value = null;
@@ -270,7 +267,7 @@ export const useProduct = () => {
     fetchTags,
     loadLatest,
     loadHotQuick,
-    fetchDetailBySlug,
+    fetchById,
     fetchProductCatalogues,
     fetchHotCatalogueProducts,
     fetchProductsByCatalogueId,

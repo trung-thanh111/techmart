@@ -174,7 +174,7 @@ export const usePostCatalogue = (initialFilters?: CataloguePayloadFilter, mode: 
     await fetchData();
   };
 
-  const fetchBySlug = async (slug: string): Promise<IPostCatalogue | null> => {
+  const fetchById = async (slug: string): Promise<IPostCatalogue | null> => {
     if (!slug) return null;
     isLoading.value = true;
     try {
@@ -267,7 +267,7 @@ export const usePostCatalogue = (initialFilters?: CataloguePayloadFilter, mode: 
     setSelectedItem,
     confirmDelete,
     fetchData,
-    fetchBySlug,
+    fetchById,
     loadpostCatalogue,
     search,
     setPage,

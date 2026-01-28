@@ -93,7 +93,7 @@ import { useRoute } from "vue-router";
 import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
 import { useAgency } from "~/composables/agency/useAgency";
 
-const { fetchBySlug, agency, isLoading, getCoverUrl, getSafeWebsite, getWorkingHours, getMapEmbedSrcFromAddress, getExternalMapLinkFromAddress, formatPhone } = useAgency();
+const { fetchById, agency, isLoading, getCoverUrl, getSafeWebsite, getWorkingHours, getMapEmbedSrcFromAddress, getExternalMapLinkFromAddress, formatPhone } = useAgency();
 
 const { t } = useI18n();
 const slug = computed(() => String(useRoute().params.slug || ""));
@@ -117,7 +117,7 @@ const externalMapLinkFromAddress = computed(() => getExternalMapLinkFromAddress(
 
 onMounted(async () => {
   if (!slug.value) return;
-  await fetchBySlug(slug.value);
+  await fetchById(slug.value);
 });
 
 const breadcrumbs = computed(() => [

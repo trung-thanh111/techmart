@@ -49,7 +49,7 @@ const opened = ref<Record<number, boolean>>({});
 const title = ref<string>("");
 const faqs = ref<any[]>([]);
 
-const { fetchBySlug, isLoading } = useFaq();
+const { fetchById, isLoading } = useFaq();
 
 const toggle = (idx: number) => {
   opened.value[idx] = !opened.value[idx];
@@ -57,7 +57,7 @@ const toggle = (idx: number) => {
 
 onMounted(async () => {
   if (!slug.value) return;
-  const cata = await fetchBySlug(slug.value);
+  const cata = await fetchById(slug.value);
   title.value = (cata as any)?.name || "Câu hỏi";
   faqs.value = Array.isArray((cata as any)?.faqs) ? (cata as any).faqs : [];
 });

@@ -32,7 +32,7 @@ export const useAgency = (initialFilters?: AgencyPayloadFilter) => {
     }
   };
 
-  const fetchBySlug = async (slug: string): Promise<IAgency | null> => {
+  const fetchById = async (slug: string): Promise<IAgency | null> => {
     if (!slug) return null;
     isLoading.value = true;
     try {
@@ -107,7 +107,7 @@ export const useAgency = (initialFilters?: AgencyPayloadFilter) => {
     filters,
     page,
     agency,
-    fetchBySlug,
+    fetchById,
     fetchData,
     search,
     setPage,

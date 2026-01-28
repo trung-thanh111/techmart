@@ -86,7 +86,7 @@
 </template>
 
 <script setup lang="ts">
-import { useAddressOrder } from "~/composables/admin/user/useAddressOrder";
+import { useAddressOrder } from "~/composables/user/useAddressOrder";
 import { PROFILEADDRESSORDERCREATE } from "~/utils/constants";
 import { useAuthStore } from "~/stores/auth/auth";
 import type { IAddressOrder } from "~/interfaces/user/address_order.interface";

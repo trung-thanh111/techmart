@@ -103,9 +103,9 @@
 
 <script setup lang="ts">
 import { Field } from "vee-validate";
-import AppCheckbox from "~/components/admin/custom/AppCheckbox.vue";
-import Button from "~/components/admin/custom/Button.vue";
-import { useAddressOrder } from "~/composables/admin/user/useAddressOrder";
+import AppCheckbox from "~/components/custom/AppCheckbox.vue";
+import Button from "~/components/custom/Button.vue";
+import { useAddressOrder } from "~/composables/user/useAddressOrder";
 import { PROFILEADDRESSORDERINDEX } from "~/utils/constants";
 
 const { t } = useI18n();

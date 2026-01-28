@@ -1,29 +1,11 @@
 export const MAX_FILE_SIZE = 5 * 1024 * 1024;
 export const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
 
-// auth
-export const TOLOGIN = "/auth/login";
-export const TOREGISTER = "/auth/register";
-// forgot password (client)
-export const TOFORGOT = "/forgot-password";
-export const TOFORGOTOTP = "/forgot-password/otp";
-export const TOFORGOTRESET = "/forgot-password/reset";
-
-// FE
 export const IMAGEDEFAULT = "/images/defaults/record.jpg";
 export const DEFAULTAVATAR = "/images/defaults/avatar.jpg";
 export const EMPTYBOX = "/images/box-emtpy.png";
 
 export const TOHOME = "/";
-// Profile routes
-export const PROFILEINDEX = "/profile";
-export const PROFILECHANGEPASSWORD = "/profile/change-password";
-export const PROFILEADDRESSORDER = "/profile/address_order";
-export const PROFILEORDERS = "/profile/orders";
-export const PROFILEADDRESSORDERCREATE = "/profile/address_order/create";
-export const PROFILEADDRESSORDERUPDATE = (id: string | number) => `/profile/address_order/${id}/update`;
-
-// Client routes
 export const TOVOUCHER = "/voucher";
 export const TOSHOP = "/shop";
 export const TOWISHLIST = "/wishlist";
@@ -33,48 +15,53 @@ export const TOFAQ = "/faq";
 export const TOPOST = "/post";
 export const TOCART = "/cart";
 export const TOCOMPARE = "/product/compare";
-
+export const TOSEARCH = "/search";
 export const PRODUCT = "/product";
 export const PRODUCTCATEGORY = "/product/category";
 export const POSTCATEGORY = "/post/category";
 export const PRODUCTCATEGORIES = "/product/categories";
 export const POSTCATEGORIES = "/post/categories";
 
-// Post route constants
 export const TOPOSTDETAIL = (slug: string) => `/post/${slug}`;
 export const TOPOSTCATEGORY = "/post/category";
-
-export const TOPROFILEADDRESSORDERCREATE = "/profile/address_order/create";
+export const PROFILEINDEX = "/profile";
+export const PROFILECHANGEPASSWORD = "/profile/change-password";
+export const PROFILEADDRESSORDER = "/profile/address_order";
+export const PROFILEORDERS = "/profile/orders";
+export const PROFILEADDRESSORDERUPDATE = (id: string | number) => `/profile/address_order/${id}/update`;
+export const PROFILEADDRESSORDERCREATE = "/profile/address_order/create";
 export const PROFILEADDRESSORDERINDEX = "/profile/address_order";
 export const PROFILEADRESSORDERCREATE = "/profile/address_order/create";
 export const PROFILEADRESSORDERUPDATE = "/profile/address_order/update";
 
-// Policy routes
-export const TOSEARCH = "/search";
+export const TOLOGIN = "/auth/login";
+export const TOREGISTER = "/auth/register";
+export const TOFORGOT = "/forgot-password";
+export const TOFORGOTOTP = "/forgot-password/otp";
+export const TOFORGOTRESET = "/forgot-password/reset";
+
 export const TOPOLICY = "/policy/privacy_policy";
 export const TOPOLICIES = "/policy";
 export const TOEXCHANGEPOLICY = "/policy/return_policy";
 export const TOWARRANTYPOLICY = "/policy/warranty_policy";
 export const TOLIVERYPOLICY = "/policy/delivery_policy";
 export const TOPRIVACYPOLICY = "/policy/privacy_policy";
-
-// Contact
 export const HOTLINE = "tel:19002098";
-
-// Support routes
 export const SUPPORT_BASE = "/support";
 export const SUPPORT_CONTACT = "/support/contact";
 export const SUPPORT_FAQS = "/support/faqs";
-
-// Guide routes
 export const GUIDE_BASE = "/guide";
 export const GUIDE_ORDER = "/guide/order";
 export const GUIDE_MANAGER_ORDER = "/guide/maneger-order";
 export const GUIDE_MANAGER_ACCOUNT = "/guide/maneger-account";
 
-// export const TOFORBIDDEN = "/forbidden";
-// export const TO404 = "/404";
-// export const TO500 = "/500";
+export const PRODUCTCATALOGUEINDEX = "/product/catalogue";
+export const POSTTAGINDEX = "/post/tag";
+export const ATTRIBUTEINDEX = "/attribute";
+
+export const TOFORBIDDEN = "/forbidden";
+export const TO404 = "/404";
+export const TO500 = "/500";
 
 // Promotion Constants
 export const PROMOTION_TYPES = [

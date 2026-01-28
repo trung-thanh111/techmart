@@ -61,7 +61,7 @@ const { t } = useI18n();
 const route = useRoute();
 const slug = computed(() => route.params.slug as string);
 
-const { categoryDetail, fetchBySlug } = useProductCatalogue() as any;
+const { categoryDetail, fetchById } = useProductCatalogue() as any;
 const { productCatalogueList, fetchProductCatalogues } = useProduct();
 
 const breadcrumbs = computed(() => [
@@ -70,7 +70,7 @@ const breadcrumbs = computed(() => [
 ]);
 
 async function loadCategoryData(slug: string) {
-  await fetchBySlug(slug);
+  await fetchById(slug);
 }
 
 onMounted(async () => {

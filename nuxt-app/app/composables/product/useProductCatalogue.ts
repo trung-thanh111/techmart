@@ -174,7 +174,7 @@ export const useProductCatalogue = (initialFilters?: CataloguePayloadFilter, mod
     await fetchData();
   };
 
-  const fetchBySlug = async (slug: string): Promise<IProductCatalogue | null> => {
+  const fetchById = async (slug: string): Promise<IProductCatalogue | null> => {
     if (!slug) return null;
     isLoading.value = true;
     try {
@@ -267,7 +267,7 @@ export const useProductCatalogue = (initialFilters?: CataloguePayloadFilter, mod
     setSelectedItem,
     confirmDelete,
     fetchData,
-    fetchBySlug,
+    fetchById,
     loadproductCatalogue,
     search,
     setPage,

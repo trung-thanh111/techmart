@@ -28,7 +28,7 @@ const headerText = computed<string | undefined>(() => {
 
 const loadPopup = async () => {
   try {
-    const res = (await popupService.all({ perpage: 5 })) as any;
+    const res = (await popupService.pagination({ perpage: 5 })) as any;
     let rows: any[] = [];
     if (Array.isArray(res?.data)) rows = res.data;
     else if (res?.data?.data) rows = res.data.data;

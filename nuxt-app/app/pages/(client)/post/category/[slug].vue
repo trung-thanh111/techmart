@@ -89,7 +89,7 @@ const { t } = useI18n();
 const route = useRoute();
 const slug = computed(() => route.params.slug as string);
 
-const { categoryDetail, fetchBySlug, categoryPosts, categoryPostsLoading, resetCategoryPosts, loadCategoryPostsById } = usePostCatalogue();
+const { categoryDetail, fetchById, categoryPosts, categoryPostsLoading, resetCategoryPosts, loadCategoryPostsById } = usePostCatalogue();
 const { postCatalogueList, fetchPostCatalogues } = usePost();
 
 const totalLikes = computed<number>(() => {
@@ -107,7 +107,7 @@ const breadcrumbs = computed(() => [
 ]);
 
 async function loadCategoryData(slug: string) {
-  await fetchBySlug(slug);
+  await fetchById(slug);
   if (categoryDetail.value?.id) {
     resetCategoryPosts();
     await loadCategoryPostsById(categoryDetail.value.id, 5);

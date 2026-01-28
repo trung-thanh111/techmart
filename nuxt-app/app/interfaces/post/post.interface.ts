@@ -41,5 +41,4 @@ export interface Option {
 export interface PostPayloadFilter extends BasePayloadFilter {
   tag_id?: number | null;
   post_catalogue_id?: number | null;
-  sort?: string | null;
 }
