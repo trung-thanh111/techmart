@@ -3,7 +3,7 @@
     <div v-if="postDetailLoading" class="flex items-center justify-center min-h-[400px]">
       <div class="text-center">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-        <p class="text-gray-600">{{ $t("post.loading") }}</p>
+        <p class="text-gray-600">{{ $t("common.loading") }}</p>
       </div>
     </div>
     <div v-else-if="postDetailError" class="flex items-center justify-center min-h-[400px]">
@@ -63,7 +63,7 @@
                   </transition>
                 </div>
                 <div v-if="contentWithIds" class="text-gray-700 space-y-3 sm:space-y-4 text-base leading-relaxed break-words prose prose-lg max-w-none" v-html="contentWithIds"></div>
-                <div v-else-if="postDetailLoading" class="text-gray-500 italic">{{ $t("post.loadingContent") }}</div>
+                <div v-else-if="postDetailLoading" class="text-gray-500 italic">{{ $t("common.loadingContent") }}</div>
                 <div v-else class="text-gray-500 italic">{{ $t("post.noContent") }}</div>
                 <div class="flex flex-wrap items-center justify-between mt-3 gap-1 sm:gap-0">
                   <div class="flex items-center gap-5">
@@ -258,7 +258,7 @@ const initForSlug = async (targetSlug: string) => {
   const id = postDetail.value?.id;
   if (!id) return;
   setCurrent(id);
-  await Promise.all([loadComments(id), getLikeStatus(id)]);
+  await Promise.all([loadComments(id), getLikeStatus(id), trackView(id)]);
 };
 
 onBeforeRouteUpdate((to, from, next) => {

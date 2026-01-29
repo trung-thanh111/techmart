@@ -82,7 +82,7 @@
           </div>
         </div>
       </div>
-      <div v-if="mostLikedLoading" class="text-sm text-gray-500 p-2">{{ $t("post.loading") }}</div>
+      <div v-if="mostLikedLoading" class="text-sm text-gray-500 p-2">{{ $t("common.loading") }}</div>
       <div v-else-if="!mostLikedItems || mostLikedItems.length === 0" class="text-sm text-gray-500 p-2">{{ $t("post.noPosts") }}</div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
         <NuxtLink v-for="(post, index) in mostLikedItems" :key="post.id" :to="`${TOPOST}/${post.slug}`" class="flex items-center gap-2 md:gap-3 p-2 md:p-3 rounded-md hover:bg-gray-50 transition">
@@ -97,7 +97,7 @@
 
     <section v-if="byCatalogueCache[3] && byCatalogueCache[3].length > 0" class="max-w-[1440px] mx-auto p-2 md:p-4 bg-white rounded-md shadow mb-2 md:mb-6">
       <h2 class="inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] text-lg md:text-2xl font-bold mb-3 md:mb-4">{{ $t("post.productPosts") }}</h2>
-      <div v-if="byCatalogueLoading[3]" class="text-sm text-gray-500 p-2">{{ $t("post.loading") }}</div>
+      <div v-if="byCatalogueLoading[3]" class="text-sm text-gray-500 p-2">{{ $t("common.loading") }}</div>
       <div v-else-if="!byCatalogueCache[3] || byCatalogueCache[3].length === 0" class="text-sm text-gray-500 p-2">{{ $t("post.noPosts") }}</div>
       <Splide v-else :options="postProductOptions" id="post-product-slider">
         <SplideSlide v-for="post in byCatalogueCache[3]" :key="post.id">
@@ -135,7 +135,7 @@
           </div>
           <div class="mt-3 md:mt-5 flex justify-center">
             <button v-if="latestPage <= latestLastPage" class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 text-xs md:text-sm disabled:opacity-60" :disabled="isLoading || latestLoading" @click="loadLatest()">
-              {{ latestLoading ? $t("post.loadingMore") : $t("post.loadMore") }}
+              {{ latestLoading ? $t("common.loadingMore") : $t("post.loadMore") }}
             </button>
           </div>
         </div>
@@ -150,7 +150,7 @@
             </div>
             <div class="flex justify-center">
               <button v-if="hotQuickPage <= hotQuickLastPage" class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 text-xs md:text-sm disabled:opacity-60" :disabled="isLoading || hotQuickLoading" @click="loadHotQuick()">
-                {{ hotQuickLoading ? $t("post.loadingMore") : $t("post.loadMore") }}
+                {{ hotQuickLoading ? $t("common.loadingMore") : $t("post.loadMore") }}
               </button>
             </div>
           </div>

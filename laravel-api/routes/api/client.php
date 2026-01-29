@@ -146,6 +146,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
     Route::get('product/{id}', [ProductController::class, 'show']);
     Route::get('menu/{id}', [MenuController::class, 'show']);
     Route::get('post/{id}', [PostController::class, 'show']);
+    Route::put('posts/{id}/view', [PostController::class, 'updateView']);
     Route::get('post/category/{id}', [PostCatalogueController::class, 'show']);
     Route::get('product/category/{id}', [ProductCatalogueController::class, 'show']);
     Route::get('agency/{id}', [AgencyController::class, 'show']);
