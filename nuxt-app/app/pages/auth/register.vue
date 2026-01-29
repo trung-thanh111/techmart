@@ -141,7 +141,7 @@ const { authOptions, registerItems } = useAuthSlider();
 const { handleRegister, isLoading, verifyNotice } = useRegister();
 
 definePageMeta({
-  middleware: "guest",
+  middleware: "auth-redirect",
   layout: "auth",
 });
 </script>

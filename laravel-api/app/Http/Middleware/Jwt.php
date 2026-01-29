@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Middleware;
 
 use App\Http\Resources\ApiResource;
@@ -19,30 +20,31 @@ class Jwt
      */
     public function handle(Request $request, Closure $next, $guard = 'api'): Response
     {
-        // try {
-        //     $token = $request->bearerToken();
-        //     if (!$token) {
-        //         $token = $request->cookie('refreshToken');
-        //     }
+        try {
+            $token = $request->bearerToken();
+            if (!$token) {
+                $token = $request->cookie('refreshToken');
+            }
 
-        //     if (!$token) {
-        //         return ApiResource::message(Lang::get('message.access_token_not_found'), Response::HTTP_UNAUTHORIZED);
-        //     }
-        //     JWTAuth::setToken($token);
+            if (!$token) {
+                return ApiResource::message(Lang::get('message.access_token_not_found'), Response::HTTP_UNAUTHORIZED);
+            }
+            JWTAuth::setToken($token);
 
-        //     $payload = JWTAuth::getPayload();
-        //     if ($payload->get('guard') !== $guard) {
-        //         return ApiResource::message(Lang::get('message.token_invalid'), Response::HTTP_UNAUTHORIZED);
-        //     }
-        //     JWTAuth::authenticate();
-
-        // } catch (TokenInvalidException $e) {
-        //     return ApiResource::message(Lang::get('message.token_invalid'), Response::HTTP_UNAUTHORIZED);
-        // } catch (TokenExpiredException $e) {
-        //     return ApiResource::message(Lang::get('message.token_expired'), Response::HTTP_UNAUTHORIZED);
-        // } catch (\Throwable $th) {
-        //     return ApiResource::message($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
-        // }
+            $payload = JWTAuth::getPayload();
+            if ($payload->get('guard') !== $guard) {
+                return ApiResource::message(Lang::get('message.token_invalid'), Response::HTTP_UNAUTHORIZED);
+            }
+            if (!auth($guard)->check()) {
+                JWTAuth::authenticate();
+            }
+        } catch (TokenInvalidException $e) {
+            return ApiResource::message(Lang::get('message.token_invalid'), Response::HTTP_UNAUTHORIZED);
+        } catch (TokenExpiredException $e) {
+            return ApiResource::message(Lang::get('message.token_expired'), Response::HTTP_UNAUTHORIZED);
+        } catch (\Throwable $th) {
+            return ApiResource::message($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
 
         return $next($request);
     }

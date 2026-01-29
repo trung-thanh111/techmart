@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Requests\Promotion\PromotionCatalogue;
 
 use App\Enums\Common;
@@ -23,7 +24,7 @@ class StoreRequest extends BaseRequest
     {
         $mimes = implode(',', config('upload.image.allowed_type'));
         $max_size = config('upload.image.max_size');
-         return [
+        return [
             'name' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:promotion_catalogues,slug',
             'description' => 'nullable|string',
@@ -33,14 +34,16 @@ class StoreRequest extends BaseRequest
         ];
     }
 
-    public function prepareForValidation(){
+    public function prepareForValidation()
+    {
         $this->merge([
             'slug' => generate_slug($this->name),
             'user_id' => auth(Common::API)->user()->id,
         ]);
     }
 
-    public function messages(){
+    public function messages()
+    {
         return [];
     }
 }

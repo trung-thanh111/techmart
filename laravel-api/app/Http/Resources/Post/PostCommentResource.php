@@ -20,14 +20,18 @@ class PostCommentResource extends JsonResource
             'content'       => $this->content,
             'like_count'    => (int) $this->like_count,
             'comment_count' => (int) $this->comment_count,
-            'author'        => $this->whenLoaded('users', [
-                'id' => $this->users->id,
-                'name' => $this->users->name,
-                'avatar' => [
-                    'path' => $this->image ?? null,
-                    'url' => asset("/storage/{$this->image}") ?? null,
-                ],
-            ]),
+            'author'        => $this->whenLoaded('users', function () {
+                $user = $this->users;
+                if (!$user) return null;
+                return [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'avatar' => [
+                        'path' => $user->image ?? null,
+                        'url' => isset($user->image) ? asset("/storage/{$user->image}") : null,
+                    ],
+                ];
+            }),
             'replies' => PostCommentResource::collection($this->whenLoaded('replies')),
             'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
             'createdAtHuman' => $this->created_at?->diffForHumans(),

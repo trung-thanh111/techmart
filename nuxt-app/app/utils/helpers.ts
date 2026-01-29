@@ -22,6 +22,12 @@ export const formatPrice = (price: number): string => {
   );
 };
 
+export const formatNumber = (number: number): string => {
+  return new Intl.NumberFormat("vi-VN", {
+    style: "decimal",
+  }).format(number);
+};
+
 export const formatDate = (date: Date): string => {
   return date.toLocaleDateString("vi-VN");
 };

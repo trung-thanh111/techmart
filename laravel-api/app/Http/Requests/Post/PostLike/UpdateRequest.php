@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Requests\Post\PostLike;
 
 use App\Enums\Common;
@@ -38,13 +39,15 @@ class UpdateRequest extends BaseRequest
         ];
     }
 
-    public function prepareForValidation(){
+    public function prepareForValidation()
+    {
         $this->merge([
             'user_id' => auth(Common::API)->user()->id,
         ]);
     }
 
-    public function messages(){
+    public function messages()
+    {
         return [];
     }
 }

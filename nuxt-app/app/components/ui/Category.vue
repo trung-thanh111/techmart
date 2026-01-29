@@ -1,5 +1,5 @@
 <template>
-  <section :class="['bg-white shadow-md rounded-md py-3 md:py-6 px-2 md:px-6 mb-4 md:mb-6', rootClass]">
+  <section v-if="items.length > 0" :class="['bg-white shadow-md rounded-md py-3 md:py-6 px-2 md:px-6 mb-4 md:mb-6', rootClass]">
     <div class="mb-3 md:mb-5">
       <div class="flex flex-wrap justify-between items-center gap-2">
         <div>

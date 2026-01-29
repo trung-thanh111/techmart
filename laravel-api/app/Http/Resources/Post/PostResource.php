@@ -30,11 +30,13 @@ class PostResource extends JsonResource
                 'isHot' => (bool) $this->is_hot,
                 'publish' => (int) $this->publish,
                 'likeCount' => (int) $this->like_count,
-                'creator' => $this->whenLoaded('users', [
-                    'id' => $this->users->id,
-                    'avatar' => asset("/storage/{$this->users->image}") ?? null,
-                    'name' => $this->users->name,
-                ]),
+                'creator' => $this->whenLoaded('users', function () {
+                    return $this->users ? [
+                        'id' => $this->users->id,
+                        'avatar' => asset("/storage/{$this->users->image}") ?? null,
+                        'name' => $this->users->name,
+                    ] : null;
+                }),
                 'createdAtHuman' => $this->created_at?->diffForHumans(),
                 // 'order' => (int) $this->order,
                 // 'viewCount' => (int) $this->view_count,
@@ -66,11 +68,13 @@ class PostResource extends JsonResource
             'likeCount' => (int) $this->like_count,
             'postCatalogueId' => (int) $this->post_catalogue_id,
             'tagId' => (int) $this->tag_id,
-            'creator' => $this->whenLoaded('users', [
-                'id' => $this->users->id,
-                'avatar' => asset("/storage/{$this->users->image}") ?? null,
-                'name' => $this->users->name,
-            ]),
+            'creator' => $this->whenLoaded('users', function () {
+                return $this->users ? [
+                    'id' => $this->users->id,
+                    'avatar' => asset("/storage/{$this->users->image}") ?? null,
+                    'name' => $this->users->name,
+                ] : null;
+            }),
             'postCatalogues' => PostCatalogueResource::collection($this->whenLoaded('post_catalogues')),
             'tags' => TagResource::collection($this->whenLoaded('post_tags')),
             'relateds' => $this->whenLoaded('relateds', function () {

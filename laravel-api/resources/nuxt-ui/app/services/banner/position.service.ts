@@ -2,7 +2,7 @@ import type { IApiOk, IApiMessage, IPaginate } from "~/interfaces/base.interface
 import type { IPosition } from "~/interfaces/banner/position.interface";
 import { useApi } from "~/composables/useApi";
 
-const ENDPOINT = "/api/v1";
+const ENDPOINT = "/api/v1/admin";
 
 export const positionService = {
     pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IPosition>>> => {

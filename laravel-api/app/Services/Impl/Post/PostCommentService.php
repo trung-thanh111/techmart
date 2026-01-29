@@ -16,7 +16,7 @@ class PostCommentService extends BaseService implements PostCommentServiceInterf
 
     protected $complexFilter = ['id'];
 
-    protected $with = [];
+    protected $with = ['users'];
     protected $relationFilter = [];
     protected $simpleFilter = ['publish', 'post_id'];
 
@@ -66,7 +66,7 @@ class PostCommentService extends BaseService implements PostCommentServiceInterf
         if ($this->useNestedSet) {
             $this->initializeNestedset();
         }
-        
+
         return parent::afterSave($request, $id);
     }
 }

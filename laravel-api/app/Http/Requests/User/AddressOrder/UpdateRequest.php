@@ -52,7 +52,7 @@ class UpdateRequest extends BaseRequest
     public function prepareForValidation()
     {
         $this->merge([
-            'user_id' => auth(Common::API)->id() ?? auth(Common::Admin)->id(),
+            'user_id' => auth(Common::API)->id() ?? auth(Common::ADMIN)->id(),
             ...($this->has('title') && !$this->has('slug') ? ['slug' => Str::slug($this->title)] : []),
             'publish' => $this->publish ?? 2,
         ]);

@@ -3,6 +3,7 @@ import { attributeCatalogueService } from "~/services/attribute/catalogue.servic
 import { attributeService } from "~/services/attribute/attribute.service";
 import { productService } from "~/services/product/product.service";
 
+export const ENDPOINT = "/api/v1/admin";
 export const productVariantService = {
     /**
      * Get attribute catalogues with attributes

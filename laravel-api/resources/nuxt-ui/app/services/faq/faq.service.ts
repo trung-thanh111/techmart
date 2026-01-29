@@ -3,7 +3,7 @@ import type { IFaq } from "~/interfaces/faq/faq.interface";
 import { useApi } from "~/composables/useApi";
 import { formData } from "~/utils/formData";
 
-const ENDPOINT = "/api/v1";
+const ENDPOINT = "/api/v1/admin";
 
 export const faqService = {
     pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IFaq>>> => {

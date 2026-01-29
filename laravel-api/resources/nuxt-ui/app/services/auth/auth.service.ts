@@ -5,7 +5,7 @@ import type { IAuthSuccessResponse } from "~/interfaces/user/user.interface";
 import { useApi } from "~/composables/useApi";
 import { useAuthStore } from "~/stores/auth/auth";
 
-const ENDPOINT = "/api/v1/auth";
+const ENDPOINT = "/api/v1/admin/auth";
 const VERIFY_ENDPOINT = "/api/v1/email-verification";
 const FORGOT_ENDPOINT = "/api/v1/password/forgot";
 const CHANGE_PASSWORD_ENDPOINT = "/api/v1/password/change";

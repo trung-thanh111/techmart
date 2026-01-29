@@ -2,7 +2,7 @@ import type { IApiOk, IApiMessage, IPaginate } from "~/interfaces/base.interface
 import type { IPostTag } from "~/interfaces/post/tag.interface";
 import { useApi } from "~/composables/useApi";
 
-const ENDPOINT = "/api/v1";
+const ENDPOINT = "/api/v1/admin";
 
 export const postTagService = {
     pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IPostTag>>> => {

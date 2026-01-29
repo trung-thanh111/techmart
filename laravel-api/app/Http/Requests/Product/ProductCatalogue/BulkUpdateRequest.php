@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Requests\Product\ProductCatalogue;
 
 use App\Enums\Common;

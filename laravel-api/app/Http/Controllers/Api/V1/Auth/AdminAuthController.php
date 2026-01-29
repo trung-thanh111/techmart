@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api\V1\Auth;
 
 use Illuminate\Http\Response;
@@ -29,7 +30,6 @@ class AdminAuthController extends Controller
         try {
             $response = $this->authService->authenticate($request, $this->guard);
             return ApiResource::ok($response['data'], Lang::get('message.login_success'))->withCookie($response['authCookie']);
-
         } catch (ModelNotFoundException $e) {
             return ApiResource::message($e->getMessage(), Response::HTTP_NOT_FOUND);
         } catch (AuthenticationException $e) {
@@ -39,18 +39,20 @@ class AdminAuthController extends Controller
         }
     }
 
-    public function me(): JsonResponse{
+    public function me(): JsonResponse
+    {
         try {
             $response = $this->authService->getMe($this->guard);
             return ApiResource::ok($response, Lang::get('message.get_user_success'));
-        } catch(UserNotDefinedException $e){
+        } catch (UserNotDefinedException $e) {
             return ApiResource::message($e->getMessage(), Response::HTTP_BAD_REQUEST);
         } catch (\Throwable $th) {
             return ApiResource::message($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
-    public function refresh(Request $request): JsonResponse {
+    public function refresh(Request $request): JsonResponse
+    {
         try {
             $response = $this->authService->refreshToken($request, $this->guard);
             return ApiResource::ok($response['data'], Lang::get('message.refresh_token_success'))->withCookie($response['authCookie']);
@@ -59,7 +61,8 @@ class AdminAuthController extends Controller
         }
     }
 
-    public function logout(): JsonResponse{
+    public function logout(): JsonResponse
+    {
         try {
             $this->authService->logout($this->guard);
             return ApiResource::message(Lang::get('message.logout_success'));

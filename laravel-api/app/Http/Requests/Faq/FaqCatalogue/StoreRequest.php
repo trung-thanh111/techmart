@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Requests\Faq\FaqCatalogue;
 
 use App\Enums\Common;
@@ -34,14 +35,16 @@ class StoreRequest extends BaseRequest
         ];
     }
 
-    public function prepareForValidation(){
+    public function prepareForValidation()
+    {
         $this->merge([
             'slug' => generate_slug($this->name),
             'user_id' => auth(Common::API)->user()->id,
         ]);
     }
 
-    public function messages(){
+    public function messages()
+    {
         return [];
     }
 }

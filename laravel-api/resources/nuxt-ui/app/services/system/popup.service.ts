@@ -3,7 +3,7 @@ import type { IPopup } from "~/interfaces/system/popup.interface";
 import { useApi } from "~/composables/useApi";
 import { formData } from "~/utils/formData";
 
-const ENDPOINT = "/api/v1";
+const ENDPOINT = "/api/v1/admin";
 
 export const popupService = {
     pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IPopup>>> => {
