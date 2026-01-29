@@ -34,16 +34,13 @@
               <div class="text-lg md:text-[24px] font-semibold uppercase">
                 {{ isLoading ? $t("common.loading") : policy ? "Chính sách " + getPolicyTitle(policy.keyword as any) : $t("common.noData") }}
               </div>
-              <p class="text-sm text-gray-600">{{ $t("common.lastUpdated") }} {{ policy ? new Date(policy.updatedAt).toLocaleDateString("vi-VN") : "" }}</p>
+              <p class="text-sm text-gray-600">{{ $t("common.lastUpdated") }} {{ policy ? new Date(policy.updatedAt as any).toLocaleDateString("vi-VN") : "" }}</p>
             </div>
           </div>
           <div class="prose" v-if="isLoading">
             <div class="text-center text-gray-500">{{ $t("common.loadingContent") }}</div>
           </div>
           <div class="prose" v-else-if="policy && policy.content" v-html="policy.content"></div>
-          <div class="prose" v-else-if="error">
-            <div class="text-center text-red-500">{{ error }}</div>
-          </div>
           <div class="prose" v-else>
             <div class="text-center text-gray-500">{{ $t("common.updatingContent") }}</div>
           </div>
@@ -64,24 +61,24 @@ import { definePageMeta } from "#imports";
 
 const route = useRoute();
 const router = useRouter();
-
 const policy = ref<ISystem | null>(null);
 const isLoading = ref(true);
-const error = ref<string | null>(null);
+const toast = useAppToast();
 
 const loadPolicy = async (keyword: string) => {
   try {
     isLoading.value = true;
-    error.value = null;
     const response = await systemService.findByKeyword(keyword);
-    if (response.data) {
-      policy.value = response.data;
+    if (response.data && Array.isArray(response.data) && response.data.length > 0) {
+      (policy.value as any) = response.data[0];
+    } else if (response.data && !Array.isArray(response.data)) {
+      (policy.value as any) = response.data;
     } else {
-      error.value = "Không tìm thấy chính sách này";
+      toast.value = "Không tìm thấy chính sách này";
     }
   } catch (err) {
     console.error("Error loading policy:", err);
-    error.value = "Có lỗi xảy ra khi tải dữ liệu";
+    toast.value = "Có lỗi xảy ra khi tải dữ liệu";
   } finally {
     isLoading.value = false;
   }

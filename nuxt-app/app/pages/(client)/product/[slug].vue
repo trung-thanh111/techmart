@@ -131,7 +131,7 @@
                       </h1>
                       <div class="text-sm text-gray-500 my-1">
                         <span>{{ $t("field.category") }}:</span>
-                        <NuxtLink v-for="catalogue in productDetail.productCatalogues as any[]" :key="catalogue.id" :to="`/product/category/${catalogue.slug}`" class="ml-2 font-semibold text-sky-500 hover:underline">
+                        <NuxtLink v-for="catalogue in productDetail.productCatalogues as any[]" :key="catalogue.id" :to="`${PRODUCTCATEGORY}/${catalogue.slug}`" class="ml-2 font-semibold text-sky-500 hover:underline">
                           {{ catalogue.name }}
                         </NuxtLink>
                         <template v-if="(productDetail as any).brand">

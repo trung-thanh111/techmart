@@ -65,11 +65,6 @@ export const useApi = () => {
       const accessToken = auth.accessToken;
 
       if (!accessToken) {
-        // If it's a public endpoint called via privateFetch, we might want to allow it?
-        // But privateFetch implies auth.
-        console.warn("Không tìm thấy accessToken");
-        // We throw immediately? Or let it fail 401?
-        // Throwing saves a request.
         throw createError({
           statusCode: 401,
           statusMessage: "Unauthorized",

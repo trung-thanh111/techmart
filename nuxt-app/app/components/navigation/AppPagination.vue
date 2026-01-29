@@ -20,8 +20,8 @@ const to = computed(() => Math.min(first.value + props.pagination.per_page, prop
 </script>
 
 <template>
-  <div class="flex items-center justify-between">
-    <p class="text-sm text-gray-500">{{ $t("admin.components.pagination.showingResults", { from, to, total: props.pagination.total }) }}</p>
+  <div v-if="props.pagination.total > 0" class="flex items-center justify-between">
+    <p class="text-sm text-gray-500">{{ $t("common.showingResult", { from, to, total: props.pagination.total }) }}</p>
     <Paginator
       :first="first"
       :rows="props.pagination.per_page"

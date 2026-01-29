@@ -12,9 +12,6 @@
       </div>
     </section>
     <Partner />
-    <div class="w-full max-w-7xl mx-auto py-2 mb-3">
-      <div class="h-px w-full bg-gradient-to-r from-transparent via-[rgba(32,141,128,0.3)] to-transparent"></div>
-    </div>
     <Category :description="$t('common.exploreProducts')" :items="productCatalogueList as any" :basePath="PRODUCTCATEGORY" />
     <section class="product-accsessory bg-white shadow-md rounded-md py-3 md:py-6 px-2 md:px-6 mb-4">
       <div class="mb-4 flex flex-wrap justify-between items-center gap-2">
@@ -124,6 +121,7 @@
 </template>
 <script setup lang="ts">
 import CommitMent from "~/components/ui/CommitMent.vue";
+import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
 import Partner from "~/components/ui/Partner.vue";
 import { useShop } from "~/composables/shop/useShop";
 import Category from "~/components/ui/Category.vue";

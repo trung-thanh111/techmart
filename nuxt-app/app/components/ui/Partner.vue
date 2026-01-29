@@ -1,5 +1,5 @@
 <template>
-  <section :class="['bg-white shadow-md rounded-md py-2 px-2 md:px-6 mb-3 md:mb-6', rootClass]">
+  <section v-if="resolvedLogos.length > 0" :class="['bg-white shadow-md rounded-md py-2 px-2 md:px-6 mb-3 md:mb-6', rootClass]">
     <Splide :options="partnerOptions" :extensions="{ AutoScroll }" id="partner-shop-slider">
       <SplideSlide v-for="logo in resolvedLogos" :key="logo.alt || logo.src">
         <div class="block rounded-md shadow">
@@ -9,6 +9,9 @@
         </div>
       </SplideSlide>
     </Splide>
+    <div class="w-full max-w-7xl mx-auto py-2 mb-3">
+      <div class="h-px w-full bg-gradient-to-r from-transparent via-[rgba(32,141,128,0.3)] to-transparent"></div>
+    </div>
   </section>
 </template>
 <script setup lang="ts">

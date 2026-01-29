@@ -73,7 +73,7 @@
         </template>
       </div>
     </section>
-    <Category :items="postCatalogueList as any" basePath="TOPOST" :viewAllLink="TOPOSTCATEGORY" :viewAllText="$t('common.viewAll')" />
+    <Category :items="postCatalogueList as any" :basePath="POSTCATEGORY" :viewAllLink="TOPOSTCATEGORY" :viewAllText="$t('common.viewAll')" />
     <section class="product-accsessory bg-white shadow-md rounded-md py-3 md:py-6 px-2 md:px-6 mb-4 md:mb-6">
       <div class="mb-4 md:mb-5">
         <div class="flex justify-between items-center gap-2">
@@ -171,7 +171,7 @@
 <script setup lang="ts">
 import { usePostSlider } from "~/composables/usePostSlider";
 import { usePost } from "~/composables/post/usePost";
-import { IMAGEDEFAULT, TOPOST, TOPOSTCATEGORY } from "~/utils/constants";
+import { IMAGEDEFAULT, TOPOST, TOPOSTCATEGORY, POSTCATEGORY } from "~/utils/constants";
 import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
 import Category from "~/components/ui/Category.vue";
 import { definePageMeta } from "#imports";
