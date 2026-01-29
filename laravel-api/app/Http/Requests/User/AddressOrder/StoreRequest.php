@@ -41,7 +41,7 @@ class StoreRequest extends BaseRequest
     {
         $this->merge([
             'slug' => generate_slug($this->title),
-            'user_id' => auth(Common::API)->id() ?? auth(Common::Admin)->id(),
+            'user_id' => auth(Common::API)->id() ?? auth(Common::ADMIN)->id(),
             'publish' => $this->publish ?? 2,
         ]);
     }

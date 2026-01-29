@@ -4,7 +4,7 @@ import { useApi } from "~/composables/useApi";
 import { formData } from "~/utils/formData";
 import { buildRelationParams } from "~/utils/helpers";
 
-const ENDPOINT = "/api/v1";
+const ENDPOINT = "/api/v1/admin";
 
 export const postService = {
     pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IPost>>> => {

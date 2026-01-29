@@ -292,10 +292,10 @@ class AuthService implements AuthServiceInterface
     public function logout(string $guard = 'api'): \Symfony\Component\HttpFoundation\Cookie
     {
         $auth = $this->getAuth($guard);
-        $cookieName = $this->getCookieName($guard);
+        $cookieName = $this->getCookieName();
         $auth->logout();
         $auth->invalidate(true);
 
-        return Cookie::forget($cookieName);
+        return Cookie::make($cookieName, null, -1, '/', null, true, true, false, 'Lax');
     }
 }

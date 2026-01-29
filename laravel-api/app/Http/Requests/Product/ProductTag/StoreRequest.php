@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Requests\Product\ProductTag;
 
 use App\Enums\Common;

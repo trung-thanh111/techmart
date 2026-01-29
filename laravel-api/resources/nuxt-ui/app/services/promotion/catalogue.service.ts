@@ -3,7 +3,7 @@ import type { IPromotionCatalogue } from "~/interfaces/promotion/catalogue.inter
 import { useApi } from "~/composables/useApi";
 import { formData } from "~/utils/formData";
 
-const ENDPOINT = "/api/v1";
+const ENDPOINT = "/api/v1/admin";
 
 export const promotionCatalogueService = {
     pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IPromotionCatalogue>>> => {

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Requests\Post\Tag;
 
 use App\Enums\Common;

@@ -46,7 +46,7 @@ class AgencyService extends BaseService implements AgencyServiceInterface
     protected function prepareModelData(Request $request): self
     {
         return $this->initializeBasicModelData($request)
-        ->uploadImage($request, 'image', self::PIPELINE, 'logo');
+            ->uploadImage($request, 'image', self::PIPELINE, 'logo');
     }
 
     protected function initializeBasicModelData(Request $request): self

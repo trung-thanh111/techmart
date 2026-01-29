@@ -3,7 +3,7 @@ import type { IPostCatalogue } from "~/interfaces/post/catalogue.interface";
 import { useApi } from "~/composables/useApi";
 import { formData } from "~/utils/formData";
 
-const ENDPOINT = "/api/v1";
+const ENDPOINT = "/api/v1/admin";
 
 export const postCatalogueService = {
     pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IPostCatalogue>>> => {

@@ -56,7 +56,7 @@ export const usePostLike = () => {
         state.currentLikeId = null;
       } else {
         try {
-          const response = await postLikeService.store(postId);
+          const response = await postLikeService.store({ postId });
           const data = response.data;
 
           if (data) {
@@ -92,19 +92,23 @@ export const usePostLike = () => {
 
     try {
       const userId = auth.user?.id;
-      const existPromise = auth.isAuthenticated && typeof userId === "number"
-        ? postLikeService.checkLiked(postId, userId)
-        : Promise.resolve({ liked: false, records: [] as IPostLike[] });
-      const countPromise = postLikeService.list({ post_id: postId, type: 'all' });
+      const existPromise = auth.isAuthenticated && typeof userId === "number" ? postLikeService.checkLiked(postId, userId) : Promise.resolve({ data: [] as IPostLike[] });
+      const countPromise = postLikeService.list({ post_id: postId, type: "all" });
 
-      const [exist, countRes] = await Promise.all([existPromise, countPromise]);
+      const [existRes, countRes] = await Promise.all([existPromise, countPromise]);
 
       const payload = countRes?.data;
       let allLikes: IPostLike[] = Array.isArray(payload?.data) ? payload.data : Array.isArray(payload) ? payload : [];
       allLikes = allLikes.filter((x: any) => Number((x as any)?.postId ?? (x as any)?.post_id) === postId);
 
-      state.isLiked = !!exist.liked;
-      state.currentLikeId = (exist.records[0] as unknown as IPostLike | undefined)?.id ?? null;
+      // Handle exist response
+      const rawExistData = existRes?.data;
+      const userLikes = Array.isArray(rawExistData) ? rawExistData : Array.isArray((rawExistData as any)?.data) ? (rawExistData as any).data : [];
+
+      const userLikeRecord = userLikes.find((x: any) => Number((x as any)?.postId ?? (x as any)?.post_id) === postId);
+
+      state.isLiked = !!userLikeRecord;
+      state.currentLikeId = userLikeRecord?.id ?? null;
       state.likeCount = allLikes.length;
 
       return true;

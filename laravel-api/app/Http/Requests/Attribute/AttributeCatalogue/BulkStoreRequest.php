@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Requests\Attribute\AttributeCatalogue;
 
 use App\Enums\Common;

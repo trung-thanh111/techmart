@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Requests\Post\PostCommentLike;
 
 use App\Enums\Common;
@@ -22,7 +23,7 @@ class StoreRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'comment_id'   => 'required|exists:post_comments,id',
+            'comment_id' => 'required|exists:post_comments,id',
         ];
     }
 
@@ -34,7 +35,8 @@ class StoreRequest extends BaseRequest
     }
 
 
-    public function messages(){
+    public function messages()
+    {
         return [];
     }
 }

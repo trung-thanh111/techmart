@@ -42,27 +42,27 @@ const { t } = useI18n();
 
 const sortOptions = [
   {
-    label: t("common.filter.newest"),
+    label: t("filter.newest"),
     value: "created_at,desc",
     icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.3 0-200-89.7-200-200S145.7 56 256 56s200 89.7 200 200-89.7 200-200 200zm12-200V136c0-6.6-5.4-12-12-12s-12 5.4-12 12v120c0 6.6 5.4 12 12 12h88c6.6 0 12-5.4 12-12s-5.4-12-12-12h-76z"/></svg>`,
   },
   {
-    label: t("common.filter.oldest"),
+    label: t("filter.oldest"),
     value: "created_at,asc",
     icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.3 0-200-89.7-200-200S145.7 56 256 56s200 89.7 200 200-89.7 200-200 200zm12-200V136c0-6.6-5.4-12-12-12s-12 5.4-12 12v120c0 6.6 5.4 12 12 12h88c6.6 0 12-5.4 12-12s-5.4-12-12-12h-76z"/></svg>`,
   },
   {
-    label: t("common.filter.price_high"),
+    label: t("filter.price_high"),
     value: "price_origin,desc",
     icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="currentColor"><path d="M576 80c0-26.5-21.5-48-48-48H48C21.5 32 0 53.5 0 80s21.5 48 48 48h480c26.5 0 48-21.5 48-48zm0 176c0-26.5-21.5-48-48-48H176c-26.5 0-48 21.5-48 48s21.5 48 48 48h352c26.5 0 48-21.5 48-48zm0 176c0-26.5-21.5-48-48-48H304c-26.5 0-48 21.5-48 48s21.5 48 48 48h224c26.5 0 48-21.5 48-48z"/></svg>`,
   },
   {
-    label: t("common.filter.price_low"),
+    label: t("filter.price_low"),
     value: "price_origin,asc",
     icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="currentColor"><path d="M576 432c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48s21.5-48 48-48h480c26.5 0 48 21.5 48 48zm0-176c0 26.5-21.5 48-48 48H176c-26.5 0-48-21.5-48-48s21.5-48 48-48h352c26.5 0 48 21.5 48 48zm0-176c0 26.5-21.5 48-48 48H304c-26.5 0-48-21.5-48-48s21.5-48 48-48h224c26.5 0 48 21.5 48 48z"/></svg>`,
   },
   {
-    label: t("common.filter.best_seller"),
+    label: t("filter.best_seller"),
     value: "sold_count,desc",
     icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor"><path d="M64 64c0-17.7-14.3-32-32-32S0 46.3 0 64V400c0 44.2 35.8 80 80 80H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H80c-8.8 0-16-7.2-16-16V64zm406.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L320 301.3l-57.4-57.4c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L320 301.3l57.4 57.4c12.5 12.5 32.8 12.5 45.3 0l112-112z"/></svg>`,
   },

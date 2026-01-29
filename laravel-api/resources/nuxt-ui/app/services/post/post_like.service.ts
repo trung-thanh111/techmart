@@ -2,7 +2,7 @@ import type { IApiOk, IApiMessage, IPaginate } from "~/interfaces/base.interface
 import type { IPostLike, IPostLikeResponse } from "~/interfaces/post/post_like.interface";
 import { useApi } from "~/composables/useApi";
 
-const ENDPOINT = "/api/v1";
+const ENDPOINT = "/api/v1/admin";
 
 export const postLikeService = {
     store: async (postId: number): Promise<IApiOk<IPostLike>> => {

@@ -3,7 +3,7 @@
     <div v-if="postDetailLoading" class="flex items-center justify-center min-h-[400px]">
       <div class="text-center">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-        <p class="text-gray-600">{{ $t("post.loading") }}</p>
+        <p class="text-gray-600">{{ $t("common.loading") }}</p>
       </div>
     </div>
     <div v-else-if="postDetailError" class="flex items-center justify-center min-h-[400px]">
@@ -63,7 +63,7 @@
                   </transition>
                 </div>
                 <div v-if="contentWithIds" class="text-gray-700 space-y-3 sm:space-y-4 text-base leading-relaxed break-words prose prose-lg max-w-none" v-html="contentWithIds"></div>
-                <div v-else-if="postDetailLoading" class="text-gray-500 italic">{{ $t("post.loadingContent") }}</div>
+                <div v-else-if="postDetailLoading" class="text-gray-500 italic">{{ $t("common.loadingContent") }}</div>
                 <div v-else class="text-gray-500 italic">{{ $t("post.noContent") }}</div>
                 <div class="flex flex-wrap items-center justify-between mt-3 gap-1 sm:gap-0">
                   <div class="flex items-center gap-5">
@@ -72,7 +72,7 @@
                       <svg class="w-5 h-5 sm:w-4 sm:h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
                         <path d="M320 96C239.2 96 174.5 132.8 127.4 176.6C80.6 220.1 49.3 272 34.4 307.7C31.1 315.6 31.1 324.4 34.4 332.3C49.3 368 80.6 420 127.4 463.4C174.5 507.1 239.2 544 320 544C400.8 544 465.5 507.2 512.6 463.4C559.4 419.9 590.7 368 605.6 332.3C608.9 324.4 608.9 315.6 605.6 307.7C590.7 272 559.4 220 512.6 176.6C465.5 132.9 400.8 96 320 96zM176 320C176 240.5 240.5 176 320 176C399.5 176 464 240.5 464 320C464 399.5 399.5 464 320 464C240.5 464 176 399.5 176 320zM320 256C320 291.3 291.3 320 256 320C244.5 320 233.7 317 224.3 311.6C223.3 322.5 224.2 333.7 227.2 344.8C240.9 396 293.6 426.4 344.8 412.7C396 399 426.4 346.3 412.7 295.1C400.5 249.4 357.2 220.3 311.6 224.3C316.9 233.6 320 244.4 320 256z" />
                       </svg>
-                      <span class="text-xs sm:text-sm">{{ postDetail.viewCount }} {{ $t("post.views") }}</span>
+                      <span class="text-xs sm:text-sm">{{ formatNumber(postDetail.viewCount as any) }} {{ $t("post.views") }}</span>
                     </div>
                   </div>
                   <div class="flex items-center space-x-1 sm:space-x-2 md:space-x-3">
@@ -210,8 +210,8 @@
 import { Field } from "vee-validate";
 import { TOPOST, TOPOSTDETAIL, TOLOGIN } from "~/utils/constants";
 import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
-import CommentTree from "~/components/post/CommentTree.vue";
-import PostLikeButton from "~/components/post/PostLikeButton.vue";
+import CommentTree from "~/components/features/post/CommentTree.vue";
+import PostLikeButton from "~/components/features/post/PostLikeButton.vue";
 import { buildToc, type TocItem } from "~/composables/useToc";
 import { usePostSlider } from "~/composables/usePostSlider";
 import { usePost } from "~/composables/post/usePost";
@@ -258,7 +258,7 @@ const initForSlug = async (targetSlug: string) => {
   const id = postDetail.value?.id;
   if (!id) return;
   setCurrent(id);
-  await Promise.all([loadComments(id), getLikeStatus(id)]);
+  await Promise.all([loadComments(id), getLikeStatus(id), trackView(id)]);
 };
 
 onBeforeRouteUpdate((to, from, next) => {
@@ -292,6 +292,16 @@ watch(
     await initForSlug(newSlug);
   },
   { immediate: true },
+);
+
+watch(
+  () => auth.isAuthenticated,
+  (isAuthenticated) => {
+    const id = postDetail.value?.id;
+    if (isAuthenticated && id) {
+      getLikeStatus(id);
+    }
+  },
 );
 
 const breadcrumbs = computed(() => [

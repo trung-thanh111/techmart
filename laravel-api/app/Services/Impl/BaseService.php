@@ -222,6 +222,7 @@ abstract class BaseService implements BaseServiceInterface
     public function show($id)
     {
         $field = request()->input('field') ?? request()->input('column');
+
         if ($field) {
             $model = $this->findByField($field, $id);
             if (!$model) {
@@ -230,15 +231,19 @@ abstract class BaseService implements BaseServiceInterface
             return $model;
         }
 
-        if (is_numeric($id)) {
-            return $this->checkModelExists($id)->getResult();
+        // nếu tìm id k tồn tại thì cho id thành string để tìm theo slug
+        if (ctype_digit(strval($id))) {
+            try {
+                return $this->checkModelExists((int)$id)->getResult();
+            } catch (ModelNotFoundException $e) {
+            }
         }
-
         $model = $this->findByField('slug', $id);
-        if (!$model) {
-            throw new ModelNotFoundException(Lang::get('message.record_not_found'));
+
+        if ($model) {
+            return $model;
         }
-        return $model;
+        throw new ModelNotFoundException(Lang::get('message.record_not_found'));
     }
 
     public function relation(Request $request, int $id = 0, string $action = '')

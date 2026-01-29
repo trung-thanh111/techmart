@@ -1,5 +1,5 @@
 <template>
-  <section :class="['bg-white shadow-md rounded-md py-3 md:py-6 px-2 md:px-6 mb-4 md:mb-6', rootClass]">
+  <section v-if="items.length > 0" :class="['bg-white shadow-md rounded-md py-3 md:py-6 px-2 md:px-6 mb-4 md:mb-6', rootClass]">
     <div class="mb-3 md:mb-5">
       <div class="flex flex-wrap justify-between items-center gap-2">
         <div>
@@ -22,7 +22,7 @@
     </div>
     <Splide :options="options" id="mini-category-slider">
       <SplideSlide v-for="item in items" :key="item.id" class="shadow-lg">
-        <NuxtLink v-if="item.slug" :to="`${basePath}${item.slug}`" class="block">
+        <NuxtLink v-if="item.slug" :to="`${basePath}/${item.slug}`" class="block">
           <div class="mini-category-item" style="height: 180px; width: 120px">
             <NuxtImg :src="item.image?.path ? (item.image?.url ?? '') : IMAGEDEFAULT" :alt="item.name || 'Item'" class="rounded-md" loading="lazy" />
             <div class="mini-category-text">

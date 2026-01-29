@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Requests\Faq\Faq;
 
 use App\Enums\Common;
@@ -32,7 +33,8 @@ class StoreRequest extends BaseRequest
         ];
     }
 
-    public function prepareForValidation(){
+    public function prepareForValidation()
+    {
         $this->merge([
             'slug' => generate_slug($this->question),
             'user_id' => auth(Common::API)->user()->id,
@@ -40,7 +42,8 @@ class StoreRequest extends BaseRequest
         ]);
     }
 
-    public function messages(){
+    public function messages()
+    {
         return [];
     }
 }

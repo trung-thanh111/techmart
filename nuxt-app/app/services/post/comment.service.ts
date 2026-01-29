@@ -45,16 +45,16 @@ export const postCommentService = {
   },
 
   store: async (payload: Partial<IPostComment>): Promise<IApiOk<IPostComment>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IPostComment>>(endpoint.collection, {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiOk<IPostComment>>(endpoint.collection, {
       method: "POST",
       body: formData(payload),
     });
   },
 
   update: async (id: number, payload: Partial<IPostComment>): Promise<IApiOk<IPostComment>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IPostComment>>(`${endpoint.collection}/${id}`, {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiOk<IPostComment>>(`${endpoint.collection}/${id}`, {
       method: "POST",
       body: formData(payload),
       params: { _method: "PATCH" },
@@ -62,15 +62,15 @@ export const postCommentService = {
   },
 
   delete: async (id: number): Promise<IApiMessage> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiMessage>(`${endpoint.collection}/${id}`, {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiMessage>(`${endpoint.collection}/${id}`, {
       method: "DELETE",
     });
   },
 
   deleteMultiple: async (ids: number[]): Promise<IApiMessage> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiMessage>(`${endpoint.collection}/bulkDelete`, {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiMessage>(`${endpoint.collection}/bulkDelete`, {
       method: "DELETE",
       body: { ids },
     });

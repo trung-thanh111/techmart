@@ -2,7 +2,7 @@ import type { IApiOk, IApiMessage, IPaginate } from "~/interfaces/base.interface
 import type { IPostCommentLike } from "~/interfaces/post/comment_like.interface";
 import { useApi } from "~/composables/useApi";
 
-const ENDPOINT = "/api/v1";
+const ENDPOINT = "/api/v1/admin";
 
 export const postCommentLikeService = {
     store: async (commentId: number): Promise<IApiOk<IPostCommentLike>> => {

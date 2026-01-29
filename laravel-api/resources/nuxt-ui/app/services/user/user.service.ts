@@ -3,7 +3,7 @@ import type { IUser } from "~/interfaces/user/user.interface";
 import { useApi } from "~/composables/useApi";
 import { formData } from "~/utils/formData";
 
-const ENDPOINT = "/api/v1";
+const ENDPOINT = "/api/v1/admin";
 
 export const useUserService = {
     pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IUser>>> => {

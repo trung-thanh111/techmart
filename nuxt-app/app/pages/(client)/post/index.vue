@@ -1,7 +1,7 @@
 <template>
   <div class="main-content max-w-7xl mx-auto px-2 sm:px-4">
     <Breadcrumb :crumbs="breadcrumbs" />
-    <section class="mx-auto">
+    <section class="mx-auto" v-if="featuredPosts.length > 0">
       <div class="mb-4 md:mb-5">
         <Splide :options="postSlideHotOptions" id="post-slide-hot">
           <SplideSlide v-for="featuredPostItem in featuredPosts" :key="featuredPostItem.id">
@@ -37,7 +37,7 @@
       <div class="w-full max-w-8xl mx-auto my-4 md:my-5">
         <div class="h-[2px] w-full bg-gradient-to-r from-transparent via-[rgba(32,141,128,0.3)] to-transparent"></div>
       </div>
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-3 md:gap-4 bg-white shadow-md rounded-md py-3 md:py-6 px-2 md:px-6 mb-4 md:mb-8">
+      <div v-if="featuredPostLimits.length > 0" class="grid grid-cols-1 lg:grid-cols-3 gap-3 md:gap-4 bg-white shadow-md rounded-md py-3 md:py-6 px-2 md:px-6 mb-4 md:mb-8">
         <template v-for="(featuredPostLimitItem, idx) in featuredPostLimits" :key="featuredPostLimitItem.id">
           <div v-if="idx === 0" class="lg:col-span-2">
             <div class="relative rounded-xl overflow-hidden border border-gray-100 hover:border-cyan-200 hover:shadow-xl transition-all">
@@ -73,8 +73,8 @@
         </template>
       </div>
     </section>
-    <Category :items="postCatalogueList as any" basePath="TOPOST" :viewAllLink="TOPOSTCATEGORY" :viewAllText="$t('common.viewAll')" />
-    <section class="product-accsessory bg-white shadow-md rounded-md py-3 md:py-6 px-2 md:px-6 mb-4 md:mb-6">
+    <Category :items="postCatalogueList as any" :basePath="POSTCATEGORY" :viewAllLink="TOPOSTCATEGORY" :viewAllText="$t('common.viewAll')" />
+    <section v-if="mostLikedItems.length > 0" class="product-accsessory bg-white shadow-md rounded-md py-3 md:py-6 px-2 md:px-6 mb-4 md:mb-6">
       <div class="mb-4 md:mb-5">
         <div class="flex justify-between items-center gap-2">
           <div>
@@ -82,7 +82,7 @@
           </div>
         </div>
       </div>
-      <div v-if="mostLikedLoading" class="text-sm text-gray-500 p-2">{{ $t("post.loading") }}</div>
+      <div v-if="mostLikedLoading" class="text-sm text-gray-500 p-2">{{ $t("common.loading") }}</div>
       <div v-else-if="!mostLikedItems || mostLikedItems.length === 0" class="text-sm text-gray-500 p-2">{{ $t("post.noPosts") }}</div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
         <NuxtLink v-for="(post, index) in mostLikedItems" :key="post.id" :to="`${TOPOST}/${post.slug}`" class="flex items-center gap-2 md:gap-3 p-2 md:p-3 rounded-md hover:bg-gray-50 transition">
@@ -95,9 +95,9 @@
       </div>
     </section>
 
-    <section class="max-w-[1440px] mx-auto p-2 md:p-4 bg-white rounded-md shadow mb-2 md:mb-6">
+    <section v-if="byCatalogueCache[3] && byCatalogueCache[3].length > 0" class="max-w-[1440px] mx-auto p-2 md:p-4 bg-white rounded-md shadow mb-2 md:mb-6">
       <h2 class="inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] text-lg md:text-2xl font-bold mb-3 md:mb-4">{{ $t("post.productPosts") }}</h2>
-      <div v-if="byCatalogueLoading[3]" class="text-sm text-gray-500 p-2">{{ $t("post.loading") }}</div>
+      <div v-if="byCatalogueLoading[3]" class="text-sm text-gray-500 p-2">{{ $t("common.loading") }}</div>
       <div v-else-if="!byCatalogueCache[3] || byCatalogueCache[3].length === 0" class="text-sm text-gray-500 p-2">{{ $t("post.noPosts") }}</div>
       <Splide v-else :options="postProductOptions" id="post-product-slider">
         <SplideSlide v-for="post in byCatalogueCache[3]" :key="post.id">
@@ -113,7 +113,7 @@
       </Splide>
     </section>
 
-    <section class="bg-white shadow-md rounded-md py-2 md:py-3 px-2 md:px-6 mb-2 md:mb-6">
+    <section v-if="latestItems.length > 0" class="bg-white shadow-md rounded-md py-2 md:py-3 px-2 md:px-6 mb-2 md:mb-6">
       <h2 class="inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] text-lg md:text-2xl font-bold mb-3 md:mb-4">{{ $t("post.dailyNews") }}</h2>
       <div class="grid grid-cols-12 gap-3 md:gap-4">
         <div class="col-span-12 lg:col-span-9">
@@ -135,11 +135,11 @@
           </div>
           <div class="mt-3 md:mt-5 flex justify-center">
             <button v-if="latestPage <= latestLastPage" class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 text-xs md:text-sm disabled:opacity-60" :disabled="isLoading || latestLoading" @click="loadLatest()">
-              {{ latestLoading ? $t("post.loadingMore") : $t("post.loadMore") }}
+              {{ latestLoading ? $t("common.loadingMore") : $t("post.loadMore") }}
             </button>
           </div>
         </div>
-        <div class="col-span-12 lg:col-span-3">
+        <div v-if="hotQuickItems.length > 0" class="col-span-12 lg:col-span-3">
           <div class="bg-white rounded-lg p-3 md:p-4 border border-gray-200 mb-3 md:mb-5">
             <h2 class="text-base md:text-lg font-semibold text-gray-800 mb-2 md:mb-4">{{ $t("post.quickView") }}</h2>
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-2 gap-2 mb-3 md:mb-4">
@@ -150,11 +150,11 @@
             </div>
             <div class="flex justify-center">
               <button v-if="hotQuickPage <= hotQuickLastPage" class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 text-xs md:text-sm disabled:opacity-60" :disabled="isLoading || hotQuickLoading" @click="loadHotQuick()">
-                {{ hotQuickLoading ? $t("post.loadingMore") : $t("post.loadMore") }}
+                {{ hotQuickLoading ? $t("common.loadingMore") : $t("post.loadMore") }}
               </button>
             </div>
           </div>
-          <div class="bg-white rounded-lg p-3 md:p-4 border border-gray-200">
+          <div v-if="tagList.length > 0" class="bg-white rounded-lg p-3 md:p-4 border border-gray-200">
             <h2 class="text-base md:text-lg font-semibold text-gray-800 mb-2 md:mb-4">
               <span class="text-sky-600">#</span>
               {{ $t("post.tags") }}
@@ -171,7 +171,7 @@
 <script setup lang="ts">
 import { usePostSlider } from "~/composables/usePostSlider";
 import { usePost } from "~/composables/post/usePost";
-import { IMAGEDEFAULT, TOPOST, TOPOSTCATEGORY } from "~/utils/constants";
+import { IMAGEDEFAULT, TOPOST, TOPOSTCATEGORY, POSTCATEGORY } from "~/utils/constants";
 import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
 import Category from "~/components/ui/Category.vue";
 import { definePageMeta } from "#imports";

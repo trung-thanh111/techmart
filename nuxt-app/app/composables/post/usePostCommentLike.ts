@@ -24,18 +24,21 @@ export const usePostCommentLike = () => {
     isLoading.value = true;
     error.value = null;
     try {
-      const existPromise = auth.isAuthenticated && typeof userId === "number"
-        ? postCommentLikeService.checkLiked(commentId, userId)
-        : Promise.resolve({ liked: false, records: [] as IPostCommentLike[] });
+      const existPromise = auth.isAuthenticated && typeof userId === "number" ? postCommentLikeService.checkLiked(commentId, userId) : Promise.resolve({ data: [] as IPostCommentLike[] } as any);
       const countPromise = postCommentLikeService.listByComment(commentId);
 
-      const [exist, countRes] = await Promise.all([existPromise, countPromise]);
+      const [existRes, countRes] = await Promise.all([existPromise, countPromise]);
 
       const payload = countRes?.data;
       const likes: IPostCommentLike[] = Array.isArray(payload?.data) ? payload.data : Array.isArray(payload) ? payload : [];
 
-      state.isLiked = !!exist.liked;
-      state.currentLikeId = exist.records[0]?.id ?? null;
+      // Handle exist response
+      const rawExistData = existRes?.data;
+      const userLikes = Array.isArray(rawExistData) ? rawExistData : Array.isArray((rawExistData as any)?.data) ? (rawExistData as any).data : [];
+      const userLikeRecord = userLikes.find((x: any) => Number((x as any)?.postCommentId ?? (x as any)?.post_comment_id ?? (x as any)?.commentId) === commentId);
+
+      state.isLiked = !!userLikeRecord;
+      state.currentLikeId = userLikeRecord?.id ?? null;
       state.likeCount = likes.length;
       return true;
     } catch (e: any) {
@@ -75,7 +78,7 @@ export const usePostCommentLike = () => {
         state.currentLikeId = null;
       } else {
         try {
-          const res = await postCommentLikeService.store(commentId);
+          const res = await postCommentLikeService.store({ comment_id: commentId } as any);
           const data = res.data;
           if (data) {
             state.isLiked = true;

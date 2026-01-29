@@ -2,7 +2,7 @@ import type { UploadResponse } from "~/interfaces/upload/image.interface";
 import { useApi } from "~/composables/useApi";
 import type { ApiResponse } from "~/composables/useApi";
 
-const ENDPOINT = "/api/v1";
+const ENDPOINT = "/api/v1/admin";
 
 export const uploadService = {
     /**

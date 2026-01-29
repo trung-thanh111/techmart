@@ -2,7 +2,7 @@ import type { IApiOk, IApiMessage, IPaginate } from "~/interfaces/base.interface
 import type { IWishlist, IWishlistGrouped } from "~/interfaces/product/wishlist.interface";
 import { useApi } from "~/composables/useApi";
 
-const ENDPOINT = "/api/v1";
+const ENDPOINT = "/api/v1/admin";
 
 export const wishlistService = {
     pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IWishlistGrouped>>> => {

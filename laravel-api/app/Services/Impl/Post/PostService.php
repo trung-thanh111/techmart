@@ -20,7 +20,7 @@ class PostService extends BaseService implements PostServiceInterface
     protected $complexFilter = ['id'];
     protected $sort = ['like_count', 'desc', 'id', 'desc'];
 
-    protected $with = ['post_catalogues', 'post_tags', 'relateds'];
+    protected $with = ['post_catalogues', 'post_tags', 'relateds', 'users'];
     protected $relationFilter = ['post_catalogues', 'post_tags'];
 
     protected $cacheKeyPrefix = 'posts';

@@ -8,6 +8,7 @@
     "logout": "Đăng xuất"
   },
   "common": {
+    "showingResult": "Hiển thị {from} đến {to} trong {total} kết quả",
     "success": "Thành công",
     "error": "Có lỗi xảy ra",
     "failed": "Thất bại",
@@ -213,6 +214,10 @@
     "customer": "Khách hàng",
     "admin": "Quản trị viên",
     "since": "từ ngày"
+  },
+  "category": {
+    "title": "Danh mục",
+    "description": "Khám phá các danh mục sản phẩm đa dạng tại Tech Mart Store – từ thiết bị điện tử, gia dụng thông minh đến phụ kiện hiện đại, đáp ứng nhu cầu học tập, làm việc và giải trí của bạn."
   },
   "field": {
     "name": "Họ và tên",
@@ -543,6 +548,28 @@
       "clickToUpload": "Click ảnh để tải lên"
     }
   },
+  "form": {
+    "firstName": "Tên",
+    "firstNamePlaceholder": "Nhập tên",
+    "lastName": "Họ",
+    "lastNamePlaceholder": "Nhập họ",
+    "fullName": "Họ tên",
+    "fullNamePlaceholder": "Nhập họ tên",
+    "email": "Email",
+    "emailPlaceholder": "Nhập email",
+    "subject": "Chủ đề",
+    "subjectPlaceholder": "Nhập chủ đề",
+    "content": "Nội dung",
+    "contentPlaceholder": "Nhập nội dung",
+    "phone": "Số điện thoại",
+    "phonePlaceholder": "Nhập số điện thoại",
+    "birthday": "Ngày sinh",
+    "gender": "Giới tính",
+    "genderPlaceholder": "Chọn giới tính",
+    "image": "Hình ảnh",
+    "imageNote": "Chỉ chấp nhận ảnh JPG, PNG, WEBP, dung lượng tối đa 5MB",
+    "clickToUpload": "Click ảnh để tải lên"
+  },
   "faq": {
     "title": "Câu hỏi thường gặp",
     "viewDetails": "Xem chi tiết",
@@ -725,6 +752,13 @@
     "memberBenefits": "để hưởng quyền lợi thành viên từ chúng tôi!",
     "specifications": "Thông số kỹ thuật"
   },
+  "filter": {
+    "newest": "Mới nhất",
+    "oldest": "Cũ nhất",
+    "price_high": "Giá: Cao đến thấp",
+    "price_low": "Giá: Thấp đến cao",
+    "best_seller": "Bán chạy nhất"
+  },
   "search": {
     "recentSearches": "Tìm kiếm gần đây",
     "noResults": "Không tìm thấy sản phẩm phù hợp",
@@ -738,13 +772,6 @@
     "over10000000": "Trên 10.000.000đ",
     "cataloguePlaceholder": "Danh mục",
     "brandPlaceholder": "Thương hiệu",
-    "filter": {
-      "newest": "Mới nhất",
-      "oldest": "Cũ nhất",
-      "price_high": "Giá: Cao đến thấp",
-      "price_low": "Giá: Thấp đến cao",
-      "best_seller": "Bán chạy nhất"
-    },
     "form": {
       "fullName": "Họ tên",
       "fullNamePlaceholder": "Tên công ty của bạn",
@@ -776,6 +803,8 @@
     "supportPolicy": "Hỗ trợ & chính sách"
   },
   "utilityTool": {
+    "show": "Hiển thị",
+    "hide": "Ẩn",
     "chat": "Chat",
     "offers": "Ưu đãi",
     "giftCode": "Tặng mã giảm 10% trên đơn hàng",

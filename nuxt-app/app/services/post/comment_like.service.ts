@@ -9,16 +9,16 @@ const endpoint = {
 
 export const postCommentLikeService = {
   store: async (payload: Partial<IPostCommentLike>): Promise<IApiOk<IPostCommentLike>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IPostCommentLike>>(endpoint.collection, {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiOk<IPostCommentLike>>(endpoint.collection, {
       method: "POST",
       body: payload,
     });
   },
 
   delete: async (id: number): Promise<IApiMessage> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiMessage>(`${endpoint.collection}/${id}`, {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiMessage>(`${endpoint.collection}/${id}`, {
       method: "DELETE",
     });
   },
@@ -28,7 +28,7 @@ export const postCommentLikeService = {
     return await publicFetch<IApiOk<IPostCommentLike[]>>(endpoint.collection, {
       method: "GET",
       params: {
-        post_comment_id: commentId,
+        comment_id: commentId,
         publish: 2,
         sort: "id,desc",
         deleted_at: null,
@@ -49,18 +49,15 @@ export const postCommentLikeService = {
     });
   },
 
-  checkLiked: async (commentId: number, userId: number): Promise<IApiOk<boolean>> => {
+  checkLiked: async (commentId: number, userId: number): Promise<IApiOk<IPostCommentLike[]>> => {
     const { publicFetch } = useApi();
-    const response = await publicFetch<IApiOk<IPostCommentLike[]>>(endpoint.collection, {
+    return await publicFetch<IApiOk<IPostCommentLike[]>>(endpoint.collection, {
       method: "GET",
       params: {
-        post_comment_id: commentId,
+        comment_id: commentId,
         user_id: userId,
+        type: "all",
       },
     });
-    return {
-      ...response,
-      data: response.data.length > 0,
-    };
   },
 };
