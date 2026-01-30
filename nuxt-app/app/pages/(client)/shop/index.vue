@@ -54,28 +54,24 @@
             <FilterSort :sort="filters.sort" :setSort="setSort" />
           </div>
           <div class="relative" id="product-shop-slide">
-            <template v-if="totalProducts > 0 && chunks.length">
-              <Splide :options="sliderOptions" ref="splideRef">
-                <SplideSlide v-for="(chunk, idx) in chunks" :key="idx">
-                  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
-                    <ProductCard v-for="product in chunk" :key="product.id" :product="product" />
-                  </div>
-                </SplideSlide>
-              </Splide>
-              <button v-if="totalProducts > 8" @click="prev" :disabled="isLoading" class="absolute left-0 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 text-gray-700 shadow hover:bg-gray-200 disabled:opacity-50 transition-all">
-                <i class="fa-solid fa-chevron-left"></i>
-              </button>
-              <button v-if="totalProducts > 8" @click="next" :disabled="isLoading" class="absolute right-0 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-sky-500 to-cyan-400 text-white shadow hover:from-sky-600 hover:to-cyan-500 disabled:opacity-50 transition-all">
-                <i v-if="isLoading" class="fa-solid fa-circle-notch fa-spin"></i>
-                <i v-else class="fa-solid fa-chevron-right"></i>
-              </button>
-            </template>
-            <template v-else>
-              <div class="flex flex-col items-center justify-center py-10 text-center text-gray-500">
-                <NuxtImg :src="EMPTYBOX" alt="" class="object-contain" />
-                <p class="text-sm text-center">{{ $t("common.noProductsMatchFilter") }}</p>
-              </div>
-            </template>
+            <DataState :loading="isLoading && chunks.length === 0" :error="false" :data="chunks.length > 0 ? chunks : []" :show-empty-image="true">
+              <template v-if="totalProducts > 0 && chunks.length">
+                <Splide :options="sliderOptions" ref="splideRef">
+                  <SplideSlide v-for="(chunk, idx) in chunks" :key="idx">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
+                      <ProductCard v-for="product in chunk" :key="product.id" :product="product" />
+                    </div>
+                  </SplideSlide>
+                </Splide>
+                <button v-if="totalProducts > 8" @click="prev" :disabled="isLoading" class="absolute left-0 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 text-gray-700 shadow hover:bg-gray-200 disabled:opacity-50 transition-all">
+                  <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <button v-if="totalProducts > 8" @click="next" :disabled="isLoading" class="absolute right-0 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-sky-500 to-cyan-400 text-white shadow hover:from-sky-600 hover:to-cyan-500 disabled:opacity-50 transition-all">
+                  <i v-if="isLoading" class="fa-solid fa-circle-notch fa-spin"></i>
+                  <i v-else class="fa-solid fa-chevron-right"></i>
+                </button>
+              </template>
+            </DataState>
           </div>
         </div>
       </div>
@@ -123,6 +119,7 @@
 import CommitMent from "~/components/ui/CommitMent.vue";
 import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
 import Partner from "~/components/ui/Partner.vue";
+import DataState from "~/components/ui/DataState.vue";
 import { useShop } from "~/composables/shop/useShop";
 import Category from "~/components/ui/Category.vue";
 import FilterBar from "~/components/ui/FilterBar.vue";

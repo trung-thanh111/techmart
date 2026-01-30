@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1\Auth;
 
+use App\Enums\Common;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use App\Http\Resources\ApiResource;
@@ -17,7 +18,7 @@ use Tymon\JWTAuth\Exceptions\UserNotDefinedException;
 class AdminAuthController extends Controller
 {
     private $authService;
-    private $guard = 'admin';
+    private $guard = Common::ADMIN;
 
     public function __construct(
         AuthService $authService
@@ -64,8 +65,8 @@ class AdminAuthController extends Controller
     public function logout(): JsonResponse
     {
         try {
-            $this->authService->logout($this->guard);
-            return ApiResource::message(Lang::get('message.logout_success'));
+            $cookie = $this->authService->logout($this->guard);
+            return ApiResource::message(Lang::get('message.logout_success'))->withCookie($cookie);
         } catch (\Throwable $th) {
             return ApiResource::message($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }

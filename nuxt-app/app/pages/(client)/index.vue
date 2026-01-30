@@ -60,17 +60,11 @@
         <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("home.popularLightingDesc") }}</p>
       </div>
       <div class="max-w-7xl mx-auto">
-        <div v-if="featuredProductsLoading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div v-for="n in 3" :key="n" class="animate-pulse">
-            <div class="bg-gray-200 rounded-lg h-64"></div>
+        <DataState :loading="featuredProductsLoading" :error="false" :data="featuredProducts" :show-empty-image="true">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <ProductCard v-for="product in featuredProducts.slice(0, 3)" :key="product.id" :product="product" :loading="false" />
           </div>
-        </div>
-        <div v-else-if="featuredProducts.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <ProductCard v-for="product in featuredProducts.slice(0, 3)" :key="product.id" :product="product" :loading="false" />
-        </div>
-        <div v-else class="text-center py-8">
-          <p class="text-gray-500">{{ $t("home.noProductsFound") || "Không tìm thấy sản phẩm" }}</p>
-        </div>
+        </DataState>
       </div>
     </section>
     <section class="product-sales bg-[linear-gradient(99.73deg,rgba(43,57,144,0.91)_-22.07%,#0097cc_47.78%,#8dc63f_117.9%)] rounded-md py-3 md:py-6 px-3 md:px-6 md:mb-8 mb-4">
@@ -742,6 +736,7 @@ import CommitMent from "~/components/ui/CommitMent.vue";
 import ProductCard from "~/components/features/ProductCard.vue";
 import CollectionProduct from "~/components/features/Collection.vue";
 import ButtonViewMore from "~/components/ui/Button.vue";
+import DataState from "~/components/ui/DataState.vue";
 import { useHomeSlider } from "~/composables/useHomeSlider";
 
 // Import auth composable

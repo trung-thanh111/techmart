@@ -5,6 +5,7 @@ import { useI18n } from "vue-i18n";
 import AppPagination from "~/components/navigation/AppPagination.vue";
 import CommitMent from "~/components/ui/CommitMent.vue";
 import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
+import DataState from "~/components/ui/DataState.vue";
 import { useAgency } from "~/composables/agency/useAgency";
 import { TOAGENCY } from "~/utils/constants";
 
@@ -127,9 +128,8 @@ definePageMeta({ layout: "client" });
       </div>
     </section>
     <section>
-      <div v-if="isLoading" class="flex items-center justify-center py-10 text-gray-400">{{ $t("common.loading") }}</div>
-      <div v-else-if="!hasData" class="text-center py-5 text-gray-400">{{ $t("common.noData") }}</div>
-      <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 md:gap-6 gap-4">
+      <DataState :loading="isLoading" :error="false" :data="agencies" :show-empty-image="true">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 md:gap-6 gap-4">
         <div v-for="agency in agencies" :key="agency.id" class="bg-white rounded-lg shadow-md p-4 flex flex-col items-center hover:shadow-xl transition-shadow group">
           <NuxtImg :src="getCoverUrl(agency)" :alt="agency.name" class="w-20 h-20 rounded-full object-cover mb-3 border-2 border-gray-200 group-hover:border-sky-500 transition-all" loading="lazy" />
           <NuxtLink :to="`${TOAGENCY}/${agency.slug}`" class="text-lg font-semibold text-gray-800 group-hover:text-sky-600 mb-1">
@@ -169,7 +169,8 @@ definePageMeta({ layout: "client" });
             </span>
           </div>
         </div>
-      </div>
+        </div>
+      </DataState>
     </section>
     <Teleport to="body">
       <div v-if="activeMapIframe" class="fixed inset-0 bg-black/50 flex items-center justify-center z-[9999]" @click.self="closeMap" style="isolation: isolate">

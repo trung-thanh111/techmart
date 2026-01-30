@@ -1,18 +1,7 @@
 <template>
   <div class="main-content max-w-7xl mx-auto">
-    <div v-if="productDetailLoading" class="flex items-center justify-center min-h-[400px]">
-      <div class="text-center">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-        <p class="text-gray-600">{{ $t("common.loading") }}</p>
-      </div>
-    </div>
-    <div v-else-if="productDetailError" class="flex items-center justify-center min-h-[400px]">
-      <div class="text-center">
-        <h2 class="text-xl font-semibold text-gray-800 mb-2">{{ $t("header.loadingError") }}</h2>
-        <p class="text-gray-600 mb-4">{{ productDetailError }}</p>
-      </div>
-    </div>
-    <div v-else-if="productDetail">
+    <DataState :loading="productDetailLoading" :error="productDetailError" :data="productDetail" :show-empty-image="false">
+      <template v-if="productDetail">
       <Breadcrumb :crumbs="breadcrumbs" />
       <section class="bg-white shadow-md rounded-md">
         <div class="container">
@@ -760,12 +749,14 @@
           </Splide>
         </div>
       </section>
-    </div>
+      </template>
+    </DataState>
   </div>
 </template>
 <script setup lang="ts">
 import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
 import ProductCard from "~/components//features/ProductCard.vue";
+import DataState from "~/components/ui/DataState.vue";
 import { Splide, SplideSlide } from "@splidejs/vue-splide";
 import { useProduct } from "~/composables/product/useProduct";
 import { useProductSlider } from "~/composables/useProductSlider";

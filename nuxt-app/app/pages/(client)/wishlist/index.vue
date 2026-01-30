@@ -24,20 +24,11 @@
         </div>
       </div>
 
-      <div v-if="isLoading" class="flex items-center justify-center min-h-[400px]">
-        <div class="text-center">
-          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p class="text-gray-600">{{ $t("wishlist.loading") }}</p>
-        </div>
-      </div>
-      <div v-else-if="filteredProducts.length === 0" class="flex items-center justify-center min-h-[400px]">
-        <div class="text-center">
-          <p class="text-gray-600">{{ $t("wishlist.noItems") }}</p>
-        </div>
-      </div>
-      <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      <DataState :loading="isLoading" :error="false" :data="filteredProducts" :show-empty-image="true">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         <ProductCardWishlist v-for="(item, index) in filteredProducts" :key="item.id || index" :product="item" @removed="handleProductRemoved" />
       </div>
+      </DataState>
       <div v-if="hasMore && filteredProducts.length > 5" class="w-full flex justify-center mt-4 md:mt-6">
         <button @click="loadMore" type="button" class="relative flex items-center py-1.5 px-4 overflow-hidden font-medium transition-all bg-sky-500 rounded group">
           <span class="absolute inset-0 transition-all duration-500 ease-in-out delay-200 -translate-x-full bg-sky-600 rounded-md group-hover:translate-x-0"></span>
@@ -52,6 +43,7 @@ import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
 import ProductCardWishlist from "~/components//features/ProductCardWishlist.vue";
 import FilterWishlist from "~/components//features/FilterWishlist.vue";
 import FilterSort from "~/components//features/FilterSort.vue";
+import DataState from "~/components/ui/DataState.vue";
 import { useWishlist } from "~/composables/product/useWishlist";
 import { productCatalogueService } from "~/services/product/catalogue.service";
 import { brandService } from "~/services/brand/brand.service";

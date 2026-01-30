@@ -54,7 +54,16 @@ export const useApi = () => {
         try {
           // Dynamic import to avoid circular dependency
           const { authService } = await import("~/services/auth/auth.service");
-          await authService.refresh();
+          const refreshRes = await authService.refresh();
+          // Update auth store with new tokens
+          if (refreshRes?.data) {
+            auth.setAuth(refreshRes.data.user, {
+              accessToken: refreshRes.data.accessToken,
+              refreshToken: null,
+              csrfToken: refreshRes.data.csrfToken,
+              expireAt: refreshRes.data.expireAt,
+            });
+          }
         } catch (e) {
           // If refresh fails, let the request proceed (it will 401) or logout
           // We let it proceed to fail gracefully or let onResponseError handle it
@@ -63,6 +72,7 @@ export const useApi = () => {
       }
 
       const accessToken = auth.accessToken;
+      const csrfToken = auth.csrfToken;
 
       if (!accessToken) {
         throw createError({
@@ -70,8 +80,15 @@ export const useApi = () => {
           statusMessage: "Unauthorized",
         });
       }
+      
       const headers = new Headers(options.headers as HeadersInit);
       headers.set("Authorization", `Bearer ${accessToken}`);
+      
+      // Add CSRF token for POST/PUT/PATCH/DELETE requests
+      if (csrfToken && ['POST', 'PUT', 'PATCH', 'DELETE'].includes(options.method?.toUpperCase() || '')) {
+        headers.set("X-CSRF-TOKEN", csrfToken);
+      }
+      
       options.headers = headers;
     },
   });

@@ -41,6 +41,7 @@ class AuthService implements AuthServiceInterface
     private $userRepository;
     private $refreshTokenModel;
     private $emailVerificationService;
+    private $rememberMe = false;
 
 
     public function __construct(
@@ -71,6 +72,7 @@ class AuthService implements AuthServiceInterface
         try {
             // Validate Admin Role if guard is admin
             if ($guard === 'admin') {
+                // TODO: Add admin role validation if needed
             }
 
             return $this->beginTransaction()
@@ -78,7 +80,7 @@ class AuthService implements AuthServiceInterface
                 ->generateRefreshToken($guard, $rememberMe)
                 ->generateCsrfToken($guard)
                 ->commit()
-                ->authResponse($guard);
+                ->authResponse($guard, $rememberMe);
         } catch (\Throwable $th) {
             $this->rollback();
             throw $th;
@@ -172,10 +174,17 @@ class AuthService implements AuthServiceInterface
         return $this;
     }
 
-    private function authResponse(string $guard): array
+    private function authResponse(string $guard, bool $rememberMe = false): array
     {
         $auth = $this->getAuth($guard);
-        $cookieName = $this->getCookieName($guard);
+        $cookieName = $this->getCookieName();
+        $refreshTokenTTL = $rememberMe ? self::REFRESH_TOKEN_TIME_TO_LIVE_REMEMBER : self::REFRESH_TOKEN_TIME_TO_LIVE;
+
+        // Get cookie settings from config
+        $secure = config('session.secure', false);
+        $httpOnly = config('session.http_only', true);
+        $sameSite = config('session.same_site', 'lax');
+        $domain = config('session.domain');
 
         return [
             'data' => [
@@ -185,7 +194,17 @@ class AuthService implements AuthServiceInterface
                 'csrfToken' => $this->csrfToken,
                 'user' => new UserResource($auth->user()),
             ],
-            'authCookie' => Cookie::make($cookieName, $this->refreshToken, self::REFRESH_TOKEN_TIME_TO_LIVE * 24 * 60, '/', null, true, true, false, 'Lax'),
+            'authCookie' => Cookie::make(
+                $cookieName,
+                $this->refreshToken,
+                $refreshTokenTTL * 24 * 60,
+                '/',
+                $domain,
+                $secure,
+                $httpOnly,
+                false,
+                $sameSite
+            ),
         ];
     }
 
@@ -217,13 +236,13 @@ class AuthService implements AuthServiceInterface
             return $this->beginTransaction()
                 ->checkHeaderToken($request, $guard)
                 ->checkRefreshToken()
+                ->determineRememberMe()
+                ->revokeOldRefreshToken()
                 ->generateNewAccessToken($guard)
-                ->generateRefreshToken($guard) // Generates new, but what about old?
-                // Logic flow: checkRefreshToken checks if old was reused.
-                // We generate new refresh token.
+                ->generateRefreshToken($guard, $this->rememberMe)
                 ->generateCsrfToken($guard)
                 ->commit()
-                ->authResponse($guard);
+                ->authResponse($guard, $this->rememberMe);
         } catch (\Throwable $th) {
             $this->rollback();
             throw $th;
@@ -239,7 +258,7 @@ class AuthService implements AuthServiceInterface
             throw new NotFoundHttpException(Lang::get('message.model_not_found'));
         }
 
-        $cookieName = $this->getCookieName($guard);
+        $cookieName = $this->getCookieName();
         $refreshToken = $request->cookie($cookieName);
 
         if (!$refreshToken) {
@@ -269,12 +288,33 @@ class AuthService implements AuthServiceInterface
         return $this;
     }
 
+    private function determineRememberMe(): self
+    {
+        if ($this->refreshTokenModel) {
+            $daysUntilExpiry = now()->diffInDays($this->refreshTokenModel->expires_at);
+            $this->rememberMe = $daysUntilExpiry >= self::REFRESH_TOKEN_TIME_TO_LIVE_REMEMBER - 1;
+        }
+        return $this;
+    }
+
+    private function revokeOldRefreshToken(): self
+    {
+        if ($this->refreshTokenModel) {
+            $this->refreshTokenModel->update([
+                'was_used' => true,
+                'is_revoked' => true
+            ]);
+        }
+        return $this;
+    }
+
     private function generateNewAccessToken(string $guard): self
     {
         $auth = $this->getAuth($guard);
-        $this->refreshTokenModel->update(['was_used' => 1]);
         $user = $this->userRepository->findById($this->refreshTokenModel->user_id);
-        $auth->setTTL((self::ACCESS_TOKEN_TIME_TO_LIVE));
+
+        $ttl = $this->rememberMe ? self::ACCESS_TOKEN_TIME_TO_LIVE_REMEMBER : self::ACCESS_TOKEN_TIME_TO_LIVE;
+        $auth->setTTL($ttl);
         $auth->claims(['guard' => $guard]);
         $this->accessToken = $auth->login($user);
 
@@ -293,9 +333,35 @@ class AuthService implements AuthServiceInterface
     {
         $auth = $this->getAuth($guard);
         $cookieName = $this->getCookieName();
+
+        // Revoke all refresh tokens for this user
+        if ($user = $auth->user()) {
+            $this->refreshTokenRepository->revokeAllUserRefreshToken($user->id);
+            // Delete CSRF tokens
+            $this->csrfTokenRepository->deleteCsrfTokenByUserid($user->id);
+        }
+
+        // Invalidate current JWT token
         $auth->logout();
         $auth->invalidate(true);
 
-        return Cookie::make($cookieName, null, -1, '/', null, true, true, false, 'Lax');
+        // Get cookie settings from config
+        $secure = config('session.secure', false);
+        $httpOnly = config('session.http_only', true);
+        $sameSite = config('session.same_site', 'lax');
+        $domain = config('session.domain');
+
+        // Return cookie to delete from browser
+        return Cookie::make(
+            $cookieName,
+            null,
+            -1,
+            '/',
+            $domain,
+            $secure,
+            $httpOnly,
+            false,
+            $sameSite
+        );
     }
 }

@@ -22,16 +22,15 @@ class Jwt
     {
         try {
             $token = $request->bearerToken();
-            if (!$token) {
-                $token = $request->cookie('refreshToken');
-            }
 
             if (!$token) {
                 return ApiResource::message(Lang::get('message.access_token_not_found'), Response::HTTP_UNAUTHORIZED);
             }
+
             JWTAuth::setToken($token);
 
             $payload = JWTAuth::getPayload();
+
             if ($payload->get('guard') !== $guard) {
                 return ApiResource::message(Lang::get('message.token_invalid'), Response::HTTP_UNAUTHORIZED);
             }

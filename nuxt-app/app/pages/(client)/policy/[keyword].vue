@@ -21,30 +21,23 @@
     <section class="flex flex-col md:flex-row bg-white shadow-md rounded-lg md:my-5 my-2">
       <SidebarPolicy />
       <main class="flex-1 px-4 md:px-6 lg:px-8 mx-auto">
-        <div v-if="isLoading" class="flex items-center justify-center min-h-[400px]">
-          <div class="text-center">
-            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-            <p class="text-gray-600">{{ $t("common.loading") }}</p>
-          </div>
-        </div>
-        <div v-else class="max-w-full text-gray-800 text-sm leading-7 md:leading-9">
-          <div class="relative mb-4">
-            <NuxtImg src="/images/bg-title-policy.png" alt="image-policy-bg" loading="lazy" class="w-full h-auto object-cover" />
-            <div class="absolute inset-0 flex flex-col justify-center items-center gap-2">
-              <div class="text-lg md:text-[24px] font-semibold uppercase">
-                {{ isLoading ? $t("common.loading") : policy ? "Chính sách " + getPolicyTitle(policy.keyword as any) : $t("common.noData") }}
+        <DataState :loading="isLoading" :error="!policy && !isLoading" :data="policy" :empty-message="$t('common.notFound')">
+          <div class="max-w-full text-gray-800 text-sm leading-7 md:leading-9">
+            <div class="relative mb-4">
+              <NuxtImg src="/images/bg-title-policy.png" alt="image-policy-bg" loading="lazy" class="w-full h-auto object-cover" />
+              <div class="absolute inset-0 flex flex-col justify-center items-center gap-2">
+                <div class="text-lg md:text-[24px] font-semibold uppercase">
+                  {{ policy ? "Chính sách " + getPolicyTitle(policy.keyword as any) : $t("common.noData") }}
+                </div>
+                <p class="text-sm text-gray-600">{{ $t("common.lastUpdated") }} {{ policy ? new Date(policy.updatedAt as any).toLocaleDateString("vi-VN") : "" }}</p>
               </div>
-              <p class="text-sm text-gray-600">{{ $t("common.lastUpdated") }} {{ policy ? new Date(policy.updatedAt as any).toLocaleDateString("vi-VN") : "" }}</p>
+            </div>
+            <div class="prose" v-if="policy && policy.content" v-html="policy.content"></div>
+            <div class="prose" v-else>
+              <div class="text-center text-gray-500">{{ $t("common.updatingContent") }}</div>
             </div>
           </div>
-          <div class="prose" v-if="isLoading">
-            <div class="text-center text-gray-500">{{ $t("common.loadingContent") }}</div>
-          </div>
-          <div class="prose" v-else-if="policy && policy.content" v-html="policy.content"></div>
-          <div class="prose" v-else>
-            <div class="text-center text-gray-500">{{ $t("common.updatingContent") }}</div>
-          </div>
-        </div>
+        </DataState>
       </main>
     </section>
   </div>
@@ -55,6 +48,7 @@ import { ref, onMounted, watch } from "vue";
 import { systemService } from "~/services/system/system.service";
 import { getPolicyTitle } from "~/utils/system/policy";
 import SidebarPolicy from "~/components//navigation/SidebarPolicy.vue";
+import DataState from "~/components/ui/DataState.vue";
 import { useRoute, useRouter } from "vue-router";
 import { TOPRIVACYPOLICY } from "~/utils/constants";
 import { definePageMeta } from "#imports";
