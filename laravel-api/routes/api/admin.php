@@ -48,7 +48,6 @@ Route::group(['prefix' => 'v1/admin/auth'], function () {
     });
 });
 
-// Admin Resource Routes (Protected)
 Route::group(['prefix' => 'v1/admin', 'middleware' => ['jwt:admin', 'convert', 'checkPermission']], function () use ($routeExcept) {
 
     // Attribute Catalogue
@@ -193,6 +192,8 @@ Route::group(['prefix' => 'v1/admin', 'middleware' => ['jwt:admin', 'convert', '
         Route::patch('bulkUpdate', [BannerController::class, 'bulkUpdate']);
     });
     Route::resource('banners', BannerController::class)->except($routeExcept);
+
+    //generate route
 
     // Other Admin Resources
     Route::resource('systems', SystemController::class)->except($routeExcept);
