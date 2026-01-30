@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -37,4 +38,8 @@ class Brand extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
+    public function product_counts()
+    {
+        return $this->hasMany(Product::class, 'brand_id', 'id')->where('publish', 2);
+    }
 }

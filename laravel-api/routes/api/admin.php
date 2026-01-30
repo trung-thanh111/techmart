@@ -33,22 +33,27 @@ use App\Http\Controllers\Api\V1\Banner\BannerController;
 use App\Http\Controllers\Api\V1\Post\PostCommentController;
 use App\Http\Controllers\Api\V1\Post\PostCommentLikeController;
 use App\Http\Controllers\Api\V1\Post\PostLikeController;
+use App\Http\Controllers\Api\V1\Auth\AdminAuthController;
 
 $routeExcept = ['create', 'edit'];
 
 // Admin Auth routes
 Route::group(['prefix' => 'v1/admin/auth'], function () {
-    Route::post('refresh', [\App\Http\Controllers\Api\V1\Auth\AdminAuthController::class, 'refresh']);
+    // Public routes (no auth required)
     Route::middleware(['convert'])->group(function () {
-        Route::post('login', [\App\Http\Controllers\Api\V1\Auth\AdminAuthController::class, 'login']);
+        Route::post('login', [AdminAuthController::class, 'login']);
     });
+
+    // Refresh token (no auth required, but needs refresh token cookie)
+    Route::post('refresh', [AdminAuthController::class, 'refresh']);
+
+    // Protected routes (requires JWT auth)
     Route::middleware(['jwt:admin', 'convert'])->group(function () {
-        Route::get('me', [\App\Http\Controllers\Api\V1\Auth\AdminAuthController::class, 'me']);
-        Route::post('logout', [\App\Http\Controllers\Api\V1\Auth\AdminAuthController::class, 'logout']);
+        Route::get('me', [AdminAuthController::class, 'me']);
+        Route::post('logout', [AdminAuthController::class, 'logout']);
     });
 });
 
-// Admin Resource Routes (Protected)
 Route::group(['prefix' => 'v1/admin', 'middleware' => ['jwt:admin', 'convert', 'checkPermission']], function () use ($routeExcept) {
 
     // Attribute Catalogue
@@ -193,6 +198,8 @@ Route::group(['prefix' => 'v1/admin', 'middleware' => ['jwt:admin', 'convert', '
         Route::patch('bulkUpdate', [BannerController::class, 'bulkUpdate']);
     });
     Route::resource('banners', BannerController::class)->except($routeExcept);
+
+    //generate route
 
     // Other Admin Resources
     Route::resource('systems', SystemController::class)->except($routeExcept);

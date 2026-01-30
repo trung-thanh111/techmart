@@ -30,15 +30,13 @@
     <Category :title="$t('common.categories')" :description="$t('header.exploreCategories')" :items="productCatalogueList as any" :basePath="PRODUCTCATEGORY" :viewAllLink="TOSHOP" :viewAllText="$t('common.viewAll')" />
 
     <section class="mx-auto bg-white shadow-md rounded-md py-3 md:py-6 px-3 md:px-6 md:mb-8 mb-4">
-      <div>
-        <div v-if="!categoryDetail" class="text-sm text-gray-500 p-2">{{ $t("common.loading") }}</div>
-        <div v-else-if="!(categoryDetail as any).products || (categoryDetail as any).products.length === 0" class="text-center text-gray-500 py-4">{{ $t("common.noData") }}</div>
-        <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      <DataState :loading="!categoryDetail" :error="false" :data="(categoryDetail as any)?.products" :show-empty-image="true">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           <div v-for="product in (categoryDetail as any).products" :key="product.id" class="flex justify-center">
             <ProductCard :product="product" />
           </div>
         </div>
-      </div>
+      </DataState>
     </section>
   </div>
 </template>
@@ -52,6 +50,7 @@ import { definePageMeta } from "#imports";
 import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
 import Category from "~/components/ui/Category.vue";
 import ProductCard from "~/components//features/ProductCard.vue";
+import DataState from "~/components/ui/DataState.vue";
 import { IMAGEDEFAULT, TOSHOP, PRODUCTCATEGORY } from "~/utils/constants";
 import { useProductCatalogue } from "~/composables/product/useProductCatalogue";
 import { useProduct } from "~/composables/product/useProduct";

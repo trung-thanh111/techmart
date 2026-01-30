@@ -8,7 +8,7 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.72 19.72 0 0 1 2.09 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13 1.05.37 2.07.72 3.06a2 2 0 0 1-.45 2.11l-1.27 1.27a16 16 0 0 0 6.29 6.29l1.27-1.27a2 2 0 0 1 2.11-.45c.99.35 2.01.59 3.06.72A2 2 0 0 1 22 16.92z" /></svg>
               <div class="flex gap-1">
                 <span>{{ $t("header.hotlineLabel") }}</span>
-                <NuxtLink to="#" data-tippy-content="hotline" class="hover:text-gray-300 transition-colors">{{ $t("header.hotline1") }} -</NuxtLink>
+                <NuxtLink to="#" class="hover:text-gray-300 transition-colors">{{ $t("header.hotline1") }} -</NuxtLink>
                 <NuxtLink to="#" class="hover:text-gray-300 transition-colors">{{ $t("header.hotline2") }}</NuxtLink>
               </div>
             </div>
@@ -67,7 +67,7 @@
                 <p>{{ $t("header.order") }}</p>
               </div>
             </NuxtLink>
-            <div class="relative inline-block text-left group">
+            <div ref="userMenuRef" class="relative inline-block text-left">
               <NuxtLink v-if="!user" :to="TOLOGIN" class="flex items-center gap-1">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6 mt-1.5">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
@@ -79,7 +79,7 @@
                 </div>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5 mt-1.5"><polyline points="6,9 12,15 18,9" /></svg>
               </NuxtLink>
-              <button v-else type="button" class="bg-transparent shadow-none focus:outline-none">
+              <button v-else type="button" @click="toggleUserMenu" class="bg-transparent shadow-none focus:outline-none">
                 <span class="flex items-center gap-1">
                   <span class="text-right">
                     <span class="hidden xl:inline-block font-medium">{{ user?.name }}</span>
@@ -90,8 +90,7 @@
                   <NuxtImg class="rounded-full w-9 h-9 object-cover" :src="avatar" :alt="'Avatar ' + user?.name" loading="lazy" />
                 </span>
               </button>
-              <div class="absolute top-full right-0 w-full h-3 group-hover:block hidden z-0"></div>
-              <div v-if="user" class="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 hidden group-hover:block transition-all duration-300 ease-in-out">
+              <div v-show="isUserMenuOpen && user" class="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 transition-all duration-300 ease-in-out">
                 <div class="w-full bg-white rounded-md border-0 shadow-xl font-normal ring-black/10 divide-y divide-gray-100">
                   <div class="px-4 py-2 text-sm text-gray-500 font-semibold">{{ $t("header.hello", { name: user?.name }) }}</div>
                   <div class="py-1">
@@ -159,8 +158,8 @@
                 </div>
               </div>
             </div>
-            <div class="relative inline-block text-left group">
-              <NuxtLink :to="TOCART" class="block relative text-white mt-2 group/cart">
+            <div ref="cartMenuRef" class="relative inline-block text-left group">
+              <NuxtLink :to="TOCART" class="block relative text-white mt-2">
                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
@@ -168,11 +167,11 @@
                   {{ cartCount }}
                 </span>
               </NuxtLink>
-              <div class="absolute top-full right-0 w-full h-5 group-hover:block hidden z-10"></div>
-              <div v-if="cartItems.length > 0" class="absolute right-0 top-12 z-30 min-w-[24rem] origin-top-right bg-white shadow-md rounded-md hidden group-hover:block transition-all duration-300 ease-in-out">
-                <div class="w-full rounded-md border-0 shadow-xl font-normal">
+              <div class="absolute top-full right-0 w-full h-10 group-hover:block hidden z-10"></div>
+              <div v-if="cartItems.length > 0" class="absolute right-0 top-12 z-30 min-w-[24rem] origin-top-right bg-white shadow-md rounded-lg hidden group-hover:block transition-all duration-300 ease-in-out">
+                <div class="w-full rounded-lg border-0 shadow-xl font-normal">
                   <div class="w-full max-w-md rounded-lg shadow-lg overflow-hidden text-sm">
-                    <div class="px-4 py-2 bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-white font-medium">
+                    <div class="px-4 py-2 bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-white font-medium rounded-t-lg">
                       {{ $t("action.quickView") }}
                     </div>
                     <div class="max-h-[300px] overflow-y-auto">
@@ -189,9 +188,9 @@
                         </div>
                       </div>
                     </div>
-                    <div class="flex items-center justify-between px-4 py-3 border-t border-gray-100">
+                    <div class="flex items-center justify-between px-4 py-2 border-t border-gray-100">
                       <p class="text-gray-500 text-sm">{{ $t("cart.itemsInCart", { count: cartCount }) }}</p>
-                      <NuxtLink :to="TOCART" class="bg-info-500 hover:bg-info-600 text-white font-medium p-2 rounded text-sm transition-all duration-200">
+                      <NuxtLink :to="TOCART" class="bg-[#0097cc] hover:bg-[#007c8b] text-white font-medium p-2 rounded text-xs transition-all duration-200">
                         {{ $t("action.viewCart") }}
                       </NuxtLink>
                     </div>
@@ -348,7 +347,7 @@
                       </div>
                       <div class="flex items-center justify-between px-4 py-3 border-t border-gray-100">
                         <span class="text-gray-500 text-sm">{{ $t("cart.itemsInCart", { count: cartCount }) }}</span>
-                        <NuxtLink :to="TOCART" class="!bg-info-500 hover:!bg-info-600 text-white font-medium p-2 rounded text-sm transition-all duration-200">
+                        <NuxtLink :to="TOCART" class="!bg-[#0097cc] hover:!bg-[#007c8b] text-white font-medium p-2 rounded text-sm transition-all duration-200">
                           {{ $t("action.viewCart") }}
                         </NuxtLink>
                       </div>
@@ -364,16 +363,14 @@
           <div class="mt-8 hidden sm:grid grid-cols-2 md:grid-cols-5 text-white text-sm">
             <!-- menu -->
             <Menu :menu-tree="menuTree" />
-            <NuxtLink :to="TOSHOP">
-              <div class="flex items-center justify-center cursor-pointer h-10 px-3 rounded transition-opacity">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mt-0.5 text-white mr-2">
-                  <path d="M3 9L5 3h14l2 6" />
-                  <path d="M3 9h18" />
-                  <rect x="4" y="9" width="16" height="11" rx="2" />
-                  <path d="M10 20v-6h4v6" />
-                </svg>
-                <span>{{ $t("common.shop") }}</span>
-              </div>
+            <NuxtLink :to="TOSHOP" class="flex items-center justify-center cursor-pointer h-10 px-3 rounded transition-all hover:bg-white/10">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mt-0.5 text-white mr-2">
+                <path d="M3 9L5 3h14l2 6" />
+                <path d="M3 9h18" />
+                <rect x="4" y="9" width="16" height="11" rx="2" />
+                <path d="M10 20v-6h4v6" />
+              </svg>
+              <span>{{ $t("common.shop") }}</span>
             </NuxtLink>
             <div class="flex items-center justify-center bg-gradient-to-r from-[#a8d444] to-[#b7e354] text-[#005a63] hover:opacity-90 cursor-pointer h-10 px-3 rounded transition-opacity">
               <svg viewBox="0 0 512 512" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 mt-1 text-yellow-300 mr-1"><polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2" /></svg>
@@ -391,6 +388,7 @@
 import { ref, computed, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
+import { onClickOutside } from "@vueuse/core";
 import { TOLOGIN, TOAGENCY, TOFAQ, PROFILEINDEX, TOCART, TOPOLICY, TOWISHLIST } from "~/utils/constants";
 import logo from "~/assets/images/logo/logo-website.png";
 import { useAuthStore } from "~/stores/auth/auth";
@@ -436,6 +434,32 @@ const getCartItemName = (item: ICartItem): string => {
 const isMobileMenuOpen = ref(false);
 const subMenuOpen = ref<string | null>(null);
 const productMenuOpen = ref<string | null>(null);
+
+const isUserMenuOpen = ref(false);
+const userMenuRef = ref(null);
+const isCartMenuOpen = ref(false);
+const cartMenuRef = ref(null);
+
+const toggleUserMenu = () => {
+  isUserMenuOpen.value = !isUserMenuOpen.value;
+  if (isUserMenuOpen.value) isCartMenuOpen.value = false;
+};
+
+const closeUserMenu = () => {
+  isUserMenuOpen.value = false;
+};
+
+const toggleCartMenu = () => {
+  isCartMenuOpen.value = !isCartMenuOpen.value;
+  if (isCartMenuOpen.value) isUserMenuOpen.value = false;
+};
+
+const closeCartMenu = () => {
+  isCartMenuOpen.value = false;
+};
+
+onClickOutside(userMenuRef, closeUserMenu);
+onClickOutside(cartMenuRef, closeCartMenu);
 
 const toggleMobileMenu = () => {
   isMobileMenuOpen.value = !isMobileMenuOpen.value;

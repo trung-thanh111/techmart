@@ -2,6 +2,7 @@
 import { ref, watch, computed } from "vue";
 import AppPagination from "~/components/navigation/AppPagination.vue";
 import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
+import DataState from "~/components/ui/DataState.vue";
 import { useFaq } from "~/composables/faq/useFaq";
 import { TOFAQ } from "~/utils/constants";
 import { useI18n } from "vue-i18n";
@@ -46,30 +47,26 @@ definePageMeta({ layout: "client" });
       </div>
     </section>
     <section class="mx-auto px-4 bg-white shadow-md rounded-md py-3 md:py-6 mb-4 md:mb-8">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="col-span-full text-center mb-4 md:mb-6">
-          <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f]">{{ $t("faq.faqTitle") }}</h2>
-          <div class="mt-1.5 text-gray-600 text-xs md:text-sm flex gap-1 justify-center">
-            {{ $t("faq.faqDescription") }}
-            <span for="formContact" class="text-sky-500 underline hover:text-sky-600 cursor-pointer">{{ $t("faq.contactNow") }}</span>
-          </div>
+      <div class="mb-4 md:mb-6 text-center">
+        <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f]">{{ $t("faq.faqTitle") }}</h2>
+        <div class="mt-1.5 text-gray-600 text-xs md:text-sm flex gap-1 justify-center">
+          {{ $t("faq.faqDescription") }}
+          <span for="formContact" class="text-sky-500 underline hover:text-sky-600 cursor-pointer">{{ $t("faq.contactNow") }}</span>
         </div>
-        <template v-if="isLoading">
-          <div class="col-span-full text-center text-gray-400 py-8">{{ $t("faq.loading") }}</div>
-        </template>
-        <template v-else-if="!catalogues.length">
-          <div class="col-span-full text-center text-gray-400 py-8">{{ $t("faq.noData") }}</div>
-        </template>
-        <template v-else>
-          <NuxtLink v-for="item in catalogues" :key="item.id" :to="`${TOFAQ}/${item.slug}`" class="flex flex-col bg-white rounded-xl border border-gray-100 hover:border-cyan-500 shadow transition hover:shadow-lg overflow-hidden">
-            <NuxtImg :src="getCoverUrl(item)" :alt="item.name" class="w-full h-40 md:h-48 object-cover" loading="lazy" />
-            <div class="p-4 flex flex-col flex-1">
-              <h3 class="text-base font-semibold mb-2 hover:text-cyan-700 line-clamp-2">{{ item.name }}</h3>
-              <button type="button" class="mt-auto inline-flex items-center justify-center bg-gradient-to-r from-sky-700 to-sky-600 hover:from-sky-600 hover:to-sky-500 text-white text-xs md:text-sm font-semibold py-2 px-5 rounded transition">{{ $t("faq.viewDetails") }}</button>
-            </div>
-          </NuxtLink>
-        </template>
       </div>
+      <DataState :loading="isLoading" :error="false" :data="catalogues" :show-empty-image="true">
+        <template v-if="catalogues.length > 0">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <NuxtLink v-for="item in catalogues" :key="item.id" :to="`${TOFAQ}/${item.slug}`" class="flex flex-col bg-white rounded-xl border border-gray-100 hover:border-cyan-500 shadow transition hover:shadow-lg overflow-hidden">
+              <NuxtImg :src="getCoverUrl(item)" :alt="item.name" class="w-full h-40 md:h-48 object-cover" loading="lazy" />
+              <div class="p-4 flex flex-col flex-1">
+                <h3 class="text-base font-semibold mb-2 hover:text-cyan-700 line-clamp-2">{{ item.name }}</h3>
+                <button type="button" class="mt-auto inline-flex items-center justify-center bg-gradient-to-r from-sky-700 to-sky-600 hover:from-sky-600 hover:to-sky-500 text-white text-xs md:text-sm font-semibold py-2 px-5 rounded transition">{{ $t("faq.viewDetails") }}</button>
+              </div>
+            </NuxtLink>
+          </div>
+        </template>
+      </DataState>
       <AppPagination v-if="!isLoading && data?.data?.links" :pagination="data.data" @update:page="setPage" class="mt-3" />
     </section>
     <section class="mx-auto p-4 bg-white shadow-md rounded-md py-3 md:py-6 mb-4 md:mb-8">

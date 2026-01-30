@@ -10,8 +10,8 @@ const endpoint = {
 
 export const wishlistService = {
   pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IWishlistGrouped>>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IPaginate<IWishlistGrouped>>>(endpoint.collection, {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiOk<IPaginate<IWishlistGrouped>>>(endpoint.collection, {
       method: "GET",
       params: {
         publish: 2,
@@ -23,8 +23,8 @@ export const wishlistService = {
   },
 
   all: async (): Promise<IApiOk<IWishlist[]>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IWishlist[]>>(endpoint.collection, {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiOk<IWishlist[]>>(endpoint.collection, {
       method: "GET",
       params: {
         type: "all",
@@ -36,23 +36,23 @@ export const wishlistService = {
   },
 
   show: async (id: number | string): Promise<IApiOk<IWishlist>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IWishlist>>(`${endpoint.collection}/${id}`, {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiOk<IWishlist>>(`${endpoint.collection}/${id}`, {
       method: "GET",
     });
   },
 
   store: async (payload: Partial<IWishlist>): Promise<IApiOk<IWishlist>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IWishlist>>(endpoint.collection, {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiOk<IWishlist>>(endpoint.collection, {
       method: "POST",
       body: payload,
     });
   },
 
   update: async (id: number, payload: Partial<IWishlist>): Promise<IApiOk<IWishlist>> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiOk<IWishlist>>(`${endpoint.collection}/${id}`, {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiOk<IWishlist>>(`${endpoint.collection}/${id}`, {
       method: "POST",
       body: payload,
       params: { _method: "PATCH" },
@@ -60,8 +60,8 @@ export const wishlistService = {
   },
 
   delete: async (id: number): Promise<IApiMessage> => {
-    const { publicFetch } = useApi();
-    return await publicFetch<IApiMessage>(`${endpoint.collection}/${id}`, {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiMessage>(`${endpoint.collection}/${id}`, {
       method: "DELETE",
     });
   },

@@ -28,6 +28,7 @@ class BrandResource extends JsonResource
             'country' => $this->country,
             'order' => (int) $this->order,
             'publish' => (int) $this->publish,
+            'product_count' => (int) ($this->product_counts_count ?? 0),
             // 'creator' => $this->whenLoaded('users', [
             //     'id' => $this->users->id,
             //     'name' => $this->users->name,

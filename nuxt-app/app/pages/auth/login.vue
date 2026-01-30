@@ -1,5 +1,5 @@
 <template>
-  <div class="main-content rounded-lg h-screen overflow-hidden">
+  <div class="main-content h-screen overflow-hidden">
     <div class="relative w-full h-full">
       <NuxtImg src="/images/bg-auth.png" alt="image-background" class="w-full h-full object-cover" loading="lazy" />
       <div class="absolute inset-0 flex items-center justify-center">

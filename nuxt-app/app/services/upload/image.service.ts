@@ -9,7 +9,7 @@ const endpoint = {
 
 export const uploadService = {
   temp: async (files: File[] | FileList, sessionId: string): Promise<UploadResponse> => {
-    const { publicFetch } = useApi();
+    const { privateFetch } = useApi();
 
     const fd = new FormData();
     Array.from(files).forEach((file, index) => {
@@ -17,7 +17,7 @@ export const uploadService = {
     });
     fd.append("sessionId", sessionId);
 
-    const res = await publicFetch<ApiResponse<UploadResponse>>(endpoint.uploadTemp, {
+    const res = await privateFetch<ApiResponse<UploadResponse>>(endpoint.uploadTemp, {
       method: "POST",
       body: fd,
     });

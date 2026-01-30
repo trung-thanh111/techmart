@@ -34,10 +34,8 @@
     <Category :description="$t('common.exploreProducts')" :items="postCatalogueList as any" :basePath="POSTCATEGORY" :viewAllLink="POSTCATEGORIES" :viewAllText="$t('common.viewAll')" />
 
     <section class="mx-auto bg-white shadow-md rounded-md py-3 md:py-6 px-3 md:px-6 md:mb-8 mb-4">
-      <div>
-        <div v-if="categoryPostsLoading" class="text-sm text-gray-500 p-2">{{ $t("common.loading") }}</div>
-        <div v-else-if="categoryPosts.length === 0" class="text-center text-gray-500 py-4">{{ $t("common.noData") }}</div>
-        <ul v-else class="grid gap-4">
+      <DataState :loading="categoryPostsLoading" :error="false" :data="categoryPosts" :show-empty-image="true">
+        <ul class="grid gap-4">
           <li v-for="post in categoryPosts" :key="post.id">
             <NuxtLink :to="`${TOPOST}/${post.slug}`" :prefetch="false" class="block">
               <div class="bg-white rounded-xl shadow-lg overflow-hidden h-full relative">
@@ -67,13 +65,14 @@
             </NuxtLink>
           </li>
         </ul>
-      </div>
+      </DataState>
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
 import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
+import DataState from "~/components/ui/DataState.vue";
 import { IMAGEDEFAULT, TOPOST, POSTCATEGORY, POSTCATEGORIES } from "~/utils/constants";
 import { usePostCatalogue } from "~/composables/post/usePostCatalogue";
 import { usePost } from "~/composables/post/usePost";

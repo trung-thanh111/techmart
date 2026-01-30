@@ -10,43 +10,58 @@
           {{ $t("common.resetFilters") }}
         </button>
       </div>
-      <div class="filter-scroll"></div>
-      <Accordion multiple>
-        <AccordionPanel v-for="catalogue in attributeCatalogues.filter((cat) => cat.attributes && cat.attributes.length > 0)" :key="catalogue.id" :value="catalogue.id.toString()">
-          <LazyAccordionHeader>
-            {{ catalogue.name }}
-          </LazyAccordionHeader>
+      <Accordion multiple v-model:value="expandedBrands">
+        <AccordionPanel value="brand">
+          <AccordionHeader>
+            <div class="flex items-center justify-between w-full">
+              <span class="font-medium text-gray-700">Thương hiệu</span>
+              <span class="text-xs text-gray-500 font-normal">({{ brands.length }})</span>
+            </div>
+          </AccordionHeader>
           <AccordionContent>
             <div class="flex flex-col gap-2 py-2">
-              <div v-for="attr in catalogue.attributes" :key="attr.id" class="flex items-center gap-2 rounded-md px-2 py-1 transition-colors text-[14px]">
-                <Checkbox v-model="selectedAttributes[catalogue.slug]" :inputId="`attr-${catalogue.slug}-${attr.id}`" :value="attr.id" />
-                <label :for="`attr-${catalogue.slug}-${attr.id}`" class="text-gray-700 cursor-pointer">
-                  {{ attr.name }}
-                </label>
+              <div v-for="brand in brands" :key="brand.id" class="flex items-center gap-2 rounded-md px-2 py-1 transition-colors text-[14px]">
+                <RadioButton v-model="selectedBrand" :inputId="`brand-${brand.id}`" :value="brand.id" name="brand" class="scale-75" />
+                <div class="flex items-center justify-between w-full">
+                  <label :for="`brand-${brand.id}`" class="text-gray-700 text-sm cursor-pointer select-none">
+                    {{ brand.name }}
+                  </label>
+                  <span class="text-xs text-gray-400 text-end">({{ brand.product_count || 0 }})</span>
+                </div>
               </div>
             </div>
           </AccordionContent>
         </AccordionPanel>
       </Accordion>
-      <Accordion multiple>
-        <AccordionPanel value="brand">
-          <AccordionHeader input-class="text-sm font-semibold text-gray-800">Thương hiệu</AccordionHeader>
+      <Accordion multiple v-model:value="expandedAttributes">
+        <AccordionPanel v-for="catalogue in attributeCatalogues.filter((cat) => cat.attributes && cat.attributes.length > 0)" :key="catalogue.id" :value="catalogue.id.toString()">
+          <LazyAccordionHeader>
+            <div class="flex items-center justify-between w-full">
+              <span class="font-medium text-gray-700">{{ catalogue.name }}</span>
+              <span class="text-xs text-gray-500 font-normal">({{ catalogue.attributes?.length || 0 }})</span>
+            </div>
+          </LazyAccordionHeader>
           <AccordionContent>
-            <div class="flex flex-col gap-2 py-2">
-              <div v-for="brand in brands" :key="brand.id" class="flex items-center gap-2 rounded-md px-2 py-1 transition-colors text-[14px]">
-                <RadioButton v-model="selectedBrand" :inputId="`brand-${brand.id}`" :value="brand.id" name="brand" />
-                <label :for="`brand-${brand.id}`" class="text-gray-700 text-sm cursor-pointer select-none">
-                  {{ brand.name }}
-                </label>
+            <div class="flex flex-col">
+              <div v-for="attr in catalogue.attributes" :key="attr.id" class="flex items-center gap-2 rounded-md px-2 py-2 transition-colors text-[14px] border-b border-gray-200 last:border-b-0">
+                <Checkbox v-model="selectedAttributes[catalogue.slug]" :inputId="`attr-${catalogue.slug}-${attr.id}`" :value="attr.id" class="scale-75" />
+                <div class="flex items-center justify-between w-full">
+                  <label :for="`attr-${catalogue.slug}-${attr.id}`" class="text-gray-700 cursor-pointer text-sm">
+                    {{ attr.name }}
+                  </label>
+                  <span class="text-xs text-gray-400 text-end">({{ attr.product_count || 0 }})</span>
+                </div>
               </div>
             </div>
           </AccordionContent>
         </AccordionPanel>
       </Accordion>
 
-      <Accordion multiple>
+      <Accordion multiple v-model:value="expandedPrice">
         <AccordionPanel value="price">
-          <AccordionHeader>{{ $t("common.price") }}</AccordionHeader>
+          <AccordionHeader>
+            <span class="text-sm font-medium text-gray-700">{{ $t("common.price") }}</span>
+          </AccordionHeader>
           <AccordionContent>
             <div class="flex flex-col gap-3 py-2">
               <Slider v-model="priceRange" range :min="minPrice" :max="maxPrice" class="w-full" />
@@ -89,6 +104,10 @@ const maxPrice = 300000000;
 const defaultPriceRange = [minPrice, maxPrice];
 const priceRange = ref([...defaultPriceRange]);
 
+const expandedAttributes = ref([]);
+const expandedBrands = ref(["brand"]);
+const expandedPrice = ref(["price"]);
+
 let isInitialized = false;
 let debounceTimer = null;
 
@@ -113,6 +132,8 @@ const fetchAttributeCatalogues = async () => {
     res.data.forEach((item) => {
       selectedAttributes.value[item.slug] = [];
     });
+    // Expand all attributes
+    expandedAttributes.value = res.data.map((item) => item.id.toString());
   } catch (e) {
     console.error($t("message.errorLoading"), e);
   }
@@ -172,7 +193,7 @@ onMounted(async () => {
   padding: 0 !important;
 }
 
-.p-accordionheader-toggle-icon {
-  font-size: 10px !important;
+:deep(.p-icon.p-accordionheader-toggle-icon) {
+  display: none !important;
 }
 </style>

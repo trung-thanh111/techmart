@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use App\Traits\HasQuery;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -38,8 +39,13 @@ class Attribute extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function attribute_catalogues():BelongsTo
+    public function attribute_catalogues(): BelongsTo
     {
         return $this->belongsTo(AttributeCatalogue::class, 'attribute_catalogue_id', 'id');
+    }
+
+    public function product_variants(): BelongsToMany
+    {
+        return $this->belongsToMany(ProductVariant::class, 'product_variant_attribute', 'attribute_id', 'product_variant_id');
     }
 }

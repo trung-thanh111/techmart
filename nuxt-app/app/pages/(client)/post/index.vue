@@ -82,9 +82,8 @@
           </div>
         </div>
       </div>
-      <div v-if="mostLikedLoading" class="text-sm text-gray-500 p-2">{{ $t("common.loading") }}</div>
-      <div v-else-if="!mostLikedItems || mostLikedItems.length === 0" class="text-sm text-gray-500 p-2">{{ $t("post.noPosts") }}</div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+      <DataState :loading="mostLikedLoading" :data="mostLikedItems">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
         <NuxtLink v-for="(post, index) in mostLikedItems" :key="post.id" :to="`${TOPOST}/${post.slug}`" class="flex items-center gap-2 md:gap-3 p-2 md:p-3 rounded-md hover:bg-gray-50 transition">
           <div class="text-2xl md:text-4xl font-bold text-gray-500">#{{ (index as number) + 1 }}</div>
           <div class="flex-1">
@@ -93,13 +92,13 @@
           </div>
         </NuxtLink>
       </div>
+      </DataState>
     </section>
 
     <section v-if="byCatalogueCache[3] && byCatalogueCache[3].length > 0" class="max-w-[1440px] mx-auto p-2 md:p-4 bg-white rounded-md shadow mb-2 md:mb-6">
       <h2 class="inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] text-lg md:text-2xl font-bold mb-3 md:mb-4">{{ $t("post.productPosts") }}</h2>
-      <div v-if="byCatalogueLoading[3]" class="text-sm text-gray-500 p-2">{{ $t("common.loading") }}</div>
-      <div v-else-if="!byCatalogueCache[3] || byCatalogueCache[3].length === 0" class="text-sm text-gray-500 p-2">{{ $t("post.noPosts") }}</div>
-      <Splide v-else :options="postProductOptions" id="post-product-slider">
+      <DataState :loading="byCatalogueLoading[3]" :data="byCatalogueCache[3]">
+        <Splide :options="postProductOptions" id="post-product-slider">
         <SplideSlide v-for="post in byCatalogueCache[3]" :key="post.id">
           <NuxtLink :to="`/post/${post.slug}`" class="relative rounded-xl overflow-hidden border border-gray-100 hover:border-cyan-200 hover:shadow-xl transition-all block">
             <NuxtImg :src="post.image?.path ? (post.image?.url ?? '') : IMAGEDEFAULT" :alt="post.name" class="w-full h-40 md:h-72 object-cover" loading="lazy" />
@@ -111,6 +110,7 @@
           </NuxtLink>
         </SplideSlide>
       </Splide>
+      </DataState>
     </section>
 
     <section v-if="latestItems.length > 0" class="bg-white shadow-md rounded-md py-2 md:py-3 px-2 md:px-6 mb-2 md:mb-6">
@@ -174,6 +174,7 @@ import { usePost } from "~/composables/post/usePost";
 import { IMAGEDEFAULT, TOPOST, TOPOSTCATEGORY, POSTCATEGORY } from "~/utils/constants";
 import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
 import Category from "~/components/ui/Category.vue";
+import DataState from "~/components/ui/DataState.vue";
 import { definePageMeta } from "#imports";
 import { useI18n } from "vue-i18n";
 

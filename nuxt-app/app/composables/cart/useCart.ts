@@ -227,9 +227,18 @@ export const useCart = () => {
         await fetchGuestCart();
       }
 
+      // Lưu scroll position trước khi show toast
+      const scrollY = window.scrollY;
+      
       // Hiển thị toast sau khi reload xong
       await nextTick();
       toast.success(isBuyNow ? t("cart.addSuccessBuyNow") : t("cart.addSuccess"));
+      
+      // Khôi phục scroll position sau khi toast hiện
+      await nextTick();
+      if (scrollY > 0) {
+        window.scrollTo({ top: scrollY, behavior: "instant" });
+      }
 
       return true;
     } catch (error: any) {

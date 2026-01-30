@@ -1,20 +1,7 @@
 <template>
   <div class="main-content max-w-7xl mx-auto">
-    <div v-if="postDetailLoading" class="flex items-center justify-center min-h-[400px]">
-      <div class="text-center">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-        <p class="text-gray-600">{{ $t("common.loading") }}</p>
-      </div>
-    </div>
-    <div v-else-if="postDetailError" class="flex items-center justify-center min-h-[400px]">
-      <div class="text-center">
-        <div class="text-red-500 text-6xl mb-4">⚠️</div>
-        <h2 class="text-xl font-semibold text-gray-800 mb-2">{{ $t("post.cannotLoadPost") }}</h2>
-        <p class="text-gray-600 mb-4">{{ postDetailError }}</p>
-        <NuxtLink :to="TOPOST" class="inline-block bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">{{ $t("post.backToList") }}</NuxtLink>
-      </div>
-    </div>
-    <div v-else-if="postDetail">
+    <DataState :loading="postDetailLoading" :data="postDetail" :show-empty-image="false">
+      <template v-if="postDetail">
       <Breadcrumb :crumbs="breadcrumbs" />
       <section class="relative w-full mb-5">
         <div class="grid grid-cols-12 gap-4">
@@ -203,7 +190,8 @@
           </SplideSlide>
         </Splide>
       </section>
-    </div>
+      </template>
+    </DataState>
   </div>
 </template>
 <script setup lang="ts">
@@ -212,6 +200,7 @@ import { TOPOST, TOPOSTDETAIL, TOLOGIN } from "~/utils/constants";
 import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
 import CommentTree from "~/components/features/post/CommentTree.vue";
 import PostLikeButton from "~/components/features/post/PostLikeButton.vue";
+import DataState from "~/components/ui/DataState.vue";
 import { buildToc, type TocItem } from "~/composables/useToc";
 import { usePostSlider } from "~/composables/usePostSlider";
 import { usePost } from "~/composables/post/usePost";

@@ -4,6 +4,8 @@ export interface ISystem {
   content?: string | null;
   publish?: number;
   userId?: number | null;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface SystemPayloadFilter {

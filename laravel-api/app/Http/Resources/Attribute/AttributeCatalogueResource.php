@@ -22,11 +22,19 @@ class AttributeCatalogueResource extends JsonResource
                 'description' => $this->description,
                 'order' => (int) $this->order,
                 'publish' => (int) $this->publish,
-                'attributes' => $this->whenLoaded('attributes', function () {
-                    return $this->attributes->map(fn($attr) => [
+                'attributes' => $this->whenLoaded('attributes_with_product_count', function () {
+                    return $this->attributes_with_product_count->map(fn($attr) => [
                         'id' => $attr->id,
                         'name' => $attr->name,
+                        'product_count' => $attr->product_count ?? 0,
                     ]);
+                }, function () {
+                    return $this->whenLoaded('attributes', function () {
+                        return $this->attributes->map(fn($attr) => [
+                            'id' => $attr->id,
+                            'name' => $attr->name,
+                        ]);
+                    });
                 }),
             ];
         }
@@ -38,11 +46,19 @@ class AttributeCatalogueResource extends JsonResource
             'order' => (int) $this->order,
             'publish' => (int) $this->publish,
             // egerload tránh n+1 tối ưu time 
-            'attributes' => $this->whenLoaded('attributes', function () {
-                return $this->attributes->map(fn($attr) => [
+            'attributes' => $this->whenLoaded('attributes_with_product_count', function () {
+                return $this->attributes_with_product_count->map(fn($attr) => [
                     'id' => $attr->id,
                     'name' => $attr->name,
+                    'product_count' => $attr->product_count ?? 0,
                 ]);
+            }, function () {
+                return $this->whenLoaded('attributes', function () {
+                    return $this->attributes->map(fn($attr) => [
+                        'id' => $attr->id,
+                        'name' => $attr->name,
+                    ]);
+                });
             }),
         ];
     }

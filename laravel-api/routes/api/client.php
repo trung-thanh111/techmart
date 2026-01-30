@@ -35,11 +35,16 @@ $routeExcept = ['create', 'edit'];
 
 // Client Auth routes
 Route::group(['prefix' => 'v1/auth'], function () {
-    Route::post('refresh', [AuthController::class, 'refresh']);
+    // Public routes (no auth required)
     Route::middleware(['convert'])->group(function () {
         Route::post('login', [AuthController::class, 'login']);
         Route::post('register', [AuthController::class, 'register']);
     });
+
+    // Refresh token (no auth required, but needs refresh token cookie)
+    Route::post('refresh', [AuthController::class, 'refresh']);
+
+    // Protected routes (requires JWT auth)
     Route::middleware(['jwt:api', 'convert'])->group(function () {
         Route::get('me', [AuthController::class, 'me']);
         Route::post('logout', [AuthController::class, 'logout']);
@@ -106,6 +111,9 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
         Route::get('brands', [BrandController::class, 'index']);
         Route::get('brands/{id}', [BrandController::class, 'show']);
 
+        Route::get('systems', [SystemController::class, 'index']);
+        Route::get('systems/{id}', [SystemController::class, 'show']);
+
         Route::get('product_catalogues', [ProductCatalogueController::class, 'index']);
         Route::get('product_catalogues/{id}', [ProductCatalogueController::class, 'show']);
 
@@ -143,6 +151,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
 
     // FE routes (public matchers)
     Route::get('policy/{keyword}', [SystemController::class, 'getByKeyword']);
+    Route::get('systems', [SystemController::class, 'index']); // Added for systemService.all/findByKeyword usage
     Route::get('product/{id}', [ProductController::class, 'show']);
     Route::get('menu/{id}', [MenuController::class, 'show']);
     Route::get('post/{id}', [PostController::class, 'show']);
@@ -151,7 +160,8 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
     Route::get('product/category/{id}', [ProductCatalogueController::class, 'show']);
     Route::get('agency/{id}', [AgencyController::class, 'show']);
     Route::get('faq/{id}', [FaqController::class, 'show']);
-    Route::get('faq-catalogue/{id}', [FaqCatalogueController::class, 'show']);
+    Route::get('faq_catalogues', [FaqCatalogueController::class, 'index']);
+    Route::get('faq_catalogues/{id}', [FaqCatalogueController::class, 'show']);
 
     // Cart Routes
     Route::middleware(['convert'])->group(function () use ($routeExcept) {

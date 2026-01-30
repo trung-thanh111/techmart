@@ -1,4 +1,5 @@
 import type { Ref } from "vue";
+import { nextTick } from "vue";
 import { wishlistService } from "~/services/product/wishlist.service";
 import type { IApiOk, IPaginate } from "~/interfaces/base.interface";
 import type { IWishlist, IWishlistGrouped } from "~/interfaces/product/wishlist.interface";
@@ -104,9 +105,21 @@ export const useWishlist = () => {
 
       const currentPage = paginate.value?.data?.current_page || 1;
       const perPage = paginate.value?.data?.per_page || 10;
+      
+      // Lưu scroll position trước khi fetch và show toast
+      const scrollY = window.scrollY;
+      
       await fetchWishlist(currentPage, perPage, false);
 
+      await nextTick();
       toast.success("Thành công", { description: "Đã thêm vào yêu thích" });
+      
+      // Khôi phục scroll position sau khi toast hiện
+      await nextTick();
+      if (scrollY > 0) {
+        window.scrollTo({ top: scrollY, behavior: "instant" });
+      }
+      
       return true;
     } catch (error: any) {
       console.error("[useWishlist] toggleWishlist error:", error);
@@ -190,7 +203,18 @@ export const useWishlist = () => {
         wishlistGrouped.value = wishlistGrouped.value.filter((item) => item.product?.id !== targetItem?.product?.id);
       }
 
+      // Lưu scroll position trước khi show toast
+      const scrollY = window.scrollY;
+      
+      await nextTick();
       toast.success("Thành công", { description: "Đã xóa khỏi yêu thích" });
+      
+      // Khôi phục scroll position sau khi toast hiện
+      await nextTick();
+      if (scrollY > 0) {
+        window.scrollTo({ top: scrollY, behavior: "instant" });
+      }
+      
       return true;
     } catch (error: any) {
       console.error("[useWishlist] removeWishlist error:", error);

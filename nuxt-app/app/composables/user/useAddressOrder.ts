@@ -131,8 +131,7 @@ export const useAddressOrder = (initialFilters?: any, type: "create" | "update" 
         }
 
         if (options.redirectPath) {
-          await new Promise((resolve) => setTimeout(resolve, 500));
-          await router.push(options.redirectPath);
+          navigateTo(options.redirectPath);
         }
 
         return response;
@@ -202,11 +201,8 @@ export const useAddressOrder = (initialFilters?: any, type: "create" | "update" 
               updateAddressesList(updatedAddresses);
             }
           }
-
-          if (isRedirect && options.redirectPath) {
-            await new Promise((resolve) => setTimeout(resolve, 500));
-
-            await router.push(options.redirectPath);
+          if (options.redirectPath) {
+            navigateTo(options.redirectPath);
           }
 
           return response;

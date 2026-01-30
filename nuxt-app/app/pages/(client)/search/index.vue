@@ -36,15 +36,11 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 px-4 mb-5">
-      <ProductCard v-for="product in products" :key="product.id" :product="product" />
-    </div>
-
-    <div v-if="!products || products.length === 0" class="flex flex-col items-center justify-center py-16">
-      <NuxtImg :src="EMPTYBOX" alt="Không tìm thấy" loading="lazy" class="w-64 h-64 mb-6 object-cover" />
-      <h3 class="text-xl uppercase font-bold text-gray-700 mb-1">{{ $t("common.noProductsFound") }}</h3>
-      <p class="text-gray-500 text-sm mb-4">{{ $t("common.tryDifferentKeyword") }}</p>
-    </div>
+    <DataState :loading="status === 'pending'" :error="false" :data="products" :show-empty-image="true">
+      <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 px-4 mb-5">
+        <ProductCard v-for="product in products" :key="product.id" :product="product" />
+      </div>
+    </DataState>
   </div>
 </template>
 
@@ -54,6 +50,7 @@ import { useRoute } from "vue-router";
 import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
 import ProductCard from "~/components//features/ProductCard.vue";
 import FilterSort from "~/components//features/FilterSort.vue";
+import DataState from "~/components/ui/DataState.vue";
 import { useShop } from "~/composables/shop/useShop";
 import { EMPTYBOX, TOSEARCH } from "~/utils/constants";
 import { definePageMeta } from "#imports";

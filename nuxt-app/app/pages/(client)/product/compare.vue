@@ -3,15 +3,8 @@
     <Breadcrumb :crumbs="breadcrumbs" />
     <div class="compare-page">
       <div class="container mx-auto">
-        <div v-if="compareList.length === 0" class="text-center py-12">
-          <div class="flex flex-col items-center justify-center py-10 text-center text-gray-500">
-            <NuxtImg :src="EMPTYBOX" alt="Empty comparison" class="object-contain" loading="lazy" />
-            <p class="text-sm text-center mb-3">{{ $t("common.emptyProduct") }}</p>
-            <Button label="Cửa hàng" icon="pi pi-arrow-left" severity="info" @click="goToShop" />
-          </div>
-        </div>
-
-        <div v-else class="space-y-8">
+        <DataState :loading="false" :error="false" :data="compareList" :show-empty-image="true">
+          <div class="space-y-8">
           <section class="bg-white rounded-lg shadow-md p-4 md:p-6">
             <div class="overflow-x-auto">
               <div class="grid grid-cols-4 gap-4 min-w-[800px]">
@@ -68,7 +61,13 @@
               </table>
             </div>
           </section>
-        </div>
+          </div>
+          <template #empty>
+            <div class="text-center py-12">
+              <Button label="Cửa hàng" icon="pi pi-arrow-left" severity="info" @click="goToShop" />
+            </div>
+          </template>
+        </DataState>
       </div>
 
       <SearchProductModal v-model="showSearchModal" selection-mode="record" @added="handleProductsAdded" />
@@ -83,6 +82,7 @@ import { TOSHOP, TOCOMPARE } from "~/utils/constants";
 import ProductCardCompare from "~/components//features/ProductCardCompare.vue";
 import SearchProductModal from "~/components//features/SearchProductModal.vue";
 import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
+import DataState from "~/components/ui/DataState.vue";
 import { EMPTYBOX } from "~/utils/constants";
 import { useI18n } from "vue-i18n";
 import { navigateTo } from "#app";
