@@ -16,7 +16,7 @@ class AttributeCatalogueService extends BaseService implements AttributeCatalogu
 
     protected $complexFilter = ['id'];
 
-    protected $with = ['attributes'];
+    protected $with = ['attributes_with_product_count'];
     protected $relationFilter = [];
 
     protected $cacheKeyPrefix = 'attribute_catalogues';

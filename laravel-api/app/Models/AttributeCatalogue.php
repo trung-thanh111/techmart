@@ -38,7 +38,21 @@ class AttributeCatalogue extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function attributes(): HasMany{
+    public function attributes(): HasMany
+    {
         return $this->hasMany(Attribute::class, 'attribute_catalogue_id', 'id');
+    }
+
+    public function attributes_with_product_count(): HasMany
+    {
+        return $this->hasMany(Attribute::class, 'attribute_catalogue_id', 'id')
+            ->withCount(['product_variants as product_count' => function ($query) {
+                // Đếm sản phẩm (distinct product_id) thông qua variant
+                $query->select(\Illuminate\Support\Facades\DB::raw('count(distinct product_variants.product_id)'))
+                    ->join('products', 'products.id', '=', 'product_variants.product_id')
+                    ->where('products.publish', 2)
+                    ->whereNull('products.deleted_at')
+                    ->where('product_variants.publish', 2);
+            }]);
     }
 }
