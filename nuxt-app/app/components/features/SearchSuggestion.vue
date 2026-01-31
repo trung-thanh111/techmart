@@ -32,7 +32,7 @@
           <div v-else class="text-sm text-gray-500 py-2">{{ $t("search.suggestions") }}</div>
           <div v-for="product in suggestions" :key="product.id" class="flex items-center gap-2 p-2 rounded hover:bg-gray-50">
             <NuxtLink :to="`/product/${product.slug || ''}`" class="flex items-center gap-2 w-full text-gray-700 no-underline">
-              <img :src="getProductImage(product)" loading="lazy" alt="" class="w-10 h-8 object-cover rounded flex-shrink-0" />
+              <img :src="getProductImage(product)" loading="lazy" :alt="getProductDisplayName(product)" class="w-10 h-8 object-cover rounded flex-shrink-0" />
               <div class="flex-1 min-w-0">
                 <p class="text-sm font-normal text-gray-800 truncate">{{ getProductDisplayName(product) }}</p>
                 <p class="text-xs text-red-600 mt-1">{{ getProductPrice(product) ? formatPrice(getProductPrice(product)) : $t("search.updating") }}</p>
@@ -53,7 +53,7 @@
           <div v-for="product in visibleList" :key="product.id" class="flex items-center justify-between group p-2 rounded hover:bg-gray-100 cursor-pointer">
             <NuxtLink :to="`/product/${product.slug || ''}`" class="flex items-center gap-2 max-w-[90%] text-gray-400 no-underline">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-gray-400 flex-shrink-0"><polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2" /></svg>
-              <img :src="getProductImage(product)" loading="lazy" alt="" class="w-10 h-8 object-cover rounded flex-shrink-0" />
+              <img :src="getProductImage(product)" loading="lazy" :alt="getProductDisplayName(product)" class="w-10 h-8 object-cover rounded flex-shrink-0" />
               <div class="flex-1 min-w-0">
                 <p class="text-sm font-normal text-gray-800 truncate">{{ getProductDisplayName(product) }}</p>
                 <p class="text-xs text-red-600 mt-1">{{ getProductPrice(product) ? formatPrice(getProductPrice(product)) : $t("search.updating") }}</p>

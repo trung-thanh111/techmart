@@ -4,7 +4,7 @@
       <div class="flex items-center space-x-3">
         <NuxtImg class="w-8 h-8 rounded-full" :src="avatar" :alt="node.author?.name || 'User'" loading="lazy" />
         <div>
-          <p class="text-sm font-semibold text-gray-800">{{ node.author?.name || "Anonymous" }}</p>
+          <p class="text-sm font-semibold text-gray-800">{{ node.author?.name || $t("post.anonymous") }}</p>
           <p class="text-xs text-gray-500">{{ node.createdAtHuman }}</p>
         </div>
       </div>
@@ -100,6 +100,14 @@ import { useAuth } from "~/composables/auth/useAuth";
 import { postCommentService } from "~/services/post/comment.service";
 import { useAppToast } from "~/composables/useAppToast";
 import { usePostCommentLike } from "~/composables/post/usePostCommentLike";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+
+const emit = defineEmits<{
+  refresh: [];
+  reply: [parentId: number];
+}>();
 
 const props = defineProps<{ node: any; isRoot?: boolean }>();
 const { isAdmin, user } = useAuth();
@@ -123,10 +131,10 @@ const canDelete = computed(() => isAdmin.value || isAuthor.value);
 const hideComment = async () => {
   try {
     await postCommentService.update(props.node.id, { publish: 0 });
-    toast.success("Đã ẩn bình luận");
+    toast.success(t("post.commentHidden"));
     emit("refresh"); // lăng nghe sk refresh báo cho cha biết reload lại cmt
   } catch (error) {
-    toast.error("Không thể ẩn bình luận");
+    toast.error(t("post.commentHiddenError"));
   }
 };
 
@@ -154,29 +162,24 @@ const closeDeleteModal = () => {
 const deleteComment = async () => {
   try {
     await postCommentService.delete(props.node.id);
-    toast.success("Đã xóa bình luận");
+    toast.success(t("post.commentDeleted"));
     closeDeleteModal();
     emit("refresh");
   } catch (error) {
-    toast.error("Không thể xóa bình luận");
+    toast.error(t("post.commentDeleteError"));
   }
 };
 
 const onToggleLike = async () => {
   const ok = await toggle(props.node.id);
   if (!ok) {
-    toast.error("Không thể thực hiện thao tác");
+    toast.error(t("post.actionFailed"));
   }
 };
 
 const replyToComment = () => {
   emit("reply", props.node.id);
 };
-
-const emit = defineEmits<{
-  refresh: [];
-  reply: [parentId: number];
-}>();
 
 onMounted(async () => {
   resetFor(props.node.id);

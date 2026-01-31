@@ -67,7 +67,7 @@
     "showing": "Hiển thị",
     "noProductsFound": "Không tìm thấy sản phẩm nào",
     "tryDifferentKeyword": "Hãy thử từ khoá khác hoặc kiểm tra lại bộ lọc tìm kiếm của bạn.",
-    "loading": "Đang tải...",
+    "loading": "Đang tải",
     "notFound": "Không tìm thấy!",
     "contactUs": "liên hệ ngay",
     "policyContactText": "Nếu bạn có thắc mắc liên quan đến chính sách, cách chúng tôi hỗ trợ bạn chi tiết hơn có thể",
@@ -90,6 +90,8 @@
     "passwordResetSuccess": "Mật khẩu đã được đặt lại thành công!",
     "backToLogin": "Quay lại đăng nhập",
     "copiedLink": "Đã copy link",
+    "banner": "Banner",
+    "priority": "Ưu tiên",
     "form": {
       "email": "Email",
       "fullName": "Họ tên",
@@ -316,6 +318,7 @@
     "notFound": "Không tìm thấy dữ liệu",
     "confirmDelete": "Bạn có chắc muốn xóa?",
     "confirmCancel": "Bạn có chắc muốn hủy?",
+    "errorLoading": "Lỗi tải dữ liệu",
     "confirmLogout": "Bạn có chắc muốn đăng xuất?",
     "unsavedChanges": "Bạn có thay đổi chưa được lưu",
     "addedToCart": "Đã thêm vào giỏ hàng",
@@ -361,6 +364,17 @@
     "minutes": "phút",
     "seconds": "giây"
   },
+  "sidebarPolicy": {
+    "policy": "Chính sách",
+    "loading": "Đang tải",
+    "close": "Đóng",
+    "viewResults": "Xem kết quả",
+    "maxSize": "Tối đa {size}"
+  },
+  "policy": {
+    "prefix": "Chính sách {title}",
+    "notFound": "Không tìm thấy chính sách này"
+  },
   "product": {
     "breadcrumb": "Sản phẩm",
     "searchResult": "Kết quả tìm kiếm",
@@ -391,7 +405,28 @@
     "warranty12Months": "Bảo hành 12 tháng tại các cơ sở",
     "sampleName": "Tên sản phẩm mẫu rất dài để test chiều cao cố định giới hạn 2 dòng",
     "mainImage": "Ảnh chính",
-    "subImage": "Ảnh phụ"
+    "subImage": "Ảnh phụ",
+    "customerReviewsTitle": "Đánh Giá Khách Hàng",
+    "customerReviewsDescription": "Chiếc ghế này sử dụng chất liệu đệm an toàn, thân thiện với môi trường, mang lại cảm giác êm ái và dễ chịu khi sử dụng.",
+    "fabricDesc": "Vải bọc cao cấp, mềm mại nhưng vẫn bền đẹp theo thời gian, với nhiều tông màu đa dạng để bạn dễ dàng lựa chọn theo phong cách nội thất.",
+    "yourThoughtsTitle": "Cảm nghĩ của bạn",
+    "yourThoughtsPlaceholder": "Bạn đang nghĩ gì ...",
+    "reviewsTitle": "Đánh giá của mọi người ({count})",
+    "basedOn": "Dựa trên",
+    "reviews": "đánh giá",
+    "likes": "thích",
+    "reply": "trả lời",
+    "youMightLike": "Có thể bạn sẽ thích",
+    "rating": "Đánh giá",
+    "userMenu": {
+      "profile": "Hồ sơ",
+      "messages": "Tin nhắn",
+      "taskboard": "Bảng công việc",
+      "help": "Trợ giúp",
+      "logout": "Đăng xuất"
+    },
+    "mockReview1": "Bài viết rất đúng trọng tâm. Thực sự đáng thời gian đọc. Cảm ơn bạn! Nhưng công cụ chỉ là phương tiện cho các nhà thiết kế UX...",
+    "mockReply": "Rất cảm kích! Vui vì bạn đã thích nó"
   },
   "productCard": {
     "sampleProductName": "Tên sản phẩm mẫu",
@@ -411,7 +446,7 @@
     "dailyNews": "Tin mới trong ngày",
     "tags": "Tags",
     "loadMore": "Xem thêm",
-    "loadingMore": "Đang tải...",
+    "loadingMore": "Đang tải",
     "tableOfContent": "Nội dung bài viết",
     "loadingContent": "Đang tải nội dung...",
     "noContent": "Không có nội dung",
@@ -434,9 +469,28 @@
     "share": "Chia sẻ",
     "loginRequired": "Hey guy, hãy đăng nhập để sử dụng chức năng",
     "cannotLoadPost": "Không thể tải bài viết",
-    "backToList": "Quay lại danh sách"
+    "backToList": "Quay lại danh sách",
+    "anonymous": "Ẩn danh",
+    "commentHidden": "Đã ẩn bình luận",
+    "commentHiddenError": "Không thể ẩn bình luận",
+    "commentDeleted": "Đã xóa bình luận",
+    "commentDeleteError": "Không thể xóa bình luận",
+    "actionFailed": "Không thể thực hiện thao tác"
   },
   "cart": {
+    "addSuccess": "Thêm vào giỏ hàng thành công",
+    "addSuccessBuyNow": "Đã thêm sản phẩm vào giỏ hàng",
+    "addFailed": "Thêm vào giỏ hàng thất bại",
+    "errorLoad": "Không thể tải thông tin giỏ hàng",
+    "errorCreate": "Không thể khởi tạo giỏ hàng",
+    "errorAdd": "Không thể thêm sản phẩm vào giỏ hàng",
+    "errorUpdate": "Cập nhật giỏ hàng thất bại",
+    "removeSuccess": "Đã xóa sản phẩm khỏi giỏ hàng",
+    "errorRemove": "Không thể xóa sản phẩm",
+    "clearSuccess": "Đã làm trống giỏ hàng",
+    "errorClear": "Không thể làm trống giỏ hàng",
+    "addToCart": "Thêm vào giỏ hàng",
+    "buyNow": "Mua ngay",
     "breadcrumb": "Giỏ hàng",
     "empty": "Giỏ hàng trống",
     "emptyDesc": "Chưa có sản phẩm nào trong giỏ hàng",
@@ -460,6 +514,8 @@
     "clearCartWarning": "Hành động này không thể hoàn tác.",
     "unitPrice": "Đơn giá",
     "quantity": "Số lượng",
+    "decreaseQuantity": "Giảm số lượng",
+    "increaseQuantity": "Tăng số lượng",
     "total": "Thành tiền",
     "order": "Đơn hàng",
     "coupon": "Mã giảm giá",
@@ -472,7 +528,9 @@
     "grandTotal": "Tổng tiền",
     "proceedToCheckout": "Tiến hành thanh toán",
     "error": "Lỗi",
-    "cancel": "Hủy"
+    "cancel": "Hủy",
+    "notification": "Thông báo",
+    "featureDeveloping": "Tính năng đang phát triển"
   },
   "profile": {
     "cancel": "Hủy",
@@ -549,7 +607,8 @@
       "image": "Hình ảnh",
       "imageNote": "Chỉ chấp nhận ảnh JPG, PNG, WEBP, dung lượng tối đa 5MB",
       "clickToUpload": "Click ảnh để tải lên"
-    }
+    },
+    "mapPreview": "Xem trước bản đồ"
   },
   "form": {
     "firstName": "Tên",
@@ -588,7 +647,7 @@
     "noQuestions": "Chưa có câu hỏi",
     "faqGroup": "Nhóm câu hỏi",
     "faqTitle": "Câu hỏi thường gặp",
-    "loading": "Đang tải...",
+    "loading": "Đang tải",
     "noData": "Không có dữ liệu"
   },
   "agency": {
@@ -640,7 +699,31 @@
     "us": "Chúng Tôi",
     "shopNow": "Mua Sắm Ngay",
     "featuredEvents": "Sự kiện nổi bật",
-    "readMore": "đọc thêm →"
+    "readMore": "đọc thêm →",
+    "suggestedProducts": "📦 Mọi người thường mua cùng:",
+    "gamingAccessories": "Phụ kiện cày game",
+    "gamingConsoles": "Máy chơi game",
+    "highPerformance": "Hiệu năng khủng",
+    "gamingMonitor": "Màn hình gamming",
+    "highRefreshRate": "Tần số quét cao",
+    "mechanicalKeyboard": "Bàn phím cơ",
+    "switchCherryMX": "Switch Cherry MX",
+    "gamingLaptop": "Laptop Gamming",
+    "battleReady": "Vào Trận mọi lúc",
+    "highConfig": "Cấu hình khủng",
+    "newest": "Mới nhất",
+    "techAccessories": "Phụ kiện công nghệ",
+    "qualityGuaranteed": "Chất Lượng Đảm Bảo",
+    "qualityDesc": "100% hàng chính hãng, bảo hành toàn diện. Hoàn tiền 200% nếu phát hiện hàng giả hoặc kém chất lượng",
+    "fastDelivery": "Giao Hàng Siêu Tốc",
+    "deliveryDesc": "Giao hàng trong 2-4h nội thành, 24h toàn quốc. Đóng gói cẩn thận, bảo vệ tối đa",
+    "easyExchange": "Đổi Trả Dễ Dàng",
+    "exchangeDesc": "Đổi trả miễn phí trong 30 ngày, không cần lý do. Quy trình đơn giản 3 bước, hoàn tiền trong 24h",
+    "topTrust": "Tin Cậy Hàng Đầu",
+    "trustDesc": "Hơn 500.000 khách hàng tin tưởng, 4.9★ đánh giá từ 50.000+ reviews. Được tạp chí Tech Awards vinh danh 3 năm liên tiếp",
+    "technology": "công nghệ",
+    "featuredArticle": "Bài viết nổi bật: Công nghệ AI thay đổi cuộc sống thế nào?",
+    "articleDesc": "Trí tuệ nhân tạo đang làm thay đổi cách chúng ta sống, làm việc và giao tiếp. Cùng tìm hiểu những đột phá mới nhất trong lĩnh vực này."
   },
   "footer": {
     "hotline": "Hotline",
@@ -760,7 +843,8 @@
     "oldest": "Cũ nhất",
     "price_high": "Giá: Cao đến thấp",
     "price_low": "Giá: Thấp đến cao",
-    "best_seller": "Bán chạy nhất"
+    "best_seller": "Bán chạy nhất",
+    "title": "Bộ lọc"
   },
   "search": {
     "recentSearches": "Tìm kiếm gần đây",
@@ -886,7 +970,8 @@
       "fullNamePlaceholder": "Họ tên của bạn",
       "confirmPassword": "Xác nhận mật khẩu",
       "confirmPasswordPlaceholder": "Xác nhận mật khẩu",
-      "register": "Đăng ký"
+      "register": "Đăng ký",
+      "registerButton": "Đăng ký"
     },
     "welcomeBack": "Chào mừng trở lại!",
     "loginDescription": "Đăng nhập để tiếp tục sử dụng bạn nhé.",
@@ -897,25 +982,7 @@
     "noAccount": "Chưa có tài khoản?",
     "hasAccount": "Đã có tài khoản?",
     "agreeTerms": "Bằng cách đăng ký, bạn đã đồng ý với điều khoản & chính sách",
-    "product": {
-      "customerReviewsTitle": "Đánh Giá Khách Hàng",
-      "customerReviewsDescription": "Chiếc ghế này sử dụng chất liệu đệm an toàn, thân thiện với môi trường, mang lại cảm giác êm ái và dễ chịu khi sử dụng.",
-      "yourThoughtsTitle": "Cảm nghĩ của bạn",
-      "yourThoughtsPlaceholder": "Bạn đang nghĩ gì ...",
-      "reviewsTitle": "Đánh giá của mọi người ({count})",
-      "basedOn": "Dựa trên",
-      "reviews": "đánh giá",
-      "likes": "thích",
-      "reply": "trả lời",
-      "youMightLike": "Có thể bạn sẽ thích",
-      "rating": "Đánh giá",
-      "userMenu": {
-        "profile": "Profile",
-        "messages": "Messages",
-        "taskboard": "Taskboard",
-        "help": "Help",
-        "logout": "Logout"
-      }
-    }
+    "codeNotReceived": "Chờ đã, tôi chưa nhận được code?",
+    "resend": "Gửi lại"
   }
 }

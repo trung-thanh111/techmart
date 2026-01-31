@@ -58,7 +58,7 @@ const toggle = (idx: number) => {
 onMounted(async () => {
   if (!slug.value) return;
   const cata = await fetchById(slug.value);
-  title.value = (cata as any)?.name || "Câu hỏi";
+  title.value = (cata as any)?.name || t("faq.breadcrumbDetail");
   faqs.value = Array.isArray((cata as any)?.faqs) ? (cata as any).faqs : [];
 });
 

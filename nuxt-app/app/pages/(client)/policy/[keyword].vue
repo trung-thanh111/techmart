@@ -27,7 +27,7 @@
               <NuxtImg src="/images/bg-title-policy.png" alt="image-policy-bg" loading="lazy" class="w-full h-auto object-cover" />
               <div class="absolute inset-0 flex flex-col justify-center items-center gap-2">
                 <div class="text-lg md:text-[24px] font-semibold uppercase">
-                  {{ policy ? "Chính sách " + getPolicyTitle(policy.keyword as any) : $t("common.noData") }}
+                  {{ policy ? $t("policy.prefix", { title: getPolicyTitle(policy.keyword as any) }) : $t("common.noData") }}
                 </div>
                 <p class="text-sm text-gray-600">{{ $t("common.lastUpdated") }} {{ policy ? new Date(policy.updatedAt as any).toLocaleDateString("vi-VN") : "" }}</p>
               </div>
@@ -45,6 +45,7 @@
 <script setup lang="ts">
 import type { ISystem } from "~/interfaces/system/system.interface";
 import { ref, onMounted, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { systemService } from "~/services/system/system.service";
 import { getPolicyTitle } from "~/utils/system/policy";
 import SidebarPolicy from "~/components//navigation/SidebarPolicy.vue";
@@ -57,7 +58,9 @@ const route = useRoute();
 const router = useRouter();
 const policy = ref<ISystem | null>(null);
 const isLoading = ref(true);
+
 const toast = useAppToast();
+const { t } = useI18n();
 
 const loadPolicy = async (keyword: string) => {
   try {
@@ -68,11 +71,11 @@ const loadPolicy = async (keyword: string) => {
     } else if (response.data && !Array.isArray(response.data)) {
       (policy.value as any) = response.data;
     } else {
-      toast.value = "Không tìm thấy chính sách này";
+      toast.value = t("policy.notFound");
     }
   } catch (err) {
     console.error("Error loading policy:", err);
-    toast.value = "Có lỗi xảy ra khi tải dữ liệu";
+    toast.value = t("message.errorLoading");
   } finally {
     isLoading.value = false;
   }

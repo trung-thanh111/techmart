@@ -2,7 +2,7 @@
   <aside class="product-filter flex-shrink-0 w-full md:w-[280px] mb-3 md:mb-0 sticky top-4">
     <div class="p-1 md:p-2 overflow-y-auto max-h-[126vh] custom-scrollbar">
       <div class="flex justify-between items-center gap-2">
-        <h2 class="text-transparent text-start bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-lg sm:text-md font-bold pb-2">Bộ lọc</h2>
+        <h2 class="text-transparent text-start bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-lg sm:text-md font-bold pb-2">{{ $t("filter.title") }}</h2>
         <button v-if="hasActiveFilters" class="flex items-center gap-1 text-xs text-[#0097cc] cursor-pointer hover:text-[#007c8b] transition-colors" @click="handleResetFilters">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -14,7 +14,7 @@
         <AccordionPanel value="brand">
           <AccordionHeader>
             <div class="flex items-center justify-between w-full">
-              <span class="font-medium text-gray-700">Thương hiệu</span>
+              <span class="font-medium text-gray-700">{{ $t("field.brand") }}</span>
               <span class="text-xs text-gray-500 font-normal">({{ brands.length }})</span>
             </div>
           </AccordionHeader>

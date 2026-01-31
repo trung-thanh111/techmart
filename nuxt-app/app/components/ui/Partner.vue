@@ -4,7 +4,7 @@
       <SplideSlide v-for="logo in resolvedLogos" :key="logo.alt || logo.src">
         <div class="block rounded-md shadow">
           <div class="logo-slide h-24 w-full flex items-center justify-center">
-            <NuxtImg :src="logo.src" :alt="logo.alt || 'Brand'" class="h-12 w-auto object-contain" loading="lazy" />
+            <NuxtImg :src="logo.src" :alt="logo.alt || $t('field.brand')" class="h-12 w-auto object-contain" loading="lazy" />
           </div>
         </div>
       </SplideSlide>
@@ -42,7 +42,7 @@ onMounted(async () => {
       resolvedLogos.value = (brands || [])
         .map((b) => ({
           src: b.logo?.path ? (b.logo?.url ?? "") : "",
-          alt: b.name || "Brand",
+          alt: b.name || t("field.brand"),
         }))
         .filter((item) => !!item.src);
     } catch (e) {

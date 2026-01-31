@@ -1,14 +1,4 @@
 {
-  "header": {
-    "title": "Home",
-    "description": "Home",
-    "keywords": "Home",
-    "search": "Search...",
-    "cart": "Cart",
-    "account": "Account",
-    "login": "Login",
-    "register": "Register"
-  },
   "cart": {
     "title": "Cart",
     "breadcrumb": "Cart",
@@ -72,5 +62,138 @@
       "confirmPassword": "Confirm password",
       "submit": "Register"
     }
+  },
+  "common": {
+    "banner": "Banner",
+    "priority": "Priority",
+    "categories": "Categories",
+    "productCount": "products",
+    "viewAll": "View all",
+    "viewMore": "View more",
+    "gift": "Gift"
+  },
+  "action": {
+    "addProduct": "Add Product",
+    "share": "Share",
+    "viewDetail": "View Detail"
+  },
+  "nav": {
+    "shop": "Shop",
+    "faq": "FAQ"
+  },
+  "field": {
+    "category": "Category",
+    "brand": "Brand",
+    "sku": "SKU",
+    "quantity": "Quantity"
+  },
+  "header": {
+    "title": "Home",
+    "description": "Home",
+    "keywords": "Home",
+    "search": "Search...",
+    "cart": "Cart",
+    "account": "Account",
+    "login": "Login",
+    "register": "Register",
+    "specifications": "Specifications",
+    "promotionTitle": "Promotions",
+    "discountText": "Discount",
+    "maxDiscount": "Max {amount}",
+    "timeLabel": "Time:",
+    "appliesTo": "Applies to",
+    "noPromotion": "No promotion",
+    "loginRequired": "Login",
+    "memberBenefits": "to enjoy member benefits!",
+    "easyExchange": "Easy Exchange",
+    "distributionSystem": "Distribution System",
+    "storesCount": "{count} stores",
+    "noStores": "No stores found",
+    "distributionAgent": "Distribution Agent",
+    "freeConsultation": "Free Consultation",
+    "easyReturn": "Easy Return",
+    "warrantyYears": "Warranty",
+    "productDescription": "Description",
+    "noDescription": "No description",
+    "noSpecFound": "No specifications found",
+    "compareTooltip": "Compare"
+  },
+  "wishlist": {
+    "title": "Wishlist",
+    "breadcrumb": "Wishlist",
+    "description": "Your favorite products",
+    "loadMore": "Load More"
+  },
+  "product": {
+    "rating": "Rating",
+    "customerReviewsTitle": "Customer Reviews",
+    "customerReviewsDescription": "Reviews",
+    "fabricDesc": "",
+    "basedOn": "Based on",
+    "reviews": "reviews",
+    "yourThoughtsTitle": "Your Thoughts",
+    "yourThoughtsPlaceholder": "Share your thoughts...",
+    "reviewsTitle": "{count} Reviews",
+    "userMenu": {
+      "profile": "Profile",
+      "messages": "Messages",
+      "taskboard": "Taskboard",
+      "help": "Help",
+      "logout": "Logout"
+    },
+    "mockReview1": "Great product!",
+    "mockReply": "Thank you!",
+    "likes": "likes",
+    "reply": "Reply",
+    "youMightLike": "You might like"
+  },
+  "message": {
+    "errorLoading": "Error loading data"
+  },
+  "commitment": {
+    "quality": {
+      "title": "Quality Commitment",
+      "desc": "Quality checked before delivery"
+    },
+    "warranty": {
+      "title": "Genuine Warranty",
+      "desc": "All products have genuine warranty"
+    },
+    "inspect": {
+      "title": "Inspect Goods",
+      "desc": "Allow inspection before payment"
+    },
+    "return": {
+      "title": "Free Return",
+      "desc": "Free return within 30 days"
+    },
+    "refund": {
+      "title": "100% Refund",
+      "desc": "Refund if technical error within 7 days"
+    }
+  },
+  "sidebar": {
+    "openMenu": "Open menu",
+    "collapseExpand": "Collapse/Expand sidebar",
+    "personal": "Personal",
+    "information": "Information",
+    "changePassword": "Change Password",
+    "addressOrder": "Address Order",
+    "myOrders": "My Orders",
+    "wishlists": "Wishlists",
+    "myVouchers": "My Vouchers",
+    "settings": "Settings",
+    "apiKeys": "API Keys",
+    "notifications": "Notifications",
+    "accountSecurity": "Account Security",
+    "activityHistory": "Activity History",
+    "support": "Support",
+    "supportCenter": "Support Center",
+    "privacyPolicy": "Privacy Policy",
+    "logout": "Logout"
+  },
+  "sidebarPolicy": {
+    "policy": "Policy",
+    "loading": "Loading..."
   }
 }

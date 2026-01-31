@@ -4,7 +4,7 @@
     <section>
       <article>
         <div class="container mx-auto">
-          <DataState :loading="isLoading" :error="false" :data="isEmpty ? [] : items" :show-empty-image="false">
+          <DataState :loading="isPageLoading" :error="false" :data="isEmpty ? [] : items" :show-empty-image="false">
             <template v-if="!isEmpty && items.length > 0">
               <div class="grid grid-cols-12 gap-6 mb-5">
                 <div class="col-span-12 lg:col-span-8">
@@ -14,7 +14,7 @@
                         <tr class="border-b border-gray-200 text-sm text-left">
                           <th class="p-2 md:p-4 w-10 text-center">
                             <label class="relative flex items-center justify-center cursor-pointer">
-                              <Checkbox :checked="isAllSelected" @change="handleSelectAll" binary size="small" />
+                              <Checkbox :modelValue="isAllSelected" @update:modelValue="handleSelectAll" binary size="small" />
                               <span v-if="isAllSelected" class="absolute inset-0 flex items-center justify-center pointer-events-none">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-5 md:w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
                                   <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
@@ -32,7 +32,7 @@
                         <tr v-for="item in items" :key="item.id" class="hover:bg-[#f1f1f1]">
                           <td class="p-2 md:p-4 text-center">
                             <label class="relative flex items-center justify-center cursor-pointer">
-                              <Checkbox :checked="isItemSelected(item.id!)" @change="() => toggleSelectItem(item.id!)" binary size="small" />
+                              <Checkbox :modelValue="isItemSelected(item.id!)" @update:modelValue="toggleSelectItem(item.id!)" binary size="small" />
                               <span v-if="isItemSelected(item.id!)" class="absolute inset-0 flex items-center justify-center pointer-events-none">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-5 md:w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
                                   <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
@@ -60,7 +60,7 @@
                           </td>
                           <td class="text-center align-middle">
                             <div class="flex items-center justify-between rounded overflow-hidden border border-gray-200 p-1 shadow-sm min-w-0 gap-1">
-                              <button type="button" title="quantity-decrease" @click.stop.prevent="handleDecreaseQuantity(item.id!, item.quantity || 1)" :disabled="(item.quantity || 0) <= 1" class="bg-teal-500 text-white w-8 h-6 md:w-8 md:h-7 flex items-center justify-center hover:bg-teal-600 disabled:opacity-50 disabled:cursor-not-allowed">
+                              <button type="button" :title="$t('cart.decreaseQuantity')" @click.stop.prevent="handleDecreaseQuantity(item.id!, item.quantity || 1)" :disabled="(item.quantity || 0) <= 1" class="bg-teal-500 text-white w-8 h-6 md:w-8 md:h-7 flex items-center justify-center hover:bg-teal-600 disabled:opacity-50 disabled:cursor-not-allowed">
                                 <svg class="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 18 18">
                                   <path d="M3.75 9H14.25"></path>
                                 </svg>
@@ -68,7 +68,7 @@
                               <div class="w-7 h-6 md:w-8 md:h-7 flex items-center justify-center bg-white">
                                 <input type="text" :value="item.quantity || 1" readonly class="text-center text-gray-800 text-xs md:text-sm focus:outline-none max-w-full bg-white" inputmode="numeric" />
                               </div>
-                              <button type="button" title="quantity-increase" @click.stop.prevent="handleUpdateQuantity(item.id!, (item.quantity || 1) + 1)" :disabled="(item.quantity || 0) >= getStock(item)" class="bg-teal-500 text-white w-8 h-6 md:w-8 md:h-7 flex items-center justify-center hover:bg-teal-600 disabled:opacity-50 disabled:cursor-not-allowed">
+                              <button type="button" :title="$t('cart.increaseQuantity')" @click.stop.prevent="handleUpdateQuantity(item.id!, (item.quantity || 1) + 1)" :disabled="(item.quantity || 0) >= getStock(item)" class="bg-teal-500 text-white w-8 h-6 md:w-8 md:h-7 flex items-center justify-center hover:bg-teal-600 disabled:opacity-50 disabled:cursor-not-allowed">
                                 <svg class="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 18 18">
                                   <path d="M9 3.75V14.25"></path>
                                   <path d="M3.75 9H14.25"></path>
@@ -179,19 +179,19 @@
                       <div class="mt-5 space-y-3">
                         <div class="flex items-center justify-between text-sm">
                           <span class="text-gray-600">{{ $t("cart.subtotal") }}:</span>
-                          <span class="font-medium">{{ formatPrice(selectedTotalPrice) }}</span>
+                          <span class="">{{ formatPrice(selectedTotalPrice) }}</span>
                         </div>
                         <div class="flex items-center justify-between text-sm">
                           <span class="text-gray-600">{{ $t("cart.discount") }}:</span>
-                          <span class="text-green-600 font-medium">− {{ formatPrice(0) }}</span>
+                          <span class="text-green-600">{{ Number(formatPrice(0)) > 0 ? `- ${formatPrice(0)}` : formatPrice(0) }}</span>
                         </div>
                         <div class="flex items-center justify-between text-sm">
                           <span class="text-gray-600">{{ $t("cart.shipping") }}:</span>
-                          <span class="font-medium">{{ formatPrice(selectedCount > 0 ? 25000 : 0) }}</span>
+                          <span class="">{{ formatPrice(selectedCount > 0 ? 25000 : 0) }}</span>
                         </div>
                         <div class="flex items-center justify-between text-sm">
                           <span class="text-gray-600">{{ $t("cart.taxPercent", { percent: 5 }) }}:</span>
-                          <span class="font-medium">{{ formatPrice(selectedCount > 0 ? Math.round(selectedTotalPrice * 0.05) : 0) }}</span>
+                          <span class="">{{ formatPrice(selectedCount > 0 ? Math.round(selectedTotalPrice * 0.05) : 0) }}</span>
                         </div>
                         <div class="border-t border-gray-200 pt-3 mt-4">
                           <div class="flex items-center justify-between">
@@ -221,7 +221,7 @@
             </template>
             <template #empty>
               <div class="flex flex-col items-center justify-center py-12 text-center text-gray-500">
-                <NuxtImg :src="EMPTYBOX" alt="Không có dữ liệu" class="object-contain mb-4 h-32 md:h-40" loading="lazy" />
+                <NuxtImg :src="EMPTYBOX" :alt="$t('common.noData')" class="object-contain mb-4 h-32 md:h-40" loading="lazy" />
                 <p class="text-gray-500 mb-6">{{ $t("cart.emptyDesc") }}</p>
                 <Button :label="$t('cart.shopping')" icon="pi pi-arrow-left" @click="navigateTo(TOSHOP)" class="rounded py-1" />
               </div>
@@ -280,6 +280,8 @@ import { formatPrice, resolveAlbum } from "~/utils/helpers";
 import { IMAGEDEFAULT, TOSHOP, PRODUCT, EMPTYBOX } from "~/utils/constants";
 import type { ICartItem } from "~/interfaces/cart/cartItem.interface";
 
+const isPageLoading = ref(true);
+
 const { t } = useI18n();
 const toast = useToast();
 
@@ -297,8 +299,7 @@ const isAllSelected = computed(() => {
   return itemsWithId.every((item) => isItemSelected(item.id!));
 });
 
-const handleSelectAll = (event: any) => {
-  const checked = event?.checked ?? event?.target?.checked ?? false;
+const handleSelectAll = (checked: boolean) => {
   if (checked) {
     selectAll();
   } else {
@@ -400,14 +401,15 @@ const applyCoupon = () => {
   }
   toast.add({
     severity: "info",
-    summary: "Thông báo",
-    detail: "Tính năng đang phát triển",
+    summary: t("cart.notification"),
+    detail: t("cart.featureDeveloping"),
     life: 3000,
   });
 };
 
 onMounted(async () => {
   await loadCart();
+  isPageLoading.value = false;
 });
 
 definePageMeta({

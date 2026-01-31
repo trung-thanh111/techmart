@@ -31,7 +31,7 @@
                 <iframe :src="buildMapEmbedSrc(item)" class="w-full h-full" style="border: 0" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
               </div>
               <div v-else>
-                <NuxtImg src="/images/defaults/record.jpg" alt="Map preview" class="w-full h-full object-cover" loading="lazy" />
+                <NuxtImg src="/images/defaults/record.jpg" :alt="$t('profile.mapPreview')" class="w-full h-full object-cover" loading="lazy" />
               </div>
             </div>
 

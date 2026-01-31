@@ -100,7 +100,7 @@ definePageMeta({ layout: "client" });
             </div>
           </div>
           <div class="mt-6 flex justify-end">
-            <button type="submit" class="inline-block bg-cyan-600 text-white rounded-sm py-1 md:py-2 px-4 md:px-6 hover:bg-cyan-700 transition">{{ $t("common.confirm") }}</button>
+            <button type="submit" class="inline-block bg-cyan-600 text-white rounded-sm py-1 md:py-2 px-4 md:px-6 hover:bg-cyan-700 transition text-sm">{{ $t("common.confirm") }}</button>
           </div>
         </form>
       </div>

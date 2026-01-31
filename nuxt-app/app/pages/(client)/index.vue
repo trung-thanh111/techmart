@@ -125,7 +125,7 @@
               </button>
               <div class="absolute top-full right-0 w-full h-5 group-hover:block hidden z-0"></div>
               <div class="absolute top-full right-0 mt-1 w-72 bg-white border border-gray-200 rounded shadow-lg p-3 z-50 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-200">
-                <p class="text-sm font-semibold mb-2 text-gray-700">📦 Mọi người thường mua cùng:</p>
+                <p class="text-sm font-semibold mb-2 text-gray-700">{{ $t("home.suggestedProducts") }}</p>
                 <ul class="space-y-3 text-sm text-gray-600">
                   <li v-for="(product_similar, id) in 3" :key="id">
                     <a href="#" class="flex items-center gap-3 p-2 rounded-lg transition hover:bg-gray-50">
@@ -176,11 +176,11 @@
               <div class="absolute inset-0 bg-black/10 rounded-2xl backdrop-brightness-[.85] z-0"></div>
               <div class="relative z-10 flex flex-col justify-between h-full">
                 <div>
-                  <h3 class="text-sm sm:text-xl drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] font-semibold leading-tight mb-1">Phụ kiện cày game</h3>
-                  <p class="text-xs">Chơi là win</p>
+                  <h3 class="text-sm sm:text-xl drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] font-semibold leading-tight mb-1">{{ $t("home.gamingAccessories") }}</h3>
+                  <p class="text-xs">{{ $t("home.playToWin") }}</p>
                 </div>
                 <div class="text-right">
-                  <a href="#" class="text-xs sm:text-sm font-medium inline-block hover:text-sky-500 underline">Xem ngay</a>
+                  <a href="#" class="text-xs sm:text-sm font-medium inline-block hover:text-sky-500 underline">{{ $t("home.viewNow") }}</a>
                 </div>
               </div>
             </div>
@@ -188,11 +188,11 @@
               <div class="absolute inset-0 bg-black/10 rounded-2xl backdrop-brightness-[.85] z-0"></div>
               <div class="relative z-10 flex flex-col justify-between h-full">
                 <div>
-                  <h3 class="text-sm sm:text-xl drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] font-semibold leading-tight mb-1">Máy chơi game</h3>
-                  <p class="text-xs">Hiệu năng khủng</p>
+                  <h3 class="text-sm sm:text-xl drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] font-semibold leading-tight mb-1">{{ $t("home.gamingConsoles") }}</h3>
+                  <p class="text-xs">{{ $t("home.highPerformance") }}</p>
                 </div>
                 <div class="text-right">
-                  <a href="#" class="text-xs sm:text-sm font-medium inline-block hover:text-sky-500 underline">Xem ngay</a>
+                  <a href="#" class="text-xs sm:text-sm font-medium inline-block hover:text-sky-500 underline">{{ $t("home.viewNow") }}</a>
                 </div>
               </div>
             </div>
@@ -202,11 +202,11 @@
               <div class="absolute inset-0 bg-black/10 rounded-2xl backdrop-brightness-[.85] z-0"></div>
               <div class="relative z-10 flex flex-col justify-between h-full">
                 <div>
-                  <h3 class="text-sm sm:text-xl drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] font-semibold leading-tight mb-1">Màn hình gamming</h3>
-                  <p class="text-xs">Tần số quét cao</p>
+                  <h3 class="text-sm sm:text-xl drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] font-semibold leading-tight mb-1">{{ $t("home.gamingMonitor") }}</h3>
+                  <p class="text-xs">{{ $t("home.highRefreshRate") }}</p>
                 </div>
                 <div class="text-right">
-                  <a href="#" class="text-xs sm:text-sm font-medium inline-block hover:text-sky-500 underline">Xem ngay</a>
+                  <a href="#" class="text-xs sm:text-sm font-medium inline-block hover:text-sky-500 underline">{{ $t("home.viewNow") }}</a>
                 </div>
               </div>
             </div>
@@ -214,11 +214,11 @@
               <div class="absolute inset-0 bg-black/30 rounded-2xl backdrop-brightness-[.85] z-0"></div>
               <div class="relative z-10 flex flex-col justify-between h-full">
                 <div>
-                  <h3 class="text-sm sm:text-xl drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] font-semibold leading-tight mb-1">Bàn phím cơ</h3>
-                  <p class="text-xs">Switch Cherry MX</p>
+                  <h3 class="text-sm sm:text-xl drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] font-semibold leading-tight mb-1">{{ $t("home.mechanicalKeyboard") }}</h3>
+                  <p class="text-xs">{{ $t("home.switchCherryMX") }}</p>
                 </div>
                 <div class="text-right">
-                  <a href="#" class="text-xs sm:text-sm font-medium inline-block hover:text-sky-500 underline">Xem ngay</a>
+                  <a href="#" class="text-xs sm:text-sm font-medium inline-block hover:text-sky-500 underline">{{ $t("home.viewNow") }}</a>
                 </div>
               </div>
             </div>
@@ -228,8 +228,8 @@
           <div class="absolute inset-0 bg-black/30 rounded-2xl backdrop-brightness-[.85] z-0"></div>
           <div class="relative z-10 flex flex-col justify-between h-full text-right">
             <div>
-              <h3 class="text-lg sm:text-xl drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] font-semibold leading-tight mb-1">Laptop Gamming</h3>
-              <p class="text-xs">Vào Trận mọi lúc</p>
+              <h3 class="text-lg sm:text-xl drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] font-semibold leading-tight mb-1">{{ $t("home.gamingLaptop") }}</h3>
+              <p class="text-xs">{{ $t("home.battleReady") }}</p>
             </div>
             <div class="text-right">
               <a href="#" class="text-xs sm:text-sm font-medium inline-block hover:text-sky-500 underline">{{ $t("home.viewNow") }}</a>
@@ -243,14 +243,14 @@
       <div class="mb-4 md:mb-8">
         <div class="flex justify-between items-center space-x-2">
           <div>
-            <h2 class="text-white text-xl md:text-3xl font-bold">Cấu hình khủng</h2>
+            <h2 class="text-white text-xl md:text-3xl font-bold">{{ $t("home.highConfig") }}</h2>
             <div class="h-1 max-w-48 my-1 md:my-2 relative">
               <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-white via-green-300 to-green-300"></div>
             </div>
           </div>
           <div class="relative inline-block group">
             <a href="#" class="flex items-center space-x-1 text-white hover:text-gray-300">
-              <span class="text-xs md:text-sm font-medium">Sắp xếp</span>
+              <span class="text-xs md:text-sm font-medium">{{ $t("home.sort") }}</span>
               <svg class="w-4 h-4" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                 <path d="M151.6 469.6C145.5 476.2 137 480 128 480s-17.5-3.8-23.6-10.4l-88-96c-11.9-13-11.1-33.3 2-45.2s33.3-11.1 45.2 2L96 365.7 96 64c0-17.7 14.3-32 32-32s32 14.3 32 32l0 301.7 32.4-35.4c11.9-13 32.2-13.9 45.2-2s13.9 32.2 2 45.2l-88 96zM320 32l32 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-32 0c-17.7 0-32-14.3-32-32s14.3-32 32-32zm0 128l96 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-96 0c-17.7 0-32-14.3-32-32s14.3-32 32-32zm0 128l160 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-160 0c-17.7 0-32-14.3-32-32s14.3-32 32-32zm0 128l224 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-224 0c-17.7 0-32-14.3-32-32s14.3-32 32-32z" />
               </svg>
@@ -262,7 +262,7 @@
                   <span class="flex items-center gap-1 sm:gap-2 group-hover/item:text-sky-600 transition-colors">
                     <!-- fa-clock SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="w-4 h-4 text-xs md:text-sm text-gray-500 group-hover/item:text-sky-600 transition-colors"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.3 0-200-89.7-200-200S145.7 56 256 56s200 89.7 200 200-89.7 200-200 200zm12-200V136c0-6.6-5.4-12-12-12s-12 5.4-12 12v120c0 6.6 5.4 12 12 12h88c6.6 0 12-5.4 12-12s-5.4-12-12-12h-76z" /></svg>
-                    Mới nhất
+                    {{ $t("home.newest") }}
                   </span>
                   <svg v-if="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500 opacity-0 group-[.active]:opacity-100"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
                 </button>
@@ -270,7 +270,7 @@
                   <span class="flex items-center gap-1 sm:gap-2 group-hover/item:text-sky-600 transition-colors">
                     <!-- fa-arrow-up-wide-short SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="currentColor" class="w-4 h-4 text-xs md:text-sm text-gray-500 group-hover/item:text-sky-600 transition-colors"><path d="M576 80c0-26.5-21.5-48-48-48H48C21.5 32 0 53.5 0 80s21.5 48 48 48h480c26.5 0 48-21.5 48-48zm0 176c0-26.5-21.5-48-48-48H176c-26.5 0-48 21.5-48 48s21.5 48 48 48h352c26.5 0 48-21.5 48-48zm0 176c0-26.5-21.5-48-48-48H304c-26.5 0-48 21.5-48 48s21.5 48 48 48h224c26.5 0 48-21.5 48-48zm0-176c0 26.5-21.5 48-48 48H176c-26.5 0-48-21.5-48-48s21.5-48 48-48h352c26.5 0 48 21.5 48 48z" /></svg>
-                    Giá: Thấp đến Cao
+                    {{ $t("home.priceLowToHigh") }}
                   </span>
                   <svg v-if="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500 opacity-0 group-[.active]:opacity-100"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
                 </button>
@@ -278,7 +278,7 @@
                   <span class="flex items-center gap-1 sm:gap-2 group-hover/item:text-sky-600 transition-colors">
                     <!-- fa-arrow-down-wide-short SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="currentColor" class="w-4 h-4 text-xs md:text-sm text-gray-500 group-hover/item:text-sky-600 transition-colors"><path d="M576 432c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48s21.5-48 48-48h480c26.5 0 48 21.5 48 48zm0-176c0 26.5-21.5 48-48 48H176c-26.5 0-48-21.5-48-48s21.5-48 48-48h352c26.5 0 48 21.5 48 48zm0-176c0 26.5-21.5 48-48 48H304c-26.5 0-48-21.5-48-48s21.5-48 48-48h224c26.5 0 48 21.5 48 48zm0-176c0 26.5-21.5 48-48 48H176c-26.5 0-48-21.5-48-48s21.5-48 48-48h352c26.5 0 48 21.5 48 48z" /></svg>
-                    Giá: Cao đến Thấp
+                    {{ $t("home.priceHighToLow") }}
                   </span>
                   <svg v-if="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500 opacity-0 group-[.active]:opacity-100"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
                 </button>
@@ -288,7 +288,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="w-4 h-4 text-xs md:text-sm text-gray-500 group-hover/item:text-sky-600 transition-colors">
                       <path d="M64 64c0-17.7-14.3-32-32-32S0 46.3 0 64V400c0 44.2 35.8 80 80 80H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H80c-8.8 0-16-7.2-16-16V64zm406.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L320 301.3l-57.4-57.4c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L320 301.3l57.4 57.4c12.5 12.5 32.8 12.5 45.3 0l112-112z" />
                     </svg>
-                    Bán chạy nhất
+                    {{ $t("home.bestSelling") }}
                   </span>
                   <svg v-if="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500 opacity-0 group-[.active]:opacity-100"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
                 </button>
@@ -296,7 +296,7 @@
                   <span class="flex items-center gap-1 sm:gap-2 group-hover/item:text-sky-600 transition-colors">
                     <!-- fa-star SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="currentColor" class="w-4 h-4 text-xs md:text-sm text-gray-500 group-hover/item:text-sky-600 transition-colors"><path d="M287.9 17.8L354 150.2l146.1 21.3c26.2 3.8 36.7 36 17.7 54.6l-105.7 103 25 145.5c4.5 26.2-23 46-46.4 33.7L288 439.6l-130.7 68.7c-23.4 12.3-50.9-7.5-46.4-33.7l25-145.5L30.2 226.1c-19-18.6-8.5-50.8 17.7-54.6L194 150.2 260.1 17.8c11.7-23.6 45.6-23.9 57.8 0z" /></svg>
-                    Đánh giá cao
+                    {{ $t("home.highRated") }}
                   </span>
                   <svg v-if="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500 opacity-0 group-[.active]:opacity-100"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
                 </button>
@@ -304,7 +304,7 @@
             </div>
           </div>
         </div>
-        <p class="text-white/90 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("home.popularLightingDesc") }}</p>
+        <p class="text-white/90 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("home.lightingDesc") }}</p>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         <ProductCard v-for="product in 10" :key="product.id" :product="product" />
@@ -316,14 +316,14 @@
       <div class="mb-4 md:mb-8">
         <div class="flex justify-between items-center space-x-2">
           <div class="head-section-product">
-            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-xl md:text-3xl font-bold">{{ $t("home.integrateAI") }}</h2>
+            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-xl md:text-3xl font-bold">{{ $t("home.techAccessories") }}</h2>
             <div class="h-1 max-w-48 my-1 md:my-2 relative">
               <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-white via-green-300 to-green-300"></div>
             </div>
           </div>
           <div class="relative inline-block group">
             <a href="#" class="flex items-center space-x-1 text-white hover:text-gray-300">
-              <span class="text-xs md:text-sm font-medium text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f]">Sắp xếp</span>
+              <span class="text-xs md:text-sm font-medium text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f]">{{ $t("home.sort") }}</span>
               <svg viewBox="0 0 576 512" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 md:w-5 md:h-5">
                 <defs>
                   <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -350,7 +350,7 @@
                   <span class="flex items-center gap-1 sm:gap-2 group-hover/item:text-sky-600 transition-colors">
                     <!-- fa-arrow-up-wide-short SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="currentColor" class="w-4 h-4 text-xs md:text-sm text-gray-500 group-hover/item:text-sky-600 transition-colors"><path d="M576 80c0-26.5-21.5-48-48-48H48C21.5 32 0 53.5 0 80s21.5 48 48 48h480c26.5 0 48-21.5 48-48zm0 176c0-26.5-21.5-48-48-48H176c-26.5 0-48 21.5-48 48s21.5 48 48 48h352c26.5 0 48-21.5 48-48zm0 176c0-26.5-21.5-48-48-48H304c-26.5 0-48 21.5-48 48s21.5 48 48 48h224c26.5 0 48-21.5 48-48zm0-176c0 26.5-21.5 48-48 48H176c-26.5 0-48-21.5-48-48s21.5-48 48-48h352c26.5 0 48 21.5 48 48z" /></svg>
-                    Giá: Thấp đến Cao
+                    {{ $t("home.priceLowToHigh") }}
                   </span>
                   <svg v-if="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500 opacity-0 group-[.active]:opacity-100"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
                 </button>
@@ -358,7 +358,7 @@
                   <span class="flex items-center gap-1 sm:gap-2 group-hover/item:text-sky-600 transition-colors">
                     <!-- fa-arrow-down-wide-short SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="currentColor" class="w-4 h-4 text-xs md:text-sm text-gray-500 group-hover/item:text-sky-600 transition-colors"><path d="M576 432c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48s21.5-48 48-48h480c26.5 0 48 21.5 48 48zm0-176c0 26.5-21.5 48-48 48H176c-26.5 0-48-21.5-48-48s21.5-48 48-48h352c26.5 0 48 21.5 48 48zm0-176c0 26.5-21.5 48-48 48H304c-26.5 0-48-21.5-48-48s21.5-48 48-48h224c26.5 0 48 21.5 48 48zm0-176c0 26.5-21.5 48-48 48H176c-26.5 0-48-21.5-48-48s21.5-48 48-48h352c26.5 0 48 21.5 48 48z" /></svg>
-                    Giá: Cao đến Thấp
+                    {{ $t("home.priceHighToLow") }}
                   </span>
                   <svg v-if="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500 opacity-0 group-[.active]:opacity-100"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
                 </button>
@@ -368,7 +368,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="w-4 h-4 text-xs md:text-sm text-gray-500 group-hover/item:text-sky-600 transition-colors">
                       <path d="M64 64c0-17.7-14.3-32-32-32S0 46.3 0 64V400c0 44.2 35.8 80 80 80H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H80c-8.8 0-16-7.2-16-16V64zm406.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L320 301.3l-57.4-57.4c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L320 301.3l57.4 57.4c12.5 12.5 32.8 12.5 45.3 0l112-112z" />
                     </svg>
-                    Bán chạy nhất
+                    {{ $t("home.bestSelling") }}
                   </span>
                   <svg v-if="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500 opacity-0 group-[.active]:opacity-100"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
                 </button>
@@ -376,7 +376,7 @@
                   <span class="flex items-center gap-1 sm:gap-2 group-hover/item:text-sky-600 transition-colors">
                     <!-- fa-star SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="currentColor" class="w-4 h-4 text-xs md:text-sm text-gray-500 group-hover/item:text-sky-600 transition-colors"><path d="M287.9 17.8L354 150.2l146.1 21.3c26.2 3.8 36.7 36 17.7 54.6l-105.7 103 25 145.5c4.5 26.2-23 46-46.4 33.7L288 439.6l-130.7 68.7c-23.4 12.3-50.9-7.5-46.4-33.7l25-145.5L30.2 226.1c-19-18.6-8.5-50.8 17.7-54.6L194 150.2 260.1 17.8c11.7-23.6 45.6-23.9 57.8 0z" /></svg>
-                    Đánh giá cao
+                    {{ $t("home.highRated") }}
                   </span>
                   <svg v-if="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500 opacity-0 group-[.active]:opacity-100"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
                 </button>
@@ -462,7 +462,7 @@
           </div>
           <div class="absolute top-0 z-20 left-0 -translate-x-4 -translate-y-4 bg-white shadow px-4 py-2 rounded-full text-sm font-medium text-sky-600 flex items-center gap-2">
             <i class="fas fa-bolt text-yellow-400"></i>
-            Flash Sale Hôm Nay
+            {{ $t("home.flashSaleToday") }}
           </div>
           <div class="absolute -inset-2 bg-sky-400/20 blur-2xl rounded-3xl z-0"></div>
         </div>
@@ -472,7 +472,7 @@
       <div class="mb-4 md:mb-8">
         <div class="flex justify-between items-center space-x-2">
           <div class="head-section-product">
-            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-xl md:text-3xl font-bold">Phụ kiện công nghệ</h2>
+            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-xl md:text-3xl font-bold">{{ $t("home.techAccessories") }}</h2>
             <div class="h-1 max-w-48 my-1 md:my-2 relative">
               <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-white via-green-300 to-green-300"></div>
             </div>
@@ -506,7 +506,7 @@
                   <span class="flex items-center gap-1 sm:gap-2 group-hover/item:text-sky-600 transition-colors">
                     <!-- fa-arrow-up-wide-short SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="currentColor" class="w-4 h-4 text-xs md:text-sm text-gray-500 group-hover/item:text-sky-600 transition-colors"><path d="M576 80c0-26.5-21.5-48-48-48H48C21.5 32 0 53.5 0 80s21.5 48 48 48h480c26.5 0 48-21.5 48-48zm0 176c0-26.5-21.5-48-48-48H176c-26.5 0-48 21.5-48 48s21.5 48 48 48h352c26.5 0 48-21.5 48-48zm0 176c0-26.5-21.5-48-48-48H304c-26.5 0-48 21.5-48 48s21.5 48 48 48h224c26.5 0 48-21.5 48-48zm0-176c0 26.5-21.5 48-48 48H176c-26.5 0-48-21.5-48-48s21.5-48 48-48h352c26.5 0 48 21.5 48 48z" /></svg>
-                    Giá: Thấp đến Cao
+                    {{ $t("home.priceLowToHigh") }}
                   </span>
                   <svg v-if="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500 opacity-0 group-[.active]:opacity-100"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
                 </button>
@@ -514,7 +514,7 @@
                   <span class="flex items-center gap-1 sm:gap-2 group-hover/item:text-sky-600 transition-colors">
                     <!-- fa-arrow-down-wide-short SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="currentColor" class="w-4 h-4 text-xs md:text-sm text-gray-500 group-hover/item:text-sky-600 transition-colors"><path d="M576 432c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48s21.5-48 48-48h480c26.5 0 48 21.5 48 48zm0-176c0 26.5-21.5 48-48 48H176c-26.5 0-48-21.5-48-48s21.5-48 48-48h352c26.5 0 48 21.5 48 48zm0-176c0 26.5-21.5 48-48 48H304c-26.5 0-48-21.5-48-48s21.5-48 48-48h224c26.5 0 48 21.5 48 48zm0-176c0 26.5-21.5 48-48 48H176c-26.5 0-48-21.5-48-48s21.5-48 48-48h352c26.5 0 48 21.5 48 48z" /></svg>
-                    Giá: Cao đến Thấp
+                    {{ $t("home.priceHighToLow") }}
                   </span>
                   <svg v-if="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500 opacity-0 group-[.active]:opacity-100"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
                 </button>
@@ -524,7 +524,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="w-4 h-4 text-xs md:text-sm text-gray-500 group-hover/item:text-sky-600 transition-colors">
                       <path d="M64 64c0-17.7-14.3-32-32-32S0 46.3 0 64V400c0 44.2 35.8 80 80 80H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H80c-8.8 0-16-7.2-16-16V64zm406.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L320 301.3l-57.4-57.4c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L320 301.3l57.4 57.4c12.5 12.5 32.8 12.5 45.3 0l112-112z" />
                     </svg>
-                    Bán chạy nhất
+                    {{ $t("home.bestSelling") }}
                   </span>
                   <svg v-if="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500 opacity-0 group-[.active]:opacity-100"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
                 </button>
@@ -532,7 +532,7 @@
                   <span class="flex items-center gap-1 sm:gap-2 group-hover/item:text-sky-600 transition-colors">
                     <!-- fa-star SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="currentColor" class="w-4 h-4 text-xs md:text-sm text-gray-500 group-hover/item:text-sky-600 transition-colors"><path d="M287.9 17.8L354 150.2l146.1 21.3c26.2 3.8 36.7 36 17.7 54.6l-105.7 103 25 145.5c4.5 26.2-23 46-46.4 33.7L288 439.6l-130.7 68.7c-23.4 12.3-50.9-7.5-46.4-33.7l25-145.5L30.2 226.1c-19-18.6-8.5-50.8 17.7-54.6L194 150.2 260.1 17.8c11.7-23.6 45.6-23.9 57.8 0z" /></svg>
-                    Đánh giá cao
+                    {{ $t("home.highRated") }}
                   </span>
                   <svg v-if="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500 opacity-0 group-[.active]:opacity-100"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
                 </button>
@@ -540,7 +540,7 @@
             </div>
           </div>
         </div>
-        <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">Các thiết bị chiếu sáng được ưa chuộng nhất tại Tech mart Store, nâng cao trải nghiệm sống của hàng ngàn khách hàng.</p>
+        <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("home.lightingDesc") }}</p>
       </div>
       <div class="flex flex-col lg:flex-row justify-between items-start gap-4">
         <div class="w-full lg:w-1/5 h-[150px] lg:h-[858px] md:-mx-3 lg:mx-0">
@@ -556,7 +556,7 @@
                     <span class="absolute top-0 right-0 w-5 h-5 rotate-45 translate-x-1/2 -translate-y-1/2 bg-white"></span>
                   </span>
                   <span class="absolute bottom-0 left-0 w-full h-full transition-all duration-500 ease-in-out delay-200 -translate-x-full bg-sky-600 rounded-md group-hover:translate-x-0"></span>
-                  <span class="relative text-center text-white transition-colors duration-200 ease-in-out group-hover:text-white drop-shadow">Khám phá</span>
+                  <span class="relative text-center text-white transition-colors duration-200 ease-in-out group-hover:text-white drop-shadow">{{ $t("home.explore") }}</span>
                 </a>
               </div>
             </div>
@@ -592,7 +592,7 @@
           <a href="#" class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] animate-glow">{{ $t("home.us") }}</a>
           <span class="text-2xl md:text-4xl">?</span>
         </h2>
-        <p class="text-sm text-gray-600 max-w-3xl mx-auto leading-relaxed">Trải nghiệm sự khác biệt với những giải pháp công nghệ tiên tiến nhất, được thiết kế để biến tầm nhìn thương mại điện tử của bạn thành hiện thực</p>
+        <p class="text-sm text-gray-600 max-w-3xl mx-auto leading-relaxed">{{ $t("home.experienceDifference") }}</p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 md:gap-8">
@@ -606,8 +606,8 @@
                 </div>
                 <div class="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full animate-pulse"></div>
               </div>
-              <h3 class="text-xl font-bold text-gray-900 mb-4 group-hover:text-blue-600 transition-colors duration-300">Chất Lượng Đảm Bảo</h3>
-              <p class="text-gray-600 leading-relaxed text-sm">100% hàng chính hãng, bảo hành toàn diện. Hoàn tiền 200% nếu phát hiện hàng giả hoặc kém chất lượng</p>
+              <h3 class="text-xl font-bold text-gray-900 mb-4 group-hover:text-blue-600 transition-colors duration-300">{{ $t("home.qualityGuaranteed") }}</h3>
+              <p class="text-gray-600 leading-relaxed text-sm">{{ $t("home.qualityDesc") }}</p>
             </div>
           </div>
         </div>
@@ -624,8 +624,8 @@
                   <div class="w-3 h-3 bg-green-400 rounded-full absolute animate-pulse"></div>
                 </div>
               </div>
-              <h3 class="text-xl font-bold text-gray-900 mb-4 group-hover:text-emerald-600 transition-colors duration-300">Giao Hàng Siêu Tốc</h3>
-              <p class="text-gray-600 leading-relaxed text-sm">Giao hàng trong 2-4h nội thành, 24h toàn quốc. Đóng gói cẩn thận, bảo vệ tối đa</p>
+              <h3 class="text-xl font-bold text-gray-900 mb-4 group-hover:text-emerald-600 transition-colors duration-300">{{ $t("home.fastDelivery") }}</h3>
+              <p class="text-gray-600 leading-relaxed text-sm">{{ $t("home.deliveryDesc") }}</p>
             </div>
           </div>
         </div>
@@ -639,8 +639,8 @@
                 </div>
                 <div class="absolute -bottom-2 -left-2 w-4 h-4 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full animate-bounce"></div>
               </div>
-              <h3 class="text-xl font-bold text-gray-900 mb-4 group-hover:text-purple-600 transition-colors duration-300">Đổi Trả Dễ Dàng</h3>
-              <p class="text-gray-600 leading-relaxed text-sm">Đổi trả miễn phí trong 30 ngày, không cần lý do. Quy trình đơn giản 3 bước, hoàn tiền trong 24h</p>
+              <h3 class="text-xl font-bold text-gray-900 mb-4 group-hover:text-purple-600 transition-colors duration-300">{{ $t("home.easyExchange") }}</h3>
+              <p class="text-gray-600 leading-relaxed text-sm">{{ $t("home.exchangeDesc") }}</p>
             </div>
           </div>
         </div>
@@ -654,8 +654,8 @@
                 </div>
                 <div class="absolute -top-1 -left-1 w-5 h-5 border-2 border-yellow-400 rounded-full animate-spin"></div>
               </div>
-              <h3 class="text-xl font-bold text-gray-900 mb-4 group-hover:text-orange-600 transition-colors duration-300">Tin Cậy Hàng Đầu</h3>
-              <p class="text-gray-600 leading-relaxed text-sm">Hơn 500.000 khách hàng tin tưởng, 4.9★ đánh giá từ 50.000+ reviews. Được tạp chí Tech Awards vinh danh 3 năm liên tiếp</p>
+              <h3 class="text-xl font-bold text-gray-900 mb-4 group-hover:text-orange-600 transition-colors duration-300">{{ $t("home.topTrust") }}</h3>
+              <p class="text-gray-600 leading-relaxed text-sm">{{ $t("home.trustDesc") }}</p>
             </div>
           </div>
         </div>
@@ -713,9 +713,9 @@
             <a href="#" class="block cursor-pointer">
               <img src="/images/posts/post-home-2.jpg" loading="lazy" alt="Post" class="w-full object-cover" />
               <div class="relative p-2">
-                <a href="#" class="absolute top-0 left-0 -translate-y-8 translate-x-4 inline-block bg-sky-100/80 text-sky-600 font-semibold text-[8px] md:text-[10px] px-4 py-1 rounded-full uppercase shadow-lg tracking-wide">công nghệ</a>
-                <h3 class="text-lg font-medium text-gray-800 hover:text-cyan-600 transition-colors line-clamp-1">Bài viết nổi bật: Công nghệ AI thay đổi cuộc sống thế nào?</h3>
-                <p class="text-gray-600 hover:text-gray-500 transition-colors text-sm line-clamp-1">Trí tuệ nhân tạo đang làm thay đổi cách chúng ta sống, làm việc và giao tiếp. Cùng tìm hiểu những đột phá mới nhất trong lĩnh vực này. Trí tuệ nhân tạo đang làm thay đổi cách chúng ta sống, làm việc và giao tiếp. Cùng tìm hiểu những đột phá mới nhất trong lĩnh vực này.</p>
+                <a href="#" class="absolute top-0 left-0 -translate-y-8 translate-x-4 inline-block bg-sky-100/80 text-sky-600 font-semibold text-[8px] md:text-[10px] px-4 py-1 rounded-full uppercase shadow-lg tracking-wide">{{ $t("home.technology") }}</a>
+                <h3 class="text-lg font-medium text-gray-800 hover:text-cyan-600 transition-colors line-clamp-1">{{ $t("home.featuredArticle") }}</h3>
+                <p class="text-gray-600 hover:text-gray-500 transition-colors text-sm line-clamp-1">{{ $t("home.articleDesc") }}</p>
                 <!-- <div
                     class="text-xs flex justify-between text-right hover:scale-105 transition-transform duration-300">
                     <p class="not-hover:none">09/09/2025</p>
