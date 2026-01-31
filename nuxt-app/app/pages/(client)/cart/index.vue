@@ -4,7 +4,7 @@
     <section>
       <article>
         <div class="container mx-auto">
-          <DataState :loading="isLoading" :error="false" :data="isEmpty ? [] : items" :show-empty-image="false">
+          <DataState :loading="isPageLoading" :error="false" :data="isEmpty ? [] : items" :show-empty-image="false">
             <template v-if="!isEmpty && items.length > 0">
               <div class="grid grid-cols-12 gap-6 mb-5">
                 <div class="col-span-12 lg:col-span-8">
@@ -14,7 +14,7 @@
                         <tr class="border-b border-gray-200 text-sm text-left">
                           <th class="p-2 md:p-4 w-10 text-center">
                             <label class="relative flex items-center justify-center cursor-pointer">
-                              <Checkbox :checked="isAllSelected" @change="handleSelectAll" binary size="small" />
+                              <Checkbox :modelValue="isAllSelected" @update:modelValue="handleSelectAll" binary size="small" />
                               <span v-if="isAllSelected" class="absolute inset-0 flex items-center justify-center pointer-events-none">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-5 md:w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
                                   <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
@@ -32,7 +32,7 @@
                         <tr v-for="item in items" :key="item.id" class="hover:bg-[#f1f1f1]">
                           <td class="p-2 md:p-4 text-center">
                             <label class="relative flex items-center justify-center cursor-pointer">
-                              <Checkbox :checked="isItemSelected(item.id!)" @change="() => toggleSelectItem(item.id!)" binary size="small" />
+                              <Checkbox :modelValue="isItemSelected(item.id!)" @update:modelValue="toggleSelectItem(item.id!)" binary size="small" />
                               <span v-if="isItemSelected(item.id!)" class="absolute inset-0 flex items-center justify-center pointer-events-none">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-5 md:w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
                                   <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
@@ -179,19 +179,19 @@
                       <div class="mt-5 space-y-3">
                         <div class="flex items-center justify-between text-sm">
                           <span class="text-gray-600">{{ $t("cart.subtotal") }}:</span>
-                          <span class="font-medium">{{ formatPrice(selectedTotalPrice) }}</span>
+                          <span class="">{{ formatPrice(selectedTotalPrice) }}</span>
                         </div>
                         <div class="flex items-center justify-between text-sm">
                           <span class="text-gray-600">{{ $t("cart.discount") }}:</span>
-                          <span class="text-green-600 font-medium">− {{ formatPrice(0) }}</span>
+                          <span class="text-green-600">{{ Number(formatPrice(0)) > 0 ? `- ${formatPrice(0)}` : formatPrice(0) }}</span>
                         </div>
                         <div class="flex items-center justify-between text-sm">
                           <span class="text-gray-600">{{ $t("cart.shipping") }}:</span>
-                          <span class="font-medium">{{ formatPrice(selectedCount > 0 ? 25000 : 0) }}</span>
+                          <span class="">{{ formatPrice(selectedCount > 0 ? 25000 : 0) }}</span>
                         </div>
                         <div class="flex items-center justify-between text-sm">
                           <span class="text-gray-600">{{ $t("cart.taxPercent", { percent: 5 }) }}:</span>
-                          <span class="font-medium">{{ formatPrice(selectedCount > 0 ? Math.round(selectedTotalPrice * 0.05) : 0) }}</span>
+                          <span class="">{{ formatPrice(selectedCount > 0 ? Math.round(selectedTotalPrice * 0.05) : 0) }}</span>
                         </div>
                         <div class="border-t border-gray-200 pt-3 mt-4">
                           <div class="flex items-center justify-between">
@@ -280,6 +280,8 @@ import { formatPrice, resolveAlbum } from "~/utils/helpers";
 import { IMAGEDEFAULT, TOSHOP, PRODUCT, EMPTYBOX } from "~/utils/constants";
 import type { ICartItem } from "~/interfaces/cart/cartItem.interface";
 
+const isPageLoading = ref(true);
+
 const { t } = useI18n();
 const toast = useToast();
 
@@ -297,8 +299,7 @@ const isAllSelected = computed(() => {
   return itemsWithId.every((item) => isItemSelected(item.id!));
 });
 
-const handleSelectAll = (event: any) => {
-  const checked = event?.checked ?? event?.target?.checked ?? false;
+const handleSelectAll = (checked: boolean) => {
   if (checked) {
     selectAll();
   } else {
@@ -408,6 +409,7 @@ const applyCoupon = () => {
 
 onMounted(async () => {
   await loadCart();
+  isPageLoading.value = false;
 });
 
 definePageMeta({

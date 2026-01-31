@@ -478,6 +478,17 @@
     "actionFailed": "Không thể thực hiện thao tác"
   },
   "cart": {
+    "addSuccess": "Thêm vào giỏ hàng thành công",
+    "addSuccessBuyNow": "Đã thêm sản phẩm vào giỏ hàng",
+    "addFailed": "Thêm vào giỏ hàng thất bại",
+    "errorLoad": "Không thể tải thông tin giỏ hàng",
+    "errorCreate": "Không thể khởi tạo giỏ hàng",
+    "errorAdd": "Không thể thêm sản phẩm vào giỏ hàng",
+    "errorUpdate": "Cập nhật giỏ hàng thất bại",
+    "removeSuccess": "Đã xóa sản phẩm khỏi giỏ hàng",
+    "errorRemove": "Không thể xóa sản phẩm",
+    "clearSuccess": "Đã làm trống giỏ hàng",
+    "errorClear": "Không thể làm trống giỏ hàng",
     "addToCart": "Thêm vào giỏ hàng",
     "buyNow": "Mua ngay",
     "breadcrumb": "Giỏ hàng",
