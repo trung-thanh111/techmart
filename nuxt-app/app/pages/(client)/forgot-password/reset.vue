@@ -47,34 +47,27 @@
 
                 <div class="flex items-center">
                   <input id="remember" name="remember" type="checkbox" class="h-4 w-4 text-blue-600 border-gray-300 rounded" />
-                  <label for="remember" class="ml-2 block text-sm text-gray-900">Ghi nhớ đăng nhập</label>
+                  <label for="remember" class="ml-2 block text-sm text-gray-900">{{ $t("auth.form.remember") }}</label>
                 </div>
 
                 <div class="bg-gray-100 rounded-lg p-4 space-y-2 text-sm">
-                  <p class="text-gray-700 font-normal">Mật khẩu nên có:</p>
+                  <p class="text-gray-700 font-normal">{{ $t("changePassword.requirements") }}</p>
                   <ul class="space-y-1">
                     <li class="flex items-center gap-2" :class="hasLen ? 'text-emerald-600' : 'text-[#f06548]'">
                       <span class="w-4 text-center">{{ hasLen ? "✔" : "✖" }}</span>
-                      Tối thiểu
-                      <span class="font-medium">8 ký tự</span>
+                      {{ $t("changePassword.minLength", { count: 8 }) }}
                     </li>
                     <li class="flex items-center gap-2" :class="hasLower ? 'text-emerald-600' : 'text-[#f06548]'">
                       <span class="w-4 text-center">{{ hasLower ? "✔" : "✖" }}</span>
-                      Ít nhất
-                      <span class="font-medium">1 chữ thường</span>
-                      (a-z)
+                      {{ $t("changePassword.lowercase") }}
                     </li>
                     <li class="flex items-center gap-2" :class="hasUpper ? 'text-emerald-600' : 'text-[#f06548]'">
                       <span class="w-4 text-center">{{ hasUpper ? "✔" : "✖" }}</span>
-                      Ít nhất
-                      <span class="font-medium">1 chữ hoa</span>
-                      (A-Z)
+                      {{ $t("changePassword.uppercase") }}
                     </li>
                     <li class="flex items-center gap-2" :class="hasDigit ? 'text-emerald-600' : 'text-[#f06548]'">
                       <span class="w-4 text-center">{{ hasDigit ? "✔" : "✖" }}</span>
-                      Ít nhất
-                      <span class="font-medium">1 số</span>
-                      (0-9)
+                      {{ $t("changePassword.number") }}
                     </li>
                   </ul>
                 </div>

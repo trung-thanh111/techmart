@@ -21,8 +21,8 @@
           </div>
         </div>
         <div class="flex flex-col sm:flex-row items-center gap-3 mt-4 pt-4 border-t border-gray-200">
-          <Button unstyled @click="handleClose" class="flex-1 px-4 py-2 text-sm border border-sky-500 text-sky-500 rounded hover:bg-sky-50 transition">Đóng</Button>
-          <Button unstyled @click="handleApply" class="flex-1 px-4 py-2 text-sm bg-sky-500 text-white rounded hover:bg-sky-600 transition">Xem kết quả</Button>
+          <Button unstyled @click="handleClose" class="flex-1 px-4 py-2 text-sm border border-sky-500 text-sky-500 rounded hover:bg-sky-50 transition">{{ $t("common.close") }}</Button>
+          <Button unstyled @click="handleApply" class="flex-1 px-4 py-2 text-sm bg-sky-500 text-white rounded hover:bg-sky-600 transition">{{ $t("common.viewResults") }}</Button>
         </div>
       </div>
     </div>

@@ -3,21 +3,21 @@
     <div v-if="loading" class="flex items-center justify-center min-h-[400px]">
       <div class="text-center">
         <p class="text-gray-600 text-base">
-          Đang tải
+          {{ $t("common.loading") }}
           <span :class="loadingDotsClass">{{ loadingDots }}</span>
         </p>
       </div>
     </div>
     <div v-else-if="error" class="flex items-center justify-center min-h-[400px]">
       <div class="text-center">
-        <p class="text-red-500 text-base font-medium">{{ errorMessage || "Có lỗi xảy ra" }}</p>
+        <p class="text-red-500 text-base font-medium">{{ errorMessage || $t("common.error") }}</p>
       </div>
     </div>
     <div v-else-if="isEmpty" class="flex flex-col items-center justify-center py-10 text-center text-gray-500 min-h-[400px]">
       <slot name="empty">
         <div class="flex flex-col items-center justify-center">
-          <NuxtImg v-if="showEmptyImage" :src="EMPTYBOX" alt="Không có dữ liệu" class="object-contain mb-4" loading="lazy" />
-          <p class="text-sm text-center">{{ emptyMessage || "Không có dữ liệu" }}</p>
+          <NuxtImg v-if="showEmptyImage" :src="EMPTYBOX" :alt="$t('common.noData')" class="object-contain mb-4" loading="lazy" />
+          <p class="text-sm text-center">{{ emptyMessage || $t("common.noData") }}</p>
         </div>
       </slot>
     </div>
@@ -44,8 +44,6 @@ const props = withDefaults(defineProps<Props>(), {
   loading: false,
   error: false,
   data: null,
-  emptyMessage: "Không có dữ liệu",
-  errorMessage: "Có lỗi xảy ra",
   showEmptyImage: true,
 });
 

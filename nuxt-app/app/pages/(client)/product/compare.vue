@@ -5,66 +5,66 @@
       <div class="container mx-auto">
         <DataState :loading="false" :error="false" :data="compareList" :show-empty-image="true">
           <div class="space-y-8">
-          <section class="bg-white rounded-lg shadow-md p-4 md:p-6">
-            <div class="overflow-x-auto">
-              <div class="grid grid-cols-4 gap-4 min-w-[800px]">
-                <div class="font-semibold text-gray-700">
-                  <h2 class="text-xl font-semibold text-gray-800 mb-6">{{ $t("common.product") }}</h2>
-                  <span class="md:hidden">{{ $t("common.product").slice(0, 2) }}</span>
+            <section class="bg-white rounded-lg shadow-md p-4 md:p-6">
+              <div class="overflow-x-auto">
+                <div class="grid grid-cols-4 gap-4 min-w-[800px]">
+                  <div class="font-semibold text-gray-700">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-6">{{ $t("common.product") }}</h2>
+                    <span class="md:hidden">{{ $t("common.product").slice(0, 2) }}</span>
+                  </div>
+
+                  <template v-for="i in 3" :key="i">
+                    <ProductCardCompare v-if="compareList[i - 1]" :item="compareList[i - 1]!" @remove="() => handleRemoveProduct(compareList[i - 1]!.variantId)" class="bg-white rounded-lg" />
+                    <button v-else @click="openSearchModal" class="border-2 border-dashed border-gray-400 rounded-lg p-4 flex flex-col items-center justify-center min-h-[120px] hover:border-sky-400 hover:bg-sky-900/20 transition-colors">
+                      <span class="text-4xl text-gray-400 mb-2">+</span>
+                      <span class="text-sm text-gray-400">{{ $t("action.addProduct") }}</span>
+                    </button>
+                  </template>
                 </div>
-
-                <template v-for="i in 3" :key="i">
-                  <ProductCardCompare v-if="compareList[i - 1]" :item="compareList[i - 1]!" @remove="() => handleRemoveProduct(compareList[i - 1]!.variantId)" class="bg-white rounded-lg" />
-                  <button v-else @click="openSearchModal" class="border-2 border-dashed border-gray-400 rounded-lg p-4 flex flex-col items-center justify-center min-h-[120px] hover:border-sky-400 hover:bg-sky-900/20 transition-colors">
-                    <span class="text-4xl text-gray-400 mb-2">+</span>
-                    <span class="text-sm text-gray-400">{{ $t("action.addProduct") }}</span>
-                  </button>
-                </template>
               </div>
-            </div>
-          </section>
+            </section>
 
-          <section class="bg-white rounded-lg shadow-md p-4 md:p-6 mb-5">
-            <div v-if="isLoadingSpecs" class="text-center py-8">
-              <ProgressSpinner />
-              <p class="text-gray-500 mt-4">{{ $t("common.loading") }}</p>
-            </div>
-            <div v-else-if="specifications.length === 0" class="text-center py-8 text-gray-500">
-              <p>{{ $t("common.noSpec") }}</p>
-            </div>
-            <div v-else class="overflow-x-auto">
-              <table class="w-full border-collapse" style="table-layout: fixed">
-                <colgroup>
-                  <col style="width: 25%" />
-                  <col style="width: 25%" v-for="n in 3" :key="n" />
-                </colgroup>
-                <thead>
-                  <tr class="bg-gray-50">
-                    <th class="border border-gray-200 px-4 py-4 text-xl text-left font-semibold text-gray-800">Đặc tính kỹ thuật</th>
-                    <th v-for="(item, index) in compareList" :key="item.variantId" class="border border-gray-200 px-4 py-4 text-center font-semibold text-gray-700">
-                      <div class="line-clamp-3 text-sm">{{ item.fullName }}</div>
-                    </th>
-                    <th v-if="compareList.length < 3" v-for="n in 3 - compareList.length" :key="`empty-header-${n}`" class="border border-gray-200 px-4 py-4"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(spec, specIndex) in specifications" :key="specIndex" class="hover:bg-gray-50 transition-colors">
-                    <td class="border border-gray-200 px-4 py-5 font-medium text-gray-700 bg-gray-50">
-                      {{ spec.attribute }}
-                    </td>
-                    <td v-for="(item, itemIndex) in compareList" :key="item.variantId" class="border border-gray-200 px-4 py-5 text-gray-600">
-                      {{ spec[`product${itemIndex}`] || "-" }}
-                    </td>
-                    <td v-if="compareList.length < 3" v-for="n in 3 - compareList.length" :key="`empty-cell-${n}`" class="border border-gray-200 px-4 py-5"></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
+            <section class="bg-white rounded-lg shadow-md p-4 md:p-6 mb-5">
+              <div v-if="isLoadingSpecs" class="text-center py-8">
+                <ProgressSpinner />
+                <p class="text-gray-500 mt-4">{{ $t("common.loading") }}</p>
+              </div>
+              <div v-else-if="specifications.length === 0" class="text-center py-8 text-gray-500">
+                <p>{{ $t("common.noSpec") }}</p>
+              </div>
+              <div v-else class="overflow-x-auto">
+                <table class="w-full border-collapse" style="table-layout: fixed">
+                  <colgroup>
+                    <col style="width: 25%" />
+                    <col style="width: 25%" v-for="n in 3" :key="n" />
+                  </colgroup>
+                  <thead>
+                    <tr class="bg-gray-50">
+                      <th class="border border-gray-200 px-4 py-4 text-xl text-left font-semibold text-gray-800">{{ $t("header.specifications") }}</th>
+                      <th v-for="(item, index) in compareList" :key="item.variantId" class="border border-gray-200 px-4 py-4 text-center font-semibold text-gray-700">
+                        <div class="line-clamp-3 text-sm">{{ item.fullName }}</div>
+                      </th>
+                      <th v-if="compareList.length < 3" v-for="n in 3 - compareList.length" :key="`empty-header-${n}`" class="border border-gray-200 px-4 py-4"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(spec, specIndex) in specifications" :key="specIndex" class="hover:bg-gray-50 transition-colors">
+                      <td class="border border-gray-200 px-4 py-5 font-medium text-gray-700 bg-gray-50">
+                        {{ spec.attribute }}
+                      </td>
+                      <td v-for="(item, itemIndex) in compareList" :key="item.variantId" class="border border-gray-200 px-4 py-5 text-gray-600">
+                        {{ spec[`product${itemIndex}`] || "-" }}
+                      </td>
+                      <td v-if="compareList.length < 3" v-for="n in 3 - compareList.length" :key="`empty-cell-${n}`" class="border border-gray-200 px-4 py-5"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
           </div>
           <template #empty>
             <div class="text-center py-12">
-              <Button label="Cửa hàng" icon="pi pi-arrow-left" severity="info" @click="goToShop" />
+              <Button :label="$t('nav.shop')" icon="pi pi-arrow-left" severity="info" @click="goToShop" />
             </div>
           </template>
         </DataState>

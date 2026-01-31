@@ -6,7 +6,7 @@
       <div v-else>
         <div v-for="(bannerTop, index) in bannerShopTops" :key="bannerTop.id" class="overflow-hidden grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div v-for="(imageUrl, i) in resolveAlbum(bannerTop.album || [])" :key="i" class="mb-2 last:mb-0">
-            <NuxtImg :src="imageUrl" :alt="`${bannerTop.name || 'Banner'} ${index + 1}-${i + 1}`" class="w-full h-full object-contain" />
+            <NuxtImg :src="imageUrl" :alt="`${bannerTop.name || $t('common.banner')} ${index + 1}-${i + 1}`" class="w-full h-full object-contain" />
           </div>
         </div>
       </div>
@@ -27,7 +27,7 @@
         <div class="md:col-span-2">
           <div v-for="bannerSeason in bannerProductSeason" :key="bannerSeason.id" class="relative h-full w-full overflow-hidden rounded-lg">
             <div v-for="(imageUrl, i) in resolveAlbum(bannerSeason.album || [])" :key="i" class="relative h-full w-full overflow-hidden rounded-lg">
-              <NuxtImg :src="imageUrl" :alt="`${bannerSeason.name || 'Banner Season'} ${i + 1}`" loading="lazy" class="object-cover w-full h-full rounded-lg" />
+              <NuxtImg :src="imageUrl" :alt="`${bannerSeason.name || $t('common.banner')} ${i + 1}`" loading="lazy" class="object-cover w-full h-full rounded-lg" />
             </div>
             <div class="absolute w-full inset-0 bg-black/20 flex items-end justify-center py-4">
               <a href="#" class="relative flex items-center justify-center md:px-6 md:py-2 py-1 px-3 font-medium text-sm md:text-base transition-all bg-gradient-to-r from-sky-500 to-cyan-400 rounded-md shadow-lg hover:scale-105 hover:from-sky-600 hover:to-cyan-500 focus:outline-none focus:ring-2 focus:ring-sky-400 text-white">{{ $t("common.explore") }}</a>

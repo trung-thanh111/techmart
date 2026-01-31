@@ -19,7 +19,7 @@
             </div>
             <div class="lg:col-span-3 flex justify-center">
               <div class="relative overflow-hidden">
-                <NuxtImg :src="categoryDetail?.image?.path ? (categoryDetail?.image?.url ?? '') : IMAGEDEFAULT" :alt="categoryDetail?.name || 'category'" class="w-[120px] h-[120px] md:w-[160px] md:h-[160px] object-contain" sizes="(max-width: 640px) 120px, (max-width: 1024px) 160px, 160px" loading="lazy" />
+                <NuxtImg :src="categoryDetail?.image?.path ? (categoryDetail?.image?.url ?? '') : IMAGEDEFAULT" :alt="categoryDetail?.name || $t('field.category')" class="w-[120px] h-[120px] md:w-[160px] md:h-[160px] object-contain" sizes="(max-width: 640px) 120px, (max-width: 1024px) 160px, 160px" loading="lazy" />
               </div>
             </div>
           </div>

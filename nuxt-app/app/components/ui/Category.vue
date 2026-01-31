@@ -24,7 +24,7 @@
       <SplideSlide v-for="item in items" :key="item.id" class="shadow-lg">
         <NuxtLink v-if="item.slug" :to="`${basePath}/${item.slug}`" class="block">
           <div class="mini-category-item" style="height: 180px; width: 120px">
-            <NuxtImg :src="item.image?.path ? (item.image?.url ?? '') : IMAGEDEFAULT" :alt="item.name || 'Item'" class="rounded-md" loading="lazy" />
+            <NuxtImg :src="item.image?.path ? (item.image?.url ?? '') : IMAGEDEFAULT" :alt="item.name || $t('common.product')" class="rounded-md" loading="lazy" />
             <div class="mini-category-text">
               <span class="line-clamp-2">{{ item.name }}</span>
             </div>

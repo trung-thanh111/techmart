@@ -60,7 +60,7 @@
                           </td>
                           <td class="text-center align-middle">
                             <div class="flex items-center justify-between rounded overflow-hidden border border-gray-200 p-1 shadow-sm min-w-0 gap-1">
-                              <button type="button" title="quantity-decrease" @click.stop.prevent="handleDecreaseQuantity(item.id!, item.quantity || 1)" :disabled="(item.quantity || 0) <= 1" class="bg-teal-500 text-white w-8 h-6 md:w-8 md:h-7 flex items-center justify-center hover:bg-teal-600 disabled:opacity-50 disabled:cursor-not-allowed">
+                              <button type="button" :title="$t('cart.decreaseQuantity')" @click.stop.prevent="handleDecreaseQuantity(item.id!, item.quantity || 1)" :disabled="(item.quantity || 0) <= 1" class="bg-teal-500 text-white w-8 h-6 md:w-8 md:h-7 flex items-center justify-center hover:bg-teal-600 disabled:opacity-50 disabled:cursor-not-allowed">
                                 <svg class="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 18 18">
                                   <path d="M3.75 9H14.25"></path>
                                 </svg>
@@ -68,7 +68,7 @@
                               <div class="w-7 h-6 md:w-8 md:h-7 flex items-center justify-center bg-white">
                                 <input type="text" :value="item.quantity || 1" readonly class="text-center text-gray-800 text-xs md:text-sm focus:outline-none max-w-full bg-white" inputmode="numeric" />
                               </div>
-                              <button type="button" title="quantity-increase" @click.stop.prevent="handleUpdateQuantity(item.id!, (item.quantity || 1) + 1)" :disabled="(item.quantity || 0) >= getStock(item)" class="bg-teal-500 text-white w-8 h-6 md:w-8 md:h-7 flex items-center justify-center hover:bg-teal-600 disabled:opacity-50 disabled:cursor-not-allowed">
+                              <button type="button" :title="$t('cart.increaseQuantity')" @click.stop.prevent="handleUpdateQuantity(item.id!, (item.quantity || 1) + 1)" :disabled="(item.quantity || 0) >= getStock(item)" class="bg-teal-500 text-white w-8 h-6 md:w-8 md:h-7 flex items-center justify-center hover:bg-teal-600 disabled:opacity-50 disabled:cursor-not-allowed">
                                 <svg class="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 18 18">
                                   <path d="M9 3.75V14.25"></path>
                                   <path d="M3.75 9H14.25"></path>
@@ -221,7 +221,7 @@
             </template>
             <template #empty>
               <div class="flex flex-col items-center justify-center py-12 text-center text-gray-500">
-                <NuxtImg :src="EMPTYBOX" alt="Không có dữ liệu" class="object-contain mb-4 h-32 md:h-40" loading="lazy" />
+                <NuxtImg :src="EMPTYBOX" :alt="$t('common.noData')" class="object-contain mb-4 h-32 md:h-40" loading="lazy" />
                 <p class="text-gray-500 mb-6">{{ $t("cart.emptyDesc") }}</p>
                 <Button :label="$t('cart.shopping')" icon="pi pi-arrow-left" @click="navigateTo(TOSHOP)" class="rounded py-1" />
               </div>
@@ -400,8 +400,8 @@ const applyCoupon = () => {
   }
   toast.add({
     severity: "info",
-    summary: "Thông báo",
-    detail: "Tính năng đang phát triển",
+    summary: t("cart.notification"),
+    detail: t("cart.featureDeveloping"),
     life: 3000,
   });
 };

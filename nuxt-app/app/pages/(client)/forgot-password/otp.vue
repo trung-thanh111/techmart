@@ -49,9 +49,9 @@
               }"
             />
             <p class="mt-4 text-center text-sm text-gray-600">
-              Chờ đã, tôi chưa nhận được code?
+              {{ $t("auth.codeNotReceived") }}
               <button type="button" @click="resend" :disabled="canResendIn > 0" class="text-cyan-600 hover:underline disabled:opacity-50">
-                Gửi lại
+                {{ $t("auth.resend") }}
                 <span v-if="canResendIn > 0">({{ canResendIn }})</span>
               </button>
             </p>

@@ -87,7 +87,7 @@
                       {{ user?.userCatalogueId === 1 ? $t("header.customer") : $t("header.admin") }}
                     </span>
                   </span>
-                  <NuxtImg class="rounded-full w-9 h-9 object-cover" :src="avatar" :alt="'Avatar ' + user?.name" loading="lazy" />
+                  <NuxtImg class="rounded-full w-9 h-9 object-cover" :src="avatar" :alt="$t('common.avatar') + ' ' + user?.name" loading="lazy" />
                 </span>
               </button>
               <div v-show="isUserMenuOpen && user" class="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 transition-all duration-300 ease-in-out">
@@ -237,7 +237,7 @@
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5 mt-1.5"><polyline points="6,9 12,15 18,9" /></svg>
                 </NuxtLink>
                 <div v-else class="flex items-center gap-1 cursor-pointer">
-                  <NuxtImg class="rounded-full w-9 h-9 object-cover" :src="avatar" :alt="'Avatar ' + user?.name" loading="lazy" />
+                  <NuxtImg class="rounded-full w-9 h-9 object-cover" :src="avatar" :alt="$t('common.avatar') + ' ' + user?.name" loading="lazy" />
                   <div class="text-xs">
                     <p class="font-medium truncate max-w-[100px]">{{ user?.name }}</p>
                     <p class="font-light">{{ user?.userCatalogueId === 1 ? $t("header.customer") : $t("header.admin") }}</p>

@@ -25,7 +25,7 @@
 
     <!-- Modal -->
     <button data-open-modal="modalVoucher" class="fixed bottom-36 left-6 z-50 bg-white rounded-full shadow-md hover:scale-105 transition-all">
-      <NuxtImg src="/images/icon-voucher.png" alt="Mở Ưu Đãi" class="w-12 h-12 object-contain" format="webp" loading="lazy" />
+      <NuxtImg src="/images/icon-voucher.png" :alt="$t('utilityTool.offers')" class="w-12 h-12 object-contain" format="webp" loading="lazy" />
     </button>
     <div id="modalVoucher" data-modal-id="modalVoucher" class="modal fixed inset-0 bg-gray-100/60 bg-opacity-50 items-center justify-center z-50 hidden">
       <!-- Modal Container -->

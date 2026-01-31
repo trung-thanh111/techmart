@@ -8,7 +8,7 @@
         <div class="mt-2 font-semibold text-gray-800">
           {{ $t("common.clickToUpload") }}
         </div>
-        <div class="mt-1 text-xs text-gray-400">{{ extsLabel }} (max. {{ maxSizeLabel }})</div>
+        <div class="mt-1 text-xs text-gray-400">{{ extsLabel }} ({{ $t("common.maxSize", { size: maxSizeLabel }) }})</div>
         <input ref="inputRef" type="file" class="hidden" :accept="accept" @change="onChange" />
       </div>
     </div>
@@ -18,7 +18,7 @@
       </button>
       <NuxtImg :src="defaultImage" class="rounded shadow-md block mx-auto cursor-pointer" width="260" height="120" alt="preview" loading="lazy" @click="trigger" />
       <input ref="inputRef" type="file" class="hidden" :accept="accept" @change="onChange" />
-      <div class="mt-1 text-xs text-gray-400">{{ extsLabel }} (max. {{ maxSizeLabel }})</div>
+      <div class="mt-1 text-xs text-gray-400">{{ extsLabel }} ({{ $t("common.maxSize", { size: maxSizeLabel }) }})</div>
     </div>
   </div>
 </template>
