@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -223,7 +224,7 @@ class GenerateModule extends Command
 
     protected function createRoute(): self
     {
-        $folder = base_path('routes/api.php');
+        $folder = base_path('routes/api/admin.php');
         if (!File::exists($folder)) return $this;
         $content = File::get($folder);
 

@@ -89,7 +89,7 @@
 </template>
 
 <script setup>
-import UtilityTool from "~/components//navigation/UtilityTool.vue";
+import UtilityTool from "~/components/navigation/UtilityTool.vue";
 
 const { t } = useI18n();
 

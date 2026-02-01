@@ -2,13 +2,15 @@ import type { BasePayloadFilter } from "../base.interface";
 
 export interface IAddressOrder {
   id: number;
-  title: string,
-  slug: string,
+  title: string;
+  slug: string;
   fullName?: string;
   phone?: string;
   email?: string;
   address?: string;
-  state?: string;
+  street?: string;
+  city?: string;
+  ward?: string;
   postalCode?: string;
   countryCode?: string;
   isDefault?: boolean;
@@ -24,5 +26,5 @@ export interface Option {
 }
 
 export interface AddressOrderPayloadFilter extends BasePayloadFilter {
-  user_id: number | null
+  user_id: number | null;
 }

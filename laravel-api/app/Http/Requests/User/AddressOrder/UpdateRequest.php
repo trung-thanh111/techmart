@@ -40,7 +40,7 @@ class UpdateRequest extends BaseRequest
             "phone" => "required|string|max:20|{$sometime}",
             "email" => "nullable|email|max:255|{$sometime}",
             "address" => "required|string|max:255|{$sometime}",
-            "state" => "nullable|string|max:100|{$sometime}",
+            "street" => "nullable|string|max:100|{$sometime}",
             "city" => "nullable|string|max:100|{$sometime}",
             "postal_code" => "required|string|max:20|{$sometime}",
             "country_code" => "nullable|string|max:2|{$sometime}",

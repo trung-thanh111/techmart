@@ -5,7 +5,6 @@
 
     <form @submit.prevent="onSubmit" class="space-y-4">
       <h2 class="text-sm font-semibold text-gray-700">{{ $t("profile.information") }}</h2>
-
       <div class="bg-white rounded-md">
         <div class="mb-3">
           <label class="block text-sm text-gray-700 mb-1">

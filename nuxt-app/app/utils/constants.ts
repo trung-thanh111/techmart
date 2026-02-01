@@ -14,6 +14,7 @@ export const TOAGENCYSYSTEM = "/agency";
 export const TOFAQ = "/faq";
 export const TOPOST = "/post";
 export const TOCART = "/cart";
+export const TOCHECKOUT = "/cart/checkout";
 export const TOCOMPARE = "/product/compare";
 export const TOSEARCH = "/search";
 export const PRODUCT = "/product";
