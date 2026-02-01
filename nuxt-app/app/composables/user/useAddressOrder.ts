@@ -13,6 +13,23 @@ interface UseAddressOrderOptions {
   redirectPath?: string;
 }
 
+export const useAddressValidation = () => {
+  const { t } = useI18n();
+  return z.object({
+    title: z.string({ required_error: t("validation.required", { field: t("profile.titleLabel") }) }).min(1, t("validation.required", { field: t("profile.titleLabel") })),
+    fullName: z.string({ required_error: t("validation.required", { field: t("profile.fullName") }) }).min(1, t("validation.required", { field: t("profile.fullName") })),
+    email: z.string().email(t("validate.email")).nullable().optional().or(z.literal("")),
+    phone: z.string({ required_error: t("validation.required", { field: t("profile.phone") }) }).min(1, t("validation.required", { field: t("profile.phone") })),
+    address: z.string({ required_error: t("validation.required", { field: t("profile.address") }) }).min(1, t("validation.required", { field: t("profile.address") })),
+    countryCode: z.string({ required_error: t("validation.required", { field: t("profile.countryCode") }) }).min(1, t("validation.required", { field: t("profile.countryCode") })),
+    street: z.string({ required_error: t("validation.required", { field: t("profile.street") }) }).min(1, t("validation.required", { field: t("profile.street") })),
+    city: z.string({ required_error: t("validation.required", { field: t("profile.city") }) }).min(1, t("validation.required", { field: t("profile.city") })),
+    ward: z.string({ required_error: t("validation.required", { field: t("profile.ward") }) }).min(1, t("validation.required", { field: t("profile.ward") })),
+    postalCode: z.string({ required_error: t("validation.required", { field: t("profile.postalCode") }) }).min(1, t("validation.required", { field: t("profile.postalCode") })),
+    isDefault: z.boolean().optional(),
+  });
+};
+
 export const useAddressOrder = (initialFilters?: any, type: "create" | "update" = "create", options: UseAddressOrderOptions = {}) => {
   const { t } = useI18n();
   const router = useRouter();
@@ -21,18 +38,7 @@ export const useAddressOrder = (initialFilters?: any, type: "create" | "update" 
   const data = ref<IApiOk<IPaginate<IAddressOrder>> | IApiOk<IAddressOrder[]> | null>(null);
   const selectedItem = ref<IAddressOrder | null>(null);
 
-  const schema = z.object({
-    title: z.string({ required_error: t("validation.required", { field: t("profile.titleLabel") }) }).min(1, t("validation.required", { field: t("profile.titleLabel") })),
-    fullName: z.string({ required_error: t("validation.required", { field: t("profile.fullName") }) }).min(1, t("validation.required", { field: t("profile.fullName") })),
-    email: z.string().email(t("validate.email")).nullable().optional().or(z.literal("")),
-    phone: z.string({ required_error: t("validation.required", { field: t("profile.phone") }) }).min(1, t("validation.required", { field: t("profile.phone") })),
-    address: z.string({ required_error: t("validation.required", { field: t("profile.address") }) }).min(1, t("validation.required", { field: t("profile.address") })),
-    countryCode: z.string().nullable().optional().or(z.literal("")),
-    state: z.string().nullable().optional().or(z.literal("")),
-    city: z.string().nullable().optional().or(z.literal("")),
-    postalCode: z.string({ required_error: t("validation.required", { field: t("profile.postalCode") }) }).min(1, t("validation.required", { field: t("profile.postalCode") })),
-    isDefault: z.boolean().optional(),
-  });
+  const schema = useAddressValidation();
 
   const { handleSubmit, setValues, values } = useForm({
     validationSchema: toTypedSchema(schema),
@@ -104,12 +110,12 @@ export const useAddressOrder = (initialFilters?: any, type: "create" | "update" 
       const payload: any = {
         title: values.title,
         fullName: values.fullName,
-        email: values.email || undefined,
+        email: values.email || "",
         phone: values.phone,
         address: values.address,
-        countryCode: values.countryCode || undefined,
-        state: values.state || undefined,
-        city: values.city || undefined,
+        countryCode: values.countryCode || "",
+        street: values.street || "",
+        city: values.city || "",
         postalCode: values.postalCode,
         isDefault: values.isDefault || false,
       };
@@ -167,12 +173,12 @@ export const useAddressOrder = (initialFilters?: any, type: "create" | "update" 
         const payload: any = {
           title: values.title,
           fullName: values.fullName,
-          email: values.email || undefined,
+          email: values.email || "",
           phone: values.phone,
           address: values.address,
-          countryCode: values.countryCode || undefined,
-          state: values.state || undefined,
-          city: values.city || undefined,
+          countryCode: values.countryCode || "",
+          street: values.street || "",
+          city: values.city || "",
           postalCode: values.postalCode,
           isDefault: values.isDefault || false,
         };

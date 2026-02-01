@@ -28,7 +28,7 @@ class StoreRequest extends BaseRequest
             "phone" => "required|string|max:20",
             "email" => "nullable|email|max:255",
             "address" => "required|string|max:255",
-            "state" => "nullable|string|max:100",
+            "street" => "nullable|string|max:100",
             "city" => "nullable|string|max:100",
             "postal_code" => "required|string|max:20",
             "country_code" => "nullable|string|max:2",

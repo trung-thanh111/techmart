@@ -34,6 +34,7 @@ use App\Http\Controllers\Api\V1\Post\PostCommentController;
 use App\Http\Controllers\Api\V1\Post\PostCommentLikeController;
 use App\Http\Controllers\Api\V1\Post\PostLikeController;
 use App\Http\Controllers\Api\V1\Auth\AdminAuthController;
+use App\Http\Controllers\Api\V1\Order\OrderController;
 
 $routeExcept = ['create', 'edit'];
 
@@ -89,7 +90,7 @@ Route::group(['prefix' => 'v1/admin', 'middleware' => ['jwt:admin', 'convert', '
     });
     Route::resource('permissions', PermissionController::class)->except($routeExcept);
 
-    // Post Catalogue (Admin Write)
+    // Post Catalogue
     Route::group(['prefix' => 'post_catalogues'], function () {
         Route::delete('bulkDelete', [PostCatalogueController::class, 'bulkDelete']);
         Route::post('{id}/attach', [PostCatalogueController::class, 'attach']);
@@ -100,7 +101,7 @@ Route::group(['prefix' => 'v1/admin', 'middleware' => ['jwt:admin', 'convert', '
     });
     Route::resource('post_catalogues', PostCatalogueController::class)->except($routeExcept);
 
-    // Posts (Admin Write)
+    // Posts
     Route::group(['prefix' => 'posts'], function () {
         Route::delete('bulkDelete', [PostController::class, 'bulkDelete']);
         Route::post('{id}/attach', [PostController::class, 'attach']);
@@ -122,7 +123,7 @@ Route::group(['prefix' => 'v1/admin', 'middleware' => ['jwt:admin', 'convert', '
     });
     Route::resource('post_tags', PostTagController::class)->except($routeExcept);
 
-    // Product Catalogue (Admin Write)
+    // Product Catalogue
     Route::group(['prefix' => 'product_catalogues'], function () {
         Route::delete('bulkDelete', [ProductCatalogueController::class, 'bulkDelete']);
         Route::post('{id}/attach', [ProductCatalogueController::class, 'attach']);
@@ -133,7 +134,7 @@ Route::group(['prefix' => 'v1/admin', 'middleware' => ['jwt:admin', 'convert', '
     });
     Route::resource('product_catalogues', ProductCatalogueController::class)->except($routeExcept);
 
-    // Products (Admin Write)
+    // Products
     Route::group(['prefix' => 'products'], function () {
         Route::delete('bulkDelete', [ProductController::class, 'bulkDelete']);
         Route::post('{id}/attach', [ProductController::class, 'attach']);
@@ -188,7 +189,7 @@ Route::group(['prefix' => 'v1/admin', 'middleware' => ['jwt:admin', 'convert', '
     });
     Route::resource('users', UserController::class)->except($routeExcept);
 
-    // Banners (Admin Write)
+    // Banners
     Route::group(['prefix' => 'banners'], function () {
         Route::delete('bulkDelete', [BannerController::class, 'bulkDelete']);
         Route::post('{id}/attach', [BannerController::class, 'attach']);
@@ -198,6 +199,17 @@ Route::group(['prefix' => 'v1/admin', 'middleware' => ['jwt:admin', 'convert', '
         Route::patch('bulkUpdate', [BannerController::class, 'bulkUpdate']);
     });
     Route::resource('banners', BannerController::class)->except($routeExcept);
+
+    // Orders
+    Route::group(['prefix' => 'orders'], function () {
+        Route::delete('bulkDelete', [OrderController::class, 'bulkDelete']);
+        Route::post('{id}/attach', [OrderController::class, 'attach']);
+        Route::delete('{id}/detach', [OrderController::class, 'detach']);
+        Route::post('bulkStore', [OrderController::class, 'bulkStore']);
+        Route::put('bulkUpdate', [OrderController::class, 'bulkUpdate']);
+        Route::patch('bulkUpdate', [OrderController::class, 'bulkUpdate']);
+    });
+    Route::resource('orders', BannerController::class)->except($routeExcept);
 
     //generate route
 

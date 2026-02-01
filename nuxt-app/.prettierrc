@@ -1,0 +1,23 @@
+{
+    "singleQuote": true,
+    "semi": true,
+    "tabWidth": 4,
+    "useTabs": false,
+    "printWidth": 3000,
+    "jsxBracketSameLine": true,
+    "bracketSpacing": true,
+    "bracketSameLine": true,
+    "htmlWhitespaceSensitivity": "ignore",
+    "singleAttributePerLine": false,
+    "proseWrap": "preserve",
+    "overrides": [
+        {
+            "files": "*.vue",
+            "options": {
+                "proseWrap": "preserve",
+                "printWidth": 3000,
+                "bracketSpacing": false
+            }
+        }
+    ]
+}
