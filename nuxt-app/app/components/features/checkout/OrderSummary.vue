@@ -75,14 +75,14 @@
           <span class="">{{ formatPrice(selectedCount > 0 ? 25000 : 0) }}</span>
         </div>
         <div class="flex items-center justify-between text-sm">
-          <span class="text-gray-600">{{ $t("cart.taxPercent", { percent: 5 }) }}:</span>
-          <span class="">{{ formatPrice(selectedCount > 0 ? Math.round(selectedTotalPrice * 0.05) : 0) }}</span>
+          <span class="text-gray-600">{{ $t("cart.taxPercent", { percent: 10 }) }}:</span>
+          <span class="">{{ formatPrice(taxAmount) }}</span>
         </div>
         <div class="border-t border-gray-200 pt-3 mt-4">
           <div class="flex items-center justify-between">
             <span class="md:text-lg text-base font-bold text-gray-900">{{ $t("cart.grandTotal") }}:</span>
             <span class="md:text-xl text-lg font-bold text-red-600">
-              {{ formatPrice(selectedCount > 0 ? selectedTotalPrice + 25000 + Math.round(selectedTotalPrice * 0.05) : 0) }}
+              {{ formatPrice(selectedCount > 0 ? selectedTotalPrice + 25000 + taxAmount : 0) }}
             </span>
           </div>
           <p class="text-xs text-gray-500 mt-1">{{ $t("cart.taxIncluded") }}</p>
@@ -165,4 +165,8 @@ const getVariantInfo = (item: ICartItem): string => {
   }
   return "";
 };
+
+const taxAmount = computed(() => {
+  return props.selectedCount > 0 ? Math.round(props.selectedTotalPrice * 0.1) : 0;
+});
 </script>

@@ -51,12 +51,53 @@
             </small>
           </Field>
         </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label for="city" class="block text-sm text-gray-600 mb-1">
+              {{ $t("profile.city") }}
+            </label>
+            <Field name="city" v-slot="{ field, errorMessage, meta }">
+              <Select
+                v-bind="field.value"
+                :model-value="field.value"
+                :options="cities"
+                option-label="name"
+                option-value="codename"
+                filter
+                checkmark
+                :placeholder="$t('profile.addressForm.cityPlaceholder')"
+                class="w-full border border-gray-300 rounded text-sm h-[40px]"
+                :class="errorMessage && meta.touched ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''"
+                @update:model-value="
+                  (val) => {
+                    field.onChange(val);
+                    onCityChange(val);
+                  }
+                "
+              />
+              <small v-if="errorMessage && meta.touched" class="text-red-500 text-xs">
+                {{ $t(errorMessage) }}
+              </small>
+            </Field>
+          </div>
+          <div>
+            <label for="ward" class="block text-sm text-gray-600 mb-1">
+              {{ $t("profile.ward") }}
+            </label>
+            <Field name="ward" v-slot="{ field, errorMessage, meta }">
+              <Select v-bind="field.value" :model-value="field.value" :options="wards" option-label="name" option-value="codename" filter checkmark :placeholder="$t('profile.addressForm.wardPlaceholder')" class="w-full border border-gray-300 rounded text-sm h-[40px]" :class="errorMessage && meta.touched ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''" :disabled="!values.city" @update:model-value="field.onChange" />
+              <small v-if="errorMessage && meta.touched" class="text-red-500 text-xs">
+                {{ $t(errorMessage) }}
+              </small>
+            </Field>
+          </div>
+        </div>
         <div>
-          <label for="phone" class="block text-sm text-gray-600 mb-1">
-            {{ $t("profile.form.phone") }}
+          <label for="street" class="block text-sm text-gray-600 mb-1">
+            {{ $t("profile.street") }}
           </label>
-          <Field name="phone" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-            <input v-bind="field" id="phone" type="text" :placeholder="$t('profile.form.phonePlaceholder')" class="base-input" :class="errorMessage && meta.touched ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''" />
+          <Field name="street" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
+            <input v-bind="field" id="street" type="text" :placeholder="$t('profile.addressForm.streetPlaceholder')" class="base-input" :class="errorMessage && meta.touched ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''" />
             <small v-if="errorMessage && meta.touched" class="text-red-500 text-xs">
               {{ $t(errorMessage) }}
             </small>
@@ -124,10 +165,27 @@ import { Field } from "vee-validate";
 import SingleImageUpload from "~/components/custom/SingleImageUpload.vue";
 import { useProfile } from "~/composables/user/useProfile";
 import { useAuthStore } from "~/stores/auth/auth";
+import vietnamData from "../../../../../data/address_vietnam.json";
 
 const { isLoading, genderOptions, fetchProfile, handleUpdateProfile, setValues, values } = useProfile();
 const authStore = useAuthStore();
 const data = ref<any>(null);
+
+const cities = computed(() => vietnamData);
+
+const wards = computed(() => {
+  if (!values.city) return [];
+  const selectedCity = vietnamData.find((c: any) => c.codename === values.city);
+  return selectedCity ? selectedCity.wards : [];
+});
+
+const onCityChange = (val: string) => {
+  setValues({
+    ...values,
+    city: val,
+    ward: "",
+  });
+};
 
 // Fetch Profile on mount
 const init = async () => {

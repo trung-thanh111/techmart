@@ -3,7 +3,7 @@
     <div class="w-full">
       <Form :validation-schema="validationSchema" @submit="onSubmit" class="space-y-4">
         <Field name="street" v-model="form.street" type="hidden" readonly />
-        <div class="flex justify-end mb-4">
+        <div class="flex justify-end mb-4" v-if="authStore.isAuthenticated">
           <button @click="handleToggleProfileInfo" type="button" :class="['px-2 py-1 text-xs border rounded transition-colors flex items-center gap-1', isUsingProfile ? 'text-red-600 bg-red-50 border-red-200 hover:bg-red-100 hover:text-red-700' : 'text-teal-600 bg-teal-50 border-teal-200 hover:bg-teal-100 hover:text-teal-700', isLoadingProfile ? 'opacity-70 cursor-wait' : '']" :disabled="isLoadingProfile">
             <i v-if="isLoadingProfile" class="pi pi-spinner pi-spin text-[10px]" />
             {{ isUsingProfile ? "Hủy" : "Sử dụng thông tin" }}
