@@ -120,4 +120,8 @@ onMounted(async () => {
 onUnmounted(() => {
   document.removeEventListener("click", handleModalClick);
 });
+
+definePageMeta({
+  layout: "client",
+});
 </script>

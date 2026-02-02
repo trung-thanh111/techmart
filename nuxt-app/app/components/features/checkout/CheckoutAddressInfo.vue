@@ -14,7 +14,7 @@
           <h5 class="text-base font-semibold text-gray-800 mb-4">Phương thức vận chuyển</h5>
           <div class="grid grid-cols-1 md:grid-cols-2 md:gap-4 gap-2">
             <label class="border border-gray-200 rounded-md shadow p-4 flex items-center justify-between cursor-pointer">
-              <AppCheckbox v-model="modelValue.shippingMethod" value="standard" class="mr-3 w-5 h-5 accent-teal-500" />
+              <RadioButton v-model="modelValue.shippingMethod" inputId="standard" value="standard" class="mr-3" />
               <div class="flex-1">
                 <span class="block text-base font-semibold text-gray-800 mb-1">Giao hàng tiêu chuẩn</span>
                 <span class="block text-xs text-gray-500 mb-1">Dự kiến giao từ 3 đến 5 ngày</span>
@@ -22,20 +22,12 @@
               <span class="text-lg font-medium text-gray-800 ml-4">Miễn phí</span>
             </label>
             <label class="border border-gray-200 rounded-md shadow p-4 flex items-center justify-between cursor-pointer">
-              <AppCheckbox v-model="modelValue.shippingMethod" value="express" class="mr-3 w-5 h-5 accent-teal-500" />
+              <RadioButton v-model="modelValue.shippingMethod" inputId="express" value="express" class="mr-3" />
               <div class="flex-1">
                 <span class="block text-base font-semibold text-gray-800 mb-1">Giao hàng nhanh</span>
                 <span class="block text-xs text-gray-500 mb-1">Giao trong vòng 24 giờ</span>
               </div>
               <span class="text-lg font-medium text-gray-800 ml-4">50.000đ</span>
-            </label>
-            <label class="border border-gray-200 rounded-md shadow p-4 flex items-center justify-between cursor-pointer">
-              <AppCheckbox v-model="modelValue.shippingMethod" value="same_day" class="mr-3 w-5 h-5 accent-teal-500" />
-              <div class="flex-1">
-                <span class="block text-base font-semibold text-gray-800 mb-1">Giao hàng hỏa tốc</span>
-                <span class="block text-xs text-gray-500 mb-1">Nhận hàng trong ngày</span>
-              </div>
-              <span class="text-lg font-medium text-gray-800 ml-4">100.000đ</span>
             </label>
           </div>
         </div>
@@ -48,15 +40,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import type { IAddressInfo, IAddress } from "~/interfaces/cart/checkout.interface";
-import AddressCard from "~/components/features/checkout/AddressCard.vue";
-import AddressFormModal from "~/components/features/checkout/AddressFormModal.vue";
-import NextButton from "~/components/features/checkout/NextButton.vue";
-import BackButton from "~/components/features/checkout/BackButton.vue";
 import { useAuthStore } from "~/stores/auth/auth";
 import { profileService } from "~/services/user/profile.service";
-import AppCheckbox from "~/components/custom/AppCheckbox.vue";
+import { useAppToast } from "~/composables/useAppToast";
+import { addressOrderService } from "~/services/user/address_order.service";
+import type { IAddressOrder } from "~/interfaces/user/address_order.interface";
+import RadioButton from "primevue/radiobutton";
+import AddressCard from "~/components/features/checkout/AddressCard.vue";
+import NextButton from "~/components/features/checkout/NextButton.vue";
+import BackButton from "~/components/features/checkout/BackButton.vue";
+import AddressFormModal from "~/components/features/checkout/AddressFormModal.vue";
 
 const props = defineProps<{
   modelValue: IAddressInfo;
@@ -68,10 +63,6 @@ const emit = defineEmits<{
   (e: "next"): void;
   (e: "back"): void;
 }>();
-
-import { useAppToast } from "~/composables/useAppToast";
-import { addressOrderService } from "~/services/user/address_order.service";
-import type { IAddressOrder } from "~/interfaces/user/address_order.interface";
 
 const toast = useAppToast();
 const authStore = useAuthStore();
@@ -90,6 +81,7 @@ const mapAddress = (addr: any): IAddress => ({
   shippingCity: addr.city,
   shippingWard: addr.ward,
   shippingStreet: addr.street || addr.address,
+  isDefault: addr.isDefault,
 });
 
 const fetchAddresses = async () => {
@@ -98,6 +90,12 @@ const fetchAddresses = async () => {
       const res = await profileService.getProfile();
       if (res.data && res.data.addressOrder) {
         userAddresses.value = res.data.addressOrder.slice(0, 3).map(mapAddress);
+        if (!props.modelValue.selectedAddress) {
+          const defaultAddr = userAddresses.value.find((addr) => addr.isDefault);
+          if (defaultAddr) {
+            emit("update:modelValue", { ...props.modelValue, selectedAddress: Number(defaultAddr.id) });
+          }
+        }
         if (authStore.user) {
           authStore.user.addressOrder = res.data.addressOrder;
         }
@@ -110,6 +108,9 @@ const fetchAddresses = async () => {
 
 onMounted(() => {
   fetchAddresses();
+  if (!props.modelValue.shippingMethod) {
+    emit("update:modelValue", { ...props.modelValue, shippingMethod: "standard" });
+  }
 });
 
 const handleOpenCreateContext = () => {

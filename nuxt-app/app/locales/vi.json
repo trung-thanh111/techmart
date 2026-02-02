@@ -533,6 +533,9 @@
     "featureDeveloping": "Tính năng đang phát triển"
   },
   "profile": {
+    "city": "Tỉnh/Thành phố",
+    "ward": "Phường/Xã/Thị Trấn",
+    "street": "Số nhà/Tên đường",
     "cancel": "Hủy",
     "delete": "Xóa",
     "addSuccess": "Thêm thành công",
@@ -581,6 +584,9 @@
     "description": "Mô tả",
     "descriptionPlaceholder": "Nhập mô tả về bạn...",
     "addressForm": {
+      "cityPlaceholder": "Chọn tỉnh/thành phố",
+      "wardPlaceholder": "Chọn phường/xã/thị trấn",
+      "streetPlaceholder": "Nhập số nhà/tên đường",
       "titlePlaceholder": "Nhà riêng / Văn phòng ...",
       "fullNamePlaceholder": "Nguyễn Văn A",
       "emailPlaceholder": "email[at]domain.com",

@@ -23,7 +23,9 @@ export const useProfile = () => {
     birthday: z.string().nullable().optional(),
     gender: z.string().nullable().optional(),
     description: z.string().nullable().optional(),
-    address: z.string().nullable().optional(),
+    street: z.string().nullable().optional(),
+    city: z.string().nullable().optional(),
+    ward: z.string().nullable().optional(),
     image: z.any().optional(),
   });
 
@@ -50,7 +52,9 @@ export const useProfile = () => {
           firstName: user.firstName,
           lastName: user.lastName,
           phone: user.phone,
-          address: user.address,
+          street: user.street,
+          city: user.city,
+          ward: user.ward,
           birthday: user.birthday,
           gender: user.gender,
           description: user.description,
