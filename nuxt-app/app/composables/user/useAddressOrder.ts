@@ -116,6 +116,7 @@ export const useAddressOrder = (initialFilters?: any, type: "create" | "update" 
         countryCode: values.countryCode || "",
         street: values.street || "",
         city: values.city || "",
+        ward: values.ward || "",
         postalCode: values.postalCode,
         isDefault: values.isDefault || false,
       };
@@ -179,6 +180,7 @@ export const useAddressOrder = (initialFilters?: any, type: "create" | "update" 
           countryCode: values.countryCode || "",
           street: values.street || "",
           city: values.city || "",
+          ward: values.ward || "",
           postalCode: values.postalCode,
           isDefault: values.isDefault || false,
         };

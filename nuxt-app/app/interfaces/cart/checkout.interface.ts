@@ -40,4 +40,5 @@ export interface IAddress {
   shippingCity?: string;
   shippingWard?: string;
   shippingStreet?: string;
+  isDefault?: boolean;
 }

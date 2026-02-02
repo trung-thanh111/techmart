@@ -53,7 +53,7 @@
                   :model-value="field.value"
                   :options="cities"
                   option-label="name"
-                  option-value="name"
+                  option-value="codename"
                   filter
                   checkmark
                   placeholder="Chọn Tỉnh/Thành phố"
@@ -80,7 +80,7 @@
             </label>
             <Field name="ward" v-model="form.ward">
               <template #default="{ field, errorMessage }">
-                <Select v-bind="field.value" :model-value="field.value" :options="wards" option-label="name" option-value="name" filter checkmark placeholder="Chọn Phường/Xã/Thị trấn" class="w-full rounded py-[1px]" :class="{ 'p-invalid': errorMessage }" :disabled="!form.city" size="small" appendTo="body" overlayClass="!z-[99999]" @update:model-value="field.onChange" />
+                <Select v-bind="field.value" :model-value="field.value" :options="wards" option-label="name" option-value="codename" filter checkmark placeholder="Chọn Phường/Xã/Thị trấn" class="w-full rounded py-[1px]" :class="{ 'p-invalid': errorMessage }" :disabled="!form.city" size="small" appendTo="body" overlayClass="!z-[99999]" @update:model-value="field.onChange" />
               </template>
             </Field>
             <ErrorMessage name="ward" class="text-red-500 text-xs mt-1 block" />
@@ -281,7 +281,7 @@ const cities = computed(() => vietnamData);
 
 const wards = computed(() => {
   if (!form.value.city) return [];
-  const selectedCity = vietnamData.find((c: any) => c.name === form.value.city);
+  const selectedCity = vietnamData.find((c: any) => c.codename === form.value.city);
   return selectedCity ? selectedCity.wards : [];
 });
 

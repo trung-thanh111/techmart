@@ -55,18 +55,65 @@
             <small v-if="errorMessage && meta.touched" class="text-red-500 text-xs">{{ $t(errorMessage) }}</small>
           </Field>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+          <div>
+            <label for="city" class="block text-sm font-medium text-gray-700 mb-2">
+              {{ $t("profile.city") }}
+              <span class="text-red-500">*</span>
+            </label>
+            <Field name="city" v-slot="{ field, errorMessage }">
+              <Select
+                v-bind="field.value"
+                :model-value="field.value"
+                :options="cities"
+                option-label="name"
+                option-value="codename"
+                filter
+                checkmark
+                :placeholder="$t('profile.addressForm.cityPlaceholder')"
+                class="w-full rounded py-[1px]"
+                :class="{ 'p-invalid': errorMessage }"
+                size="small"
+                appendTo="body"
+                overlayClass="!z-[99999]"
+                @update:model-value="
+                  (val) => {
+                    field.onChange(val);
+                    onCityChange(val);
+                  }
+                "
+              />
+              <small v-if="errorMessage" class="text-red-500 text-xs mt-1 block">{{ $t(errorMessage) }}</small>
+            </Field>
+          </div>
+          <div>
+            <label for="ward" class="block text-sm font-medium text-gray-700 mb-2">
+              {{ $t("profile.ward") }}
+              <span class="text-red-500">*</span>
+            </label>
+            <Field name="ward" v-slot="{ field, errorMessage }">
+              <Select v-bind="field.value" :model-value="field.value" :options="wards" option-label="name" option-value="codename" filter checkmark :placeholder="$t('profile.addressForm.wardPlaceholder')" class="w-full rounded py-[1px]" :class="{ 'p-invalid': errorMessage }" :disabled="!values.city" size="small" appendTo="body" overlayClass="!z-[99999]" @update:model-value="field.onChange" />
+              <small v-if="errorMessage" class="text-red-500 text-xs mt-1 block">{{ $t(errorMessage) }}</small>
+            </Field>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="block text-sm text-gray-700 mb-1">
+            {{ $t("profile.street") }}
+            <span class="text-red-500">*</span>
+          </label>
+          <Field name="street" v-slot="{ field, errorMessage, meta }">
+            <input v-bind="field" type="text" :placeholder="$t('profile.addressForm.streetPlaceholder')" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-sky-500" />
+            <small v-if="errorMessage && meta.touched" class="text-red-500 text-xs">{{ $t(errorMessage) }}</small>
+          </Field>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
           <div>
             <label class="block text-sm text-gray-700 mb-1">{{ $t("profile.countryCode") }}</label>
             <Field name="countryCode" v-slot="{ field, errorMessage, meta }">
               <input v-bind="field" type="text" maxlength="2" :placeholder="$t('profile.addressForm.countryCodePlaceholder')" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-sky-500" />
-              <small v-if="errorMessage && meta.touched" class="text-red-500 text-xs">{{ $t(errorMessage) }}</small>
-            </Field>
-          </div>
-          <div>
-            <label class="block text-sm text-gray-700 mb-1">{{ $t("profile.state") }}</label>
-            <Field name="state" v-slot="{ field, errorMessage, meta }">
-              <input v-bind="field" type="text" :placeholder="$t('profile.addressForm.statePlaceholder')" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-sky-500" />
               <small v-if="errorMessage && meta.touched" class="text-red-500 text-xs">{{ $t(errorMessage) }}</small>
             </Field>
           </div>
@@ -103,10 +150,27 @@ import AppCheckbox from "~/components/custom/AppCheckbox.vue";
 import Button from "~/components/custom/Button.vue";
 import { useAddressOrder } from "~/composables/user/useAddressOrder";
 import { useAuthStore } from "~/stores/auth/auth";
+import vietnamData from "../../../../../../data/address_vietnam.json";
+
+const cities = computed(() => vietnamData);
+
+const wards = computed(() => {
+  if (!values.city) return [];
+  const selectedCity = vietnamData.find((c: any) => c.codename === values.city);
+  return selectedCity ? selectedCity.wards : [];
+});
+
+const onCityChange = (val: string) => {
+  setValues({
+    ...values,
+    city: val,
+    ward: "",
+  });
+};
 
 const { t } = useI18n();
 
-const { isLoading, handleStore, getAddressesByUserId, data } = useAddressOrder(undefined, "create", {
+const { isLoading, handleStore, getAddressesByUserId, data, values, setValues } = useAddressOrder(undefined, "create", {
   redirectPath: PROFILEADDRESSORDERINDEX,
 });
 
