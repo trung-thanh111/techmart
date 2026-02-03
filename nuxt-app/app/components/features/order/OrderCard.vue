@@ -18,7 +18,6 @@
         <span :class="statusClass" class="text-[9px] uppercase font-semibold px-2 py-0.5 rounded">
           {{ ORDER_STATUS_LABELS[order.status || ""] || order.status }}
         </span>
-        <!-- Dropdown Menu -->
         <div class="relative" ref="dropdownRef">
           <button @click.stop="toggleDropdown" class="p-1 hover:bg-gray-200 rounded transition-colors">
             <svg class="w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
@@ -26,11 +25,11 @@
             </svg>
           </button>
           <Transition name="dropdown">
-            <div v-if="showDropdown" class="absolute right-0 top-full mt-1 w-40 bg-white border border-gray-200 rounded-md shadow-lg z-50 text-gray-500 text-sm">
-              <NuxtLink :to="`${PROFILEORDER}/${order.code}`" class="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" @click="showDropdown = false">Xem chi tiết</NuxtLink>
+            <div v-if="showDropdown" class="absolute right-0 top-full mt-1 w-40 bg-white border border-gray-200 rounded-md shadow-lg z-50 text-gray-500 text-xs">
+              <NuxtLink :to="`${PROFILEORDER}/${order.code}`" class="flex items-center gap-2 px-3 py-2 text-xs text-gray-700 hover:bg-gray-100" @click="showDropdown = false">Xem chi tiết</NuxtLink>
               <button
                 v-if="order.status === 'delivered'"
-                class="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                class="w-full flex items-center gap-2 px-3 py-2 text-xs text-gray-700 hover:bg-gray-100"
                 @click="
                   emit('review', order);
                   showDropdown = false;
@@ -40,7 +39,7 @@
               </button>
               <button
                 v-if="order.status === 'shipped'"
-                class="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                class="w-full flex items-center gap-2 px-3 py-2 text-xs text-gray-700 hover:bg-gray-100"
                 @click="
                   navigateTo(`${PROFILEORDER}/${order.code}`);
                   showDropdown = false;
@@ -50,7 +49,7 @@
               </button>
               <button
                 v-if="order.status === 'pending'"
-                class="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50"
+                class="w-full flex items-center gap-2 px-3 py-2 text-xs text-red-600 hover:bg-red-50"
                 @click="
                   emit('cancel', order);
                   showDropdown = false;
@@ -59,7 +58,7 @@
                 Hủy đơn hàng
               </button>
               <button
-                class="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                class="w-full flex items-center gap-2 px-3 py-2 text-xs text-gray-700 hover:bg-gray-100"
                 @click="
                   emit('reorder', order);
                   showDropdown = false;
