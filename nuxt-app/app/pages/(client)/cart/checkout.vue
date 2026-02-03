@@ -1,7 +1,7 @@
 <template>
   <div class="main-content max-w-7xl mx-auto">
     <!-- Breadcrumb  -->
-    <Breadcrumb :crumbs="[{ label: $t('cart.breadcrumb'), href: '/cart' }]" />
+    <Breadcrumb :crumbs="[{ label: $t('cart.breadcrumb'), href: TOCART }]" />
     <!-- bnner slide  -->
     <section>
       <article>
@@ -28,7 +28,7 @@
             </div>
 
             <div class="col-span-12 lg:col-span-4">
-              <OrderSummary :selected-items="selectedItems" :selected-count="selectedCount" :selected-total-price="selectedTotalPrice" v-model:coupon-code="couponCode" @unselect-item="handleUnselectItem" @apply-coupon="applyCoupon" @checkout="handleCheckout" />
+              <OrderSummary :selected-items="selectedItems" :selected-count="selectedCount" :selected-total-price="selectedTotalPrice" :shipping-method="formData.address_info.shippingMethod || undefined" v-model:coupon-code="couponCode" :loading="isSubmitting" :button-label="activeTab === 'payment_method' ? 'Đặt hàng' : undefined" @unselect-item="handleUnselectItem" @apply-coupon="applyCoupon" @checkout="handleCheckout" />
             </div>
           </div>
         </div>
@@ -36,45 +36,32 @@
     </section>
 
     <!-- Modals -->
-    <CheckoutModals @create="console.log('Create address')" @update="console.log('Update address')" @delete="console.log('Delete address')" />
+    <CheckoutModals />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from "vue";
+import { onMounted, onUnmounted } from "vue";
 import { useCheckout } from "~/composables/cart/useCheckout";
 import { useCartStore } from "~/stores/cart";
-import { storeToRefs } from "pinia";
+import { useCart } from "~/composables/cart/useCart";
 import CheckoutProgress from "~/components/features/checkout/CheckoutProgress.vue";
 import CheckoutPersonalInfo from "~/components/features/checkout/CheckoutPersonalInfo.vue";
 import CheckoutAddressInfo from "~/components/features/checkout/CheckoutAddressInfo.vue";
 import CheckoutPaymentMethod from "~/components/features/checkout/CheckoutPaymentMethod.vue";
 import OrderSummary from "~/components/features/checkout/OrderSummary.vue";
 import CheckoutModals from "~/components/features/checkout/CheckoutModals.vue";
-import { useCart } from "~/composables/cart/useCart";
 
-const { activeTab, formData, paymentMethods, isTabValid, canProceedToNext, progressPercentage, goToNextTab, goToPreviousTab, handleTabClick } = useCheckout();
+const { activeTab, formData, paymentMethods, isTabValid, canProceedToNext, progressPercentage, isSubmitting, couponCode, selectedItems, selectedCount, selectedTotalPrice, goToNextTab, goToPreviousTab, handleTabClick, handleCheckout, applyCoupon } = useCheckout();
 
 const { loadCart } = useCart();
 const cartStore = useCartStore();
-const { selectedItemsData: selectedItems, selectedCount, selectedTotalPrice } = storeToRefs(cartStore);
-
-const couponCode = ref("");
-
-const applyCoupon = () => {
-  console.log("Apply coupon", couponCode.value);
-  // Logic apply coupon
-};
-
-const handleCheckout = () => {
-  console.log("Checkout", formData);
-  // Logic checkout
-};
 
 const handleUnselectItem = (id: number) => {
   cartStore.toggleSelectItem(id);
 };
 
+// Modal handling
 const openModal = (modalId: string) => {
   const modal = document.getElementById(modalId);
   if (modal) {

@@ -74,7 +74,7 @@
 import { ref, onMounted, onUnmounted, h } from "vue";
 import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
-import { PROFILEINDEX, PROFILECHANGEPASSWORD, PROFILEADDRESSORDER, PROFILEORDERS, TOWISHLIST, TOVOUCHER } from "~/utils/constants";
+import { PROFILEINDEX, PROFILECHANGEPASSWORD, PROFILEADDRESSORDER, PROFILEORDER, TOWISHLIST, TOVOUCHER } from "~/utils/constants";
 
 const { t } = useI18n();
 const isSidebarOpen = ref(false);
@@ -104,7 +104,7 @@ const sidebarSections = [
       { label: t("sidebar.information"), to: PROFILEINDEX },
       { label: t("sidebar.changePassword"), to: PROFILECHANGEPASSWORD },
       { label: t("sidebar.addressOrder"), to: PROFILEADDRESSORDER },
-      { label: t("sidebar.myOrders"), to: PROFILEORDERS },
+      { label: t("sidebar.myOrders"), to: PROFILEORDER },
       { label: t("sidebar.wishlists"), to: TOWISHLIST },
       { label: t("sidebar.myVouchers"), to: TOVOUCHER },
     ],
@@ -146,7 +146,7 @@ const collapsedMenu = [
     icon: () => h("svg", { fill: "currentColor", viewBox: "0 0 384 512" }, [h("path", { d: "M168 0C75.1 0 0 75.1 0 168c0 87.2 135.1 303.7 146.6 320.6 6 9.2 20.8 9.2 26.8 0C248.9 471.7 384 255.2 384 168 384 75.1 308.9 0 216 0zm0 240c-39.8 0-72-32.2-72-72s32.2-72 72-72 72 32.2 72 72-32.2 72-72 72z" })]),
   },
   {
-    to: PROFILEORDERS,
+    to: PROFILEORDER,
     icon: () => h("svg", { fill: "currentColor", viewBox: "0 0 512 512" }, [h("path", { d: "M512 128v256c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128c0-35.3 28.7-64 64-64h384c35.3 0 64 28.7 64 64z" })]),
   },
   {

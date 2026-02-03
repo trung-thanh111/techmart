@@ -33,7 +33,9 @@ class StoreRequest extends BaseRequest
             "birthday" => "nullable|date",
             "gender" => "nullable|string|in:male,female,other",
             "phone" => "nullable|string|max:255",
-            "address" => "nullable|string|max:255",
+            "street" => "nullable|string|max:255",
+            "city" => "nullable|string|max:255",
+            "ward" => "nullable|string|max:255",
             "password" => "required|string|min:8",
             "publish" => "required|integer|in:0,1,2",
             // "user_catalogues" => "required|array",
@@ -42,13 +44,10 @@ class StoreRequest extends BaseRequest
         ];
     }
 
-    public function prepareForValidation(){
+    public function prepareForValidation() {}
 
-    }
-
-    public function messages(){
-        return [
-
-        ];
+    public function messages()
+    {
+        return [];
     }
 }

@@ -6,11 +6,14 @@
         <p class="text-sm mb-6 text-gray-500">Vui lòng chọn và nhập thông tin thanh toán của bạn.</p>
       </div>
       <div class="mt-6 max-w-4xl mx-auto">
-        <!-- Payment Method Tabs -->
+        <!-- Payment Methods -->
         <div class="mb-6">
           <div class="flex w-full items-center space-x-[2px] bg-gray-100 p-1 rounded-lg">
             <div v-for="method in paymentMethods" :key="method.id" @click="activePaymentMethod = method.id" :class="['flex-1 flex-shrink-0 p-3 font-semibold text-center whitespace-normal duration-75 cursor-pointer rounded-md', activePaymentMethod === method.id ? 'bg-white text-teal-600 shadow-sm' : 'text-gray-600 hover:text-teal-600']">
               <div class="flex items-center justify-center gap-2">
+                <svg v-if="activePaymentMethod === method.id" class="w-4 h-4 text-teal-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                </svg>
                 <img :src="method.icon" :alt="method.name" class="w-6 h-6 object-cover" />
                 <span class="text-sm font-medium">{{ method.name }}</span>
               </div>
@@ -18,7 +21,7 @@
           </div>
         </div>
         <div class="bg-white border border-gray-200 rounded-lg p-6">
-          <div v-if="activePaymentMethod === 'vnpay'" class="space-y-4">
+          <div v-if="activePaymentMethod === PAYMENT_METHODS.VNPAY" class="space-y-4">
             <div class="flex items-center gap-3 mb-4">
               <img src="/images/logo/vnpay.webp" alt="VNPay" class="w-8 h-8" />
               <h6 class="text-lg font-semibold">Thanh toán qua VNPay</h6>
@@ -32,7 +35,7 @@
               </ul>
             </div>
           </div>
-          <div v-if="activePaymentMethod === 'momo'" class="space-y-4">
+          <div v-if="activePaymentMethod === PAYMENT_METHODS.MOMO" class="space-y-4">
             <div class="flex items-center gap-3 mb-4">
               <img src="/images/logo/momo.svg" alt="MoMo" class="w-8 h-8" />
               <h6 class="text-lg font-semibold">Thanh toán qua MoMo</h6>
@@ -60,7 +63,7 @@
               </div>
             </div>
           </div>
-          <div v-if="activePaymentMethod === 'cod'" class="space-y-4">
+          <div v-if="activePaymentMethod === PAYMENT_METHODS.COD" class="space-y-4">
             <div class="flex items-center gap-3 mb-4">
               <img src="/images/cash-on-delivery.webp" alt="COD" class="w-8 h-8" />
               <h6 class="text-lg font-semibold">Thanh toán khi nhận hàng</h6>
@@ -102,6 +105,7 @@ import { computed } from "vue";
 import type { IPaymentInfo, IPaymentMethod } from "~/interfaces/cart/checkout.interface";
 import NextButton from "~/components/features/checkout/NextButton.vue";
 import BackButton from "~/components/features/checkout/BackButton.vue";
+import { PAYMENT_METHODS } from "~/utils/order.constants";
 
 const props = defineProps<{
   modelValue: IPaymentInfo;

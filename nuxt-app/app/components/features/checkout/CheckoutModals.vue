@@ -141,7 +141,6 @@
 </template>
 
 <script setup lang="ts">
-// Props can be added later for passing data to modals (e.g., address to update)
 defineEmits<{
   (e: "create"): void;
   (e: "update"): void;

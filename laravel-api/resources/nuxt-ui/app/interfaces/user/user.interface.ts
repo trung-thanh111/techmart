@@ -11,7 +11,9 @@ export interface IUser {
     birthday: string | null;
     gender: string | null;
     phone: string | null;
-    address: string | null;
+    street: string | null;
+    city: string | null;
+    ward: string | null;
     userCatalogueId: number;
     isAdmin: boolean;
     image: { path: string | null; url: string | null };

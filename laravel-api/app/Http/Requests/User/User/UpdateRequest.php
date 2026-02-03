@@ -39,7 +39,9 @@ class UpdateRequest extends BaseRequest
             "birthday" => "nullable|date|{$sometime}",
             "gender" => "nullable|string|in:male,female,other|{$sometime}",
             "phone" => "nullable|string|max:255|{$sometime}",
-            "address" => "nullable|string|max:255|{$sometime}",
+            "street" => "nullable|string|max:255|{$sometime}",
+            "city" => "nullable|string|max:255|{$sometime}",
+            "ward" => "nullable|string|max:255|{$sometime}",
             "user_catalogue_id" => "nullable|integer|exists:user_catalogues,id|{$sometime}",
             "image" => "nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048|{$sometime}",
             "publish" => "required|integer|in:0,1,2|{$sometime}",
@@ -55,7 +57,8 @@ class UpdateRequest extends BaseRequest
         ];
     }
 
-    public function prepareForValidation() {
+    public function prepareForValidation()
+    {
         $this->merge([
             'updated_at' => now(),
         ]);

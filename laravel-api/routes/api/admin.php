@@ -208,8 +208,11 @@ Route::group(['prefix' => 'v1/admin', 'middleware' => ['jwt:admin', 'convert', '
         Route::post('bulkStore', [OrderController::class, 'bulkStore']);
         Route::put('bulkUpdate', [OrderController::class, 'bulkUpdate']);
         Route::patch('bulkUpdate', [OrderController::class, 'bulkUpdate']);
+        Route::post('{id}/status', [OrderController::class, 'updateStatus']);
+        Route::post('{id}/cancel', [OrderController::class, 'cancel']);
+        Route::post('{id}/payment-status', [OrderController::class, 'updatePaymentStatus']);
     });
-    Route::resource('orders', BannerController::class)->except($routeExcept);
+    Route::resource('orders', OrderController::class)->except($routeExcept);
 
     //generate route
 

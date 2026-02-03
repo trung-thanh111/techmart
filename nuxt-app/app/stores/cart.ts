@@ -4,7 +4,7 @@ import type { ICartItem } from "~/interfaces/cart/cartItem.interface";
 import { generateGuestId } from "~/utils/helpers";
 
 const STORAGE_KEY = "cart";
-const TTL_MS = 90 * 60 * 1000; // 1h30p
+const TTL_MS = 720 * 60 * 1000; // 12h
 
 interface CartStoreState {
   cart: ICart | null;

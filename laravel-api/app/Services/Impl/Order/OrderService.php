@@ -1,54 +1,520 @@
 <?php
+
 namespace App\Services\Impl\Order;
 
+use App\Enums\Common;
+use App\Enums\OrderEnum;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\OrderStatusHistory;
+use App\Models\ProductVariant;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Services\Impl\BaseService;
 use Illuminate\Database\Eloquent\Model;
 use App\Repositories\Order\OrderRepository;
 use App\Http\Resources\Order\OrderResource;
 use App\Services\Interfaces\Order\OrderServiceInterface;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Str;
 
-class OrderService extends BaseService implements OrderServiceInterface {
+class OrderService extends BaseService implements OrderServiceInterface
+{
+    protected $repository;
 
-protected $repository;
+    protected $complexFilter = ['id', 'user_id'];
+    protected $simpleFilter = ['status', 'payment_status'];
+    protected $fieldSearchs = ['code', 'customer_name', 'customer_email', 'customer_phone'];
 
-protected $complexFilter = ['id'];
+    protected $with = ['order_items', 'order_status_histories', 'order_shipments', 'order_payments', 'order_refunds', 'user'];
+    protected $relationFilter = [];
 
-protected $with = [];
-protected $relationFilter = [];
+    protected $cacheKeyPrefix = 'orders';
+    protected $cacheTags = ['orders:collection'];
 
-protected $cacheKeyPrefix = 'orders';
-protected $cacheTags = ['orders:collection'];
+    protected $useUpload = false;
 
-protected $useUpload = false;
+    protected float $taxRate = 0.1; // 10%
 
-    public function __construct(
-        OrderRepository $repository
-    ) {
+    public function __construct(OrderRepository $repository)
+    {
         $this->repository = $repository;
     }
 
-    protected function getRepository(){
+    protected function getRepository()
+    {
         return $this->repository;
     }
 
     /**
-     * nhiệm vụ bắt data từ client post lên (dạng thô, chuỗi, file, ....)
-     *
+     * Tạo đơn hàng mới với items
+     * Flow: validate stock -> reserve stock -> create order -> create items -> create history
      */
-    protected function prepareModelData(Request $request): self {
+    public function createOrder(Request $request)
+    {
+        return DB::transaction(function () use ($request) {
+            $items = $request->input('items', []);
+            $userId = auth(Common::API)->id();
 
+            // 1. Validate và reserve stock với pessimistic locking
+            $reservedItems = $this->reserveStock($items);
+
+            // 2. Calculate totals
+            $totals = $this->calculateTotals($reservedItems, $request);
+
+            // 3. Generate order code
+            $orderCode = $this->generateOrderCode();
+
+            // 4. Create order
+            $orderData = array_merge(
+                $request->only([
+                    'customer_email',
+                    'customer_phone',
+                    'customer_name',
+                    'payment_method',
+                    'shipping_method',
+                    'shipping_provider',
+                    'shipping_address',
+                    'shipping_city',
+                    'shipping_ward',
+                    'shipping_street',
+                    'shipping_country_code',
+                    'shipping_postal_code',
+                    'customer_note',
+                ]),
+                [
+                    'code' => $orderCode,
+                    'user_id' => $userId,
+                    'subtotal' => $totals['subtotal'],
+                    'tax_amount' => $totals['tax_amount'],
+                    'shipping_fee' => $totals['shipping_fee'],
+                    'discount_amount' => $totals['discount_amount'],
+                    'total_amount' => $totals['total_amount'],
+                    'status' => OrderEnum::STATUS_PENDING,
+                    'payment_status' => OrderEnum::PAYMENT_STATUS_UNPAID,
+                ]
+            );
+
+            $order = Order::create($orderData);
+
+            // 5. Create order items
+            $this->createOrderItems($order, $reservedItems);
+
+            // 6. Create initial status history
+            $this->createStatusHistory($order, null, OrderEnum::STATUS_PENDING, $userId, 'customer', 'Đơn hàng được tạo');
+
+            // 7. Clear cache
+            $this->clearCacheByTags();
+
+            // 8. Load relationships và return
+            $order->load($this->with);
+
+            return $order;
+        });
+    }
+
+    /**
+     * Reserve stock với pessimistic locking để handle race condition
+     * Sử dụng SELECT FOR UPDATE để lock rows khi nhiều người mua cùng lúc
+     */
+    protected function reserveStock(array $items): array
+    {
+        $reservedItems = [];
+
+        foreach ($items as $item) {
+            $productId = $item['product_id'];
+            $variantId = $item['product_variant_id'] ?? null;
+            $quantity = $item['quantity'];
+
+            // Lock variant/product row để tránh race condition
+            if ($variantId) {
+                $variant = ProductVariant::lockForUpdate()->find($variantId);
+
+                if (!$variant) {
+                    throw new \Exception("Sản phẩm không tồn tại: variant_id = {$variantId}");
+                }
+
+                if ($variant->stock < $quantity) {
+                    throw new \Exception(
+                        "Sản phẩm '{$variant->name}' chỉ còn {$variant->stock} sản phẩm, không đủ {$quantity} sản phẩm yêu cầu"
+                    );
+                }
+
+                // Trừ stock (pessimistic lock đảm bảo atomic)
+                $variant->decrement('stock', $quantity);
+
+                $product = Product::find($productId);
+
+                $reservedItems[] = [
+                    'product_id' => $productId,
+                    'product_variant_id' => $variantId,
+                    'product_sku' => $variant->sku ?? $product->sku,
+                    'product_name' => $product->name . ' - ' . $variant->name,
+                    'product_description' => $product->description,
+                    'product_attributes' => $variant->attribute_data,
+                    'product_image' => $this->getProductImage($product->album),
+                    'quantity' => $quantity,
+                    'unit_price' => $variant->price,
+                    'original_price' => $variant->price,
+                    'warranty_months' => $product->warranty ?? 0,
+                ];
+            } else {
+                // Product không có variant được chọn -> lấy variant đầu tiên
+                $product = Product::find($productId);
+
+                if (!$product) {
+                    throw new \Exception("Sản phẩm không tồn tại: product_id = {$productId}");
+                }
+
+                // Lấy variant đầu tiên của product để quản lý stock
+                $variant = ProductVariant::lockForUpdate()
+                    ->where('product_id', $productId)
+                    ->where('publish', 1)
+                    ->first();
+
+                if (!$variant) {
+                    throw new \Exception("Sản phẩm '{$product->name}' không có phiên bản nào khả dụng");
+                }
+
+                if ($variant->stock < $quantity) {
+                    throw new \Exception(
+                        "Sản phẩm '{$product->name}' chỉ còn {$variant->stock} sản phẩm, không đủ {$quantity} sản phẩm yêu cầu"
+                    );
+                }
+
+                // Trừ stock từ variant đầu tiên
+                $variant->decrement('stock', $quantity);
+
+                $reservedItems[] = [
+                    'product_id' => $productId,
+                    'product_variant_id' => $variant->id ?? null,
+                    'product_sku' => $variant->sku ?? $product->sku,
+                    'product_name' => $product->name . ' - ' . $variant->name,
+                    'product_description' => $product->description,
+                    'product_attributes' => $variant->attribute_data ?? null,
+                    'product_image' => $this->getProductImage($product->album),
+                    'quantity' => $quantity,
+                    'unit_price' => $variant->price,
+                    'original_price' => $variant->price,
+                    'warranty_months' => $product->warranty ?? 0,
+                ];
+            }
+        }
+
+        return $reservedItems;
+    }
+
+    /**
+     * Rollback stock khi cancel order
+     */
+    protected function releaseStock(Order $order): void
+    {
+        foreach ($order->order_items as $item) {
+            if ($item->product_variant_id) {
+                ProductVariant::where('id', $item->product_variant_id)
+                    ->increment('stock', $item->quantity);
+            }
+        }
+    }
+
+    /**
+     * Calculate order totals
+     */
+    protected function calculateTotals(array $items, Request $request): array
+    {
+        $subtotal = 0;
+        foreach ($items as $item) {
+            $subtotal += $item['unit_price'] * $item['quantity'];
+        }
+
+        // Calculate shipping fee logic
+        // Use constants from OrderEnum if shipping_method is provided
+        $shippingMethod = $request->input('shipping_method', OrderEnum::SHIPPING_METHOD_STANDARD);
+        $shippingFee = $request->input('shipping_fee');
+
+        if ($shippingFee === null) {
+            // Auto calculate based on constant if not provided by FE (though FE usually sends it)
+            // But good to have fallback/validation
+            $shippingFee = OrderEnum::SHIPPING_FEES[$shippingMethod] ?? OrderEnum::SHIPPING_FEE_STANDARD;
+        }
+
+        $discountAmount = $request->input('discount_amount', 0);
+        $taxAmount = $subtotal * OrderEnum::TAX_RATE; // Use constant
+        $totalAmount = $subtotal + $taxAmount + $shippingFee - $discountAmount;
+
+        return [
+            'subtotal' => $subtotal,
+            'tax_amount' => $taxAmount,
+            'shipping_fee' => $shippingFee,
+            'discount_amount' => $discountAmount,
+            'total_amount' => $totalAmount < 0 ? 0 : $totalAmount,
+        ];
+    }
+
+    /**
+     * Create order items từ reserved items
+     */
+    protected function createOrderItems(Order $order, array $items): void
+    {
+        foreach ($items as $item) {
+            $subtotal = $item['quantity'] * $item['unit_price'];
+            $discountAmount = 0; // TODO: implement item-level discount
+            $taxAmount = $subtotal * $this->taxRate;
+            $total = $subtotal - $discountAmount + $taxAmount;
+
+            $warrantyExpiresAt = null;
+            if ($item['warranty_months'] > 0) {
+                $warrantyExpiresAt = now()->addMonths($item['warranty_months']);
+            }
+
+            OrderItem::create([
+                'order_id' => $order->id,
+                'product_id' => $item['product_id'],
+                'product_variant_id' => $item['product_variant_id'],
+                'product_sku' => $item['product_sku'],
+                'product_name' => $item['product_name'],
+                'product_description' => $item['product_description'],
+                'product_attributes' => $item['product_attributes'],
+                'product_image' => $item['product_image'],
+                'quantity' => $item['quantity'],
+                'unit_price' => $item['unit_price'],
+                'original_price' => $item['original_price'],
+                'discount_amount' => $discountAmount,
+                'tax_amount' => $taxAmount,
+                'subtotal' => $subtotal,
+                'total' => $total,
+                'warranty_months' => $item['warranty_months'],
+                'warranty_expires_at' => $warrantyExpiresAt,
+                'status' => 'pending',
+                'is_returnable' => true,
+                'return_day' => 7,
+            ]);
+        }
+    }
+
+    /**
+     * Generate unique order code
+     */
+    protected function generateOrderCode(): string
+    {
+        $prefix = 'ORD';
+        $timestamp = now()->format('ymd');
+        $random = strtoupper(Str::random(4));
+
+        $code = "{$prefix}{$timestamp}{$random}";
+
+        // Ensure uniqueness
+        while (Order::where('code', $code)->exists()) {
+            $random = strtoupper(Str::random(4));
+            $code = "{$prefix}{$timestamp}{$random}";
+        }
+
+        return $code;
+    }
+
+    /**
+     * Update order status với history tracking
+     */
+    public function updateStatus(int $orderId, string $newStatus, ?string $note = null): Order
+    {
+        return DB::transaction(function () use ($orderId, $newStatus, $note) {
+            $order = Order::lockForUpdate()->findOrFail($orderId);
+            $oldStatus = $order->status;
+
+            if ($oldStatus === $newStatus) {
+                return $order;
+            }
+
+            // Validate status transition
+            $this->validateStatusTransition($oldStatus, $newStatus);
+
+            // Update order status
+            $order->status = $newStatus;
+
+            // Update timestamps based on status
+            switch ($newStatus) {
+                case 'confirmed':
+                    $order->confirmed_at = now();
+                    break;
+                case 'shipped':
+                    $order->shipped_at = now();
+                    break;
+                case 'delivered':
+                    $order->delivered_at = now();
+                    break;
+                case 'cancelled':
+                    $order->cancelled_at = now();
+                    // Release stock when cancelled
+                    $this->releaseStock($order);
+                    break;
+                case 'refunded':
+                    $order->refunded_at = now();
+                    // Release stock when refunded
+                    $this->releaseStock($order);
+                    break;
+            }
+
+            $order->save();
+
+            // Create status history
+            $userId = auth(Common::API)->id();
+            $userType = auth(Common::ADMIN)->check() ? 'admin' : 'customer';
+
+            $this->createStatusHistory($order, $oldStatus, $newStatus, $userId, $userType, $note);
+
+            // Clear cache
+            $this->clearCacheByTags();
+
+            return $order->load($this->with);
+        });
+    }
+
+    /**
+     * Validate status transition với permission checks
+     * - Customer: chỉ cancel được ở status 'pending'
+     * - Admin: cancel được đến 'processing', refund cần admin
+     */
+    protected function validateStatusTransition(string $from, string $to): void
+    {
+        $isAdmin = auth(Common::ADMIN)->check();
+
+        $allowedTransitions = [
+            'pending' => ['confirmed', 'cancelled', 'failed'],
+            'confirmed' => ['processing', 'cancelled'],
+            'processing' => ['shipped', 'cancelled'],
+            'shipped' => ['delivered', 'failed'],
+            'delivered' => ['refunded'],
+            'cancelled' => [],
+            'refunded' => [],
+            'failed' => ['pending'], // Retry
+        ];
+
+        if (!isset($allowedTransitions[$from]) || !in_array($to, $allowedTransitions[$from])) {
+            throw new \Exception("Không thể chuyển trạng thái từ '{$from}' sang '{$to}'");
+        }
+
+        // Permission checks
+        if ($to === 'cancelled') {
+            if (!$isAdmin && $from !== 'pending') {
+                throw new \Exception("Bạn chỉ có thể hủy đơn hàng ở trạng thái chờ xác nhận");
+            }
+            if (!$isAdmin && in_array($from, ['confirmed', 'processing'])) {
+                throw new \Exception("Chỉ admin mới có quyền hủy đơn hàng đã xác nhận/đang xử lý");
+            }
+        }
+
+        if ($to === 'refunded') {
+            if (!$isAdmin) {
+                throw new \Exception("Chỉ admin mới có quyền hoàn tiền đơn hàng");
+            }
+        }
+    }
+
+
+
+    /**
+     * Helper to get product image from album
+     */
+    protected function getProductImage($album): ?string
+    {
+        if (empty($album)) {
+            return null;
+        }
+
+        $image = $album[0] ?? null;
+
+        if (is_array($image)) {
+            return $image['path'] ?? $image['url'] ?? null;
+        }
+
+        return is_string($image) ? $image : null;
+    }
+
+    /**
+     * Cancel order
+     */
+    public function cancelOrder(int $orderId, ?string $reason = null): Order
+    {
+        return $this->updateStatus($orderId, 'cancelled', $reason ?? 'Đơn hàng bị hủy');
+    }
+
+    /**
+     * Create status history record
+     */
+    protected function createStatusHistory(
+        Order $order,
+        ?string $oldStatus,
+        string $newStatus,
+        ?int $userId,
+        string $userType,
+        ?string $note = null
+    ): void {
+        OrderStatusHistory::create([
+            'order_id' => $order->id,
+            'old_status' => $oldStatus,
+            'new_status' => $newStatus,
+            'user_id' => $userId,
+            'user_type' => $userType,
+            'note' => $note,
+            'metadata' => [
+                'ip' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+                'timestamp' => now()->toISOString(),
+            ],
+        ]);
+    }
+
+    /**
+     * Update payment status
+     */
+    public function updatePaymentStatus(int $orderId, string $paymentStatus): Order
+    {
+        return DB::transaction(function () use ($orderId, $paymentStatus) {
+            $order = Order::lockForUpdate()->findOrFail($orderId);
+            $order->payment_status = $paymentStatus;
+
+            if ($paymentStatus === 'paid') {
+                $order->paid_at = now();
+            }
+
+            $order->save();
+
+            $this->clearCacheByTags();
+
+            return $order->load($this->with);
+        });
+    }
+
+    /**
+     * Override save để dùng createOrder cho store
+     */
+    public function save(Request $request, ?int $id = null)
+    {
+        if ($id === null) {
+            // Create new order
+            $order = $this->createOrder($request);
+            return $this->getResource($order);
+        }
+
+        // Update existing order (basic fields only)
+        return parent::save($request, $id);
+    }
+
+    protected function prepareModelData(Request $request): self
+    {
         return $this->initializeBasicModelData($request);
     }
 
-    protected function initializeBasicModelData(Request $request): self {
+    protected function initializeBasicModelData(Request $request): self
+    {
         $fillable = $this->repository->getFillable();
         $this->modelData = $request->only($fillable);
         return $this;
     }
 
-    protected function getResource(Model $resource){
+    protected function getResource(Model $resource)
+    {
         return new OrderResource($resource);
     }
-
 }

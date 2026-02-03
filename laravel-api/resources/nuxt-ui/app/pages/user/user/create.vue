@@ -128,12 +128,52 @@
                             <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
                         </Field>
                     </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label" for="city">
+                                    {{ $t("admin.common.form.city") }}
+                                </label>
+                                <Field name="city" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
+                                    <Select
+                                        :modelValue="field.value"
+                                        @update:modelValue="
+                                            (val) => {
+                                                field.onChange(val);
+                                                onCityChange(val);
+                                            }
+                                        "
+                                        :options="cities"
+                                        optionLabel="name"
+                                        optionValue="codename"
+                                        filter
+                                        :placeholder="$t('admin.common.form.cityPlaceholder')"
+                                        checkmark
+                                        class="rounded py-[1px] w-100"
+                                        size="small"
+                                    />
+                                    <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
+                                </Field>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label" for="ward">
+                                    {{ $t("admin.common.form.ward") }}
+                                </label>
+                                <Field name="ward" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
+                                    <Select :modelValue="field.value" @update:modelValue="field.onChange" :options="wards" optionLabel="name" optionValue="codename" filter :placeholder="$t('admin.common.form.wardPlaceholder')" checkmark class="rounded py-[1px] w-100" size="small" :disabled="!values.city" />
+                                    <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
+                                </Field>
+                            </div>
+                        </div>
+                    </div>
                     <div class="mb-3">
-                        <label class="form-label" for="address">
-                            {{ $t("admin.common.form.address") }}
+                        <label class="form-label" for="street">
+                            {{ $t("admin.common.form.street") }}
                         </label>
-                        <Field name="address" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
-                            <CKEditor :model-value="field.value" @update:model-value="field.onChange" :placeholder="$t('admin.common.form.addressPlaceholder')" height="h-32" />
+                        <Field name="street" v-slot="{ field, errorMessage, meta }" :validate-on-input="true">
+                            <input v-bind="field" id="street" type="text" :placeholder="$t('admin.common.form.streetPlaceholder')" class="form-control" :class="errorMessage && meta.touched ? 'border-red-500' : ''" />
                             <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
                         </Field>
                     </div>
@@ -201,8 +241,24 @@ import { USERINDEX } from "~/utils/constants";
 import { useUser } from "~/composables/user/useUser";
 import SingleImageUpload from "~/components/custom/SingleImageUpload.vue";
 import CKEditor from "~/components/custom/CKEditor.vue";
+import vietnamData from "../../../data/address_vietnam.json";
 
 const { isLoading, showPassword, genderOptions, handleStore, userCatalogueOptions, setValues, values } = useUser();
+
+const cities = computed(() => vietnamData);
+const wards = computed(() => {
+    if (!values.city) return [];
+    const selectedCity = vietnamData.find((c: any) => c.codename === values.city);
+    return selectedCity ? selectedCity.wards : [];
+});
+
+const onCityChange = (val: string) => {
+    setValues({
+        ...values,
+        city: val,
+        ward: "",
+    });
+};
 
 definePageMeta({
     layout: "admin",
