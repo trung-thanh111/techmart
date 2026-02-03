@@ -1,8 +1,10 @@
 <?php
+
 namespace App\Http\Requests\Order\Order;
 
-use App\Enums\Common;
 use App\Http\Requests\BaseRequest;
+use Illuminate\Validation\Rule;
+use App\Enums\OrderEnum;
 
 class StoreRequest extends BaseRequest
 {
@@ -22,19 +24,48 @@ class StoreRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            "name" => "required|string|max:255",
-            "publish" => "required|integer|in:0,1,2",
+            // Customer info - required from FE
+            'customer_email' => 'required|email|max:255',
+            'customer_phone' => 'nullable|string|max:20',
+            'customer_name' => 'required|string|max:100',
+
+            // Items - required from FE (BE sẽ tính totals từ items)
+            'items' => 'required|array|min:1',
+            'items.*.product_id' => 'required|integer|exists:products,id',
+            'items.*.product_variant_id' => 'nullable|integer|exists:product_variants,id',
+            'items.*.quantity' => 'required|integer|min:1',
+
+            // Shipping address - required
+            'shipping_address' => 'required|string|max:255',
+            'shipping_city' => 'nullable|string|max:100',
+            'shipping_ward' => 'nullable|string|max:100',
+            'shipping_street' => 'nullable|string|max:100',
+            'shipping_country_code' => 'nullable|string|size:2',
+            'shipping_postal_code' => 'nullable|string|max:20',
+
+            // Shipping method
+            'shipping_method' => ['nullable', 'string', Rule::in(OrderEnum::AVAILABLE_SHIPPING_METHODS)],
+            'shipping_provider' => 'nullable|string|max:50',
+
+            // Payment
+            'payment_method' => ['required', 'string', Rule::in(OrderEnum::AVAILABLE_PAYMENT_METHODS)],
+
+            // Notes
+            'customer_note' => 'nullable|string',
+
+            // Optional: FE có thể gửi shipping_fee, discount_amount
+            'shipping_fee' => 'nullable|numeric|min:0',
+            'discount_amount' => 'nullable|numeric|min:0',
         ];
     }
 
-    public function prepareForValidation(){
-        // $this->merge([
-        //     'slug' => generate_slug($this->name),
-        //     'user_id' => auth(Common::API)->user()->id,
-        // ]);
+    public function prepareForValidation()
+    {
+        // Custom logic if needed
     }
 
-    public function messages(){
+    public function messages()
+    {
         return [];
     }
 }

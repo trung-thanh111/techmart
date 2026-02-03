@@ -72,17 +72,17 @@
         </div>
         <div class="flex items-center justify-between text-sm">
           <span class="text-gray-600">{{ $t("cart.shipping") }}:</span>
-          <span class="">{{ formatPrice(selectedCount > 0 ? 25000 : 0) }}</span>
+          <span class="">{{ formatPrice(shippingFee) }}</span>
         </div>
         <div class="flex items-center justify-between text-sm">
-          <span class="text-gray-600">{{ $t("cart.taxPercent", { percent: 10 }) }}:</span>
+          <span class="text-gray-600">{{ $t("cart.taxPercent", { percent: TAX_RATE * 100 }) }}:</span>
           <span class="">{{ formatPrice(taxAmount) }}</span>
         </div>
         <div class="border-t border-gray-200 pt-3 mt-4">
           <div class="flex items-center justify-between">
             <span class="md:text-lg text-base font-bold text-gray-900">{{ $t("cart.grandTotal") }}:</span>
             <span class="md:text-xl text-lg font-bold text-red-600">
-              {{ formatPrice(selectedCount > 0 ? selectedTotalPrice + 25000 + taxAmount : 0) }}
+              {{ formatPrice(selectedCount > 0 ? selectedTotalPrice + shippingFee + taxAmount : 0) }}
             </span>
           </div>
           <p class="text-xs text-gray-500 mt-1">{{ $t("cart.taxIncluded") }}</p>
@@ -93,16 +93,14 @@
         <NuxtLink v-if="to" :to="to" class="flex items-center justify-center w-full bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white py-2 px-4 rounded-sm font-semibold text-base shadow uppercase transition-all duration-200" :class="{ 'opacity-60 cursor-not-allowed pointer-events-none': selectedCount === 0 || loading }" @click="$emit('checkout')">
           <i v-if="loading" class="pi pi-spinner pi-spin mr-2" />
           {{ buttonLabel || $t("cart.proceedToCheckout") }}
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
         </NuxtLink>
 
         <button v-else type="button" class="flex items-center justify-center w-full bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white py-2 px-4 rounded-sm font-semibold text-base shadow uppercase transition-all duration-200" :class="{ 'opacity-60 cursor-not-allowed': selectedCount === 0 || loading }" :disabled="selectedCount === 0 || loading" @click="$emit('checkout')">
           <i v-if="loading" class="pi pi-spinner pi-spin mr-2" />
           {{ buttonLabel || $t("cart.proceedToCheckout") }}
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
         </button>
 
-        <div class="mt-4 flex items-center justify-center gap-2 text-xs text-gray-500">
+        <div class="mt-4 flex items-center justify-center gap-2 text-xs text-green-600 italic">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
           </svg>
@@ -117,11 +115,13 @@
 import { formatPrice, resolveAlbum } from "~/utils/helpers";
 import { IMAGEDEFAULT } from "~/utils/constants";
 import type { ICartItem } from "~/interfaces/cart/cartItem.interface";
+import { SHIPPING_METHODS, SHIPPING_FEES } from "~/utils/order.constants";
 
 const props = defineProps<{
   selectedItems: ICartItem[];
   selectedCount: number;
   selectedTotalPrice: number;
+  shippingMethod?: string;
   couponCode: string;
   loading?: boolean;
   buttonLabel?: string;
@@ -166,7 +166,15 @@ const getVariantInfo = (item: ICartItem): string => {
   return "";
 };
 
+const shippingFee = computed(() => {
+  if (props.selectedCount === 0) return 0;
+  if (props.shippingMethod === SHIPPING_METHODS.EXPRESS) {
+    return SHIPPING_FEES[SHIPPING_METHODS.EXPRESS];
+  }
+  return SHIPPING_FEES[SHIPPING_METHODS.STANDARD];
+});
+
 const taxAmount = computed(() => {
-  return props.selectedCount > 0 ? Math.round(props.selectedTotalPrice * 0.1) : 0;
+  return props.selectedCount > 0 ? Math.round(props.selectedTotalPrice * TAX_RATE) : 0;
 });
 </script>

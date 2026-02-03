@@ -40,7 +40,9 @@ export const useUser = (initialFilters?: UserPayloadFilter, mode: "create" | "up
             .nullable()
             .optional(),
         phone: z.string().max(255, "admin.validation.phoneMaxLength").nullable().optional(),
-        address: z.string().max(255, "admin.validation.addressMaxLength").nullable().optional(),
+        street: z.string().max(255, "admin.validation.streetMaxLength").nullable().optional(),
+        city: z.string().max(255, "admin.validation.cityMaxLength").nullable().optional(),
+        ward: z.string().max(255, "admin.validation.wardMaxLength").nullable().optional(),
         password: z.string().min(8, "admin.validation.passwordMinLength").optional(),
         publish: z.number({ required_error: "admin.validation.statusRequired" }).refine((val) => [0, 1, 2].includes(val), { message: "admin.validation.statusInvalid" }),
         userCatalogueId: z.number({ required_error: "admin.validation.userCatalogueRequired" }).optional(),

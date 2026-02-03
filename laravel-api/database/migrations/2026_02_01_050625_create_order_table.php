@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('code', 20)->unique()->index()->comment('order code');
             $table->foreignId('user_id')->nullable()->index()->constrained()->nullOnDelete();
-            $table->string('customer_email')->unique();
+            $table->string('customer_email');
             $table->string('customer_phone', 20)->nullable();
             $table->string('customer_name', 100);
 
@@ -71,15 +71,6 @@ return new class extends Migration
             $table->string('shipping_country_code', 2)->default('VN');
             $table->string('shipping_postal_code', 20)->nullable();
 
-            // Địa chỉ thanh toán (có thể khác địa chỉ giao hàng)
-            $table->boolean('billing_same_as_shipping')->default(true);
-            $table->text('billing_address')->nullable();
-            $table->string('billing_city', 100)->nullable();
-            $table->string('billing_ward', 100)->nullable();
-            $table->string('billing_street', 100)->nullable();
-            $table->string('billing_country', 2)->nullable();
-            $table->string('billing_postal_code', 20)->nullable();
-
             // Ghi chú
             $table->text('customer_note')->nullable();
             $table->text('admin_note')->nullable();
@@ -93,6 +84,7 @@ return new class extends Migration
             $table->timestamp('shipped_at')->nullable()->index();
             $table->timestamp('delivered_at')->nullable()->index();
             $table->timestamp('cancelled_at')->nullable();
+            $table->timestamp('refunded_at')->nullable();
             $table->timestamp('paid_at')->nullable()->index();
             $table->softDeletes();
             $table->timestamps();

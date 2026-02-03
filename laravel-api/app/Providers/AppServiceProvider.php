@@ -89,6 +89,8 @@ use App\Services\Interfaces\PasswordReset\PasswordResetServiceInterface;
 use App\Services\Impl\PasswordReset\PasswordResetService;
 use App\Services\Interfaces\Auth\ChangePasswordServiceInterface;
 use App\Services\Impl\Auth\ChangePasswordService;
+use App\Services\Interfaces\Order\OrderServiceInterface;
+use App\Services\Impl\Order\OrderService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -136,6 +138,7 @@ class AppServiceProvider extends ServiceProvider
         PopupServiceInterface::class => PopupService::class,
         MenuServiceInterface::class => MenuService::class,
         MenuItemServiceInterface::class => MenuItemService::class,
+        OrderServiceInterface::class => OrderService::class,
     ];
 
     /**

@@ -22,7 +22,9 @@ class AddressOrderResource extends JsonResource
             'phone' => $this->phone ?? null,
             'email' => $this->email ?? null,
             'address' => $this->address ?? null,
-            'state' => $this->state ?? null,
+            'city' => $this->city ?? null,
+            'ward' => $this->ward ?? null,
+            'street' => $this->street ?? null,
             'postalCode' => $this->postal_code ?? null,
             'countryCode' => $this->country_code,
             'user' => $this->whenLoaded('users', function () {

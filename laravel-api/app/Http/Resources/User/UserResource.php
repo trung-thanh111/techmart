@@ -14,7 +14,6 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        // trả về các trường cần lấy ra của user login thành công
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -26,6 +25,8 @@ class UserResource extends JsonResource
             'gender' => $this->gender,
             'phone' => $this->phone,
             'address' => $this->address,
+            'city' => $this->city,
+            'ward' => $this->ward,
             'userCatalogueId' => (int) $this->user_catalogue_id,
             'isAdmin' => $this->is_admin,
             'image' => [
@@ -37,9 +38,6 @@ class UserResource extends JsonResource
             'publish' => (int) $this->publish,
             'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
             'updatedAt' => $this->updated_at?->format('Y-m-d H:i:s'),
-            // 'deletedAt' => $this->deleted_at?->format('Y-m-d H:i:s'),
-            // 'createdAtHuman' => $this->created_at?->diffForHumans(),
-            // 'updatedAtHuman' => $this->updated_at?->diffForHumans(),
         ];
     }
 }

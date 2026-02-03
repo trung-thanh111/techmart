@@ -124,7 +124,7 @@ export const TOHOME = "/";
 export const PROFILEINDEX = "/profile";
 export const PROFILECHANGEPASSWORD = "/profile/change-password";
 export const PROFILEADDRESSORDER = "/profile/address_order";
-export const PROFILEORDERS = "/profile/orders";
+export const PROFILEORDER = "/profile/order";
 export const PROFILEADDRESSORDERCREATE = "/profile/address_order/create";
 export const PROFILEADDRESSORDERUPDATE = (id: string | number) => `/profile/address_order/${id}/update`;
 

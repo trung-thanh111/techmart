@@ -29,6 +29,7 @@ use App\Http\Controllers\Api\V1\Banner\BannerController;
 use App\Http\Controllers\Api\V1\EmailVerification\EmailVerificationController;
 use App\Http\Controllers\Api\V1\Auth\ForgotPasswordController;
 use App\Http\Controllers\Api\V1\Auth\ChangePasswordController;
+use App\Http\Controllers\Api\V1\Order\OrderController;
 use App\Http\Controllers\Api\V1\User\ProfileController;
 
 $routeExcept = ['create', 'edit'];
@@ -95,6 +96,18 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
             Route::patch('bulkUpdate', [AddressOrderController::class, 'bulkUpdate']);
         });
         Route::resource('address_orders', AddressOrderController::class)->except($routeExcept);
+
+        // Orders
+        Route::group(['prefix' => 'orders'], function () {
+            Route::delete('bulkDelete', [OrderController::class, 'bulkDelete']);
+            Route::post('{id}/attach', [OrderController::class, 'attach']);
+            Route::delete('{id}/detach', [OrderController::class, 'detach']);
+            Route::post('bulkStore', [OrderController::class, 'bulkStore']);
+            Route::put('bulkUpdate', [OrderController::class, 'bulkUpdate']);
+            Route::patch('bulkUpdate', [OrderController::class, 'bulkUpdate']);
+            Route::post('{id}/cancel', [OrderController::class, 'cancel']);
+        });
+        Route::resource('orders', OrderController::class)->except($routeExcept);
 
         // Post Comments & Likes
         Route::resource('post_comments', PostCommentController::class)->except(array_merge($routeExcept, ['index']));

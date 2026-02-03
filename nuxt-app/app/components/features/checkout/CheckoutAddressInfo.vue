@@ -14,20 +14,20 @@
           <h5 class="text-base font-semibold text-gray-800 mb-4">Phương thức vận chuyển</h5>
           <div class="grid grid-cols-1 md:grid-cols-2 md:gap-4 gap-2">
             <label class="border border-gray-200 rounded-md shadow p-4 flex items-center justify-between cursor-pointer">
-              <RadioButton v-model="modelValue.shippingMethod" inputId="standard" value="standard" class="mr-3" />
+              <RadioButton v-model="modelValue.shippingMethod" inputId="standard" :value="SHIPPING_METHODS.STANDARD" class="mr-3" />
               <div class="flex-1">
                 <span class="block text-base font-semibold text-gray-800 mb-1">Giao hàng tiêu chuẩn</span>
                 <span class="block text-xs text-gray-500 mb-1">Dự kiến giao từ 3 đến 5 ngày</span>
               </div>
-              <span class="text-lg font-medium text-gray-800 ml-4">Miễn phí</span>
+              <span class="text-lg font-medium text-gray-800 ml-4">{{ formatPrice(SHIPPING_FEES[SHIPPING_METHODS.STANDARD]) }}</span>
             </label>
             <label class="border border-gray-200 rounded-md shadow p-4 flex items-center justify-between cursor-pointer">
-              <RadioButton v-model="modelValue.shippingMethod" inputId="express" value="express" class="mr-3" />
+              <RadioButton v-model="modelValue.shippingMethod" inputId="express" :value="SHIPPING_METHODS.EXPRESS" class="mr-3" />
               <div class="flex-1">
                 <span class="block text-base font-semibold text-gray-800 mb-1">Giao hàng nhanh</span>
                 <span class="block text-xs text-gray-500 mb-1">Giao trong vòng 24 giờ</span>
               </div>
-              <span class="text-lg font-medium text-gray-800 ml-4">50.000đ</span>
+              <span class="text-lg font-medium text-gray-800 ml-4">{{ formatPrice(SHIPPING_FEES[SHIPPING_METHODS.EXPRESS]) }}</span>
             </label>
           </div>
         </div>
@@ -47,6 +47,8 @@ import { profileService } from "~/services/user/profile.service";
 import { useAppToast } from "~/composables/useAppToast";
 import { addressOrderService } from "~/services/user/address_order.service";
 import type { IAddressOrder } from "~/interfaces/user/address_order.interface";
+import { SHIPPING_METHODS, SHIPPING_FEES } from "~/utils/order.constants";
+import { formatPrice } from "~/utils/helpers";
 import RadioButton from "primevue/radiobutton";
 import AddressCard from "~/components/features/checkout/AddressCard.vue";
 import NextButton from "~/components/features/checkout/NextButton.vue";
