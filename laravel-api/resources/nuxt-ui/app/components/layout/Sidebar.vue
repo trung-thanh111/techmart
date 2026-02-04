@@ -86,14 +86,7 @@
                         <div class="collapse menu-dropdown" id="sidebarorders">
                             <ul class="nav nav-sm flex-column">
                                 <li class="nav-item">
-                                    <NuxtLink to="#sidebarorder" class="nav-link menu-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarorder" data-key="t-order">{{ $t("admin.sidebar.orders") }}</NuxtLink>
-                                    <div class="collapse menu-dropdown" id="sidebarorder">
-                                        <ul class="nav nav-sm flex-column">
-                                            <li class="nav-item">
-                                                <NuxtLink :to="ORDERINDEX" class="nav-link" data-key="t-order-list">{{ $t("admin.sidebar.orderList") }}</NuxtLink>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                    <NuxtLink :to="ORDERINDEX" class="nav-link" data-key="t-order-list">{{ $t("admin.sidebar.orderList") }}</NuxtLink>
                                 </li>
                             </ul>
                         </div>

@@ -97,7 +97,7 @@ definePageMeta({
                     </thead>
                     <tbody>
                         <tr v-if="isLoading">
-                            <td colspan="8" class="text-center text-muted">Đang tải...</td>
+                            <td colspan="9" class="text-center text-muted">Đang tải...</td>
                         </tr>
                         <template v-else>
                             <tr v-for="item in data?.data?.data ?? []" :key="item.id" class="cursor-pointer" :class="{ 'table-active': selectedIds.includes(item.id!) }">
