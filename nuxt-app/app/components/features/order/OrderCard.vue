@@ -38,7 +38,7 @@
                 Đánh giá
               </button>
               <button
-                v-if="order.status === 'shipped'"
+                v-if="order.status === 'pending'"
                 class="w-full flex items-center gap-2 px-3 py-2 text-xs text-gray-700 hover:bg-gray-100"
                 @click="
                   navigateTo(`${PROFILEORDER}/${order.code}`);
@@ -58,6 +58,7 @@
                 Hủy đơn hàng
               </button>
               <button
+                v-if="order.status === 'delivered'"
                 class="w-full flex items-center gap-2 px-3 py-2 text-xs text-gray-700 hover:bg-gray-100"
                 @click="
                   emit('reorder', order);

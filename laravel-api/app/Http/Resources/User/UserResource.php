@@ -24,9 +24,9 @@ class UserResource extends JsonResource
             'birthday' => $this->birthday ? \Carbon\Carbon::parse($this->birthday)->format('Y-m-d') : null,
             'gender' => $this->gender,
             'phone' => $this->phone,
-            'address' => $this->address,
-            'city' => $this->city,
-            'ward' => $this->ward,
+            'street' => $this->street || '',
+            'city' => $this->city || '',
+            'ward' => $this->ward || '',
             'userCatalogueId' => (int) $this->user_catalogue_id,
             'isAdmin' => $this->is_admin,
             'image' => [

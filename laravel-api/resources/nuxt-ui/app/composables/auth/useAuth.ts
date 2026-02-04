@@ -8,13 +8,13 @@ export const useAuth = () => {
     const getMe = async () => {
         try {
             const res = await authService.me();
-            auth.setAuth(res.data.user, {
-                accessToken: res.data.accessToken,
-                refreshToken: null,
-                csrfToken: res.data.csrfToken,
-                expireAt: res.data.expireAt,
-            });
-            return res.data.user;
+            // /me endpoint only returns user data, not tokens
+            // Update user info in store without changing tokens
+            if (res.data) {
+                auth.user = res.data;
+                auth.isAdmin = res.data.isAdmin ?? false;
+            }
+            return res.data;
         } catch (e) {
             // nếu 401 sẽ bị interceptor trả lỗi
             console.error("getMe failed:", e);

@@ -57,7 +57,7 @@ const buttonConfig = computed(() => {
         },
     };
 
-    return configs[props.variant];
+    return configs[props.variant] || configs.custom;
 });
 
 const finalLabel = computed(() => {

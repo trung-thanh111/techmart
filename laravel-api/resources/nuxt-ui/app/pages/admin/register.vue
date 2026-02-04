@@ -142,6 +142,7 @@ const { handleRegister, isLoading, verifyNotice } = useRegister();
 
 definePageMeta({
     layout: "auth",
+    middleware: ["auth-redirect"],
 });
 </script>
 

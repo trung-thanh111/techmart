@@ -110,6 +110,7 @@ const { handleLogin, isLoading } = useLogin();
 
 definePageMeta({
     layout: "auth",
+    middleware: ["auth-redirect"],
 });
 </script>
 

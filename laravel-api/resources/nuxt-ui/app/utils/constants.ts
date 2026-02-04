@@ -1,137 +1,152 @@
-// admin route
-export const TODASHBOARD = "/dashboard";
+// Admin routes - all prefixed with /admin
+export const ADMIN_PREFIX = "/admin";
 
-export const USERCATALOGUEINDEX = "/user/catalogue";
-export const USERCATALOGUECREATE = "/user/catalogue/create";
-export const USERCATALOGUEUPDATE = "/user/catalogue/update";
+// Auth routes
+export const TOLOGIN = "/admin/login";
+export const TOREGISTER = "/admin/register";
+export const TOFORGOT = "/admin/forgot-password";
+export const TOFORGOTOTP = "/admin/forgot-password/otp";
+export const TOFORGOTRESET = "/admin/forgot-password/reset";
 
-export const ADDRESSORDERINDEX = "/user/address_order";
-export const ADDRESSORDERCREATE = "/user/address_order/create";
-export const ADDRESSORDERUPDATE = "/user/address_order/update";
+// Dashboard
+export const TODASHBOARD = "/admin/dashboard";
 
-export const USERINDEX = "/user/user";
-export const USERCREATE = "/user/user/create";
-export const USERUPDATE = "/user/user/update";
+// User module
+export const USERCATALOGUEINDEX = "/admin/user/catalogue";
+export const USERCATALOGUECREATE = "/admin/user/catalogue/create";
+export const USERCATALOGUEUPDATE = "/admin/user/catalogue/update";
 
-export const PERMISSIONINDEX = "/user/permission";
-export const PERMISSIONCREATE = "/user/permission/create";
-export const PERMISSIONUPDATE = "/user/permission/update";
+export const ADDRESSORDERINDEX = "/admin/user/address_order";
+export const ADDRESSORDERCREATE = "/admin/user/address_order/create";
+export const ADDRESSORDERUPDATE = "/admin/user/address_order/update";
 
-export const POSTCATALOGUEINDEX = "/post/catalogue";
-export const POSTCATALOGUECREATE = "/post/catalogue/create";
-export const POSTCATALOGUEUPDATE = "/post/catalogue/update";
+export const USERINDEX = "/admin/user/user";
+export const USERCREATE = "/admin/user/user/create";
+export const USERUPDATE = "/admin/user/user/update";
 
-export const POSTTAGINDEX = "/post/tag";
-export const POSTTAGCREATE = "/post/tag/create";
-export const POSTTAGUPDATE = "/post/tag/update";
+export const PERMISSIONINDEX = "/admin/user/permission";
+export const PERMISSIONCREATE = "/admin/user/permission/create";
+export const PERMISSIONUPDATE = "/admin/user/permission/update";
 
-export const POSTINDEX = "/post/post";
-export const POSTCREATE = "/post/post/create";
-export const POSTUPDATE = "/post/post/update";
+// Post module
+export const POSTCATALOGUEINDEX = "/admin/post/catalogue";
+export const POSTCATALOGUECREATE = "/admin/post/catalogue/create";
+export const POSTCATALOGUEUPDATE = "/admin/post/catalogue/update";
 
-export const FAQINDEX = "/faq/faq";
-export const FAQCREATE = "/faq/faq/create";
-export const FAQUPDATE = "/faq/faq/update";
+export const POSTTAGINDEX = "/admin/post/tag";
+export const POSTTAGCREATE = "/admin/post/tag/create";
+export const POSTTAGUPDATE = "/admin/post/tag/update";
 
-export const FAQCATALOGUEINDEX = "/faq/catalogue";
-export const FAQCATALOGUECREATE = "/faq/catalogue/create";
-export const FAQCATALOGUEUPDATE = "/faq/catalogue/update";
+export const POSTINDEX = "/admin/post/post";
+export const POSTCREATE = "/admin/post/post/create";
+export const POSTUPDATE = "/admin/post/post/update";
 
-export const ATTRIBUTEINDEX = "/attribute/attribute";
-export const ATTRIBUTECREATE = "/attribute/attribute/create";
-export const ATTRIBUTEUPDATE = "/attribute/attribute/update";
+// FAQ module
+export const FAQINDEX = "/admin/faq/faq";
+export const FAQCREATE = "/admin/faq/faq/create";
+export const FAQUPDATE = "/admin/faq/faq/update";
 
-export const ATTRIBUTECATALOGUEINDEX = "/attribute/catalogue";
-export const ATTRIBUTECATALOGUECREATE = "/attribute/catalogue/create";
-export const ATTRIBUTECATALOGUEUPDATE = "/attribute/catalogue/update";
+export const FAQCATALOGUEINDEX = "/admin/faq/catalogue";
+export const FAQCATALOGUECREATE = "/admin/faq/catalogue/create";
+export const FAQCATALOGUEUPDATE = "/admin/faq/catalogue/update";
 
-export const PRODUCTINDEX = "/product/product";
-export const PRODUCTCREATE = "/product/product/create";
-export const PRODUCTUPDATE = "/product/product/update";
+// Attribute module
+export const ATTRIBUTEINDEX = "/admin/attribute/attribute";
+export const ATTRIBUTECREATE = "/admin/attribute/attribute/create";
+export const ATTRIBUTEUPDATE = "/admin/attribute/attribute/update";
 
-export const INVENTORYINDEX = "/inventory/inventory";
-export const INVENTORYCREATE = "/inventory/inventory/create";
-export const INVENTORYUPDATE = "/inventory/inventory/update";
+export const ATTRIBUTECATALOGUEINDEX = "/admin/attribute/catalogue";
+export const ATTRIBUTECATALOGUECREATE = "/admin/attribute/catalogue/create";
+export const ATTRIBUTECATALOGUEUPDATE = "/admin/attribute/catalogue/update";
 
-export const PRODUCTCATALOGUEINDEX = "/product/catalogue";
-export const PRODUCTCATALOGUECREATE = "/product/catalogue/create";
-export const PRODUCTCATALOGUEUPDATE = "/product/catalogue/update";
+// Product module
+export const PRODUCTINDEX = "/admin/product/product";
+export const PRODUCTCREATE = "/admin/product/product/create";
+export const PRODUCTUPDATE = "/admin/product/product/update";
 
-export const PROMOTIONCATALOGUEINDEX = "/promotion/catalogue";
-export const PROMOTIONCATALOGUECREATE = "/promotion/catalogue/create";
-export const PROMOTIONCATALOGUEUPDATE = "/promotion/catalogue/update";
+export const PRODUCTCATALOGUEINDEX = "/admin/product/catalogue";
+export const PRODUCTCATALOGUECREATE = "/admin/product/catalogue/create";
+export const PRODUCTCATALOGUEUPDATE = "/admin/product/catalogue/update";
 
-export const PROMOTIONINDEX = "/promotion/promotion";
-export const PROMOTIONCREATE = "/promotion/promotion/create";
-export const PROMOTIONUPDATE = "/promotion/promotion/update";
+export const PRODUCTTAGINDEX = "/admin/product/tag";
+export const PRODUCTTAGCREATE = "/admin/product/tag/create";
+export const PRODUCTTAGUPDATE = "/admin/product/tag/update";
 
-export const PRODUCTTAGINDEX = "/product/tag";
-export const PRODUCTTAGCREATE = "/product/tag/create";
-export const PRODUCTTAGUPDATE = "/product/tag/update";
+// Order module
+export const ORDERINDEX = "/admin/order/order";
 
-export const BRANDINDEX = "/brand/brand";
-export const BRANDCREATE = "/brand/brand/create";
-export const BRANDUPDATE = "/brand/brand/update";
+// Inventory module
+export const INVENTORYINDEX = "/admin/inventory/inventory";
+export const INVENTORYCREATE = "/admin/inventory/inventory/create";
+export const INVENTORYUPDATE = "/admin/inventory/inventory/update";
 
-export const SYSTEMINDEX = "/system/system";
-export const SYSTEMCREATE = "/system/system/create";
-export const POPUPINDEX = "/system/popup";
-export const POPUPCREATE = "/system/popup/create";
-export const SYSTEMUPDATE = "/system/system/update";
+// Promotion module
+export const PROMOTIONCATALOGUEINDEX = "/admin/promotion/catalogue";
+export const PROMOTIONCATALOGUECREATE = "/admin/promotion/catalogue/create";
+export const PROMOTIONCATALOGUEUPDATE = "/admin/promotion/catalogue/update";
 
-export const AGENCYINDEX = "/agency/agency";
-export const AGENCYCREATE = "/agency/agency/create";
-export const AGENCYUPDATE = "/agency/agency/update";
+export const PROMOTIONINDEX = "/admin/promotion/promotion";
+export const PROMOTIONCREATE = "/admin/promotion/promotion/create";
+export const PROMOTIONUPDATE = "/admin/promotion/promotion/update";
 
-export const MENUINDEX = "/menu/menu";
-export const MENUCREATE = "/menu/menu/create";
-export const MENUUPDATE = "/menu/menu/update";
+// Brand module
+export const BRANDINDEX = "/admin/brand/brand";
+export const BRANDCREATE = "/admin/brand/brand/create";
+export const BRANDUPDATE = "/admin/brand/brand/update";
 
-export const BANNERINDEX = "/banner/banner";
-export const BANNERCREATE = "/banner/banner/create";
-export const BANNERUPDATE = "/banner/banner/update";
+// System module
+export const SYSTEMINDEX = "/admin/system/system";
+export const SYSTEMCREATE = "/admin/system/system/create";
+export const SYSTEMUPDATE = "/admin/system/system/update";
+export const POPUPINDEX = "/admin/system/popup";
+export const POPUPCREATE = "/admin/system/popup/create";
 
-export const BANNERPAGEINDEX = "/banner/page";
-export const BANNERPAGECREATE = "/banner/page/create";
-export const BANNERPAGEUPDATE = "/banner/page/update";
+// Agency module
+export const AGENCYINDEX = "/admin/agency/agency";
+export const AGENCYCREATE = "/admin/agency/agency/create";
+export const AGENCYUPDATE = "/admin/agency/agency/update";
 
-export const BANNERPOSITIONINDEX = "/banner/position";
-export const BANNERPOSITIONCREATE = "/banner/position/create";
-export const BANNERPOSITIONUPDATE = "/banner/position/update";
+export const AGENCYWORKINGHOURINDEX = "/admin/agency/working_hour";
+export const AGENCYWORKINGHOURCREATE = "/admin/agency/working_hour/create";
+export const AGENCYWORKINGHOURUPDATE = "/admin/agency/working_hour/update";
 
-export const AGENCYWORKINGHOURINDEX = "/agency/working_hour";
-export const AGENCYWORKINGHOURCREATE = "/agency/working_hour/create";
-export const AGENCYWORKINGHOURUPDATE = "/agency/working_hour/update";
+// Menu module
+export const MENUINDEX = "/admin/menu/menu";
+export const MENUCREATE = "/admin/menu/menu/create";
+export const MENUUPDATE = "/admin/menu/menu/update";
 
+// Banner module
+export const BANNERINDEX = "/admin/banner/banner";
+export const BANNERCREATE = "/admin/banner/banner/create";
+export const BANNERUPDATE = "/admin/banner/banner/update";
+
+export const BANNERPAGEINDEX = "/admin/banner/page";
+export const BANNERPAGECREATE = "/admin/banner/page/create";
+export const BANNERPAGEUPDATE = "/admin/banner/page/update";
+
+export const BANNERPOSITIONINDEX = "/admin/banner/position";
+export const BANNERPOSITIONCREATE = "/admin/banner/position/create";
+export const BANNERPOSITIONUPDATE = "/admin/banner/position/update";
+
+// File & Image constants
 export const MAX_FILE_SIZE = 5 * 1024 * 1024;
 export const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
 
-// auth
-export const TOLOGIN = "/auth/login";
-export const TOREGISTER = "/auth/register";
-// forgot password (client)
-export const TOFORGOT = "/forgot-password";
-export const TOFORGOTOTP = "/forgot-password/otp";
-export const TOFORGOTRESET = "/forgot-password/reset";
-
-// FE
+// Default images
 export const IMAGEDEFAULT = "/shared/images/defaults/record.jpg";
 export const DEFAULTAVATAR = "/shared/images/defaults/avatar.jpg";
 export const EMPTYBOX = "/client/images/box-emtpy.png";
 
-export const TOHOME = "/";
-// Profile routes
-export const PROFILEINDEX = "/profile";
-export const PROFILECHANGEPASSWORD = "/profile/change-password";
-export const PROFILEADDRESSORDER = "/profile/address_order";
-export const PROFILEORDER = "/profile/order";
-export const PROFILEADDRESSORDERCREATE = "/profile/address_order/create";
-export const PROFILEADDRESSORDERUPDATE = (id: string | number) => `/profile/address_order/${id}/update`;
+// Home
+export const TOHOME = "/admin/dashboard";
 
-// Post route constants
-// export const TOFORBIDDEN = "/forbidden";
-// export const TO404 = "/404";
-// export const TO500 = "/500";
+// Profile routes (if needed in admin)
+export const PROFILEINDEX = "/admin/profile";
+export const PROFILECHANGEPASSWORD = "/admin/profile/change-password";
+export const PROFILEADDRESSORDER = "/admin/profile/address_order";
+export const PROFILEORDER = "/admin/profile/order";
+export const PROFILEADDRESSORDERCREATE = "/admin/profile/address_order/create";
+export const PROFILEADDRESSORDERUPDATE = (id: string | number) => `/admin/profile/address_order/${id}/update`;
 
 // Promotion Constants
 export const PROMOTION_TYPES = [

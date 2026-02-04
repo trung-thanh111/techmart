@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import type { BasePayloadFilter } from "~/interfaces/base.interface";
+import { useI18n } from "vue-i18n";
 
 interface Props {
     initialFilters?: Partial<BasePayloadFilter>;
+    publishFilter?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -11,6 +13,7 @@ const props = withDefaults(defineProps<Props>(), {
         perpage: 20,
         publish: null,
     }),
+    publishFilter: true,
 });
 
 const emit = defineEmits<{
@@ -63,7 +66,7 @@ const handleSearch = () => {
                 <Select v-model="perpage" :options="perpageOptions" option-label="name" option-value="value" filter :placeholder="$t('admin.components.filterBar.selectRecords')" class="w-full text-sm" />
             </div>
 
-            <div class="min-w-[200px]">
+            <div v-if="publishFilter" class="min-w-[200px]">
                 <Select v-model="publish" :options="publishOptions" option-label="name" option-value="value" showClear :placeholder="$t('admin.components.filterBar.selectStatus')" class="w-full text-sm" />
             </div>
 

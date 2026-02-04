@@ -1,7 +1,7 @@
 import type { IApiOk, IApiMessage } from "~/interfaces/base.interface";
 import type { TLoginRequest } from "~/composables/auth/useLogin";
 import type { TRegisterRequest } from "~/composables/auth/useRegister";
-import type { IAuthSuccessResponse } from "~/interfaces/user/user.interface";
+import type { IAuthSuccessResponse, IUser } from "~/interfaces/user/user.interface";
 import { useApi } from "~/composables/useApi";
 import { useAuthStore } from "~/stores/auth/auth";
 
@@ -11,9 +11,9 @@ const FORGOT_ENDPOINT = "/api/v1/password/forgot";
 const CHANGE_PASSWORD_ENDPOINT = "/api/v1/password/change";
 
 export const authService = {
-    me: async (): Promise<IApiOk<IAuthSuccessResponse>> => {
+    me: async (): Promise<IApiOk<IUser>> => {
         const { privateFetch } = useApi();
-        return await privateFetch<IApiOk<IAuthSuccessResponse>>(`${ENDPOINT}/me`);
+        return await privateFetch<IApiOk<IUser>>(`${ENDPOINT}/me`);
     },
 
     login: async (payload: TLoginRequest): Promise<IApiOk<IAuthSuccessResponse>> => {

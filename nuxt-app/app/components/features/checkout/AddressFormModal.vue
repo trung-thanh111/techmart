@@ -183,8 +183,8 @@ const handleToggleProfileInfo = async () => {
       const user = res.data;
       let city = "";
       let ward = "";
-      let street = user.address || "";
-      let address = user.address || "";
+      let street = user.street || "";
+      // let address = user.address || "";
 
       if (user.addressOrder && user.addressOrder.length > 0) {
         const defaultAddress = user.addressOrder.find((a: any) => a.isDefault) || user.addressOrder[0];
@@ -192,7 +192,7 @@ const handleToggleProfileInfo = async () => {
           city = defaultAddress.city || defaultAddress.shipping_city || "";
           ward = defaultAddress.ward || defaultAddress.shipping_ward || "";
           street = defaultAddress.street || defaultAddress.shipping_street || defaultAddress.address || "";
-          address = street;
+          // address = street;
         }
       }
 
@@ -204,7 +204,7 @@ const handleToggleProfileInfo = async () => {
         city: city,
         ward: ward,
         street: street,
-        address: address,
+        address: street,
       };
       if (!form.value.title) form.value.title = "Nhà riêng";
       isUsingProfile.value = true;
