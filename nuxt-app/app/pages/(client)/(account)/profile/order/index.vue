@@ -8,7 +8,7 @@
           <div class="container pb-1 tabs">
             <div class="relative max-w-full overflow-x-auto scrollbar-hide hiddenScroll tabs-order-scroll">
               <div class="flex w-full items-center space-x-[2px]">
-                <div v-for="tab in tabs" :key="tab.key" :class="['flex-1 text-sm flex-shrink-0 p-2 md:p-3 font-semibold text-center whitespace-normal duration-75 cursor-pointer tabs_item', activeTab === tab.key ? 'bg-gradient-to-r from-sky-500 to-sky-600 text-white' : 'text-gray-700 bg-white hover:bg-gradient-to-r hover:from-sky-500 hover:to-sky-600 hover:text-white']" @click="activeTab = tab.key">
+                <div v-for="tab in tabs" :key="tab.key" :class="['flex-1 text-sm flex-shrink-0 p-2 md:p-3 text-center whitespace-normal duration-75 cursor-pointer tabs_item', activeTab === tab.key ? 'bg-gradient-to-r from-sky-500 to-sky-600 text-white' : 'text-gray-700 bg-white hover:bg-gradient-to-r hover:from-sky-500 hover:to-sky-600 hover:text-white']" @click="activeTab = tab.key">
                   {{ tab.label }}
                 </div>
               </div>

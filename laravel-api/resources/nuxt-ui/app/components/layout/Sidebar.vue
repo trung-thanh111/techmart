@@ -79,6 +79,20 @@
                     </li>
 
                     <li class="nav-item">
+                        <NuxtLink class="nav-link menu-link" to="#sidebarorders" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarorders">
+                            <i class="ri-image-2-line"></i>
+                            <span data-key="t-order-pages">{{ $t("admin.sidebar.orders") }}</span>
+                        </NuxtLink>
+                        <div class="collapse menu-dropdown" id="sidebarorders">
+                            <ul class="nav nav-sm flex-column">
+                                <li class="nav-item">
+                                    <NuxtLink :to="ORDERINDEX" class="nav-link" data-key="t-order-list">{{ $t("admin.sidebar.orderList") }}</NuxtLink>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
                         <NuxtLink class="nav-link menu-link" to="#sidebarPromotions" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarPromotions">
                             <i class="ri-price-tag-3-line"></i>
                             <span data-key="t-promotion-pages">{{ $t("admin.sidebar.promotions") }}</span>

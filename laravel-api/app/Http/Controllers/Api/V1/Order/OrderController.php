@@ -94,6 +94,21 @@ class OrderController extends BaseController
         return ApiResource::ok($order, Lang::get('message.update_data_successfully'));
     }
 
+    /**
+     * Update refund status
+     * POST /orders/{id}/refunds/{refundId}/status
+     */
+    public function updateRefundStatus(Request $request, int $id, int $refundId): JsonResponse
+    {
+        $request->validate([
+            'status' => 'required|string|in:pending,approved,processing,completed,rejected',
+        ]);
+
+        $order = $this->service->updateRefundStatus($id, $refundId, $request->input('status'));
+
+        return ApiResource::ok($order, Lang::get('message.update_data_successfully'));
+    }
+
     public function attach(RelationRequest $request, int $id = 0): JsonResponse
     {
         return $this->baseRelation($request, $id, 'attach');

@@ -311,6 +311,8 @@
             "productCatalogue": "Nhóm sản phẩm",
             "inventory": "Kho hàng",
             "promotions": "Khuyến mãi",
+            "orders": "Đơn hàng",
+            "orderList": "Danh sách",
             "promotionCatalogue": "Nhóm khuyến mãi",
             "productList": "Danh sách",
             "productCreate": "Thêm mới",

@@ -26,4 +26,9 @@ interface OrderServiceInterface
      * Update trạng thái thanh toán
      */
     public function updatePaymentStatus(int $orderId, string $paymentStatus): Order;
+
+    /**
+     * Update trạng thái hoàn tiền
+     */
+    public function updateRefundStatus(int $orderId, int $refundId, string $status): Order;
 }

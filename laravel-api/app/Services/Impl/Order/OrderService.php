@@ -487,6 +487,34 @@ class OrderService extends BaseService implements OrderServiceInterface
     }
 
     /**
+     * Update refund status
+     */
+    public function updateRefundStatus(int $orderId, int $refundId, string $status): Order
+    {
+        return DB::transaction(function () use ($orderId, $refundId, $status) {
+            $order = Order::lockForUpdate()->findOrFail($orderId);
+
+            // Find refund item within the order
+            $refund = $order->order_refunds()->where('id', $refundId)->firstOrFail();
+
+            $refund->status = $status;
+
+            // If completed, maybe trigger some side effects? 
+            // For now just update status
+            if ($status === 'approved') {
+                $refund->approved_at = now();
+                $refund->approved_by = auth(Common::API)->id();
+            }
+
+            $refund->save();
+
+            $this->clearCacheByTags();
+
+            return $order->load($this->with);
+        });
+    }
+
+    /**
      * Override save để dùng createOrder cho store
      */
     public function save(Request $request, ?int $id = null)

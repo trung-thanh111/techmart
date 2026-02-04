@@ -1442,6 +1442,6 @@
 <script setup>
 definePageMeta({
     layout: "admin",
-    middleware: ["auth-required"],
+    middleware: ["auth-admin"],
 });
 </script>

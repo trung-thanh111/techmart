@@ -206,7 +206,7 @@ abstract class BaseService implements BaseServiceInterface
         $lockKey = "lock:{$cacheKey}";
         // nếu mà cache có data thì lấy trong cache ra còn không thì mới lấy từ database
         $this->model = Cache::lock($lockKey, 2)->block(2, function () use ($cacheKey, $id) {
-            return Cache::remember($cacheKey, $this->cacheTTL, function () use ($id) {
+            return Cache::tags($this->cacheTags)->remember($cacheKey, $this->cacheTTL, function () use ($id) {
                 // nếu mà k có data thì lấy trong model ra (db) với quan hệ
                 return $this->repository->findById($id, $this->with);
             });
