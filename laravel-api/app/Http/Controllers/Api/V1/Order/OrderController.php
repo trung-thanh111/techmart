@@ -94,10 +94,6 @@ class OrderController extends BaseController
         return ApiResource::ok($order, Lang::get('message.update_data_successfully'));
     }
 
-    /**
-     * Update refund status
-     * POST /orders/{id}/refunds/{refundId}/status
-     */
     public function updateRefundStatus(Request $request, int $id, int $refundId): JsonResponse
     {
         $request->validate([
@@ -105,6 +101,17 @@ class OrderController extends BaseController
         ]);
 
         $order = $this->service->updateRefundStatus($id, $refundId, $request->input('status'));
+
+        return ApiResource::ok($order, Lang::get('message.update_data_successfully'));
+    }
+
+    public function updateItemStatus(Request $request, int $id, int $itemId): JsonResponse
+    {
+        $request->validate([
+            'status' => 'required|string|in:pending,confirmed,processing',
+        ]);
+
+        $order = $this->service->updateItemStatus($id, $itemId, $request->input('status'));
 
         return ApiResource::ok($order, Lang::get('message.update_data_successfully'));
     }

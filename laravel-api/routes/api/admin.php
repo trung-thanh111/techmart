@@ -211,6 +211,7 @@ Route::group(['prefix' => 'v1/admin', 'middleware' => ['jwt:admin', 'convert', '
         Route::post('{id}/status', [OrderController::class, 'updateStatus']);
         Route::post('{id}/cancel', [OrderController::class, 'cancel']);
         Route::post('{id}/payment-status', [OrderController::class, 'updatePaymentStatus']);
+        Route::post('{id}/items/{itemId}/status', [OrderController::class, 'updateItemStatus']);
         Route::post('{id}/refunds/{refundId}/status', [OrderController::class, 'updateRefundStatus']);
     });
     Route::resource('orders', OrderController::class)->except($routeExcept);

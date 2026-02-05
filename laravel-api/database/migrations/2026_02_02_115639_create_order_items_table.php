@@ -40,6 +40,7 @@ return new class extends Migration
             // Trạng thái item (có thể khác trạng thái đơn hàng chung cho phép mỗi item có một trang thái khác nhau)
             $table->enum('status', [
                 'pending',
+                'confirmed',
                 'processing',
                 'shipped',
                 'delivered',
