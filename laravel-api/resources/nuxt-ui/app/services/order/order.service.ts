@@ -36,6 +36,14 @@ export const orderService = {
         });
     },
 
+    updateItemStatus: async (orderId: number, itemId: number, status: string): Promise<IApiOk<IOrder>> => {
+        const { privateFetch } = useApi();
+        return await privateFetch<IApiOk<IOrder>>(`${ENDPOINT}/orders/${orderId}/items/${itemId}/status`, {
+            method: "POST",
+            body: { status },
+        });
+    },
+
     updateRefundStatus: async (orderId: number, refundId: number, status: string): Promise<IApiMessage> => {
         const { privateFetch } = useApi();
         return await privateFetch<IApiMessage>(`${ENDPOINT}/orders/${orderId}/refunds/${refundId}/status`, {

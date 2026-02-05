@@ -18,7 +18,7 @@ import { ORDER_STATUS_LABELS } from "~/utils/order/order.constants";
 const route = useRoute();
 const orderId = computed(() => Number(route.params.id));
 
-const { order, isLoading, fetchOrder, handleUpdate, handleUpdateStatus, adminAllowedStatus } = useOrder();
+const { order, isLoading, fetchOrder, handleUpdate, handleUpdateStatus, handleUpdateItemStatus, adminAllowedStatus } = useOrder();
 
 // Form state
 const showStatusModal = ref(false);
@@ -110,7 +110,7 @@ definePageMeta({
             </div>
 
             <!-- Products Table -->
-            <OrderItemsTable :items="order?.items" class="mb-3" />
+            <OrderItemsTable :items="order?.items" :loading="isLoading" @update-status="(itemId, status) => handleUpdateItemStatus(orderId, itemId, status)" class="mb-3" />
 
             <!-- Timeline -->
             <OrderTimeline :histories="order?.statusHistories" />

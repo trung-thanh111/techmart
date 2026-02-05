@@ -57,7 +57,6 @@ definePageMeta({
                     <Button variant="delete" type="button" :label="`Xóa (${selectedIds.length})`" :loading="isLoading" :disabled="!hasSelectedItems" data-bs-toggle="modal" data-bs-target="#deleteMultipleRecord" class="rounded text-xs" size="small" />
                     <Button variant="cancel" :loading="isLoading" :disabled="!hasSelectedItems" @click="updateSelectedIds([])" class="rounded text-xs" size="small" />
                 </div>
-                <!-- No create button for orders -->
             </div>
             <FilterBar @search="search" :publish-filter="false">
                 <div class="min-w-[180px]">

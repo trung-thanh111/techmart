@@ -2,14 +2,28 @@
 import type { IOrderItem } from "~/interfaces/order/order.interface";
 import { formatPrice } from "~/utils/order/order.helpers";
 
-defineProps<{
+const props = defineProps<{
     items?: IOrderItem[];
+    loading?: boolean;
+}>();
+
+const emit = defineEmits<{
+    (e: "update-status", itemId: number, status: string): void;
 }>();
 
 const config = useRuntimeConfig();
 
 const selectedItem = ref<IOrderItem | null>(null);
 const showDetailModal = ref(false);
+const selectedStatus = ref<string>("");
+const isUpdating = ref(false);
+
+const itemStatusOptions = [
+    { label: "Chờ xử lý", value: "pending" },
+    { label: "Đã xác nhận", value: "confirmed" },
+    { label: "Đang xử lý", value: "processing" },
+    // { label: "Đã vận chuyển", value: "shipped" }, // Restricted by backend
+];
 
 const getImageUrl = (item: IOrderItem) => {
     if (item.productImage?.url) return item.productImage.url;
@@ -44,8 +58,21 @@ const formatAttributes = (attrs?: Record<string, any>) => {
 
 const openDetail = (item: IOrderItem) => {
     selectedItem.value = item;
+    selectedStatus.value = item.status || "pending";
     showDetailModal.value = true;
 };
+
+const handleUpdateStatus = () => {
+    if (!selectedItem.value?.id || !selectedStatus.value) return;
+    emit("update-status", selectedItem.value.id, selectedStatus.value);
+};
+
+watch(
+    () => props.loading,
+    (newVal) => {
+        isUpdating.value = newVal || false;
+    },
+);
 </script>
 
 <template>
@@ -169,6 +196,16 @@ const openDetail = (item: IOrderItem) => {
                         <div class="d-flex justify-content-between border-top border-dashed pt-2 mt-2">
                             <span class="fw-bold">Tổng tiền:</span>
                             <span class="fw-bold text-danger fs-16">{{ formatPrice(selectedItem.total || 0) }}</span>
+                        </div>
+                    </div>
+
+                    <div class="col-12 mt-3">
+                        <div class="bg-light rounded p-3">
+                            <label class="form-label fw-medium mb-2">Trạng thái sản phẩm</label>
+                            <div class="d-flex gap-2">
+                                <Select v-model="selectedStatus" :options="itemStatusOptions" optionLabel="label" optionValue="value" class="w-100" />
+                                <Button label="Cập nhật" size="small" :loading="isUpdating" @click="handleUpdateStatus" />
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -28,6 +28,18 @@ class OrderService extends BaseService implements OrderServiceInterface
     protected $fieldSearchs = ['code', 'customer_name', 'customer_email', 'customer_phone'];
 
     protected $with = ['order_items', 'order_status_histories', 'order_shipments', 'order_payments', 'order_refunds', 'user'];
+
+    protected const STATUS_PRIORITY = [
+        'pending' => 0,
+        'confirmed' => 1,
+        'processing' => 2,
+        'shipped' => 3,
+        'delivered' => 4,
+        'completed' => 5, // if exists
+        'cancelled' => -1, // Special case
+        'refunded' => -1,  // Special case
+        'failed' => -1,    // Special case
+    ];
     protected $relationFilter = [];
 
     protected $cacheKeyPrefix = 'orders';
@@ -366,8 +378,87 @@ class OrderService extends BaseService implements OrderServiceInterface
             // Clear cache
             $this->clearCacheByTags();
 
+            // Sync items to order status (Order -> Items)
+            $this->syncItemsToOrder($order, $newStatus);
+
             return $order->load($this->with);
         });
+    }
+
+    public function updateItemStatus(int $orderId, int $itemId, string $newStatus): Order
+    {
+        return DB::transaction(function () use ($orderId, $itemId, $newStatus) {
+            $order = Order::findOrFail($orderId);
+            $item = OrderItem::where('order_id', $orderId)->where('id', $itemId)->firstOrFail();
+
+            if ($item->status === $newStatus) {
+                return $order;
+            }
+
+            $allowedStatuses = ['pending', 'confirmed', 'processing'];
+            if (!in_array($newStatus, $allowedStatuses)) {
+                throw new \Exception("Chỉ được phép cập nhật trạng thái item sang: pending, confirmed, processing.");
+            }
+
+            $item->status = $newStatus;
+            $item->save();
+
+            $this->syncOrderToItems($order);
+
+            $this->clearCacheByTags();
+
+            return $order->load($this->with);
+        });
+    }
+
+    protected function syncItemsToOrder(Order $order, string $newOrderStatus): void
+    {
+        $propagatingStatuses = ['confirmed', 'processing', 'shipped', 'delivered', 'cancelled', 'refunded'];
+
+        if (!in_array($newOrderStatus, $propagatingStatuses)) {
+            return;
+        }
+
+        $orderPriority = self::STATUS_PRIORITY[$newOrderStatus] ?? -99;
+
+        foreach ($order->order_items as $item) {
+            $itemPriority = self::STATUS_PRIORITY[$item->status] ?? -99;
+            if ($newOrderStatus === 'cancelled' || $newOrderStatus === 'refunded') {
+                $item->status = $newOrderStatus;
+                $item->save();
+                continue;
+            }
+            if ($itemPriority < $orderPriority && $itemPriority >= 0) {
+                $item->status = $newOrderStatus;
+                $item->save();
+            }
+        }
+    }
+
+    protected function syncOrderToItems(Order $order): void
+    {
+        $items = $order->order_items()->get();
+        if ($items->isEmpty()) return;
+
+        $currentOrderStatus = $order->status;
+        $currentOrderPriority = self::STATUS_PRIORITY[$currentOrderStatus] ?? -99;
+
+        $minPriority = 999;
+        $minStatus = null;
+
+        foreach ($items as $item) {
+            $p = self::STATUS_PRIORITY[$item->status] ?? 0;
+            if ($p < 0) continue;
+
+            if ($p < $minPriority) {
+                $minPriority = $p;
+                $minStatus = $item->status;
+            }
+        }
+
+        if ($minStatus && $minPriority > $currentOrderPriority) {
+            $this->updateStatus($order->id, $minStatus, "Tự động cập nhật theo trạng thái sản phẩm");
+        }
     }
 
     /**

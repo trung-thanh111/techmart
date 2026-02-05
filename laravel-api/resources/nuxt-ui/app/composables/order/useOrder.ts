@@ -107,6 +107,22 @@ export const useOrder = (initialFilters?: OrderPayloadFilter) => {
         }
     };
 
+    // Update item status
+    const handleUpdateItemStatus = async (orderId: number, itemId: number, status: string) => {
+        isLoading.value = true;
+        try {
+            await orderService.updateItemStatus(orderId, itemId, status);
+            toast.success(t("admin.messages.updateSuccess"));
+            await fetchOrder(orderId);
+        } catch (err: any) {
+            toast.error(err?.response?.data?.message || t("admin.messages.updateFailed"));
+            console.error("Lỗi cập nhật trạng thái sản phẩm:", err);
+            throw err;
+        } finally {
+            isLoading.value = false;
+        }
+    };
+
     // Update refund status
     const handleUpdateRefundStatus = async (orderId: number, refundId: number, status: string) => {
         isLoading.value = true;
@@ -251,6 +267,7 @@ export const useOrder = (initialFilters?: OrderPayloadFilter) => {
         fetchOrder,
         handleUpdate,
         handleUpdateStatus,
+        handleUpdateItemStatus,
         handleUpdateRefundStatus,
         handleDelete,
         handleDeleteMultiple,
