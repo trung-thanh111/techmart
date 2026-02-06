@@ -6,6 +6,7 @@ import Pagination from "~/components/navigation/AppPagination.vue";
 import AppCheckbox from "~/components/custom/AppCheckbox.vue";
 import Button from "~/components/custom/Button.vue";
 import { useAttribute } from "~/composables/attribute/useAttribute";
+import { ATTRIBUTEUPDATE } from "~/utils/constants";
 
 const { data, isLoading, selectedIds, selectedItem, attributeCatalogueOptions, filters, search, setPage, handleDeleteMultiple, setSelectedItem, confirmDelete, updateSelectedIds, getTotalItems, getAllItemIds } = useAttribute();
 
@@ -88,7 +89,7 @@ definePageMeta({
                                     <AppCheckbox :model-value="selectedIds" :value="item.id" @update:model-value="handleSelectedIdsChange" />
                                 </td>
                                 <td>
-                                    <NuxtLink class="hover:text-teal-500 flex items-center gap-2" :to="`/attribute/attribute/${item.id}/edit`">
+                                    <NuxtLink class="hover:text-teal-500 flex items-center gap-2" :to="ATTRIBUTEUPDATE(item.id)">
                                         {{ item.name }}
                                     </NuxtLink>
                                 </td>
@@ -104,7 +105,7 @@ definePageMeta({
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end">
                                             <li>
-                                                <NuxtLink class="dropdown-item text-info" :to="`/attribute/attribute/${item.id}/edit`">
+                                                <NuxtLink class="dropdown-item text-info" :to="ATTRIBUTEUPDATE(item.id)">
                                                     <i class="ri-edit-box-line me-1"></i>
                                                     {{ $t("admin.common.edit") }}
                                                 </NuxtLink>

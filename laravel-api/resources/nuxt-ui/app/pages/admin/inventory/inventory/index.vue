@@ -6,6 +6,7 @@ import Pagination from "~/components/navigation/AppPagination.vue";
 import AppCheckbox from "~/components/custom/AppCheckbox.vue";
 import Button from "~/components/custom/Button.vue";
 import { useInventory } from "~/composables/inventory/useInventory";
+import { INVENTORYUPDATE } from "~/utils/constants";
 
 const { data, isLoading, selectedIds, selectedItem, search, setPage, handleDeleteMultiple, setSelectedItem, confirmDelete, updateSelectedIds, getTotalItems, getAllItemIds } = useInventory();
 
@@ -90,12 +91,12 @@ definePageMeta({
                                     <AppCheckbox :model-value="selectedIds" :value="item.id" @update:model-value="handleSelectedIdsChange" />
                                 </td>
                                 <td>
-                                    <NuxtLink class="hover:text-teal-500 flex items-center gap-2" :to="`/inventory/inventory/${item.id}/edit`">
+                                    <NuxtLink class="hover:text-teal-500 flex items-center gap-2" :to="INVENTORYUPDATE(item.id)">
                                         {{ item.agency?.name || "đại lý" }}
                                     </NuxtLink>
                                 </td>
                                 <td>
-                                    <NuxtLink class="hover:text-teal-500 flex items-center gap-2" :to="`/inventory/inventory/${item.id}/edit`">
+                                    <NuxtLink class="hover:text-teal-500 flex items-center gap-2" :to="INVENTORYUPDATE(item.id)">
                                         {{ item.productVariant?.name || "Phiên bản" }}
                                     </NuxtLink>
                                 </td>
@@ -114,7 +115,7 @@ definePageMeta({
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end">
                                             <li>
-                                                <NuxtLink class="dropdown-item text-info" :to="`/inventory/inventory/${item.id}/edit`">
+                                                <NuxtLink class="dropdown-item text-info" :to="INVENTORYUPDATE(item.id)">
                                                     <i class="ri-edit-box-line me-1"></i>
                                                     {{ $t("admin.common.edit") }}
                                                 </NuxtLink>

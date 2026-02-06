@@ -1,8 +1,11 @@
 import type { UploadResponse } from "~/interfaces/upload/image.interface";
 import { useApi } from "~/composables/useApi";
 import type { ApiResponse } from "~/composables/useApi";
+import { API_VERSION } from "~/utils/apiConfig";
 
-const ENDPOINT = "/api/v1/admin";
+const endpoint = {
+    uploadTemp: `${API_VERSION.version1}/upload-temp`,
+} as const;
 
 export const uploadService = {
     /**
@@ -19,7 +22,7 @@ export const uploadService = {
         });
         fd.append("sessionId", sessionId);
 
-        const res = await privateFetch<ApiResponse<UploadResponse>>(`${ENDPOINT}/upload-temp`, {
+        const res = await privateFetch<ApiResponse<UploadResponse>>(endpoint.uploadTemp, {
             method: "POST",
             body: fd,
         });

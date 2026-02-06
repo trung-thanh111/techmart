@@ -6,6 +6,7 @@ import Pagination from "~/components/navigation/AppPagination.vue";
 import AppCheckbox from "~/components/custom/AppCheckbox.vue";
 import Button from "~/components/custom/Button.vue";
 import { useProduct } from "~/composables/product/useProduct";
+import { PRODUCTUPDATE } from "~/utils/constants";
 
 const { data, isLoading, config, selectedIds, selectedItem, productCatalogueOptions, tagOptions, brandOptions, filters, search, setPage, handleDeleteMultiple, handleToggleIsHot, setSelectedItem, confirmDelete, updateSelectedIds, getTotalItems, getAllItemIds } = useProduct();
 
@@ -98,7 +99,7 @@ definePageMeta({
                                     <AppCheckbox :model-value="selectedIds" :value="item.id!" @update:model-value="handleSelectedIdsChange" />
                                 </td>
                                 <td>
-                                    <NuxtLink class="hover:text-teal-500 flex items-center gap-2" :to="`/product/product/${item.id}/edit`">
+                                    <NuxtLink class="hover:text-teal-500 flex items-center gap-2" :to="PRODUCTUPDATE(item.id!)">
                                         <NuxtImg :src="item.album && item.album.length > 0 ? `${config.public.baseUrl}/storage/${item.album[0]?.path}` : '/images/defaults/record.jpg'" alt="image-record" class="rounded-md w-[120px] h-[70px] object-contain" width="120" height="70" loading="lazy" />
                                         {{ item.name }}
                                     </NuxtLink>
@@ -121,7 +122,7 @@ definePageMeta({
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end">
                                             <li>
-                                                <NuxtLink class="dropdown-item text-info" :to="`/product/product/${item.id}/edit`">
+                                                <NuxtLink class="dropdown-item text-info" :to="PRODUCTUPDATE(item.id!)">
                                                     <i class="ri-edit-box-line me-1"></i>
                                                     {{ $t("admin.common.edit") }}
                                                 </NuxtLink>

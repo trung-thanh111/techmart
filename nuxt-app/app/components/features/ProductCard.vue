@@ -91,11 +91,13 @@ const { handleToggleWishlistFromProduct, isProductVariantInWishlist } = useWishl
 const { addItem } = useCart();
 
 const mainImage = computed(() => {
-  return resolveAlbum(props.product?.album)?.[0] || "";
+  const images = resolveAlbum(props.product?.album);
+  return images[0] || "";
 });
 
 const subImage = computed(() => {
-  return resolveAlbum(props.product?.album)?.[1] || "";
+  const images = resolveAlbum(props.product?.album);
+  return images[1] || "";
 });
 
 const originalPrice = computed(() => Number(props.product?.priceOrigin || 0));

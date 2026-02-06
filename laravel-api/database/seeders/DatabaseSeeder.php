@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use Database\Seeders\Post\PostCatalogueSeeder;
+use Database\Seeders\Product\ProductCatalogueSeeder;
+use Database\Seeders\Product\TagSeeder;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,6 +18,18 @@ class DatabaseSeeder extends Seeder
             UserCatalogueSeeder::class,
             UserSeeder::class,
             AdminPermissionSeeder::class,
+            ProductCatalogueSeeder::class,
+            TagSeeder::class,
+            PostCatalogueSeeder::class,
+            \Database\Seeders\Post\TagSeeder::class,
+            \Database\Seeders\Attribute\AttributeCatalogueSeeder::class,
+            \Database\Seeders\Attribute\AttributeSeeder::class,
+            \Database\Seeders\Faq\FaqCatalogueSeeder::class,
+            \Database\Seeders\Faq\FaqSeeder::class,
+            \Database\Seeders\Brand\BrandSeeder::class,
+            \Database\Seeders\Agency\AgencySeeder::class,
+            \Database\Seeders\Agency\AgencyWorkingHourSeeder::class,
+            \Database\Seeders\Product\ProductSeeder::class,
         ]);
     }
 }

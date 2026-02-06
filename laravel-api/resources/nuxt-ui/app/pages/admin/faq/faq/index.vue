@@ -6,6 +6,7 @@ import Pagination from "~/components/navigation/AppPagination.vue";
 import AppCheckbox from "~/components/custom/AppCheckbox.vue";
 import Button from "~/components/custom/Button.vue";
 import { useFaq } from "~/composables/faq/useFaq";
+import { FAQUPDATE } from "~/utils/constants";
 
 const { data, isLoading, selectedIds, selectedItem, faqCatalogueOptions, filters, search, setPage, handleDeleteMultiple, handleToggleIsHot, setSelectedItem, confirmDelete, updateSelectedIds, getTotalItems, getAllItemIds } = useFaq();
 
@@ -90,7 +91,7 @@ definePageMeta({
                                     <AppCheckbox :model-value="selectedIds" :value="item.id" @update:model-value="handleSelectedIdsChange" />
                                 </td>
                                 <td>
-                                    <NuxtLink class="hover:text-teal-500 flex items-center gap-2" :to="`/faq/faq/${item.id}/edit`">
+                                    <NuxtLink class="hover:text-teal-500 flex items-center gap-2" :to="FAQUPDATE(item.id)">
                                         {{ item.question }}
                                     </NuxtLink>
                                 </td>
@@ -109,7 +110,7 @@ definePageMeta({
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end">
                                             <li>
-                                                <NuxtLink class="dropdown-item text-info" :to="`/faq/faq/${item.id}/edit`">
+                                                <NuxtLink class="dropdown-item text-info" :to="FAQUPDATE(item.id)">
                                                     <i class="ri-edit-box-line me-1"></i>
                                                     {{ $t("admin.common.edit") }}
                                                 </NuxtLink>

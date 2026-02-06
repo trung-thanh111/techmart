@@ -1,20 +1,24 @@
 import type { IApiOk, IApiMessage, IPaginate } from "~/interfaces/base.interface";
 import type { IUserCatalogue } from "~/interfaces/user/catalogue.interface";
 import { useApi } from "~/composables/useApi";
+import { API_VERSION } from "~/utils/apiConfig";
 
-const ENDPOINT = "/api/v1/admin";
+const endpoint = {
+    collection: `${API_VERSION.version1}/user_catalogues`,
+    resource: `${API_VERSION.version1}/user_catalogue`,
+} as const;
 
 export const userCatalogueService = {
     pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IUserCatalogue>>> => {
         const { privateFetch } = useApi();
-        return await privateFetch<IApiOk<IPaginate<IUserCatalogue>>>(`${ENDPOINT}/user_catalogues`, {
+        return await privateFetch<IApiOk<IPaginate<IUserCatalogue>>>(endpoint.collection, {
             params,
         });
     },
 
     store: async (payload: Partial<IUserCatalogue>): Promise<IApiOk<IUserCatalogue>> => {
         const { privateFetch } = useApi();
-        return await privateFetch<IApiOk<IUserCatalogue>>(`${ENDPOINT}/user_catalogues`, {
+        return await privateFetch<IApiOk<IUserCatalogue>>(endpoint.collection, {
             method: "POST",
             body: payload,
         });
@@ -22,12 +26,12 @@ export const userCatalogueService = {
 
     show: async (id: number | string): Promise<IApiOk<IUserCatalogue>> => {
         const { privateFetch } = useApi();
-        return await privateFetch<IApiOk<IUserCatalogue>>(`${ENDPOINT}/user_catalogues/${id}`);
+        return await privateFetch<IApiOk<IUserCatalogue>>(`${endpoint.collection}/${id}`);
     },
 
     update: async (id: number, payload: Partial<IUserCatalogue>): Promise<IApiOk<IUserCatalogue>> => {
         const { privateFetch } = useApi();
-        return await privateFetch<IApiOk<IUserCatalogue>>(`${ENDPOINT}/user_catalogues/${id}`, {
+        return await privateFetch<IApiOk<IUserCatalogue>>(`${endpoint.collection}/${id}`, {
             method: "PATCH",
             body: payload,
         });
@@ -35,14 +39,14 @@ export const userCatalogueService = {
 
     delete: async (id: number): Promise<IApiMessage> => {
         const { privateFetch } = useApi();
-        return await privateFetch<IApiMessage>(`${ENDPOINT}/user_catalogues/${id}`, {
+        return await privateFetch<IApiMessage>(`${endpoint.collection}/${id}`, {
             method: "DELETE",
         });
     },
 
     deleteMultiple: async (ids: number[]): Promise<IApiMessage> => {
         const { privateFetch } = useApi();
-        return await privateFetch<IApiMessage>(`${ENDPOINT}/user_catalogues/bulkDelete`, {
+        return await privateFetch<IApiMessage>(`${endpoint.collection}/bulkDelete`, {
             body: { ids },
             method: "DELETE",
         });
@@ -50,17 +54,17 @@ export const userCatalogueService = {
 
     all: async (): Promise<IApiOk<IUserCatalogue>> => {
         const { privateFetch } = useApi();
-        return await privateFetch<IApiOk<IUserCatalogue>>(`${ENDPOINT}/user_catalogues?type=all`);
+        return await privateFetch<IApiOk<IUserCatalogue>>(`${endpoint.collection}?type=all`);
     },
 
     getPermissions: async (id: number): Promise<IApiOk<any>> => {
         const { privateFetch } = useApi();
-        return await privateFetch<IApiOk<any>>(`${ENDPOINT}/user_catalogues/${id}/permissions`);
+        return await privateFetch<IApiOk<any>>(`${endpoint.collection}/${id}/permissions`);
     },
 
     attach: async (id: number, ids: number[], withRelation: string = "permissions"): Promise<IApiMessage> => {
         const { privateFetch } = useApi();
-        return await privateFetch<IApiMessage>(`${ENDPOINT}/user_catalogues/${id}/attach`, {
+        return await privateFetch<IApiMessage>(`${endpoint.collection}/${id}/attach`, {
             method: "POST",
             body: { ids, with: withRelation },
         });
@@ -68,7 +72,7 @@ export const userCatalogueService = {
 
     detach: async (id: number, ids: number[], withRelation: string = "permissions"): Promise<IApiMessage> => {
         const { privateFetch } = useApi();
-        return await privateFetch<IApiMessage>(`${ENDPOINT}/user_catalogues/${id}/detach`, {
+        return await privateFetch<IApiMessage>(`${endpoint.collection}/${id}/detach`, {
             method: "DELETE",
             body: { ids, with: withRelation },
         });

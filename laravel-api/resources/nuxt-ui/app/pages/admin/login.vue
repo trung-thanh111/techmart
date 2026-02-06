@@ -1,11 +1,11 @@
 <template>
-    <div class="main-content h-screen overflow-hidden">
+    <div class="w-full h-screen overflow-hidden">
         <div class="relative w-full h-full">
             <NuxtImg src="/images/bg-auth.png" alt="image-background" class="w-full h-full object-cover" loading="lazy" />
             <div class="absolute inset-0 flex items-center justify-center">
-                <div class="flex flex-col lg:flex-row max-w-4xl w-full mx-auto overflow-hidden lg:h-[560px]">
-                    <div class="relative lg:w-1/2 hidden lg:block h-full">
-                        <NuxtImg src="/images/showroom/image-showroom.jpg" alt="background đăng nhập" class="absolute inset-0 w-full h-full object-cover z-0" loading="lazy" />
+                <div class="flex flex-col lg:flex-row max-w-5xl w-full mx-auto overflow-hidden rounded-xl shadow-2xl">
+                    <div class="relative lg:w-1/2 hidden lg:block min-h-[560px]">
+                        <NuxtImg src="/images/image-showroom.jpg" alt="background đăng nhập" class="absolute inset-0 w-full h-full object-cover z-0" loading="lazy" />
                         <div class="absolute inset-0 bg-sky-200/80 opacity-90 z-10"></div>
                         <div class="relative z-40 flex flex-col p-6 lg:p-8 h-full">
                             <NuxtImg src="/images/logo/logo-website.png" alt="Logo" class="w-40 h-8 mb-6" loading="lazy" />
@@ -19,7 +19,7 @@
                             </Splide>
                         </div>
                     </div>
-                    <div class="flex flex-col justify-center p-6 lg:p-8 w-full lg:w-1/2 bg-white max-w-xs sm:max-w-sm md:max-w-md mx-auto">
+                    <div class="flex flex-col justify-center p-6 lg:p-12 w-full lg:w-1/2 bg-white mx-auto">
                         <h2 class="text-xl font-semibold text-cyan-600 mb-1 text-center">{{ $t("auth.welcomeBack") }}</h2>
                         <p class="text-sm text-gray-500 mb-6 text-center">{{ $t("auth.loginDescription") }}</p>
 
@@ -62,7 +62,7 @@
                                 <Field v-slot="{ field }" name="rememberMe" type="checkbox" :value="true" :unchecked-value="false">
                                     <input v-bind="field" id="rememberMe" :value="true" type="checkbox" class="h-4 w-4 text-teal-600 border-gray-300 rounded" />
                                 </Field>
-                                <label for="rememberMe" class="ml-2 block text-sm text-gray-700">{{ $t("auth.form.remember") }}</label>
+                                <label for="rememberMe" class="ml-2 mb-0 block text-sm text-gray-700">{{ $t("auth.form.remember") }}</label>
                             </div>
                             <Button
                                 type="submit"

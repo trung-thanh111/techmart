@@ -88,7 +88,7 @@ definePageMeta({
                                     <AppCheckbox :model-value="selectedIds" :value="item.id" @update:model-value="handleSelectedIdsChange" />
                                 </td>
                                 <td>
-                                    <NuxtLink class="hover:text-teal-500 flex items-center gap-2" :to="`/agency/working_hour/${item.id}/edit`">
+                                    <NuxtLink class="hover:text-teal-500 flex items-center gap-2" :to="`${AGENCYWORKINGHOURINDEX}/${item.id}/edit`">
                                         {{ item.dayOfWeek }}
                                     </NuxtLink>
                                 </td>
@@ -110,7 +110,7 @@ definePageMeta({
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end">
                                             <li>
-                                                <NuxtLink class="dropdown-item text-info" :to="`/agency/working_hour/${item.id}/edit`">
+                                                <NuxtLink class="dropdown-item text-info" :to="`${AGENCYWORKINGHOURINDEX}/${item.id}/edit`">
                                                     <i class="ri-edit-box-line me-1"></i>
                                                     {{ $t("admin.common.edit") }}
                                                 </NuxtLink>

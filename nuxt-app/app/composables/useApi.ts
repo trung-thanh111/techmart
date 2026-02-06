@@ -80,15 +80,15 @@ export const useApi = () => {
           statusMessage: "Unauthorized",
         });
       }
-      
+
       const headers = new Headers(options.headers as HeadersInit);
       headers.set("Authorization", `Bearer ${accessToken}`);
-      
+
       // Add CSRF token for POST/PUT/PATCH/DELETE requests
-      if (csrfToken && ['POST', 'PUT', 'PATCH', 'DELETE'].includes(options.method?.toUpperCase() || '')) {
+      if (csrfToken && ["POST", "PUT", "PATCH", "DELETE"].includes(options.method?.toUpperCase() || "")) {
         headers.set("X-CSRF-TOKEN", csrfToken);
       }
-      
+
       options.headers = headers;
     },
   });

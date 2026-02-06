@@ -2,21 +2,24 @@ import type { IApiOk, IApiMessage, IPaginate } from "~/interfaces/base.interface
 import type { IPostComment } from "~/interfaces/post/comment.interface";
 import { useApi } from "~/composables/useApi";
 import { formData } from "~/utils/formData";
-import { buildRelationParams } from "~/utils/helpers";
+import { API_VERSION } from "~/utils/apiConfig";
 
-const ENDPOINT = "/api/v1/admin";
+const endpoint = {
+    collection: `${API_VERSION.version1}/post_comments`,
+    resource: `${API_VERSION.version1}/post_comment`,
+} as const;
 
 export const postCommentService = {
     pagination: async (params?: Record<string, any>): Promise<IApiOk<IPaginate<IPostComment>>> => {
         const { privateFetch } = useApi();
-        return await privateFetch<IApiOk<IPaginate<IPostComment>>>(`${ENDPOINT}/post_comments`, {
+        return await privateFetch<IApiOk<IPaginate<IPostComment>>>(endpoint.collection, {
             params,
         });
     },
 
     store: async (payload: Partial<IPostComment>): Promise<IApiOk<IPostComment>> => {
         const { privateFetch } = useApi();
-        return await privateFetch<IApiOk<IPostComment>>(`${ENDPOINT}/post_comments`, {
+        return await privateFetch<IApiOk<IPostComment>>(endpoint.collection, {
             method: "POST",
             body: formData(payload),
         });
@@ -24,12 +27,12 @@ export const postCommentService = {
 
     show: async (id: number | string): Promise<IApiOk<IPostComment>> => {
         const { privateFetch } = useApi();
-        return await privateFetch<IApiOk<IPostComment>>(`${ENDPOINT}/post_comments/${id}`);
+        return await privateFetch<IApiOk<IPostComment>>(`${endpoint.collection}/${id}`);
     },
 
     update: async (id: number, payload: Partial<IPostComment>): Promise<IApiOk<IPostComment>> => {
         const { privateFetch } = useApi();
-        return await privateFetch<IApiOk<IPostComment>>(`${ENDPOINT}/post_comments/${id}`, {
+        return await privateFetch<IApiOk<IPostComment>>(`${endpoint.collection}/${id}`, {
             method: "POST",
             body: formData(payload),
             params: { _method: "PATCH" },
@@ -38,21 +41,21 @@ export const postCommentService = {
 
     delete: async (id: number): Promise<IApiMessage> => {
         const { privateFetch } = useApi();
-        return await privateFetch<IApiMessage>(`${ENDPOINT}/post_comments/${id}`, {
+        return await privateFetch<IApiMessage>(`${endpoint.collection}/${id}`, {
             method: "DELETE",
         });
     },
 
     deleteMultiple: async (ids: number[]): Promise<IApiMessage> => {
         const { privateFetch } = useApi();
-        return await privateFetch<IApiMessage>(`${ENDPOINT}/post_comments/bulkDelete`, {
+        return await privateFetch<IApiMessage>(`${endpoint.collection}/bulkDelete`, {
             body: { ids },
             method: "DELETE",
         });
     },
 
     all: async (): Promise<IApiOk<IPostComment[]>> => {
-        const { publicFetch } = useApi();
-        return await publicFetch<IApiOk<IPostComment[]>>(`${ENDPOINT}/post_comments?type=all&publish=2`);
+        const { privateFetch } = useApi();
+        return await privateFetch<IApiOk<IPostComment[]>>(`${endpoint.collection}?type=all&publish=2`);
     },
 };
