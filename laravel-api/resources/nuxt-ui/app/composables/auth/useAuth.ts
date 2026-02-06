@@ -12,7 +12,8 @@ export const useAuth = () => {
             // Update user info in store without changing tokens
             if (res.data) {
                 auth.user = res.data;
-                auth.isAdmin = res.data.isAdmin ?? false;
+                const isAdminFromCatalogue = res.data.userCatalogue?.some((cat: any) => cat.isAdmin) ?? false;
+                auth.isAdmin = res.data.isAdmin || isAdminFromCatalogue;
             }
             return res.data;
         } catch (e) {

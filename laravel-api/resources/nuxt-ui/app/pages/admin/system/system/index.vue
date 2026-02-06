@@ -6,7 +6,7 @@ import AppCheckbox from "~/components/custom/AppCheckbox.vue";
 import Button from "~/components/custom/Button.vue";
 import PublishSelect from "~/components/custom/PublishSelect.vue";
 import { useSystem } from "~/composables/system/useSystem";
-import { SYSTEMCREATE } from "~/utils/constants";
+import { SYSTEMCREATE, SYSTEMUPDATE } from "~/utils/constants";
 
 const { data, isLoading, filters, search, setPage, selectedIds, selectedItem, setSelectedItem, handleDeleteMultiple, confirmDelete, updateSelectedIds, getTotalItems } = useSystem();
 
@@ -82,7 +82,7 @@ definePageMeta({
                                     <AppCheckbox :model-value="selectedIds" :value="item.id!" @update:model-value="handleSelectedIdsChange" />
                                 </td>
                                 <td>
-                                    <NuxtLink class="hover:text-teal-500" :to="`/system/system/${item.id}/edit`">
+                                    <NuxtLink class="hover:text-teal-500" :to="SYSTEMUPDATE(item.id!)">
                                         <div class="text-truncate">{{ item.keyword }}</div>
                                         <div class="text-muted small">
                                             <p class="line-clamp-2" v-html="item.content"></p>
@@ -101,7 +101,7 @@ definePageMeta({
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end">
                                             <li>
-                                                <NuxtLink class="dropdown-item text-info" :to="`/system/system/${item.id}/edit`">
+                                                <NuxtLink class="dropdown-item text-info" :to="SYSTEMUPDATE(item.id!)">
                                                     <i class="ri-edit-box-line me-1"></i>
                                                     {{ $t("admin.common.edit") }}
                                                 </NuxtLink>

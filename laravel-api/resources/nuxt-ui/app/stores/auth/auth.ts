@@ -1,7 +1,11 @@
 import { defineStore } from "pinia";
 import type { IAuthState, IUser, IJWTTokens } from "~/interfaces/user/user.interface";
 
-const isAdminFromUser = (u: IUser | null) => (u ? u.isAdmin : false);
+const isAdminFromUser = (u: IUser | null) => {
+    if (!u) return false;
+    if (u.isAdmin) return true;
+    return u.userCatalogue?.some((cat: any) => cat.isAdmin || cat.is_admin) ?? false;
+};
 
 export const useAuthStore = defineStore("auth", {
     state: (): IAuthState => ({

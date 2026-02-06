@@ -6,6 +6,7 @@ import Pagination from "~/components/navigation/AppPagination.vue";
 import AppCheckbox from "~/components/custom/AppCheckbox.vue";
 import Button from "~/components/custom/Button.vue";
 import { useBrand } from "~/composables/brand/useBrand";
+import { BRANDUPDATE } from "~/utils/constants";
 
 const { data, isLoading, selectedIds, selectedItem, search, setPage, handleDeleteMultiple, setSelectedItem, confirmDelete, updateSelectedIds, getTotalItems, getAllItemIds } = useBrand();
 
@@ -90,7 +91,7 @@ definePageMeta({
                                     <AppCheckbox :model-value="selectedIds" :value="item.id" @update:model-value="handleSelectedIdsChange" />
                                 </td>
                                 <td>
-                                    <NuxtLink class="hover:text-teal-500 flex items-center gap-2" :to="`/brand/brand/${item.id}/edit`">
+                                    <NuxtLink class="hover:text-teal-500 flex items-center gap-2" :to="BRANDUPDATE(item.id)">
                                         <NuxtImg :src="item.logo?.path ? (item.logo?.url ?? '') : '/images/defaults/record.jpg'" alt="image-record" class="rounded-md w-[120px] h-[70px] object-contain" loading="lazy" />
                                         {{ item.name }}
                                     </NuxtLink>
@@ -113,7 +114,7 @@ definePageMeta({
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end">
                                             <li>
-                                                <NuxtLink class="dropdown-item text-info" :to="`/brand/brand/${item.id}/edit`">
+                                                <NuxtLink class="dropdown-item text-info" :to="BRANDUPDATE(item.id)">
                                                     <i class="ri-edit-box-line me-1"></i>
                                                     {{ $t("admin.common.edit") }}
                                                 </NuxtLink>

@@ -10,6 +10,7 @@ import PaymentMethodIcon from "~/components/order/PaymentMethodIcon.vue";
 import { useOrder } from "~/composables/order/useOrder";
 import { formatPrice, formatDate, canDeleteOrder, getDaysUntilDeletable } from "~/utils/order/order.helpers";
 import { PAYMENT_STATUS_LABELS, PAYMENT_METHOD_LABELS } from "~/utils/order/order.constants";
+import { ORDERUPDATE } from "~/utils/constants";
 
 const { data, isLoading, config, selectedIds, selectedItem, statusOptions, paymentStatusOptions, filters, search, setPage, handleDeleteMultiple, setSelectedItem, confirmDelete, updateSelectedIds, getTotalItems, getAllItemIds, checkCanDelete } = useOrder();
 
@@ -104,7 +105,7 @@ definePageMeta({
                                     <AppCheckbox :model-value="selectedIds" :value="item.id!" @update:model-value="handleSelectedIdsChange" />
                                 </td>
                                 <td>
-                                    <NuxtLink :to="`${ORDERINDEX}/${item.id}/edit`" class="fw-medium text-primary">#{{ item.code }}</NuxtLink>
+                                    <NuxtLink :to="ORDERUPDATE(item.id!)" class="fw-medium text-primary">#{{ item.code }}</NuxtLink>
                                 </td>
                                 <td>
                                     <div class="text-truncate italic">
@@ -137,7 +138,7 @@ definePageMeta({
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end">
                                             <li>
-                                                <NuxtLink class="dropdown-item text-info" :to="`/order/order/${item.id}/edit`">
+                                                <NuxtLink class="dropdown-item text-info" :to="ORDERUPDATE(item.id!)">
                                                     <i class="ri-eye-line me-1"></i>
                                                     Chi tiết
                                                 </NuxtLink>

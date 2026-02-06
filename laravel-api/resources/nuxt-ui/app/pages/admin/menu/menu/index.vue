@@ -4,6 +4,7 @@ import Pagination from "~/components/navigation/AppPagination.vue";
 import AppCheckbox from "~/components/custom/AppCheckbox.vue";
 import Button from "~/components/custom/Button.vue";
 import { useMenu } from "~/composables/menu/useMenu";
+import { MENUUPDATE } from "~/utils/constants";
 import FilterBar from "~/components/navigation/FilterBar.vue";
 
 const { data, isLoading, filters, selectedIds, selectedItem, fetchData, setPage, handleDeleteMultiple, handleDelete, setValues, search, getTotalItems, getAllItemIds } = useMenu();
@@ -95,7 +96,7 @@ definePageMeta({
                                     <AppCheckbox :model-value="selectedIds" :value="item.id!" @update:model-value="handleSelectedIdsChange" />
                                 </td>
                                 <td>
-                                    <NuxtLink class="hover:text-teal-500" :to="`/menu/menu/${item.id}/edit`">{{ item.name }}</NuxtLink>
+                                    <NuxtLink class="hover:text-teal-500" :to="MENUUPDATE(item.id!)">{{ item.name }}</NuxtLink>
                                 </td>
                                 <td class="text-center">
                                     <code>{{ item.slug }}</code>
@@ -119,7 +120,7 @@ definePageMeta({
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end">
                                             <li>
-                                                <NuxtLink class="dropdown-item text-info" :to="`/menu/menu/${item.id}/edit`">
+                                                <NuxtLink class="dropdown-item text-info" :to="MENUUPDATE(item.id!)">
                                                     <i class="ri-edit-box-line me-1"></i>
                                                     {{ $t("admin.common.edit") }}
                                                 </NuxtLink>

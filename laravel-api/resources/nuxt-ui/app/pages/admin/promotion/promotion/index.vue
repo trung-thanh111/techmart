@@ -6,6 +6,7 @@ import Pagination from "~/components/navigation/AppPagination.vue";
 import AppCheckbox from "~/components/custom/AppCheckbox.vue";
 import Button from "~/components/custom/Button.vue";
 import { usePromotion } from "~/composables/promotion/usePromotion";
+import { PROMOTIONUPDATE } from "~/utils/constants";
 
 const { data, isLoading, filters, selectedIds, selectedItem, search, setPage, handleDeleteMultiple, setSelectedItem, confirmDelete, updateSelectedIds, getTotalItems, getAllItemIds } = usePromotion();
 
@@ -159,7 +160,7 @@ definePageMeta({
                                     <AppCheckbox :model-value="selectedIds" :value="item.id" @update:model-value="handleSelectedIdsChange" />
                                 </td>
                                 <td>
-                                    <NuxtLink class="hover:text-teal-500 flex items-center gap-2" :to="`/promotion/promotion/${item.id}/edit`">
+                                    <NuxtLink class="hover:text-teal-500 flex items-center gap-2" :to="PROMOTIONUPDATE(item.id)">
                                         <div>
                                             <img v-if="item.image" :src="item.image" :alt="item.name" class="w-12 h-12 object-cover rounded" />
                                             <div v-else class="w-12 h-12 bg-gray-200 rounded flex items-center justify-center">
@@ -196,7 +197,7 @@ definePageMeta({
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end">
                                             <li>
-                                                <NuxtLink class="dropdown-item text-info" :to="`/promotion/promotion/${item.id}/edit`">
+                                                <NuxtLink class="dropdown-item text-info" :to="PROMOTIONUPDATE(item.id)">
                                                     <i class="ri-edit-box-line me-1"></i>
                                                     {{ $t("admin.common.edit") }}
                                                 </NuxtLink>

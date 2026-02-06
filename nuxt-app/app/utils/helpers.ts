@@ -88,6 +88,7 @@ export const resolveImageUrl = (input?: any, fallback: string = IMAGEDEFAULT): s
 };
 
 export const resolveAlbum = (album: any[] = [], fallback: string = IMAGEDEFAULT): string[] => {
+  if (!Array.isArray(album)) return [fallback];
   const config = useRuntimeConfig();
   const base = `${config.public.baseUrl}/storage`;
 

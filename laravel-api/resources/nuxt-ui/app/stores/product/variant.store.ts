@@ -5,7 +5,6 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 import { productVariantService } from "~/services/product/variant.service";
-import { attributeCatalogueService } from "~/services/attribute/catalogue.service";
 import { attributeService } from "~/services/attribute/attribute.service";
 import type { IAttributeCatalogue, IAttribute, IVariantGroup, IProductVariant } from "~/interfaces/product/variant.interface";
 import { cartesianProduct, generateDefaultSku, validateCombinationLimit, generateUniqueVariantCode } from "~/utils/variantHelpers";
@@ -237,7 +236,7 @@ export const useProductVariantStore = defineStore("productVariant", () => {
         const existingSkus = variants.value.map((v) => v.sku).filter(Boolean);
         variants.value.forEach((variant) => {
             if (!variant.sku) {
-                variant.sku = generateUniqueVariantCode(existingSkus, generateDefaultSku(productSku, variant.code));
+                variant.sku = generateUniqueVariantCode(existingSkus as any, generateDefaultSku(productSku, variant.code as any));
                 existingSkus.push(variant.sku);
             }
         });

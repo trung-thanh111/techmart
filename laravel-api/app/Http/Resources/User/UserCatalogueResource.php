@@ -20,6 +20,7 @@ class UserCatalogueResource extends JsonResource
             'slug' => $this->slug,
             'description' => $this->description,
             'publish' => (int) $this->publish,
+            'isAdmin' => (bool) $this->is_admin,
             // 'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
             // 'updatedAt' => $this->updated_at?->format('Y-m-d H:i:s'),
             // 'deletedAt' => $this->deleted_at?->format('Y-m-d H:i:s'),

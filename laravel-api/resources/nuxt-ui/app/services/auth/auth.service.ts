@@ -4,21 +4,24 @@ import type { TRegisterRequest } from "~/composables/auth/useRegister";
 import type { IAuthSuccessResponse, IUser } from "~/interfaces/user/user.interface";
 import { useApi } from "~/composables/useApi";
 import { useAuthStore } from "~/stores/auth/auth";
+import { API_VERSION } from "~/utils/apiConfig";
 
-const ENDPOINT = "/api/v1/admin/auth";
-const VERIFY_ENDPOINT = "/api/v1/email-verification";
-const FORGOT_ENDPOINT = "/api/v1/password/forgot";
-const CHANGE_PASSWORD_ENDPOINT = "/api/v1/password/change";
+const endpoint = {
+    auth: `${API_VERSION.version1}/auth`,
+    verification: `${API_VERSION.version1}/email-verification`,
+    forgotPassword: `${API_VERSION.version1}/password/forgot`,
+    changePassword: `${API_VERSION.version1}/password/change`,
+} as const;
 
 export const authService = {
     me: async (): Promise<IApiOk<IUser>> => {
         const { privateFetch } = useApi();
-        return await privateFetch<IApiOk<IUser>>(`${ENDPOINT}/me`);
+        return await privateFetch<IApiOk<IUser>>(`${endpoint.auth}/me`);
     },
 
     login: async (payload: TLoginRequest): Promise<IApiOk<IAuthSuccessResponse>> => {
         const { publicFetch } = useApi();
-        return await publicFetch<IApiOk<IAuthSuccessResponse>>(`${ENDPOINT}/login`, {
+        return await publicFetch<IApiOk<IAuthSuccessResponse>>(`${endpoint.auth}/login`, {
             method: "POST",
             body: payload,
         });
@@ -27,7 +30,7 @@ export const authService = {
     // Kiểu trả về khi register có thể không chứa token nếu cần xác thực email
     register: async (payload: TRegisterRequest): Promise<any> => {
         const { publicFetch } = useApi();
-        return await publicFetch<any>(`${ENDPOINT}/register`, {
+        return await publicFetch<any>(`${endpoint.auth}/register`, {
             method: "POST",
             body: payload,
         });
@@ -35,7 +38,7 @@ export const authService = {
 
     logout: async (): Promise<IApiMessage> => {
         const { privateFetch } = useApi();
-        return await privateFetch<IApiMessage>(`${ENDPOINT}/logout`, {
+        return await privateFetch<IApiMessage>(`${endpoint.auth}/logout`, {
             method: "POST",
         });
     },
@@ -43,13 +46,13 @@ export const authService = {
     // Status verification by email
     verifyStatus: async (email: string): Promise<{ data: { verified: boolean } }> => {
         const { publicFetch } = useApi();
-        return await publicFetch<any>(`${VERIFY_ENDPOINT}/status?email=${encodeURIComponent(email)}`);
+        return await publicFetch<any>(`${endpoint.verification}/status?email=${encodeURIComponent(email)}`);
     },
 
     // Forgot password flow
     forgotRequest: async (email: string): Promise<any> => {
         const { publicFetch } = useApi();
-        return await publicFetch<any>(`${FORGOT_ENDPOINT}/request`, {
+        return await publicFetch<any>(`${endpoint.forgotPassword}/request`, {
             method: "POST",
             body: { email },
         });
@@ -57,7 +60,7 @@ export const authService = {
 
     forgotResend: async (email: string): Promise<any> => {
         const { publicFetch } = useApi();
-        return await publicFetch<any>(`${FORGOT_ENDPOINT}/resend`, {
+        return await publicFetch<any>(`${endpoint.forgotPassword}/resend`, {
             method: "POST",
             body: { email },
         });
@@ -65,7 +68,7 @@ export const authService = {
 
     forgotVerify: async (payload: { email: string; code: string }): Promise<any> => {
         const { publicFetch } = useApi();
-        return await publicFetch<any>(`${FORGOT_ENDPOINT}/verify`, {
+        return await publicFetch<any>(`${endpoint.forgotPassword}/verify`, {
             method: "POST",
             body: payload,
         });
@@ -73,7 +76,7 @@ export const authService = {
 
     forgotReset: async (payload: { email: string; code: string; password: string; passwordConfirmation: string }): Promise<any> => {
         const { publicFetch } = useApi();
-        return await publicFetch<any>(`${FORGOT_ENDPOINT}/reset`, {
+        return await publicFetch<any>(`${endpoint.forgotPassword}/reset`, {
             method: "POST",
             body: payload,
         });
@@ -82,7 +85,7 @@ export const authService = {
     // Change password
     changePassword: async (payload: { passwordOld: string; password: string; passwordConfirmation: string }): Promise<any> => {
         const { privateFetch } = useApi();
-        return await privateFetch<any>(`${CHANGE_PASSWORD_ENDPOINT}`, {
+        return await privateFetch<any>(`${endpoint.changePassword}`, {
             method: "POST",
             body: payload,
         });
@@ -91,7 +94,7 @@ export const authService = {
     refresh: async (): Promise<IApiOk<IAuthSuccessResponse>> => {
         const { publicFetch } = useApi();
         const auth = useAuthStore();
-        return await publicFetch<IApiOk<IAuthSuccessResponse>>(`${ENDPOINT}/refresh`, {
+        return await publicFetch<IApiOk<IAuthSuccessResponse>>(`${endpoint.auth}/refresh`, {
             method: "POST",
             headers: {
                 "X-CSRF-TOKEN": auth.csrfToken || "",
