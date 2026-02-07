@@ -152,7 +152,7 @@ export const useProduct = () => {
 
   const loadLatest = async () => {
     if (latestLoading.value) return;
-    if (isLatestLoaded.value && latestPage.value === 1) return; // Cache hit for first page
+    if (isLatestLoaded.value && latestPage.value === 1) return;
     latestLoading.value = true;
     try {
       const res = await fetchPaginate({ keyword: "", perpage: 5, sort: "published_at,desc" }, latestPage.value, 5);
@@ -161,7 +161,7 @@ export const useProduct = () => {
         latestItems.value = [...latestItems.value, ...pg.data];
         latestLastPage.value = pg.last_page;
         latestPage.value += 1;
-        if (latestPage.value === 2) isLatestLoaded.value = true; // Mark as loaded after first page
+        if (latestPage.value === 2) isLatestLoaded.value = true;
       }
     } finally {
       latestLoading.value = false;
@@ -170,7 +170,7 @@ export const useProduct = () => {
 
   const loadHotQuick = async () => {
     if (hotQuickLoading.value) return;
-    if (isHotQuickLoaded.value && hotQuickPage.value === 1) return; // Cache hit for first page
+    if (isHotQuickLoaded.value && hotQuickPage.value === 1) return;
     hotQuickLoading.value = true;
     try {
       const relation = buildRelationParams({ product_catalogues: 1 }, "is_hot");
@@ -185,7 +185,7 @@ export const useProduct = () => {
         hotQuickItems.value = [...hotQuickItems.value, ...pageItems];
         hotQuickLastPage.value = typeof pg?.last_page === "number" ? pg.last_page : hotQuickLastPage.value;
         hotQuickPage.value = hotQuickPage.value + 1;
-        if (hotQuickPage.value === 2) isHotQuickLoaded.value = true; // Mark as loaded after first page
+        if (hotQuickPage.value === 2) isHotQuickLoaded.value = true;
       }
     } finally {
       hotQuickLoading.value = false;

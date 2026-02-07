@@ -6,6 +6,7 @@ import Pagination from "~/components/navigation/AppPagination.vue";
 import AppCheckbox from "~/components/custom/AppCheckbox.vue";
 import Button from "~/components/custom/Button.vue";
 import { useProductTag } from "~/composables/product/useProductTag";
+import { PRODUCTTAGCREATE } from "~/utils/constants";
 
 const { data, isLoading, selectedIds, selectedItem, handleToggleIsHot, search, setPage, handleDeleteMultiple, setSelectedItem, confirmDelete, updateSelectedIds, getTotalItems, getAllItemIds } = useProductTag();
 
@@ -51,7 +52,7 @@ definePageMeta({
                     <Button variant="cancel" :loading="isLoading" :disabled="!hasSelectedItems" @click="updateSelectedIds([])" />
                 </div>
                 <div class="d-flex align-items-center gap-2">
-                    <NuxtLink to="/product/tag/create" class="btn btn-success">
+                    <NuxtLink :to="PRODUCTTAGCREATE" class="btn btn-success">
                         <i class="ri-add-line me-1"></i>
                         {{ $t("admin.common.create") }}
                     </NuxtLink>

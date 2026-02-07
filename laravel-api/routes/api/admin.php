@@ -34,6 +34,7 @@ use App\Http\Controllers\Api\V1\Post\PostCommentController;
 use App\Http\Controllers\Api\V1\Post\PostCommentLikeController;
 use App\Http\Controllers\Api\V1\Post\PostLikeController;
 use App\Http\Controllers\Api\V1\Auth\AdminAuthController;
+use App\Http\Controllers\Api\V1\Auth\ChangePasswordController;
 use App\Http\Controllers\Api\V1\Order\OrderController;
 
 $routeExcept = ['create', 'edit'];
@@ -56,7 +57,10 @@ Route::group(['prefix' => 'v1/admin/auth'], function () {
 });
 
 Route::group(['prefix' => 'v1/admin', 'middleware' => ['jwt:admin', 'convert', 'checkPermission']], function () use ($routeExcept) {
-
+    Route::middleware(['jwt:admin', 'convert'])->group(function () {
+        Route::post('password/change', [ChangePasswordController::class, 'changePassword']);
+        Route::post('upload-temp', [ImageController::class, 'uploadTemp']);
+    });
     // Attribute Catalogue
     Route::group(['prefix' => 'attribute_catalogues'], function () {
         Route::delete('bulkDelete', [AttributeCatalogueController::class, 'bulkDelete']);

@@ -4,7 +4,7 @@ import Pagination from "~/components/navigation/AppPagination.vue";
 import AppCheckbox from "~/components/custom/AppCheckbox.vue";
 import Button from "~/components/custom/Button.vue";
 import { useMenu } from "~/composables/menu/useMenu";
-import { MENUUPDATE } from "~/utils/constants";
+import { MENUUPDATE, MENUCREATE } from "~/utils/constants";
 import FilterBar from "~/components/navigation/FilterBar.vue";
 
 const { data, isLoading, filters, selectedIds, selectedItem, fetchData, setPage, handleDeleteMultiple, handleDelete, setValues, search, getTotalItems, getAllItemIds } = useMenu();
@@ -56,7 +56,7 @@ definePageMeta({
                     <Button variant="delete" type="button" :label="`${$t('admin.common.delete')} (${selectedIds.length})`" :loading="isLoading" :disabled="!selectedIds.length" data-bs-toggle="modal" data-bs-target="#deleteMultipleRecord" />
                     <Button variant="cancel" :loading="isLoading" :disabled="!selectedIds.length" @click="selectedIds = []" />
                 </div>
-                <NuxtLink to="/menu/menu/create" class="btn btn-success">
+                <NuxtLink :to="MENUCREATE" class="btn btn-success">
                     <i class="ri-add-line me-1"></i>
                     {{ $t("admin.common.create") }}
                 </NuxtLink>

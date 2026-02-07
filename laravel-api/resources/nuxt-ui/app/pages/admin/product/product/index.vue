@@ -51,7 +51,7 @@ definePageMeta({
                     <Button variant="delete" type="button" :label="`${$t('admin.common.delete')} (${selectedIds.length})`" :loading="isLoading" :disabled="!hasSelectedItems" data-bs-toggle="modal" data-bs-target="#deleteMultipleRecord" />
                     <Button variant="cancel" :loading="isLoading" :disabled="!hasSelectedItems" @click="updateSelectedIds([])" />
                 </div>
-                <NuxtLink to="/product/product/create" class="btn btn-success">
+                <NuxtLink :to="PRODUCTCREATE" class="btn btn-success">
                     <i class="ri-add-line me-1"></i>
                     {{ $t("admin.common.create") }}
                 </NuxtLink>

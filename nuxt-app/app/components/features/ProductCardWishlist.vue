@@ -203,7 +203,7 @@ const handleAddToCompare = async () => {
   const variantData = productData.variant;
   const productVariant: IProductVariant = variantData
     ? {
-        id: variantData.id,
+        id: variantData?.id,
         name: variantData.name,
         price: variantData.price,
         attributeData: variantData.attributeData,

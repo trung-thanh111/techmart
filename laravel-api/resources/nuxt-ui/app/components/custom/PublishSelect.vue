@@ -22,5 +22,5 @@ const options = computed<Option[]>(() => [
 </script>
 
 <template>
-    <Select :options="options" optionLabel="name" optionValue="value" :modelValue="props.modelValue" @update:modelValue="emit('update:modelValue', $event)" :placeholder="$t('admin.components.filterBar.selectStatus')" checkmark class="rounded py-[1px] w-100 md:w-56" size="small" />
+    <Select :options="options" optionLabel="name" optionValue="value" :modelValue="props.modelValue" @update:modelValue="emit('update:modelValue', $event)" :placeholder="$t('admin.components.filterBar.selectStatus')" checkmark class="rounded py-[1px] w-100 md:w-56" size="small" overlayClass="!z-[9999]" />
 </template>

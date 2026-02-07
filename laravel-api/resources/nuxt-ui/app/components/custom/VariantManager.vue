@@ -320,12 +320,38 @@ const syncGroupsFromRows = () => {
 const initializeGroupsFromExistingVariants = async () => {
     if (variants.value.length === 0) return;
     const groupNameToAttrIds = new Map<string, Set<number>>();
+
+    let hasAttributeData = false;
     for (const v of variants.value as any[]) {
         const ad = v.attributeData || {};
-        for (const [groupName, attr] of Object.entries(ad) as any) {
-            if (!groupNameToAttrIds.has(groupName)) groupNameToAttrIds.set(groupName, new Set<number>());
-            const set = groupNameToAttrIds.get(groupName)!;
-            if (attr?.id) set.add(Number(attr.id));
+        if (Object.keys(ad).length > 0) {
+            hasAttributeData = true;
+            for (const [groupName, attr] of Object.entries(ad) as any) {
+                if (!groupNameToAttrIds.has(groupName)) groupNameToAttrIds.set(groupName, new Set<number>());
+                const set = groupNameToAttrIds.get(groupName)!;
+                if (attr?.id) set.add(Number(attr.id));
+            }
+        }
+    }
+
+    // Fallback: nếu attributeData rỗng thì dùng attributes array
+    if (!hasAttributeData) {
+        const allAttrIds = new Set<number>();
+        for (const v of variants.value as any[]) {
+            const attrs = v.attributes || [];
+            attrs.forEach((id: number) => allAttrIds.add(id));
+        }
+
+        if (allAttrIds.size > 0) {
+            for (const catalogue of attributeCatalogues.value) {
+                if (!catalogue.attributes) {
+                    await variantStore.loadAttributesByCatalogue(catalogue.id);
+                }
+                const matchingAttrIds = (catalogue.attributes || []).filter((a) => allAttrIds.has(a.id)).map((a) => a.id);
+                if (matchingAttrIds.length > 0) {
+                    groupNameToAttrIds.set(catalogue.name, new Set(matchingAttrIds));
+                }
+            }
         }
     }
 
@@ -341,7 +367,10 @@ const initializeGroupsFromExistingVariants = async () => {
             groupRows.value.push({ uid: cryptoRandom(), catalogueId: catalogue.id, attributeIds, lockGroup: true });
         }
     }
-    syncGroupsFromRows();
+    // Chỉ sync nếu có groupRows, tránh clear variants hiện có
+    if (groupRows.value.length > 0) {
+        syncGroupsFromRows();
+    }
 };
 
 const cryptoRandom = () => Math.random().toString(36).slice(2);
@@ -638,19 +667,42 @@ const normalizeVariants = (list: IProductVariant[]) => {
     });
 };
 
+const isInitialized = ref(false);
+
+const initFromVariants = async (variantsData: IProductVariant[]) => {
+    if (isInitialized.value || variantsData.length === 0) return;
+    isInitialized.value = true;
+
+    if (attributeCatalogues.value.length === 0) {
+        await loadAttributeCatalogues();
+    }
+
+    variantStore.setVariants([...variantsData]);
+    hasVariants.value = true;
+    await initializeGroupsFromExistingVariants();
+};
+
 onMounted(async () => {
     await loadAttributeCatalogues();
 
     // Kiểm tra xem có dữ liệu variants nào không
     const hasExistingVariants = (Array.isArray(props.modelValue) && props.modelValue.length > 0) || (props.initialVariants && props.initialVariants.length > 0);
     if (hasExistingVariants) {
-        // Ưu tiên modelValue trước, nếu không có thì dùng initialVariants
         const variantsToUse = Array.isArray(props.modelValue) && props.modelValue.length > 0 ? [...props.modelValue] : [...props.initialVariants];
-        variantStore.setVariants(variantsToUse);
-        hasVariants.value = true;
-        await initializeGroupsFromExistingVariants();
+        await initFromVariants(variantsToUse);
     }
 });
+
+// Watch modelValue để react khi parent setValues sau mounted (edit mode)
+watch(
+    () => props.modelValue,
+    async (newVal) => {
+        if (Array.isArray(newVal) && newVal.length > 0 && !isInitialized.value) {
+            await initFromVariants(newVal);
+        }
+    },
+    { deep: true },
+);
 
 watch(
     variantGroups,

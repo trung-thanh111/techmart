@@ -6,6 +6,7 @@ import Pagination from "~/components/navigation/AppPagination.vue";
 import AppCheckbox from "~/components/custom/AppCheckbox.vue";
 import Button from "~/components/custom/Button.vue";
 import { useAddressOrder } from "~/composables/user/useAddressOrder";
+import { ADDRESSORDERCREATE } from "~/utils/constants";
 
 const { data, isLoading, selectedIds, selectedItem, userOptions, filters, search, setPage, handleDeleteMultiple, setSelectedItem, confirmDelete, updateSelectedIds, getTotalItems, getAllItemIds } = useAddressOrder();
 
@@ -50,7 +51,7 @@ definePageMeta({
                     <Button variant="delete" type="button" :label="`${$t('admin.common.delete')} (${selectedIds.length})`" :loading="isLoading" :disabled="!hasSelectedItems" data-bs-toggle="modal" data-bs-target="#deleteMultipleRecord" />
                     <Button variant="cancel" :loading="isLoading" :disabled="!hasSelectedItems" @click="updateSelectedIds([])" />
                 </div>
-                <NuxtLink to="/user/address_order/create" class="btn btn-success">
+                <NuxtLink :to="ADDRESSORDERCREATE" class="btn btn-success">
                     <i class="ri-add-line me-1"></i>
                     {{ $t("admin.common.create") }}
                 </NuxtLink>

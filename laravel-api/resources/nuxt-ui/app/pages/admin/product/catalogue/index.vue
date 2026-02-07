@@ -6,6 +6,7 @@ import Pagination from "~/components/navigation/AppPagination.vue";
 import AppCheckbox from "~/components/custom/AppCheckbox.vue";
 import Button from "~/components/custom/Button.vue";
 import { useProductCatalogue } from "~/composables/product/useProductCatalogue";
+import { PRODUCTCATALOGUECREATE } from "~/utils/constants";
 
 const { data, isLoading, selectedIds, selectedItem, search, setPage, handleDeleteMultiple, handleToggleIsHot, setSelectedItem, confirmDelete, updateSelectedIds, getTotalItems, getAllItemIds } = useProductCatalogue();
 
@@ -51,7 +52,7 @@ definePageMeta({
                     <Button variant="cancel" :loading="isLoading" :disabled="!hasSelectedItems" @click="updateSelectedIds([])" />
                 </div>
                 <div class="d-flex align-items-center gap-2">
-                    <NuxtLink to="/product/catalogue/create" class="btn btn-success">
+                    <NuxtLink :to="PRODUCTCATALOGUECREATE" class="btn btn-success">
                         <i class="ri-add-line me-1"></i>
                         {{ $t("admin.common.create") }}
                     </NuxtLink>

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Repositories\Product\ProductRepository;
 use App\Http\Resources\Product\ProductResource;
 use App\Services\Interfaces\Product\ProductServiceInterface;
+use Illuminate\Support\Facades\Log;
 
 class ProductService extends BaseService implements ProductServiceInterface
 {
@@ -85,8 +86,8 @@ class ProductService extends BaseService implements ProductServiceInterface
 
     private function handleProductVariant(Request $request): self
     {
-        $variants = $request->input('product_variants');
-        if ($request->has('product_variants')) {
+        $variants = $request->input('productVariants') ?? $request->input('product_variants');
+        if ($request->has('productVariants') || $request->has('product_variants')) {
             if ($this->model->exists) {
                 $this->model->product_variants()->delete();
             }
@@ -105,7 +106,8 @@ class ProductService extends BaseService implements ProductServiceInterface
             $publishRaw = $variantData['publish'] ?? 2;
             $publish = is_bool($publishRaw) ? ($publishRaw ? 1 : 0) : (int)$publishRaw;
 
-            $attributeData = $variantData['attributeData'] ?? null;
+            $attributeData = $variantData['attributeData'] ?? $variantData['attribute_data'] ?? null;
+
             if (is_string($attributeData)) {
                 $decoded = json_decode($attributeData, true);
                 $attributeData = is_array($decoded) ? $decoded : [];

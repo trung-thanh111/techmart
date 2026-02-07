@@ -6,7 +6,7 @@ import Pagination from "~/components/navigation/AppPagination.vue";
 import AppCheckbox from "~/components/custom/AppCheckbox.vue";
 import Button from "~/components/custom/Button.vue";
 import { usePromotion } from "~/composables/promotion/usePromotion";
-import { PROMOTIONUPDATE } from "~/utils/constants";
+import { PROMOTIONUPDATE, PROMOTIONCREATE } from "~/utils/constants";
 
 const { data, isLoading, filters, selectedIds, selectedItem, search, setPage, handleDeleteMultiple, setSelectedItem, confirmDelete, updateSelectedIds, getTotalItems, getAllItemIds } = usePromotion();
 
@@ -118,7 +118,7 @@ definePageMeta({
                     <Button variant="cancel" :loading="isLoading" :disabled="!hasSelectedItems" @click="updateSelectedIds([])" />
                 </div>
                 <div class="d-flex align-items-center gap-2">
-                    <NuxtLink to="/promotion/promotion/create" class="btn btn-success">
+                    <NuxtLink :to="PROMOTIONCREATE" class="btn btn-success">
                         <i class="ri-add-line me-1"></i>
                         {{ $t("admin.common.create") }}
                     </NuxtLink>

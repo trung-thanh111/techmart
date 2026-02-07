@@ -6,6 +6,7 @@ import Pagination from "~/components/navigation/AppPagination.vue";
 import AppCheckbox from "~/components/custom/AppCheckbox.vue";
 import Button from "~/components/custom/Button.vue";
 import { useAgencyWorkingHour } from "~/composables/agency/useWorkingHour";
+import { AGENCYWORKINGHOURCREATE, AGENCYWORKINGHOURINDEX } from "~/utils/constants";
 
 const { data, isLoading, selectedIds, selectedItem, search, setPage, handleDeleteMultiple, setSelectedItem, confirmDelete, updateSelectedIds, getTotalItems, getAllItemIds } = useAgencyWorkingHour();
 
@@ -50,7 +51,7 @@ definePageMeta({
                     <Button variant="delete" type="button" :label="`${$t('admin.common.delete')} (${selectedIds.length})`" :loading="isLoading" :disabled="!hasSelectedItems" data-bs-toggle="modal" data-bs-target="#deleteMultipleRecord" />
                     <Button variant="cancel" :loading="isLoading" :disabled="!hasSelectedItems" @click="updateSelectedIds([])" />
                 </div>
-                <NuxtLink to="/agency/working_hour/create" class="btn btn-success">
+                <NuxtLink :to="AGENCYWORKINGHOURCREATE" class="btn btn-success">
                     <i class="ri-add-line me-1"></i>
                     {{ $t("admin.common.create") }}
                 </NuxtLink>

@@ -6,7 +6,7 @@ import Pagination from "~/components/navigation/AppPagination.vue";
 import AppCheckbox from "~/components/custom/AppCheckbox.vue";
 import Button from "~/components/custom/Button.vue";
 import { useBanner } from "~/composables/banner/useBanner";
-import { BANNERUPDATE } from "~/utils/constants";
+import { BANNERUPDATE, BANNERCREATE } from "~/utils/constants";
 
 const { data, config, isLoading, selectedIds, selectedItem, search, setPage, handleDeleteMultiple, setSelectedItem, confirmDelete, updateSelectedIds, getTotalItems, getAllItemIds, handleToggleIsHot } = useBanner();
 
@@ -56,7 +56,7 @@ definePageMeta({
                     <Button variant="cancel" :loading="isLoading" :disabled="!hasSelectedItems" @click="updateSelectedIds([])" />
                 </div>
                 <div class="d-flex align-items-center gap-2">
-                    <NuxtLink to="/banner/banner/create" class="btn btn-success">
+                    <NuxtLink :to="BANNERCREATE" class="btn btn-success">
                         <i class="ri-add-line me-1"></i>
                         {{ $t("admin.common.create") }}
                     </NuxtLink>

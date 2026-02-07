@@ -113,7 +113,7 @@ const confirmUpdate = async () => {
 
                 <div class="d-flex flex-column gap-2">
                     <label class="form-label mb-0 required">Trạng thái</label>
-                    <Select v-model="newStatus" :options="refundStatuses" optionLabel="label" optionValue="value" placeholder="Chọn trạng thái" class="w-100 rounded py-[1px]" overlayClass="!z-[99999]" size="small" checkmark />
+                    <Select v-model="newStatus" :options="refundStatuses" optionLabel="label" optionValue="value" placeholder="Chọn trạng thái" class="w-100 rounded py-[1px]" overlayClass="!z-[9999]" size="small" checkmark />
                 </div>
 
                 <div class="d-flex justify-content-end gap-2 mt-2">

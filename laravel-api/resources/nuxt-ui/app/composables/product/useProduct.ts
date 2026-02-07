@@ -24,14 +24,16 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
     const isLoading = ref(false);
     const selectedIds = ref<number[]>([]);
     const selectedItem = ref<IProduct | null>(null);
-    // Options with caching
-    const faqOptions = ref<Array<{ name: string; id: number }>>([]);
-    const tagOptions = ref<Array<{ name: string; id: number }>>([]);
-    const brandOptions = ref<Array<{ name: string; id: number }>>([]);
-    const productOptions = ref<Array<{ name: string; id: number }>>([]);
-    const productCatalogueOptions = ref<Array<{ name: string; id: number }>>([]);
-    // Cache flags to avoid reloading using useState
-    const isOptionsLoaded = useState("product-options-loaded", () => false);
+
+    // Sử dụng useState để cache data, tránh call API nhiều lần
+    const faqOptions = useState<Array<{ name: string; id: number }>>("product-faq-options", () => []);
+    const tagOptions = useState<Array<{ name: string; id: number }>>("product-tag-options", () => []);
+    const brandOptions = useState<Array<{ name: string; id: number }>>("product-brand-options", () => []);
+    const productOptions = useState<Array<{ name: string; id: number }>>("product-related-options", () => []);
+    const productCatalogueOptions = useState<Array<{ name: string; id: number }>>("product-catalogue-options", () => []);
+
+    // ... variable declarations ...
+
     const slug = computed(() => slugify(values.name || ""));
 
     const schema = {
@@ -98,7 +100,6 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
         const wrapped = handleSubmit(async (payload: TProductCreate | TProductUpdate) => {
             isLoading.value = true;
             try {
-                console.info("payload cretea:", payload);
                 const response = await productService.store(payload as Partial<IProduct>);
                 toast.success(response?.message || t("admin.messages.createSuccess"));
                 if (shouldClose) {
@@ -234,8 +235,8 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
         }
     };
 
-    const loadProductCatalogue = async () => {
-        if (productCatalogueOptions.value.length > 0) return; // Cache hit
+    const loadProductCatalogue = async (force = false) => {
+        if (!force && productCatalogueOptions.value.length > 0) return; // Cache hit
         try {
             const response = await productCatalogueService.all();
             const rows = response?.data ?? [];
@@ -245,8 +246,8 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
         }
     };
 
-    const loadTag = async () => {
-        if (tagOptions.value.length > 0) return; // Cache hit
+    const loadTag = async (force = false) => {
+        if (!force && tagOptions.value.length > 0) return; // Cache hit
         try {
             const response = await productTagService.all();
             const rows = response?.data ?? [];
@@ -256,8 +257,8 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
         }
     };
 
-    const loadBrand = async () => {
-        if (brandOptions.value.length > 0) return; // Cache hit
+    const loadBrand = async (force = false) => {
+        if (!force && brandOptions.value.length > 0) return; // Cache hit
         try {
             const response = await brandService.all();
             const rows = response?.data ?? [];
@@ -267,8 +268,8 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
         }
     };
 
-    const loadProduct = async () => {
-        if (productOptions.value.length > 0) return; // Cache hit
+    const loadProduct = async (force = false) => {
+        if (!force && productOptions.value.length > 0) return; // Cache hit
         try {
             const response = await productService.all();
             const rows = response?.data ?? [];
@@ -278,14 +279,13 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
         }
     };
 
-    const loadFaqOptions = async () => {
-        if (faqOptions.value.length > 0) return; // Cache hit
+    const loadFaqOptions = async (force = false) => {
+        if (!force && faqOptions.value.length > 0) return; // Cache hit
         try {
             const response = await faqService.pagination({
                 type: "all",
                 publish: 2,
             });
-            // Response có thể là IPaginate hoặc array trực tiếp
             let rows: any[] = [];
             if (response?.data) {
                 if (Array.isArray(response.data)) {
@@ -342,10 +342,8 @@ export const useProduct = (initialFilters?: ProductPayloadFilter, mode: "create"
 
     const initializeData = async () => {
         await fetchData();
-        if (!isOptionsLoaded.value) {
-            await Promise.all([loadProductCatalogue(), loadTag(), loadBrand(), loadProduct(), loadFaqOptions()]);
-            isOptionsLoaded.value = true;
-        }
+        // Luôn load options khi init
+        await Promise.all([loadProductCatalogue(), loadTag(), loadBrand(), loadProduct(), loadFaqOptions()]);
     };
 
     onMounted(async () => {

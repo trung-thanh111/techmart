@@ -6,7 +6,7 @@ import Pagination from "~/components/navigation/AppPagination.vue";
 import AppCheckbox from "~/components/custom/AppCheckbox.vue";
 import Button from "~/components/custom/Button.vue";
 import { useUser } from "~/composables/user/useUser";
-import { USERUPDATE } from "~/utils/constants";
+import { USERUPDATE, USERCREATE } from "~/utils/constants";
 
 const { data, isLoading, selectedIds, selectedItem, userCatalogueOptions, filters, search, setPage, handleDeleteMultiple, setSelectedItem, confirmDelete, updateSelectedIds, getTotalItems, getAllItemIds, loadUserCatalogue } = useUser();
 
@@ -51,7 +51,7 @@ definePageMeta({
                     <Button variant="delete" type="button" :label="`${$t('admin.common.delete')} (${selectedIds.length})`" :loading="isLoading" :disabled="!hasSelectedItems" data-bs-toggle="modal" data-bs-target="#deleteMultipleRecord" />
                     <Button variant="cancel" :loading="isLoading" :disabled="!hasSelectedItems" @click="updateSelectedIds([])" />
                 </div>
-                <NuxtLink to="/user/user/create" class="btn btn-success">
+                <NuxtLink :to="USERCREATE" class="btn btn-success">
                     <i class="ri-add-line me-1"></i>
                     {{ $t("admin.common.create") }}
                 </NuxtLink>
