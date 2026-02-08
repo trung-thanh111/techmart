@@ -42,18 +42,6 @@ class ProductVariantResource extends JsonResource
                     ];
                 });
             }),
-            // 'attributeNames' => $this->whenLoaded('variant_attributes', [
-            //     'name' => $this->variant_attributes->pluck('name')->toArray()
-            // ]),
-            // 'attributeCatalogues' => $this->whenLoaded('variant_attributes', function (){
-            //     return $this->variant_attributes->groupBy('attribute_catalogue_id')->map(function ($attrs, $catalogueId){
-            //         return [
-            //             'catalogueId' => $catalogueId,
-            //             'attributeIds' => $attrs->pluck('id')->toArray(),
-            //             'attributeNames' => $attrs->pluck('name')->toArray(),
-            //         ];
-            //     })->values();
-            // }),
             'publish' => (int) $this->publish,
         ];
     }
