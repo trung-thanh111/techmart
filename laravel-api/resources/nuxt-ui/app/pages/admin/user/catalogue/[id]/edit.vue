@@ -47,7 +47,7 @@
                     <div class="mb-3">
                         <label class="form-label">{{ $t("admin.common.form.description") }}</label>
                         <Field name="description" v-slot="{ field }">
-                            <CKEditor :model-value="field.value" @update:model-value="field.onChange" :placeholder="$t('admin.common.form.descriptionPlaceholder')" height="h-32" />
+                            <CKEditor :model-value="field.value" @update:model-value="field.onChange" :placeholder="$t('admin.common.form.descriptionPlaceholder')" height="h-24" />
                         </Field>
                     </div>
                 </div>

@@ -7,6 +7,7 @@ export const EMPTYBOX = "/images/box-emtpy.png";
 
 export const TOHOME = "/";
 export const TOVOUCHER = "/voucher";
+export const TOORDER = "/order";
 export const TOSHOP = "/shop";
 export const TOWISHLIST = "/wishlist";
 export const TOAGENCY = "/agency";

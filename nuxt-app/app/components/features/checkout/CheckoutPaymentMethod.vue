@@ -95,7 +95,7 @@
         </div>
       </div>
       <BackButton @click="$emit('back')" />
-      <NextButton @click="$emit('next')" :disabled="!canProceed">Hoàn tất</NextButton>
+      <!-- <NextButton @click="$emit('next')" :disabled="!canProceed">Hoàn tất</NextButton> -->
     </div>
   </div>
 </template>
