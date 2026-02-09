@@ -20,11 +20,11 @@
           <!-- Header -->
           <div class="mb-4 flex items-center justify-between">
             <div class="flex items-center gap-3">
-              <NuxtLink :to="PROFILEORDER" class="text-gray-500 hover:text-gray-700">
+              <!-- <NuxtLink :to="PROFILEORDER" class="text-gray-500 hover:text-gray-700">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
-              </NuxtLink>
+              </NuxtLink> -->
               <h5 class="text-2xl font-semibold">Đơn hàng #{{ order.code }}</h5>
               <span :class="getStatusClass(order.status)" class="text-[9px] uppercase font-semibold px-2 py-0.5 rounded">
                 {{ ORDER_STATUS_LABELS[order.status || ""] || order.status }}
@@ -177,7 +177,7 @@
             <div v-if="order.customerNote !== undefined" class="mt-6">
               <h5 class="text-base font-semibold mb-3">Ghi chú:</h5>
               <div class="relative">
-                <textarea v-model="customerNote" rows="3" class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-sky-500 resize-none" placeholder="Thêm ghi chú cho đơn hàng..." @blur="handleSaveNote"></textarea>
+                <textarea v-model="customerNote" rows="3" class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-sky-500 resize-none" placeholder="Thêm ghi chú cho đơn hàng..." :disabled="order.status !== STATUS_ORDER[0]" @blur="handleSaveNote"></textarea>
                 <p v-if="noteSaving" class="absolute bottom-2 right-2 text-xs text-gray-400">Đang lưu...</p>
                 <p v-else-if="noteSaved" class="absolute bottom-2 right-2 text-xs text-green-500">Đã lưu</p>
               </div>

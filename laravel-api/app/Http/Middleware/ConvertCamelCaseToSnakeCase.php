@@ -9,6 +9,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ConvertCamelCaseToSnakeCase
 {
+    private array $preserveValueKeys = [
+        'attributeData',
+        'attribute_data',
+    ];
+
     /**
      * Handle an incoming request.
      *
@@ -24,15 +29,20 @@ class ConvertCamelCaseToSnakeCase
 
     /**
      * Recursively convert array keys from camelCase to snake_case
+     * @param array $data
+     * @param bool $preserveKeys Nếu true, không convert các key bên trong, chỉ giữ nguyên
      */
-    private function convertKeysToSnakeCase(array $data): array
+    private function convertKeysToSnakeCase(array $data, bool $preserveKeys = false): array
     {
         $result = [];
         foreach ($data as $key => $value) {
-            $newKey = Str::snake($key);
+            $newKey = $preserveKeys ? $key : Str::snake($key);
+
             if (is_array($value)) {
-                $value = $this->convertKeysToSnakeCase($value);
+                $shouldPreserve = in_array($key, $this->preserveValueKeys, true);
+                $value = $this->convertKeysToSnakeCase($value, $shouldPreserve);
             }
+
             $result[$newKey] = $value;
         }
         return $result;

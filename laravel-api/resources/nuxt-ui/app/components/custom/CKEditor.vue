@@ -22,10 +22,10 @@ const props = defineProps<{
 const emit = defineEmits<{ (e: "update:modelValue", value: string): void }>();
 
 const editorHeight = computed(() => {
-    if (!props.height) return "200px";
+    if (!props.height) return "160px";
     if (typeof props.height === "number") return `${props.height}px`;
-    if (props.height === "h-32") return "130px";
-    if (props.height === "h-64") return "260px";
+    if (props.height === "h-16") return "100px";
+    if (props.height === "h-32") return "160px";
     if (/^\d+$/.test(props.height)) return `${props.height}px`;
     return props.height;
 });

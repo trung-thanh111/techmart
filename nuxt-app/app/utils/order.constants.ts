@@ -40,17 +40,15 @@ export const PAYMENT_STATUS_LABELS: Record<string, string> = {
   refunded: "Đã hoàn tiền",
 };
 
-/** Timeline status configuration with labels and descriptions */
 export const STATUS_CONFIG: Record<string, { label: string; description: string }> = {
   pending: { label: "Đặt hàng", description: "Đơn hàng đã được tạo và đang chờ xác nhận" },
-  confirmed: { label: "Xác nhận", description: "Đơn hàng đã được xác nhận bởi hệ thống" },
-  processing: { label: "Đang xử lý", description: "Đơn hàng đang được đóng gói và chuẩn bị" },
+  confirmed: { label: "Xác nhận", description: "Đơn hàng đã được xác nhận bởi người bán hoặc hệ thống" },
+  processing: { label: "Đang xử lý", description: "Đơn hàng đang được đóng gói và chuẩn bị giao đến bạn" },
   shipped: { label: "Đang giao", description: "Đơn hàng đã được giao cho đơn vị vận chuyển" },
-  delivered: { label: "Hoàn thành", description: "Đơn hàng đã được giao thành công" },
-  cancelled: { label: "Đã hủy", description: "Đơn hàng đã bị hủy" },
-  failed: { label: "Thất bại", description: "Đơn hàng giao không thành công" },
-  refunded: { label: "Hoàn tiền", description: "Đơn hàng đã được hoàn tiền" },
+  delivered: { label: "Hoàn thành", description: "Đơn hàng đã được giao thành công!" },
+  cancelled: { label: "Đã hủy", description: "Đơn hàng đã bị hủy!" },
+  failed: { label: "Thất bại", description: "Đơn hàng giao không thành công!" },
+  refunded: { label: "Hoàn tiền", description: "Đơn hàng đã được hoàn tiền!" },
 };
 
-/** Order of statuses for timeline display */
-export const STATUS_ORDER = ["pending", "confirmed", "processing", "shipped", "delivered"] as const;
+export const STATUS_ORDER = ["pending", "confirmed", "processing", "shipped", "delivered", "cancelled", "failed", "refunded"] as const;
