@@ -91,6 +91,8 @@ use App\Services\Interfaces\Auth\ChangePasswordServiceInterface;
 use App\Services\Impl\Auth\ChangePasswordService;
 use App\Services\Interfaces\Order\OrderServiceInterface;
 use App\Services\Impl\Order\OrderService;
+use App\Services\Interfaces\Payment\PaymentServiceInterface;
+use App\Services\Impl\Payment\PaymentService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -139,6 +141,7 @@ class AppServiceProvider extends ServiceProvider
         MenuServiceInterface::class => MenuService::class,
         MenuItemServiceInterface::class => MenuItemService::class,
         OrderServiceInterface::class => OrderService::class,
+        PaymentServiceInterface::class => PaymentService::class,
     ];
 
     /**
