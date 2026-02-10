@@ -85,11 +85,10 @@
 </template>
 
 <script setup lang="ts">
-import { useOrderDetail } from "~/composables/order/useOrderDetail";
+import { useOrderDetail } from "~/composables/order/useOrders";
 import { formatPrice, formatDate } from "~/utils/helpers";
 import { ORDER_STATUS_LABELS, PAYMENT_METHOD_LABELS } from "~/utils/order.constants";
 import DataState from "~/components/ui/DataState.vue";
-import { TOORDERFAILED } from "~/utils/constants";
 
 definePageMeta({
   layout: "client",

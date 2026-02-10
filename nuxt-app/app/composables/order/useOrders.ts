@@ -1,4 +1,4 @@
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, onMounted } from "vue";
 import type { IOrder, IOrderGroup, OrderTab } from "~/interfaces/order/order.interface";
 import { orderService } from "~/services/order/order.service";
 
@@ -95,6 +95,31 @@ export const useOrders = () => {
     groupedOrders,
     fetchOrders,
   };
+};
+
+export const useOrderDetail = () => {
+  const order = ref<IOrder | null>(null);
+  const loading = ref(false);
+  const route = useRoute();
+
+  const fetchOrder = async () => {
+    const code = route.query.code as string;
+    if (!code) return;
+
+    loading.value = true;
+    try {
+      const res = await orderService.show(code, { relations: "order_items" });
+      order.value = res.data ?? null;
+    } catch {
+      order.value = null;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  onMounted(fetchOrder);
+
+  return { order, loading };
 };
 
 export type { OrderTab };
