@@ -386,7 +386,7 @@
 </template>
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
-import { storeToRefs } from "pinia";
+
 import { useI18n } from "vue-i18n";
 import { onClickOutside } from "@vueuse/core";
 import { TOLOGIN, TOAGENCY, TOFAQ, PROFILEINDEX, TOCART, TOPOLICY, TOWISHLIST } from "~/utils/constants";
@@ -406,11 +406,11 @@ const { t } = useI18n();
 
 // Auth
 const authStore = useAuthStore();
-const { user } = storeToRefs(authStore);
+const user = computed(() => authStore.user);
 const avatar = computed(() => {
   const img = user.value?.image;
-  if (img && img.path) return img.url || "/images/defaults/avatar.jpg";
-  return "/images/defaults/avatar.jpg";
+  if (img && img.path) return img.url || DEFAULTAVATAR;
+  return DEFAULTAVATAR;
 });
 
 const { handleLogout } = useAuth();
