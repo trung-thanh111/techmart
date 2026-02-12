@@ -18,9 +18,9 @@ const endpoint = {
 } as const;
 
 export const authService = {
-  me: async (): Promise<IApiOk<IUser>> => {
+  me: async (): Promise<IApiOk<IAuthSuccessResponse>> => {
     const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IUser>>(endpoint.me, {
+    return await privateFetch<IApiOk<IAuthSuccessResponse>>(endpoint.me, {
       method: "GET",
     });
   },
@@ -36,13 +36,13 @@ export const authService = {
   refresh: async (): Promise<IApiOk<IAuthSuccessResponse>> => {
     const { publicFetch } = useApi();
     const auth = useAuthStore();
-    
+
     // Include CSRF token in refresh request
     const headers: HeadersInit = {};
     if (auth.csrfToken) {
-      headers['X-CSRF-TOKEN'] = auth.csrfToken;
+      headers["X-CSRF-TOKEN"] = auth.csrfToken;
     }
-    
+
     return await publicFetch<IApiOk<IAuthSuccessResponse>>(endpoint.refresh, {
       method: "POST",
       headers,
