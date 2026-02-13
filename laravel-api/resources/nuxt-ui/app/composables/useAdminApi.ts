@@ -1,8 +1,8 @@
 import type { FetchOptions } from "ofetch";
-import { useAdminAuthStore } from "~/stores/auth/adminAuth";
+import { useAuthStore } from "~/stores/auth/auth";
 
 // Path to Admin Login
-const TO_ADMIN_LOGIN = "/auth/login";
+const TOLOGIN = "/admin/login";
 
 // Hàm tạo fetch với base config
 const createFetch = (options: FetchOptions = {}) => {
@@ -16,7 +16,7 @@ const createFetch = (options: FetchOptions = {}) => {
         onResponseError({ request, response }) {
             console.error("Admin API Error:", request, response);
             if (response.status === 401) {
-                navigateTo(TO_ADMIN_LOGIN);
+                navigateTo(TOLOGIN);
             }
             if (response.status === 422) {
                 throw createError({
@@ -45,7 +45,7 @@ export const useAdminApi = () => {
 
     const privateFetch = createFetch({
         async onRequest({ options }) {
-            const auth = useAdminAuthStore();
+            const auth = useAuthStore();
 
             // Check for token expiry
             if (auth.accessToken && auth.expireAt && Date.now() > auth.expireAt) {
