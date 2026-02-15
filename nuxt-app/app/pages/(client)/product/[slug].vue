@@ -998,7 +998,7 @@ const handleWishlistToggle = async () => {
   await toggleWishlist(selectedVariant.value.id);
 };
 
-// Lấy tất cả variant IDs có trong wishlist cho product hiện tại
+// Lấy tất cả variant ids có trong wishlist cho product hiện tại
 const wishlistVariantIds = computed(() => {
   if (!productDetail.value?.id) return [];
   return getWishlistVariantIdsByProductId(productDetail.value.id);
