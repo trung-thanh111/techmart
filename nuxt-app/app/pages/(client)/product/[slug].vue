@@ -976,7 +976,7 @@ const discountPercent = computed(() => {
   return Math.round(discount);
 });
 
-// Related products
+// related products
 const relatedProducts = computed(() => {
   if (!productDetail.value?.relateds || !Array.isArray(productDetail.value.relateds)) return [];
   const items = productDetail.value.relateds;
