@@ -17,7 +17,7 @@ class UpdateRequest extends BaseRequest
         $sometime = ($method === "PATCH") ? "sometimes" : "";
         return [
             "order_id" => "{$sometime}|integer|exists:orders,id",
-            "payment_id" => "{$sometime}|nullable|integer|exists:order_payments,id",
+            "payment_id" => "{$sometime}|nullable|integer|exists:payment_transactions,id",
             "refund_number" => "{$sometime}|string|max:20",
             "amount" => "{$sometime}|numeric|min:0",
             "currency" => "{$sometime}|string|size:3",

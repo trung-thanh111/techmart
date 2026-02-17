@@ -12,6 +12,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Services\Impl\BaseService;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Repositories\Order\OrderRepository;
 use App\Http\Resources\Order\OrderResource;
 use App\Services\Interfaces\Order\OrderServiceInterface;
@@ -27,7 +28,7 @@ class OrderService extends BaseService implements OrderServiceInterface
     protected $simpleFilter = ['status', 'payment_status'];
     protected $fieldSearchs = ['code', 'customer_name', 'customer_email', 'customer_phone'];
 
-    protected $with = ['order_items', 'order_status_histories', 'order_shipments', 'order_payments', 'order_refunds', 'user'];
+    protected $with = ['order_items', 'order_status_histories', 'order_shipments', 'payment_transactions', 'order_refunds', 'user'];
 
     protected const STATUS_PRIORITY = [
         'pending' => 0,
@@ -44,6 +45,8 @@ class OrderService extends BaseService implements OrderServiceInterface
 
     protected $cacheKeyPrefix = 'orders';
     protected $cacheTags = ['orders:collection'];
+
+    protected $paramField = 'code';
 
     protected $useUpload = false;
 

@@ -62,7 +62,7 @@ export const useOrder = (initialFilters?: OrderPayloadFilter) => {
         isLoading.value = true;
         try {
             const response = await orderService.show(id, {
-                relations: "order_items,order_status_histories,order_payments,order_shipments,order_refunds",
+                relations: "order_items,order_status_histories,payment_transactions,order_shipments,order_refunds",
             });
             order.value = response.data;
             return response;

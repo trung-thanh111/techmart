@@ -15,7 +15,7 @@ class StoreRequest extends BaseRequest
     {
         return [
             'order_id' => 'required|integer|exists:orders,id',
-            'transaction_id' => 'required|string|unique:order_payments,transaction_id',
+            'transaction_id' => 'required|string|unique:payment_transactions,transaction_id',
             'payment_method' => 'required|string|max:50',
             'payment_gateway' => 'nullable|string|max:50',
             'amount' => 'required|numeric|min:0',

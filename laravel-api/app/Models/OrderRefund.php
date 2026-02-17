@@ -37,7 +37,7 @@ class OrderRefund extends Model
         return $this->belongsTo(Order::class);
     }
 
-    public function order_payments()
+    public function payment_transactions()
     {
         return $this->belongsTo(OrderPayment::class, 'payment_id');
     }
