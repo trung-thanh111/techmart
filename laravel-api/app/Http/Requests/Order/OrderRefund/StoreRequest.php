@@ -15,7 +15,7 @@ class StoreRequest extends BaseRequest
     {
         return [
             'order_id' => 'required|integer|exists:orders,id',
-            'payment_id' => 'nullable|integer|exists:order_payments,id',
+            'payment_id' => 'nullable|integer|exists:payment_transactions,id',
             'refund_number' => 'required|string|max:20|unique:order_refunds,refund_number',
             'amount' => 'required|numeric|min:0',
             'currency' => 'required|string|size:3',

@@ -71,7 +71,7 @@ class Order extends Model
         'order_items',
         'order_status_histories',
         'order_shipments',
-        'order_payments',
+        'payment_transactions',
         'order_refunds'
     ];
 
@@ -90,7 +90,7 @@ class Order extends Model
         return $this->hasMany(OrderShipment::class);
     }
 
-    public function order_payments()
+    public function payment_transactions()
     {
         return $this->hasMany(OrderPayment::class);
     }

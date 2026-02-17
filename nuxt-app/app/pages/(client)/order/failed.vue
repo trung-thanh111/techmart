@@ -57,7 +57,7 @@
           </div>
           <div class="flex flex-col sm:flex-row gap-3 md:gap-4 mb-6 md:mb-8">
             <a href="/" class="flex-1 flex items-center justify-center gap-2 px-4 py-2 md:py-2.5 bg-teal-500 hover:bg-teal-600 text-white font-medium rounded-md transition-colors">Về trang chủ</a>
-            <NuxtLink :to="`/cart/checkout`" class="flex-1 flex items-center justify-center gap-2 px-4 py-2 md:py-2.5 bg-red-500 hover:bg-red-600 text-white font-medium rounded-md transition-colors">Thanh toán lại</NuxtLink>
+            <NuxtLink :to="TOCHECKOUT" class="flex-1 flex items-center justify-center gap-2 px-4 py-2 md:py-2.5 bg-red-500 hover:bg-red-600 text-white font-medium rounded-md transition-colors">Thanh toán lại</NuxtLink>
           </div>
           <div class="text-center">
             <p class="text-xs md:text-sm text-gray-600 mb-2">Cần hỗ trợ? Liên hệ chúng tôi:</p>

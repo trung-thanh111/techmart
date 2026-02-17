@@ -61,7 +61,7 @@ class OrderResource extends JsonResource
             // Relations
             'items' => OrderItemResource::collection($this->whenLoaded('order_items')),
             'statusHistories' => OrderStatusHistoryResource::collection($this->whenLoaded('order_status_histories')),
-            'payments' => OrderPaymentResource::collection($this->whenLoaded('order_payments')),
+            'payments' => OrderPaymentResource::collection($this->whenLoaded('payment_transactions')),
             'shipments' => OrderShipmentResource::collection($this->whenLoaded('order_shipments')),
             'refunds' => OrderRefundResource::collection($this->whenLoaded('order_refunds')),
 

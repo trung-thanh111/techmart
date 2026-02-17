@@ -42,6 +42,8 @@ abstract class BaseService implements BaseServiceInterface
     protected $useNestedSet = false; // flag check xem các lớp con nào có sử dụng nestedset (true ở lớp con nếu sử dụng)
     protected $useUpload = false; // flag check xem các lớp con nào có sử dụng upload (true ở lớp con nếu sử dụng)
 
+    protected $paramField = 'slug'; // trường để tìm kiếm khi id không phải là số
+
     public function __construct()
     {
         $this->repository = $this->getRepository();
@@ -238,7 +240,7 @@ abstract class BaseService implements BaseServiceInterface
             } catch (ModelNotFoundException $e) {
             }
         }
-        $model = $this->findByField('slug', $id);
+        $model = $this->findByField($this->paramField, $id);
 
         if ($model) {
             return $model;

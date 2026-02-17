@@ -54,7 +54,7 @@
             <SearchSuggestion />
           </div>
           <div class="items-center gap-4 hidden sm:flex text-white">
-            <NuxtLink :to="PROFILEORDER" class="flex items-center gap-1 hover:text-gray-300 transition-colors">
+            <a v-if="user" href="#" @click.prevent="openTrackingDialog" class="flex items-center gap-1 hover:text-gray-300 transition-colors">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-7 h-7 mt-1.5">
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
                 <polyline points="14,2 14,8 20,8" />
@@ -66,7 +66,7 @@
                 <p>{{ $t("header.track") }}</p>
                 <p>{{ $t("header.order") }}</p>
               </div>
-            </NuxtLink>
+            </a>
             <div ref="userMenuRef" class="relative inline-block text-left">
               <NuxtLink v-if="!user" :to="TOLOGIN" class="flex items-center gap-1">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6 mt-1.5">
@@ -210,7 +210,7 @@
               </svg>
             </button>
             <div class="flex items-center gap-4 text-white">
-              <NuxtLink to="#" class="flex items-center gap-1 hover:text-gray-300 transition-colors">
+              <a v-if="user" href="#" @click.prevent="openTrackingDialog" class="flex items-center gap-1 hover:text-gray-300 transition-colors">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6 mt-1.5">
                   <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
                   <polyline points="14,2 14,8 20,8" />
@@ -223,7 +223,7 @@
                   <br />
                   {{ $t("header.order") }}
                 </span>
-              </NuxtLink>
+              </a>
               <div class="relative inline-block text-left group">
                 <NuxtLink v-if="!user" :to="TOLOGIN" class="flex items-center gap-1">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6 mt-1.5">
@@ -382,6 +382,74 @@
     </header>
     <!-- mobile -->
     <MenuMobile :is-open="isMobileMenuOpen" :menu-tree="menuTree" @close="closeMobileMenu" />
+
+    <Dialog v-model:visible="visibleTracking" :header="$t('header.trackOrder')" :modal="true" :style="{ width: '850px' }" :breakpoints="{ '960px': '75vw', '640px': '90vw' }">
+      <div class="flex flex-col gap-4">
+        <div class="flex items-center gap-2">
+          <span class="p-input-icon-left w-full">
+            <InputText v-model="trackingKeyword" :placeholder="$t('header.searchOrderPlaceholder')" class="w-full" @input="handleTrackingSearch" @keydown.enter="searchOrders" />
+          </span>
+          <Button icon="pi pi-search" :label="$t('header.searchLabel')" @click="searchOrders" :loading="trackingLoading" />
+        </div>
+
+        <div v-if="trackingOrders.length > 0">
+          <DataTable :value="trackingOrders" :loading="trackingLoading" responsiveLayout="scroll" class="p-datatable-sm" stripedRows :rowHover="true">
+            <Column field="code" :header="$t('order.code') || 'Mã đơn'">
+              <template #body="{ data }">
+                <NuxtLink :to="`${PROFILEORDER}/${data.code}`" class="font-bold text-[#00b88c] hover:underline" @click="visibleTracking = false">#{{ data.code }}</NuxtLink>
+              </template>
+            </Column>
+
+            <Column field="createdAt" :header="$t('order.date') || 'Ngày đặt'">
+              <template #body="{ data }">
+                {{ formatDate(data.createdAt) }}
+              </template>
+            </Column>
+
+            <Column :header="$t('order.customer') || 'Khách hàng'">
+              <template #body="{ data }">
+                <div class="flex flex-col">
+                  <span class="font-medium text-sm">{{ data.customerName || data.customer?.name || "-" }}</span>
+                  <span class="text-xs text-gray-500">{{ data.customerPhone || data.customer?.phone || "-" }}</span>
+                </div>
+              </template>
+            </Column>
+
+            <Column field="totalAmount" :header="$t('order.total') || 'Tổng tiền'">
+              <template #body="{ data }">
+                <span class="font-bold text-red-500">{{ formatPrice(data.totalAmount) }}</span>
+              </template>
+            </Column>
+
+            <Column field="status" :header="$t('order.status') || 'Trạng thái'">
+              <template #body="{ data }">
+                <Tag :value="getStatusLabel(data.status)" :severity="getStatusSeverity(data.status)" />
+              </template>
+            </Column>
+
+            <Column field="paymentStatus" :header="$t('order.payment') || 'Thanh toán'">
+              <template #body="{ data }">
+                <Tag :value="getPaymentStatusLabel(data.paymentStatus)" :severity="getPaymentStatusSeverity(data.paymentStatus)" />
+              </template>
+            </Column>
+
+            <Column :header="$t('common.action') || 'Xem'">
+              <template #body="{ data }">
+                <NuxtLink :to="`${PROFILEORDER}/${data.code}`" class="text-teal-600 hover:text-teal-800" @click="visibleTracking = false">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </NuxtLink>
+              </template>
+            </Column>
+          </DataTable>
+        </div>
+        <div v-else-if="!trackingLoading && trackingKeyword && trackingOrders.length === 0" class="text-center p-4">
+          <p class="text-gray-500">{{ $t("common.noData") }}</p>
+        </div>
+      </div>
+    </Dialog>
   </div>
 </template>
 <script setup lang="ts">
@@ -403,6 +471,14 @@ import Menu from "../navigation/Menu.vue";
 import MenuMobile from "../navigation/MenuMobile.vue";
 
 const { t } = useI18n();
+
+import { orderService } from "~/services/order/order.service";
+import Dialog from "primevue/dialog";
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
+import InputText from "primevue/inputtext";
+import Button from "primevue/button";
+import Tag from "primevue/tag";
 
 // Auth
 const authStore = useAuthStore();
@@ -477,6 +553,109 @@ onMounted(async () => {
   await loadCart();
   await loadMenuBySlug("main-menu");
 });
+
+// Order Tracking Logic
+const visibleTracking = ref(false);
+const trackingKeyword = ref("");
+const trackingOrders = ref<any[]>([]);
+const trackingLoading = ref(false);
+let searchTimeout: any;
+
+const openTrackingDialog = () => {
+  visibleTracking.value = true;
+  trackingKeyword.value = "";
+  trackingOrders.value = [];
+};
+
+const searchOrders = async () => {
+  trackingLoading.value = true;
+  try {
+    const response = await orderService.pagination({
+      keyword: trackingKeyword.value,
+      perpage: 5,
+    });
+    trackingOrders.value = response.data.data;
+  } catch (error) {
+    console.error("Error searching orders:", error);
+  } finally {
+    trackingLoading.value = false;
+  }
+};
+
+const handleTrackingSearch = () => {
+  if (searchTimeout) clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    searchOrders();
+  }, 500);
+};
+
+const formatDate = (dateString?: string) => {
+  if (!dateString) return "-";
+  return new Date(dateString).toLocaleDateString("vi-VN", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+};
+
+const getStatusSeverity = (status: string) => {
+  switch (status) {
+    case "pending":
+      return "warn";
+    case "confirmed":
+      return "info";
+    case "processing":
+      return "info";
+    case "shipped":
+      return "secondary";
+    case "delivered":
+      return "success";
+    case "cancelled":
+      return "danger";
+    case "refunded":
+      return "warn";
+    case "failed":
+      return "danger";
+    default:
+      return "secondary";
+  }
+};
+
+const getPaymentStatusSeverity = (status: string) => {
+  switch (status) {
+    case "paid":
+      return "success";
+    case "unpaid":
+      return "warn";
+    case "refunded":
+      return "info";
+    default:
+      return "secondary";
+  }
+};
+
+const getStatusLabel = (status: string) => {
+  const labels: Record<string, string> = {
+    pending: t("status.pending") || "Chờ xử lý",
+    confirmed: t("status.confirmed") || "Đã xác nhận",
+    processing: t("status.processing") || "Đang xử lý",
+    shipped: t("status.shipped") || "Đang giao",
+    delivered: t("status.delivered") || "Đã giao",
+    cancelled: t("status.cancelled") || "Đã hủy",
+    refunded: t("status.refunded") || "Đã hoàn tiền",
+    failed: t("status.failed") || "Thất bại",
+  };
+  return labels[status] || status;
+};
+
+const getPaymentStatusLabel = (status: string) => {
+  const labels: Record<string, string> = {
+    paid: t("payment.paid") || "Đã thanh toán",
+    unpaid: t("payment.unpaid") || "Chưa thanh toán",
+    refunded: t("payment.refunded") || "Đã hoàn tiền",
+  };
+  return labels[status] || status;
+};
 </script>
 <style scoped>
 .line-clamp-custom-2 {
