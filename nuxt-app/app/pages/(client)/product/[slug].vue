@@ -284,7 +284,7 @@
                         {{ $t("header.storesCount", { count: agenciesForVariant.length }) }}
                       </div>
                       <div class="mt-2 overflow-hidden border border-gray-200 rounded-lg">
-                        <div class="h-[280px] xl:h-[320px] overflow-y-auto scrollbar-hide address-agents">
+                        <div class="h-full overflow-y-auto scrollbar-hide address-agents">
                           <div class="w-full h-full">
                             <div v-for="(agency, index) in agenciesForVariant" :key="agency.id" :class="['flex items-center space-x-[6px] text-xs p-2', index % 2 === 0 ? 'bg-white' : 'bg-gray-200']">
                               <div class="flex items-center space-x-[2px]">
