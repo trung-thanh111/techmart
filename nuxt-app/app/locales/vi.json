@@ -953,6 +953,24 @@
     "uppercase": "Ít nhất 1 chữ hoa (A-Z)",
     "number": "Ít nhất 1 số (0-9)"
   },
+  "order": {
+    "code": "Mã đơn",
+    "date": "Ngày đặt",
+    "customer": "Khách hàng",
+    "total": "Tổng tiền",
+    "statusOrder": "Trạng thái",
+    "payment": "Thanh toán",
+    "status": {
+      "pending": "Chờ xử lý",
+      "confirmed": "Đã xác nhận",
+      "processing": "Đang xử lý",
+      "shipped": "Đang giao",
+      "delivered": "Đã giao",
+      "cancelled": "Đã hủy",
+      "refunded": "Đã hoàn tiền",
+      "failed": "Thất bại"
+    }
+  },
   "auth": {
     "login": "Đăng nhập",
     "hello": "Xin chào! {name}.",
