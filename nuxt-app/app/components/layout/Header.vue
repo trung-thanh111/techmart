@@ -391,12 +391,21 @@
           </span>
           <Button icon="pi pi-search" :label="$t('header.searchLabel')" @click="searchOrders" :loading="trackingLoading" />
         </div>
-
+        <DataState :loading="trackingLoading" :empty="trackingOrders.length === 0" :error="false" />
         <div v-if="trackingOrders.length > 0">
-          <DataTable :value="trackingOrders" :loading="trackingLoading" responsiveLayout="scroll" class="p-datatable-sm" stripedRows :rowHover="true">
+          <DataTable :value="trackingOrders" :loading="trackingLoading" responsiveLayout="scroll" class="p-datatable-sm" stripedRows :rowHover="true" :class="['text-sm']">
             <Column field="code" :header="$t('order.code') || 'Mã đơn'">
               <template #body="{ data }">
                 <NuxtLink :to="`${PROFILEORDER}/${data.code}`" class="font-bold text-[#00b88c] hover:underline" @click="visibleTracking = false">#{{ data.code }}</NuxtLink>
+              </template>
+            </Column>
+
+            <Column :header="$t('order.customer') || 'Khách hàng'">
+              <template #body="{ data }">
+                <div class="flex flex-col leading-1.5">
+                  <span class="font-medium text-sm">{{ data.customerName || data.customer?.name || "-" }}</span>
+                  <span class="text-xs text-gray-500">{{ data.customerPhone || data.customer?.phone || "-" }}</span>
+                </div>
               </template>
             </Column>
 
@@ -406,22 +415,13 @@
               </template>
             </Column>
 
-            <Column :header="$t('order.customer') || 'Khách hàng'">
-              <template #body="{ data }">
-                <div class="flex flex-col">
-                  <span class="font-medium text-sm">{{ data.customerName || data.customer?.name || "-" }}</span>
-                  <span class="text-xs text-gray-500">{{ data.customerPhone || data.customer?.phone || "-" }}</span>
-                </div>
-              </template>
-            </Column>
-
             <Column field="totalAmount" :header="$t('order.total') || 'Tổng tiền'">
               <template #body="{ data }">
                 <span class="font-bold text-red-500">{{ formatPrice(data.totalAmount) }}</span>
               </template>
             </Column>
 
-            <Column field="status" :header="$t('order.status') || 'Trạng thái'">
+            <Column field="status" :header="$t('order.statusOrder') || 'Trạng thái'">
               <template #body="{ data }">
                 <Tag :value="getStatusLabel(data.status)" :severity="getStatusSeverity(data.status)" />
               </template>
@@ -430,17 +430,6 @@
             <Column field="paymentStatus" :header="$t('order.payment') || 'Thanh toán'">
               <template #body="{ data }">
                 <Tag :value="getPaymentStatusLabel(data.paymentStatus)" :severity="getPaymentStatusSeverity(data.paymentStatus)" />
-              </template>
-            </Column>
-
-            <Column :header="$t('common.action') || 'Xem'">
-              <template #body="{ data }">
-                <NuxtLink :to="`${PROFILEORDER}/${data.code}`" class="text-teal-600 hover:text-teal-800" @click="visibleTracking = false">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                </NuxtLink>
               </template>
             </Column>
           </DataTable>
@@ -479,6 +468,7 @@ import Column from "primevue/column";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import Tag from "primevue/tag";
+import DataState from "../ui/DataState.vue";
 
 // Auth
 const authStore = useAuthStore();
@@ -636,14 +626,14 @@ const getPaymentStatusSeverity = (status: string) => {
 
 const getStatusLabel = (status: string) => {
   const labels: Record<string, string> = {
-    pending: t("status.pending") || "Chờ xử lý",
-    confirmed: t("status.confirmed") || "Đã xác nhận",
-    processing: t("status.processing") || "Đang xử lý",
-    shipped: t("status.shipped") || "Đang giao",
-    delivered: t("status.delivered") || "Đã giao",
-    cancelled: t("status.cancelled") || "Đã hủy",
-    refunded: t("status.refunded") || "Đã hoàn tiền",
-    failed: t("status.failed") || "Thất bại",
+    pending: t("order.status.pending") || "Chờ xử lý",
+    confirmed: t("order.status.confirmed") || "Đã xác nhận",
+    processing: t("order.status.processing") || "Đang xử lý",
+    shipped: t("order.status.shipped") || "Đang giao",
+    delivered: t("order.status.delivered") || "Đã giao",
+    cancelled: t("order.status.cancelled") || "Đã hủy",
+    refunded: t("order.status.refunded") || "Đã hoàn tiền",
+    failed: t("order.status.failed") || "Thất bại",
   };
   return labels[status] || status;
 };
