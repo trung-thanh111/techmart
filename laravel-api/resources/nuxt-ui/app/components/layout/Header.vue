@@ -494,24 +494,6 @@
             </div>
         </div>
     </header>
-    <Dialog v-model:visible="showTrackingOrderDialog" :header="t('cart.removeItem')" :modal="true" :style="{ width: '450px' }" :closable="true" @hide="selectedItemToDelete = null">
-        <div class="flex flex-col gap-4">
-            <div class="flex items-center gap-3">
-                <i class="pi pi-exclamation-triangle text-2xl text-red-500"></i>
-                <span class="text-base">{{ t("cart.removeItemConfirm") }}</span>
-            </div>
-            <div v-if="selectedItemToDelete" class="mt-2">
-                <p class="text-sm text-gray-600 mb-2">{{ t("cart.product") }}:</p>
-                <div class="p-2 bg-gray-50 border border-red-200 rounded">
-                    <p class="font-medium text-red-500 text-sm">{{ getProductName(selectedItemToDelete) }}</p>
-                </div>
-            </div>
-        </div>
-        <template #footer>
-            <Button :label="t('cart.cancel')" severity="secondary" outlined @click="showTrackingOrderDialog = false" class="px-3 py-1.5 text-xs rounded" />
-            <Button :label="t('cart.removeItem')" severity="danger" :loading="isLoading" @click="handleConfirmDeleteItem" class="px-3 py-1.5 text-xs rounded" />
-        </template>
-    </Dialog>
 </template>
 
 <script setup lang="ts">

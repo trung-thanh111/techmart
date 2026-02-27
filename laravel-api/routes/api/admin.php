@@ -225,6 +225,18 @@ Route::group(['prefix' => 'v1/admin', 'middleware' => ['jwt:admin', 'convert', '
     // Other Admin Resources
     Route::resource('systems', SystemController::class)->except($routeExcept);
     Route::resource('popups', PopupController::class)->except($routeExcept);
+
+    // Promotions
+    Route::group(['prefix' => 'promotions'], function () {
+        Route::delete('bulkDelete', [PromotionController::class, 'bulkDelete']);
+        Route::post('{id}/attach', [PromotionController::class, 'attach']);
+        Route::delete('{id}/detach', [PromotionController::class, 'detach']);
+        Route::post('bulkStore', [PromotionController::class, 'bulkStore']);
+        Route::put('bulkUpdate', [PromotionController::class, 'bulkUpdate']);
+        Route::patch('bulkUpdate', [PromotionController::class, 'bulkUpdate']);
+        Route::post('{id}/restore', [PromotionController::class, 'restore']);
+    });
+    Route::post('promotion/apply_discount', [PromotionController::class, 'applyDiscount']);
     Route::resource('promotions', PromotionController::class)->except($routeExcept);
     Route::resource('menus', MenuController::class)->except($routeExcept);
     Route::resource('menu_items', MenuItemController::class)->except($routeExcept);
@@ -242,6 +254,17 @@ Route::group(['prefix' => 'v1/admin', 'middleware' => ['jwt:admin', 'convert', '
     Route::resource('faqs', FaqController::class)->except($routeExcept);
     Route::resource('banner_pages', BannerPageController::class)->except($routeExcept);
     Route::resource('banner_positions', BannerPositionController::class)->except($routeExcept);
+
+    // Promotion Catalogues
+    Route::group(['prefix' => 'promotion_catalogues'], function () {
+        Route::delete('bulkDelete', [PromotionCatalogueController::class, 'bulkDelete']);
+        Route::post('{id}/attach', [PromotionCatalogueController::class, 'attach']);
+        Route::delete('{id}/detach', [PromotionCatalogueController::class, 'detach']);
+        Route::post('bulkStore', [PromotionCatalogueController::class, 'bulkStore']);
+        Route::put('bulkUpdate', [PromotionCatalogueController::class, 'bulkUpdate']);
+        Route::patch('bulkUpdate', [PromotionCatalogueController::class, 'bulkUpdate']);
+        Route::post('{id}/restore', [PromotionCatalogueController::class, 'restore']);
+    });
     Route::resource('promotion_catalogues', PromotionCatalogueController::class)->except($routeExcept);
     Route::resource('product_tags', ProductTagController::class)->except($routeExcept);
 

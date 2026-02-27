@@ -136,6 +136,7 @@ import AccordionHeader from "primevue/accordionheader";
 import AccordionContent from "primevue/accordioncontent";
 import { PROMOTION_RULE_TYPES, PROMOTION_OPERATORS, PROMOTION_LOGIC_OPERATORS } from "~/utils/constants";
 import { useAppToast } from "~/composables/useAppToast";
+import { useI18n } from "vue-i18n";
 import { promotionService } from "~/services/promotion/promotion.service";
 import { useRoute } from "vue-router";
 
@@ -151,6 +152,8 @@ const emit = defineEmits<{
     save: [value: any[]];
     "save-record": [index: number, record: any];
 }>();
+
+const { t } = useI18n();
 
 const rules = ref<any[]>(props.modelValue || []);
 import { watch } from "vue";

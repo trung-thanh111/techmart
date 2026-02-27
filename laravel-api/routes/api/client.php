@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\V1\Product\WishlistController;
 use App\Http\Controllers\Api\V1\Post\PostCommentLikeController;
 use App\Http\Controllers\Api\V1\Post\PostLikeController;
 use App\Http\Controllers\Api\V1\Post\PostCommentController;
+use App\Http\Controllers\Api\V1\Promotion\PromotionController;
 use App\Http\Controllers\Api\V1\Product\ProductTagController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\Product\ProductController;
@@ -165,6 +166,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
         Route::get('post_comments', [PostCommentController::class, 'index']);
         Route::get('post_likes', [PostLikeController::class, 'index']);
         Route::get('post_comment_likes', [PostCommentLikeController::class, 'index']);
+        Route::post('promotion/apply_discount', [PromotionController::class, 'applyDiscount']);
     });
 
     // FE routes (public matchers)

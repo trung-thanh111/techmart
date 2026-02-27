@@ -94,6 +94,7 @@ import AccordionHeader from "primevue/accordionheader";
 import AccordionContent from "primevue/accordioncontent";
 import { PROMOTION_ACTION_TYPES, PROMOTION_APPLY_TO } from "~/utils/constants";
 import { useAppToast } from "~/composables/useAppToast";
+import { useI18n } from "vue-i18n";
 
 interface Props {
     modelValue: any[];
@@ -104,6 +105,8 @@ const emit = defineEmits<{
     "update:modelValue": [value: any[]];
     save: [value: any[]];
 }>();
+
+const { t } = useI18n();
 
 // local actions array synced with parent
 const actionsLocal = ref<any[]>(props.modelValue || []);

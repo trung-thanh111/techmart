@@ -5,16 +5,17 @@ namespace App\Services\Impl\Promotion;
 use Illuminate\Http\Request;
 use App\Services\Impl\BaseService;
 use Illuminate\Database\Eloquent\Model;
+use App\Classes\Promotion\PromotionEvaluator;
 use App\Repositories\Promotion\PromotionRepository;
 use App\Http\Resources\Promotion\PromotionResource;
 use App\Services\Interfaces\Promotion\PromotionServiceInterface;
-use App\Http\Resources\Promotion\PromotionDetailResource;
 use App\Models\Promotion;
 
 class PromotionService extends BaseService implements PromotionServiceInterface
 {
 
     protected $repository;
+    protected PromotionEvaluator $evaluator;
 
     protected $complexFilter = ['id'];
 
@@ -32,9 +33,31 @@ class PromotionService extends BaseService implements PromotionServiceInterface
     protected $useUpload = true;
 
     public function __construct(
-        PromotionRepository $repository
+        PromotionRepository $repository,
+        PromotionEvaluator $evaluator
     ) {
         $this->repository = $repository;
+        $this->evaluator = $evaluator;
+    }
+
+    /**
+     * Calculate discount for a given cart context.
+     *
+     * @param array $context ['subtotal' => float, 'items' => array]
+     * @return array
+     */
+    public function calculateDiscount(array $context): array
+    {
+        // Initial values for context if not present
+        $context['subtotal'] = (float)($context['subtotal'] ?? 0);
+        $context['items'] = $context['items'] ?? [];
+
+        $promotions = Promotion::active()
+            ->hasUsageLeft()
+            ->with(['promotion_rules', 'promotion_actions', 'promotion_targets'])
+            ->get();
+
+        return $this->evaluator->evaluate($promotions, $context);
     }
 
     /**
@@ -44,6 +67,9 @@ class PromotionService extends BaseService implements PromotionServiceInterface
     protected function prepareModelData(Request $request): self
     {
         $this->initializeBasicModelData($request);
+
+        // Upload single image if present
+        $this->uploadImage($request, 'image', 'default', 'image');
 
         // Normalize combinable_with: accept JSON string or array
         if ($request->has('combinable_with')) {
