@@ -37,7 +37,6 @@ const getPromotionStatus = (item: any) => {
     const now = new Date();
     const startDate = item.startDate ? new Date(item.startDate) : null;
     let endDate = item.endDate ? new Date(item.endDate) : null;
-    console.info(endDate);
     if (endDate && !isNaN(endDate?.getTime())) {
         endDate = new Date(endDate?.getFullYear(), endDate?.getMonth(), endDate?.getDate(), 23, 59, 59, 999);
     } else {

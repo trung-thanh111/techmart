@@ -14,16 +14,16 @@
         </div>
         <div class="card-body p-2">
             <Accordion :modelValue="activeIndex" @update:modelValue="(val: any) => (activeIndex = val)" expandIcon="pi pi-plus" collapseIcon="pi pi-minus">
-                <template v-if="rules.length === 0">
+                <template v-if="fields.length === 0">
                     <div class="text-center text-muted py-4">
                         {{ $t("admin.page.promotion.noRules") }}
                     </div>
                 </template>
                 <template v-else>
-                    <AccordionPanel v-for="(rule, index) in rules" :key="index" :value="index">
+                    <AccordionPanel v-for="(field, index) in fields" :key="field.key" :value="index">
                         <AccordionHeader>
                             <div class="flex items-center gap-2 w-full">
-                                <span class="font-medium">#{{ index + 1 }} - {{ getRuleTypeLabel(rule.ruleType) }}</span>
+                                <span class="font-medium">#{{ index + 1 }} - {{ getRuleTypeLabel(field.value.ruleType) }}</span>
                                 <div class="ml-auto flex items-center gap-2">
                                     <button type="button" @click.stop="removeRule(index)" class="w-8 h-8 flex items-center justify-center rounded-full text-white bg-red-500 hover:bg-red-700 transition">
                                         <i class="mdi mdi-trash-can"></i>
@@ -37,26 +37,26 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <label class="form-label">{{ $t("admin.page.promotion.ruleGroup") }}</label>
-                                            <Field :name="`rules.${index}.ruleGroup`" v-slot="{ field, errorMessage, meta }">
-                                                <InputNumber v-model="field.value" @update:modelValue="field.onChange" :min="0" class="w-full" input-class="rounded" size="small" style="height: 38px" />
+                                            <Field :name="`rules.${index}.ruleGroup`" v-slot="{ field: f, errorMessage, meta }">
+                                                <InputNumber v-model="f.value" @update:modelValue="f.onChange" :min="0" class="w-full" input-class="rounded" size="small" style="height: 38px" />
                                                 <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
                                             </Field>
                                         </div>
                                         <div class="col-md-4">
                                             <label class="form-label">{{ $t("admin.page.promotion.logicOperator") }}</label>
-                                            <Field :name="`rules.${index}.logicOperator`" v-slot="{ field, errorMessage, meta }">
-                                                <Select v-model="field.value" @update:modelValue="field.onChange" :options="PROMOTION_LOGIC_OPERATORS" option-label="label" option-value="value" class="w-full" :placeholder="$t('admin.page.promotion.selectLogicOperator')" style="height: 38px" />
+                                            <Field :name="`rules.${index}.logicOperator`" v-slot="{ field: f, errorMessage, meta }">
+                                                <Select v-model="f.value" @update:modelValue="f.onChange" :options="PROMOTION_LOGIC_OPERATORS" option-label="label" option-value="value" class="w-full" :placeholder="$t('admin.page.promotion.selectLogicOperator')" style="height: 38px" />
                                                 <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
                                             </Field>
                                         </div>
                                         <div class="col-md-4">
                                             <label class="form-label">{{ $t("admin.page.promotion.ruleType") }}</label>
-                                            <Field :name="`rules.${index}.ruleType`" v-slot="{ field, errorMessage, meta }">
+                                            <Field :name="`rules.${index}.ruleType`" v-slot="{ field: f, errorMessage, meta }">
                                                 <Select
-                                                    v-model="field.value"
+                                                    v-model="f.value"
                                                     @update:modelValue="
                                                         (val) => {
-                                                            field.onChange(val);
+                                                            f.onChange(val);
                                                             onRuleTypeChange(index, val);
                                                         }
                                                     "
@@ -74,31 +74,31 @@
                                     <div class="row mt-3">
                                         <div class="col-md-6">
                                             <label class="form-label">{{ $t("admin.page.promotion.operator") }}</label>
-                                            <Field :name="`rules.${index}.operator`" v-slot="{ field, errorMessage, meta }">
-                                                <Select v-model="field.value" @update:modelValue="field.onChange" :options="PROMOTION_OPERATORS" option-label="label" option-value="value" class="w-full" :placeholder="$t('admin.page.promotion.selectOperator')" style="height: 38px" />
+                                            <Field :name="`rules.${index}.operator`" v-slot="{ field: f, errorMessage, meta }">
+                                                <Select v-model="f.value" @update:modelValue="f.onChange" :options="PROMOTION_OPERATORS" option-label="label" option-value="value" class="w-full" :placeholder="$t('admin.page.promotion.selectOperator')" style="height: 38px" />
                                                 <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
                                             </Field>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">{{ $t("admin.page.promotion.value") }}</label>
-                                            <Field :name="`rules.${index}.value`" v-slot="{ field, errorMessage, meta }">
-                                                <template v-if="rule.ruleType === 'min_order_total'">
-                                                    <InputNumber v-model="field.value" @update:modelValue="field.onChange" mode="currency" currency="VND" locale="vi-VN" class="w-full h-[38px] rounded" :min="0" />
+                                            <Field :name="`rules.${index}.value`" v-slot="{ field: f, errorMessage, meta }">
+                                                <template v-if="field.value.ruleType === 'min_order_total'">
+                                                    <InputNumber v-model="f.value" @update:modelValue="f.onChange" mode="currency" currency="VND" locale="vi-VN" class="w-full h-[38px] rounded" :min="0" />
                                                 </template>
-                                                <template v-else-if="rule.ruleType === 'time_slot'">
+                                                <template v-else-if="field.value.ruleType === 'time_slot'">
                                                     <div class="flex gap-2">
-                                                        <input :value="(field.value && field.value.from) || ''" @input="(e) => updateNestedFieldFromEvent(field, 'from', e)" class="form-control rounded h-[38px]" placeholder="Từ (HH:MM)" />
-                                                        <input :value="(field.value && field.value.to) || ''" @input="(e) => updateNestedFieldFromEvent(field, 'to', e)" class="form-control rounded h-[38px]" placeholder="Đến (HH:MM)" />
+                                                        <input :value="(f.value && f.value.from) || ''" @input="(e) => updateNestedFieldFromEvent(f, 'from', e)" class="form-control rounded h-[38px]" placeholder="Từ (HH:MM)" />
+                                                        <input :value="(f.value && f.value.to) || ''" @input="(e) => updateNestedFieldFromEvent(f, 'to', e)" class="form-control rounded h-[38px]" placeholder="Đến (HH:MM)" />
                                                     </div>
                                                 </template>
-                                                <template v-else-if="rule.ruleType === 'product_qty_by_category'">
+                                                <template v-else-if="field.value.ruleType === 'product_qty_by_category'">
                                                     <div class="flex gap-2">
-                                                        <input :value="(field.value && field.value.category_id) || ''" @input="(e) => updateNestedFieldFromEventNumber(field, 'category_id', e)" class="form-control rounded h-[38px]" placeholder="ID danh mục" />
-                                                        <input :value="(field.value && field.value.min_qty) || ''" @input="(e) => updateNestedFieldFromEventNumber(field, 'min_qty', e)" class="form-control rounded h-[38px]" placeholder="SL tối thiểu" />
+                                                        <input :value="(f.value && f.value.category_id) || ''" @input="(e) => updateNestedFieldFromEventNumber(f, 'category_id', e)" class="form-control rounded h-[38px]" placeholder="ID danh mục" />
+                                                        <input :value="(f.value && f.value.min_qty) || ''" @input="(e) => updateNestedFieldFromEventNumber(f, 'min_qty', e)" class="form-control rounded h-[38px]" placeholder="SL tối thiểu" />
                                                     </div>
                                                 </template>
                                                 <template v-else>
-                                                    <input :value="field.value" @input="(e) => updateFieldFromEvent(field, e)" type="text" class="form-control rounded h-[38px]" :class="errorMessage && meta.touched ? 'border-red-500' : ''" placeholder="Nhập giá trị điều kiện" />
+                                                    <input :value="f.value" @input="(e) => updateFieldFromEvent(f, e)" type="text" class="form-control rounded h-[38px]" :class="errorMessage && meta.touched ? 'border-red-500' : ''" placeholder="Nhập giá trị điều kiện" />
                                                 </template>
                                                 <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
                                             </Field>
@@ -107,8 +107,8 @@
                                     <div class="row mt-3">
                                         <div class="col-12">
                                             <label class="form-label">{{ $t("admin.page.promotion.description") }}</label>
-                                            <Field :name="`rules.${index}.description`" v-slot="{ field, errorMessage, meta }">
-                                                <CKEditor v-model="field.value" @update:modelValue="field.onChange" class="h-32" />
+                                            <Field :name="`rules.${index}.description`" v-slot="{ field: f, errorMessage, meta }">
+                                                <CKEditor v-model="f.value" @update:modelValue="f.onChange" class="h-32" />
                                                 <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
                                             </Field>
                                         </div>
@@ -125,7 +125,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { Field } from "vee-validate";
+import { Field, useFieldArray } from "vee-validate";
 import Button from "~/components/custom/Button.vue";
 import CKEditor from "~/components/custom/CKEditor.vue";
 import InputNumber from "primevue/inputnumber";
@@ -141,65 +141,50 @@ import { promotionService } from "~/services/promotion/promotion.service";
 import { useRoute } from "vue-router";
 
 interface Props {
-    modelValue: any[];
     promotionId?: number | string | null;
 }
 
 const props = defineProps<Props>();
 const route = useRoute();
 const emit = defineEmits<{
-    "update:modelValue": [value: any[]];
     save: [value: any[]];
     "save-record": [index: number, record: any];
 }>();
 
 const { t } = useI18n();
 
-const rules = ref<any[]>(props.modelValue || []);
-import { watch } from "vue";
-
-// keep local rules in sync with parent prop
-watch(
-    () => props.modelValue,
-    (v) => {
-        rules.value = v || [];
-    },
-    { deep: true },
-);
+const { fields, push, remove, update } = useFieldArray<any>("rules");
 
 const activeIndex = ref<number | null>(null);
 
 const addRule = async () => {
-    const newRecord = {
-        ruleGroup: rules.value.length,
-        logicOperator: null,
-        ruleType: null,
-        operator: null,
-        value: null,
+    push({
+        ruleGroup: fields.value.length,
+        logicOperator: "AND",
+        ruleType: "min_order_total",
+        operator: ">=",
+        value: 0,
         description: null,
-    };
-    rules.value = [...rules.value, newRecord];
-    activeIndex.value = rules.value.length - 1;
-    emit("update:modelValue", rules.value);
+    });
+    activeIndex.value = fields.value.length - 1;
 };
 
 const removeRule = async (index: number) => {
-    rules.value = rules.value.filter((_, i) => i !== index);
+    remove(index);
     // collapse after removal
     activeIndex.value = null;
-    // notify parent of change
-    emit("update:modelValue", rules.value);
 };
 const toast = useAppToast();
 
 const confirmAndClose = () => {
-    emit("save", rules.value);
-    toast.success("Đã lưu điều kiện");
+    toast.success(t("admin.saveSuccess"));
 };
+
 const onRuleTypeChange = (index: number, newType: string) => {
     // initialize appropriate default value shape when changing type
-    const r = rules.value[index];
-    if (!r) return;
+    const field = fields.value[index];
+    if (!field) return;
+    const r = { ...field.value };
     if (newType === "min_order_total") {
         r.value = r.value || 0;
     } else if (newType === "time_slot") {
@@ -209,17 +194,15 @@ const onRuleTypeChange = (index: number, newType: string) => {
     } else {
         r.value = r.value ?? "";
     }
-    // update
-    rules.value = [...rules.value];
-    emit("update:modelValue", rules.value);
+    update(index, r);
 };
 
 const saveRecord = async (index: number) => {
-    const record = rules.value[index];
+    const record = fields.value[index].value;
     // persist then emit
     await persistRules();
     emit("save-record", index, record);
-    toast.success("Đã lưu điều kiện này");
+    toast.success(t("admin.saveSuccess"));
     // close the panel after saving
     activeIndex.value = null;
 };
@@ -232,21 +215,16 @@ const persistRules = async () => {
     const pid = getPromotionId();
     if (!pid || Number.isNaN(pid)) return;
     try {
-        const payload = { rules: rules.value } as any;
+        const payload = { rules: fields.value.map((f) => f.value) } as any;
         const resp = await promotionService.update(pid, payload as any);
-        toast.success(resp?.message || "Đã lưu điều kiện");
-        // if server returns updated promotion, sync rules
-        const refreshed = await promotionService.show(pid);
-        const refreshedData = (refreshed?.data as any) || {};
-        if (refreshedData && refreshedData.rules) {
-            rules.value = refreshedData.rules;
-            emit("update:modelValue", rules.value);
-        }
+        toast.success(resp?.message || t("admin.saveSuccess"));
+        // if server returns updated promotion, the parent will usually handle the sync
     } catch (err: any) {
         console.error("Persist rules error:", err);
-        toast.error(err?.response?.data?.message || "Lưu điều kiện thất bại");
+        toast.error(err?.response?.data?.message || t("admin.saveFailed"));
     }
 };
+
 const updateNestedFieldFromEvent = (field: any, key: string, ev?: Event) => {
     const v = ev && (ev.target as HTMLInputElement)?.value;
     const newVal = { ...(field.value || {}) };

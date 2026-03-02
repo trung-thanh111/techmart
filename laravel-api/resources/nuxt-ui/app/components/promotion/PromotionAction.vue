@@ -14,16 +14,16 @@
         </div>
         <div class="card-body p-2">
             <Accordion :modelValue="activeIndex" @update:modelValue="(val: any) => (activeIndex = val)" expandIcon="pi pi-plus" collapseIcon="pi pi-minus">
-                <template v-if="actionsLocal.length === 0">
+                <template v-if="fields.length === 0">
                     <div class="text-center text-muted py-4">
                         {{ $t("admin.page.promotion.noActions") }}
                     </div>
                 </template>
                 <template v-else>
-                    <AccordionPanel v-for="(action, index) in actionsLocal" :key="index" :value="index">
+                    <AccordionPanel v-for="(field, index) in fields" :key="field.key" :value="index">
                         <AccordionHeader>
                             <div class="flex items-center gap-2 w-full">
-                                <span class="font-medium">#{{ index + 1 }} - {{ getActionTypeLabel(action.actionType) }}</span>
+                                <span class="font-medium">#{{ index + 1 }} - {{ getActionTypeLabel(field.value.actionType) }}</span>
                                 <div class="ml-auto flex items-center gap-2">
                                     <button type="button" @click.stop="removeAction(index)" class="w-8 h-8 flex items-center justify-center rounded-full text-white bg-red-500 hover:bg-red-700 transition">
                                         <i class="mdi mdi-trash-can"></i>
@@ -36,22 +36,22 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <label class="form-label">{{ $t("admin.page.promotion.executionOrder") }}</label>
-                                        <Field :name="`actions.${index}.executionOrder`" v-slot="{ field, errorMessage, meta }">
-                                            <InputNumber v-model="field.value" @update:modelValue="field.onChange" :min="0" class="w-full" input-class="rounded" size="small" style="height: 38px" />
+                                        <Field :name="`actions.${index}.executionOrder`" v-slot="{ field: f, errorMessage, meta }">
+                                            <InputNumber v-model="f.value" @update:modelValue="f.onChange" :min="0" class="w-full" input-class="rounded" size="small" style="height: 38px" />
                                             <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
                                         </Field>
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">{{ $t("admin.page.promotion.actionType") }}</label>
-                                        <Field :name="`actions.${index}.actionType`" v-slot="{ field, errorMessage, meta }">
-                                            <Select v-model="field.value" @update:modelValue="field.onChange" :options="PROMOTION_ACTION_TYPES" option-label="label" option-value="value" class="w-full" :placeholder="$t('admin.page.promotion.selectActionType')" style="height: 38px" />
+                                        <Field :name="`actions.${index}.actionType`" v-slot="{ field: f, errorMessage, meta }">
+                                            <Select v-model="f.value" @update:modelValue="f.onChange" :options="PROMOTION_ACTION_TYPES" option-label="label" option-value="value" class="w-full" :placeholder="$t('admin.page.promotion.selectActionType')" style="height: 38px" />
                                             <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
                                         </Field>
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">{{ $t("admin.page.promotion.actionValue") }}</label>
-                                        <Field :name="`actions.${index}.actionValue`" v-slot="{ field, errorMessage, meta }">
-                                            <InputNumber v-model="field.value" @update:modelValue="field.onChange" :min="0" class="w-full" input-class="rounded" size="small" style="height: 38px" />
+                                        <Field :name="`actions.${index}.actionValue`" v-slot="{ field: f, errorMessage, meta }">
+                                            <InputNumber v-model="f.value" @update:modelValue="f.onChange" :min="0" class="w-full" input-class="rounded" size="small" style="height: 38px" />
                                             <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
                                         </Field>
                                     </div>
@@ -60,15 +60,24 @@
                                 <div class="row mt-3">
                                     <div class="col-md-6">
                                         <label class="form-label">{{ $t("admin.page.promotion.maxDiscount") }}</label>
-                                        <Field :name="`actions.${index}.maxDiscount`" v-slot="{ field, errorMessage, meta }">
-                                            <InputNumber v-model="field.value" @update:modelValue="field.onChange" mode="currency" currency="VND" locale="vi-VN" :min="0" class="w-full" input-class="!rounded" size="small" style="height: 38px" />
+                                        <Field :name="`actions.${index}.maxDiscount`" v-slot="{ field: f, errorMessage, meta }">
+                                            <InputNumber v-model="f.value" @update:modelValue="f.onChange" mode="currency" currency="VND" locale="vi-VN" :min="0" class="w-full" input-class="!rounded" size="small" style="height: 38px" />
                                             <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
                                         </Field>
                                     </div>
                                     <div class="col-md-6">
+                                        <label class="form-label">{{ $t("admin.page.promotion.minDiscount") }}</label>
+                                        <Field :name="`actions.${index}.minDiscount`" v-slot="{ field: f, errorMessage, meta }">
+                                            <InputNumber v-model="f.value" @update:modelValue="f.onChange" mode="currency" currency="VND" locale="vi-VN" :min="0" class="w-full" input-class="!rounded" size="small" style="height: 38px" />
+                                            <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
+                                        </Field>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
                                         <label class="form-label">{{ $t("admin.page.promotion.applyTo") }}</label>
-                                        <Field :name="`actions.${index}.applyTo`" v-slot="{ field, errorMessage, meta }">
-                                            <Select v-model="field.value" @update:modelValue="field.onChange" :options="PROMOTION_APPLY_TO" option-label="label" option-value="value" class="w-full" :placeholder="$t('admin.page.promotion.selectApplyTo')" style="height: 38px" />
+                                        <Field :name="`actions.${index}.applyTo`" v-slot="{ field: f, errorMessage, meta }">
+                                            <Select v-model="f.value" @update:modelValue="f.onChange" :options="PROMOTION_APPLY_TO" option-label="label" option-value="value" class="w-full" :placeholder="$t('admin.page.promotion.selectApplyTo')" style="height: 38px" />
                                             <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
                                         </Field>
                                     </div>
@@ -83,8 +92,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
-import { Field } from "vee-validate";
+import { ref } from "vue";
+import { Field, useFieldArray } from "vee-validate";
 import Button from "~/components/custom/Button.vue";
 import InputNumber from "primevue/inputnumber";
 import Select from "primevue/select";
@@ -96,50 +105,26 @@ import { PROMOTION_ACTION_TYPES, PROMOTION_APPLY_TO } from "~/utils/constants";
 import { useAppToast } from "~/composables/useAppToast";
 import { useI18n } from "vue-i18n";
 
-interface Props {
-    modelValue: any[];
-}
-
-const props = defineProps<Props>();
-const emit = defineEmits<{
-    "update:modelValue": [value: any[]];
-    save: [value: any[]];
-}>();
-
 const { t } = useI18n();
 
-// local actions array synced with parent
-const actionsLocal = ref<any[]>(props.modelValue || []);
-watch(
-    () => props.modelValue,
-    (v) => {
-        actionsLocal.value = v || [];
-    },
-    { deep: true },
-);
+const { fields, push, remove } = useFieldArray<any>("actions");
 
 const addAction = () => {
-    const next = [
-        ...actionsLocal.value,
-        {
-            executionOrder: actionsLocal.value.length,
-            actionType: "percent",
-            actionValue: 0,
-            maxDiscount: 0,
-            minDiscount: 0,
-            applyTo: "cart_subtotal",
-            config: null,
-        },
-    ];
-    actionsLocal.value = next;
-    emit("update:modelValue", actionsLocal.value);
+    push({
+        executionOrder: fields.value.length,
+        actionType: "percent",
+        actionValue: 0,
+        maxDiscount: 0,
+        minDiscount: 0,
+        applyTo: "cart_subtotal",
+        config: null,
+    });
     // open newly added panel
-    activeIndex.value = actionsLocal.value.length - 1;
+    activeIndex.value = fields.value.length - 1;
 };
 
 const removeAction = (index: number) => {
-    actionsLocal.value = actionsLocal.value.filter((_, i) => i !== index);
-    emit("update:modelValue", actionsLocal.value);
+    remove(index);
     activeIndex.value = null;
 };
 
@@ -148,8 +133,7 @@ const activeIndex = ref<number | null>(null);
 const toast = useAppToast();
 
 const confirmAndClose = () => {
-    emit("save", actionsLocal.value);
-    toast.success("Đã lưu hành động");
+    toast.success(t("admin.saveSuccess"));
 };
 
 const getActionTypeLabel = (type: string) => {

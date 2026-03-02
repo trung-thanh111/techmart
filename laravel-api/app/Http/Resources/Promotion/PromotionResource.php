@@ -20,6 +20,7 @@ class PromotionResource extends JsonResource
                 'code' => $this->code,
                 'name' => $this->name,
                 'slug' => $this->slug,
+                'image' => $this->image,
                 'type' => $this->type,
                 'priority' => $this->priority,
                 'publish' => (int) $this->publish,
@@ -40,6 +41,7 @@ class PromotionResource extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug,
             'description' => $this->description,
+            'image' => $this->image,
             'type' => $this->type,
             'priority' => $this->priority,
             'promotionCatalogue' => $this->whenLoaded('promotion_catalogue', function () {

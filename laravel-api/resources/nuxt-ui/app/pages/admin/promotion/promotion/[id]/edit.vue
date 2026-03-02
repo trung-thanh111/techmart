@@ -188,6 +188,13 @@
                             <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
                         </Field>
                     </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{ $t("admin.common.status") }}</label>
+                        <Field name="publish" v-slot="{ field, errorMessage, meta }">
+                            <PublishSelect :modelValue="field.value" @update:modelValue="field.onChange" />
+                            <small v-if="errorMessage && meta.touched" class="text-danger">{{ $t(errorMessage) }}</small>
+                        </Field>
+                    </div>
                 </div>
             </div>
         </div>
@@ -205,6 +212,7 @@ import PromotionAction from "~/components/promotion/PromotionAction.vue";
 import PromotionTarget from "~/components/promotion/PromotionTarget.vue";
 import SingleImageUpload from "~/components/custom/SingleImageUpload.vue";
 import CKEditor from "~/components/custom/CKEditor.vue";
+import PublishSelect from "~/components/custom/PublishSelect.vue";
 import { promotionService } from "~/services/promotion/promotion.service";
 import { useAppToast } from "~/composables/useAppToast";
 
