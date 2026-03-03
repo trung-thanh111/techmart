@@ -163,7 +163,7 @@
 
 <script setup lang="ts">
 import { ref, watch, nextTick, onMounted } from "vue";
-import { Field, useFieldArray, useForm } from "vee-validate";
+import { Field, useFieldArray } from "vee-validate";
 import Button from "~/components/custom/Button.vue";
 import Select from "primevue/select";
 import Accordion from "primevue/accordion";
@@ -179,7 +179,6 @@ import { formatPrice } from "~/utils/helpers";
 import CKEditor from "~/components/custom/CKEditor.vue";
 
 const { t } = useI18n();
-const { setFieldValue } = useForm();
 const toast = useAppToast();
 
 const { fields, push, remove, update } = useFieldArray<any>("targets");

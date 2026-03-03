@@ -143,7 +143,7 @@ class PromotionService extends BaseService implements PromotionServiceInterface
      */
     public function isActive(Promotion $promotion): bool
     {
-        if (!$promotion->publish) {
+        if ((int)$promotion->publish !== 2) {
             return false;
         }
         $now = now();

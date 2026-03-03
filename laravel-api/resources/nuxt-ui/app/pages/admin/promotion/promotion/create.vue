@@ -166,7 +166,7 @@
                     <div class="mb-3">
                         <Field name="canCombine" v-slot="{ field, errorMessage, meta }">
                             <div class="flex items-center gap-2">
-                                <Checkbox v-model="field.value" @update:modelValue="field.onChange" :id="`can_combine`" />
+                                <Checkbox v-model="field.value" @update:modelValue="field.onChange" :id="`can_combine`" binary />
                                 <label class="form-check-label" :for="`can_combine`">
                                     {{ $t("admin.page.promotion.canCombine") }}
                                 </label>

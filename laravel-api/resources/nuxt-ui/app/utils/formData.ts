@@ -1,22 +1,29 @@
 export const formData = (payload: Record<string, any>): FormData => {
     const fd = new FormData();
-    Object.entries(payload).forEach(([key, value]) => {
-        if (value === undefined || value === null) return;
-        if (value instanceof File || value instanceof Blob) {
-            fd.append(key, value);
-        } else if (typeof value === "boolean") {
-            fd.append(key, value ? "1" : "0");
-        } else if (Array.isArray(value)) {
-            if (value.every((v) => typeof v !== "object")) {
-                value.forEach((v) => fd.append(`${key}[]`, String(v)));
-            } else {
-                fd.append(key, JSON.stringify(value));
-            }
-        } else if (typeof value === "object") {
-            fd.append(key, JSON.stringify(value));
+
+    const appendRecursive = (data: any, rootKey: string) => {
+        if (data === undefined || data === null) return;
+
+        if (data instanceof File || data instanceof Blob) {
+            fd.append(rootKey, data);
+        } else if (Array.isArray(data)) {
+            data.forEach((item, index) => {
+                appendRecursive(item, `${rootKey}[${index}]`);
+            });
+        } else if (typeof data === "object" && !(data instanceof Date)) {
+            Object.entries(data).forEach(([key, value]) => {
+                appendRecursive(value, `${rootKey}[${key}]`);
+            });
+        } else if (typeof data === "boolean") {
+            fd.append(rootKey, data ? "1" : "0");
         } else {
-            fd.append(key, String(value));
+            fd.append(rootKey, String(data));
         }
+    };
+
+    Object.entries(payload).forEach(([key, value]) => {
+        appendRecursive(value, key);
     });
+
     return fd;
 };

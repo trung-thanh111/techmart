@@ -23,6 +23,7 @@ class PromotionResource extends JsonResource
                 'image' => $this->image,
                 'type' => $this->type,
                 'priority' => $this->priority,
+                'promotionCatalogueId' => $this->promotion_catalogue_id,
                 'publish' => (int) $this->publish,
                 'canCombine' => (bool) $this->can_combine,
                 'combinableWith' => $this->combinable_with,
@@ -44,6 +45,7 @@ class PromotionResource extends JsonResource
             'image' => $this->image,
             'type' => $this->type,
             'priority' => $this->priority,
+            'promotionCatalogueId' => $this->promotion_catalogue_id,
             'promotionCatalogue' => $this->whenLoaded('promotion_catalogue', function () {
                 return $this->promotion_catalogue;
             }),

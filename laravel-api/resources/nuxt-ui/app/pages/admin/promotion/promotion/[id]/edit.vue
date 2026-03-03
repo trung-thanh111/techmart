@@ -227,25 +227,31 @@ onMounted(async () => {
     const promotionData = (promotionResponse?.data as any) || null;
 
     if (promotionData) {
+        const parseDate = (v: any) => {
+            if (!v) return null;
+            const d = v instanceof Date ? v : new Date(String(v));
+            return Number.isNaN(d.getTime()) ? null : d;
+        };
+
         setValues({
-            name: promotionData.name || "",
-            code: promotionData.code || "",
-            description: promotionData.description || "",
-            image: promotionData.image || "",
-            type: (promotionData.type as any) || "order",
-            priority: promotionData.priority || 0,
-            promotionCatalogueId: promotionData.promotionCatalogueId || null,
-            canCombine: promotionData.canCombine || false,
-            combinableWith: promotionData.combinableWith || null,
-            usageLimit: promotionData.usageLimit || null,
-            usagePerCustomer: promotionData.usagePerCustomer || null,
-            startDate: promotionData.startDate || null,
-            endDate: promotionData.endDate || null,
-            publish: promotionData.publish || 2,
+            name: promotionData.name ?? "",
+            code: promotionData.code ?? "",
+            description: promotionData.description ?? "",
+            image: promotionData.image ?? null,
+            type: (promotionData.type as any) ?? "order",
+            priority: promotionData.priority ?? 0,
+            promotionCatalogueId: promotionData.promotionCatalogue?.id ?? promotionData.promotionCatalogueId ?? null,
+            canCombine: promotionData.canCombine ?? false,
+            combinableWith: promotionData.combinableWith ?? null,
+            usageLimit: promotionData.usageLimit ?? null,
+            usagePerCustomer: promotionData.usagePerCustomer ?? null,
+            startDate: parseDate(promotionData.startDate),
+            endDate: parseDate(promotionData.endDate),
+            publish: promotionData.publish ?? 2,
             // API returns keys: rules, actions, targets
-            rules: promotionData.rules || [],
-            actions: promotionData.actions || [],
-            targets: promotionData.targets || [],
+            rules: promotionData.rules ?? [],
+            actions: promotionData.actions ?? [],
+            targets: promotionData.targets ?? [],
         });
     }
 });

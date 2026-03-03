@@ -52,7 +52,7 @@ class Promotion extends Model
         'combinable_with' => 'array',
         'start_date' => 'datetime',
         'end_date' => 'datetime',
-        'publish' => 'boolean',
+        'publish' => 'integer',
         'can_combine' => 'boolean',
     ];
 
