@@ -248,7 +248,7 @@ onMounted(async () => {
             startDate: parseDate(promotionData.startDate),
             endDate: parseDate(promotionData.endDate),
             publish: promotionData.publish ?? 2,
-            // API returns keys: rules, actions, targets
+            // relations
             rules: promotionData.rules ?? [],
             actions: promotionData.actions ?? [],
             targets: promotionData.targets ?? [],
