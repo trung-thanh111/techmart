@@ -34,6 +34,8 @@ class DatabaseSeeder extends Seeder
             \Database\Seeders\Post\PostSeeder::class,
             \Database\Seeders\Menu\MenuSeeder::class,
             PromotionSeeder::class,
+            \Database\Seeders\Banner\BannerSeeder::class,
+            \Database\Seeders\Popup\PopupSeeder::class,
         ]);
     }
 }

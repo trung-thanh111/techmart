@@ -267,5 +267,21 @@
       "refunded": "Refunded",
       "failed": "Failed"
     }
+  },
+  "home": {
+    "introBanner": "Introduction Banner"
+  },
+  "client": {
+    "popup": {
+      "type": {
+        "promotion": "Promotion",
+        "notification": "Notification",
+        "confirm": "Confirmation",
+        "form": "Survey",
+        "guide": "Guide"
+      },
+      "close": "Close",
+      "exploreNow": "Explore Now"
+    }
   }
 }

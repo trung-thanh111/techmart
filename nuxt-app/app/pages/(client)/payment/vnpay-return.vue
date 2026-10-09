@@ -33,6 +33,10 @@
             Chi tiết giao dịch
           </h3>
           <div class="space-y-3">
+            <div v-if="orderCode" class="flex justify-between">
+              <span class="text-gray-600">Đơn hàng:</span>
+              <span class="font-semibold text-teal-600 text-sm">#{{ orderCode }}</span>
+            </div>
             <div v-if="txnRef" class="flex justify-between">
               <span class="text-gray-600">Mã giao dịch:</span>
               <span class="font-semibold text-gray-900 text-sm">{{ txnRef }}</span>
@@ -61,7 +65,27 @@
         <!-- Actions -->
         <div class="flex flex-col sm:flex-row gap-3 md:gap-4">
           <a href="/" class="flex-1 flex items-center justify-center gap-2 px-4 py-2 md:py-2.5 bg-teal-500 hover:bg-teal-600 text-white font-medium rounded-md transition-colors">Tiếp tục mua sắm</a>
-          <NuxtLink :to="PROFILEORDER" class="flex-1 flex items-center justify-center gap-2 px-4 py-2 md:py-2.5 border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium rounded-md transition-colors">Đơn hàng của tôi</NuxtLink>
+          <NuxtLink
+            v-if="orderCode && authStore.isAuthenticated"
+            :to="`${PROFILEORDER}/${orderCode}`"
+            class="flex-1 flex items-center justify-center gap-2 px-4 py-2 md:py-2.5 border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium rounded-md transition-colors"
+          >
+            Chi tiết đơn hàng
+          </NuxtLink>
+          <NuxtLink
+            v-else-if="orderCode"
+            :to="`${TOORDERSUCCESS}?code=${orderCode}`"
+            class="flex-1 flex items-center justify-center gap-2 px-4 py-2 md:py-2.5 border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium rounded-md transition-colors"
+          >
+            Chi tiết đơn hàng
+          </NuxtLink>
+          <NuxtLink
+            v-else
+            :to="PROFILEORDER"
+            class="flex-1 flex items-center justify-center gap-2 px-4 py-2 md:py-2.5 border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium rounded-md transition-colors"
+          >
+            Đơn hàng của tôi
+          </NuxtLink>
         </div>
       </div>
     </div>
@@ -70,12 +94,16 @@
 
 <script setup lang="ts">
 import { formatPrice } from "~/utils/helpers";
+import { paymentService } from "~/services/payment/payment.service";
+import { useAuthStore } from "~/stores/auth/auth";
 
 definePageMeta({
   layout: "client",
 });
 
 const route = useRoute();
+const authStore = useAuthStore();
+const orderCode = ref<string | null>(null);
 
 // Parse VNPay query params
 const responseCode = computed(() => (route.query.vnp_ResponseCode as string) || "99");
@@ -87,6 +115,20 @@ const amount = computed(() => {
 });
 const bankCode = computed(() => (route.query.vnp_BankCode as string) || "");
 const transactionNo = computed(() => (route.query.vnp_TransactionNo as string) || "");
+
+// Gửi params về backend để verify signature và cập nhật trạng thái đơn hàng
+onMounted(async () => {
+  if (route.query.vnp_TxnRef) {
+    try {
+      const res = await paymentService.vnpayReturn(route.query as Record<string, any>);
+      if (res?.order_code) {
+        orderCode.value = res.order_code;
+      }
+    } catch (e) {
+      console.error("Lỗi xác thực VNPay return:", e);
+    }
+  }
+});
 
 const STATUS_MESSAGES: Record<string, string> = {
   "00": "Giao dịch thành công",

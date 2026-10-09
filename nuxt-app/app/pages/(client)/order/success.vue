@@ -63,7 +63,20 @@
           </div>
           <div class="flex flex-col sm:flex-row gap-3 md:gap-4 mb-6 md:mb-8">
             <a href="/" class="flex-1 flex items-center justify-center gap-2 px-4 py-2 md:py-2.5 bg-teal-500 hover:bg-teal-600 text-white font-medium rounded-md transition-colors">Tiếp tục mua sắm</a>
-            <NuxtLink :to="`${PROFILEORDER}/${order.id}`" class="flex-1 flex items-center justify-center gap-2 px-4 py-2 md:py-2.5 border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium rounded-md transition-colors">Chi tiết đơn hàng</NuxtLink>
+            <NuxtLink
+              v-if="authStore.isAuthenticated"
+              :to="`${PROFILEORDER}/${order.code}`"
+              class="flex-1 flex items-center justify-center gap-2 px-4 py-2 md:py-2.5 border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium rounded-md transition-colors"
+            >
+              Chi tiết đơn hàng
+            </NuxtLink>
+            <NuxtLink
+              v-else
+              :to="TOLOGIN"
+              class="flex-1 flex items-center justify-center gap-2 px-4 py-2 md:py-2.5 border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium rounded-md transition-colors"
+            >
+              Đăng nhập tài khoản
+            </NuxtLink>
           </div>
           <div class="text-center">
             <p class="text-xs md:text-sm text-gray-600 mb-2">Cần hỗ trợ? Liên hệ chúng tôi:</p>
@@ -89,6 +102,7 @@
 </template>
 
 <script setup lang="ts">
+import { useAuthStore } from "~/stores/auth/auth";
 import { useOrderDetail } from "~/composables/order/useOrders";
 import { formatPrice, formatDate } from "~/utils/helpers";
 import { ORDER_STATUS_LABELS, PAYMENT_METHOD_LABELS } from "~/utils/order.constants";
@@ -98,6 +112,7 @@ definePageMeta({
   layout: "client",
 });
 
+const authStore = useAuthStore();
 const { order, loading } = useOrderDetail();
 
 watch(order, (newOrder) => {

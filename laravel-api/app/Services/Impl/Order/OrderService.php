@@ -71,7 +71,16 @@ class OrderService extends BaseService implements OrderServiceInterface
     {
         return DB::transaction(function () use ($request) {
             $items = $request->input('items', []);
-            $userId = auth(Common::API)->id();
+            $userId = null;
+            try {
+                if ($user = \Tymon\JWTAuth\Facades\JWTAuth::parseToken()->authenticate()) {
+                    $userId = $user->id;
+                }
+            } catch (\Throwable $e) {
+                if (auth(Common::API)->check()) {
+                    $userId = auth(Common::API)->id();
+                }
+            }
 
             // 1. Validate và reserve stock với pessimistic locking
             $reservedItems = $this->reserveStock($items);

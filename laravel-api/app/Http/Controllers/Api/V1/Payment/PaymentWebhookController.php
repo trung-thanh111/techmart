@@ -97,11 +97,27 @@ class PaymentWebhookController extends Controller
     {
         $payload = $request->query();
         $responseCode = $payload['vnp_ResponseCode'] ?? '99';
+        $orderCode = null;
+
+        try {
+            if (!empty($payload['vnp_TxnRef']) && !empty($payload['vnp_SecureHash'])) {
+                $this->paymentService->handleWebhook('vnpay', $payload);
+            }
+            if (!empty($payload['vnp_TxnRef'])) {
+                $txn = \App\Models\PaymentTransaction::where('request_id', $payload['vnp_TxnRef'])->first();
+                if ($txn && $txn->order) {
+                    $orderCode = $txn->order->code;
+                }
+            }
+        } catch (\Throwable $e) {
+            Log::channel($this->getLogChannel())->warning('[VNPay Return] Lỗi cập nhật: ' . $e->getMessage());
+        }
 
         return response()->json([
             'success' => $responseCode === '00',
             'response_code' => $responseCode,
             'order_id' => $payload['vnp_TxnRef'] ?? null,
+            'order_code' => $orderCode,
             'amount' => isset($payload['vnp_Amount']) ? $payload['vnp_Amount'] / 100 : null,
             'message' => $responseCode === '00' ? 'Thanh toán thành công' : 'Thanh toán thất bại',
         ]);

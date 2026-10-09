@@ -9,7 +9,10 @@
             <!-- Main Slider -->
             <Splide ref="mainSlider" :options="mainOptions" class="mb-2 max-h-[400px]" id="hero-slide-left-main">
               <SplideSlide v-for="(item, index) in mainItems" :key="`main-${index}`">
-                <NuxtImg :src="item.image" loading="lazy" :alt="`Slide ${index + 1}`" class="w-full h-[200px] sm:h-[250px] md:h-[300px] lg:h-[400px] object-cover rounded-lg" />
+                <NuxtLink v-if="item.link" :to="item.link" class="block w-full h-full">
+                  <NuxtImg :src="item.image" loading="lazy" :alt="item.alt || `Slide ${index + 1}`" class="w-full h-[200px] sm:h-[250px] md:h-[300px] lg:h-[400px] object-cover rounded-lg" />
+                </NuxtLink>
+                <NuxtImg v-else :src="item.image" loading="lazy" :alt="item.alt || `Slide ${index + 1}`" class="w-full h-[200px] sm:h-[250px] md:h-[300px] lg:h-[400px] object-cover rounded-lg" />
               </SplideSlide>
             </Splide>
 
@@ -32,7 +35,10 @@
       <div class="md:col-span-1">
         <Splide :options="rightVirticalOptions" class="h-full" id="right-vertical-slider">
           <SplideSlide v-for="(item, index) in rightVirticalItems" :key="`right-${index}`">
-            <NuxtImg :src="item.image" loading="lazy" :alt="item.alt || 'Banner image'" class="w-full h-[200px] sm:h-[200px] md:h-[250px] lg:h-auto object-cover rounded-lg shadow-sm hover:opacity-90 transition-all" />
+            <NuxtLink v-if="item.link" :to="item.link" class="block w-full h-full">
+              <NuxtImg :src="item.image" loading="lazy" :alt="item.alt || 'Banner image'" class="w-full h-[200px] sm:h-[200px] md:h-[250px] lg:h-auto object-cover rounded-lg shadow-sm hover:opacity-90 transition-all" />
+            </NuxtLink>
+            <NuxtImg v-else :src="item.image" loading="lazy" :alt="item.alt || 'Banner image'" class="w-full h-[200px] sm:h-[200px] md:h-[250px] lg:h-auto object-cover rounded-lg shadow-sm hover:opacity-90 transition-all" />
           </SplideSlide>
         </Splide>
       </div>
@@ -389,10 +395,10 @@
       <div class="flex flex-col lg:flex-row justify-between items-start gap-4">
         <div class="w-full lg:w-1/5 h-[150px] lg:h-[858px] md:-mx-3 lg:mx-0">
           <div class="relative h-full w-full overflow-hidden shadow-md">
-            <NuxtImg src="/images/slide/test11.jpg" loading="lazy" alt="Banner giới thiệu" class="object-cover w-full h-full" />
+            <NuxtImg :src="introBanner" loading="lazy" :alt="$t('home.introBanner')" class="object-cover w-full h-full" />
             <div class="absolute w-full max-w-[300px] inset-0 bg-black/20 flex items-end justify-center py-4">
               <div class="mx-auto mt-6 hidden lg:block">
-                <a href="#" class="relative flex items-center justify-center px-6 py-2 overflow-hidden font-medium text-md transition-all bg-gradient-to-r from-sky-500 to-cyan-400 rounded-md shadow-lg group hover:scale-105 hover:from-sky-600 hover:to-cyan-500 focus:outline-none focus:ring-2 focus:ring-sky-400">
+                <NuxtLink to="/shop" class="relative flex items-center justify-center px-6 py-2 overflow-hidden font-medium text-md transition-all bg-gradient-to-r from-sky-500 to-cyan-400 rounded-md shadow-lg group hover:scale-105 hover:from-sky-600 hover:to-cyan-500 focus:outline-none focus:ring-2 focus:ring-sky-400">
                   <span class="absolute top-0 right-0 inline-block w-4 h-4 transition-all duration-500 ease-in-out bg-sky-700 rounded group-hover:-mr-4 group-hover:-mt-4">
                     <span class="absolute top-0 right-0 w-5 h-5 rotate-45 translate-x-1/2 -translate-y-1/2 bg-white"></span>
                   </span>
@@ -401,7 +407,7 @@
                   </span>
                   <span class="absolute bottom-0 left-0 w-full h-full transition-all duration-500 ease-in-out delay-200 -translate-x-full bg-sky-600 rounded-md group-hover:translate-x-0"></span>
                   <span class="relative text-center text-white transition-colors duration-200 ease-in-out group-hover:text-white drop-shadow">{{ $t("home.explore") }}</span>
-                </a>
+                </NuxtLink>
               </div>
             </div>
           </div>
@@ -545,10 +551,10 @@
       <div class="flex flex-col lg:flex-row justify-between items-start gap-4">
         <div class="w-full lg:w-1/5 h-[150px] lg:h-[858px] md:-mx-3 lg:mx-0">
           <div class="relative h-full w-full overflow-hidden shadow-md">
-            <img src="/images/slide/image_about_accessory_1.jpg" loading="lazy" alt="Banner giới thiệu" class="object-cover w-full h-full" />
+            <NuxtImg :src="introAccessoryBanner" loading="lazy" :alt="$t('home.introBanner')" class="object-cover w-full h-full" />
             <div class="absolute w-full max-w-[300px] inset-0 bg-black/20 flex items-end justify-center py-4">
               <div class="mx-auto mt-6 hidden lg:block">
-                <a href="#" class="relative flex items-center justify-center px-6 py-2 overflow-hidden font-medium text-md transition-all bg-gradient-to-r from-sky-500 to-cyan-400 rounded-md shadow-lg group hover:scale-105 hover:from-sky-600 hover:to-cyan-500 focus:outline-none focus:ring-2 focus:ring-sky-400">
+                <NuxtLink to="/shop" class="relative flex items-center justify-center px-6 py-2 overflow-hidden font-medium text-md transition-all bg-gradient-to-r from-sky-500 to-cyan-400 rounded-md shadow-lg group hover:scale-105 hover:from-sky-600 hover:to-cyan-500 focus:outline-none focus:ring-2 focus:ring-sky-400">
                   <span class="absolute top-0 right-0 inline-block w-4 h-4 transition-all duration-500 ease-in-out bg-sky-700 rounded group-hover:-mr-4 group-hover:-mt-4">
                     <span class="absolute top-0 right-0 w-5 h-5 rotate-45 translate-x-1/2 -translate-y-1/2 bg-white"></span>
                   </span>
@@ -557,7 +563,7 @@
                   </span>
                   <span class="absolute bottom-0 left-0 w-full h-full transition-all duration-500 ease-in-out delay-200 -translate-x-full bg-sky-600 rounded-md group-hover:translate-x-0"></span>
                   <span class="relative text-center text-white transition-colors duration-200 ease-in-out group-hover:text-white drop-shadow">{{ $t("home.explore") }}</span>
-                </a>
+                </NuxtLink>
               </div>
             </div>
           </div>
@@ -747,7 +753,23 @@ import Partner from "~/components/ui/Partner.vue";
 import { useProduct } from "~/composables/product/useProduct";
 import { productService } from "~/services/product/product.service";
 
-const { mainOptions, thumbOptions, rightVirticalOptions, postFeaturedOptions, partnerOptions, mainItems, thumbnailItems, rightVirticalItems, postFeaturedItems, partnerItems, mainSlider, thumbSlider, partnerSlider } = useHomeSlider();
+const {
+  mainOptions,
+  thumbOptions,
+  rightVirticalOptions,
+  postFeaturedOptions,
+  partnerOptions,
+  mainItems,
+  thumbnailItems,
+  rightVirticalItems,
+  introBanner,
+  introAccessoryBanner,
+  postFeaturedItems,
+  partnerItems,
+  mainSlider,
+  thumbSlider,
+  partnerSlider,
+} = useHomeSlider();
 
 const { isAuthenticated, user } = useAuth();
 

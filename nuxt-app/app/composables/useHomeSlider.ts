@@ -2,12 +2,16 @@ import { ref, onMounted } from "vue";
 import type { Ref } from "vue";
 import { AutoScroll } from "@splidejs/splide-extension-auto-scroll";
 import { Splide as SplideJS } from "@splidejs/splide";
+import { bannerService } from "~/services/banner/banner.service";
+import { resolveAlbum } from "~/utils/helpers";
+import type { IBanner } from "~/interfaces/banner/banner.interface";
 
 type SplideOptions = any;
 
 interface SlideItem {
   image: string;
   alt?: string;
+  link?: string;
 }
 
 interface ThumbnailItem {
@@ -125,7 +129,85 @@ export function useHomeSlider() {
   };
 
   // Slides data
-  const mainItems: SlideItem[] = [{ image: "/images/slide/hero-slide-left-1.webp" }, { image: "/images/slide/hero-slide-left-2.webp" }, { image: "/images/slide/hero-slide-left-3.webp" }];
+  const defaultMainItems: SlideItem[] = [
+    { image: "/images/slide/hero-slide-left-1.webp" },
+    { image: "/images/slide/hero-slide-left-2.webp" },
+    { image: "/images/slide/hero-slide-left-3.webp" },
+  ];
+
+  const defaultRightVirticalItems: SlideItem[] = [
+    { image: "/images/slide/hero-slide-right-1.webp", alt: "Banner Right 1" },
+    { image: "/images/slide/hero-slide-right-2.webp", alt: "Banner Right 2" },
+    { image: "/images/slide/slide_hero_r_3.png", alt: "Banner Right 3" },
+    { image: "/images/slide/slide_hero_r_3.png", alt: "Banner Right 4" },
+    { image: "/images/slide/slide_hero_r_3.png", alt: "Banner Right 5" },
+  ];
+
+  const mainItems = useState<SlideItem[]>("home-main-slider-items", () => defaultMainItems);
+  const rightVirticalItems = useState<SlideItem[]>("home-right-slider-items", () => defaultRightVirticalItems);
+  const introBanner = useState<string>("home-intro-banner-1", () => "/images/slide/test11.jpg");
+  const introAccessoryBanner = useState<string>("home-intro-banner-2", () => "/images/slide/image_about_accessory_1.jpg");
+
+  const fetchHomeBanners = async () => {
+    try {
+      const res = await bannerService.all({
+        page_id: 1,
+        publish: 2,
+      });
+
+      const list: IBanner[] = Array.isArray(res?.data)
+        ? res.data
+        : (res?.data as any)?.data || [];
+
+      if (!list.length) return;
+
+      // 1. Slider chính (position_id = 1)
+      const mainBanner = list.find((b: any) => b.position_id === 1 || b.positionId === 1);
+      if (mainBanner && mainBanner.album) {
+        const resolved = resolveAlbum(mainBanner.album);
+        if (resolved.length > 0) {
+          mainItems.value = resolved.map((img, idx) => ({
+            image: img,
+            alt: mainBanner.name ? `${mainBanner.name} ${idx + 1}` : `Slide ${idx + 1}`,
+            link: mainBanner.link_url || "/shop",
+          }));
+        }
+      }
+
+      // 2. Banner dọc phải (position_id = 2)
+      const rightBanner = list.find((b: any) => b.position_id === 2 || b.positionId === 2);
+      if (rightBanner && rightBanner.album) {
+        const resolved = resolveAlbum(rightBanner.album);
+        if (resolved.length > 0) {
+          rightVirticalItems.value = resolved.map((img, idx) => ({
+            image: img,
+            alt: rightBanner.name ? `${rightBanner.name} ${idx + 1}` : `Banner Right ${idx + 1}`,
+            link: rightBanner.link_url || "/shop",
+          }));
+        }
+      }
+
+      // 3. Banner giới thiệu (position_id = 3)
+      const introBanners = list.filter((b: any) => b.position_id === 3 || b.positionId === 3);
+      if (introBanners.length > 0) {
+        const first = introBanners[0];
+        const resolvedFirst = resolveAlbum(first.album || []);
+        if (resolvedFirst[0]) {
+          introBanner.value = resolvedFirst[0];
+        }
+
+        if (introBanners.length > 1) {
+          const second = introBanners[1];
+          const resolvedSecond = resolveAlbum(second.album || []);
+          if (resolvedSecond[0]) {
+            introAccessoryBanner.value = resolvedSecond[0];
+          }
+        }
+      }
+    } catch (err) {
+      console.error("[useHomeSlider] fetchHomeBanners error:", err);
+    }
+  };
 
   const thumbnailItems: ThumbnailItem[] = [
     {
@@ -139,7 +221,7 @@ export function useHomeSlider() {
       description: "Mua 1 sẽ được tặng thêm 1 đến hết tháng 6.",
     },
     {
-      icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" fill="currentColor" class="md:w-5 md:h-5 w-4 h-4"><path d="M153.6 29.9l16-21.3C173.6 3.2 180 0 186.7 0C198.4 0 208 9.6 208 21.3V43.5c0 13.1 5.4 25.7 14.9 34.7L307.6 159C356.4 205.6 384 270.2 384 337.7C384 434 306 512 209.7 512H192C86 512 0 426 0 320v-3.8c0-48.8 19.4-95.6 53.9-130.1l3.5-3.5c4.2-4.2 10-6.6 16-6.6C85.9 176 96 186.1 96 198.6V288c0 35.3 28.7 64 64 64s64-28.7 64-64v-3.9c0-18-7.2-35.3-19.9-48l-38.6-38.6c-24-24-37.5-56.7-37.5-90.7c0-27.7 9-54.8 25.6-76.9z"/></svg>',
+      icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" fill="currentColor" class="md:w-5 md:h-5 w-4 h-4"><path d="M153.6 29.9l16-21.3C173.6 3.2 180 0 186.7 0C198.4 0 208 9.6 208 21.3V43.5c0 13.1 5.4 25.7 14.9 34.7L307.6 159C356.4 205.6 384 270.2 384 337.7C384 434 306 512 209.7 512H192C86 512 0 426 0 320v-3.8c0-48.8 19.4-95.6 539-130.1l3.5-3.5c4.2-4.2 10-6.6 16-6.6C85.9 176 96 186.1 96 198.6V288c0 35.3 28.7 64 64 64s64-28.7 64-64v-3.9c0-18-7.2-35.3-19.9-48l-38.6-38.6c-24-24-37.5-56.7-37.5-90.7c0-27.7 9-54.8 25.6-76.9z"/></svg>',
       title: "Sản phẩm bán chạy",
       description: "Top 10 sản phẩm được yêu thích nhất.",
     },
@@ -237,8 +319,10 @@ export function useHomeSlider() {
   const thumbSlider: Ref<any> = ref();
   const partnerSlider: Ref<any> = ref();
 
-  // Đồng bộ main vs thumb slide - ĐÃ SỬA
-  onMounted(() => {
+  // Đồng bộ main vs thumb slide & nạp banners
+  onMounted(async () => {
+    fetchHomeBanners();
+
     if (mainSlider.value?.splide && thumbSlider.value?.splide) {
       mainSlider.value.splide.sync(thumbSlider.value.splide);
     }
@@ -250,21 +334,26 @@ export function useHomeSlider() {
   });
 
   return {
-    // trả cấu hình cho Home
+    // cấu hình slider
     mainOptions,
     thumbOptions,
     rightVirticalOptions,
     postFeaturedOptions,
     partnerOptions,
 
-    // Trả data cho Home
+    // dữ liệu banners & slides
     mainItems,
     thumbnailItems,
     rightVirticalItems,
+    introBanner,
+    introAccessoryBanner,
     postFeaturedItems,
     partnerItems,
 
-    // trả về ref cho Home
+    // actions
+    fetchHomeBanners,
+
+    // refs cho Splide
     mainSlider,
     thumbSlider,
     partnerSlider,

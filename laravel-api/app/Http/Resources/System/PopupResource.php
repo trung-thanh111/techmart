@@ -22,7 +22,11 @@ class PopupResource extends JsonResource
             'content' => $this->content,
             'image' => [
                 'path' => $this->image ?? null,
-                'url' => $this->image ? asset("/storage/{$this->image}") : null,
+                'url' => $this->image
+                    ? (str_starts_with($this->image, 'http://') || str_starts_with($this->image, 'https://') || str_starts_with($this->image, '/')
+                        ? $this->image
+                        : asset("/storage/{$this->image}"))
+                    : null,
             ],
             'link' => $this->link,
             'buttonText' => $this->button_text,

@@ -22,7 +22,7 @@ export const bannerService = {
     });
   },
 
-  all: async (): Promise<IApiOk<IBanner[]>> => {
+  all: async (params?: Record<string, any>): Promise<IApiOk<IBanner[]>> => {
     const { publicFetch } = useApi();
     return await publicFetch<IApiOk<IBanner[]>>(endpoint.collection, {
       method: "GET",
@@ -31,6 +31,7 @@ export const bannerService = {
         publish: 2,
         sort: "id,desc",
         deleted_at: null,
+        ...params,
       },
     });
   },

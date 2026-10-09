@@ -248,7 +248,7 @@ class VNPayGateway extends AbstractPaymentGateway
     public function parseWebhookPayload(array $payload): array
     {
         $responseCode = $payload['vnp_ResponseCode'] ?? '99';
-        $transactionStatus = $payload['vnp_TransactionStatus'] ?? '99';
+        $transactionStatus = $payload['vnp_TransactionStatus'] ?? $responseCode;
 
         return [
             'gateway_order_id' => $payload['vnp_TxnRef'] ?? '',

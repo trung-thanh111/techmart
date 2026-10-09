@@ -209,8 +209,12 @@ class PaymentService implements PaymentServiceInterface
             'paid_at' => $parsed['is_success'] ? now() : null,
         ]);
 
-        // 6. Dispatch async job
-        ProcessPaymentCallback::dispatch($transaction->id)->onQueue('payments');
+        // 6. Dispatch job (sync in local/testing to guarantee immediate update)
+        if (app()->environment('local', 'testing') || config('queue.default') === 'sync') {
+            ProcessPaymentCallback::dispatchSync($transaction->id);
+        } else {
+            ProcessPaymentCallback::dispatch($transaction->id)->onQueue('payments');
+        }
 
         Log::channel($logChannel)->info(
             "[Webhook] Đã xử lý IPN cho transaction #{$transaction->id}, status={$newStatus}"
@@ -252,7 +256,11 @@ class PaymentService implements PaymentServiceInterface
 
                     // Nếu thành công → dispatch job
                     if ($gatewayStatus['status'] === PaymentEnum::STATUS_COMPLETED) {
-                        ProcessPaymentCallback::dispatch($latestTransaction->id)->onQueue('payments');
+                        if (app()->environment('local', 'testing') || config('queue.default') === 'sync') {
+                            ProcessPaymentCallback::dispatchSync($latestTransaction->id);
+                        } else {
+                            ProcessPaymentCallback::dispatch($latestTransaction->id)->onQueue('payments');
+                        }
                     }
                 }
             } catch (\Throwable $e) {

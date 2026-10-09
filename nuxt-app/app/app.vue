@@ -3,7 +3,9 @@
   <NuxtLayout v-else>
     <NuxtPage />
   </NuxtLayout>
-  <Toaster position="top-right" richColors closeButton :duration="2000" />
+  <ClientOnly>
+    <Toaster position="top-right" richColors closeButton :duration="2500" />
+  </ClientOnly>
 </template>
 
 <script setup>

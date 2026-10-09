@@ -218,14 +218,16 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
             Route::delete('{id}/detach', [CartItemController::class, 'detach']);
         });
         Route::resource('cart_items', CartItemController::class)->except($routeExcept);
-
-        // Payment Routes
-        Route::group(['prefix' => 'payment'], function () {
-            Route::post('create', [PaymentController::class, 'create']);
-            Route::get('{orderId}', [PaymentController::class, 'show']);
-            Route::post('refund', [PaymentController::class, 'refund']);
-        });
     });
+});
+
+// Payment Routes (public — both guest and logged-in user can checkout & pay)
+Route::group(['prefix' => 'v1/payment'], function () {
+    Route::post('create', [PaymentController::class, 'create']);
+    Route::get('vnpay-return', [PaymentWebhookController::class, 'vnpayReturn']);
+    Route::get('health', [PaymentController::class, 'health']);
+    Route::get('{orderId}', [PaymentController::class, 'show'])->whereNumber('orderId');
+    Route::post('refund', [PaymentController::class, 'refund']);
 });
 
 // Payment Webhook Routes (public — no auth, verify by signature)
@@ -233,9 +235,3 @@ Route::group(['prefix' => 'v1/payment/webhook'], function () {
     Route::post('momo', [PaymentWebhookController::class, 'handleMoMo']);
     Route::get('vnpay', [PaymentWebhookController::class, 'handleVNPay']); // VNPay IPN là GET
 });
-
-// VNPay Return URL — user redirect back sau thanh toán
-Route::get('v1/payment/vnpay-return', [PaymentWebhookController::class, 'vnpayReturn']);
-
-// Payment Health Check (public)
-Route::get('v1/payment/health', [PaymentController::class, 'health']);

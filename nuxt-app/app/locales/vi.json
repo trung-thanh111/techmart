@@ -729,7 +729,8 @@
     "trustDesc": "Hơn 500.000 khách hàng tin tưởng, 4.9★ đánh giá từ 50.000+ reviews. Được tạp chí Tech Awards vinh danh 3 năm liên tiếp",
     "technology": "công nghệ",
     "featuredArticle": "Bài viết nổi bật: Công nghệ AI thay đổi cuộc sống thế nào?",
-    "articleDesc": "Trí tuệ nhân tạo đang làm thay đổi cách chúng ta sống, làm việc và giao tiếp. Cùng tìm hiểu những đột phá mới nhất trong lĩnh vực này."
+    "articleDesc": "Trí tuệ nhân tạo đang làm thay đổi cách chúng ta sống, làm việc và giao tiếp. Cùng tìm hiểu những đột phá mới nhất trong lĩnh vực này.",
+    "introBanner": "Banner giới thiệu"
   },
   "footer": {
     "hotline": "Hotline",
@@ -1044,5 +1045,18 @@
     "resend": "Gửi lại",
     "sessionExpired": "Phiên đăng nhập hết hạn",
     "sessionExpiredDesc": "Vui lòng đăng nhập lại để tiếp tục."
+  },
+  "client": {
+    "popup": {
+      "type": {
+        "promotion": "Khuyến mãi",
+        "notification": "Thông báo",
+        "confirm": "Xác nhận",
+        "form": "Khảo sát",
+        "guide": "Hướng dẫn"
+      },
+      "close": "Đóng",
+      "exploreNow": "Khám phá ngay"
+    }
   }
 }

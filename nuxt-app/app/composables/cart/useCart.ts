@@ -175,23 +175,13 @@ export const useCart = () => {
       const purchasableId = variant ? variant.id! : product.id!;
       const price = variant?.price || product.priceOrigin || 0;
 
-      // Lấy hoặc tạo cart - đảm bảo cart luôn được fetch từ DB trước
+      // Lấy hoặc tạo cart
       let currentCart = cart.value;
       if (!currentCart || !currentCart.id) {
-        // Fetch cart từ DB trước
-        if (isAuthenticated.value) {
-          currentCart = await fetchCart();
-        } else {
-          currentCart = await fetchGuestCart();
-        }
-
-        // Nếu vẫn không có, tạo mới
+        currentCart = await getOrCreateCart();
         if (!currentCart || !currentCart.id) {
-          currentCart = await getOrCreateCart();
-          if (!currentCart || !currentCart.id) {
-            toast.error(t("cart.errorCreate"));
-            return false;
-          }
+          toast.error(t("cart.errorCreate"));
+          return false;
         }
       }
 
@@ -223,26 +213,8 @@ export const useCart = () => {
         }
       }
 
-      // Reload cart để đồng bộ - luôn reload từ DB
-      if (isAuthenticated.value) {
-        await fetchCart();
-      } else {
-        await fetchGuestCart();
-      }
-
-      // Lưu scroll position trước khi show toast
-      const scrollY = window.scrollY;
-      
-      // Hiển thị toast sau khi reload xong
-      await nextTick();
+      // Thông báo tức thì
       toast.success(isBuyNow ? t("cart.addSuccessBuyNow") : t("cart.addSuccess"));
-      
-      // Khôi phục scroll position sau khi toast hiện
-      await nextTick();
-      if (scrollY > 0) {
-        window.scrollTo({ top: scrollY, behavior: "instant" });
-      }
-
       return true;
     } catch (error: any) {
       console.error("Error adding item to cart:", error);
@@ -258,21 +230,24 @@ export const useCart = () => {
   };
 
   /**
-   * Cập nhật quantity của item
+   * Cập nhật quantity của item (Optimistic UI)
    */
   const updateItemQuantity = async (itemId: number, quantity: number): Promise<boolean> => {
     if (quantity < 1) {
       return await removeItem(itemId);
     }
 
-    isLoading.value = true;
-    try {
-      const item = items.value.find((i) => i.id === itemId);
-      if (!item) {
-        toast.error(t("cart.productNotFound"));
-        return false;
-      }
+    const item = items.value.find((i) => i.id === itemId);
+    if (!item) {
+      toast.error(t("cart.productNotFound"));
+      return false;
+    }
 
+    const prevQuantity = item.quantity;
+    // Cập nhật store ngay lập tức
+    store.updateItem(itemId, { quantity });
+
+    try {
       const payload: Partial<CartItemPayload> = {
         cartId: item.cartId!,
         purchasableType: item.purchasableType!,
@@ -286,88 +261,61 @@ export const useCart = () => {
 
       if (response.data) {
         store.updateItem(itemId, response.data);
-        // Reload cart để đồng bộ từ DB
-        if (isAuthenticated.value) {
-          await fetchCart();
-        } else {
-          await fetchGuestCart();
-        }
       }
-
       return true;
     } catch (error: any) {
       console.error("Error updating item quantity:", error);
+      // Rollback số lượng nếu lỗi
+      store.updateItem(itemId, { quantity: prevQuantity });
       toast.error(t("cart.errorUpdate"));
       return false;
-    } finally {
-      isLoading.value = false;
     }
   };
 
   /**
-   * Xóa item khỏi cart
+   * Xóa item khỏi cart (Optimistic UI)
    */
   const removeItem = async (itemId: number): Promise<boolean> => {
-    isLoading.value = true;
+    const existingIndex = store.cart?.cartItems?.findIndex((i) => i.id === itemId);
+    const existingItem = existingIndex !== undefined && existingIndex > -1 ? store.cart?.cartItems?.[existingIndex] : null;
+
+    // Xóa khỏi store tức thì
+    store.removeItem(itemId);
+    toast.success(t("cart.removeSuccess"));
+
     try {
-      const response = isAuthenticated.value ? await cartItemService.delete(itemId) : await cartItemService.deleteGuest(itemId);
-
-      store.removeItem(itemId);
-
       if (isAuthenticated.value) {
-        await fetchCart();
+        await cartItemService.delete(itemId);
       } else {
-        await fetchGuestCart();
+        await cartItemService.deleteGuest(itemId);
       }
-
-      toast.success(t("cart.removeSuccess"));
-
       return true;
     } catch (error: any) {
       console.error("Error removing item from cart:", error);
+      // Rollback nếu API lỗi
+      if (existingItem) {
+        store.addItem(existingItem);
+      }
       toast.error(t("cart.errorRemove"));
       return false;
-    } finally {
-      isLoading.value = false;
     }
   };
 
   const clearCart = async (): Promise<boolean> => {
     if (isEmpty.value) return true;
 
-    isLoading.value = true;
+    const itemIds = items.value.map((item) => item.id!).filter((id): id is number => id !== undefined);
+    store.clear();
+    toast.success(t("cart.clearSuccess"));
+
     try {
-      const itemIds = items.value.map((item) => item.id!).filter((id): id is number => id !== undefined);
-      for (const itemId of itemIds) {
-        try {
-          if (isAuthenticated.value) {
-            await cartItemService.delete(itemId);
-          } else {
-            await cartItemService.deleteGuest(itemId);
-          }
-        } catch (error: any) {
-          console.error(`Error deleting item ${itemId}:`, error);
-        }
-      }
-
-      // Clear store
-      store.clear();
-
-      if (isAuthenticated.value) {
-        await fetchCart();
-      } else {
-        await fetchGuestCart();
-      }
-
-      toast.success(t("cart.clearSuccess"));
-
+      await Promise.allSettled(
+        itemIds.map((itemId) => (isAuthenticated.value ? cartItemService.delete(itemId) : cartItemService.deleteGuest(itemId))),
+      );
       return true;
     } catch (error: any) {
       console.error("Error clearing cart:", error);
-      toast.error(t("cart.errorClear"));
       return false;
-    } finally {
-      isLoading.value = false;
     }
   };
 

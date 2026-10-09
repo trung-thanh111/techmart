@@ -7,6 +7,7 @@ import { SHIPPING_METHODS, SHIPPING_FEES, PAYMENT_METHODS } from "~/utils/order.
 import { orderService } from "~/services/order/order.service";
 import { promotionService } from "~/services/promotion/promotion.service";
 import { cartItemService } from "~/services/cart/cartItem.service";
+import { paymentService } from "~/services/payment/payment.service";
 import { useCartStore } from "~/stores/cart";
 import { useAuthStore } from "~/stores/auth/auth";
 import { useAppToast } from "~/composables/useAppToast";
@@ -277,15 +278,17 @@ export const useCheckout = () => {
     try {
       const res = await orderService.store(orderPayload);
       if (res.data) {
-        toast.success("Đặt hàng thành công!");
-
-        // Remove ordered items from cart (both backend and local store)
+        // Xóa các sản phẩm đã đặt khỏi giỏ hàng (hỗ trợ cả user và guest)
         const itemsToRemove = [...selectedItems.value];
         await Promise.all(
           itemsToRemove.map(async (item) => {
             if (item.id) {
               try {
-                await cartItemService.delete(item.id);
+                if (authStore.isAuthenticated) {
+                  await cartItemService.delete(item.id);
+                } else {
+                  await cartItemService.deleteGuest(item.id);
+                }
               } catch {
                 return 0;
               }
@@ -294,6 +297,25 @@ export const useCheckout = () => {
           }),
         );
 
+        // Nếu chọn thanh toán online (VNPay / MoMo)
+        const method = formData.payment_method.selectedMethod;
+        if (method === PAYMENT_METHODS.VNPAY || method === PAYMENT_METHODS.MOMO) {
+          try {
+            const paymentRes = await paymentService.create(res.data.id!, method);
+            if (paymentRes.data?.pay_url) {
+              // Chuyển hướng đến cổng thanh toán
+              window.location.href = paymentRes.data.pay_url;
+              return;
+            }
+          } catch (payError: any) {
+            console.error("Error creating payment:", payError);
+            toast.warning("Tạo đơn hàng thành công, nhưng không thể kết nối cổng thanh toán. Bạn có thể thanh toán lại sau.");
+            navigateTo(`${TOORDERSUCCESS}?code=${res.data.code}`);
+            return;
+          }
+        }
+
+        toast.success("Đặt hàng thành công!");
         navigateTo(`${TOORDERSUCCESS}?code=${res.data.code}`);
       }
     } catch (error: any) {
