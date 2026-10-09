@@ -1,12 +1,9 @@
 <template>
-  <div>
-    <h1 class="text-xl md:text-2xl font-semibold text-gray-900 mb-4">{{ $t("profile.myOrders") }}</h1>
-    <p class="text-sm text-gray-600">{{ $t("profile.ordersContent") }}</p>
-  </div>
+  <div></div>
 </template>
 
 <script setup lang="ts">
-// kế thừa layout + middleware từ parent /profile
-</script>
+import { PROFILEORDER } from "~/utils/constants";
 
-<style scoped></style>
+await navigateTo(PROFILEORDER, { replace: true, redirectCode: 301 });
+</script>

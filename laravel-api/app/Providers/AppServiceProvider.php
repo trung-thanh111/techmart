@@ -142,6 +142,7 @@ class AppServiceProvider extends ServiceProvider
         MenuItemServiceInterface::class => MenuItemService::class,
         OrderServiceInterface::class => OrderService::class,
         PaymentServiceInterface::class => PaymentService::class,
+        \App\Services\Interfaces\Dashboard\DashboardServiceInterface::class => \App\Services\Impl\Dashboard\DashboardService::class,
     ];
 
     /**

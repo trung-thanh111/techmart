@@ -53,20 +53,18 @@
                                         <p class="text-uppercase fw-medium text-muted text-truncate mb-0">{{ $t("admin.page.dashboard.totalEarnings") }}</p>
                                     </div>
                                     <div class="flex-shrink-0">
-                                        <h5 class="text-success fs-14 mb-0">
-                                            <i class="ri-arrow-right-up-line fs-13 align-middle"></i>
-                                            +16.24 %
+                                        <h5 :class="[(stats?.overview?.earnings?.growth_percentage ?? 0) >= 0 ? 'text-success' : 'text-danger', 'fs-14 mb-0']">
+                                            <i :class="[(stats?.overview?.earnings?.growth_percentage ?? 0) >= 0 ? 'ri-arrow-right-up-line' : 'ri-arrow-right-down-line', 'fs-13 align-middle']"></i>
+                                            {{ (stats?.overview?.earnings?.growth_percentage ?? 0) >= 0 ? '+' : '' }}{{ stats?.overview?.earnings?.growth_percentage ?? 0 }} %
                                         </h5>
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                     <div>
                                         <h4 class="fs-22 fw-semibold ff-secondary mb-4">
-                                            $
-                                            <span class="counter-value" data-target="559.25">0</span>
-                                            k
+                                            {{ formatPrice(stats?.overview?.earnings?.total || 0) }}
                                         </h4>
-                                        <a href="#" class="text-decoration-underline">{{ $t("admin.page.dashboard.viewNetEarnings") }}</a>
+                                        <NuxtLink to="/admin/order/order" class="text-decoration-underline">{{ $t("admin.page.dashboard.viewNetEarnings") }}</NuxtLink>
                                     </div>
                                     <div class="avatar-sm flex-shrink-0">
                                         <span class="avatar-title bg-success-subtle rounded fs-3">
@@ -86,16 +84,16 @@
                                         <p class="text-uppercase fw-medium text-muted text-truncate mb-0">{{ $t("admin.page.dashboard.orders") }}</p>
                                     </div>
                                     <div class="flex-shrink-0">
-                                        <h5 class="text-danger fs-14 mb-0">
-                                            <i class="ri-arrow-right-down-line fs-13 align-middle"></i>
-                                            -3.57 %
+                                        <h5 :class="[(stats?.overview?.orders?.growth_percentage ?? 0) >= 0 ? 'text-success' : 'text-danger', 'fs-14 mb-0']">
+                                            <i :class="[(stats?.overview?.orders?.growth_percentage ?? 0) >= 0 ? 'ri-arrow-right-up-line' : 'ri-arrow-right-down-line', 'fs-13 align-middle']"></i>
+                                            {{ (stats?.overview?.orders?.growth_percentage ?? 0) >= 0 ? '+' : '' }}{{ stats?.overview?.orders?.growth_percentage ?? 0 }} %
                                         </h5>
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                     <div>
-                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="36894">0</span></h4>
-                                        <a href="#" class="text-decoration-underline">{{ $t("admin.page.dashboard.viewAllOrders") }}</a>
+                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4">{{ (stats?.overview?.orders?.total || 0).toLocaleString() }}</h4>
+                                        <NuxtLink to="/admin/order/order" class="text-decoration-underline">{{ $t("admin.page.dashboard.viewAllOrders") }}</NuxtLink>
                                     </div>
                                     <div class="avatar-sm flex-shrink-0">
                                         <span class="avatar-title bg-info-subtle rounded fs-3">
@@ -119,19 +117,18 @@
                                         <p class="text-uppercase fw-medium text-muted text-truncate mb-0">{{ $t("admin.page.dashboard.customers") }}</p>
                                     </div>
                                     <div class="flex-shrink-0">
-                                        <h5 class="text-success fs-14 mb-0">
-                                            <i class="ri-arrow-right-up-line fs-13 align-middle"></i>
-                                            +29.08 %
+                                        <h5 :class="[(stats?.overview?.customers?.growth_percentage ?? 0) >= 0 ? 'text-success' : 'text-danger', 'fs-14 mb-0']">
+                                            <i :class="[(stats?.overview?.customers?.growth_percentage ?? 0) >= 0 ? 'ri-arrow-right-up-line' : 'ri-arrow-right-down-line', 'fs-13 align-middle']"></i>
+                                            {{ (stats?.overview?.customers?.growth_percentage ?? 0) >= 0 ? '+' : '' }}{{ stats?.overview?.customers?.growth_percentage ?? 0 }} %
                                         </h5>
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                     <div>
                                         <h4 class="fs-22 fw-semibold ff-secondary mb-4">
-                                            <span class="counter-value" data-target="183.35">0</span>
-                                            M
+                                            {{ (stats?.overview?.customers?.total || 0).toLocaleString() }}
                                         </h4>
-                                        <a href="#" class="text-decoration-underline">{{ $t("admin.page.dashboard.viewDetails") }}</a>
+                                        <NuxtLink to="/admin/user/user" class="text-decoration-underline">{{ $t("admin.page.dashboard.viewDetails") }}</NuxtLink>
                                     </div>
                                     <div class="avatar-sm flex-shrink-0">
                                         <span class="avatar-title bg-warning-subtle rounded fs-3">
@@ -152,24 +149,25 @@
                             <div class="card-body">
                                 <div class="d-flex align-items-center">
                                     <div class="flex-grow-1 overflow-hidden">
-                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">{{ $t("admin.page.dashboard.myBalance") }}</p>
+                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Sản phẩm & Tồn kho</p>
                                     </div>
                                     <div class="flex-shrink-0">
-                                        <h5 class="text-muted fs-14 mb-0">+0.00 %</h5>
+                                        <h5 class="text-warning fs-14 mb-0">
+                                            <i class="ri-alert-line fs-13 align-middle me-1"></i>
+                                            {{ stats?.overview?.products?.low_stock_count ?? 0 }} báo động
+                                        </h5>
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                     <div>
                                         <h4 class="fs-22 fw-semibold ff-secondary mb-4">
-                                            $
-                                            <span class="counter-value" data-target="165.89">0</span>
-                                            k
+                                            {{ (stats?.overview?.products?.total || 0).toLocaleString() }} SP
                                         </h4>
-                                        <a href="#" class="text-decoration-underline">{{ $t("admin.page.dashboard.withdraw") }}</a>
+                                        <NuxtLink to="/admin/product/product" class="text-decoration-underline">Quản lý kho hàng</NuxtLink>
                                     </div>
                                     <div class="avatar-sm flex-shrink-0">
                                         <span class="avatar-title bg-primary-subtle rounded fs-3">
-                                            <i class="bx bx-wallet text-primary"></i>
+                                            <i class="bx bx-box text-primary"></i>
                                         </span>
                                     </div>
                                 </div>
@@ -327,148 +325,45 @@
                                 <div class="table-responsive table-card">
                                     <table class="table table-hover table-centered align-middle table-nowrap mb-0">
                                         <tbody>
-                                            <tr>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="avatar-sm bg-light rounded p-1 me-2">
-                                                            <NuxtImg src="/images/products/img-1.png" alt="" class="img-fluid d-block" />
-                                                        </div>
-                                                        <div>
-                                                            <h5 class="fs-14 my-1"><a href="apps-ecommerce-product-details.html" class="text-reset">Branded T-Shirts</a></h5>
-                                                            <span class="text-muted">24 Apr 2021</span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 my-1 fw-normal">$29.00</h5>
-                                                    <span class="text-muted">{{ $t("admin.page.dashboard.price") }}</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 my-1 fw-normal">62</h5>
-                                                    <span class="text-muted">{{ $t("admin.page.dashboard.ordersCount") }}</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 my-1 fw-normal">510</h5>
-                                                    <span class="text-muted">{{ $t("admin.page.dashboard.stock") }}</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 my-1 fw-normal">$1,798</h5>
-                                                    <span class="text-muted">{{ $t("admin.page.dashboard.total") }}</span>
+                                            <tr v-if="loading && topProducts.length === 0">
+                                                <td colspan="5" class="text-center py-4 text-muted">
+                                                    <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
+                                                    Đang tải dữ liệu sản phẩm...
                                                 </td>
                                             </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="avatar-sm bg-light rounded p-1 me-2">
-                                                            <NuxtImg src="/images/products/img-2.png" alt="" class="img-fluid d-block" width="40" height="40" loading="lazy" />
-                                                        </div>
-                                                        <div>
-                                                            <h5 class="fs-14 my-1"><a href="apps-ecommerce-product-details.html" class="text-reset">Bentwood Chair</a></h5>
-                                                            <span class="text-muted">19 Mar 2021</span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 my-1 fw-normal">$85.20</h5>
-                                                    <span class="text-muted">{{ $t("admin.page.dashboard.price") }}</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 my-1 fw-normal">35</h5>
-                                                    <span class="text-muted">{{ $t("admin.page.dashboard.ordersCount") }}</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 my-1 fw-normal"><span class="badge bg-danger-subtle text-danger">Hết hàng</span></h5>
-                                                    <span class="text-muted">{{ $t("admin.page.dashboard.stock") }}</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 my-1 fw-normal">$2982</h5>
-                                                    <span class="text-muted">{{ $t("admin.page.dashboard.total") }}</span>
-                                                </td>
+                                            <tr v-else-if="topProducts.length === 0">
+                                                <td colspan="5" class="text-center py-4 text-muted">Chưa có dữ liệu sản phẩm bán chạy</td>
                                             </tr>
-                                            <tr>
+                                            <tr v-for="product in topProducts" :key="product.id">
                                                 <td>
                                                     <div class="d-flex align-items-center">
                                                         <div class="avatar-sm bg-light rounded p-1 me-2">
-                                                            <NuxtImg src="/images/products/img-3.png" alt="" class="img-fluid d-block" width="40" height="40" loading="lazy" />
+                                                            <NuxtImg :src="product.image || '/images/products/img-1.png'" :alt="product.name" class="img-fluid d-block" width="40" height="40" loading="lazy" />
                                                         </div>
                                                         <div>
-                                                            <h5 class="fs-14 my-1"><a href="apps-ecommerce-product-details.html" class="text-reset">Borosil Paper Cup</a></h5>
-                                                            <span class="text-muted">01 Mar 2021</span>
+                                                            <h5 class="fs-14 my-1">
+                                                                <NuxtLink :to="`/admin/product/product/${product.id}`" class="text-reset">{{ product.name }}</NuxtLink>
+                                                            </h5>
+                                                            <span class="text-muted">Mã SP: #{{ product.id }}</span>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <h5 class="fs-14 my-1 fw-normal">$14.00</h5>
+                                                    <h5 class="fs-14 my-1 fw-normal">{{ formatPrice(product.price) }}</h5>
                                                     <span class="text-muted">{{ $t("admin.page.dashboard.price") }}</span>
                                                 </td>
                                                 <td>
-                                                    <h5 class="fs-14 my-1 fw-normal">80</h5>
+                                                    <h5 class="fs-14 my-1 fw-normal">{{ product.total_sold }}</h5>
                                                     <span class="text-muted">{{ $t("admin.page.dashboard.ordersCount") }}</span>
                                                 </td>
                                                 <td>
-                                                    <h5 class="fs-14 my-1 fw-normal">749</h5>
+                                                    <h5 class="fs-14 my-1 fw-normal">
+                                                        <span class="badge bg-success-subtle text-success">Đang bán</span>
+                                                    </h5>
                                                     <span class="text-muted">{{ $t("admin.page.dashboard.stock") }}</span>
                                                 </td>
                                                 <td>
-                                                    <h5 class="fs-14 my-1 fw-normal">$1120</h5>
-                                                    <span class="text-muted">{{ $t("admin.page.dashboard.total") }}</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="avatar-sm bg-light rounded p-1 me-2">
-                                                            <NuxtImg src="/images/products/img-4.png" alt="" class="img-fluid d-block" width="40" height="40" loading="lazy" />
-                                                        </div>
-                                                        <div>
-                                                            <h5 class="fs-14 my-1"><a href="apps-ecommerce-product-details.html" class="text-reset">One Seater Sofa</a></h5>
-                                                            <span class="text-muted">11 Feb 2021</span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 my-1 fw-normal">$127.50</h5>
-                                                    <span class="text-muted">{{ $t("admin.page.dashboard.price") }}</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 my-1 fw-normal">56</h5>
-                                                    <span class="text-muted">{{ $t("admin.page.dashboard.ordersCount") }}</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 my-1 fw-normal"><span class="badge bg-danger-subtle text-danger">Hết hàng</span></h5>
-                                                    <span class="text-muted">{{ $t("admin.page.dashboard.stock") }}</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 my-1 fw-normal">$7140</h5>
-                                                    <span class="text-muted">{{ $t("admin.page.dashboard.total") }}</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="avatar-sm bg-light rounded p-1 me-2">
-                                                            <NuxtImg src="/images/products/img-5.png" alt="" class="img-fluid d-block" width="40" height="40" loading="lazy" />
-                                                        </div>
-                                                        <div>
-                                                            <h5 class="fs-14 my-1"><a href="apps-ecommerce-product-details.html" class="text-reset">Stillbird Helmet</a></h5>
-                                                            <span class="text-muted">17 Jan 2021</span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 my-1 fw-normal">$54</h5>
-                                                    <span class="text-muted">{{ $t("admin.page.dashboard.price") }}</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 my-1 fw-normal">74</h5>
-                                                    <span class="text-muted">{{ $t("admin.page.dashboard.ordersCount") }}</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 my-1 fw-normal">805</h5>
-                                                    <span class="text-muted">{{ $t("admin.page.dashboard.stock") }}</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 my-1 fw-normal">$3996</h5>
+                                                    <h5 class="fs-14 my-1 fw-normal">{{ formatPrice(product.total_revenue) }}</h5>
                                                     <span class="text-muted">{{ $t("admin.page.dashboard.total") }}</span>
                                                 </td>
                                             </tr>
@@ -785,154 +680,56 @@
                                             <tr>
                                                 <th scope="col">{{ $t("admin.page.dashboard.orderCode") }}</th>
                                                 <th scope="col">{{ $t("admin.page.dashboard.customer") }}</th>
-                                                <th scope="col">{{ $t("admin.page.dashboard.product") }}</th>
+                                                <th scope="col">Số món</th>
                                                 <th scope="col">{{ $t("admin.page.dashboard.amount") }}</th>
-                                                <th scope="col">{{ $t("admin.page.dashboard.seller") }}</th>
+                                                <th scope="col">Phương thức</th>
                                                 <th scope="col">{{ $t("admin.page.dashboard.status") }}</th>
-                                                <th scope="col">{{ $t("admin.page.dashboard.rating") }}</th>
+                                                <th scope="col">Thời gian</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
+                                            <tr v-if="loading && recentOrders.length === 0">
+                                                <td colspan="7" class="text-center py-4 text-muted">
+                                                    <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
+                                                    Đang tải danh sách đơn hàng...
+                                                </td>
+                                            </tr>
+                                            <tr v-else-if="recentOrders.length === 0">
+                                                <td colspan="7" class="text-center py-4 text-muted">Chưa có đơn hàng gần đây</td>
+                                            </tr>
+                                            <tr v-for="order in recentOrders" :key="order.id">
                                                 <td>
-                                                    <a href="apps-ecommerce-order-details.html" class="fw-medium link-primary">#VZ2112</a>
+                                                    <NuxtLink :to="`/admin/order/order/${order.id}`" class="fw-medium link-primary">
+                                                        #{{ order.code }}
+                                                    </NuxtLink>
                                                 </td>
                                                 <td>
                                                     <div class="d-flex align-items-center">
-                                                        <div class="flex-shrink-0 me-2">
-                                                            <NuxtImg src="/images/users/avatar-1.jpg" alt="" class="avatar-xs rounded-circle material-shadow" />
+                                                        <div class="avatar-xs me-2">
+                                                            <span class="avatar-title bg-light text-primary rounded-circle">
+                                                                <i class="ri-user-3-line"></i>
+                                                            </span>
                                                         </div>
-                                                        <div class="flex-grow-1">Alex Smith</div>
+                                                        <div>
+                                                            <div class="fw-medium">{{ order.customer_name }}</div>
+                                                            <small class="text-muted">{{ order.customer_phone || '' }}</small>
+                                                        </div>
                                                     </div>
                                                 </td>
-                                                <td>{{ $t("admin.page.dashboard.clothing") }}</td>
+                                                <td>{{ order.items_count }} SP</td>
                                                 <td>
-                                                    <span class="text-success">$109.00</span>
-                                                </td>
-                                                <td>Zoetic Fashion</td>
-                                                <td>
-                                                    <span class="badge bg-success-subtle text-success">{{ $t("admin.page.dashboard.paid") }}</span>
+                                                    <span class="text-success fw-medium">{{ formatPrice(order.total_amount) }}</span>
                                                 </td>
                                                 <td>
-                                                    <h5 class="fs-14 fw-medium mb-0">
-                                                        5.0
-                                                        <span class="text-muted fs-11 ms-1">(61 {{ $t("admin.page.dashboard.votes") }})</span>
-                                                    </h5>
-                                                </td>
-                                            </tr>
-                                            <!-- end tr -->
-                                            <tr>
-                                                <td>
-                                                    <a href="apps-ecommerce-order-details.html" class="fw-medium link-primary">#VZ2111</a>
+                                                    <span class="badge bg-light text-body border text-uppercase">{{ order.payment_method }}</span>
                                                 </td>
                                                 <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="flex-shrink-0 me-2">
-                                                            <NuxtImg src="/images/users/avatar-2.jpg" alt="" class="avatar-xs rounded-circle material-shadow" />
-                                                        </div>
-                                                        <div class="flex-grow-1">Jansh Brown</div>
-                                                    </div>
-                                                </td>
-                                                <td>{{ $t("admin.page.dashboard.furniture") }}</td>
-                                                <td>
-                                                    <span class="text-success">$149.00</span>
-                                                </td>
-                                                <td>Micro Design</td>
-                                                <td>
-                                                    <span class="badge bg-warning-subtle text-warning">{{ $t("admin.page.dashboard.pending") }}</span>
+                                                    <OrderStatusBadge :status="order.status" size="sm" />
                                                 </td>
                                                 <td>
-                                                    <h5 class="fs-14 fw-medium mb-0">
-                                                        4.5
-                                                        <span class="text-muted fs-11 ms-1">(61 {{ $t("admin.page.dashboard.votes") }})</span>
-                                                    </h5>
+                                                    <span class="text-muted fs-12">{{ new Date(order.created_at).toLocaleDateString('vi-VN') }}</span>
                                                 </td>
                                             </tr>
-                                            <!-- end tr -->
-                                            <tr>
-                                                <td>
-                                                    <a href="apps-ecommerce-order-details.html" class="fw-medium link-primary">#VZ2109</a>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="flex-shrink-0 me-2">
-                                                            <NuxtImg src="/images/users/avatar-3.jpg" alt="" class="avatar-xs rounded-circle material-shadow" />
-                                                        </div>
-                                                        <div class="flex-grow-1">Ayaan Bowen</div>
-                                                    </div>
-                                                </td>
-                                                <td>{{ $t("admin.page.dashboard.carAccessories") }}</td>
-                                                <td>
-                                                    <span class="text-success">$215.00</span>
-                                                </td>
-                                                <td>Nesta Technologies</td>
-                                                <td>
-                                                    <span class="badge bg-success-subtle text-success">{{ $t("admin.page.dashboard.paid") }}</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 fw-medium mb-0">
-                                                        4.9
-                                                        <span class="text-muted fs-11 ms-1">(89 {{ $t("admin.page.dashboard.votes") }})</span>
-                                                    </h5>
-                                                </td>
-                                            </tr>
-                                            <!-- end tr -->
-                                            <tr>
-                                                <td>
-                                                    <a href="apps-ecommerce-order-details.html" class="fw-medium link-primary">#VZ2108</a>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="flex-shrink-0 me-2">
-                                                            <NuxtImg src="/images/users/avatar-4.jpg" alt="" class="avatar-xs rounded-circle material-shadow" />
-                                                        </div>
-                                                        <div class="flex-grow-1">Prezy Mark</div>
-                                                    </div>
-                                                </td>
-                                                <td>{{ $t("admin.page.dashboard.furniture") }}</td>
-                                                <td>
-                                                    <span class="text-success">$199.00</span>
-                                                </td>
-                                                <td>Syntyce Solutions</td>
-                                                <td>
-                                                    <span class="badge bg-danger-subtle text-danger">{{ $t("admin.page.dashboard.unpaid") }}</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 fw-medium mb-0">
-                                                        4.3
-                                                        <span class="text-muted fs-11 ms-1">(47 {{ $t("admin.page.dashboard.votes") }})</span>
-                                                    </h5>
-                                                </td>
-                                            </tr>
-                                            <!-- end tr -->
-                                            <tr>
-                                                <td>
-                                                    <a href="apps-ecommerce-order-details.html" class="fw-medium link-primary">#VZ2107</a>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="flex-shrink-0 me-2">
-                                                            <NuxtImg src="/images/users/avatar-6.jpg" alt="" class="avatar-xs rounded-circle material-shadow" />
-                                                        </div>
-                                                        <div class="flex-grow-1">Vihan Hudda</div>
-                                                    </div>
-                                                </td>
-                                                <td>{{ $t("admin.page.dashboard.category") }}</td>
-                                                <td>
-                                                    <span class="text-success">$330.00</span>
-                                                </td>
-                                                <td>iTest Factory</td>
-                                                <td>
-                                                    <span class="badge bg-success-subtle text-success">{{ $t("admin.page.dashboard.paid") }}</span>
-                                                </td>
-                                                <td>
-                                                    <h5 class="fs-14 fw-medium mb-0">
-                                                        4.7
-                                                        <span class="text-muted fs-11 ms-1">(161 {{ $t("admin.page.dashboard.votes") }})</span>
-                                                    </h5>
-                                                </td>
-                                            </tr>
-                                            <!-- end tr -->
                                         </tbody>
                                         <!-- end tbody -->
                                     </table>
@@ -1439,9 +1236,47 @@
         <!-- end col -->
     </div>
 </template>
-<script setup>
+<script setup lang="ts">
+import { dashboardService, type IDashboardStatistics, type IRecentOrder, type ITopProduct } from "~/services/dashboard/dashboard.service";
+import { formatPrice } from "~/utils/helpers";
+import OrderStatusBadge from "~/components/order/OrderStatusBadge.vue";
+
 definePageMeta({
     layout: "admin",
     middleware: ["auth-admin"],
+});
+
+const loading = ref(true);
+const stats = ref<IDashboardStatistics | null>(null);
+const recentOrders = ref<IRecentOrder[]>([]);
+const topProducts = ref<ITopProduct[]>([]);
+
+const loadDashboardData = async () => {
+    loading.value = true;
+    try {
+        const [statsRes, ordersRes, productsRes] = await Promise.allSettled([
+            dashboardService.statistics(),
+            dashboardService.recentOrders(5),
+            dashboardService.topProducts(5),
+        ]);
+
+        if (statsRes.status === "fulfilled" && statsRes.value?.data) {
+            stats.value = statsRes.value.data;
+        }
+        if (ordersRes.status === "fulfilled" && ordersRes.value?.data) {
+            recentOrders.value = ordersRes.value.data;
+        }
+        if (productsRes.status === "fulfilled" && productsRes.value?.data) {
+            topProducts.value = productsRes.value.data;
+        }
+    } catch (e) {
+        console.error("Failed to load dashboard data:", e);
+    } finally {
+        loading.value = false;
+    }
+};
+
+onMounted(() => {
+    loadDashboardData();
 });
 </script>

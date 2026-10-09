@@ -36,6 +36,7 @@ use App\Http\Controllers\Api\V1\Post\PostLikeController;
 use App\Http\Controllers\Api\V1\Auth\AdminAuthController;
 use App\Http\Controllers\Api\V1\Auth\ChangePasswordController;
 use App\Http\Controllers\Api\V1\Order\OrderController;
+use App\Http\Controllers\Api\V1\Dashboard\DashboardController;
 
 $routeExcept = ['create', 'edit'];
 $publicResourceExcept = ['create', 'edit', 'index', 'show'];
@@ -61,6 +62,14 @@ Route::group(['prefix' => 'v1/', 'middleware' => ['jwt:admin', 'convert', 'check
     Route::middleware(['jwt:admin', 'convert'])->group(function () {
         Route::post('password/change', [ChangePasswordController::class, 'changePassword']);
         Route::post('upload-temp', [ImageController::class, 'uploadTemp']);
+    });
+
+    // Dashboard Analytics
+    Route::group(['prefix' => 'dashboard'], function () {
+        Route::get('statistics', [DashboardController::class, 'statistics']);
+        Route::get('charts', [DashboardController::class, 'charts']);
+        Route::get('recent-orders', [DashboardController::class, 'recentOrders']);
+        Route::get('top-products', [DashboardController::class, 'topProducts']);
     });
     // Attribute Catalogue
     Route::group(['prefix' => 'attribute_catalogues'], function () {
