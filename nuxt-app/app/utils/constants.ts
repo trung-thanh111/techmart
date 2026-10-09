@@ -25,6 +25,7 @@ export const PRODUCTCATEGORY = "/product/category";
 export const POSTCATEGORY = "/post/category";
 export const PRODUCTCATEGORIES = "/product/categories";
 export const POSTCATEGORIES = "/post/categories";
+export const POSTCATALOGUEINDEX = "/post/categories";
 
 export const TOPOSTDETAIL = (slug: string) => `/post/${slug}`;
 export const TOPOSTCATEGORY = "/post/category";

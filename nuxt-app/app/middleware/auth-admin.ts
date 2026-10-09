@@ -1,9 +1,9 @@
-import { useAdminAuthStore } from "~/stores/auth/adminAuth";
+import { useAuthStore } from "~/stores/auth/auth";
 import { useAppToast } from "~/composables/useAppToast";
 
 export default defineNuxtRouteMiddleware(() => {
   const toast = useAppToast();
-  const authStore = useAdminAuthStore();
+  const authStore = useAuthStore();
 
   if (!authStore.isAuthenticated || !authStore.isAdmin) {
     if (toast) {
