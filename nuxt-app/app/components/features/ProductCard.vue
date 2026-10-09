@@ -23,8 +23,8 @@
       <div class="h-full flex flex-col relative overflow-hidden z-10">
         <div class="absolute z-10 group-hover:backdrop-blur-sm group-hover:bg-white/30 transition-all duration-300 pointer-events-none rounded-lg"></div>
         <div class="relative h-[260px] overflow-hidden z-0">
-          <NuxtImg :src="mainImage" loading="lazy" :alt="product?.name || $t('productCard.mainImage')" class="w-full h-full object-contain transition-opacity duration-300 group-hover:opacity-0" />
-          <NuxtImg v-if="subImage" :src="subImage" loading="lazy" :alt="product?.name || $t('productCard.subImage')" class="w-full h-full object-contain absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <NuxtImg :src="mainImageSrc" loading="lazy" :alt="product?.name || $t('productCard.mainImage')" class="w-full h-full object-contain transition-opacity duration-300" :class="{ 'group-hover:opacity-0': hasHoverImage }" @error="handleMainImgError" />
+          <NuxtImg v-if="hasHoverImage" :src="subImageSrc" loading="lazy" :alt="product?.name || $t('productCard.subImage')" class="w-full h-full object-contain absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" @error="handleSubImgError" />
         </div>
         <div class="px-1 flex-grow flex flex-col justify-between z-0">
           <h3 class="text-sm font-medium text-gray-500 h-10 overflow-hidden leading-5 line-clamp-2">
@@ -77,7 +77,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref, watch } from "vue";
 import type { IProduct } from "~/interfaces/product/product.interface";
 import { formatPrice, resolveAlbum } from "~/utils/helpers";
 import { useCompare } from "~/composables/product/useCompare";
@@ -90,15 +90,43 @@ const { handleAddToCompareFromProduct } = useCompare();
 const { handleToggleWishlistFromProduct, isProductVariantInWishlist } = useWishlist();
 const { addItem } = useCart();
 
-const mainImage = computed(() => {
+const FALLBACK_MAIN = "/images/products/iphone-16-pro-max.webp";
+const FALLBACK_SUB = "/images/products/iphone-16-pro-max-3.webp";
+
+const rawMainImage = computed(() => {
   const images = resolveAlbum(props.product?.album);
-  return images[0] || "";
+  return images[0] || FALLBACK_MAIN;
 });
 
-const subImage = computed(() => {
+const rawSubImage = computed(() => {
   const images = resolveAlbum(props.product?.album);
-  return images[1] || "";
+  if (images.length > 1 && images[1] && images[1] !== images[0]) {
+    return images[1];
+  }
+  return images[0] || FALLBACK_SUB;
 });
+
+const mainImageSrc = ref(rawMainImage.value);
+const subImageSrc = ref(rawSubImage.value);
+
+watch(rawMainImage, (newVal) => {
+  mainImageSrc.value = newVal || FALLBACK_MAIN;
+});
+watch(rawSubImage, (newVal) => {
+  subImageSrc.value = newVal || FALLBACK_SUB;
+});
+
+const hasHoverImage = computed(() => {
+  return Boolean(subImageSrc.value && subImageSrc.value !== mainImageSrc.value);
+});
+
+const handleMainImgError = () => {
+  mainImageSrc.value = FALLBACK_MAIN;
+};
+
+const handleSubImgError = () => {
+  subImageSrc.value = FALLBACK_SUB;
+};
 
 const originalPrice = computed(() => Number(props.product?.priceOrigin || 0));
 

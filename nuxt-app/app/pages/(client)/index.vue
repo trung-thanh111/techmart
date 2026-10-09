@@ -67,8 +67,8 @@
       </div>
       <div class="max-w-7xl mx-auto">
         <DataState :loading="featuredProductsLoading" :error="false" :data="featuredProducts" :show-empty-image="true">
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <ProductCard v-for="product in featuredProducts.slice(0, 3)" :key="product.id" :product="product" :loading="false" />
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <ProductCard v-for="product in featuredProducts.slice(0, 4)" :key="product.id" :product="product" :loading="false" />
           </div>
         </DataState>
       </div>
@@ -582,16 +582,16 @@
             <NuxtLink to="/post" class="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] font-medium text-sm md:text-base after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#007c8b] after:to-[#00b88c] after:transition-all after:duration-300 group-hover:after:w-full">{{ $t("home.viewAll") }}</NuxtLink>
           </div>
         </div>
-        <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("home.popularLightingDesc") }}</p>
+        <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("home.featuredEventsDesc") }}</p>
       </div>
       <div class="grid grid-cols-1 lg:grid-cols-2 md:gap-6 gap-4">
         <Splide :options="postFeaturedOptions" id="featured-posts">
-          <SplideSlide v-for="(item, index) in postFeaturedItems" :key="`main-${index}`" class="bg-gray-100 rounded-xl overflow-hidden shadow-md">
-            <NuxtLink :to="item.link || '/post'" class="block">
-              <img :src="item.image" loading="lazy" :alt="`post futured ${index}`" class="w-full object-cover" />
+          <SplideSlide v-for="(item, index) in (homePosts.length ? homePosts.slice(0, 1) : postFeaturedItems)" :key="`main-${index}`" class="bg-gray-100 rounded-xl overflow-hidden shadow-md">
+            <NuxtLink :to="item.slug ? `/post/${item.slug}` : (item.link || '/post')" class="block">
+              <img :src="item.image?.url || item.image?.path || item.image || '/images/posts/post-home-1.jpg'" loading="lazy" :alt="item.name || item.title" class="w-full object-cover max-h-[300px]" />
               <div class="relative p-4">
-                <span class="absolute top-0 left-0 -translate-y-10 translate-x-4 inline-block bg-sky-100/80 text-sky-600 font-semibold text-xs px-4 py-1 rounded-full uppercase shadow-lg tracking-wide">{{ item.category }}</span>
-                <h3 class="text-lg md:text-xl font-bold text-gray-800 hover:text-cyan-600 transition-colors md:mb-2 mb-1 line-clamp-1">{{ item.title }}</h3>
+                <span class="absolute top-0 left-0 -translate-y-10 translate-x-4 inline-block bg-sky-100/80 text-sky-600 font-semibold text-xs px-4 py-1 rounded-full uppercase shadow-lg tracking-wide">{{ (item.postCatalogues && item.postCatalogues[0]?.name) || item.category || $t("home.technology") }}</span>
+                <h3 class="text-lg md:text-xl font-bold text-gray-800 hover:text-cyan-600 transition-colors md:mb-2 mb-1 line-clamp-1">{{ item.name || item.title }}</h3>
                 <p class="text-gray-600 hover:text-gray-500 transition-colors text-sm md:mb-4 mb-2 line-clamp-2">{{ item.description }}</p>
                 <div class="text-right hover:scale-105 transition-transform duration-300">
                   <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] font-medium text-sm md:text-base">{{ $t("home.readMore") }}</span>
@@ -602,13 +602,13 @@
         </Splide>
 
         <div class="grid grid-cols-1 md:grid-cols-2 md:gap-6 gap-4">
-          <div v-for="(post_homes, id) in 4" :key="id" class="bg-gray-100 rounded-lg shadow-lg overflow-hidden">
-            <NuxtLink to="/post" class="block cursor-pointer">
-              <img src="/images/posts/post-home-2.jpg" loading="lazy" alt="Post" class="w-full object-cover" />
-              <div class="relative p-2">
-                <span class="absolute top-0 left-0 -translate-y-8 translate-x-4 inline-block bg-sky-100/80 text-sky-600 font-semibold text-[8px] md:text-[10px] px-4 py-1 rounded-full uppercase shadow-lg tracking-wide">{{ $t("home.technology") }}</span>
-                <h3 class="text-lg font-medium text-gray-800 hover:text-cyan-600 transition-colors line-clamp-1">{{ $t("home.featuredArticle") }}</h3>
-                <p class="text-gray-600 hover:text-gray-500 transition-colors text-sm line-clamp-1">{{ $t("home.articleDesc") }}</p>
+          <div v-for="post in (homePosts.length > 1 ? homePosts.slice(1, 5) : postFeaturedItems.slice(0, 4))" :key="post.id || post.title" class="bg-gray-100 rounded-lg shadow-lg overflow-hidden flex flex-col justify-between">
+            <NuxtLink :to="post.slug ? `/post/${post.slug}` : (post.link || '/post')" class="block cursor-pointer h-full">
+              <img :src="post.image?.url || post.image?.path || post.image || '/images/posts/post-home-2.jpg'" loading="lazy" :alt="post.name || post.title" class="w-full h-36 object-cover" />
+              <div class="relative p-3">
+                <span class="absolute top-0 left-0 -translate-y-8 translate-x-4 inline-block bg-sky-100/80 text-sky-600 font-semibold text-[8px] md:text-[10px] px-4 py-1 rounded-full uppercase shadow-lg tracking-wide">{{ (post.postCatalogues && post.postCatalogues[0]?.name) || post.category || $t("home.technology") }}</span>
+                <h3 class="text-sm md:text-base font-semibold text-gray-800 hover:text-cyan-600 transition-colors line-clamp-1 mt-1">{{ post.name || post.title }}</h3>
+                <p class="text-gray-600 hover:text-gray-500 transition-colors text-xs line-clamp-2 mt-1">{{ post.description }}</p>
               </div>
             </NuxtLink>
           </div>
@@ -630,9 +630,10 @@ import { useHomeSlider } from "~/composables/useHomeSlider";
 import { useAuth } from "~/composables/auth/useAuth";
 import Partner from "~/components/ui/Partner.vue";
 
-// Import product composable
+// Import product and post composable / service
 import { useProduct } from "~/composables/product/useProduct";
 import { productService } from "~/services/product/product.service";
+import { postService } from "~/services/post/post.service";
 
 const {
   mainOptions,
@@ -660,6 +661,7 @@ const superSaleProducts = ref([]);
 const bestSellerProducts = ref([]);
 const highConfigProducts = ref([]);
 const highConfigAccessoryProducts = ref([]);
+const homePosts = ref([]);
 
 const highConfigSort = ref("price_origin,desc");
 const accessorySort = ref("id,desc");
@@ -693,19 +695,22 @@ onMounted(async () => {
       productService.pagination({ perpage: 10, sort: "sold,desc" }),
       productService.pagination({ perpage: 10, sort: highConfigSort.value }),
       productService.pagination({ perpage: 8, product_catalogue_id: 6, sort: accessorySort.value }),
+      postService.pagination({ publish: 2, perpage: 5, sort: "id,desc" }),
     ]);
 
     const superSaleRes = results[1].status === "fulfilled" ? results[1].value : null;
     const bestSellerRes = results[2].status === "fulfilled" ? results[2].value : null;
     const highConfigRes = results[3].status === "fulfilled" ? results[3].value : null;
     const accessoryRes = results[4].status === "fulfilled" ? results[4].value : null;
+    const postRes = results[5].status === "fulfilled" ? results[5].value : null;
 
     superSaleProducts.value = superSaleRes?.data?.data || [];
     bestSellerProducts.value = bestSellerRes?.data?.data || [];
     highConfigProducts.value = highConfigRes?.data?.data || [];
     highConfigAccessoryProducts.value = (accessoryRes?.data?.data || []).slice(0, 8);
+    homePosts.value = postRes?.data?.data || [];
   } catch (error) {
-    console.error("Error loading home page products:", error);
+    console.error("Error loading home page data:", error);
   }
 });
 

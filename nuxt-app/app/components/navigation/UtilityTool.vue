@@ -70,9 +70,7 @@
                 </div>
               </div>
             </div>
-            <div v-show="showConditions[index]" class="voucher-condition border border-sky-200 bg-white rounded-md text-xs text-gray-600 mt-2 p-2">
-              {{ voucher.description || $t("utilityTool.voucherCondition") }}
-            </div>
+            <div v-show="showConditions[index]" class="voucher-condition border border-sky-200 bg-white rounded-md text-xs text-gray-600 mt-2 p-2 [&>p]:mb-1 [&>p:last-child]:mb-0" v-html="voucher.description || $t('utilityTool.voucherCondition')"></div>
           </div>
         </div>
       </div>

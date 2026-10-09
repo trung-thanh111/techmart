@@ -730,7 +730,16 @@
     "technology": "công nghệ",
     "featuredArticle": "Bài viết nổi bật: Công nghệ AI thay đổi cuộc sống thế nào?",
     "articleDesc": "Trí tuệ nhân tạo đang làm thay đổi cách chúng ta sống, làm việc và giao tiếp. Cùng tìm hiểu những đột phá mới nhất trong lĩnh vực này.",
-    "introBanner": "Banner giới thiệu"
+    "introBanner": "Banner giới thiệu",
+    "collection": "Bộ sưu tập",
+    "collectionDesc": "Khám phá các bộ sưu tập công nghệ đỉnh cao được tuyển chọn đặc biệt dành cho bạn.",
+    "discoverNow": "Khám phá ngay",
+    "flashSaleToday": "Flash Sale Hôm Nay",
+    "bestSelling": "Bán chạy nhất",
+    "highRated": "Đánh giá cao",
+    "featuredEventsDesc": "Cập nhật những tin tức công nghệ mới nhất, xu hướng và sự kiện nổi bật trong ngành.",
+    "lightingDesc": "Cấu hình mạnh mẽ, hiệu năng đột phá đáp ứng mọi nhu cầu đồ họa và chiến game đỉnh cao.",
+    "experienceDifference": "Trải nghiệm sự khác biệt với dịch vụ tận tâm và chất lượng hàng đầu tại TechMart."
   },
   "footer": {
     "hotline": "Hotline",

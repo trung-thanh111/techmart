@@ -117,12 +117,39 @@ class PromotionSeeder extends Seeder
                     ]
                 ]
             ],
+            [
+                'code' => 'SUPERSALE',
+                'name' => 'Siêu Sale Công Nghệ 2026',
+                'slug' => 'sieu-sale-cong-nghe-2026',
+                'description' => '<p>Đại tiệc Siêu Sale Công Nghệ: Giảm trực tiếp 20% cho các sản phẩm công nghệ hàng đầu.</p>',
+                'type' => 'product',
+                'priority' => 100,
+                'can_combine' => true,
+                'usage_limit' => 50000,
+                'usage_per_customer' => 10,
+                'used_count' => 0,
+                'start_date' => now()->subDays(2),
+                'end_date' => now()->addMonths(6),
+                'publish' => 2,
+                'rules' => [],
+                'actions' => [
+                    [
+                        'execution_order' => 0,
+                        'action_type' => 'percent',
+                        'action_value' => 20,
+                        'max_discount' => 5000000,
+                        'apply_to' => 'product',
+                    ]
+                ],
+                'targets' => 'hot_products',
+            ],
         ];
 
         foreach ($promotions as $promoData) {
             $rules = $promoData['rules'];
             $actions = $promoData['actions'];
-            unset($promoData['rules'], $promoData['actions']);
+            $targets = $promoData['targets'] ?? null;
+            unset($promoData['rules'], $promoData['actions'], $promoData['targets']);
 
             $promotion = Promotion::firstOrCreate(
                 ['code' => $promoData['code']],
@@ -150,6 +177,27 @@ class PromotionSeeder extends Seeder
                     ],
                     $action
                 );
+            }
+
+            // Gán targets cho sản phẩm
+            if ($targets === 'hot_products') {
+                $hotProducts = \App\Models\Product::where('is_hot', 1)->take(10)->get();
+                if ($hotProducts->isEmpty()) {
+                    $hotProducts = \App\Models\Product::take(10)->get();
+                }
+                foreach ($hotProducts as $prod) {
+                    \App\Models\PromotionTarget::firstOrCreate(
+                        [
+                            'promotion_id' => $promotion->id,
+                            'target_type' => 'product',
+                            'target_id' => $prod->id,
+                        ],
+                        [
+                            'is_included' => true,
+                            'metadata' => ['product_name' => $prod->name, 'sku' => $prod->sku],
+                        ]
+                    );
+                }
             }
         }
     }
