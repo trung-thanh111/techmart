@@ -232,13 +232,6 @@ export function useHomeSlider() {
     },
   ];
 
-  const rightVirticalItems: SlideItem[] = [
-    { image: "/images/slide/hero-slide-right-1.webp", alt: "Banner Right 1" },
-    { image: "/images/slide/hero-slide-right-2.webp", alt: "Banner Right 2" },
-    { image: "/images/slide/slide_hero_r_3.png", alt: "Banner Right 3" },
-    { image: "/images/slide/slide_hero_r_3.png", alt: "Banner Right 4" },
-    { image: "/images/slide/slide_hero_r_3.png", alt: "Banner Right 5" },
-  ];
 
   const postFeaturedItems: PostItem[] = [
     {
