@@ -198,6 +198,11 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
     Route::post('orders/{id}/cancel', [OrderController::class, 'cancel'])->middleware(['jwt:admin,api', 'convert']);
     Route::match(['post', 'patch', 'put'], 'orders/{id}/note', [OrderController::class, 'updateNote'])->middleware(['jwt:admin,api', 'convert']);
 
+    // Product Reviews
+    Route::get('products/{id}/reviews', [\App\Http\Controllers\Api\V1\ProductReview\ProductReviewController::class, 'getByProduct'])->whereNumber('id');
+    Route::post('products/{id}/reviews', [\App\Http\Controllers\Api\V1\ProductReview\ProductReviewController::class, 'storeReview'])->whereNumber('id');
+    Route::post('product-reviews/{id}/like', [\App\Http\Controllers\Api\V1\ProductReview\ProductReviewController::class, 'like'])->whereNumber('id');
+
     // Cart Routes
     Route::middleware(['convert'])->group(function () use ($routeExcept) {
         Route::group(['prefix' => 'carts'], function () {

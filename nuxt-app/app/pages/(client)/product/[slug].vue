@@ -498,26 +498,26 @@
             </div>
             <div class="text-gray-600 text-base" v-if="activeTab === 'rating'">
               <div class="p-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white rounded-md shadow-md p-3 mb-5">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white rounded-md shadow-md p-4 mb-6">
                   <div class="space-y-4">
                     <h2 class="text-2xl font-bold text-gray-700">{{ $t("product.customerReviewsTitle") }}</h2>
                     <p class="text-gray-600 text-sm">{{ $t("product.customerReviewsDescription") }}</p>
-                    <p class="text-gray-600 text-sm">{{ $t("product.fabricDesc") }}</p>
+                    <p class="text-gray-500 text-xs">Mọi đánh giá từ khách hàng đều giúp chúng tôi hoàn thiện chất lượng sản phẩm & dịch vụ tốt hơn.</p>
                   </div>
-                  <div class="">
-                    <div class="flex items-center justify-between mb-2">
+                  <div>
+                    <div class="flex items-center justify-between mb-4">
                       <div>
                         <p class="text-sm text-gray-500">
                           {{ $t("product.basedOn") }}
-                          <span class="text-sky-500">254</span>
+                          <span class="text-sky-500 font-semibold">{{ reviewSummary?.total_reviews ?? 0 }}</span>
                           {{ $t("product.reviews") }}
                         </p>
-                        <p class="text-3xl font-bold text-gray-900">4.0</p>
+                        <p class="text-3xl font-bold text-gray-900">{{ reviewSummary?.average_rating ? reviewSummary.average_rating.toFixed(1) : "5.0" }}</p>
                       </div>
-                      <div class="flex items-center">
+                      <div class="flex items-center space-x-1">
                         <!-- Stars -->
                         <template v-for="star in 5" :key="star">
-                          <svg :class="star <= 4 ? 'text-yellow-400' : 'text-gray-300'" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                          <svg :class="star <= Math.round(reviewSummary?.average_rating ?? 5) ? 'text-yellow-400' : 'text-gray-300'" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.97 4.184.012c.97.003 1.371 1.24.588 1.81l-3.396 2.53 1.27 3.996c.286.899-.755 1.637-1.54 1.092L10 13.187l-3.343 2.148c-.784.545-1.825-.193-1.54-1.092l1.27-3.996-3.396-2.53c-.783-.57-.382-1.807.588-1.81l4.184-.012 1.286-3.97z" />
                           </svg>
                         </template>
@@ -525,196 +525,146 @@
                     </div>
 
                     <div class="space-y-2">
-                      <!-- One row -->
-                      <div class="flex items-center gap-3">
-                        <span class="text-sm w-4 font-medium text-gray-900">5</span>
+                      <div v-for="star in [5, 4, 3, 2, 1]" :key="star" class="flex items-center gap-3">
+                        <span class="text-sm w-4 font-medium text-gray-900">{{ star }}</span>
                         <div class="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden">
-                          <div class="h-full bg-gradient-to-r from-green-400 to-green-600 rounded-full" style="width: 63%"></div>
+                          <div
+                            :class="[
+                              star === 5 ? 'bg-gradient-to-r from-green-400 to-green-600' : '',
+                              star === 4 ? 'bg-gradient-to-r from-lime-400 to-lime-600' : '',
+                              star === 3 ? 'bg-gradient-to-r from-yellow-400 to-yellow-500' : '',
+                              star === 2 ? 'bg-gradient-to-r from-orange-400 to-orange-500' : '',
+                              star === 1 ? 'bg-gradient-to-r from-red-400 to-red-500' : '',
+                              'h-full rounded-full transition-all duration-500',
+                            ]"
+                            :style="{ width: `${reviewSummary?.star_percentages?.[star] ?? 0}%` }"
+                          ></div>
                         </div>
-                        <span class="text-sm w-12 text-right text-gray-600">63%</span>
-                      </div>
-                      <!-- Repeat for others -->
-                      <div class="flex items-center gap-3">
-                        <span class="text-sm w-4 font-medium text-gray-900">4</span>
-                        <div class="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden">
-                          <div class="h-full bg-gradient-to-r from-lime-400 to-lime-600 rounded-full" style="width: 22%"></div>
-                        </div>
-                        <span class="text-sm w-12 text-right text-gray-600">22%</span>
-                      </div>
-                      <div class="flex items-center gap-3">
-                        <span class="text-sm w-4 font-medium text-gray-900">3</span>
-                        <div class="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden">
-                          <div class="h-full bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-full" style="width: 23%"></div>
-                        </div>
-                        <span class="text-sm w-12 text-right text-gray-600">23%</span>
-                      </div>
-                      <div class="flex items-center gap-3">
-                        <span class="text-sm w-4 font-medium text-gray-900">2</span>
-                        <div class="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden">
-                          <div class="h-full bg-gradient-to-r from-orange-400 to-orange-500 rounded-full" style="width: 8%"></div>
-                        </div>
-                        <span class="text-sm w-12 text-right text-gray-600">8%</span>
-                      </div>
-                      <div class="flex items-center gap-3">
-                        <span class="text-sm w-4 font-medium text-gray-900">1</span>
-                        <div class="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden">
-                          <div class="h-full bg-gradient-to-r from-red-400 to-red-500 rounded-full" style="width: 35%"></div>
-                        </div>
-                        <span class="text-sm w-12 text-right text-gray-600">35%</span>
+                        <span class="text-xs w-12 text-right text-gray-500">{{ reviewSummary?.star_percentages?.[star] ?? 0 }}%</span>
                       </div>
                     </div>
                   </div>
                 </div>
-                <!-- RIGHT: Ratings -->
-                <div class="max-w-2xl mx-auto">
-                  <h1 class="text-2xl font-bold text-gray-600 mb-4 text-center tracking-wide">{{ $t("product.yourThoughtsTitle") }}</h1>
-                  <form class="rounded-md bg-gray-100 overflow-hidden shadow-md">
-                    <textarea class="w-full p-4 text-gray-600 placeholder-gray-500 focus:outline-none resize-none bg-gray-100" rows="4" :placeholder="$t('product.yourThoughtsPlaceholder')" required></textarea>
-                    <div class="flex items-center justify-between bg-gray-300 px-4 py-2">
-                      <div class="flex items-center space-x-4 text-gray-600">
-                        <!-- Image icon -->
-                        <button type="button">
-                          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 5h18v14H3V5zm3 8l3 3 4-4 5 5H5z" />
-                          </svg>
-                        </button>
-                      </div>
-                      <button class="flex items-center justify-center ml-3 text-white rounded-md h-9 w-14 bg-sky-500 hover:bg-sky-600 xl:ml-5">
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path fill-rule="evenodd" clip-rule="evenodd" d="M4.98481 2.44399C3.11333 1.57147 1.15325 3.46979 1.96543 5.36824L3.82086 9.70527C3.90146 9.89367 3.90146 10.1069 3.82086 10.2953L1.96543 14.6323C1.15326 16.5307 3.11332 18.4291 4.98481 17.5565L16.8184 12.0395C18.5508 11.2319 18.5508 8.76865 16.8184 7.961L4.98481 2.44399ZM3.34453 4.77824C3.0738 4.14543 3.72716 3.51266 4.35099 3.80349L16.1846 9.32051C16.762 9.58973 16.762 10.4108 16.1846 10.68L4.35098 16.197C3.72716 16.4879 3.0738 15.8551 3.34453 15.2223L5.19996 10.8853C5.21944 10.8397 5.23735 10.7937 5.2537 10.7473L9.11784 10.7473C9.53206 10.7473 9.86784 10.4115 9.86784 9.99726C9.86784 9.58304 9.53206 9.24726 9.11784 9.24726L5.25157 9.24726C5.2358 9.20287 5.2186 9.15885 5.19996 9.11528L3.34453 4.77824Z" fill="white"></path>
-                        </svg>
+
+                <!-- RIGHT: Ratings & Review Form -->
+                <div class="max-w-2xl mx-auto mb-8">
+                  <h3 class="text-xl font-bold text-gray-700 mb-3 text-center">Gửi đánh giá của bạn</h3>
+
+                  <!-- Rating Star Selector -->
+                  <div class="flex items-center justify-center space-x-2 mb-4">
+                    <span class="text-sm text-gray-600 mr-2">Mức độ hài lòng:</span>
+                    <button
+                      v-for="s in 5"
+                      :key="s"
+                      type="button"
+                      @click="reviewRating = s"
+                      class="text-2xl transition transform hover:scale-110 focus:outline-none"
+                    >
+                      <i :class="[s <= reviewRating ? 'fa-solid fa-star text-yellow-400' : 'fa-regular fa-star text-gray-300']"></i>
+                    </button>
+                    <span class="text-sm font-semibold text-gray-700 ml-2">({{ reviewRating }} sao)</span>
+                  </div>
+
+                  <!-- Form fields for guest -->
+                  <div v-if="!authStore.isAuthenticated" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                    <input
+                      v-model="reviewAuthorName"
+                      type="text"
+                      placeholder="Họ và tên của bạn"
+                      class="w-full px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-sky-500"
+                    />
+                    <input
+                      v-model="reviewAuthorEmail"
+                      type="email"
+                      placeholder="Email nhận thông báo (tùy chọn)"
+                      class="w-full px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-sky-500"
+                    />
+                  </div>
+
+                  <!-- Textarea -->
+                  <form @submit.prevent="handleSendReview" class="rounded-md bg-gray-50 border border-gray-200 overflow-hidden shadow-sm">
+                    <textarea
+                      v-model="reviewComment"
+                      class="w-full p-4 text-gray-700 placeholder-gray-400 focus:outline-none resize-none bg-white text-sm"
+                      rows="3"
+                      placeholder="Hãy chia sẻ trải nghiệm của bạn về sản phẩm này (chất lượng, thiết kế, hiệu năng...)..."
+                      required
+                    ></textarea>
+
+                    <div v-if="reviewSuccessMsg" class="px-4 py-2 bg-green-50 text-green-700 text-sm border-t border-green-200">
+                      {{ reviewSuccessMsg }}
+                    </div>
+                    <div v-if="reviewErrorMsg" class="px-4 py-2 bg-red-50 text-red-600 text-sm border-t border-red-200">
+                      {{ reviewErrorMsg }}
+                    </div>
+
+                    <div class="flex items-center justify-between bg-gray-100 px-4 py-2">
+                      <span class="text-xs text-gray-500">Đánh giá công khai</span>
+                      <button
+                        type="submit"
+                        :disabled="reviewSubmitting"
+                        class="flex items-center justify-center px-4 py-2 text-white text-sm font-medium rounded-md bg-sky-500 hover:bg-sky-600 disabled:opacity-50 transition"
+                      >
+                        <span v-if="reviewSubmitting">Đang gửi...</span>
+                        <span v-else>Gửi đánh giá</span>
                       </button>
                     </div>
                   </form>
                 </div>
+
                 <!-- COMMENT LIST -->
-                <div class="max-w-2xl mx-auto space-y-4 mt-6">
-                  <h1 class="text-xl font-bold text-gray-500 mb-4">{{ $t("product.reviewsTitle", { count: 23 }) }}</h1>
-                  <!-- Comment Card -->
-                  <div v-for="product_reviews in 5" :key="product_reviews" class="bg-white border border-gray-200 p-4 rounded-lg shadow-sm">
-                    <div class="flex items-center justify-between mb-2">
-                      <div class="flex items-center space-x-3">
-                        <NuxtImg class="w-8 h-8 rounded-full" src="https://i.pravatar.cc/40" alt="avatar" />
-                        <div>
-                          <p class="text-sm font-semibold text-gray-800">Michael Gough</p>
-                          <p class="text-xs text-gray-500">Feb. 8, 2022</p>
-                        </div>
-                      </div>
-                      <div class="relative inline-block text-left group">
-                        <button class="text-gray-400">
-                          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M6 10a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm6-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm4-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z" />
-                          </svg>
-                        </button>
-                        <!-- Hover bridge: chống mất hover -->
-                        <div class="absolute top-full right-0 w-full h-3 group-hover:block hidden z-0"></div>
-                        <div class="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 hidden group-hover:block transition-all duration-300 ease-in-out">
-                          <div class="w-full bg-white rounded-md border-0 shadow-xl font-normal ring-black/10 divide-y divide-gray-100">
-                            <div class="py-1">
-                              <NuxtLink to="pages-profile.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                <i class="fa-regular fa-user text-gray-400 text-md mr-2"></i>
-                                <span>{{ $t("product.userMenu.profile") }}</span>
-                              </NuxtLink>
+                <div class="max-w-2xl mx-auto space-y-4">
+                  <h4 class="text-lg font-bold text-gray-700 mb-4">
+                    Tất cả đánh giá ({{ reviewSummary?.total_reviews ?? 0 }})
+                  </h4>
 
-                              <NuxtLink to="apps-chat.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                <i class="fa-regular fa-comment-dots text-gray-400 text-md mr-2"></i>
-                                <span>{{ $t("product.userMenu.messages") }}</span>
-                              </NuxtLink>
-
-                              <NuxtLink to="apps-tasks-kanban.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                <i class="fa-regular fa-calendar-check text-gray-400 text-md mr-2"></i>
-                                <span>{{ $t("product.userMenu.taskboard") }}</span>
-                              </NuxtLink>
-
-                              <NuxtLink to="pages-faqs.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                <i class="fa-solid fa-life-ring text-gray-400 text-md mr-2"></i>
-                                <span>{{ $t("product.userMenu.help") }}</span>
-                              </NuxtLink>
-                            </div>
-                            <div class="border-t border-gray-200"></div>
-                            <div class="py-1">
-                              <NuxtLink to="auth-logout-basic.html" class="flex items-center px-4 py-2 text-sm text-red-700 hover:bg-red-100">
-                                <i class="fa-solid fa-arrow-right-from-bracket text-md mr-2"></i>
-                                <span>{{ $t("product.userMenu.logout") }}</span>
-                              </NuxtLink>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <p class="text-gray-700 text-sm mb-3">{{ $t("product.mockReview1") }}</p>
-                    <div class="flex items-center space-x-6 text-gray-500 text-xs">
-                      <span class="flex items-center space-x-1">
-                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                          <path d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8l0-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5l0 3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20-.1-.1s0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5l0 3.3c0 28.5 11.9 55.8 32.8 75.2L256 430.7 431.2 268c20.9-19.4 32.8-46.7 32.8-75.2l0-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z" />
-                        </svg>
-                        <span>11 {{ $t("product.likes") }}</span>
-                      </span>
-                      <button class="hover:underline hover:text-sky-500">{{ $t("product.reply") }}</button>
-                    </div>
+                  <div v-if="reviewLoading && reviewList.length === 0" class="text-center py-8 text-gray-500">
+                    <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-sky-500 mb-2"></div>
+                    <p class="text-sm">Đang tải đánh giá...</p>
                   </div>
 
-                  <!-- Reply Card -->
-                  <div class="ml-8 bg-white border border-gray-200 p-4 rounded-lg shadow-sm">
+                  <div v-else-if="reviewList.length === 0" class="text-center py-8 bg-white border border-gray-200 rounded-lg p-6">
+                    <i class="fa-regular fa-comment-dots text-4xl text-gray-300 mb-3"></i>
+                    <p class="text-gray-500 text-sm">Chưa có đánh giá nào cho sản phẩm này.</p>
+                    <p class="text-xs text-gray-400 mt-1">Hãy là người đầu tiên chia sẻ cảm nghĩ về sản phẩm!</p>
+                  </div>
+
+                  <!-- Comment Card -->
+                  <div
+                    v-for="item in reviewList"
+                    :key="item.id"
+                    class="bg-white border border-gray-200 p-4 rounded-lg shadow-sm hover:border-gray-300 transition"
+                  >
                     <div class="flex items-center justify-between mb-2">
                       <div class="flex items-center space-x-3">
-                        <NuxtImg class="w-8 h-8 rounded-full" src="https://i.pravatar.cc/40?img=2" alt="avatar" />
+                        <NuxtImg
+                          class="w-8 h-8 rounded-full object-cover"
+                          :src="item.user_avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(item.user_name)}&background=0284c7&color=fff`"
+                          alt="avatar"
+                        />
                         <div>
-                          <p class="text-sm font-semibold text-gray-800">Jese Leos</p>
-                          <p class="text-xs text-gray-500">Feb. 12, 2022</p>
+                          <p class="text-sm font-semibold text-gray-800">{{ item.user_name }}</p>
+                          <p class="text-xs text-gray-400">{{ item.created_at_human || item.created_at }}</p>
                         </div>
                       </div>
-                      <div class="relative inline-block text-left group">
-                        <button class="text-gray-400">
-                          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M6 10a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm6-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm4-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z" />
+                      <div class="flex items-center space-x-1">
+                        <template v-for="star in 5" :key="star">
+                          <svg :class="star <= item.rating ? 'text-yellow-400' : 'text-gray-300'" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.97 4.184.012c.97.003 1.371 1.24.588 1.81l-3.396 2.53 1.27 3.996c.286.899-.755 1.637-1.54 1.092L10 13.187l-3.343 2.148c-.784.545-1.825-.193-1.54-1.092l1.27-3.996-3.396-2.53c-.783-.57-.382-1.807.588-1.81l4.184-.012 1.286-3.97z" />
                           </svg>
-                        </button>
-                        <!-- Hover bridge: chống mất hover -->
-                        <div class="absolute top-full right-0 w-full h-3 group-hover:block hidden z-0"></div>
-                        <div class="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 hidden group-hover:block transition-all duration-300 ease-in-out">
-                          <div class="w-full bg-white rounded-md border-0 shadow-xl font-normal ring-black/10 divide-y divide-gray-100">
-                            <div class="py-1">
-                              <NuxtLink to="pages-profile.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                <i class="fa-regular fa-user text-gray-400 text-md mr-2"></i>
-                                <span>{{ $t("product.userMenu.profile") }}</span>
-                              </NuxtLink>
-
-                              <NuxtLink to="apps-chat.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                <i class="fa-regular fa-comment-dots text-gray-400 text-md mr-2"></i>
-                                <span>{{ $t("product.userMenu.messages") }}</span>
-                              </NuxtLink>
-
-                              <NuxtLink to="apps-tasks-kanban.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                <i class="fa-regular fa-calendar-check text-gray-400 text-md mr-2"></i>
-                                <span>{{ $t("product.userMenu.taskboard") }}</span>
-                              </NuxtLink>
-
-                              <NuxtLink to="pages-faqs.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                <i class="fa-solid fa-life-ring text-gray-400 text-md mr-2"></i>
-                                <span>{{ $t("product.userMenu.help") }}</span>
-                              </NuxtLink>
-                            </div>
-                            <div class="border-t border-gray-200"></div>
-                            <div class="py-1">
-                              <NuxtLink to="auth-logout-basic.html" class="flex items-center px-4 py-2 text-sm text-red-700 hover:bg-red-100">
-                                <i class="fa-solid fa-arrow-right-from-bracket text-md mr-2"></i>
-                                <span>{{ $t("product.userMenu.logout") }}</span>
-                              </NuxtLink>
-                            </div>
-                          </div>
-                        </div>
+                        </template>
                       </div>
                     </div>
-                    <p class="text-gray-700 text-sm mb-3">{{ $t("product.mockReply") }}</p>
-                    <div class="flex items-center space-x-6 text-gray-500 text-xs">
-                      <span class="flex items-center space-x-1">
-                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                          <path d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8l0-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5l0 3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20-.1-.1s0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5l0 3.3c0 28.5 11.9 55.8 32.8 75.2L256 430.7 431.2 268c20.9-19.4 32.8-46.7 32.8-75.2l0-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z" />
-                        </svg>
-                        <span>11 {{ $t("product.likes") }}</span>
-                      </span>
-                      <button class="hover:underline hover:text-sky-500">{{ $t("product.reply") }}</button>
+                    <p class="text-gray-700 text-sm mb-3 whitespace-pre-line">{{ item.comment }}</p>
+                    <div class="flex items-center justify-between text-gray-500 text-xs">
+                      <button
+                        type="button"
+                        @click="likeReview(item.id)"
+                        class="flex items-center space-x-1.5 hover:text-sky-600 transition"
+                      >
+                        <i class="fa-regular fa-thumbs-up"></i>
+                        <span>{{ item.likes_count || 0 }} hữu ích</span>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -766,6 +716,7 @@ import { useAuthStore } from "~/stores/auth/auth";
 import { useWishlist } from "~/composables/product/useWishlist";
 import { useCompare } from "~/composables/product/useCompare";
 import { useCart } from "~/composables/cart/useCart";
+import { useProductReview } from "~/composables/product/useProductReview";
 import type { IPromotion, IPromotionTarget } from "~/interfaces/promotion/promotion.interface";
 import { TOEXCHANGEPOLICY, TOAGENCYSYSTEM, HOTLINE, TOCART } from "~/utils/constants";
 import { useRoute } from "vue-router";
@@ -784,6 +735,52 @@ const { toggleWishlist, isVariantInWishlist, checkVariantWishlistStatus, fetchWi
 const { addToCompare, removeFromCompare, isInCompare } = useCompare();
 const { addItem, isAddingToCart, isBuyingNow } = useCart();
 const authStore = useAuthStore();
+
+// Reviews composable & state
+const {
+  reviews: reviewList,
+  summary: reviewSummary,
+  loading: reviewLoading,
+  submitting: reviewSubmitting,
+  fetchReviews,
+  submitReview,
+  likeReview,
+} = useProductReview();
+
+const reviewRating = ref(5);
+const reviewComment = ref("");
+const reviewAuthorName = ref("");
+const reviewAuthorEmail = ref("");
+const reviewSuccessMsg = ref("");
+const reviewErrorMsg = ref("");
+
+const handleSendReview = async () => {
+  if (!productDetail.value?.id) return;
+  if (!reviewComment.value.trim()) {
+    reviewErrorMsg.value = "Vui lòng nhập nội dung đánh giá của bạn.";
+    return;
+  }
+  reviewErrorMsg.value = "";
+  reviewSuccessMsg.value = "";
+
+  const res = await submitReview({
+    product_id: productDetail.value.id,
+    rating: reviewRating.value,
+    comment: reviewComment.value.trim(),
+    user_name: reviewAuthorName.value.trim() || undefined,
+    user_email: reviewAuthorEmail.value.trim() || undefined,
+  });
+
+  if (res.success) {
+    reviewComment.value = "";
+    reviewSuccessMsg.value = "Cảm ơn bạn! Đánh giá của bạn đã được ghi nhận.";
+    setTimeout(() => {
+      reviewSuccessMsg.value = "";
+    }, 5000);
+  } else {
+    reviewErrorMsg.value = res.message || "Gửi đánh giá không thành công.";
+  }
+};
 
 // State
 const activeTab = ref("summary");
@@ -1108,6 +1105,11 @@ onMounted(async () => {
         });
       }
       selectedVariant.value = firstVariant;
+    }
+
+    // Fetch reviews
+    if (productDetail.value?.id) {
+      await fetchReviews(productDetail.value.id);
     }
 
     // Sync sliders

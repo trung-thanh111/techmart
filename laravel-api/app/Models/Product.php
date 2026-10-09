@@ -108,4 +108,9 @@ class Product extends Model
     {
         return $this->morphMany(CartItem::class, 'purchasable');
     }
+
+    public function reviews(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ProductReview::class, 'product_id', 'id');
+    }
 }

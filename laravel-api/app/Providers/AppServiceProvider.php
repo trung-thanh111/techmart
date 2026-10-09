@@ -143,6 +143,7 @@ class AppServiceProvider extends ServiceProvider
         OrderServiceInterface::class => OrderService::class,
         PaymentServiceInterface::class => PaymentService::class,
         \App\Services\Interfaces\Dashboard\DashboardServiceInterface::class => \App\Services\Impl\Dashboard\DashboardService::class,
+        \App\Services\Interfaces\ProductReview\ProductReviewServiceInterface::class => \App\Services\Impl\ProductReview\ProductReviewService::class,
     ];
 
     /**
