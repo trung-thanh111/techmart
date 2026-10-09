@@ -55,7 +55,7 @@
           </div>
           <ClientOnly>
             <div class="items-center gap-4 hidden sm:flex text-white">
-              <a v-if="user" href="#" @click.prevent="openTrackingDialog" class="flex items-center gap-1 hover:text-gray-300 transition-colors">
+              <a href="#" @click.prevent="openTrackingDialog" class="flex items-center gap-1 hover:text-gray-300 transition-colors">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-7 h-7 mt-1.5">
                   <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
                   <polyline points="14,2 14,8 20,8" />
@@ -199,7 +199,7 @@
               </svg>
             </button>
             <div class="flex items-center gap-4 text-white">
-              <a v-if="user" href="#" @click.prevent="openTrackingDialog" class="flex items-center gap-1 hover:text-gray-300 transition-colors">
+              <a href="#" @click.prevent="openTrackingDialog" class="flex items-center gap-1 hover:text-gray-300 transition-colors">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6 mt-1.5">
                   <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
                   <polyline points="14,2 14,8 20,8" />
@@ -356,63 +356,176 @@
     <!-- mobile -->
     <MenuMobile :is-open="isMobileMenuOpen" :menu-tree="menuTree" @close="closeMobileMenu" />
 
-    <Dialog v-model:visible="visibleTracking" :header="$t('header.trackOrder')" :modal="true" :style="{ width: '850px' }" :breakpoints="{ '960px': '75vw', '640px': '90vw' }">
-      <div class="flex flex-col gap-4">
-        <div class="flex items-center gap-2">
-          <span class="p-input-icon-left w-full">
-            <InputText v-model="trackingKeyword" :placeholder="$t('header.searchOrderPlaceholder')" class="w-full" @input="handleTrackingSearch" @keydown.enter="searchOrders" />
-          </span>
-          <Button icon="pi pi-search" :label="$t('header.searchLabel')" @click="searchOrders" :loading="trackingLoading" />
+    <Dialog v-model:visible="visibleTracking" :header="$t('header.trackOrder')" :modal="true" :style="{ width: '760px' }" :breakpoints="{ '960px': '75vw', '640px': '95vw' }">
+      <div class="flex flex-col gap-4 text-gray-700">
+        <!-- Form Tra cứu -->
+        <div class="p-4 bg-gray-50 border border-gray-200 rounded-xl">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 mb-1">
+                {{ $t('order.trackCode') }} <span class="text-red-500">*</span>
+              </label>
+              <InputText
+                v-model="trackingCode"
+                :placeholder="$t('order.trackCodePlaceholder')"
+                class="w-full text-sm"
+                @keydown.enter="trackOrder"
+              />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 mb-1">
+                {{ $t('order.trackPhone') }}
+                <span v-if="!authStore.accessToken" class="text-red-500">*</span>
+              </label>
+              <InputText
+                v-model="trackingPhone"
+                :placeholder="authStore.accessToken ? $t('order.trackPhoneAuthPlaceholder') : $t('order.trackPhonePlaceholder')"
+                class="w-full text-sm"
+                @keydown.enter="trackOrder"
+              />
+            </div>
+          </div>
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-2 pt-2 border-t border-gray-200/70">
+            <span class="text-xs text-gray-500 italic">
+              {{ $t('order.trackSearchGuide') }}
+            </span>
+            <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+              <Button
+                v-if="trackedOrder"
+                severity="secondary"
+                outlined
+                size="small"
+                :label="$t('order.trackReset')"
+                icon="pi pi-refresh"
+                @click="resetTracking"
+              />
+              <Button
+                size="small"
+                icon="pi pi-search"
+                :label="$t('order.trackSubmit')"
+                :loading="trackingLoading"
+                @click="trackOrder"
+              />
+            </div>
+          </div>
         </div>
-        <DataState :loading="trackingLoading" :empty="trackingOrders.length === 0" :error="false" />
-        <div v-if="trackingOrders.length > 0">
-          <DataTable :value="trackingOrders" :loading="trackingLoading" responsiveLayout="scroll" class="p-datatable-sm" stripedRows :rowHover="true" :class="['text-sm']">
-            <Column field="code" :header="$t('order.code') || 'Mã đơn'">
-              <template #body="{ data }">
-                <NuxtLink :to="`${PROFILEORDER}/${data.code}`" class="font-bold text-[#00b88c] hover:underline" @click="visibleTracking = false">#{{ data.code }}</NuxtLink>
-              </template>
-            </Column>
 
-            <Column :header="$t('order.customer') || 'Khách hàng'">
-              <template #body="{ data }">
-                <div class="flex flex-col leading-1.5">
-                  <span class="font-medium text-sm">{{ data.customerName || data.customer?.name || "-" }}</span>
-                  <span class="text-xs text-gray-500">{{ data.customerPhone || data.customer?.phone || "-" }}</span>
+        <!-- Thông báo lỗi khi không tìm thấy đơn -->
+        <div v-if="trackingError" class="p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm flex items-start gap-2">
+          <i class="pi pi-exclamation-circle text-red-500 text-base mt-0.5"></i>
+          <span>{{ trackingError }}</span>
+        </div>
+
+        <!-- Kết quả tra cứu chi tiết đơn hàng -->
+        <div v-if="trackedOrder" class="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
+          <!-- Header tóm tắt đơn -->
+          <div class="bg-gray-100 p-4 border-b border-gray-200 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs text-gray-500">{{ $t('order.code') }}:</span>
+                <span class="font-bold text-gray-800 text-base">#{{ trackedOrder.code }}</span>
+              </div>
+              <div class="text-xs text-gray-500 mt-0.5">
+                {{ $t('order.date') }}: {{ formatDate(trackedOrder.createdAt) }}
+              </div>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <Tag :value="getStatusLabel(trackedOrder.status)" :severity="getStatusSeverity(trackedOrder.status)" />
+              <Tag :value="getPaymentStatusLabel(trackedOrder.paymentStatus)" :severity="getPaymentStatusSeverity(trackedOrder.paymentStatus)" />
+            </div>
+          </div>
+
+          <div class="p-4 space-y-4">
+            <!-- Thông tin người nhận & Địa chỉ giao hàng -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-3 bg-gray-50/80 rounded-lg text-xs">
+              <div>
+                <p class="font-bold text-gray-700 mb-1 uppercase tracking-wide flex items-center gap-1.5">
+                  <i class="pi pi-user text-gray-500"></i> {{ $t('order.trackRecipient') }}
+                </p>
+                <p class="font-semibold text-gray-900 text-sm">{{ trackedOrder.customer?.name || trackedOrder.customerName || '-' }}</p>
+                <p class="text-gray-600 mt-0.5">{{ trackedOrder.customer?.phone || trackedOrder.customerPhone || '-' }}</p>
+                <p v-if="trackedOrder.customer?.email || trackedOrder.customerEmail" class="text-gray-500 mt-0.5">
+                  {{ trackedOrder.customer?.email || trackedOrder.customerEmail }}
+                </p>
+              </div>
+              <div>
+                <p class="font-bold text-gray-700 mb-1 uppercase tracking-wide flex items-center gap-1.5">
+                  <i class="pi pi-map-marker text-gray-500"></i> {{ $t('order.trackAddress') }}
+                </p>
+                <p class="text-gray-700 leading-relaxed font-medium">
+                  {{ formatShippingAddress(trackedOrder) }}
+                </p>
+                <p v-if="trackedOrder.customerNote" class="text-gray-600 mt-1 italic">
+                  <strong>{{ $t('order.trackNote') }}:</strong> {{ trackedOrder.customerNote }}
+                </p>
+              </div>
+            </div>
+
+            <!-- Danh sách sản phẩm -->
+            <div>
+              <p class="text-xs font-bold text-gray-700 uppercase tracking-wide mb-2 flex items-center gap-1.5">
+                <i class="pi pi-box text-gray-500"></i>
+                {{ $t('order.trackItems') }} ({{ trackedOrder.items?.length || 0 }})
+              </p>
+              <div class="divide-y divide-gray-100 max-h-56 overflow-y-auto pr-1">
+                <div v-for="item in trackedOrder.items" :key="item.id" class="py-2.5 flex items-center gap-3">
+                  <img
+                    :src="item.productImage?.url || IMAGEDEFAULT"
+                    :alt="item.productName"
+                    class="w-12 h-12 object-contain rounded border border-gray-200 bg-white flex-shrink-0"
+                  />
+                  <div class="flex-1 min-w-0">
+                    <p class="text-xs font-semibold text-gray-900 line-clamp-1">{{ item.productName }}</p>
+                    <p v-if="item.productSku" class="text-[11px] text-gray-400">SKU: {{ item.productSku }}</p>
+                    <p class="text-xs text-gray-500 mt-0.5">
+                      {{ formatPrice(item.unitPrice) }} x {{ item.quantity }}
+                    </p>
+                  </div>
+                  <div class="text-right flex-shrink-0">
+                    <span class="text-xs font-bold text-gray-800">
+                      {{ formatPrice(item.total || (item.unitPrice * item.quantity)) }}
+                    </span>
+                  </div>
                 </div>
-              </template>
-            </Column>
+              </div>
+            </div>
 
-            <Column field="createdAt" :header="$t('order.date') || 'Ngày đặt'">
-              <template #body="{ data }">
-                {{ formatDate(data.createdAt) }}
-              </template>
-            </Column>
+            <!-- Bảng tổng hợp chi phí -->
+            <div class="border-t border-gray-200 pt-3 space-y-1.5 text-xs text-gray-600">
+              <div class="flex justify-between">
+                <span>{{ $t('cart.subtotal') || 'Tạm tính' }}:</span>
+                <span class="font-medium text-gray-800">{{ formatPrice(trackedOrder.subtotal) }}</span>
+              </div>
+              <div v-if="trackedOrder.shippingFee" class="flex justify-between">
+                <span>{{ $t('cart.shipping') || 'Phí vận chuyển' }}:</span>
+                <span class="font-medium text-gray-800">{{ formatPrice(trackedOrder.shippingFee) }}</span>
+              </div>
+              <div v-if="trackedOrder.discountAmount" class="flex justify-between text-green-600">
+                <span>{{ $t('cart.discount') || 'Giảm giá' }}:</span>
+                <span class="font-medium">-{{ formatPrice(trackedOrder.discountAmount) }}</span>
+              </div>
+              <div class="flex justify-between text-sm font-bold text-gray-900 pt-2 border-t border-gray-200">
+                <span>{{ $t('cart.grandTotal') || 'Tổng thanh toán' }}:</span>
+                <span class="text-base text-red-600 font-extrabold">{{ formatPrice(trackedOrder.totalAmount) }}</span>
+              </div>
+            </div>
 
-            <Column field="totalAmount" :header="$t('order.total') || 'Tổng tiền'">
-              <template #body="{ data }">
-                <span class="font-bold text-red-500">{{ formatPrice(data.totalAmount) }}</span>
-              </template>
-            </Column>
-
-            <Column field="status" :header="$t('order.statusOrder') || 'Trạng thái'">
-              <template #body="{ data }">
-                <Tag :value="getStatusLabel(data.status)" :severity="getStatusSeverity(data.status)" />
-              </template>
-            </Column>
-
-            <Column field="paymentStatus" :header="$t('order.payment') || 'Thanh toán'">
-              <template #body="{ data }">
-                <Tag :value="getPaymentStatusLabel(data.paymentStatus)" :severity="getPaymentStatusSeverity(data.paymentStatus)" />
-              </template>
-            </Column>
-          </DataTable>
-        </div>
-        <div v-else-if="!trackingLoading && trackingKeyword && trackingOrders.length === 0" class="text-center p-4">
-          <p class="text-gray-500">{{ $t("common.noData") }}</p>
+            <!-- Nút liên kết cho tài khoản sở hữu đơn hàng -->
+            <div v-if="authStore.accessToken && (trackedOrder.userId === authStore.user?.id || !trackedOrder.userId)" class="text-right pt-1">
+              <NuxtLink
+                :to="`${PROFILEORDER}/${trackedOrder.code}`"
+                class="text-xs font-semibold text-[#00b88c] hover:underline inline-flex items-center gap-1"
+                @click="visibleTracking = false"
+              >
+                {{ $t('order.trackViewDetail') }} <i class="pi pi-arrow-right text-[10px]"></i>
+              </NuxtLink>
+            </div>
+          </div>
         </div>
       </div>
     </Dialog>
   </div>
+
 </template>
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
@@ -436,12 +549,9 @@ const { t } = useI18n();
 
 import { orderService } from "~/services/order/order.service";
 import Dialog from "primevue/dialog";
-import DataTable from "primevue/datatable";
-import Column from "primevue/column";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import Tag from "primevue/tag";
-import DataState from "../ui/DataState.vue";
 
 // Auth
 const authStore = useAuthStore();
@@ -519,38 +629,76 @@ onMounted(async () => {
 
 // Order Tracking Logic
 const visibleTracking = ref(false);
-const trackingKeyword = ref("");
-const trackingOrders = ref<any[]>([]);
+const trackingCode = ref("");
+const trackingPhone = ref("");
+const trackedOrder = ref<any>(null);
 const trackingLoading = ref(false);
-let searchTimeout: any;
+const trackingError = ref("");
 
 const openTrackingDialog = () => {
   visibleTracking.value = true;
-  trackingKeyword.value = "";
-  trackingOrders.value = [];
+  trackingCode.value = "";
+  trackingPhone.value = authStore.user?.phone || "";
+  trackedOrder.value = null;
+  trackingError.value = "";
 };
 
-const searchOrders = async () => {
+const resetTracking = () => {
+  trackingCode.value = "";
+  trackingPhone.value = authStore.user?.phone || "";
+  trackedOrder.value = null;
+  trackingError.value = "";
+};
+
+const formatShippingAddress = (order: any) => {
+  if (!order) return "-";
+  if (order.shippingAddress) return order.shippingAddress;
+  const parts = [order.shippingStreet, order.shippingWard, order.shippingCity].filter(Boolean);
+  return parts.length > 0 ? parts.join(", ") : "-";
+};
+
+const trackOrder = async () => {
+  const code = trackingCode.value.trim();
+  const phone = trackingPhone.value.trim();
+
+  if (!code) {
+    trackingError.value = t("order.trackRequired") || "Vui lòng nhập mã đơn hàng.";
+    return;
+  }
+
+  if (!authStore.accessToken && !phone) {
+    trackingError.value = t("order.trackRequired") || "Vui lòng nhập số điện thoại hoặc email nhận hàng.";
+    return;
+  }
+
   trackingLoading.value = true;
+  trackingError.value = "";
   try {
-    const response = await orderService.pagination({
-      keyword: trackingKeyword.value,
-      perpage: 5,
-    });
-    trackingOrders.value = response.data.data;
-  } catch (error) {
-    console.error("Error searching orders:", error);
+    const payload: { code: string; phone?: string; email?: string } = { code };
+    if (phone) {
+      if (phone.includes("@")) {
+        payload.email = phone;
+      } else {
+        payload.phone = phone;
+      }
+    }
+
+    const response = await orderService.track(payload);
+    if (response?.data) {
+      trackedOrder.value = response.data;
+    } else {
+      trackedOrder.value = null;
+      trackingError.value = t("order.trackNotFound") || "Không tìm thấy thông tin đơn hàng.";
+    }
+  } catch (error: any) {
+    trackedOrder.value = null;
+    const msg = error?.response?._data?.message || error?.message;
+    trackingError.value = t("order.trackNotFound") || msg || "Không tìm thấy thông tin đơn hàng.";
   } finally {
     trackingLoading.value = false;
   }
 };
 
-const handleTrackingSearch = () => {
-  if (searchTimeout) clearTimeout(searchTimeout);
-  searchTimeout = setTimeout(() => {
-    searchOrders();
-  }, 500);
-};
 
 const formatDate = (dateString?: string) => {
   if (!dateString) return "-";
