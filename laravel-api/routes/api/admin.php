@@ -214,7 +214,6 @@ Route::group(['prefix' => 'v1/', 'middleware' => ['jwt:admin', 'convert', 'check
         Route::put('bulkUpdate', [OrderController::class, 'bulkUpdate']);
         Route::patch('bulkUpdate', [OrderController::class, 'bulkUpdate']);
         Route::post('{id}/status', [OrderController::class, 'updateStatus']);
-        Route::post('{id}/cancel', [OrderController::class, 'cancel']);
         Route::post('{id}/payment-status', [OrderController::class, 'updatePaymentStatus']);
         Route::post('{id}/items/{itemId}/status', [OrderController::class, 'updateItemStatus']);
         Route::post('{id}/refunds/{refundId}/status', [OrderController::class, 'updateRefundStatus']);

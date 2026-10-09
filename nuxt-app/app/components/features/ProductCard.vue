@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="product-item relative w-full h-[420px] bg-white shadow-md rounded-lg overflow-hidden group">
-      <div class="absolute top-1 -left-8 w-24 text-center text-white text-[10px] py-0.5 font-medium shadow-md z-20 transform -rotate-45 bg-gradient-to-r from-red-400 via-red-500 to-green-300 rounded-md opacity-90">- 40%</div>
+      <div v-if="discountPercent > 0" class="absolute top-1 -left-8 w-24 text-center text-white text-[10px] py-0.5 font-medium shadow-md z-20 transform -rotate-45 bg-gradient-to-r from-red-400 via-red-500 to-green-300 rounded-md opacity-90">- {{ discountPercent }}%</div>
       <div class="absolute top-0 right-0 h-full w-10 flex flex-col justify-start items-center gap-1 z-30 translate-x-full group-hover:translate-x-0 transition-all duration-300 ease-in-out bg-gradient-to-l from-white via-white/50 to-transparent rounded-l-md backdrop-blur-sm">
         <NuxtLink to="" @click.prevent="handleToggleWishlist" class="text-gray-400 hover:text-red-500 p-2 transition duration-200">
           <i :class="isInWishlist ? 'fas fa-heart text-red-500' : 'fa-regular fa-heart'"></i>
@@ -103,7 +103,15 @@ const subImage = computed(() => {
 const originalPrice = computed(() => Number(props.product?.priceOrigin || 0));
 
 const currentPrice = computed(() => {
-  return originalPrice.value;
+  const variantPrice = Number(props.product?.variant?.price || props.product?.productVariants?.[0]?.price || 0);
+  return variantPrice > 0 ? variantPrice : originalPrice.value;
+});
+
+const discountPercent = computed(() => {
+  if (originalPrice.value > 0 && currentPrice.value < originalPrice.value) {
+    return Math.round(((originalPrice.value - currentPrice.value) / originalPrice.value) * 100);
+  }
+  return 0;
 });
 
 const isInWishlist = computed(() => {

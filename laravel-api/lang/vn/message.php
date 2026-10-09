@@ -39,4 +39,6 @@ return [
     'change_password_success' => 'Đổi mật khẩu thành công',
     'change_password_error' => 'Có lỗi xảy ra khi đổi mật khẩu',
     'permission_denied_admin_on_client' => 'Tài khoản quản trị không được phép đăng nhập tại đây.',
+    'order_cannot_update_note' => 'Chỉ có thể cập nhật ghi chú khi đơn hàng đang ở trạng thái chờ xác nhận.',
+    'order_cancelled_successfully' => 'Đơn hàng đã được hủy thành công.',
 ];

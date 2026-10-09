@@ -95,7 +95,7 @@
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        <ProductCard v-for="product in 10" :key="product.id" :product="product" />
+        <ProductCard v-for="product in superSaleProducts" :key="product.id" :product="product" />
       </div>
       <!-- xem thêm  -->
       <ButtonViewMore />
@@ -149,7 +149,7 @@
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        <ProductCard v-for="product in 8" :key="product.id" :product="product" />
+        <ProductCard v-for="product in bestSellerProducts" :key="product.id" :product="product" />
       </div>
       <!-- xem thêm  -->
       <ButtonViewMore />
@@ -307,7 +307,7 @@
         <p class="text-white/90 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("home.lightingDesc") }}</p>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        <ProductCard v-for="product in 10" :key="product.id" :product="product" />
+        <ProductCard v-for="product in highConfigProducts" :key="product.id" :product="product" />
       </div>
       <!-- xem thêm  -->
       <ButtonViewMore />
@@ -409,7 +409,7 @@
         <!-- slide sản phẩm -->
         <div class="w-full lg:w-4/5 min-w-0">
           <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 grid-rows-2 gap-4">
-            <ProductCard v-for="product in 8" :key="product.id" :product="product" />
+            <ProductCard v-for="product in highConfigAccessoryProducts" :key="product.id" :product="product" />
           </div>
         </div>
       </div>
@@ -569,7 +569,7 @@
               <ul class="splide__list">
                 <li class="splide__slide">
                   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 grid-rows-2 gap-4">
-                    <ProductCard v-for="product in 8" :key="product.id" :product="product" />
+                    <ProductCard v-for="product in techAccessoryProducts" :key="product.id" :product="product" />
                   </div>
                 </li>
 
@@ -745,20 +745,39 @@ import Partner from "~/components/ui/Partner.vue";
 
 // Import product composable
 import { useProduct } from "~/composables/product/useProduct";
+import { productService } from "~/services/product/product.service";
 
 const { mainOptions, thumbOptions, rightVirticalOptions, postFeaturedOptions, partnerOptions, mainItems, thumbnailItems, rightVirticalItems, postFeaturedItems, partnerItems, mainSlider, thumbSlider, partnerSlider } = useHomeSlider();
 
 const { isAuthenticated, user } = useAuth();
 
-// Product data for first section
+// Product data for home sections
 const { list: featuredProducts, isLoading: featuredProductsLoading, fetchList } = useProduct();
 
-// Fetch featured products on page load
+const superSaleProducts = ref([]);
+const bestSellerProducts = ref([]);
+const highConfigProducts = ref([]);
+const highConfigAccessoryProducts = ref([]);
+const techAccessoryProducts = ref([]);
+
+// Fetch featured and section products on page load
 onMounted(async () => {
   try {
-    await fetchList("featuredLimit");
+    const [_, superSaleRes, bestSellerRes, highConfigRes, accessoryRes] = await Promise.all([
+      fetchList("featuredLimit"),
+      productService.pagination({ perpage: 10, is_hot: 1, sort: "id,asc" }),
+      productService.pagination({ perpage: 10, sort: "sold,desc" }),
+      productService.pagination({ perpage: 10, sort: "price_origin,desc" }),
+      productService.pagination({ perpage: 8, product_catalogue_id: 6 }),
+    ]);
+
+    superSaleProducts.value = superSaleRes?.data?.data || [];
+    bestSellerProducts.value = bestSellerRes?.data?.data || [];
+    highConfigProducts.value = highConfigRes?.data?.data || [];
+    techAccessoryProducts.value = accessoryRes?.data?.data || [];
+    highConfigAccessoryProducts.value = (accessoryRes?.data?.data || []).slice(0, 8);
   } catch (error) {
-    console.error("Error loading featured products:", error);
+    console.error("Error loading home page products:", error);
   }
 });
 

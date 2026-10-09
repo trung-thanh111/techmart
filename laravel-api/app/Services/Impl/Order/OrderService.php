@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Services\Impl\BaseService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Exceptions\SecurityException;
 use App\Repositories\Order\OrderRepository;
 use App\Http\Resources\Order\OrderResource;
 use App\Services\Interfaces\Order\OrderServiceInterface;
@@ -24,8 +25,8 @@ class OrderService extends BaseService implements OrderServiceInterface
 {
     protected $repository;
 
-    protected $complexFilter = ['id', 'user_id'];
-    protected $simpleFilter = ['status', 'payment_status'];
+    protected $complexFilter = ['id'];
+    protected $simpleFilter = ['status', 'payment_status', 'user_id'];
     protected $fieldSearchs = ['code', 'customer_name', 'customer_email', 'customer_phone'];
 
     protected $with = ['order_items', 'order_status_histories', 'order_shipments', 'payment_transactions', 'order_refunds', 'user'];
@@ -638,5 +639,50 @@ class OrderService extends BaseService implements OrderServiceInterface
     protected function getResource(Model $resource)
     {
         return new OrderResource($resource);
+    }
+
+    /**
+     * Cập nhật ghi chú cho đơn hàng
+     *
+     * @param int $orderId
+     * @param string|null $note
+     * @param int|null $userId
+     * @param string|null $adminNote
+     * @return Order
+     * @throws ModelNotFoundException
+     * @throws SecurityException
+     * @throws \InvalidArgumentException
+     */
+    public function updateCustomerNote(int $orderId, ?string $note, ?int $userId = null, ?string $adminNote = null): Order
+    {
+        $order = $this->repository->findById($orderId);
+        if (!$order) {
+            throw new ModelNotFoundException(Lang::get('message.record_not_found'));
+        }
+
+        // Kiểm tra quyền sở hữu nếu là client user
+        if ($userId !== null && (int) $order->user_id !== (int) $userId) {
+            throw new SecurityException(Lang::get('message.permission_denied'));
+        }
+
+        // Khách hàng chỉ được sửa ghi chú khi đơn hàng đang chờ xác nhận (pending)
+        if ($userId !== null && $order->status !== OrderEnum::STATUS_PENDING) {
+            throw new \InvalidArgumentException(Lang::get('message.order_cannot_update_note'));
+        }
+
+        if ($userId !== null || $note !== null) {
+            $order->customer_note = $note;
+        }
+
+        if ($adminNote !== null) {
+            $order->admin_note = $adminNote;
+        }
+
+        $order->save();
+
+        $this->clearCacheById($orderId);
+        $this->clearCacheByTags();
+
+        return $order->load($this->with);
     }
 }

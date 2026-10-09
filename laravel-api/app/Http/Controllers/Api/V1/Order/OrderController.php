@@ -7,12 +7,16 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Requests\RestoreRequest;
 use App\Http\Requests\RelationRequest;
 use App\Http\Resources\ApiResource;
+use App\Http\Resources\Order\OrderResource;
 use App\Http\Controllers\Api\V1\BaseController;
 use App\Http\Requests\Order\Order\BulkStoreRequest;
 use App\Http\Requests\Order\Order\BulkUpdateRequest;
 use App\Http\Requests\Order\Order\StoreRequest;
 use App\Http\Requests\Order\Order\UpdateRequest;
 use App\Services\Interfaces\Order\OrderServiceInterface as OrderService;
+use App\Exceptions\SecurityException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Lang;
 
 class OrderController extends BaseController
@@ -26,8 +30,15 @@ class OrderController extends BaseController
 
     public function index(Request $request): JsonResponse
     {
+        $guard = $request->attributes->get('guard');
+        if (!$guard) {
+            try {
+                $guard = \Tymon\JWTAuth\Facades\JWTAuth::parseToken()->getPayload()->get('guard');
+            } catch (\Throwable $e) {}
+        }
+
         // Khi user đăng nhập bằng guard 'api' (khách hàng), tự động giới hạn chỉ lấy đơn hàng của chính mình
-        if (auth('api')->check() && !auth('admin')->check()) {
+        if ($guard === 'api' || ($guard === null && auth('api')->check() && !auth('admin')->check())) {
             $request->merge(['user_id' => auth('api')->id()]);
         }
 
@@ -87,6 +98,45 @@ class OrderController extends BaseController
         $order = $this->service->cancelOrder($id, $request->input('reason'));
 
         return ApiResource::ok($order, 'Đơn hàng đã được hủy thành công');
+    }
+
+    /**
+     * Update order note (customer_note / admin_note)
+     * POST|PUT|PATCH /orders/{id}/note
+     */
+    public function updateNote(Request $request, int $id): JsonResponse
+    {
+        $request->validate([
+            'customer_note' => 'nullable|string|max:1000',
+            'note' => 'nullable|string|max:1000',
+            'admin_note' => 'nullable|string|max:1000',
+        ]);
+
+        $customerNote = $request->input('customer_note', $request->input('note'));
+        $adminNote = $request->input('admin_note');
+
+        $guard = $request->attributes->get('guard');
+        if (!$guard) {
+            try {
+                $guard = \Tymon\JWTAuth\Facades\JWTAuth::parseToken()->getPayload()->get('guard');
+            } catch (\Throwable $e) {}
+        }
+
+        $userId = null;
+        if ($guard === 'api' || ($guard === null && auth('api')->check() && !auth('admin')->check())) {
+            $userId = auth('api')->id();
+        }
+
+        try {
+            $order = $this->service->updateCustomerNote($id, $customerNote, $userId, $adminNote);
+            return ApiResource::ok(new OrderResource($order), Lang::get('message.update_data_successfully'));
+        } catch (SecurityException $e) {
+            return ApiResource::message($e->getMessage(), Response::HTTP_FORBIDDEN);
+        } catch (\InvalidArgumentException $e) {
+            return ApiResource::message($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        } catch (ModelNotFoundException $e) {
+            return ApiResource::message($e->getMessage(), Response::HTTP_NOT_FOUND);
+        }
     }
 
     /**

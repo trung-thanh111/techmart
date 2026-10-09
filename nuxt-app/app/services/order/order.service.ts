@@ -48,4 +48,12 @@ export const orderService = {
       body: { reason },
     });
   },
+
+  updateNote: async (id: number, customerNote: string): Promise<IApiOk<IOrder>> => {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiOk<IOrder>>(`${endpoint.collection}/${id}/note`, {
+      method: "PATCH",
+      body: { customerNote },
+    });
+  },
 };

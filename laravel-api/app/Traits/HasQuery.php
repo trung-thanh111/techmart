@@ -66,6 +66,12 @@ trait HasQuery
     {
         if (count($filter)) {
             foreach ($filter as $field => $condition) {
+                if (!is_array($condition)) {
+                    if ($condition !== null && $condition !== '') {
+                        $query->where($field, $condition);
+                    }
+                    continue;
+                }
                 foreach ($condition as $operator => $val) {
                     switch ($operator) {
                         case 'gt': // lớn hơn (greater than)

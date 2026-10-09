@@ -36,4 +36,9 @@ interface OrderServiceInterface
      * Update trạng thái item trong đơn hàng
      */
     public function updateItemStatus(int $orderId, int $itemId, string $newStatus): Order;
+
+    /**
+     * Cập nhật ghi chú cho đơn hàng
+     */
+    public function updateCustomerNote(int $orderId, ?string $note, ?int $userId = null, ?string $adminNote = null): Order;
 }

@@ -42,6 +42,9 @@ class Jwt
             if (!in_array($tokenGuard, $guards)) {
                 return ApiResource::message(Lang::get('message.token_invalid'), Response::HTTP_UNAUTHORIZED);
             }
+
+            $request->attributes->set('guard', $tokenGuard);
+
             if (!auth($tokenGuard)->check()) {
                 JWTAuth::authenticate();
             }
