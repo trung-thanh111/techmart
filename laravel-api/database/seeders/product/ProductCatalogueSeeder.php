@@ -1146,9 +1146,9 @@ class ProductCatalogueSeeder extends Seeder
                 'publish' => $item['publish'],
                 'parent_id' => 0, // Root
                 'user_id' => $userId,
-                'meta_title' => $item['metaTitle'],
-                'meta_keyword' => $item['metaKeyword'],
-                'meta_description' => $item['metaDescription'],
+                'meta_title' => $item['metaTitle'] ?? null,
+                'meta_keyword' => $item['metaKeyword'] ?? $item['meta_keyword'] ?? null,
+                'meta_description' => $item['metaDescription'] ?? null,
                 'level' => 1,
             ]);
         }
@@ -1165,9 +1165,9 @@ class ProductCatalogueSeeder extends Seeder
                 'publish' => $item['publish'],
                 'parent_id' => $item['parentId'],
                 'user_id' => $userId,
-                'meta_title' => $item['metaTitle'],
-                'meta_keyword' => $item['metaKeyword'],
-                'meta_description' => $item['metaDescription'],
+                'meta_title' => $item['metaTitle'] ?? null,
+                'meta_keyword' => $item['metaKeyword'] ?? $item['meta_keyword'] ?? null,
+                'meta_description' => $item['metaDescription'] ?? null,
                 'level' => 2,
             ]);
         }

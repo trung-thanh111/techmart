@@ -6,10 +6,29 @@
         <p class="text-sm mb-6 text-gray-500">Hãy điền thông tin hoặc chọn thông tin đã lưu để chúng tôi có thể giao hàng đến bạn.</p>
       </div>
       <div class="mt-6 max-w-4xl mx-auto">
-        <div class="flex items-center justify-start mb-4">
-          <h5 class="text-base font-semibold text-gray-800">Địa chỉ đã lưu</h5>
+        <!-- Khách vãng lai: Hiển thị thông tin địa chỉ từ Bước 1 -->
+        <div v-if="!authStore.user?.id" class="p-4 bg-teal-50 border border-teal-200 rounded-md mb-6">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <i class="pi pi-map-marker text-teal-600 text-lg"></i>
+              <span class="text-sm font-semibold text-teal-900">Địa chỉ giao hàng (khách vãng lai)</span>
+            </div>
+            <button type="button" @click="$emit('back')" class="text-xs text-teal-600 hover:text-teal-700 underline flex items-center gap-1">
+              <i class="pi pi-pencil text-xs"></i> Đổi địa chỉ
+            </button>
+          </div>
+          <p class="text-sm text-gray-700 font-medium">
+            {{ personalAddress || "Địa chỉ nhận hàng theo thông tin cá nhân ở Bước 1" }}
+          </p>
         </div>
-        <AddressCard :model-value="modelValue.selectedAddress" :addresses="userAddresses" @update:model-value="(val: string | number) => $emit('update:modelValue', { ...modelValue, selectedAddress: Number(val) })" @create="handleOpenCreateContext" @update="handleOpenUpdateContext" @delete="handleDelete" />
+
+        <!-- Khách đã đăng nhập: Hiển thị sổ địa chỉ -->
+        <div v-else>
+          <div class="flex items-center justify-start mb-4">
+            <h5 class="text-base font-semibold text-gray-800">Địa chỉ đã lưu</h5>
+          </div>
+          <AddressCard :model-value="modelValue.selectedAddress" :addresses="userAddresses" @update:model-value="(val: string | number) => $emit('update:modelValue', { ...modelValue, selectedAddress: Number(val) })" @create="handleOpenCreateContext" @update="handleOpenUpdateContext" @delete="handleDelete" />
+        </div>
         <div class="mt-8">
           <h5 class="text-base font-semibold text-gray-800 mb-4">Phương thức vận chuyển</h5>
           <div class="grid grid-cols-1 md:grid-cols-2 md:gap-4 gap-2">
@@ -57,6 +76,7 @@ import AddressFormModal from "~/components/features/checkout/AddressFormModal.vu
 
 const props = defineProps<{
   modelValue: IAddressInfo;
+  personalAddress?: string;
   canProceed: boolean;
 }>();
 

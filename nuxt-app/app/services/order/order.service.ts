@@ -3,6 +3,8 @@ import type { IOrder } from "~/interfaces/order/order.interface";
 import { useApi } from "~/composables/useApi";
 import { API_VERSION } from "~/utils/apiConfig";
 
+import { useAuthStore } from "~/stores/auth/auth";
+
 const endpoint = {
   collection: `${API_VERSION.version1}/orders`,
 } as const;
@@ -20,16 +22,20 @@ export const orderService = {
   },
 
   store: async (payload: Partial<IOrder>): Promise<IApiOk<IOrder>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IOrder>>(endpoint.collection, {
+    const auth = useAuthStore();
+    const { publicFetch, privateFetch } = useApi();
+    const fetcher = auth.accessToken ? privateFetch : publicFetch;
+    return await fetcher<IApiOk<IOrder>>(endpoint.collection, {
       method: "POST",
       body: payload,
     });
   },
 
   show: async (id: number | string, params?: any): Promise<IApiOk<IOrder>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IOrder>>(`${endpoint.collection}/${id}`, {
+    const auth = useAuthStore();
+    const { publicFetch, privateFetch } = useApi();
+    const fetcher = auth.accessToken ? privateFetch : publicFetch;
+    return await fetcher<IApiOk<IOrder>>(`${API_VERSION.version1}/order/${id}`, {
       method: "GET",
       params,
     });

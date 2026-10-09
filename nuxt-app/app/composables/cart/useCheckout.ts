@@ -77,8 +77,22 @@ export const useCheckout = () => {
   const TABS: ICheckoutTab[] = ["personal_info", "address_info", "payment_method"];
 
   const selectedAddress = computed(() => {
-    if (!formData.address_info.selectedAddress) return null;
-    return authStore.user?.addressOrder?.find((addr: any) => addr.id === formData.address_info.selectedAddress);
+    // 1. Địa chỉ từ sổ địa chỉ của tài khoản (nếu có đăng nhập và chọn)
+    if (authStore.user?.addressOrder && formData.address_info.selectedAddress) {
+      const found = authStore.user.addressOrder.find((addr: any) => addr.id === formData.address_info.selectedAddress);
+      if (found) return found;
+    }
+    // 2. Khách hàng vãng lai: sử dụng trực tiếp địa chỉ đã nhập ở bước Thông tin cá nhân
+    if (formData.personal_info.city && formData.personal_info.ward && formData.personal_info.street) {
+      return {
+        id: 0,
+        city: formData.personal_info.city,
+        ward: formData.personal_info.ward,
+        street: formData.personal_info.street,
+        address: `${formData.personal_info.street}, ${formData.personal_info.ward}, ${formData.personal_info.city}`,
+      };
+    }
+    return null;
   });
 
   const shippingFee = computed(() => {
@@ -94,7 +108,8 @@ export const useCheckout = () => {
   });
 
   const isAddressInfoValid = computed(() => {
-    return formData.address_info.selectedAddress !== null && formData.address_info.shippingMethod !== null;
+    const hasShippingMethod = Boolean(formData.address_info.shippingMethod);
+    return Boolean(selectedAddress.value) && hasShippingMethod;
   });
 
   const isTabValid = computed<Record<ICheckoutTab, boolean>>(() => ({

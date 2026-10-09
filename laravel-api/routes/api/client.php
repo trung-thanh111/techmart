@@ -110,7 +110,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
             Route::patch('bulkUpdate', [OrderController::class, 'bulkUpdate']);
             Route::post('{id}/cancel', [OrderController::class, 'cancel']);
         });
-        Route::resource('orders', OrderController::class)->except($routeExcept);
+        Route::resource('orders', OrderController::class)->except(array_merge($routeExcept, ['store', 'show']));
 
         // Post Comments & Likes
         Route::resource('post_comments', PostCommentController::class)->except(array_merge($routeExcept, ['index']));
@@ -120,6 +120,10 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
 
     // PUBLIC ROUTES (No Auth or Optional Auth)
     Route::middleware(['convert'])->group(function () use ($routeExcept) {
+        // Guest & User Checkout Orders
+        Route::post('orders', [OrderController::class, 'store']);
+        Route::get('orders/{id}', [OrderController::class, 'show']);
+
         Route::get('products', [ProductController::class, 'index']);
         Route::get('products/{id}', [ProductController::class, 'show']);
         Route::put('products/{id}/view', [ProductController::class, 'updateView']);
@@ -172,6 +176,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
     // FE routes (public matchers)
     Route::get('policy/{keyword}', [SystemController::class, 'getByKeyword']);
     Route::get('systems', [SystemController::class, 'index']); // Added for systemService.all/findByKeyword usage
+    Route::get('order/{id}', [OrderController::class, 'show']);
     Route::get('product/{id}', [ProductController::class, 'show']);
     Route::get('menu/{id}', [MenuController::class, 'show']);
     Route::get('post/{id}', [PostController::class, 'show']);

@@ -17,7 +17,7 @@
                   </div>
 
                   <div v-if="activeTab === 'address_info'">
-                    <CheckoutAddressInfo v-model="formData.address_info" :can-proceed="canProceedToNext" @next="goToNextTab" @back="goToPreviousTab" @open-modal="openModal" />
+                    <CheckoutAddressInfo v-model="formData.address_info" :personal-address="formatAddress(formData.personal_info)" :can-proceed="canProceedToNext" @next="goToNextTab" @back="goToPreviousTab" @open-modal="openModal" />
                   </div>
 
                   <div v-if="activeTab === 'payment_method'">
