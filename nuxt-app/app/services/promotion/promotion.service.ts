@@ -33,8 +33,8 @@ export interface IApplyDiscountResult {
 
 export const promotionService = {
   applyDiscount: async (payload: IApplyDiscountPayload): Promise<IApiOk<IApplyDiscountResult>> => {
-    const { privateFetch } = useApi();
-    return await privateFetch<IApiOk<IApplyDiscountResult>>(endpoint.applyDiscount, {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<IApplyDiscountResult>>(endpoint.applyDiscount, {
       method: "POST",
       body: payload,
     });

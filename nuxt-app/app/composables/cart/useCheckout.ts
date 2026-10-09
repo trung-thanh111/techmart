@@ -193,7 +193,7 @@ export const useCheckout = () => {
       });
 
       if (res.data) {
-        discountAmount.value = res.data.total_discount || 0;
+        discountAmount.value = Number(res.data.total_discount || 0);
         appliedCoupon.value = res.data.applied_promotions?.[0] || { code, name: code };
         toast.success(`Áp dụng mã giảm giá thành công! Giảm ${formatPrice(discountAmount.value)}`);
       }

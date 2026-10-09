@@ -88,7 +88,7 @@
                                   <p class="text-base font-semibold text-sky-700 mb-1">{{ promotion.name }}</p>
                                   <p class="text-sm text-gray-600">
                                     {{ $t("header.discountText") }} {{ formatPromotionDiscount(promotion) }}
-                                    <span v-if="promotion.discountType === 'percent' && promotion.maxDiscountValue">{{ $t("header.maxDiscount", { amount: formatCurrency(promotion.maxDiscountValue) }) }}</span>
+                                    <span v-if="getPromotionMaxDiscount(promotion)"> ({{ $t("header.maxDiscount", { amount: formatCurrency(getPromotionMaxDiscount(promotion)) }) }})</span>
                                   </p>
                                   <p v-if="promotionWindow(promotion)" class="text-xs text-gray-500">{{ $t("header.timeLabel") }} {{ promotionWindow(promotion) }}</p>
                                 </div>
@@ -897,41 +897,71 @@ const productCatalogueIds = computed<number[]>(() => {
 });
 
 const applicablePromotions = computed<PromotionWithTargets[]>(() => {
-  const promotions = (productDetail.value as any)?.promotions;
-  if (!Array.isArray(promotions)) return [];
+  const rawPromotions = (productDetail.value as any)?.promotions;
+  let promoList: any[] = [];
+  if (Array.isArray(rawPromotions)) {
+    promoList = rawPromotions;
+  } else if (rawPromotions && typeof rawPromotions === "object") {
+    promoList = [
+      ...(Array.isArray(rawPromotions.product) ? rawPromotions.product : []),
+      ...Object.values(rawPromotions.variants || {}).flat(),
+      ...Object.values(rawPromotions.catalogues || {}).flat(),
+    ];
+  }
+  if (!promoList.length) return [];
   const productId = productDetail.value?.id;
   const variantId = selectedVariant.value?.id;
 
-  return promotions
-    .map((promotion: IPromotion) => {
-      const targets = (promotion.promotionTargets ?? []).filter((target) => {
-        if (variantId && target.productVariantId) {
-          return target.productVariantId === variantId;
+  const uniquePromos = Array.from(new Map(promoList.map((p) => [p.id, p])).values());
+
+  return uniquePromos
+    .map((promotion: any) => {
+      const targets = (promotion.targets ?? promotion.promotionTargets ?? []).filter((target: any) => {
+        const tType = target.targetType || target.target_type;
+        const tId = Number(target.targetId || target.target_id || target.productVariantId || target.productId || target.productCatalogueId);
+        if (tType === "product_variant" || target.productVariantId) {
+          return variantId && tId === variantId;
         }
-        if (target.productId && productId) {
-          return target.productId === productId;
+        if (tType === "product" || target.productId) {
+          return productId && tId === productId;
         }
-        if (target.productCatalogueId && productCatalogueIds.value.includes(target.productCatalogueId)) {
-          return true;
+        if (tType === "product_catalogue" || target.productCatalogueId) {
+          return productCatalogueIds.value.includes(tId);
         }
         return false;
       });
-      if (!targets.length) return null;
       return { ...promotion, applicableTargets: targets };
     })
     .filter((item): item is PromotionWithTargets => Boolean(item));
 });
 
-const formatCurrency = (value?: number | null) => {
-  if (typeof value !== "number") return "";
-  return currencyFormatter.format(value);
+const formatCurrency = (value?: number | string | null) => {
+  if (value === undefined || value === null || value === "") return "";
+  const num = typeof value === "number" ? value : Number(value);
+  if (isNaN(num) || !isFinite(num)) return "";
+  return currencyFormatter.format(num);
 };
 
-const formatPromotionDiscount = (promotion: IPromotion) => {
-  if (promotion.discountType === "percent") {
-    return `${promotion.discountValue ?? 0}%`;
+const getPromotionMaxDiscount = (promotion: any) => {
+  const action = promotion.actions?.[0] || promotion.promotionActions?.[0];
+  const type = action?.actionType || promotion.discountType;
+  if (type === "percent") {
+    const maxVal = action?.maxDiscount ?? promotion.maxDiscountValue;
+    return maxVal ? Number(maxVal) : null;
   }
-  return formatCurrency(promotion.discountValue ?? 0);
+  return null;
+};
+
+const formatPromotionDiscount = (promotion: any) => {
+  const action = promotion.actions?.[0] || promotion.promotionActions?.[0];
+  const type = action?.actionType || promotion.discountType || (promotion.type === "percent" ? "percent" : "fixed");
+  const rawValue = action?.actionValue ?? promotion.discountValue ?? 0;
+  const value = typeof rawValue === "number" ? rawValue : Number(rawValue || 0);
+
+  if (type === "percent") {
+    return `${value}%`;
+  }
+  return formatCurrency(value);
 };
 
 const promotionWindow = (promotion: IPromotion) => {
@@ -967,13 +997,14 @@ const agenciesForVariant = computed(() => {
 const discountPercent = computed(() => {
   if (!productDetail.value) return 0;
 
-  const originalPrice = parseFloat(productDetail.value.priceOrigin?.toString() || "0");
-  const salePrice = selectedVariant.value?.price ? parseFloat(selectedVariant.value.price.toString()) : productDetail.value.priceOrigin ? parseFloat(productDetail.value.priceOrigin.toString()) : 0;
+  const originalPrice = parseFloat(productDetail.value.priceOrigin?.toString().replace(/[^0-9.-]+/g, "") || "0");
+  const rawSalePrice = selectedVariant.value?.price ?? productDetail.value.priceOrigin ?? 0;
+  const salePrice = parseFloat(rawSalePrice.toString().replace(/[^0-9.-]+/g, "") || "0");
 
-  if (originalPrice <= 0 || salePrice >= originalPrice) return 0;
+  if (isNaN(originalPrice) || isNaN(salePrice) || originalPrice <= 0 || salePrice >= originalPrice) return 0;
 
   const discount = ((originalPrice - salePrice) / originalPrice) * 100;
-  return Math.round(discount);
+  return isNaN(discount) ? 0 : Math.round(discount);
 });
 
 // related products

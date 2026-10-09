@@ -14,18 +14,32 @@ export const slugify = (input: string): string => {
     .replace(/^-+|-+$/g, "");
 };
 
-export const formatPrice = (price: number): string => {
+export const formatPrice = (price?: number | string | null): string => {
+  if (price === undefined || price === null || price === "") {
+    return "0 ₫";
+  }
+  const numericPrice = typeof price === "number" ? price : Number(typeof price === "string" ? price.replace(/[^0-9.-]+/g, "") : price);
+  if (isNaN(numericPrice) || !isFinite(numericPrice)) {
+    return "0 ₫";
+  }
   return (
     new Intl.NumberFormat("vi-VN", {
       style: "decimal",
-    }).format(price) + " ₫"
+    }).format(numericPrice) + " ₫"
   );
 };
 
-export const formatNumber = (number: number): string => {
+export const formatNumber = (number?: number | string | null): string => {
+  if (number === undefined || number === null || number === "") {
+    return "0";
+  }
+  const num = typeof number === "number" ? number : Number(number);
+  if (isNaN(num) || !isFinite(num)) {
+    return "0";
+  }
   return new Intl.NumberFormat("vi-VN", {
     style: "decimal",
-  }).format(number);
+  }).format(num);
 };
 
 export const formatDate = (date: Date): string => {
