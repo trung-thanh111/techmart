@@ -55,17 +55,17 @@
                   showDropdown = false;
                 "
               >
-                Hủy đơn hàng
+                {{ $t("order.cancel") }}
               </button>
               <button
-                v-if="order.status === 'delivered'"
+                v-if="order.status === 'delivered' || order.status === 'cancelled'"
                 class="w-full flex items-center gap-2 px-3 py-2 text-xs text-gray-700 hover:bg-gray-100"
                 @click="
                   emit('reorder', order);
                   showDropdown = false;
                 "
               >
-                Mua lại
+                {{ $t("order.reorder") }}
               </button>
             </div>
           </Transition>

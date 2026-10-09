@@ -10,6 +10,9 @@ import type { ICart, CartPayload } from "~/interfaces/cart/cart.interface";
 import type { ICartItem, CartItemPayload } from "~/interfaces/cart/cartItem.interface";
 import type { IProduct } from "~/interfaces/product/product.interface";
 import type { IProductVariant } from "~/interfaces/product/variant.interface";
+import type { IOrder } from "~/interfaces/order/order.interface";
+import { orderService } from "~/services/order/order.service";
+import { TOCART } from "~/utils/constants";
 
 export const useCart = () => {
   const { t } = useI18n();
@@ -517,6 +520,90 @@ export const useCart = () => {
     }
   };
 
+  /**
+   * Đẩy lại toàn bộ sản phẩm của đơn hàng cũ vào giỏ hàng và điều hướng tới giỏ hàng
+   */
+  const reorder = async (order: IOrder): Promise<boolean> => {
+    isLoading.value = true;
+    try {
+      let orderToReorder = order;
+      // Nếu order chưa load items, gọi API để lấy đầy đủ chi tiết đơn hàng
+      if (!orderToReorder.items || orderToReorder.items.length === 0) {
+        if (orderToReorder.code || orderToReorder.id) {
+          const detailRes = await orderService.show(orderToReorder.code || orderToReorder.id!, {
+            relations: "order_items",
+          });
+          if (detailRes?.data) {
+            orderToReorder = detailRes.data;
+          }
+        }
+      }
+
+      if (!orderToReorder.items || orderToReorder.items.length === 0) {
+        toast.warning(t("order.reorderEmpty"));
+        return false;
+      }
+
+      // Đảm bảo có cart
+      let currentCart = cart.value;
+      if (!currentCart || !currentCart.id) {
+        currentCart = await getOrCreateCart();
+        if (!currentCart || !currentCart.id) {
+          toast.error(t("cart.errorCreate"));
+          return false;
+        }
+      }
+
+      // Thêm từng item vào giỏ hàng
+      for (const item of orderToReorder.items) {
+        const purchasableType = item.productVariantId ? "App\\Models\\ProductVariant" : "App\\Models\\Product";
+        const purchasableId = item.productVariantId || item.productId;
+        if (!purchasableId) continue;
+
+        const quantity = item.quantity && item.quantity > 0 ? item.quantity : 1;
+        const price = item.unitPrice || item.originalPrice || 0;
+
+        const existingItem = store.findItem(purchasableType, purchasableId);
+        if (existingItem && existingItem.id) {
+          const newQuantity = (existingItem.quantity || 0) + quantity;
+          await updateItemQuantity(existingItem.id, newQuantity);
+        } else {
+          const payload: Partial<CartItemPayload> = {
+            cartId: currentCart.id!,
+            purchasableType,
+            purchasableId,
+            quantity,
+            price,
+            publish: 2,
+          };
+
+          const response = isAuthenticated.value ? await cartItemService.store(payload) : await cartItemService.storeGuest(payload);
+
+          if (response.data) {
+            store.addItem(response.data);
+          }
+        }
+      }
+
+      // Reload cart từ server để đảm bảo đồng bộ
+      if (isAuthenticated.value) {
+        await fetchCart();
+      } else {
+        await fetchGuestCart();
+      }
+
+      toast.success(t("order.reorderSuccess"));
+      await navigateTo(TOCART);
+      return true;
+    } catch (error: any) {
+      console.error("Error reordering:", error);
+      toast.error(error?.data?.message || t("order.reorderFailed"));
+      return false;
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
   return {
     // State
     isLoading: computed(() => isLoading.value),
@@ -545,6 +632,7 @@ export const useCart = () => {
     clearCart,
     syncCartAfterLogin,
     loadCart,
+    reorder,
 
     // Store actions
     toggleSelectItem: (itemId: number) => store.toggleSelectItem(itemId),

@@ -31,7 +31,18 @@
               </span>
             </div>
             <div class="flex gap-2">
-              <button v-if="canCancel" @click="handleCancel" class="bg-red-100 text-red-600 px-3 py-1 text-xs rounded hover:bg-red-200 transition">Hủy đơn</button>
+              <button
+                v-if="canReorder"
+                @click="handleReorder"
+                :disabled="reordering"
+                class="bg-sky-500 text-white px-3 py-1 text-xs rounded hover:bg-sky-600 transition flex items-center gap-1 disabled:opacity-50"
+              >
+                <span v-if="reordering" class="animate-spin rounded-full h-3 w-3 border-b-2 border-white"></span>
+                <span>{{ $t("order.reorder") }}</span>
+              </button>
+              <button v-if="canCancel" @click="handleCancel" class="bg-red-100 text-red-600 px-3 py-1 text-xs rounded hover:bg-red-200 transition">
+                {{ $t("order.cancel") }}
+              </button>
             </div>
           </div>
 
@@ -174,12 +185,30 @@
                 </div>
               </div>
             </div>
-            <div v-if="order.customerNote !== undefined" class="mt-6">
-              <h5 class="text-base font-semibold mb-3">Ghi chú:</h5>
+            <div v-if="order" class="mt-6">
+              <div class="flex items-center justify-between mb-3">
+                <h5 class="text-base font-semibold">{{ $t("order.noteLabel") }}</h5>
+                <button
+                  v-if="order.status === 'pending' && customerNote !== (order.customerNote || '')"
+                  @click="handleSaveNote"
+                  :disabled="noteSaving"
+                  class="text-xs bg-sky-500 text-white px-3 py-1 rounded hover:bg-sky-600 transition disabled:opacity-50 flex items-center gap-1"
+                >
+                  <span v-if="noteSaving" class="animate-spin rounded-full h-3 w-3 border-b-2 border-white"></span>
+                  <span>{{ noteSaving ? $t("order.noteSaving") : ($t("common.save") || "Lưu") }}</span>
+                </button>
+              </div>
               <div class="relative">
-                <textarea v-model="customerNote" rows="3" class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-sky-500 resize-none" placeholder="Thêm ghi chú cho đơn hàng..." :disabled="order.status !== STATUS_ORDER[0]" @blur="handleSaveNote"></textarea>
-                <p v-if="noteSaving" class="absolute bottom-2 right-2 text-xs text-gray-400">Đang lưu...</p>
-                <p v-else-if="noteSaved" class="absolute bottom-2 right-2 text-xs text-green-500">Đã lưu</p>
+                <textarea
+                  v-model="customerNote"
+                  rows="3"
+                  class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-sky-500 resize-none disabled:bg-gray-50 disabled:text-gray-500"
+                  :placeholder="$t('order.notePlaceholder')"
+                  :disabled="order.status !== 'pending' || noteSaving"
+                  @blur="handleSaveNote"
+                ></textarea>
+                <p v-if="noteSaving" class="absolute bottom-2 right-2 text-xs text-gray-400">{{ $t("order.noteSaving") }}</p>
+                <p v-else-if="noteSaved" class="absolute bottom-2 right-2 text-xs text-green-500">{{ $t("order.noteSaved") }}</p>
               </div>
             </div>
           </div>
@@ -192,8 +221,10 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
+import { useI18n } from "vue-i18n";
 import type { IOrder } from "~/interfaces/order/order.interface";
 import { orderService } from "~/services/order/order.service";
+import { useCart } from "~/composables/cart/useCart";
 import { ORDER_STATUS_LABELS, PAYMENT_METHOD_LABELS, PAYMENT_STATUS_LABELS, STATUS_CONFIG, STATUS_ORDER } from "~/utils/order.constants";
 import { formatPrice } from "~/utils/helpers";
 import { getCityName, getWardName } from "~/utils/address.helpers";
@@ -208,13 +239,16 @@ definePageMeta({
 });
 
 const route = useRoute();
+const { t } = useI18n();
 const toast = useAppToast();
+const { reorder } = useCart();
 
 const order = ref<IOrder | null>(null);
 const loading = ref(true);
 const customerNote = ref("");
 const noteSaving = ref(false);
 const noteSaved = ref(false);
+const reordering = ref(false);
 
 const fetchOrder = async () => {
   loading.value = true;
@@ -237,32 +271,51 @@ onMounted(fetchOrder);
 
 // Computed
 const canCancel = computed(() => order.value?.status === "pending");
+const canReorder = computed(() => !!order.value && !!order.value.items && order.value.items.length > 0);
 
 const formattedCity = computed(() => getCityName(order.value?.shippingCity || ""));
 const formattedWard = computed(() => getWardName(order.value?.shippingCity || "", order.value?.shippingWard || ""));
 
 // Methods
+const handleReorder = async () => {
+  if (!order.value) return;
+  reordering.value = true;
+  try {
+    await reorder(order.value);
+  } finally {
+    reordering.value = false;
+  }
+};
+
 const handleCancel = async () => {
-  if (!order.value?.id || !confirm("Bạn có chắc muốn hủy đơn hàng này?")) return;
+  if (!order.value?.id || !confirm(t("order.cancelConfirm"))) return;
   try {
     await orderService.cancel(order.value.id, "Khách hàng yêu cầu hủy");
-    toast.success("Đã hủy đơn hàng thành công");
+    toast.success(t("order.cancelSuccess"));
     fetchOrder();
   } catch (e: any) {
-    toast.error(e?.message || "Không thể hủy đơn hàng");
+    toast.error(e?.data?.message || e?.message || t("order.cancelError"));
   }
 };
 
 const handleSaveNote = async () => {
-  if (!order.value?.id || customerNote.value === order.value.customerNote) return;
+  if (!order.value?.id || customerNote.value === (order.value.customerNote || "")) return;
+  if (order.value.status !== "pending") {
+    toast.error(t("order.cannotUpdateNote"));
+    return;
+  }
   noteSaving.value = true;
   noteSaved.value = false;
   try {
-    await new Promise((r) => setTimeout(r, 500));
+    const res = await orderService.updateNote(order.value.id, customerNote.value);
+    if (res?.data) {
+      order.value.customerNote = res.data.customerNote;
+    }
     noteSaved.value = true;
+    toast.success(t("order.noteSaveSuccess"));
     setTimeout(() => (noteSaved.value = false), 2000);
-  } catch (e) {
-    toast.error("Không thể lưu ghi chú");
+  } catch (e: any) {
+    toast.error(e?.data?.message || e?.message || t("order.noteSaveError"));
   } finally {
     noteSaving.value = false;
   }

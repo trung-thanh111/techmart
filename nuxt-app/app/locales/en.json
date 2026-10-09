@@ -218,5 +218,38 @@
   "sidebarPolicy": {
     "policy": "Policy",
     "loading": "Loading..."
+  },
+  "order": {
+    "code": "Order Code",
+    "date": "Order Date",
+    "customer": "Customer",
+    "total": "Total",
+    "statusOrder": "Status",
+    "payment": "Payment",
+    "reorder": "Reorder",
+    "reorderSuccess": "Products added to cart successfully",
+    "reorderEmpty": "Order has no items to reorder",
+    "reorderFailed": "Failed to reorder",
+    "noteLabel": "Note:",
+    "notePlaceholder": "Add a note for this order...",
+    "noteSaving": "Saving...",
+    "noteSaved": "Saved",
+    "noteSaveSuccess": "Note saved successfully",
+    "noteSaveError": "Failed to save note",
+    "cannotUpdateNote": "Can only update note when order is pending",
+    "cancel": "Cancel Order",
+    "cancelSuccess": "Order cancelled successfully",
+    "cancelConfirm": "Are you sure you want to cancel this order?",
+    "cancelError": "Failed to cancel order",
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "processing": "Processing",
+      "shipped": "Shipped",
+      "delivered": "Delivered",
+      "cancelled": "Cancelled",
+      "refunded": "Refunded",
+      "failed": "Failed"
+    }
   }
 }

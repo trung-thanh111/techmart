@@ -41,9 +41,12 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from "vue-i18n";
 import { useOrders, type OrderTab } from "~/composables/order/useOrders";
 import { orderService } from "~/services/order/order.service";
 import { useAppToast } from "~/composables/useAppToast";
+import { useCart } from "~/composables/cart/useCart";
+import { PROFILEORDER } from "~/utils/constants";
 import OrderDateGroup from "~/components/features/order/OrderDateGroup.vue";
 
 definePageMeta({
@@ -51,7 +54,9 @@ definePageMeta({
   middleware: ["auth-required"],
 });
 
+const { t } = useI18n();
 const toast = useAppToast();
+const { reorder } = useCart();
 const { loading, activeTab, groupedOrders, fetchOrders } = useOrders();
 
 const tabs: { key: OrderTab; label: string }[] = [
@@ -64,13 +69,13 @@ const tabs: { key: OrderTab; label: string }[] = [
 ];
 
 const handleCancel = async (order: any) => {
-  if (!order?.id || !confirm("Bạn có chắc muốn hủy đơn hàng này?")) return;
+  if (!order?.id || !confirm(t("order.cancelConfirm"))) return;
   try {
     await orderService.cancel(order.id, "Khách hàng yêu cầu hủy");
-    toast.success("Đã hủy đơn hàng thành công");
+    toast.success(t("order.cancelSuccess"));
     fetchOrders();
   } catch (e: any) {
-    toast.error(e?.message || "Không thể hủy đơn hàng");
+    toast.error(e?.data?.message || e?.message || t("order.cancelError"));
   }
 };
 
@@ -79,8 +84,7 @@ const handleReview = (order: any) => {
   navigateTo(`${PROFILEORDER}/${order.code}?review=true`);
 };
 
-const handleReorder = (order: any) => {
-  // TODO: Add items to cart and navigate to checkout
-  toast.info("Tính năng đang phát triển");
+const handleReorder = async (order: any) => {
+  await reorder(order);
 };
 </script>
