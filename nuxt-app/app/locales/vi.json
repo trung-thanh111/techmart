@@ -924,7 +924,11 @@
     "featuredProducts": "Sản phẩm nổi bật",
     "phoneNumber": "0900001111",
     "voucherCode": "AMTRAN10",
-    "voucherCondition": "Điều kiện áp dụng voucher..."
+    "voucherCondition": "Điều kiện áp dụng voucher...",
+    "copied": "Đã chép",
+    "copySuccess": "Đã sao chép mã voucher vào clipboard",
+    "noVouchers": "Hiện chưa có mã ưu đãi nào",
+    "expiryPrefix": "HSD: "
   },
   "searchModal": {
     "noResults": "Không tìm thấy sản phẩm",

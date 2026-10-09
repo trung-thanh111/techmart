@@ -64,7 +64,31 @@ class Promotion extends Model
      */
     protected $appends = [
         'remaining_usage',
+        'is_active',
     ];
+
+    /**
+     * Accessor: kiểm tra promotion còn hiệu lực và lượt dùng.
+     *
+     * @return bool
+     */
+    public function getIsActiveAttribute(): bool
+    {
+        if ((int)$this->publish !== PromotionEnum::PUBLISH_PUBLIC) {
+            return false;
+        }
+        $now = Carbon::now();
+        if ($this->start_date && $now->lt($this->start_date)) {
+            return false;
+        }
+        if ($this->end_date && $now->gt($this->end_date)) {
+            return false;
+        }
+        if ($this->usage_limit !== null && (int)$this->used_count >= (int)$this->usage_limit) {
+            return false;
+        }
+        return true;
+    }
 
     /**
      * Biến này đăng ký quan hệ được phép bắn lên từ client

@@ -271,7 +271,9 @@ class PromotionService extends BaseService implements PromotionServiceInterface
 
     public function paginate(Request $request)
     {
-        $request->merge(['simple' => true]);
+        if (!$request->has('simple')) {
+            $request->merge(['simple' => true]);
+        }
         return parent::paginate($request);
     }
 }

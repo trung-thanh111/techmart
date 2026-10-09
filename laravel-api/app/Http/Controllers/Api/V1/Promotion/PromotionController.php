@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1\Promotion;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Resources\ApiResource;
 use Illuminate\Support\Facades\Lang;
@@ -23,6 +24,35 @@ class PromotionController extends BaseController
         PromotionService $service
     ) {
         $this->service = $service;
+    }
+
+    public function index(Request $request): JsonResponse
+    {
+        $guard = $request->attributes->get('guard');
+        if (!$guard) {
+            try {
+                $guard = \Tymon\JWTAuth\Facades\JWTAuth::parseToken()->getPayload()->get('guard');
+            } catch (\Throwable $e) {}
+        }
+
+        // Với client / guest, chỉ lấy khuyến mãi đã publish
+        if ($guard !== 'admin') {
+            $request->merge([
+                'publish' => 2,
+            ]);
+            if (!$request->has('simple')) {
+                $request->merge([
+                    'simple' => false,
+                ]);
+            }
+            if (!$request->has('relations')) {
+                $request->merge([
+                    'relations' => 'promotion_rules,promotion_actions',
+                ]);
+            }
+        }
+
+        return parent::index($request);
     }
 
     public function store(StoreRequest $request): JsonResponse

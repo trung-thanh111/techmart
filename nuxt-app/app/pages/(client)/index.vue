@@ -60,7 +60,7 @@
             </div>
           </div>
           <div class="group flex items-center space-x-2">
-            <a href="#" class="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] font-medium after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#007c8b] after:to-[#00b88c] after:transition-all after:duration-300 group-hover:after:w-full md:text-base text-sm">{{ $t("home.viewAll") }}</a>
+            <NuxtLink to="/shop" class="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] font-medium after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#007c8b] after:to-[#00b88c] after:transition-all after:duration-300 group-hover:after:w-full md:text-base text-sm">{{ $t("home.viewAll") }}</NuxtLink>
           </div>
         </div>
         <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("home.popularLightingDesc") }}</p>
@@ -134,7 +134,7 @@
                 <p class="text-sm font-semibold mb-2 text-gray-700">{{ $t("home.suggestedProducts") }}</p>
                 <ul class="space-y-3 text-sm text-gray-600">
                   <li v-for="(product_similar, id) in 3" :key="id">
-                    <a href="#" class="flex items-center gap-3 p-2 rounded-lg transition hover:bg-gray-50">
+                    <NuxtLink to="/shop" class="flex items-center gap-3 p-2 rounded-lg transition hover:bg-gray-50">
                       <NuxtImg src="/images/products/iphone-16-pro-max.webp" loading="lazy" alt="Ốp lưng silicon" class="w-12 h-12 object-cover rounded-md" />
                       <div class="flex-1">
                         <h4 class="font-medium text-gray-700 transition line-clamp-1 group-hover:text-sky-500">Ốp lưng silicon iPhone</h4>
@@ -144,7 +144,7 @@
                         <span class="text-red-600 font-semibold whitespace-nowrap">+29.000 ₫</span>
                         <span class="block text-xs text-gray-400 line-through">59.000 ₫</span>
                       </div>
-                    </a>
+                    </NuxtLink>
                   </li>
                 </ul>
               </div>
@@ -186,7 +186,7 @@
                   <p class="text-xs">{{ $t("home.playToWin") }}</p>
                 </div>
                 <div class="text-right">
-                  <a href="#" class="text-xs sm:text-sm font-medium inline-block hover:text-sky-500 underline">{{ $t("home.viewNow") }}</a>
+                  <NuxtLink to="/shop" class="text-xs sm:text-sm font-medium inline-block hover:text-sky-300 underline">{{ $t("home.viewNow") }}</NuxtLink>
                 </div>
               </div>
             </div>
@@ -198,7 +198,7 @@
                   <p class="text-xs">{{ $t("home.highPerformance") }}</p>
                 </div>
                 <div class="text-right">
-                  <a href="#" class="text-xs sm:text-sm font-medium inline-block hover:text-sky-500 underline">{{ $t("home.viewNow") }}</a>
+                  <NuxtLink to="/shop" class="text-xs sm:text-sm font-medium inline-block hover:text-sky-300 underline">{{ $t("home.viewNow") }}</NuxtLink>
                 </div>
               </div>
             </div>
@@ -212,7 +212,7 @@
                   <p class="text-xs">{{ $t("home.highRefreshRate") }}</p>
                 </div>
                 <div class="text-right">
-                  <a href="#" class="text-xs sm:text-sm font-medium inline-block hover:text-sky-500 underline">{{ $t("home.viewNow") }}</a>
+                  <NuxtLink to="/shop" class="text-xs sm:text-sm font-medium inline-block hover:text-sky-300 underline">{{ $t("home.viewNow") }}</NuxtLink>
                 </div>
               </div>
             </div>
@@ -224,7 +224,7 @@
                   <p class="text-xs">{{ $t("home.switchCherryMX") }}</p>
                 </div>
                 <div class="text-right">
-                  <a href="#" class="text-xs sm:text-sm font-medium inline-block hover:text-sky-500 underline">{{ $t("home.viewNow") }}</a>
+                  <NuxtLink to="/shop" class="text-xs sm:text-sm font-medium inline-block hover:text-sky-300 underline">{{ $t("home.viewNow") }}</NuxtLink>
                 </div>
               </div>
             </div>
@@ -238,7 +238,7 @@
               <p class="text-xs">{{ $t("home.battleReady") }}</p>
             </div>
             <div class="text-right">
-              <a href="#" class="text-xs sm:text-sm font-medium inline-block hover:text-sky-500 underline">{{ $t("home.viewNow") }}</a>
+              <NuxtLink to="/shop" class="text-xs sm:text-sm font-medium inline-block hover:text-sky-300 underline">{{ $t("home.viewNow") }}</NuxtLink>
             </div>
           </div>
         </div>
@@ -255,40 +255,40 @@
             </div>
           </div>
           <div class="relative inline-block group">
-            <a href="#" class="flex items-center space-x-1 text-white hover:text-gray-300">
+            <button type="button" class="flex items-center space-x-1 text-white hover:text-gray-300">
               <span class="text-xs md:text-sm font-medium">{{ $t("home.sort") }}</span>
               <svg class="w-4 h-4" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                 <path d="M151.6 469.6C145.5 476.2 137 480 128 480s-17.5-3.8-23.6-10.4l-88-96c-11.9-13-11.1-33.3 2-45.2s33.3-11.1 45.2 2L96 365.7 96 64c0-17.7 14.3-32 32-32s32 14.3 32 32l0 301.7 32.4-35.4c11.9-13 32.2-13.9 45.2-2s13.9 32.2 2 45.2l-88 96zM320 32l32 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-32 0c-17.7 0-32-14.3-32-32s14.3-32 32-32zm0 128l96 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-96 0c-17.7 0-32-14.3-32-32s14.3-32 32-32zm0 128l160 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-160 0c-17.7 0-32-14.3-32-32s14.3-32 32-32zm0 128l224 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-224 0c-17.7 0-32-14.3-32-32s14.3-32 32-32z" />
               </svg>
-            </a>
+            </button>
             <div class="absolute top-full right-0 w-full h-6 group-hover:block hidden z-0"></div>
             <div class="absolute right-0 z-50 mt-2 w-48 md:w-64 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-2xl ring-1 ring-black/10 hidden group-hover:block transition-all duration-300 ease-in-out">
               <div class="py-2 px-3 space-y-1 text-xs sm:text-sm md:text-base text-gray-700">
-                <button class="flex items-center justify-between w-full hover:bg-gray-100 px-2 sm:px-3 py-2 rounded transition group/item">
+                <button @click="handleSortHighConfig('id,desc')" class="flex items-center justify-between w-full hover:bg-gray-100 px-2 sm:px-3 py-2 rounded transition group/item" :class="{ 'text-sky-600 font-bold': highConfigSort === 'id,desc' }">
                   <span class="flex items-center gap-1 sm:gap-2 group-hover/item:text-sky-600 transition-colors">
                     <!-- fa-clock SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="w-4 h-4 text-xs md:text-sm text-gray-500 group-hover/item:text-sky-600 transition-colors"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.3 0-200-89.7-200-200S145.7 56 256 56s200 89.7 200 200-89.7 200-200 200zm12-200V136c0-6.6-5.4-12-12-12s-12 5.4-12 12v120c0 6.6 5.4 12 12 12h88c6.6 0 12-5.4 12-12s-5.4-12-12-12h-76z" /></svg>
                     {{ $t("home.newest") }}
                   </span>
-                  <svg v-if="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500 opacity-0 group-[.active]:opacity-100"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
+                  <svg v-if="highConfigSort === 'id,desc'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
                 </button>
-                <button class="flex items-center justify-between w-full hover:bg-gray-100 px-2 sm:px-3 py-2 rounded transition group/item">
+                <button @click="handleSortHighConfig('price_origin,asc')" class="flex items-center justify-between w-full hover:bg-gray-100 px-2 sm:px-3 py-2 rounded transition group/item" :class="{ 'text-sky-600 font-bold': highConfigSort === 'price_origin,asc' }">
                   <span class="flex items-center gap-1 sm:gap-2 group-hover/item:text-sky-600 transition-colors">
                     <!-- fa-arrow-up-wide-short SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="currentColor" class="w-4 h-4 text-xs md:text-sm text-gray-500 group-hover/item:text-sky-600 transition-colors"><path d="M576 80c0-26.5-21.5-48-48-48H48C21.5 32 0 53.5 0 80s21.5 48 48 48h480c26.5 0 48-21.5 48-48zm0 176c0-26.5-21.5-48-48-48H176c-26.5 0-48 21.5-48 48s21.5 48 48 48h352c26.5 0 48-21.5 48-48zm0 176c0-26.5-21.5-48-48-48H304c-26.5 0-48 21.5-48 48s21.5 48 48 48h224c26.5 0 48-21.5 48-48zm0-176c0 26.5-21.5 48-48 48H176c-26.5 0-48-21.5-48-48s21.5-48 48-48h352c26.5 0 48 21.5 48 48z" /></svg>
                     {{ $t("home.priceLowToHigh") }}
                   </span>
-                  <svg v-if="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500 opacity-0 group-[.active]:opacity-100"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
+                  <svg v-if="highConfigSort === 'price_origin,asc'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
                 </button>
-                <button class="flex items-center justify-between w-full hover:bg-gray-100 px-2 sm:px-3 py-2 rounded transition group/item">
+                <button @click="handleSortHighConfig('price_origin,desc')" class="flex items-center justify-between w-full hover:bg-gray-100 px-2 sm:px-3 py-2 rounded transition group/item" :class="{ 'text-sky-600 font-bold': highConfigSort === 'price_origin,desc' }">
                   <span class="flex items-center gap-1 sm:gap-2 group-hover/item:text-sky-600 transition-colors">
                     <!-- fa-arrow-down-wide-short SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="currentColor" class="w-4 h-4 text-xs md:text-sm text-gray-500 group-hover/item:text-sky-600 transition-colors"><path d="M576 432c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48s21.5-48 48-48h480c26.5 0 48 21.5 48 48zm0-176c0 26.5-21.5 48-48 48H176c-26.5 0-48-21.5-48-48s21.5-48 48-48h352c26.5 0 48 21.5 48 48zm0-176c0 26.5-21.5 48-48 48H304c-26.5 0-48-21.5-48-48s21.5-48 48-48h224c26.5 0 48 21.5 48 48zm0-176c0 26.5-21.5 48-48 48H176c-26.5 0-48-21.5-48-48s21.5-48 48-48h352c26.5 0 48 21.5 48 48z" /></svg>
                     {{ $t("home.priceHighToLow") }}
                   </span>
-                  <svg v-if="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500 opacity-0 group-[.active]:opacity-100"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
+                  <svg v-if="highConfigSort === 'price_origin,desc'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
                 </button>
-                <button class="flex items-center justify-between w-full hover:bg-gray-100 px-2 sm:px-3 py-2 rounded transition group/item">
+                <button @click="handleSortHighConfig('sold,desc')" class="flex items-center justify-between w-full hover:bg-gray-100 px-2 sm:px-3 py-2 rounded transition group/item" :class="{ 'text-sky-600 font-bold': highConfigSort === 'sold,desc' }">
                   <span class="flex items-center gap-1 sm:gap-2 group-hover/item:text-sky-600 transition-colors">
                     <!-- fa-chart-line SVG (thay thế cho fa-fire) -->
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="w-4 h-4 text-xs md:text-sm text-gray-500 group-hover/item:text-sky-600 transition-colors">
@@ -296,15 +296,15 @@
                     </svg>
                     {{ $t("home.bestSelling") }}
                   </span>
-                  <svg v-if="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500 opacity-0 group-[.active]:opacity-100"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
+                  <svg v-if="highConfigSort === 'sold,desc'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
                 </button>
-                <button class="flex items-center justify-between w-full hover:bg-gray-100 px-2 sm:px-3 py-2 rounded transition group/item">
+                <button @click="handleSortHighConfig('rating,desc')" class="flex items-center justify-between w-full hover:bg-gray-100 px-2 sm:px-3 py-2 rounded transition group/item" :class="{ 'text-sky-600 font-bold': highConfigSort === 'rating,desc' }">
                   <span class="flex items-center gap-1 sm:gap-2 group-hover/item:text-sky-600 transition-colors">
                     <!-- fa-star SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="currentColor" class="w-4 h-4 text-xs md:text-sm text-gray-500 group-hover/item:text-sky-600 transition-colors"><path d="M287.9 17.8L354 150.2l146.1 21.3c26.2 3.8 36.7 36 17.7 54.6l-105.7 103 25 145.5c4.5 26.2-23 46-46.4 33.7L288 439.6l-130.7 68.7c-23.4 12.3-50.9-7.5-46.4-33.7l25-145.5L30.2 226.1c-19-18.6-8.5-50.8 17.7-54.6L194 150.2 260.1 17.8c11.7-23.6 45.6-23.9 57.8 0z" /></svg>
                     {{ $t("home.highRated") }}
                   </span>
-                  <svg v-if="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500 opacity-0 group-[.active]:opacity-100"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
+                  <svg v-if="highConfigSort === 'rating,desc'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
                 </button>
               </div>
             </div>
@@ -328,7 +328,7 @@
             </div>
           </div>
           <div class="relative inline-block group">
-            <a href="#" class="flex items-center space-x-1 text-white hover:text-gray-300">
+            <button type="button" class="flex items-center space-x-1 text-white hover:text-gray-300">
               <span class="text-xs md:text-sm font-medium text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f]">{{ $t("home.sort") }}</span>
               <svg viewBox="0 0 576 512" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 md:w-5 md:h-5">
                 <defs>
@@ -340,35 +340,35 @@
                 </defs>
                 <path fill="url(#iconGradient)" d="M151.6 469.6C145.5 476.2 137 480 128 480s-17.5-3.8-23.6-10.4l-88-96c-11.9-13-11.1-33.3 2-45.2s33.3-11.1 45.2 2L96 365.7 96 64c0-17.7 14.3-32 32-32s32 14.3 32 32l0 301.7 32.4-35.4c11.9-13 32.2-13.9 45.2-2s13.9 32.2 2 45.2l-88 96zM320 32l32 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-32 0c-17.7 0-32-14.3-32-32s14.3-32 32-32zm0 128l96 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-96 0c-17.7 0-32-14.3-32-32s14.3-32 32-32zm0 128l160 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-160 0c-17.7 0-32-14.3-32-32s14.3-32 32-32zm0 128l224 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-224 0c-17.7 0-32-14.3-32-32s14.3-32 32-32z" />
               </svg>
-            </a>
+            </button>
             <div class="absolute top-full right-0 w-full h-6 group-hover:block hidden z-0"></div>
             <div class="absolute right-0 z-50 mt-2 w-48 md:w-64 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-2xl ring-1 ring-black/10 hidden group-hover:block transition-all duration-300 ease-in-out">
               <div class="py-2 px-3 space-y-1 text-xs sm:text-sm md:text-base text-gray-700">
-                <button class="flex items-center justify-between w-full hover:bg-gray-100 px-2 sm:px-3 py-2 rounded transition group/item">
+                <button @click="handleSortAccessories('id,desc')" class="flex items-center justify-between w-full hover:bg-gray-100 px-2 sm:px-3 py-2 rounded transition group/item" :class="{ 'text-sky-600 font-bold': accessorySort === 'id,desc' }">
                   <span class="flex items-center gap-1 sm:gap-2 group-hover/item:text-sky-600 transition-colors">
                     <!-- fa-clock SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="w-4 h-4 text-xs md:text-sm text-gray-500 group-hover/item:text-sky-600 transition-colors"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.3 0-200-89.7-200-200S145.7 56 256 56s200 89.7 200 200-89.7 200-200 200zm12-200V136c0-6.6-5.4-12-12-12s-12 5.4-12 12v120c0 6.6 5.4 12 12 12h88c6.6 0 12-5.4 12-12s-5.4-12-12-12h-76z" /></svg>
-                    Mới nhất
+                    {{ $t("home.newest") }}
                   </span>
-                  <svg v-if="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500 opacity-0 group-[.active]:opacity-100"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
+                  <svg v-if="accessorySort === 'id,desc'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
                 </button>
-                <button class="flex items-center justify-between w-full hover:bg-gray-100 px-2 sm:px-3 py-2 rounded transition group/item">
+                <button @click="handleSortAccessories('price_origin,asc')" class="flex items-center justify-between w-full hover:bg-gray-100 px-2 sm:px-3 py-2 rounded transition group/item" :class="{ 'text-sky-600 font-bold': accessorySort === 'price_origin,asc' }">
                   <span class="flex items-center gap-1 sm:gap-2 group-hover/item:text-sky-600 transition-colors">
                     <!-- fa-arrow-up-wide-short SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="currentColor" class="w-4 h-4 text-xs md:text-sm text-gray-500 group-hover/item:text-sky-600 transition-colors"><path d="M576 80c0-26.5-21.5-48-48-48H48C21.5 32 0 53.5 0 80s21.5 48 48 48h480c26.5 0 48-21.5 48-48zm0 176c0-26.5-21.5-48-48-48H176c-26.5 0-48 21.5-48 48s21.5 48 48 48h352c26.5 0 48-21.5 48-48zm0 176c0-26.5-21.5-48-48-48H304c-26.5 0-48 21.5-48 48s21.5 48 48 48h224c26.5 0 48-21.5 48-48zm0-176c0 26.5-21.5 48-48 48H176c-26.5 0-48-21.5-48-48s21.5-48 48-48h352c26.5 0 48 21.5 48 48z" /></svg>
                     {{ $t("home.priceLowToHigh") }}
                   </span>
-                  <svg v-if="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500 opacity-0 group-[.active]:opacity-100"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
+                  <svg v-if="accessorySort === 'price_origin,asc'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
                 </button>
-                <button class="flex items-center justify-between w-full hover:bg-gray-100 px-2 sm:px-3 py-2 rounded transition group/item">
+                <button @click="handleSortAccessories('price_origin,desc')" class="flex items-center justify-between w-full hover:bg-gray-100 px-2 sm:px-3 py-2 rounded transition group/item" :class="{ 'text-sky-600 font-bold': accessorySort === 'price_origin,desc' }">
                   <span class="flex items-center gap-1 sm:gap-2 group-hover/item:text-sky-600 transition-colors">
                     <!-- fa-arrow-down-wide-short SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="currentColor" class="w-4 h-4 text-xs md:text-sm text-gray-500 group-hover/item:text-sky-600 transition-colors"><path d="M576 432c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48s21.5-48 48-48h480c26.5 0 48 21.5 48 48zm0-176c0 26.5-21.5 48-48 48H176c-26.5 0-48-21.5-48-48s21.5-48 48-48h352c26.5 0 48 21.5 48 48zm0-176c0 26.5-21.5 48-48 48H304c-26.5 0-48-21.5-48-48s21.5-48 48-48h224c26.5 0 48 21.5 48 48zm0-176c0 26.5-21.5 48-48 48H176c-26.5 0-48-21.5-48-48s21.5-48 48-48h352c26.5 0 48 21.5 48 48z" /></svg>
                     {{ $t("home.priceHighToLow") }}
                   </span>
-                  <svg v-if="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500 opacity-0 group-[.active]:opacity-100"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
+                  <svg v-if="accessorySort === 'price_origin,desc'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
                 </button>
-                <button class="flex items-center justify-between w-full hover:bg-gray-100 px-2 sm:px-3 py-2 rounded transition group/item">
+                <button @click="handleSortAccessories('sold,desc')" class="flex items-center justify-between w-full hover:bg-gray-100 px-2 sm:px-3 py-2 rounded transition group/item" :class="{ 'text-sky-600 font-bold': accessorySort === 'sold,desc' }">
                   <span class="flex items-center gap-1 sm:gap-2 group-hover/item:text-sky-600 transition-colors">
                     <!-- fa-chart-line SVG (thay thế cho fa-fire) -->
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="w-4 h-4 text-xs md:text-sm text-gray-500 group-hover/item:text-sky-600 transition-colors">
@@ -376,15 +376,15 @@
                     </svg>
                     {{ $t("home.bestSelling") }}
                   </span>
-                  <svg v-if="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500 opacity-0 group-[.active]:opacity-100"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
+                  <svg v-if="accessorySort === 'sold,desc'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
                 </button>
-                <button class="flex items-center justify-between w-full hover:bg-gray-100 px-2 sm:px-3 py-2 rounded transition group/item">
+                <button @click="handleSortAccessories('rating,desc')" class="flex items-center justify-between w-full hover:bg-gray-100 px-2 sm:px-3 py-2 rounded transition group/item" :class="{ 'text-sky-600 font-bold': accessorySort === 'rating,desc' }">
                   <span class="flex items-center gap-1 sm:gap-2 group-hover/item:text-sky-600 transition-colors">
                     <!-- fa-star SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="currentColor" class="w-4 h-4 text-xs md:text-sm text-gray-500 group-hover/item:text-sky-600 transition-colors"><path d="M287.9 17.8L354 150.2l146.1 21.3c26.2 3.8 36.7 36 17.7 54.6l-105.7 103 25 145.5c4.5 26.2-23 46-46.4 33.7L288 439.6l-130.7 68.7c-23.4 12.3-50.9-7.5-46.4-33.7l25-145.5L30.2 226.1c-19-18.6-8.5-50.8 17.7-54.6L194 150.2 260.1 17.8c11.7-23.6 45.6-23.9 57.8 0z" /></svg>
                     {{ $t("home.highRated") }}
                   </span>
-                  <svg v-if="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500 opacity-0 group-[.active]:opacity-100"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
+                  <svg v-if="accessorySort === 'rating,desc'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
                 </button>
               </div>
             </div>
@@ -450,7 +450,7 @@
             </li>
           </ul>
           <div class="max-w-[120px] md:max-w-[180px]">
-            <a href="#" type="button" class="relative flex items-center justify-center px-6 py-2 overflow-hidden font-medium text-md transition-all bg-gradient-to-r from-sky-500 to-cyan-400 rounded-md shadow-lg group hover:scale-105 hover:from-sky-600 hover:to-cyan-500 focus:outline-none focus:ring-2 focus:ring-sky-400">
+            <NuxtLink to="/shop" class="relative flex items-center justify-center px-6 py-2 overflow-hidden font-medium text-md transition-all bg-gradient-to-r from-sky-500 to-cyan-400 rounded-md shadow-lg group hover:scale-105 hover:from-sky-600 hover:to-cyan-500 focus:outline-none focus:ring-2 focus:ring-sky-400">
               <span class="absolute top-0 right-0 inline-block w-4 h-4 transition-all duration-500 ease-in-out bg-sky-700 rounded group-hover:-mr-4 group-hover:-mt-4">
                 <span class="absolute top-0 right-0 w-5 h-5 rotate-45 translate-x-1/2 -translate-y-1/2 bg-white"></span>
               </span>
@@ -459,7 +459,7 @@
               </span>
               <span class="absolute bottom-0 left-0 w-full h-full transition-all duration-500 ease-in-out delay-200 -translate-x-full bg-sky-600 rounded-md group-hover:translate-x-0"></span>
               <span class="relative text-center text-white transition-colors duration-200 ease-in-out group-hover:text-white drop-shadow text-sm md:text-base">{{ $t("home.explore") }}</span>
-            </a>
+            </NuxtLink>
           </div>
         </div>
         <div class="relative">
@@ -474,119 +474,6 @@
         </div>
       </div>
     </section>
-    <section class="product-accsessory bg-white shadow-md rounded-md py-3 md:py-6 px-3 md:px-6 md:mb-8 mb-4">
-      <div class="mb-4 md:mb-8">
-        <div class="flex justify-between items-center space-x-2">
-          <div class="head-section-product">
-            <h2 class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-xl md:text-3xl font-bold">{{ $t("home.techAccessories") }}</h2>
-            <div class="h-1 max-w-48 my-1 md:my-2 relative">
-              <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-white via-green-300 to-green-300"></div>
-            </div>
-          </div>
-          <div class="relative inline-block group">
-            <a href="#" class="flex items-center space-x-1 text-white hover:text-gray-300">
-              <span class="text-xs md:text-sm font-medium text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f]">Sắp xếp</span>
-              <svg viewBox="0 0 576 512" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 md:w-5 md:h-5">
-                <defs>
-                  <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" style="stop-color: rgba(43, 57, 144, 0.91); stop-opacity: 1" />
-                    <stop offset="50%" style="stop-color: #0097cc; stop-opacity: 1" />
-                    <stop offset="100%" style="stop-color: #8dc63f; stop-opacity: 1" />
-                  </linearGradient>
-                </defs>
-                <path fill="url(#iconGradient)" d="M151.6 469.6C145.5 476.2 137 480 128 480s-17.5-3.8-23.6-10.4l-88-96c-11.9-13-11.1-33.3 2-45.2s33.3-11.1 45.2 2L96 365.7 96 64c0-17.7 14.3-32 32-32s32 14.3 32 32l0 301.7 32.4-35.4c11.9-13 32.2-13.9 45.2-2s13.9 32.2 2 45.2l-88 96zM320 32l32 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-32 0c-17.7 0-32-14.3-32-32s14.3-32 32-32zm0 128l96 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-96 0c-17.7 0-32-14.3-32-32s14.3-32 32-32zm0 128l160 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-160 0c-17.7 0-32-14.3-32-32s14.3-32 32-32zm0 128l224 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-224 0c-17.7 0-32-14.3-32-32s14.3-32 32-32z" />
-              </svg>
-            </a>
-            <div class="absolute top-full right-0 w-full h-6 group-hover:block hidden z-0"></div>
-            <div class="absolute right-0 z-50 mt-2 w-48 md:w-64 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-2xl ring-1 ring-black/10 hidden group-hover:block transition-all duration-300 ease-in-out">
-              <div class="py-2 px-3 space-y-1 text-xs sm:text-sm md:text-base text-gray-700">
-                <button class="flex items-center justify-between w-full hover:bg-gray-100 px-2 sm:px-3 py-2 rounded transition group/item">
-                  <span class="flex items-center gap-1 sm:gap-2 group-hover/item:text-sky-600 transition-colors">
-                    <!-- fa-clock SVG -->
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="w-4 h-4 text-xs md:text-sm text-gray-500 group-hover/item:text-sky-600 transition-colors"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.3 0-200-89.7-200-200S145.7 56 256 56s200 89.7 200 200-89.7 200-200 200zm12-200V136c0-6.6-5.4-12-12-12s-12 5.4-12 12v120c0 6.6 5.4 12 12 12h88c6.6 0 12-5.4 12-12s-5.4-12-12-12h-76z" /></svg>
-                    Mới nhất
-                  </span>
-                  <svg v-if="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500 opacity-0 group-[.active]:opacity-100"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
-                </button>
-                <button class="flex items-center justify-between w-full hover:bg-gray-100 px-2 sm:px-3 py-2 rounded transition group/item">
-                  <span class="flex items-center gap-1 sm:gap-2 group-hover/item:text-sky-600 transition-colors">
-                    <!-- fa-arrow-up-wide-short SVG -->
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="currentColor" class="w-4 h-4 text-xs md:text-sm text-gray-500 group-hover/item:text-sky-600 transition-colors"><path d="M576 80c0-26.5-21.5-48-48-48H48C21.5 32 0 53.5 0 80s21.5 48 48 48h480c26.5 0 48-21.5 48-48zm0 176c0-26.5-21.5-48-48-48H176c-26.5 0-48 21.5-48 48s21.5 48 48 48h352c26.5 0 48-21.5 48-48zm0 176c0-26.5-21.5-48-48-48H304c-26.5 0-48 21.5-48 48s21.5 48 48 48h224c26.5 0 48-21.5 48-48zm0-176c0 26.5-21.5 48-48 48H176c-26.5 0-48-21.5-48-48s21.5-48 48-48h352c26.5 0 48 21.5 48 48z" /></svg>
-                    {{ $t("home.priceLowToHigh") }}
-                  </span>
-                  <svg v-if="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500 opacity-0 group-[.active]:opacity-100"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
-                </button>
-                <button class="flex items-center justify-between w-full hover:bg-gray-100 px-2 sm:px-3 py-2 rounded transition group/item">
-                  <span class="flex items-center gap-1 sm:gap-2 group-hover/item:text-sky-600 transition-colors">
-                    <!-- fa-arrow-down-wide-short SVG -->
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="currentColor" class="w-4 h-4 text-xs md:text-sm text-gray-500 group-hover/item:text-sky-600 transition-colors"><path d="M576 432c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48s21.5-48 48-48h480c26.5 0 48 21.5 48 48zm0-176c0 26.5-21.5 48-48 48H176c-26.5 0-48-21.5-48-48s21.5-48 48-48h352c26.5 0 48 21.5 48 48zm0-176c0 26.5-21.5 48-48 48H304c-26.5 0-48-21.5-48-48s21.5-48 48-48h224c26.5 0 48 21.5 48 48zm0-176c0 26.5-21.5 48-48 48H176c-26.5 0-48-21.5-48-48s21.5-48 48-48h352c26.5 0 48 21.5 48 48z" /></svg>
-                    {{ $t("home.priceHighToLow") }}
-                  </span>
-                  <svg v-if="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500 opacity-0 group-[.active]:opacity-100"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
-                </button>
-                <button class="flex items-center justify-between w-full hover:bg-gray-100 px-2 sm:px-3 py-2 rounded transition group/item">
-                  <span class="flex items-center gap-1 sm:gap-2 group-hover/item:text-sky-600 transition-colors">
-                    <!-- fa-chart-line SVG (thay thế cho fa-fire) -->
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="w-4 h-4 text-xs md:text-sm text-gray-500 group-hover/item:text-sky-600 transition-colors">
-                      <path d="M64 64c0-17.7-14.3-32-32-32S0 46.3 0 64V400c0 44.2 35.8 80 80 80H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H80c-8.8 0-16-7.2-16-16V64zm406.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L320 301.3l-57.4-57.4c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L320 301.3l57.4 57.4c12.5 12.5 32.8 12.5 45.3 0l112-112z" />
-                    </svg>
-                    {{ $t("home.bestSelling") }}
-                  </span>
-                  <svg v-if="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500 opacity-0 group-[.active]:opacity-100"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
-                </button>
-                <button class="flex items-center justify-between w-full hover:bg-gray-100 px-2 sm:px-3 py-2 rounded transition group/item">
-                  <span class="flex items-center gap-1 sm:gap-2 group-hover/item:text-sky-600 transition-colors">
-                    <!-- fa-star SVG -->
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="currentColor" class="w-4 h-4 text-xs md:text-sm text-gray-500 group-hover/item:text-sky-600 transition-colors"><path d="M287.9 17.8L354 150.2l146.1 21.3c26.2 3.8 36.7 36 17.7 54.6l-105.7 103 25 145.5c4.5 26.2-23 46-46.4 33.7L288 439.6l-130.7 68.7c-23.4 12.3-50.9-7.5-46.4-33.7l25-145.5L30.2 226.1c-19-18.6-8.5-50.8 17.7-54.6L194 150.2 260.1 17.8c11.7-23.6 45.6-23.9 57.8 0z" /></svg>
-                    {{ $t("home.highRated") }}
-                  </span>
-                  <svg v-if="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="w-3 h-3 md:w-4 md:h-4 text-sky-500 opacity-0 group-[.active]:opacity-100"><path d="M143 352.3l-136-136c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L160 284.1l119-119c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-136 136c-9.4 9.4-24.6 9.4-33.9 0z" /></svg>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("home.lightingDesc") }}</p>
-      </div>
-      <div class="flex flex-col lg:flex-row justify-between items-start gap-4">
-        <div class="w-full lg:w-1/5 h-[150px] lg:h-[858px] md:-mx-3 lg:mx-0">
-          <div class="relative h-full w-full overflow-hidden shadow-md">
-            <NuxtImg :src="introAccessoryBanner" loading="lazy" :alt="$t('home.introBanner')" class="object-cover w-full h-full" />
-            <div class="absolute w-full max-w-[300px] inset-0 bg-black/20 flex items-end justify-center py-4">
-              <div class="mx-auto mt-6 hidden lg:block">
-                <NuxtLink to="/shop" class="relative flex items-center justify-center px-6 py-2 overflow-hidden font-medium text-md transition-all bg-gradient-to-r from-sky-500 to-cyan-400 rounded-md shadow-lg group hover:scale-105 hover:from-sky-600 hover:to-cyan-500 focus:outline-none focus:ring-2 focus:ring-sky-400">
-                  <span class="absolute top-0 right-0 inline-block w-4 h-4 transition-all duration-500 ease-in-out bg-sky-700 rounded group-hover:-mr-4 group-hover:-mt-4">
-                    <span class="absolute top-0 right-0 w-5 h-5 rotate-45 translate-x-1/2 -translate-y-1/2 bg-white"></span>
-                  </span>
-                  <span class="absolute bottom-0 rotate-180 left-0 inline-block w-4 h-4 transition-all duration-500 ease-in-out bg-sky-700 rounded group-hover:-ml-4 group-hover:-mb-4">
-                    <span class="absolute top-0 right-0 w-5 h-5 rotate-45 translate-x-1/2 -translate-y-1/2 bg-white"></span>
-                  </span>
-                  <span class="absolute bottom-0 left-0 w-full h-full transition-all duration-500 ease-in-out delay-200 -translate-x-full bg-sky-600 rounded-md group-hover:translate-x-0"></span>
-                  <span class="relative text-center text-white transition-colors duration-200 ease-in-out group-hover:text-white drop-shadow">{{ $t("home.explore") }}</span>
-                </NuxtLink>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- slide sản phẩm -->
-        <div class="w-full lg:w-4/5 min-w-0">
-          <div class="splide" id="product-slider">
-            <div class="splide__track">
-              <ul class="splide__list">
-                <li class="splide__slide">
-                  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 grid-rows-2 gap-4">
-                    <ProductCard v-for="product in techAccessoryProducts" :key="product.id" :product="product" />
-                  </div>
-                </li>
-
-                <!-- Slide 2 nếu có -->
-                <!-- <li class="splide__slide">...</li> -->
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
     <CollectionProduct />
     <section class="relative bg-white shadow-md rounded-md py-3 md:py-6 px-3 md:px-6 md:mb-8 mb-4">
       <div class="text-center md:mb-8 mb-4 relative">
@@ -595,7 +482,7 @@
         </div>
         <h2 class="text-2xl md:text-4xl font-black text-gray-700 mb-2 leading-tight">
           {{ $t("home.whyChooseUs") }}
-          <a href="#" class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] animate-glow">{{ $t("home.us") }}</a>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] animate-glow">{{ $t("home.us") }}</span>
           <span class="text-2xl md:text-4xl">?</span>
         </h2>
         <p class="text-sm text-gray-600 max-w-3xl mx-auto leading-relaxed">{{ $t("home.experienceDifference") }}</p>
@@ -669,13 +556,13 @@
       <div class="text-center md:mt-0 mt-1">
         <div class="relative inline-block">
           <div class="absolute inset-0 bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] rounded-full animate-pulse"></div>
-          <a href="#" class="relative inline-flex items-center md:px-6 md:py-2 px-3 py-1 text-white font-bold text-sm md:text-base rounded-full hover:shadow-xl transition-all duration-500 transform hover:scale-110 group overflow-hidden">
+          <NuxtLink to="/shop" class="relative inline-flex items-center md:px-6 md:py-2 px-3 py-1 text-white font-bold text-sm md:text-base rounded-full hover:shadow-xl transition-all duration-500 transform hover:scale-110 group overflow-hidden">
             <span class="absolute inset-0 bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
             <span class="relative flex items-center">
               {{ $t("home.shopNow") }}
               <i class="fas fa-arrow-right ml-3 group-hover:translate-x-2 transition-transform duration-300"></i>
             </span>
-          </a>
+          </NuxtLink>
         </div>
       </div>
     </section>
@@ -692,7 +579,7 @@
             </div>
           </div>
           <div class="group flex items-center space-x-2">
-            <a href="#" class="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] font-medium text-sm md:text-base after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#007c8b] after:to-[#00b88c] after:transition-all after:duration-300 group-hover:after:w-full">{{ $t("home.viewAll") }}</a>
+            <NuxtLink to="/post" class="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] font-medium text-sm md:text-base after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#007c8b] after:to-[#00b88c] after:transition-all after:duration-300 group-hover:after:w-full">{{ $t("home.viewAll") }}</NuxtLink>
           </div>
         </div>
         <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("home.popularLightingDesc") }}</p>
@@ -700,36 +587,30 @@
       <div class="grid grid-cols-1 lg:grid-cols-2 md:gap-6 gap-4">
         <Splide :options="postFeaturedOptions" id="featured-posts">
           <SplideSlide v-for="(item, index) in postFeaturedItems" :key="`main-${index}`" class="bg-gray-100 rounded-xl overflow-hidden shadow-md">
-            <a href="#" class="block">
+            <NuxtLink :to="item.link || '/post'" class="block">
               <img :src="item.image" loading="lazy" :alt="`post futured ${index}`" class="w-full object-cover" />
               <div class="relative p-4">
-                <a href="#" class="absolute top-0 left-0 -translate-y-10 translate-x-4 inline-block bg-sky-100/80 text-sky-600 font-semibold text-xs px-4 py-1 rounded-full uppercase shadow-lg tracking-wide">{{ item.category }}</a>
+                <span class="absolute top-0 left-0 -translate-y-10 translate-x-4 inline-block bg-sky-100/80 text-sky-600 font-semibold text-xs px-4 py-1 rounded-full uppercase shadow-lg tracking-wide">{{ item.category }}</span>
                 <h3 class="text-lg md:text-xl font-bold text-gray-800 hover:text-cyan-600 transition-colors md:mb-2 mb-1 line-clamp-1">{{ item.title }}</h3>
                 <p class="text-gray-600 hover:text-gray-500 transition-colors text-sm md:mb-4 mb-2 line-clamp-2">{{ item.description }}</p>
                 <div class="text-right hover:scale-105 transition-transform duration-300">
-                  <a href="#" class="text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] font-medium text-sm md:text-base">{{ $t("home.readMore") }}</a>
+                  <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] font-medium text-sm md:text-base">{{ $t("home.readMore") }}</span>
                 </div>
               </div>
-            </a>
+            </NuxtLink>
           </SplideSlide>
         </Splide>
 
         <div class="grid grid-cols-1 md:grid-cols-2 md:gap-6 gap-4">
           <div v-for="(post_homes, id) in 4" :key="id" class="bg-gray-100 rounded-lg shadow-lg overflow-hidden">
-            <a href="#" class="block cursor-pointer">
+            <NuxtLink to="/post" class="block cursor-pointer">
               <img src="/images/posts/post-home-2.jpg" loading="lazy" alt="Post" class="w-full object-cover" />
               <div class="relative p-2">
-                <a href="#" class="absolute top-0 left-0 -translate-y-8 translate-x-4 inline-block bg-sky-100/80 text-sky-600 font-semibold text-[8px] md:text-[10px] px-4 py-1 rounded-full uppercase shadow-lg tracking-wide">{{ $t("home.technology") }}</a>
+                <span class="absolute top-0 left-0 -translate-y-8 translate-x-4 inline-block bg-sky-100/80 text-sky-600 font-semibold text-[8px] md:text-[10px] px-4 py-1 rounded-full uppercase shadow-lg tracking-wide">{{ $t("home.technology") }}</span>
                 <h3 class="text-lg font-medium text-gray-800 hover:text-cyan-600 transition-colors line-clamp-1">{{ $t("home.featuredArticle") }}</h3>
                 <p class="text-gray-600 hover:text-gray-500 transition-colors text-sm line-clamp-1">{{ $t("home.articleDesc") }}</p>
-                <!-- <div
-                    class="text-xs flex justify-between text-right hover:scale-105 transition-transform duration-300">
-                    <p class="not-hover:none">09/09/2025</p>
-                    <a href="#" class="text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] ">đọc
-                      thêm →</a>
-                  </div> -->
               </div>
-            </a>
+            </NuxtLink>
           </div>
         </div>
       </div>
@@ -763,7 +644,6 @@ const {
   thumbnailItems,
   rightVirticalItems,
   introBanner,
-  introAccessoryBanner,
   postFeaturedItems,
   partnerItems,
   mainSlider,
@@ -780,7 +660,29 @@ const superSaleProducts = ref([]);
 const bestSellerProducts = ref([]);
 const highConfigProducts = ref([]);
 const highConfigAccessoryProducts = ref([]);
-const techAccessoryProducts = ref([]);
+
+const highConfigSort = ref("price_origin,desc");
+const accessorySort = ref("id,desc");
+
+const handleSortHighConfig = async (sortValue) => {
+  highConfigSort.value = sortValue;
+  try {
+    const res = await productService.pagination({ perpage: 10, sort: sortValue });
+    highConfigProducts.value = res?.data?.data || [];
+  } catch (error) {
+    console.error("Error sorting high config products:", error);
+  }
+};
+
+const handleSortAccessories = async (sortValue) => {
+  accessorySort.value = sortValue;
+  try {
+    const res = await productService.pagination({ perpage: 8, product_catalogue_id: 6, sort: sortValue });
+    highConfigAccessoryProducts.value = (res?.data?.data || []).slice(0, 8);
+  } catch (error) {
+    console.error("Error sorting accessory products:", error);
+  }
+};
 
 // Fetch featured and section products on page load
 onMounted(async () => {
@@ -789,8 +691,8 @@ onMounted(async () => {
       fetchList("featuredLimit"),
       productService.pagination({ perpage: 10, is_hot: 1, sort: "id,asc" }),
       productService.pagination({ perpage: 10, sort: "sold,desc" }),
-      productService.pagination({ perpage: 10, sort: "price_origin,desc" }),
-      productService.pagination({ perpage: 8, product_catalogue_id: 6 }),
+      productService.pagination({ perpage: 10, sort: highConfigSort.value }),
+      productService.pagination({ perpage: 8, product_catalogue_id: 6, sort: accessorySort.value }),
     ]);
 
     const superSaleRes = results[1].status === "fulfilled" ? results[1].value : null;
@@ -801,7 +703,6 @@ onMounted(async () => {
     superSaleProducts.value = superSaleRes?.data?.data || [];
     bestSellerProducts.value = bestSellerRes?.data?.data || [];
     highConfigProducts.value = highConfigRes?.data?.data || [];
-    techAccessoryProducts.value = accessoryRes?.data?.data || [];
     highConfigAccessoryProducts.value = (accessoryRes?.data?.data || []).slice(0, 8);
   } catch (error) {
     console.error("Error loading home page products:", error);

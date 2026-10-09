@@ -23,58 +23,70 @@
       <span class="absolute -top-10 px-3 py-1 rounded-md text-white text-sm bg-orange-400 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none font-medium">{{ $t("utilityTool.chat") }}</span>
     </button>
 
-    <!-- Modal -->
-    <button data-open-modal="modalVoucher" class="fixed bottom-36 left-6 z-50 bg-white rounded-full shadow-md hover:scale-105 transition-all">
+    <!-- Modal Voucher -->
+    <button @click="openVoucherModal" class="fixed bottom-36 left-6 z-50 bg-white rounded-full shadow-md hover:scale-105 transition-all">
       <NuxtImg src="/images/icon-voucher.png" :alt="$t('utilityTool.offers')" class="w-12 h-12 object-contain" format="webp" loading="lazy" />
     </button>
-    <div id="modalVoucher" data-modal-id="modalVoucher" class="modal fixed inset-0 bg-gray-100/60 bg-opacity-50 items-center justify-center z-50 hidden">
+    <div v-if="showVoucherModal" class="modal fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4" @click.self="closeVoucherModal">
       <!-- Modal Container -->
-      <div class="bg-white w-full max-w-xl rounded-lg overflow-hidden shadow-2xl relative animate-slide-up">
+      <div class="bg-white w-full max-w-xl rounded-xl overflow-hidden shadow-2xl relative animate-slide-up">
         <!-- Header -->
-        <div class="bg-gradient-to-r from-blue-500 to-green-400 text-white text-center py-4 text-2xl font-bold relative">
+        <div class="bg-gradient-to-r from-blue-500 to-green-400 text-white text-center py-4 text-xl md:text-2xl font-bold relative">
           {{ $t("utilityTool.offers") }}
-          <button class="btn-close-modal absolute top-2.5 right-4 text-gray-600 bg-white bg-opacity-70 w-10 h-10 rounded-full flex items-center justify-center text-2xl font-bold hover:bg-opacity-90 transition-all duration-200">✕</button>
+          <button @click="closeVoucherModal" class="absolute top-2.5 right-4 text-gray-600 bg-white/80 hover:bg-white w-9 h-9 rounded-full flex items-center justify-center text-lg font-bold transition-all duration-200">✕</button>
         </div>
 
-        <div class="px-4 py-4 space-y-6 max-h-[70vh] overflow-y-auto scrollbar-hide bg-gray-50">
+        <div class="px-4 py-4 space-y-4 max-h-[70vh] overflow-y-auto scrollbar-hide bg-gray-50">
+          <div v-if="loadingPromotions" class="flex justify-center py-8">
+            <span class="text-sm text-gray-500">{{ $t("common.loading") }}</span>
+          </div>
+          <div v-else-if="promotions.length === 0" class="text-center py-8 text-gray-500 text-sm">
+            {{ $t("utilityTool.noVouchers") }}
+          </div>
           <!-- Voucher Item (loop) -->
-          <div v-for="(voucher, index) in 3" :key="index" class="voucher-item flex flex-col bg-sky-100/50 p-2 rounded-lg shadow-sm">
-            <div class="flex items-center">
-              <div class="voucher-img w-24 h-24 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
-                <NuxtImg src="/images/products/iphone-16-pro-max.webp" alt="Voucher" class="object-cover w-full h-full" loading="lazy" />
+          <div v-for="(voucher, index) in promotions" :key="voucher.id || index" class="voucher-item flex flex-col bg-sky-50 border border-sky-100 p-3 rounded-lg shadow-sm">
+            <div class="flex items-center gap-3">
+              <div class="voucher-img w-20 h-20 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden bg-white p-1 border">
+                <NuxtImg :src="voucher.image || '/images/icon-voucher.png'" alt="Voucher" class="object-contain w-full h-full" loading="lazy" />
               </div>
-              <div class="w-[2px] h-[90px] border-l border-dashed border-gray-300 mx-3"></div>
-              <div class="flex-1">
-                <h3 class="voucher-title font-semibold text-gray-600 text-lg mb-2">{{ $t("utilityTool.giftCode") }}</h3>
-                <div class="grid grid-cols-3 gap-2 items-center mb-2">
-                  <div class="voucher-code-box col-span-2 flex items-center bg-gray-100 px-2 py-[6px] rounded border border-gray-300">
-                    <span class="text-sky-600 mr-2">📋</span>
-                    <span class="voucher-code font-mono text-sm text-gray-700">{{ $t("utilityTool.voucherCode") }}</span>
+              <div class="w-[1px] h-16 border-l border-dashed border-gray-300"></div>
+              <div class="flex-1 min-w-0">
+                <h3 class="voucher-title font-semibold text-gray-800 text-sm md:text-base line-clamp-1 mb-1">{{ voucher.name }}</h3>
+                <div class="flex items-center gap-2 mb-2">
+                  <div class="flex-1 flex items-center bg-white px-2 py-1 rounded border border-gray-200 min-w-0">
+                    <span class="text-sky-600 mr-1 text-xs">📋</span>
+                    <span class="voucher-code font-mono text-xs md:text-sm text-gray-700 font-bold truncate">{{ voucher.code || 'TECHMART' }}</span>
                   </div>
-                  <button @click="toggleCondition(index)" class="btn-copy-code bg-gradient-to-r from-sky-700 to-sky-600 hover:from-sky-600 hover:to-sky-500 text-white py-2 px-3 rounded text-sm font-medium">{{ $t("utilityTool.copy") }}</button>
+                  <button @click="copyVoucherCode(voucher.code)" class="bg-gradient-to-r from-sky-600 to-cyan-500 hover:from-sky-700 hover:to-cyan-600 text-white py-1 px-3 rounded text-xs font-medium whitespace-nowrap transition-all shadow-sm">
+                    {{ copiedCode === voucher.code ? $t("utilityTool.copied") : $t("utilityTool.copy") }}
+                  </button>
                 </div>
 
                 <div class="flex justify-between items-center text-xs">
-                  <div class="text-gray-500">{{ $t("utilityTool.expiryDate") }}</div>
-                  <button class="btn-toggle-condition text-sky-500 font-medium underline flex items-center cursor-pointer">{{ showConditions[index] ? $t("utilityTool.hideConditions") : $t("utilityTool.conditions") }}</button>
+                  <div class="text-gray-500 truncate mr-2">{{ formatExpiry(voucher.endDate) }}</div>
+                  <button @click="toggleCondition(index)" class="text-sky-600 hover:text-sky-700 font-medium underline cursor-pointer whitespace-nowrap">
+                    {{ showConditions[index] ? $t("utilityTool.hideConditions") : $t("utilityTool.conditions") }}
+                  </button>
                 </div>
               </div>
             </div>
-            <div v-show="showConditions[index]" class="voucher-condition border border-sky-400 rounded-md text-sm text-gray-600 mt-3 p-2">{{ $t("utilityTool.voucherCondition") }}</div>
+            <div v-show="showConditions[index]" class="voucher-condition border border-sky-200 bg-white rounded-md text-xs text-gray-600 mt-2 p-2">
+              {{ voucher.description || $t("utilityTool.voucherCondition") }}
+            </div>
           </div>
         </div>
       </div>
     </div>
 
     <!-- phone number  -->
-    <button class="group fixed bottom-20 left-6 z-50 flex items-center justify-start w-[45px] h-[45px] bg-[#00d757] rounded-full cursor-pointer overflow-hidden shadow-lg transition-all duration-300 active:translate-x-[2px] active:translate-y-[2px] hover:w-[150px] hover:rounded-[40px]">
+    <a href="tel:0812720008" class="group fixed bottom-20 left-6 z-50 flex items-center justify-start w-[45px] h-[45px] bg-[#00d757] rounded-full cursor-pointer overflow-hidden shadow-lg transition-all duration-300 active:translate-x-[2px] active:translate-y-[2px] hover:w-[150px] hover:rounded-[40px]">
       <div class="flex justify-center items-center w-full group-hover:w-[30%] transition-all duration-300 pl-0 group-hover:pl-2">
         <svg class="w-[25px] h-[25px]" viewBox="0 0 16 16" fill="white">
           <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z" />
         </svg>
       </div>
-      <a href="#" class="block absolute right-0 w-0 opacity-0 text-white text-base font-semibold group-hover:w-[70%] group-hover:opacity-100 transition-all duration-300 pr-3">{{ $t("utilityTool.phoneNumber") }}</a>
-    </button>
+      <span class="block absolute right-0 w-0 opacity-0 text-white text-base font-semibold group-hover:w-[70%] group-hover:opacity-100 transition-all duration-300 pr-3">{{ $t("utilityTool.phoneNumber") }}</span>
+    </a>
 
     <!-- Drawer -->
     <transition name="slide-up">
@@ -146,14 +158,23 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
-import CompareBar from "~/components//navigation/CompareBar.vue";
-import SearchProductModal from "~/components//features/SearchProductModal.vue";
+import CompareBar from "~/components/navigation/CompareBar.vue";
+import SearchProductModal from "~/components/features/SearchProductModal.vue";
+import { promotionService } from "~/services/promotion/promotion.service";
+import type { IPromotion } from "~/interfaces/promotion/promotion.interface";
+import { useAppToast } from "~/composables/useAppToast";
 
 const { t } = useI18n();
+const toast = useAppToast();
 
-const showConditions = ref([false, false, false]);
+const showVoucherModal = ref(false);
+const showConditions = ref<boolean[]>([]);
+const promotions = ref<IPromotion[]>([]);
+const loadingPromotions = ref(false);
+const copiedCode = ref<string | null>(null);
+
 const showDrawer = ref(false);
 const showSearchModal = ref(false);
 const searchSelectionMode = ref<"record" | "checkbox">("record");
@@ -161,9 +182,62 @@ const searchSelectionMode = ref<"record" | "checkbox">("record");
 let touchStartY = 0;
 let touchEndY = 0;
 
+const fetchPromotions = async () => {
+  if (promotions.value.length > 0) return;
+  loadingPromotions.value = true;
+  try {
+    const res = await promotionService.pagination({ publish: 2, perpage: 10 });
+    promotions.value = res?.data?.data || [];
+    showConditions.value = new Array(promotions.value.length).fill(false);
+  } catch (error) {
+    console.error("Error loading promotions in UtilityTool:", error);
+  } finally {
+    loadingPromotions.value = false;
+  }
+};
+
+const openVoucherModal = () => {
+  showVoucherModal.value = true;
+  fetchPromotions();
+};
+
+const closeVoucherModal = () => {
+  showVoucherModal.value = false;
+};
+
 const toggleCondition = (index: number) => {
   showConditions.value[index] = !showConditions.value[index];
 };
+
+const copyVoucherCode = async (code?: string | null) => {
+  if (!code) return;
+  try {
+    await navigator.clipboard.writeText(code);
+    copiedCode.value = code;
+    toast.success(t("utilityTool.copySuccess"));
+    setTimeout(() => {
+      if (copiedCode.value === code) {
+        copiedCode.value = null;
+      }
+    }, 3000);
+  } catch (err) {
+    console.error("Copy to clipboard failed:", err);
+  }
+};
+
+const formatExpiry = (dateStr?: string | null) => {
+  if (!dateStr) return "";
+  try {
+    const d = new Date(dateStr);
+    return `${t("utilityTool.expiryPrefix")}${d.toLocaleDateString("vi-VN")}`;
+  } catch {
+    return "";
+  }
+};
+
+onMounted(() => {
+  fetchPromotions();
+});
 
 const openDrawer = () => {
   showDrawer.value = true;

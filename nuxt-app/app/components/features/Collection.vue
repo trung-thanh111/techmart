@@ -9,55 +9,55 @@
           </div>
         </div>
         <div class="group flex items-center space-x-2">
-          <a href="#" class="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] font-medium text-sm md:text-base after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#007c8b] after:to-[#00b88c] after:transition-all after:duration-300 group-hover:after:w-full">{{ $t("home.discoverNow") }}</a>
+          <NuxtLink to="/shop" class="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#007c8b] to-[#00b88c] font-medium text-sm md:text-base after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#007c8b] after:to-[#00b88c] after:transition-all after:duration-300 group-hover:after:w-full">{{ $t("home.discoverNow") }}</NuxtLink>
         </div>
       </div>
       <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("home.collectionDesc") }}</p>
     </div>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
       <div class="grid gap-4">
-        <a href="#" class="block">
+        <NuxtLink to="/shop" class="block overflow-hidden rounded-lg hover:opacity-90 transition-opacity">
           <NuxtImg class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image.jpg" alt="Collection image 1" loading="lazy" />
-        </a>
-        <a href="#" class="block">
+        </NuxtLink>
+        <NuxtLink to="/shop" class="block overflow-hidden rounded-lg hover:opacity-90 transition-opacity">
           <NuxtImg class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-1.jpg" alt="Collection image 2" loading="lazy" />
-        </a>
-        <a href="#" class="block">
+        </NuxtLink>
+        <NuxtLink to="/shop" class="block overflow-hidden rounded-lg hover:opacity-90 transition-opacity">
           <NuxtImg class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-2.jpg" alt="Collection image 3" loading="lazy" />
-        </a>
+        </NuxtLink>
       </div>
       <div class="grid gap-4">
-        <a href="#" class="block">
+        <NuxtLink to="/shop" class="block overflow-hidden rounded-lg hover:opacity-90 transition-opacity">
           <NuxtImg class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-3.jpg" alt="Collection image 4" loading="lazy" />
-        </a>
-        <a href="#" class="block">
+        </NuxtLink>
+        <NuxtLink to="/shop" class="block overflow-hidden rounded-lg hover:opacity-90 transition-opacity">
           <NuxtImg class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-4.jpg" alt="Collection image 5" loading="lazy" />
-        </a>
-        <a href="#" class="block">
+        </NuxtLink>
+        <NuxtLink to="/shop" class="block overflow-hidden rounded-lg hover:opacity-90 transition-opacity">
           <NuxtImg class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-5.jpg" alt="Collection image 6" loading="lazy" />
-        </a>
+        </NuxtLink>
       </div>
       <div class="grid gap-4">
-        <a href="#" class="block">
+        <NuxtLink to="/shop" class="block overflow-hidden rounded-lg hover:opacity-90 transition-opacity">
           <NuxtImg class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-6.jpg" alt="Collection image 7" loading="lazy" />
-        </a>
-        <a href="#" class="block">
+        </NuxtLink>
+        <NuxtLink to="/shop" class="block overflow-hidden rounded-lg hover:opacity-90 transition-opacity">
           <NuxtImg class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-7.jpg" alt="Collection image 8" loading="lazy" />
-        </a>
-        <a href="#" class="block">
+        </NuxtLink>
+        <NuxtLink to="/shop" class="block overflow-hidden rounded-lg hover:opacity-90 transition-opacity">
           <NuxtImg class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-8.jpg" alt="Collection image 9" loading="lazy" />
-        </a>
+        </NuxtLink>
       </div>
       <div class="grid gap-4">
-        <a href="#" class="block">
+        <NuxtLink to="/shop" class="block overflow-hidden rounded-lg hover:opacity-90 transition-opacity">
           <NuxtImg class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-9.jpg" alt="Collection image 10" loading="lazy" />
-        </a>
-        <a href="#" class="block">
+        </NuxtLink>
+        <NuxtLink to="/shop" class="block overflow-hidden rounded-lg hover:opacity-90 transition-opacity">
           <NuxtImg class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-10.jpg" alt="Collection image 11" loading="lazy" />
-        </a>
-        <a href="#" class="block">
+        </NuxtLink>
+        <NuxtLink to="/shop" class="block overflow-hidden rounded-lg hover:opacity-90 transition-opacity">
           <NuxtImg class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-11.jpg" alt="Collection image 12" loading="lazy" />
-        </a>
+        </NuxtLink>
       </div>
     </div>
   </section>

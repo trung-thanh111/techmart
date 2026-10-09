@@ -93,4 +93,36 @@ class PublishStatusProtectionTest extends TestCase
         $ids = collect($response->json('data.data') ?? [])->pluck('id')->toArray();
         $this->assertContains($draftProduct->id, $ids);
     }
+
+    public function test_guest_can_list_published_promotions_and_cannot_see_draft_ones(): void
+    {
+        $publishedPromo = Promotion::create([
+            'code' => 'PUBPROMO' . rand(1000, 9999),
+            'name' => 'Published Promo',
+            'slug' => 'published-promo-' . uniqid(),
+            'type' => 'order',
+            'priority' => 10,
+            'publish' => 2, // Published
+            'start_date' => now()->subDay(),
+            'end_date' => now()->addMonth(),
+        ]);
+
+        $draftPromo = Promotion::create([
+            'code' => 'DRAFTPROMO' . rand(1000, 9999),
+            'name' => 'Draft Promo',
+            'slug' => 'draft-promo-' . uniqid(),
+            'type' => 'order',
+            'priority' => 10,
+            'publish' => 0, // Draft
+            'start_date' => now()->subDay(),
+            'end_date' => now()->addMonth(),
+        ]);
+
+        $response = $this->getJson('/api/v1/promotions');
+
+        $response->assertStatus(200);
+        $ids = collect($response->json('data.data') ?? [])->pluck('id')->toArray();
+        $this->assertContains($publishedPromo->id, $ids);
+        $this->assertNotContains($draftPromo->id, $ids);
+    }
 }

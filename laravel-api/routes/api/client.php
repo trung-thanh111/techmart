@@ -172,6 +172,8 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
         Route::get('post_likes', [PostLikeController::class, 'index']);
         Route::get('post_comment_likes', [PostCommentLikeController::class, 'index']);
         Route::post('promotion/apply_discount', [PromotionController::class, 'applyDiscount']);
+        Route::get('promotions', [PromotionController::class, 'index']);
+        Route::get('promotions/{id}', [PromotionController::class, 'show']);
     });
 
     // FE routes (public matchers)

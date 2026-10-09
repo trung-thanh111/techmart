@@ -283,5 +283,28 @@
       "close": "Close",
       "exploreNow": "Explore Now"
     }
+  },
+  "utilityTool": {
+    "show": "Show",
+    "hide": "Hide",
+    "chat": "Chat",
+    "offers": "Offers & Vouchers",
+    "giftCode": "Discount Voucher",
+    "copy": "Copy",
+    "copied": "Copied",
+    "copySuccess": "Voucher code copied to clipboard",
+    "noVouchers": "No vouchers available right now",
+    "expiryPrefix": "Exp: ",
+    "expiryDate": "Exp: 04/09/2024 - 30/09/2025",
+    "hideConditions": "Hide conditions",
+    "conditions": "Conditions",
+    "compareProducts": "Compare Products",
+    "chart": "Chart",
+    "table": "Table",
+    "ticket": "Ticket",
+    "view": "View",
+    "phoneNumber": "0812720008",
+    "voucherCode": "TECHMART",
+    "voucherCondition": "Apply on orders at TechMart"
   }
 }

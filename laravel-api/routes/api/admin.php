@@ -236,7 +236,7 @@ Route::group(['prefix' => 'v1/', 'middleware' => ['jwt:admin', 'convert', 'check
         Route::patch('bulkUpdate', [PromotionController::class, 'bulkUpdate']);
         Route::post('{id}/restore', [PromotionController::class, 'restore']);
     });
-    Route::resource('promotions', PromotionController::class)->except($routeExcept);
+    Route::resource('promotions', PromotionController::class)->except($publicResourceExcept);
     Route::resource('menus', MenuController::class)->except($publicResourceExcept);
     Route::resource('menu_items', MenuItemController::class)->except($routeExcept);
 
