@@ -968,6 +968,8 @@
         }
     },
     "auth": {
+        "sessionExpired": "Phiên đăng nhập hết hạn",
+        "sessionExpiredDesc": "Vui lòng đăng nhập lại để tiếp tục.",
         "login": "Đăng nhập",
         "hello": "Xin chào! {name}.",
         "logout": "Đăng xuất",

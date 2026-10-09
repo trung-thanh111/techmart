@@ -111,7 +111,7 @@ abstract class BaseService implements BaseServiceInterface
                 'fields' => $this->fieldSearchs
             ],
             'filters' => [
-                'simple' => $this->biuldFilter($request, $this->simpleFilter),
+                'simple' => $this->buildSimpleFilters($request),
                 'complex' => $this->biuldFilter($request, $this->complexFilter),
                 'date' => $this->biuldFilter($request, $this->dateFilter),
                 'relation' => $this->biuldFilter($request, $this->relationFilter)
@@ -139,6 +139,18 @@ abstract class BaseService implements BaseServiceInterface
                 }
             }
         }
+        return $conditions;
+    }
+
+    protected function buildSimpleFilters(Request $request): array
+    {
+        $conditions = $this->biuldFilter($request, $this->simpleFilter);
+
+        // Khách hàng / client chỉ được xem dữ liệu đã xuất bản (publish = 2)
+        if (in_array('publish', $this->simpleFilter) && !auth(Common::ADMIN)->check()) {
+            $conditions['publish'] = 2;
+        }
+
         return $conditions;
     }
 
@@ -225,27 +237,32 @@ abstract class BaseService implements BaseServiceInterface
     {
         $field = request()->input('field') ?? request()->input('column');
 
+        $model = null;
         if ($field) {
             $model = $this->findByField($field, $id);
+        } else {
+            // nếu tìm id k tồn tại thì cho id thành string để tìm theo slug
+            if (ctype_digit(strval($id))) {
+                try {
+                    $model = $this->checkModelExists((int)$id)->getResult();
+                } catch (ModelNotFoundException $e) {
+                }
+            }
             if (!$model) {
-                throw new ModelNotFoundException(Lang::get('message.record_not_found'));
-            }
-            return $model;
-        }
-
-        // nếu tìm id k tồn tại thì cho id thành string để tìm theo slug
-        if (ctype_digit(strval($id))) {
-            try {
-                return $this->checkModelExists((int)$id)->getResult();
-            } catch (ModelNotFoundException $e) {
+                $model = $this->findByField($this->paramField, $id);
             }
         }
-        $model = $this->findByField($this->paramField, $id);
 
-        if ($model) {
-            return $model;
+        if (!$model) {
+            throw new ModelNotFoundException(Lang::get('message.record_not_found'));
         }
-        throw new ModelNotFoundException(Lang::get('message.record_not_found'));
+
+        // Khách hàng / client không được xem bản nháp (publish != 2)
+        if (isset($model->publish) && !auth(Common::ADMIN)->check() && (int)$model->publish !== 2) {
+            throw new ModelNotFoundException(Lang::get('message.record_not_found'));
+        }
+
+        return $model;
     }
 
     public function relation(Request $request, int $id = 0, string $action = '')

@@ -9,6 +9,7 @@ use App\Http\Resources\Product\ProductTagResource;
 use App\Http\Resources\Product\ProductVariantResource;
 use App\Http\Resources\Promotion\PromotionResource;
 use App\Models\Promotion;
+use App\Enums\Promotion as PromotionEnum;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -23,7 +24,10 @@ class ProductResource extends JsonResource
     {
         if ($request->boolean('simple', false)) {
             $firstVariant = $this->whenLoaded('product_variants', function () {
-                $variant = $this->product_variants->first();
+                $variant = (auth(\App\Enums\Common::ADMIN)->check()
+                    ? $this->product_variants
+                    : $this->product_variants->where('publish', 2)
+                )->first();
                 return $variant ? [
                     'id' => $variant->id,
                     'name' => $variant->name,
@@ -79,7 +83,11 @@ class ProductResource extends JsonResource
             }),
             'faqs' => FaqResource::collection($this->whenLoaded('product_faqs')),
             'productTags' => ProductTagResource::collection($this->whenLoaded('product_tags')),
-            'productVariants' => ProductVariantResource::collection($this->whenLoaded('product_variants')),
+            'productVariants' => ProductVariantResource::collection($this->whenLoaded('product_variants', function () {
+                return auth(\App\Enums\Common::ADMIN)->check()
+                    ? $this->product_variants
+                    : $this->product_variants->where('publish', 2);
+            })),
             'promotions' => $this->resolvePromotions($request),
             'metaTitle' => $this->meta_title,
             'metaKeyword' => $this->meta_keyword,
@@ -114,8 +122,8 @@ class ProductResource extends JsonResource
         $now = now();
 
         $promotions = Promotion::query()
-            ->with('promotion_targets')
-            ->where('publish', 1)
+            ->with(['promotion_targets', 'promotion_actions'])
+            ->where('publish', PromotionEnum::PUBLISH_PUBLIC)
             ->where(function ($query) use ($now) {
                 $query->whereNull('start_date')->orWhere('start_date', '<=', $now);
             })

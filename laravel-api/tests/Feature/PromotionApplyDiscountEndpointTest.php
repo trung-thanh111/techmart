@@ -25,7 +25,7 @@ class PromotionApplyDiscountEndpointTest extends TestCase
                 'priority' => 10,
                 'can_combine' => false,
                 'usage_limit' => 100,
-                'publish' => 1,
+                'publish' => 2,
                 'start_date' => now()->subDay(),
                 'end_date' => now()->addMonth(),
             ]

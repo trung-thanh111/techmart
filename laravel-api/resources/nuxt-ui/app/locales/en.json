@@ -375,6 +375,8 @@
         }
     },
     "auth": {
+        "sessionExpired": "Session expired",
+        "sessionExpiredDesc": "Please log in again to continue.",
         "login": {
             "title": "Login",
             "description": "Login",

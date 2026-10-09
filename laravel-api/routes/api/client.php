@@ -110,7 +110,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
             Route::patch('bulkUpdate', [OrderController::class, 'bulkUpdate']);
             Route::post('{id}/cancel', [OrderController::class, 'cancel']);
         });
-        Route::resource('orders', OrderController::class)->except(array_merge($routeExcept, ['store', 'show']));
+        Route::resource('orders', OrderController::class)->except(array_merge($routeExcept, ['store', 'show', 'index']));
 
         // Post Comments & Likes
         Route::resource('post_comments', PostCommentController::class)->except(array_merge($routeExcept, ['index']));
@@ -185,8 +185,13 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
     Route::get('product/category/{id}', [ProductCatalogueController::class, 'show']);
     Route::get('agency/{id}', [AgencyController::class, 'show']);
     Route::get('faq/{id}', [FaqController::class, 'show']);
+    Route::get('faqs', [FaqController::class, 'index']);
+    Route::get('faqs/{id}', [FaqController::class, 'show']);
     Route::get('faq_catalogues', [FaqCatalogueController::class, 'index']);
     Route::get('faq_catalogues/{id}', [FaqCatalogueController::class, 'show']);
+
+    // Orders index: hỗ trợ cả user client (jwt:api) và user admin (jwt:admin)
+    Route::get('orders', [OrderController::class, 'index'])->middleware(['jwt:admin,api', 'convert']);
 
     // Cart Routes
     Route::middleware(['convert'])->group(function () use ($routeExcept) {

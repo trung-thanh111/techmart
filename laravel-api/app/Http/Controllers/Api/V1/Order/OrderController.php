@@ -24,6 +24,16 @@ class OrderController extends BaseController
         $this->service = $service;
     }
 
+    public function index(Request $request): JsonResponse
+    {
+        // Khi user đăng nhập bằng guard 'api' (khách hàng), tự động giới hạn chỉ lấy đơn hàng của chính mình
+        if (auth('api')->check() && !auth('admin')->check()) {
+            $request->merge(['user_id' => auth('api')->id()]);
+        }
+
+        return parent::index($request);
+    }
+
     public function store(StoreRequest $request): JsonResponse
     {
         return $this->baseSave($request);

@@ -38,6 +38,7 @@ use App\Http\Controllers\Api\V1\Auth\ChangePasswordController;
 use App\Http\Controllers\Api\V1\Order\OrderController;
 
 $routeExcept = ['create', 'edit'];
+$publicResourceExcept = ['create', 'edit', 'index', 'show'];
 
 // Admin Auth routes
 Route::group(['prefix' => 'v1/admin/auth'], function () {
@@ -56,7 +57,7 @@ Route::group(['prefix' => 'v1/admin/auth'], function () {
     });
 });
 
-Route::group(['prefix' => 'v1/', 'middleware' => ['jwt:admin', 'convert', 'checkPermission']], function () use ($routeExcept) {
+Route::group(['prefix' => 'v1/', 'middleware' => ['jwt:admin', 'convert', 'checkPermission']], function () use ($routeExcept, $publicResourceExcept) {
     Route::middleware(['jwt:admin', 'convert'])->group(function () {
         Route::post('password/change', [ChangePasswordController::class, 'changePassword']);
         Route::post('upload-temp', [ImageController::class, 'uploadTemp']);
@@ -70,7 +71,7 @@ Route::group(['prefix' => 'v1/', 'middleware' => ['jwt:admin', 'convert', 'check
         Route::put('bulkUpdate', [AttributeCatalogueController::class, 'bulkUpdate']);
         Route::patch('bulkUpdate', [AttributeCatalogueController::class, 'bulkUpdate']);
     });
-    Route::resource('attribute_catalogues', AttributeCatalogueController::class)->except($routeExcept);
+    Route::resource('attribute_catalogues', AttributeCatalogueController::class)->except($publicResourceExcept);
 
     // Attributes
     Route::group(['prefix' => 'attributes'], function () {
@@ -81,7 +82,7 @@ Route::group(['prefix' => 'v1/', 'middleware' => ['jwt:admin', 'convert', 'check
         Route::put('bulkUpdate', [AttributeController::class, 'bulkUpdate']);
         Route::patch('bulkUpdate', [AttributeController::class, 'bulkUpdate']);
     });
-    Route::resource('attributes', AttributeController::class)->except($routeExcept);
+    Route::resource('attributes', AttributeController::class)->except($publicResourceExcept);
 
     // Permissions
     Route::group(['prefix' => 'permissions'], function () {
@@ -103,7 +104,7 @@ Route::group(['prefix' => 'v1/', 'middleware' => ['jwt:admin', 'convert', 'check
         Route::put('bulkUpdate', [PostCatalogueController::class, 'bulkUpdate']);
         Route::patch('bulkUpdate', [PostCatalogueController::class, 'bulkUpdate']);
     });
-    Route::resource('post_catalogues', PostCatalogueController::class)->except($routeExcept);
+    Route::resource('post_catalogues', PostCatalogueController::class)->except($publicResourceExcept);
 
     // Posts
     Route::group(['prefix' => 'posts'], function () {
@@ -114,7 +115,7 @@ Route::group(['prefix' => 'v1/', 'middleware' => ['jwt:admin', 'convert', 'check
         Route::put('bulkUpdate', [PostController::class, 'bulkUpdate']);
         Route::patch('bulkUpdate', [PostController::class, 'bulkUpdate']);
     });
-    Route::resource('posts', PostController::class)->except($routeExcept);
+    Route::resource('posts', PostController::class)->except($publicResourceExcept);
 
     // Post Tags
     Route::group(['prefix' => 'post_tags'], function () {
@@ -125,7 +126,7 @@ Route::group(['prefix' => 'v1/', 'middleware' => ['jwt:admin', 'convert', 'check
         Route::put('bulkUpdate', [PostTagController::class, 'bulkUpdate']);
         Route::patch('bulkUpdate', [PostTagController::class, 'bulkUpdate']);
     });
-    Route::resource('post_tags', PostTagController::class)->except($routeExcept);
+    Route::resource('post_tags', PostTagController::class)->except($publicResourceExcept);
 
     // Product Catalogue
     Route::group(['prefix' => 'product_catalogues'], function () {
@@ -136,7 +137,7 @@ Route::group(['prefix' => 'v1/', 'middleware' => ['jwt:admin', 'convert', 'check
         Route::put('bulkUpdate', [ProductCatalogueController::class, 'bulkUpdate']);
         Route::patch('bulkUpdate', [ProductCatalogueController::class, 'bulkUpdate']);
     });
-    Route::resource('product_catalogues', ProductCatalogueController::class)->except($routeExcept);
+    Route::resource('product_catalogues', ProductCatalogueController::class)->except($publicResourceExcept);
 
     // Products
     Route::group(['prefix' => 'products'], function () {
@@ -147,7 +148,7 @@ Route::group(['prefix' => 'v1/', 'middleware' => ['jwt:admin', 'convert', 'check
         Route::put('bulkUpdate', [ProductController::class, 'bulkUpdate']);
         Route::patch('bulkUpdate', [ProductController::class, 'bulkUpdate']);
     });
-    Route::resource('products', ProductController::class)->except($routeExcept);
+    Route::resource('products', ProductController::class)->except($publicResourceExcept);
 
     // Brands
     Route::group(['prefix' => 'brands'], function () {
@@ -158,7 +159,7 @@ Route::group(['prefix' => 'v1/', 'middleware' => ['jwt:admin', 'convert', 'check
         Route::put('bulkUpdate', [BrandController::class, 'bulkUpdate']);
         Route::patch('bulkUpdate', [BrandController::class, 'bulkUpdate']);
     });
-    Route::resource('brands', BrandController::class)->except($routeExcept);
+    Route::resource('brands', BrandController::class)->except($publicResourceExcept);
 
     // Product Variants
     Route::group(['prefix' => 'product_variants'], function () {
@@ -202,7 +203,7 @@ Route::group(['prefix' => 'v1/', 'middleware' => ['jwt:admin', 'convert', 'check
         Route::put('bulkUpdate', [BannerController::class, 'bulkUpdate']);
         Route::patch('bulkUpdate', [BannerController::class, 'bulkUpdate']);
     });
-    Route::resource('banners', BannerController::class)->except($routeExcept);
+    Route::resource('banners', BannerController::class)->except($publicResourceExcept);
 
     // Orders
     Route::group(['prefix' => 'orders'], function () {
@@ -218,13 +219,13 @@ Route::group(['prefix' => 'v1/', 'middleware' => ['jwt:admin', 'convert', 'check
         Route::post('{id}/items/{itemId}/status', [OrderController::class, 'updateItemStatus']);
         Route::post('{id}/refunds/{refundId}/status', [OrderController::class, 'updateRefundStatus']);
     });
-    Route::resource('orders', OrderController::class)->except($routeExcept);
+    Route::resource('orders', OrderController::class)->except(array_merge($routeExcept, ['store', 'show', 'index']));
 
     //generate route
 
     // Other Admin Resources
-    Route::resource('systems', SystemController::class)->except($routeExcept);
-    Route::resource('popups', PopupController::class)->except($routeExcept);
+    Route::resource('systems', SystemController::class)->except($publicResourceExcept);
+    Route::resource('popups', PopupController::class)->except($publicResourceExcept);
 
     // Promotions
     Route::group(['prefix' => 'promotions'], function () {
@@ -236,9 +237,8 @@ Route::group(['prefix' => 'v1/', 'middleware' => ['jwt:admin', 'convert', 'check
         Route::patch('bulkUpdate', [PromotionController::class, 'bulkUpdate']);
         Route::post('{id}/restore', [PromotionController::class, 'restore']);
     });
-    Route::post('promotion/apply_discount', [PromotionController::class, 'applyDiscount']);
     Route::resource('promotions', PromotionController::class)->except($routeExcept);
-    Route::resource('menus', MenuController::class)->except($routeExcept);
+    Route::resource('menus', MenuController::class)->except($publicResourceExcept);
     Route::resource('menu_items', MenuItemController::class)->except($routeExcept);
 
     // Admin specific Logic for MenuItems
@@ -246,12 +246,12 @@ Route::group(['prefix' => 'v1/', 'middleware' => ['jwt:admin', 'convert', 'check
     Route::post('menu_items/drag-drop', [MenuItemController::class, 'dragDrop']);
 
     Route::resource('inventorys', InventoryController::class)->except($routeExcept);
-    Route::resource('agencies', AgencyController::class)->except($routeExcept);
+    Route::resource('agencies', AgencyController::class)->except($publicResourceExcept);
     Route::resource('agency_working_hours', AgencyWorkingHourController::class)->except($routeExcept);
     Route::resource('images', ImageController::class)->except($routeExcept);
     Route::resource('mails', MailController::class)->except($routeExcept);
-    Route::resource('faq_catalogues', FaqCatalogueController::class)->except($routeExcept);
-    Route::resource('faqs', FaqController::class)->except($routeExcept);
+    Route::resource('faq_catalogues', FaqCatalogueController::class)->except($publicResourceExcept);
+    Route::resource('faqs', FaqController::class)->except($publicResourceExcept);
     Route::resource('banner_pages', BannerPageController::class)->except($routeExcept);
     Route::resource('banner_positions', BannerPositionController::class)->except($routeExcept);
 
@@ -274,10 +274,10 @@ Route::group(['prefix' => 'v1/', 'middleware' => ['jwt:admin', 'convert', 'check
         Route::put('bulkUpdate', [ProductTagController::class, 'bulkUpdate']);
         Route::patch('bulkUpdate', [ProductTagController::class, 'bulkUpdate']);
     });
-    Route::resource('product_tags', ProductTagController::class)->except($routeExcept);
+    Route::resource('product_tags', ProductTagController::class)->except($publicResourceExcept);
 
     // Post Comments & Likes (Admin Moderation)
-    Route::resource('post_comments', PostCommentController::class)->except($routeExcept);
-    Route::resource('post_likes', PostLikeController::class)->except($routeExcept);
-    Route::resource('post_comment_likes', PostCommentLikeController::class)->except($routeExcept);
+    Route::resource('post_comments', PostCommentController::class)->except($publicResourceExcept);
+    Route::resource('post_likes', PostLikeController::class)->except($publicResourceExcept);
+    Route::resource('post_comment_likes', PostCommentLikeController::class)->except($publicResourceExcept);
 });

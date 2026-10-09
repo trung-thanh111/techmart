@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Include Admin Routes
-require __DIR__ . '/api/admin.php';
-
 // Include Client Routes
 require __DIR__ . '/api/client.php';
+
+// Include Admin Routes
+require __DIR__ . '/api/admin.php';

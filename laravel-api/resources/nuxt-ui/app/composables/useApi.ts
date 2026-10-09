@@ -21,12 +21,26 @@ const createFetch = (options: FetchOptions = {}) => {
         onResponseError({ request, response }) {
             console.error("API Error:", request, response);
             if (response.status === 401) {
+                const url = typeof request === "string" ? request : (request as any)?.url || "";
+                // Nếu chính request login hoặc refresh bị 401, không trigger logout session
+                if (url.includes("/auth/login") || url.includes("/auth/refresh")) {
+                    throw createError({
+                        statusCode: 401,
+                        statusMessage: response._data?.message || "Unauthorized",
+                        data: response._data,
+                    });
+                }
+
                 const auth = useAuthStore();
                 auth.clearAuth();
                 const toast = useAppToast();
                 if (toast) {
-                    toast.warning("Phiên đăng nhập hết hạn", {
-                        description: "Vui lòng đăng nhập lại để tiếp tục.",
+                    const nuxtApp = useNuxtApp();
+                    const t = (key: string, fallback: string) => {
+                        return (nuxtApp as any).$i18n ? (nuxtApp as any).$i18n.t(key) : fallback;
+                    };
+                    toast.warning(t("auth.sessionExpired", "Phiên đăng nhập hết hạn"), {
+                        description: t("auth.sessionExpiredDesc", "Vui lòng đăng nhập lại để tiếp tục."),
                     });
                 }
                 navigateTo(TOLOGIN);

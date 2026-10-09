@@ -28,7 +28,7 @@ class PromotionSeeder extends Seeder
                 'used_count' => 0,
                 'start_date' => now()->subDay(),
                 'end_date' => now()->addMonths(6),
-                'publish' => 1,
+                'publish' => 2,
                 'rules' => [
                     [
                         'rule_group' => 0,
@@ -62,7 +62,7 @@ class PromotionSeeder extends Seeder
                 'used_count' => 0,
                 'start_date' => now()->subDay(),
                 'end_date' => now()->addMonths(6),
-                'publish' => 1,
+                'publish' => 2,
                 'rules' => [
                     [
                         'rule_group' => 0,
@@ -96,7 +96,7 @@ class PromotionSeeder extends Seeder
                 'used_count' => 0,
                 'start_date' => now()->subDay(),
                 'end_date' => now()->addMonths(6),
-                'publish' => 1,
+                'publish' => 2,
                 'rules' => [
                     [
                         'rule_group' => 0,

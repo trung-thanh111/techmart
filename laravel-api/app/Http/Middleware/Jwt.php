@@ -18,8 +18,15 @@ class Jwt
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, $guard = 'api'): Response
+    public function handle(Request $request, Closure $next, ...$guards): Response
     {
+        if (empty($guards)) {
+            $guards = ['api'];
+        } else {
+            // Hỗ trợ cả cú pháp jwt:admin,api lẫn jwt:admin
+            $guards = array_unique(explode(',', implode(',', $guards)));
+        }
+
         try {
             $token = $request->bearerToken();
 
@@ -30,11 +37,12 @@ class Jwt
             JWTAuth::setToken($token);
 
             $payload = JWTAuth::getPayload();
+            $tokenGuard = $payload->get('guard');
 
-            if ($payload->get('guard') !== $guard) {
+            if (!in_array($tokenGuard, $guards)) {
                 return ApiResource::message(Lang::get('message.token_invalid'), Response::HTTP_UNAUTHORIZED);
             }
-            if (!auth($guard)->check()) {
+            if (!auth($tokenGuard)->check()) {
                 JWTAuth::authenticate();
             }
         } catch (TokenInvalidException $e) {

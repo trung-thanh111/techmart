@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Traits\HasQuery;
+use App\Enums\Promotion as PromotionEnum;
 
 /**
  * Class Promotion
@@ -150,7 +151,7 @@ class Promotion extends Model
     public function scopeActive($query)
     {
         $now = Carbon::now();
-        return $query->where('publish', 1)
+        return $query->where('publish', PromotionEnum::PUBLISH_PUBLIC)
             ->when($now, fn($q) => $q->where(function ($q2) use ($now) {
                 $q2->whereNull('start_date')->orWhere('start_date', '<=', $now);
             }))

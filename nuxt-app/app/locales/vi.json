@@ -1010,6 +1010,8 @@
     "hasAccount": "Đã có tài khoản?",
     "agreeTerms": "Bằng cách đăng ký, bạn đã đồng ý với điều khoản & chính sách",
     "codeNotReceived": "Chờ đã, tôi chưa nhận được code?",
-    "resend": "Gửi lại"
+    "resend": "Gửi lại",
+    "sessionExpired": "Phiên đăng nhập hết hạn",
+    "sessionExpiredDesc": "Vui lòng đăng nhập lại để tiếp tục."
   }
 }
