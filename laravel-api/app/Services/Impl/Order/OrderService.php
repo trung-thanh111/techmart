@@ -69,7 +69,7 @@ class OrderService extends BaseService implements OrderServiceInterface
      */
     public function createOrder(Request $request)
     {
-        return DB::transaction(function () use ($request) {
+        $order = DB::transaction(function () use ($request) {
             $items = $request->input('items', []);
             $userId = null;
             try {
@@ -137,6 +137,18 @@ class OrderService extends BaseService implements OrderServiceInterface
 
             return $order;
         });
+
+        // 9. Gửi email xác nhận đặt hàng qua Queue
+        if (!empty($order->customer_email)) {
+            try {
+                \Illuminate\Support\Facades\Mail::to($order->customer_email)
+                    ->queue(new \App\Mail\OrderConfirmationMail($order));
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::warning("Could not queue order confirmation email for order #{$order->code}: " . $e->getMessage());
+            }
+        }
+
+        return $order;
     }
 
     /**
