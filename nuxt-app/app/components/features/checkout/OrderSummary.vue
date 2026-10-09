@@ -44,19 +44,55 @@
       </div>
 
       <!-- coupon -->
-      <div class="mt-5 p-2 bg-gradient-to-r from-amber-50 to-orange-50 border border-dashed border-amber-300 rounded-sm">
-        <div class="flex items-center gap-2 mb-3">
-          <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
-          </svg>
-          <h3 class="text-sm font-semibold text-amber-800">
-            {{ $t("cart.coupon") }}
-          </h3>
+      <div class="mt-5 p-3 bg-gradient-to-r from-amber-50 to-orange-50 border border-dashed border-amber-300 rounded-sm">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+            </svg>
+            <h3 class="text-sm font-semibold text-amber-800">
+              {{ $t("cart.coupon") }}
+            </h3>
+          </div>
+          <span v-if="appliedCoupon" class="text-xs text-green-700 bg-green-100 font-medium px-2 py-0.5 rounded-full">
+            Đã áp dụng
+          </span>
         </div>
 
-        <div class="flex gap-2">
-          <InputText :model-value="couponCode" @update:modelValue="$emit('update:couponCode', $event || '')" :placeholder="$t('cart.couponPlaceholder')" :disabled="selectedCount === 0" class="flex-1 text-sm md:px-3 px-2 md:py-2 py-1.5 !border-amber-300 focus:!ring-1 focus:!ring-amber-500 focus:!border-transparent !rounded-none !shadow-none" />
-          <Button :label="$t('cart.applyCoupon')" @click="$emit('apply-coupon')" :disabled="selectedCount === 0" class="border-0 md:px-4 px-3 md:py-2 py-1.5 !bg-amber-600 text-white md:text-sm text-xs font-medium !rounded-none transition-colors hover:!brightness-110 focus:!ring-1 focus:!ring-amber-500 focus:!outline-none" />
+        <!-- Khi đã áp mã -->
+        <div v-if="appliedCoupon" class="flex items-center justify-between bg-white border border-green-200 rounded p-2 text-xs">
+          <div class="min-w-0 flex-1">
+            <p class="font-bold text-green-700 uppercase truncate">{{ appliedCoupon.code }}</p>
+            <p class="text-gray-500 truncate text-[11px]">{{ appliedCoupon.name || 'Mã giảm giá' }}</p>
+            <p class="text-green-600 font-semibold mt-0.5">- {{ formatPrice(discountAmount || 0) }}</p>
+          </div>
+          <button
+            @click="$emit('remove-coupon')"
+            type="button"
+            class="text-gray-400 hover:text-red-500 p-1 transition-colors"
+            title="Hủy áp dụng"
+          >
+            <i class="pi pi-times-circle text-base"></i>
+          </button>
+        </div>
+
+        <!-- Khi chưa áp mã -->
+        <div v-else class="flex gap-2">
+          <InputText
+            :model-value="couponCode"
+            @update:modelValue="$emit('update:couponCode', $event || '')"
+            @keyup.enter="$emit('apply-coupon')"
+            :placeholder="$t('cart.couponPlaceholder')"
+            :disabled="selectedCount === 0 || isApplyingCoupon"
+            class="flex-1 text-sm md:px-3 px-2 md:py-2 py-1.5 !border-amber-300 focus:!ring-1 focus:!ring-amber-500 focus:!border-transparent !rounded-none !shadow-none"
+          />
+          <Button
+            :label="isApplyingCoupon ? '' : $t('cart.applyCoupon')"
+            :icon="isApplyingCoupon ? 'pi pi-spinner pi-spin' : undefined"
+            @click="$emit('apply-coupon')"
+            :disabled="selectedCount === 0 || isApplyingCoupon || !couponCode"
+            class="border-0 md:px-4 px-3 md:py-2 py-1.5 !bg-amber-600 text-white md:text-sm text-xs font-medium !rounded-none transition-colors hover:!brightness-110 focus:!ring-1 focus:!ring-amber-500 focus:!outline-none"
+          />
         </div>
       </div>
 
@@ -68,7 +104,9 @@
         </div>
         <div class="flex items-center justify-between text-sm">
           <span class="text-gray-600">{{ $t("cart.discount") }}:</span>
-          <span class="text-green-600">{{ Number(formatPrice(0)) > 0 ? `- ${formatPrice(0)}` : formatPrice(0) }}</span>
+          <span :class="(discountAmount || 0) > 0 ? 'text-green-600 font-semibold' : 'text-gray-900'">
+            {{ (discountAmount || 0) > 0 ? `- ${formatPrice(discountAmount)}` : formatPrice(0) }}
+          </span>
         </div>
         <div class="flex items-center justify-between text-sm">
           <span class="text-gray-600">{{ $t("cart.shipping") }}:</span>
@@ -82,7 +120,7 @@
           <div class="flex items-center justify-between">
             <span class="md:text-lg text-base font-bold text-gray-900">{{ $t("cart.grandTotal") }}:</span>
             <span class="md:text-xl text-lg font-bold text-red-600">
-              {{ formatPrice(selectedCount > 0 ? selectedTotalPrice + shippingFee + taxAmount : 0) }}
+              {{ formatPrice(selectedCount > 0 ? Math.max(0, selectedTotalPrice - (discountAmount || 0) + shippingFee + taxAmount) : 0) }}
             </span>
           </div>
           <p class="text-xs text-gray-500 mt-1">{{ $t("cart.taxIncluded") }}</p>
@@ -117,20 +155,39 @@ import { IMAGEDEFAULT } from "~/utils/constants";
 import type { ICartItem } from "~/interfaces/cart/cartItem.interface";
 import { SHIPPING_METHODS, SHIPPING_FEES } from "~/utils/order.constants";
 
-const props = defineProps<{
-  selectedItems: ICartItem[];
-  selectedCount: number;
-  selectedTotalPrice: number;
-  shippingMethod?: string;
-  couponCode: string;
-  loading?: boolean;
-  buttonLabel?: string;
-  to?: string;
-}>();
+interface AppliedCoupon {
+  id?: number;
+  code: string;
+  name?: string;
+  type?: string;
+}
+
+const props = withDefaults(
+  defineProps<{
+    selectedItems: ICartItem[];
+    selectedCount: number;
+    selectedTotalPrice: number;
+    shippingMethod?: string;
+    couponCode: string;
+    discountAmount?: number;
+    appliedCoupon?: AppliedCoupon | null;
+    isApplyingCoupon?: boolean;
+    loading?: boolean;
+    buttonLabel?: string;
+    to?: string;
+  }>(),
+  {
+    discountAmount: 0,
+    appliedCoupon: null,
+    isApplyingCoupon: false,
+    loading: false,
+  }
+);
 
 defineEmits<{
   (e: "update:couponCode", value: string): void;
   (e: "apply-coupon"): void;
+  (e: "remove-coupon"): void;
   (e: "checkout"): void;
   (e: "unselect-item", id: number): void;
 }>();

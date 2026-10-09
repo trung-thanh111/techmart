@@ -78,9 +78,11 @@ export const useWishlist = () => {
       wishlistGrouped.value = append ? [...wishlistGrouped.value, ...transformedItems] : transformedItems;
 
       return wishlistGrouped.value;
-    } catch (error) {
+    } catch (error: any) {
       console.error("[useWishlist] fetchWishlist error:", error);
-      toast.error("Lỗi", { description: "Không thể tải danh sách yêu thích" });
+      if (error?.statusCode !== 401 && error?.status !== 401 && error?.response?.status !== 401) {
+        toast.error("Lỗi", { description: "Không thể tải danh sách yêu thích" });
+      }
       return [];
     } finally {
       isLoading.value = false;

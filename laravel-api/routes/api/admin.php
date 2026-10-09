@@ -56,7 +56,7 @@ Route::group(['prefix' => 'v1/admin/auth'], function () {
     });
 });
 
-Route::group(['prefix' => 'v1/admin', 'middleware' => ['jwt:admin', 'convert', 'checkPermission']], function () use ($routeExcept) {
+Route::group(['prefix' => 'v1/', 'middleware' => ['jwt:admin', 'convert', 'checkPermission']], function () use ($routeExcept) {
     Route::middleware(['jwt:admin', 'convert'])->group(function () {
         Route::post('password/change', [ChangePasswordController::class, 'changePassword']);
         Route::post('upload-temp', [ImageController::class, 'uploadTemp']);
@@ -266,6 +266,14 @@ Route::group(['prefix' => 'v1/admin', 'middleware' => ['jwt:admin', 'convert', '
         Route::post('{id}/restore', [PromotionCatalogueController::class, 'restore']);
     });
     Route::resource('promotion_catalogues', PromotionCatalogueController::class)->except($routeExcept);
+    Route::group(['prefix' => 'product_tags'], function () {
+        Route::delete('bulkDelete', [ProductTagController::class, 'bulkDelete']);
+        Route::post('{id}/attach', [ProductTagController::class, 'attach']);
+        Route::delete('{id}/detach', [ProductTagController::class, 'detach']);
+        Route::post('bulkStore', [ProductTagController::class, 'bulkStore']);
+        Route::put('bulkUpdate', [ProductTagController::class, 'bulkUpdate']);
+        Route::patch('bulkUpdate', [ProductTagController::class, 'bulkUpdate']);
+    });
     Route::resource('product_tags', ProductTagController::class)->except($routeExcept);
 
     // Post Comments & Likes (Admin Moderation)

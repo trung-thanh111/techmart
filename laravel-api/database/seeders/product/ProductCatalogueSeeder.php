@@ -1129,6 +1129,11 @@ class ProductCatalogueSeeder extends Seeder
 
         $userId = 1; // Default Admin ID
 
+        if (ProductCatalogue::count() > 0) {
+            $this->command->info('Product catalogues already seeded. Skipping.');
+            return;
+        }
+
         // Insert Parents
         foreach ($parents as $index => $item) {
             ProductCatalogue::create([

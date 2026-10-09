@@ -45,14 +45,11 @@ export default defineNuxtConfig({
       { code: "vi", name: "Tiếng Việt", file: "vi.json" },
       { code: "en", name: "English", file: "en.json" },
     ],
-    defaultLocale: process.env.APP_LOCALE || "vi",
+    defaultLocale: "vi",
+    fallbackLocale: "vi",
     langDir: "../app/locales/",
     strategy: "no_prefix",
-    detectBrowserLanguage: {
-      useCookie: true,
-      cookieKey: "i18n_redirected",
-      redirectOn: "root",
-    },
+    detectBrowserLanguage: false,
   },
 
   app: {

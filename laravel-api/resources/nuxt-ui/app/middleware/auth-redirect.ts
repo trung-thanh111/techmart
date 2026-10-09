@@ -7,6 +7,10 @@ export default defineNuxtRouteMiddleware((to) => {
     const toast = useAppToast();
 
     if (authStore.isAuthenticated && (to.path === TOLOGIN || to.path === TOREGISTER)) {
+        if (authStore.expireAt && Date.now() > authStore.expireAt) {
+            authStore.clearAuth();
+            return;
+        }
         if (toast) {
             toast?.message("Thông báo bảo mật", {
                 description: "Bạn đã đăng nhập, chuyển hướng...",

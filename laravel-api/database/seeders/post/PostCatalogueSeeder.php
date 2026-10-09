@@ -114,21 +114,23 @@ class PostCatalogueSeeder extends Seeder
         ];
 
         foreach ($data as $item) {
-            PostCatalogue::create([
-                'name' => $item['name'],
-                'slug' => $item['slug'],
-                'description' => $item['description'],
-                'image' => $item['image'],
-                'order' => $item['order'],
-                'publish' => $item['publish'],
-                'is_hot' => (bool)$item['is_hot'],
-                'parent_id' => $item['parent_id'],
-                'user_id' => $item['user_id'],
-                'meta_title' => $item['meta_title'],
-                'meta_keyword' => $item['meta_keyword'],
-                'meta_description' => $item['meta_description'],
-                'level' => ($item['parent_id'] == 0) ? 1 : 2,
-            ]);
+            PostCatalogue::firstOrCreate(
+                ['slug' => $item['slug']],
+                [
+                    'name' => $item['name'],
+                    'description' => $item['description'],
+                    'image' => $item['image'],
+                    'order' => $item['order'],
+                    'publish' => $item['publish'],
+                    'is_hot' => (bool)$item['is_hot'],
+                    'parent_id' => $item['parent_id'],
+                    'user_id' => $item['user_id'],
+                    'meta_title' => $item['meta_title'],
+                    'meta_keyword' => $item['meta_keyword'],
+                    'meta_description' => $item['meta_description'],
+                    'level' => ($item['parent_id'] == 0) ? 1 : 2,
+                ]
+            );
         }
     }
 }

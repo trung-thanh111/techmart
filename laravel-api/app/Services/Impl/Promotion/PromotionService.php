@@ -52,12 +52,42 @@ class PromotionService extends BaseService implements PromotionServiceInterface
         $context['subtotal'] = (float)($context['subtotal'] ?? 0);
         $context['items'] = $context['items'] ?? [];
 
-        $promotions = Promotion::active()
+        $query = Promotion::active()
             ->hasUsageLeft()
-            ->with(['promotion_rules', 'promotion_actions', 'promotion_targets'])
-            ->get();
+            ->with(['promotion_rules', 'promotion_actions', 'promotion_targets']);
 
-        return $this->evaluator->evaluate($promotions, $context);
+        if (!empty($context['code'])) {
+            $query->where('code', trim($context['code']));
+        }
+
+        $promotions = $query->get();
+
+        if (!empty($context['code']) && $promotions->isEmpty()) {
+            return [
+                'success' => false,
+                'message' => 'Mã giảm giá không tồn tại hoặc đã hết hạn/lượt dùng.',
+                'subtotal' => $context['subtotal'],
+                'total_discount' => 0,
+                'final_total' => $context['subtotal'],
+                'applied_promotions' => [],
+            ];
+        }
+
+        $result = $this->evaluator->evaluate($promotions, $context);
+
+        if (!empty($context['code']) && empty($result['applied_promotions'])) {
+            return [
+                'success' => false,
+                'message' => 'Đơn hàng chưa thỏa mãn điều kiện áp dụng mã giảm giá này.',
+                'subtotal' => $context['subtotal'],
+                'total_discount' => 0,
+                'final_total' => $context['subtotal'],
+                'applied_promotions' => [],
+            ];
+        }
+
+        $result['success'] = true;
+        return $result;
     }
 
     /**

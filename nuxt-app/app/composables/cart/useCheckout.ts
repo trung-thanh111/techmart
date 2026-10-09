@@ -1,13 +1,16 @@
-import { ref, reactive, computed } from "vue";
+import { ref, reactive, computed, onMounted } from "vue";
+import { useRoute } from "vue-router";
 import { z } from "zod";
 import type { CheckoutFormData, ICheckoutTab, IPaymentMethod } from "~/interfaces/cart/checkout.interface";
 import type { IOrder, IOrderItem } from "~/interfaces/order/order.interface";
 import { SHIPPING_METHODS, SHIPPING_FEES, PAYMENT_METHODS } from "~/utils/order.constants";
 import { orderService } from "~/services/order/order.service";
+import { promotionService } from "~/services/promotion/promotion.service";
 import { cartItemService } from "~/services/cart/cartItem.service";
 import { useCartStore } from "~/stores/cart";
 import { useAuthStore } from "~/stores/auth/auth";
 import { useAppToast } from "~/composables/useAppToast";
+import { formatPrice } from "~/utils/helpers";
 import { storeToRefs } from "pinia";
 
 export const zodPersonalSchema = z.object({
@@ -25,6 +28,9 @@ export const useCheckout = () => {
   const activePaymentMethod = ref<string>(PAYMENT_METHODS.COD);
   const isSubmitting = ref(false);
   const couponCode = ref("");
+  const discountAmount = ref<number>(0);
+  const appliedCoupon = ref<any>(null);
+  const isApplyingCoupon = ref<boolean>(false);
 
   const cartStore = useCartStore();
   const authStore = useAuthStore();
@@ -142,10 +148,71 @@ export const useCheckout = () => {
     return parts.join(", ");
   };
 
-  const applyCoupon = () => {
-    console.log("Apply coupon", couponCode.value);
-    // TODO: Logic apply coupon
+  const applyCoupon = async () => {
+    const code = couponCode.value.trim();
+    if (!code) {
+      toast.error("Vui lòng nhập mã giảm giá");
+      return;
+    }
+    if (selectedItems.value.length === 0) {
+      toast.error("Vui lòng chọn sản phẩm trước khi áp dụng mã");
+      return;
+    }
+
+    isApplyingCoupon.value = true;
+    try {
+      const items = selectedItems.value.map((item) => {
+        const isVariant = item.purchasableType === "App\\Models\\ProductVariant";
+        return {
+          id: isVariant ? (item.variant as any)?.products?.id || item.product?.id : item.purchasableId!,
+          qty: item.quantity || 1,
+          category_id: (item.product as any)?.productCatalogueId,
+          brand_id: (item.product as any)?.brandId,
+        };
+      });
+
+      const res = await promotionService.applyDiscount({
+        code,
+        subtotal: selectedTotalPrice.value,
+        items,
+      });
+
+      if (res.data) {
+        discountAmount.value = res.data.total_discount || 0;
+        appliedCoupon.value = res.data.applied_promotions?.[0] || { code, name: code };
+        toast.success(`Áp dụng mã giảm giá thành công! Giảm ${formatPrice(discountAmount.value)}`);
+      }
+    } catch (error: any) {
+      discountAmount.value = 0;
+      appliedCoupon.value = null;
+      const errorMsg =
+        error?.data?.message ||
+        error?.statusMessage ||
+        error?.response?.data?.message ||
+        "Mã giảm giá không hợp lệ hoặc đã hết hạn";
+      toast.error(errorMsg);
+    } finally {
+      isApplyingCoupon.value = false;
+    }
   };
+
+  const removeCoupon = () => {
+    discountAmount.value = 0;
+    appliedCoupon.value = null;
+    couponCode.value = "";
+    toast.info("Đã hủy áp dụng mã giảm giá");
+  };
+
+  const route = useRoute();
+  onMounted(() => {
+    const couponFromQuery = route.query.coupon;
+    if (couponFromQuery && typeof couponFromQuery === "string") {
+      couponCode.value = couponFromQuery.trim();
+      if (selectedCount.value > 0) {
+        applyCoupon();
+      }
+    }
+  });
 
   const handleCheckout = async () => {
     // Chỉ cho phép submit ở step cuối
@@ -187,6 +254,7 @@ export const useCheckout = () => {
       paymentMethod: formData.payment_method.selectedMethod,
       customerNote: formData.personal_info.customerNote,
       shippingFee: shippingFee.value,
+      discountAmount: discountAmount.value,
       items,
     };
 
@@ -227,6 +295,9 @@ export const useCheckout = () => {
     paymentMethods,
     isSubmitting,
     couponCode,
+    discountAmount,
+    appliedCoupon,
+    isApplyingCoupon,
     selectedAddress,
     shippingFee,
     selectedItems,
@@ -240,6 +311,7 @@ export const useCheckout = () => {
     handleTabClick,
     handleCheckout,
     applyCoupon,
+    removeCoupon,
     formatAddress,
   };
 };

@@ -18,7 +18,12 @@ class MinOrderTotalRule implements PromotionRuleHandler
     public function check(PromotionRule $rule, array $context): bool
     {
         $subtotal = $context['subtotal'] ?? 0;
-        $requiredAmount = (float) ($rule->value['amount'] ?? 0);
+        $val = $rule->value;
+        if (is_array($val)) {
+            $requiredAmount = (float) ($val['amount'] ?? reset($val) ?? 0);
+        } else {
+            $requiredAmount = (float) ($val ?? 0);
+        }
 
         return match ($rule->operator) {
             '>=' => $subtotal >= $requiredAmount,

@@ -15,7 +15,7 @@ class WishlistService extends BaseService implements WishlistServiceInterface
     protected $repository;
 
     protected $complexFilter = ['id'];
-    protected $simpleFilter = ['product_variant_id'];
+    protected $simpleFilter = ['product_variant_id', 'user_id'];
 
     protected $with = ['product_variants', 'product_variants.products'];
     protected $relationFilter = [];
@@ -29,6 +29,15 @@ class WishlistService extends BaseService implements WishlistServiceInterface
         WishlistRepository $repository
     ) {
         $this->repository = $repository;
+    }
+
+    public function paginate(Request $request)
+    {
+        $userId = auth('api')->id();
+        if ($userId) {
+            $request->merge(['user_id' => $userId]);
+        }
+        return parent::paginate($request);
     }
 
     protected function getRepository()

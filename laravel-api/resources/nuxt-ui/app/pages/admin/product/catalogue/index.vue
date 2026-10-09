@@ -89,7 +89,7 @@ definePageMeta({
                                     <AppCheckbox :model-value="selectedIds" :value="item.id" @update:model-value="handleSelectedIdsChange" />
                                 </td>
                                 <td>
-                                    <NuxtLink class="hover:text-teal-500 flex items-center gap-2" :to="`/product/catalogue/${item.id}/edit`">
+                                    <NuxtLink class="hover:text-teal-500 flex items-center gap-2" :to="PRODUCTCATALOGUEUPDATE(item.id)">
                                         <NuxtImg :src="item.image?.path ? (item.image?.url ?? '') : '/images/defaults/record.jpg'" alt="image-record" class="rounded-md w-[120px] h-[70px] object-cover" loading="lazy" />
                                         {{ item.name }}
                                     </NuxtLink>
@@ -109,7 +109,7 @@ definePageMeta({
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end">
                                             <li>
-                                                <NuxtLink class="dropdown-item text-info" :to="`/product/catalogue/${item.id}/edit`">
+                                                <NuxtLink class="dropdown-item text-info" :to="PRODUCTCATALOGUEUPDATE(item.id)">
                                                     <i class="ri-edit-box-line me-1"></i>
                                                     {{ $t("admin.common.edit") }}
                                                 </NuxtLink>

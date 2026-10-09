@@ -4,10 +4,10 @@ import type { TRegisterRequest } from "~/composables/auth/useRegister";
 import type { IAuthSuccessResponse, IUser } from "~/interfaces/user/user.interface";
 import { useApi } from "~/composables/useApi";
 import { useAuthStore } from "~/stores/auth/auth";
-import { API_VERSION } from "~/utils/apiConfig";
+import { API_VERSION, ADMIN_AUTH_PREFIX } from "~/utils/apiConfig";
 
 const endpoint = {
-    auth: `${API_VERSION.version1}/auth`,
+    auth: `${ADMIN_AUTH_PREFIX}/auth`,
     verification: `${API_VERSION.version1}/email-verification`,
     forgotPassword: `${API_VERSION.version1}/password/forgot`,
     changePassword: `${API_VERSION.version1}/password/change`,

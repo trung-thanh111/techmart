@@ -24,12 +24,14 @@ class AgencyWorkingHourSeeder extends Seeder
         $workingHourIds = [];
 
         foreach ($days as $en => $vi) {
-            $workingHour = AgencyWorkingHour::create([
-                'day_of_week' => $vi,
-                'open_time' => '08:00:00',
-                'close_time' => '18:00:00',
-                'publish' => 2,
-            ]);
+            $workingHour = AgencyWorkingHour::firstOrCreate(
+                ['day_of_week' => $vi],
+                [
+                    'open_time' => '08:00:00',
+                    'close_time' => '18:00:00',
+                    'publish' => 2,
+                ]
+            );
             $workingHourIds[] = $workingHour->id;
         }
 

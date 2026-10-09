@@ -61,7 +61,42 @@ class StoreRequest extends BaseRequest
 
     public function prepareForValidation()
     {
-        // Custom logic if needed
+        $keys = [
+            'customerName' => 'customer_name',
+            'customerEmail' => 'customer_email',
+            'customerPhone' => 'customer_phone',
+            'shippingAddress' => 'shipping_address',
+            'shippingCity' => 'shipping_city',
+            'shippingWard' => 'shipping_ward',
+            'shippingStreet' => 'shipping_street',
+            'shippingMethod' => 'shipping_method',
+            'paymentMethod' => 'payment_method',
+            'customerNote' => 'customer_note',
+            'shippingFee' => 'shipping_fee',
+            'discountAmount' => 'discount_amount',
+        ];
+        $merges = [];
+        foreach ($keys as $camel => $snake) {
+            if ($this->has($camel) && !$this->has($snake)) {
+                $merges[$snake] = $this->input($camel);
+            }
+        }
+        if ($this->has('items') && is_array($this->input('items'))) {
+            $items = array_map(function ($item) {
+                if (isset($item['productId']) && !isset($item['product_id'])) {
+                    $item['product_id'] = $item['productId'];
+                }
+                if (isset($item['productVariantId']) && !isset($item['product_variant_id'])) {
+                    $item['product_variant_id'] = $item['productVariantId'];
+                }
+                return $item;
+            }, $this->input('items'));
+            $merges['items'] = $items;
+        }
+
+        if (!empty($merges)) {
+            $this->merge($merges);
+        }
     }
 
     public function messages()

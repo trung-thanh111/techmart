@@ -114,7 +114,20 @@
                 </div>
 
                 <div class="col-span-12 lg:col-span-4">
-                  <OrderSummary :selected-items="selectedItems" :selected-count="selectedCount" :selected-total-price="selectedTotalPrice" v-model:coupon-code="couponCode" @unselect-item="handleUnselectItem" @apply-coupon="applyCoupon" @checkout="handleCheckout" :to="TOCHECKOUT" />
+                  <OrderSummary
+                    :selected-items="selectedItems"
+                    :selected-count="selectedCount"
+                    :selected-total-price="selectedTotalPrice"
+                    v-model:coupon-code="couponCode"
+                    :discount-amount="discountAmount"
+                    :applied-coupon="appliedCoupon"
+                    :is-applying-coupon="isApplyingCoupon"
+                    @unselect-item="handleUnselectItem"
+                    @apply-coupon="applyCoupon"
+                    @remove-coupon="removeCoupon"
+                    @checkout="handleCheckout"
+                    :to="checkoutUrl"
+                  />
                 </div>
               </div>
             </template>
@@ -179,6 +192,7 @@ import { formatPrice, resolveAlbum } from "~/utils/helpers";
 import { IMAGEDEFAULT, TOSHOP, PRODUCT, EMPTYBOX, TOCHECKOUT } from "~/utils/constants";
 import type { ICartItem } from "~/interfaces/cart/cartItem.interface";
 import OrderSummary from "~/components/features/checkout/OrderSummary.vue";
+import { promotionService } from "~/services/promotion/promotion.service";
 
 const isPageLoading = ref(true);
 
@@ -188,9 +202,19 @@ const toast = useToast();
 const { items, isEmpty, isLoading, selectedItems, selectedCount, selectedTotalPrice, toggleSelectItem, selectAll, deselectAll, isItemSelected, updateItemQuantity, removeItem, clearCart, loadCart } = useCart();
 
 const couponCode = ref("");
+const discountAmount = ref<number>(0);
+const appliedCoupon = ref<any>(null);
+const isApplyingCoupon = ref<boolean>(false);
 const showDeleteItemDialog = ref(false);
 const showClearCartDialog = ref(false);
 const selectedItemToDelete = ref<ICartItem | null>(null);
+
+const checkoutUrl = computed(() => {
+  if (couponCode.value && appliedCoupon.value) {
+    return `${TOCHECKOUT}?coupon=${encodeURIComponent(couponCode.value.trim())}`;
+  }
+  return TOCHECKOUT;
+});
 
 const isAllSelected = computed(() => {
   if (items.value.length === 0) return false;
@@ -294,14 +318,82 @@ const handleCheckout = () => {
   }
 };
 
-const applyCoupon = () => {
-  if (selectedCount.value === 0) {
+const applyCoupon = async () => {
+  const code = couponCode.value.trim();
+  if (!code) {
+    toast.add({
+      severity: "warn",
+      summary: t("cart.notification"),
+      detail: "Vui lòng nhập mã giảm giá",
+      life: 3000,
+    });
     return;
   }
+  if (selectedCount.value === 0) {
+    toast.add({
+      severity: "warn",
+      summary: t("cart.notification"),
+      detail: t("cart.selectAtLeastOne"),
+      life: 3000,
+    });
+    return;
+  }
+
+  isApplyingCoupon.value = true;
+  try {
+    const payloadItems = selectedItems.value.map((item) => {
+      const isVariant = item.purchasableType === "App\\Models\\ProductVariant";
+      return {
+        id: isVariant ? (item.variant as any)?.products?.id || item.product?.id : item.purchasableId!,
+        qty: item.quantity || 1,
+        category_id: (item.product as any)?.productCatalogueId,
+        brand_id: (item.product as any)?.brandId,
+      };
+    });
+
+    const res = await promotionService.applyDiscount({
+      code,
+      subtotal: selectedTotalPrice.value,
+      items: payloadItems,
+    });
+
+    if (res.data) {
+      discountAmount.value = res.data.total_discount || 0;
+      appliedCoupon.value = res.data.applied_promotions?.[0] || { code, name: code };
+      toast.add({
+        severity: "success",
+        summary: t("cart.notification"),
+        detail: `Áp dụng mã thành công! Giảm ${formatPrice(discountAmount.value)}`,
+        life: 3000,
+      });
+    }
+  } catch (error: any) {
+    discountAmount.value = 0;
+    appliedCoupon.value = null;
+    const errorMsg =
+      error?.data?.message ||
+      error?.statusMessage ||
+      error?.response?.data?.message ||
+      "Mã giảm giá không hợp lệ hoặc đã hết hạn";
+    toast.add({
+      severity: "error",
+      summary: t("cart.error"),
+      detail: errorMsg,
+      life: 3000,
+    });
+  } finally {
+    isApplyingCoupon.value = false;
+  }
+};
+
+const removeCoupon = () => {
+  discountAmount.value = 0;
+  appliedCoupon.value = null;
+  couponCode.value = "";
   toast.add({
     severity: "info",
     summary: t("cart.notification"),
-    detail: t("cart.featureDeveloping"),
+    detail: "Đã hủy áp dụng mã giảm giá",
     life: 3000,
   });
 };

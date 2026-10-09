@@ -58,6 +58,9 @@ class PromotionController extends BaseController
     public function applyDiscount(CalculateDiscountRequest $request): JsonResponse
     {
         $result = $this->service->calculateDiscount($request->validated());
+        if (isset($result['success']) && !$result['success']) {
+            return ApiResource::error(null, $result['message'] ?? 'Mã giảm giá không hợp lệ', 422);
+        }
         return ApiResource::ok($result, Lang::get('message.successfully'));
     }
 

@@ -169,13 +169,15 @@ class TagSeeder extends Seeder
         $userId = 1;
 
         foreach ($tags as $item) {
-            ProductTag::create([
-                'name' => $item['name'],
-                'slug' => Str::slug($item['name']),
-                'description' => $item['description'],
-                'publish' => $item['publish'],
-                'user_id' => $userId,
-            ]);
+            ProductTag::firstOrCreate(
+                ['slug' => Str::slug($item['name'])],
+                [
+                    'name' => $item['name'],
+                    'description' => $item['description'],
+                    'publish' => $item['publish'],
+                    'user_id' => $userId,
+                ]
+            );
         }
     }
 }

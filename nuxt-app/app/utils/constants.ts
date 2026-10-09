@@ -37,6 +37,8 @@ export const PROFILEADDRESSORDERCREATE = "/profile/address_order/create";
 export const PROFILEADDRESSORDERINDEX = "/profile/address_order";
 export const PROFILEADRESSORDERCREATE = "/profile/address_order/create";
 export const PROFILEADRESSORDERUPDATE = "/profile/address_order/update";
+export const PROFILEVOUCHERS = "/profile/vouchers";
+export const PROFILEORDERS = "/profile/orders";
 
 export const TOLOGIN = "/auth/login";
 export const TOREGISTER = "/auth/register";

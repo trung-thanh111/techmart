@@ -30,6 +30,9 @@ class DatabaseSeeder extends Seeder
             \Database\Seeders\Agency\AgencySeeder::class,
             \Database\Seeders\Agency\AgencyWorkingHourSeeder::class,
             \Database\Seeders\Product\ProductSeeder::class,
+            \Database\Seeders\System\SystemSeeder::class,
+            \Database\Seeders\Post\PostSeeder::class,
+            PromotionSeeder::class,
         ]);
     }
 }

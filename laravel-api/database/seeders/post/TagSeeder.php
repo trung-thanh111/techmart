@@ -157,14 +157,16 @@ class TagSeeder extends Seeder
         ];
 
         foreach ($data as $item) {
-            PostTag::create([
-                'name' => $item['name'],
-                'slug' => $item['slug'],
-                'description' => $item['description'],
-                'publish' => $item['publish'],
-                'is_hot' => (bool)$item['is_hot'],
-                'user_id' => 1,
-            ]);
+            PostTag::firstOrCreate(
+                ['slug' => $item['slug']],
+                [
+                    'name' => $item['name'],
+                    'description' => $item['description'],
+                    'publish' => $item['publish'],
+                    'is_hot' => (bool)$item['is_hot'],
+                    'user_id' => 1,
+                ]
+            );
         }
     }
 }

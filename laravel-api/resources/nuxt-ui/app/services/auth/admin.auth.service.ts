@@ -2,10 +2,10 @@ import type { IApiOk } from "~/interfaces/base.interface";
 import type { IAuthSuccessResponse } from "~/interfaces/user/user.interface";
 import { useAdminApi } from "~/composables/useAdminApi";
 import { useAuthStore } from "~/stores/auth/auth";
-import { API_VERSION } from "~/utils/apiConfig";
+import { ADMIN_AUTH_PREFIX } from "~/utils/apiConfig";
 
 const endpoint = {
-    auth: `${API_VERSION.version1}/auth`,
+    auth: `${ADMIN_AUTH_PREFIX}/auth`,
 } as const;
 
 export const adminAuthService = {

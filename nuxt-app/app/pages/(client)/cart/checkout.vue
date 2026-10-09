@@ -28,7 +28,22 @@
             </div>
 
             <div class="col-span-12 lg:col-span-4">
-              <OrderSummary :selected-items="selectedItems" :selected-count="selectedCount" :selected-total-price="selectedTotalPrice" :shipping-method="formData.address_info.shippingMethod || undefined" v-model:coupon-code="couponCode" :loading="isSubmitting" :button-label="activeTab === 'payment_method' ? 'Đặt hàng' : undefined" @unselect-item="handleUnselectItem" @apply-coupon="applyCoupon" @checkout="handleCheckout" />
+              <OrderSummary
+                :selected-items="selectedItems"
+                :selected-count="selectedCount"
+                :selected-total-price="selectedTotalPrice"
+                :shipping-method="formData.address_info.shippingMethod || undefined"
+                v-model:coupon-code="couponCode"
+                :discount-amount="discountAmount"
+                :applied-coupon="appliedCoupon"
+                :is-applying-coupon="isApplyingCoupon"
+                :loading="isSubmitting"
+                :button-label="activeTab === 'payment_method' ? 'Đặt hàng' : undefined"
+                @unselect-item="handleUnselectItem"
+                @apply-coupon="applyCoupon"
+                @remove-coupon="removeCoupon"
+                @checkout="handleCheckout"
+              />
             </div>
           </div>
         </div>
@@ -52,7 +67,28 @@ import CheckoutPaymentMethod from "~/components/features/checkout/CheckoutPaymen
 import OrderSummary from "~/components/features/checkout/OrderSummary.vue";
 import CheckoutModals from "~/components/features/checkout/CheckoutModals.vue";
 
-const { activeTab, formData, paymentMethods, isTabValid, canProceedToNext, progressPercentage, isSubmitting, couponCode, selectedItems, selectedCount, selectedTotalPrice, goToNextTab, goToPreviousTab, handleTabClick, handleCheckout, applyCoupon } = useCheckout();
+const {
+  activeTab,
+  formData,
+  paymentMethods,
+  isTabValid,
+  canProceedToNext,
+  progressPercentage,
+  isSubmitting,
+  couponCode,
+  discountAmount,
+  appliedCoupon,
+  isApplyingCoupon,
+  selectedItems,
+  selectedCount,
+  selectedTotalPrice,
+  goToNextTab,
+  goToPreviousTab,
+  handleTabClick,
+  handleCheckout,
+  applyCoupon,
+  removeCoupon,
+} = useCheckout();
 
 const { loadCart } = useCart();
 const cartStore = useCartStore();

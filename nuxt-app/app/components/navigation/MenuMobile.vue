@@ -39,13 +39,13 @@
                   </div>
                 </div>
                 <div class="border-t border-gray-300 mt-4 pt-4 space-y-2 text-sm">
-                  <NuxtLink to="#" class="flex group items-center gap-3 p-3 rounded transition-colors text-gray-500 hover:bg-gray-100 hover:text-sky-600">
+                  <NuxtLink :to="TOVOUCHER" @click="closeMenu" class="flex group items-center gap-3 p-3 rounded transition-colors text-gray-500 hover:bg-gray-100 hover:text-sky-600">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-gray-500 group-hover:text-sky-600">
                       <polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2" />
                     </svg>
                     <span class="group-hover:text-sky-600">{{ $t("menu.promotion") }}</span>
                   </NuxtLink>
-                  <NuxtLink to="#" class="flex group items-center gap-3 p-3 rounded transition-colors text-gray-500 hover:bg-gray-100 hover:text-sky-600">
+                  <NuxtLink :to="TOFAQ" @click="closeMenu" class="flex group items-center gap-3 p-3 rounded transition-colors text-gray-500 hover:bg-gray-100 hover:text-sky-600">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-gray-500 group-hover:text-sky-600">
                       <circle cx="12" cy="12" r="10" />
                       <path d="M9.09 9a3 3 0 1 1 5.82 1c0 2-3 3-3 3" />
@@ -53,8 +53,8 @@
                     </svg>
                     <span class="group-hover:text-sky-600">{{ $t("menu.faq") }}</span>
                   </NuxtLink>
-                  <NuxtLink to="#" class="flex group items-center gap-3 p-3 rounded transition-colors text-gray-500 hover:bg-gray-100 hover:text-sky-600">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-gray-500 group-hover:text-sky-600">
+                  <NuxtLink :to="TOPOLICY" @click="closeMenu" class="flex group items-center gap-3 p-3 rounded transition-colors text-gray-500 hover:bg-gray-100 hover:text-sky-600">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-gray-400 group-hover:text-sky-600">
                       <path d="M4 18v-6a8 8 0 0 1 16 0v6" />
                       <rect x="2" y="18" width="4" height="4" rx="1" />
                       <rect x="18" y="18" width="4" height="4" rx="1" />
@@ -90,6 +90,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import { TOVOUCHER, TOFAQ, TOPOLICY } from "~/utils/constants";
 import type { TreeNode } from "~/utils/nested-tree";
 import type { IMenuItem } from "~/interfaces/menu/menu.interface";
 

@@ -480,10 +480,10 @@
                                 <i class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i>
                                 <span class="align-middle">{{ $t("user.settings") }}</span>
                             </a>
-                            <a class="dropdown-item" href="/">
+                            <NuxtLink class="dropdown-item" :to="TODASHBOARD">
                                 <i class="mdi mdi-home-outline text-muted fs-18 align-middle me-1"></i>
                                 <span class="align-middle">{{ $t("user.home") }}</span>
-                            </a>
+                            </NuxtLink>
                             <a class="dropdown-item text-danger cursor-pointer" @click="handleLogout">
                                 <i class="mdi mdi-logout fs-16 align-middle me-1"></i>
                                 <span class="align-middle" data-key="t-logout">{{ $t("user.logout") }}</span>
@@ -499,6 +499,7 @@
 <script setup lang="ts">
 import { useAuth } from "~/composables/auth/useAuth";
 import { useLocale } from "~/composables/useI18n";
+import { TODASHBOARD } from "~/utils/constants";
 
 const { handleLogout } = useAuth();
 const { currentLocale, locales, switchLanguage } = useLocale();

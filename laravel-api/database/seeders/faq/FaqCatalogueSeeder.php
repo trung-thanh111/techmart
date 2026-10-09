@@ -87,15 +87,17 @@ class FaqCatalogueSeeder extends Seeder
         ];
 
         foreach ($data as $item) {
-            FaqCatalogue::create([
-                'name' => $item['name'],
-                'slug' => Str::slug($item['name']),
-                'description' => $item['description'],
-                'image' => $item['image'],
-                'is_hot' => (bool)$item['is_featured'], // Map is_featured to is_hot
-                'publish' => $item['publish'],
-                'user_id' => 1,
-            ]);
+            FaqCatalogue::firstOrCreate(
+                ['slug' => Str::slug($item['name'])],
+                [
+                    'name' => $item['name'],
+                    'description' => $item['description'],
+                    'image' => $item['image'],
+                    'is_hot' => (bool)$item['is_featured'],
+                    'publish' => $item['publish'],
+                    'user_id' => 1,
+                ]
+            );
         }
     }
 }

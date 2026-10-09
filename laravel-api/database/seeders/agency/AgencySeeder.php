@@ -67,21 +67,23 @@ class AgencySeeder extends Seeder
         ];
 
         foreach ($agencies as $agency) {
-            Agency::create([
-                'name' => $agency['name'],
-                'slug' => Str::slug($agency['name']),
-                'description' => $agency['description'],
-                'logo' => null,
-                'website' => $agency['website'],
-                'email' => $agency['email'],
-                'phone' => $agency['phone'],
-                'address' => $agency['address'],
-                'iframe_map' => $agency['iframe_map'],
-                'is_main' => $agency['is_main'],
-                'is_visible' => 1,
-                'publish' => 2,
-                'user_id' => 1,
-            ]);
+            Agency::firstOrCreate(
+                ['slug' => Str::slug($agency['name'])],
+                [
+                    'name' => $agency['name'],
+                    'description' => $agency['description'],
+                    'logo' => null,
+                    'website' => $agency['website'],
+                    'email' => $agency['email'],
+                    'phone' => $agency['phone'],
+                    'address' => $agency['address'],
+                    'iframe_map' => $agency['iframe_map'],
+                    'is_main' => $agency['is_main'],
+                    'is_visible' => 1,
+                    'publish' => 2,
+                    'user_id' => 1,
+                ]
+            );
         }
     }
 }

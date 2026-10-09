@@ -43,6 +43,10 @@
                 <span class="text-gray-600">Ngày đặt:</span>
                 <span class="text-gray-900">{{ formatDate(new Date(order.createdAt as any)) }}</span>
               </div>
+              <div v-if="(order.discountAmount || 0) > 0" class="flex justify-between text-green-600">
+                <span>Giảm giá (Voucher):</span>
+                <span class="font-semibold">- {{ formatPrice(order.discountAmount as any) }}</span>
+              </div>
               <div class="flex justify-between">
                 <span class="text-gray-600">Tổng tiền:</span>
                 <span class="font-bold text-red-500 text-base md:text-lg">{{ formatPrice(order.totalAmount as any) }}</span>

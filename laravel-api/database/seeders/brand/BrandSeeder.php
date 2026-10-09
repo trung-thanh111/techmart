@@ -89,16 +89,18 @@ class BrandSeeder extends Seeder
         ];
 
         foreach ($brands as $key => $brand) {
-            Brand::create([
-                'name' => $brand['name'],
-                'slug' => Str::slug($brand['name']),
-                'description' => $brand['description'],
-                'website' => $brand['website'],
-                'country' => $brand['country'],
-                'order' => $key + 1,
-                'publish' => 2,
-                'user_id' => 1,
-            ]);
+            Brand::firstOrCreate(
+                ['slug' => Str::slug($brand['name'])],
+                [
+                    'name' => $brand['name'],
+                    'description' => $brand['description'],
+                    'website' => $brand['website'],
+                    'country' => $brand['country'],
+                    'order' => $key + 1,
+                    'publish' => 2,
+                    'user_id' => 1,
+                ]
+            );
         }
     }
 }

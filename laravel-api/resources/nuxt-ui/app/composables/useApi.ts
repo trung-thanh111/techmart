@@ -21,6 +21,14 @@ const createFetch = (options: FetchOptions = {}) => {
         onResponseError({ request, response }) {
             console.error("API Error:", request, response);
             if (response.status === 401) {
+                const auth = useAuthStore();
+                auth.clearAuth();
+                const toast = useAppToast();
+                if (toast) {
+                    toast.warning("Phiên đăng nhập hết hạn", {
+                        description: "Vui lòng đăng nhập lại để tiếp tục.",
+                    });
+                }
                 navigateTo(TOLOGIN);
             }
             if (response.status === 422) {

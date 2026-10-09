@@ -577,15 +577,21 @@ class AttributeSeeder extends Seeder
         ];
 
         foreach ($data as $item) {
-            Attribute::create([
-                'name' => $item['name'],
-                'slug' => Str::slug($item['name']),
-                'description' => $item['description'],
-                'attribute_catalogue_id' => $item['attribute_catalogue_id'],
-                'order' => $item['order'],
-                'publish' => $item['publish'],
-                'user_id' => 1,
-            ]);
+            $baseSlug = Str::slug($item['name']);
+            $existing = Attribute::where('slug', $baseSlug)->where('attribute_catalogue_id', '!=', $item['attribute_catalogue_id'])->exists();
+            $slug = $existing ? $baseSlug . '-' . $item['attribute_catalogue_id'] : $baseSlug;
+
+            Attribute::firstOrCreate(
+                ['slug' => $slug],
+                [
+                    'name' => $item['name'],
+                    'description' => $item['description'],
+                    'attribute_catalogue_id' => $item['attribute_catalogue_id'],
+                    'order' => $item['order'],
+                    'publish' => $item['publish'],
+                    'user_id' => 1,
+                ]
+            );
         }
     }
 }

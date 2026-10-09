@@ -23,6 +23,7 @@ class CalculateDiscountRequest extends BaseRequest
     public function rules(): array
     {
         return [
+            'code' => 'nullable|string',
             'subtotal' => 'required|numeric',
             'items' => 'required|array',
             'items.*.id' => 'required|integer',
@@ -33,9 +34,12 @@ class CalculateDiscountRequest extends BaseRequest
 
     public function prepareForValidation()
     {
-        $this->merge([
-            'customer_id' => auth(Common::API)->user()->id,
-        ]);
+        $user = auth(Common::API)->user();
+        if ($user) {
+            $this->merge([
+                'customer_id' => $user->id,
+            ]);
+        }
     }
 
     public function messages()

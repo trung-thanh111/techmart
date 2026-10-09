@@ -37,7 +37,7 @@ class UserCatalogueSeeder extends Seeder
         ];
 
         foreach ($userCatalogues as $catalogue) {
-            UserCatalogue::create($catalogue);
+            UserCatalogue::firstOrCreate(['slug' => $catalogue['slug']], $catalogue);
         }
 
         $this->command->info('User catalogues seeded successfully!');

@@ -7,6 +7,9 @@ export default defineNuxtRouteMiddleware(() => {
     const authStore = useAuthStore();
 
     if (!authStore.isAuthenticated || !authStore.isAdmin) {
+        if (authStore.isAuthenticated && !authStore.isAdmin) {
+            authStore.clearAuth();
+        }
         if (toast) {
             toast.warning("Bảo mật", {
                 description: "Bạn không có quyền truy cập trang quản trị.",

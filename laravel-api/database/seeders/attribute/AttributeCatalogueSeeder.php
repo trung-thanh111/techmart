@@ -65,14 +65,16 @@ class AttributeCatalogueSeeder extends Seeder
         ];
 
         foreach ($data as $item) {
-            AttributeCatalogue::create([
-                'name' => $item['name'],
-                'slug' => Str::slug($item['name']),
-                'description' => $item['description'],
-                'order' => $item['order'],
-                'publish' => $item['publish'],
-                'user_id' => 1,
-            ]);
+            AttributeCatalogue::firstOrCreate(
+                ['slug' => Str::slug($item['name'])],
+                [
+                    'name' => $item['name'],
+                    'description' => $item['description'],
+                    'order' => $item['order'],
+                    'publish' => $item['publish'],
+                    'user_id' => 1,
+                ]
+            );
         }
     }
 }

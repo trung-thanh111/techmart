@@ -497,16 +497,18 @@ class FaqSeeder extends Seeder
         ];
 
         foreach ($data as $item) {
-            Faq::create([
-                'question' => $item['question'],
-                'slug' => Str::slug($item['question']),
-                'answer' => $item['answer'],
-                'order' => $item['sort_order'],
-                'is_hot' => (bool)$item['is_featured'],
-                'faq_catalogue_id' => $item['faq_catalogue_id'],
-                'publish' => $item['publish'],
-                'user_id' => 1,
-            ]);
+            Faq::firstOrCreate(
+                ['slug' => Str::slug($item['question'])],
+                [
+                    'question' => $item['question'],
+                    'answer' => $item['answer'],
+                    'order' => $item['sort_order'],
+                    'is_hot' => (bool)$item['is_featured'],
+                    'faq_catalogue_id' => $item['faq_catalogue_id'],
+                    'publish' => $item['publish'],
+                    'user_id' => 1,
+                ]
+            );
         }
     }
 }
