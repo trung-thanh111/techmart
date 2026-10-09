@@ -41,4 +41,10 @@ interface OrderServiceInterface
      * Cập nhật ghi chú cho đơn hàng
      */
     public function updateCustomerNote(int $orderId, ?string $note, ?int $userId = null, ?string $adminNote = null): Order;
+
+    /**
+     * Tra cứu đơn hàng nhanh theo mã đơn và thông tin xác thực (SĐT / email / userId)
+     */
+    public function trackOrder(string $code, ?string $phone = null, ?string $email = null, ?int $userId = null, bool $isAdmin = false): Order;
 }
+

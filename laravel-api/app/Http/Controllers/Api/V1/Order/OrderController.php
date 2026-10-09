@@ -140,6 +140,63 @@ class OrderController extends BaseController
     }
 
     /**
+     * Tra cứu nhanh đơn hàng (Public hoặc Authenticated)
+     * GET|POST /orders/track
+     */
+    public function track(Request $request): JsonResponse
+    {
+        $guard = $request->attributes->get('guard');
+        if (!$guard) {
+            try {
+                $guard = \Tymon\JWTAuth\Facades\JWTAuth::parseToken()->getPayload()->get('guard');
+            } catch (\Throwable $e) {}
+        }
+
+        $isAdmin = ($guard === 'admin');
+        $userId = null;
+        if (!$isAdmin) {
+            try {
+                if ($user = \Tymon\JWTAuth\Facades\JWTAuth::parseToken()->authenticate()) {
+                    $userId = $user->id;
+                }
+            } catch (\Throwable $e) {
+                if (auth('api')->check()) {
+                    $userId = auth('api')->id();
+                }
+            }
+        }
+
+        $rules = [
+            'code' => 'required|string|max:100',
+            'phone' => 'nullable|string|max:30',
+            'email' => 'nullable|email|max:150',
+        ];
+
+        // Khách vãng lai bắt buộc phải nhập phone hoặc email
+        if (!$isAdmin && $userId === null) {
+            $rules['phone'] = 'required_without:email|nullable|string|max:30';
+            $rules['email'] = 'required_without:phone|nullable|email|max:150';
+        }
+
+        $request->validate($rules);
+
+        try {
+            $order = $this->service->trackOrder(
+                (string) $request->input('code'),
+                $request->input('phone'),
+                $request->input('email'),
+                $userId,
+                $isAdmin
+            );
+
+            return ApiResource::ok(new OrderResource($order));
+        } catch (ModelNotFoundException $e) {
+            return ApiResource::message(Lang::get('message.record_not_found'), Response::HTTP_NOT_FOUND);
+        }
+    }
+
+
+    /**
      * Update payment status
      * POST /orders/{id}/payment-status
      */

@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
             \Database\Seeders\Product\ProductSeeder::class,
             \Database\Seeders\System\SystemSeeder::class,
             \Database\Seeders\Post\PostSeeder::class,
+            \Database\Seeders\Menu\MenuSeeder::class,
             PromotionSeeder::class,
         ]);
     }

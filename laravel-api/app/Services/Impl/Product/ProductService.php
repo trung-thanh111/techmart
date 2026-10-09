@@ -17,7 +17,7 @@ class ProductService extends BaseService implements ProductServiceInterface
     protected $repository;
 
     protected $complexFilter = ['id', 'price_origin'];
-    protected $simpleFilter = ['publish', 'brand_id'];
+    protected $simpleFilter = ['publish', 'brand_id', 'product_catalogue_id', 'is_hot', 'season'];
 
     protected $with = [
         'product_catalogues',

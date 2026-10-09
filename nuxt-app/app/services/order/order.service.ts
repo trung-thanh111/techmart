@@ -56,4 +56,15 @@ export const orderService = {
       body: { customerNote },
     });
   },
+
+  track: async (payload: { code: string; phone?: string; email?: string }): Promise<IApiOk<IOrder>> => {
+    const auth = useAuthStore();
+    const { publicFetch, privateFetch } = useApi();
+    const fetcher = auth.accessToken ? privateFetch : publicFetch;
+    return await fetcher<IApiOk<IOrder>>(`${endpoint.collection}/track`, {
+      method: "POST",
+      body: payload,
+    });
+  },
 };
+

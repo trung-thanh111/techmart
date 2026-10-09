@@ -763,13 +763,18 @@ const techAccessoryProducts = ref([]);
 // Fetch featured and section products on page load
 onMounted(async () => {
   try {
-    const [_, superSaleRes, bestSellerRes, highConfigRes, accessoryRes] = await Promise.all([
+    const results = await Promise.allSettled([
       fetchList("featuredLimit"),
       productService.pagination({ perpage: 10, is_hot: 1, sort: "id,asc" }),
       productService.pagination({ perpage: 10, sort: "sold,desc" }),
       productService.pagination({ perpage: 10, sort: "price_origin,desc" }),
       productService.pagination({ perpage: 8, product_catalogue_id: 6 }),
     ]);
+
+    const superSaleRes = results[1].status === "fulfilled" ? results[1].value : null;
+    const bestSellerRes = results[2].status === "fulfilled" ? results[2].value : null;
+    const highConfigRes = results[3].status === "fulfilled" ? results[3].value : null;
+    const accessoryRes = results[4].status === "fulfilled" ? results[4].value : null;
 
     superSaleProducts.value = superSaleRes?.data?.data || [];
     bestSellerProducts.value = bestSellerRes?.data?.data || [];

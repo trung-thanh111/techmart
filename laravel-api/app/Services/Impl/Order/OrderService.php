@@ -685,4 +685,83 @@ class OrderService extends BaseService implements OrderServiceInterface
 
         return $order->load($this->with);
     }
+
+    /**
+     * Chuẩn hóa số điện thoại về định dạng chuẩn (ví dụ: 0987654321)
+     */
+    protected function normalizePhone(?string $phone): ?string
+    {
+        if (empty($phone)) {
+            return null;
+        }
+
+        // Loại bỏ khoảng trắng, dấu ngoặc, dấu gạch ngang, dấu chấm
+        $cleaned = preg_replace('/[^0-9+]/', '', trim($phone));
+
+        if (str_starts_with($cleaned, '+84')) {
+            $cleaned = '0' . substr($cleaned, 3);
+        } elseif (str_starts_with($cleaned, '84') && strlen($cleaned) >= 11) {
+            $cleaned = '0' . substr($cleaned, 2);
+        }
+
+        return $cleaned;
+    }
+
+    /**
+     * Tra cứu đơn hàng nhanh theo mã đơn và thông tin xác thực
+     *
+     * @param string $code
+     * @param string|null $phone
+     * @param string|null $email
+     * @param int|null $userId
+     * @param bool $isAdmin
+     * @return Order
+     * @throws ModelNotFoundException
+     */
+    public function trackOrder(string $code, ?string $phone = null, ?string $email = null, ?int $userId = null, bool $isAdmin = false): Order
+    {
+        $code = trim($code);
+        $order = $this->repository->findByField('code', $code, $this->with);
+
+        if (!$order) {
+            throw new ModelNotFoundException(Lang::get('message.record_not_found'));
+        }
+
+        // Admin có toàn quyền tra cứu bất kỳ đơn nào
+        if ($isAdmin) {
+            return $order;
+        }
+
+        // User đã đăng nhập tra cứu đúng đơn của chính mình
+        if ($userId !== null && (int) $order->user_id === (int) $userId) {
+            return $order;
+        }
+
+        $matched = false;
+
+        // Khớp số điện thoại
+        if (!empty($phone)) {
+            $normInputPhone = $this->normalizePhone($phone);
+            $normOrderPhone = $this->normalizePhone($order->customer_phone);
+            if ($normInputPhone && $normOrderPhone && $normInputPhone === $normOrderPhone) {
+                $matched = true;
+            }
+        }
+
+        // Khớp email
+        if (!$matched && !empty($email)) {
+            $normInputEmail = strtolower(trim($email));
+            $normOrderEmail = strtolower(trim((string) $order->customer_email));
+            if ($normInputEmail && $normOrderEmail && $normInputEmail === $normOrderEmail) {
+                $matched = true;
+            }
+        }
+
+        if (!$matched) {
+            throw new ModelNotFoundException(Lang::get('message.record_not_found'));
+        }
+
+        return $order;
+    }
 }
+

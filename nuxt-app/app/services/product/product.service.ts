@@ -16,7 +16,6 @@ export const productService = {
       params: {
         publish: 2,
         sort: "id,desc",
-        deleted_at: null,
         ...params,
       },
     });
@@ -30,7 +29,6 @@ export const productService = {
         type: "all",
         publish: 2,
         sort: "id,desc",
-        deleted_at: null,
       },
     });
   },
@@ -51,7 +49,6 @@ export const productService = {
         season: "summer",
         publish: 2,
         sort: "id,desc",
-        deleted_at: null,
         perpage: limit,
       },
     });
@@ -72,7 +69,6 @@ export const productService = {
       params: {
         type: "all",
         publish: 2,
-        deleted_at: null,
         is_hot: 1,
         sort: "id,desc",
       },
@@ -86,7 +82,6 @@ export const productService = {
       params: {
         type: "all",
         publish: 2,
-        deleted_at: null,
         is_hot: 1,
         sort: "id,asc",
         limit: 5,
@@ -101,7 +96,6 @@ export const productService = {
       params: {
         type: "all",
         publish: 2,
-        deleted_at: null,
         sort: "created_at,desc",
       },
     });
@@ -114,7 +108,6 @@ export const productService = {
       params: {
         type: "all",
         publish: 2,
-        deleted_at: null,
         sort: "id,desc",
         is_hot: 1,
       },
@@ -128,7 +121,6 @@ export const productService = {
       params: {
         type: "all",
         publish: 2,
-        deleted_at: null,
         sort: "id,desc",
         product_catalogue_id: catalogueId,
       },
@@ -142,7 +134,6 @@ export const productService = {
       params: {
         type: "all",
         publish: 2,
-        deleted_at: null,
         sort: "wishlist_count,desc",
         limit: 6,
       },

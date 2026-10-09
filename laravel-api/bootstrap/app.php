@@ -33,6 +33,15 @@ return Application::configure(basePath: dirname(__DIR__))
             return ApiResource::message($e->getMessage(), Response::HTTP_NOT_FOUND);
         });
 
+        $exceptions->render(function(\Illuminate\Validation\ValidationException $e, Request $request){
+            return response()->json([
+                'status' => false,
+                'code' => Response::HTTP_UNPROCESSABLE_ENTITY,
+                'message' => $e->getMessage(),
+                'errors' => $e->errors(),
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        });
+
         $exceptions->render(function(\Throwable $th, Request $request){
             Log::error(Lang::get('message.type_exception'). get_class($th));
             Log::error(Lang::get('message.notification_exception'). $th->getMessage());

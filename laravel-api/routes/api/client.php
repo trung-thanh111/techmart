@@ -119,7 +119,9 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
 
     // PUBLIC ROUTES (No Auth or Optional Auth)
     Route::middleware(['convert'])->group(function () use ($routeExcept) {
-        // Guest & User Checkout Orders
+        // Guest & User Tracking & Checkout Orders
+        Route::match(['get', 'post'], 'orders/track', [OrderController::class, 'track']);
+        Route::match(['get', 'post'], 'order/track', [OrderController::class, 'track']);
         Route::post('orders', [OrderController::class, 'store']);
         Route::get('orders/{id}', [OrderController::class, 'show']);
 
