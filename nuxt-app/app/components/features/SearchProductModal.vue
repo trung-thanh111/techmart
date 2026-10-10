@@ -15,7 +15,7 @@
           <div class="grid grid-cols-1 gap-2">
             <div v-for="product in featuredProducts" :key="product.id" class="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer transition-colors" @click="handleSelectProduct(product)">
               <div class="w-16 h-16 flex-shrink-0 rounded overflow-hidden bg-gray-100">
-                <img v-if="getProductImage(product)" :src="getProductImage(product)" :alt="product.name" class="w-full h-full object-contain" />
+                <img v-if="getProductImage(product)" :src="getProductImage(product)" :alt="product.name" class="w-full h-full object-contain" @error="handleImgError" />
               </div>
               <div class="flex-1 min-w-0">
                 <p class="text-sm font-medium text-gray-700 truncate">{{ getProductDisplayName(product) }}</p>
@@ -31,7 +31,7 @@
           <div class="grid grid-cols-1 gap-2">
             <div v-for="product in searchResults" :key="product.id" class="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer transition-colors" @click="handleSelectProduct(product)">
               <div class="w-16 h-16 flex-shrink-0 rounded overflow-hidden bg-gray-100">
-                <img v-if="getProductImage(product)" :src="getProductImage(product)" :alt="product.name" class="w-full h-full object-contain" />
+                <img v-if="getProductImage(product)" :src="getProductImage(product)" :alt="product.name" class="w-full h-full object-contain" @error="handleImgError" />
               </div>
               <div class="flex-1 min-w-0">
                 <p class="text-sm font-medium text-gray-700 truncate">{{ getProductDisplayName(product) }}</p>
@@ -61,6 +61,7 @@
 import { ref, watch, computed } from "vue";
 import { useCompare } from "~/composables/product/useCompare";
 import { resolveAlbum, formatPrice } from "~/utils/helpers";
+import { IMAGEDEFAULT } from "~/utils/constants";
 import { useToast } from "primevue/usetoast";
 import { useDebounceFn } from "@vueuse/core";
 import { productService } from "~/services/product/product.service";
@@ -124,7 +125,14 @@ const handleSearch = () => {
 
 const getProductImage = (product: IProduct): string => {
   const images = resolveAlbum(product.album || []);
-  return images[0] || "";
+  return images[0] || IMAGEDEFAULT;
+};
+
+const handleImgError = (e: Event) => {
+  const target = e.target as HTMLImageElement;
+  if (target && target.src !== IMAGEDEFAULT) {
+    target.src = IMAGEDEFAULT;
+  }
 };
 
 const getProductDisplayName = (product: IProduct): string => {

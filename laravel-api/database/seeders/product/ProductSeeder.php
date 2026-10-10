@@ -298,7 +298,7 @@ class ProductSeeder extends Seeder
                 'warranty' => 12,
                 'tag_slugs' => ['flagship'],
                 'album' => [
-                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/m/b/mbp14-m3-max-spaceblack.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/m/b/mbp14-m3-max-spaceblack.png'],
+                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/m/a/macbook_13_19.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/m/a/macbook_13_19.png'],
                     ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/m/a/macbook-pro-14-m3-pro-silver.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/m/a/macbook-pro-14-m3-pro-silver.png']
                 ],
                 'description' => 'MacBook Pro 14 inch với chip M3 Pro mang lại hiệu năng đồ họa đột phá, màn hình Liquid Retina XDR độ sáng 1600 nits và màu sắc Đen Không Gian tuyệt đẹp.',
@@ -320,7 +320,7 @@ class ProductSeeder extends Seeder
                 'warranty' => 12,
                 'tag_slugs' => ['flagship'],
                 'album' => [
-                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/m/a/macbook_air_m3_13_inch_midnight.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/m/a/macbook_air_m3_13_inch_midnight.png'],
+                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/m/a/macbook_13_18_1.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/m/a/macbook_13_18_1.png'],
                     ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/m/a/macbook-air-m3-13-spacegray.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/m/a/macbook-air-m3-13-spacegray.png']
                 ],
                 'description' => 'MacBook Air M3 siêu mỏng nhẹ chỉ 1.24kg, pin lên đến 18 giờ liên tục, hỗ trợ xuất 2 màn hình ngoài khi gập máy.',
@@ -342,7 +342,7 @@ class ProductSeeder extends Seeder
                 'warranty' => 24,
                 'tag_slugs' => ['laptopasus', 'gaming'],
                 'album' => [
-                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/a/s/asus-rog-zephyrus-g14-2024-ga403.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/a/s/asus-rog-zephyrus-g14-2024-ga403.png'],
+                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/g/r/group_881_7.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/g/r/group_881_7.png'],
                     ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/a/s/asus-rog-zephyrus-g14-trang-2.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/a/s/asus-rog-zephyrus-g14-trang-2.png']
                 ],
                 'description' => 'Laptop gaming mỏng nhẹ đẹp nhất thế giới với màn hình ROG Nebula OLED 3K 120Hz 0.2ms, dải đèn Slash Lighting độc bản và card đồ họa RTX 4070.',
@@ -363,7 +363,7 @@ class ProductSeeder extends Seeder
                 'warranty' => 12,
                 'tag_slugs' => ['laptopdell', 'flagship'],
                 'album' => [
-                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/d/e/dell-xps-13-plus-9320.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/d/e/dell-xps-13-plus-9320.png'],
+                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/g/r/group_945_1_21.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/g/r/group_945_1_21.png'],
                     ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/d/e/dell-xps-13-plus-bac.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/d/e/dell-xps-13-plus-bac.png']
                 ],
                 'description' => 'Biểu tượng thiết kế tương lai của Dell với bàn phím liền mạch zero-lattice, dãy phím chức năng cảm ứng điện dung và touchpad kính vô hình.',
@@ -385,7 +385,7 @@ class ProductSeeder extends Seeder
                 'warranty' => 36,
                 'tag_slugs' => ['flagship'],
                 'album' => [
-                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/l/e/lenovo-thinkpad-x1-carbon-gen-11.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/l/e/lenovo-thinkpad-x1-carbon-gen-11.png'],
+                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/g/r/group_945_2__3.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/g/r/group_945_2__3.png'],
                     ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/l/e/lenovo-thinkpad-x1-carbon-den.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/l/e/lenovo-thinkpad-x1-carbon-den.png']
                 ],
                 'description' => 'Chuẩn mực laptop doanh nhân toàn cầu chế tác từ sợi carbon siêu bền đạt chuẩn quân đội Mỹ MIL-STD-810H, bàn phím gõ đỉnh cao không đối thủ.',
@@ -428,7 +428,7 @@ class ProductSeeder extends Seeder
                 'warranty' => 12,
                 'tag_slugs' => ['flagship'],
                 'album' => [
-                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/h/p/hp-envy-x360-14-fc0085tu.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/h/p/hp-envy-x360-14-fc0085tu.png'],
+                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/g/r/group_744_1_42.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/g/r/group_744_1_42.png'],
                     ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/h/p/hp-envy-bac.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/h/p/hp-envy-bac.png']
                 ],
                 'description' => 'Laptop cảm ứng xoay gập 360 độ linh hoạt của HP, màn hình cảm ứng 2.8K OLED tỉ lệ 16:10 tương thích bút stylus viết vẽ chính xác.',
@@ -451,7 +451,7 @@ class ProductSeeder extends Seeder
                 'warranty' => 12,
                 'tag_slugs' => ['flagship'],
                 'album' => [
-                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/ipad-pro-11-m4.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/ipad-pro-11-m4.png'],
+                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/ipad-pro-m5.jpg', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/ipad-pro-m5.jpg'],
                     ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/ipad-pro-11-m4-bac.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/ipad-pro-11-m4-bac.png']
                 ],
                 'description' => 'Thiết bị mỏng nhất lịch sử Apple chỉ 5.3mm! Sức mạnh quái vật từ chip M4 tiến trình 3nm thứ hai cùng màn hình OLED 2 lớp Ultra Retina XDR.',
@@ -473,7 +473,7 @@ class ProductSeeder extends Seeder
                 'warranty' => 12,
                 'tag_slugs' => ['flagship'],
                 'album' => [
-                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/ipad-air-6-11-inch.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/ipad-air-6-11-inch.png'],
+                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/ipad-air-11-wifi-1.jpg', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/ipad-air-11-wifi-1.jpg'],
                     ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/ipad-air-6-xanh.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/ipad-air-6-xanh.png']
                 ],
                 'description' => 'iPad Air thế hệ mới nâng cấp chip Apple M2 mạnh hơn 50%, camera trước chuyển sang cạnh ngang tối ưu gọi video call và học tập online.',
@@ -517,7 +517,7 @@ class ProductSeeder extends Seeder
                 'warranty' => 18,
                 'tag_slugs' => ['giare'],
                 'album' => [
-                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/x/i/xiaomi-pad-6_1_.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/x/i/xiaomi-pad-6_1_.png'],
+                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/m/a/may-tinh-bang-xiaomi-poco-pad-x1-4.jpg', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/m/a/may-tinh-bang-xiaomi-poco-pad-x1-4.jpg'],
                     ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/x/i/xiaomi-pad-6-xam.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/x/i/xiaomi-pad-6-xam.png']
                 ],
                 'description' => 'Máy tính bảng cấu hình số 1 tầm giá với màn hình 11 inch 2.8K tần số quét 144Hz 7 mức điều chỉnh, chip Snapdragon 870 và pin 8840mAh.',
@@ -539,7 +539,7 @@ class ProductSeeder extends Seeder
                 'warranty' => 12,
                 'tag_slugs' => ['giare'],
                 'album' => [
-                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/ipad-10-9-inch-gen-10.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/ipad-10-9-inch-gen-10.png'],
+                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/ipad-a16-11-inch_10__1.jpg', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/ipad-a16-11-inch_10__1.jpg'],
                     ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/ipad-gen-10-vang.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/ipad-gen-10-vang.png']
                 ],
                 'description' => 'iPad thế hệ 10 thiết kế toàn màn hình Liquid Retina 10.9 inch hiện đại, cổng USB-C tiện lợi và chip A14 Bionic mạnh mẽ.',
@@ -563,7 +563,7 @@ class ProductSeeder extends Seeder
                 'warranty' => 12,
                 'tag_slugs' => ['tainghe', 'flagship'],
                 'album' => [
-                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/a/i/airpods-pro-2-usb-c.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/a/i/airpods-pro-2-usb-c.png'],
+                    ['url' => 'https://cdn.tgdd.vn/Products/Images/54/315014/tai-nghe-bluetooth-airpods-pro-2nd-gen-usb-c-charge-apple-thumb-1-600x600.jpg', 'path' => 'https://cdn.tgdd.vn/Products/Images/54/315014/tai-nghe-bluetooth-airpods-pro-2nd-gen-usb-c-charge-apple-thumb-1-600x600.jpg'],
                     ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/a/i/airpods-pro-2-case.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/a/i/airpods-pro-2-case.png']
                 ],
                 'description' => 'Tai nghe chống ồn chủ động đỉnh cao số 1 với chip H2 thông minh, âm thanh không gian cá nhân hóa và hộp sạc chuẩn USB-C chống bụi IP54.',
@@ -584,7 +584,7 @@ class ProductSeeder extends Seeder
                 'warranty' => 12,
                 'tag_slugs' => ['tainghe', 'flagship'],
                 'album' => [
-                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/o/sony-wh-1000xm5-den.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/o/sony-wh-1000xm5-den.png'],
+                    ['url' => 'https://cdn.tgdd.vn/Products/Images/54/327510/tai-nghe-bluetooth-chup-tai-sony-wh-ult900n-den-1.jpg', 'path' => 'https://cdn.tgdd.vn/Products/Images/54/327510/tai-nghe-bluetooth-chup-tai-sony-wh-ult900n-den-1.jpg'],
                     ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/o/sony-wh-1000xm5-bac.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/o/sony-wh-1000xm5-bac.png']
                 ],
                 'description' => 'Tai nghe chụp tai chống ồn hàng đầu thế giới của Sony trang bị 2 bộ vi xử lý và 8 micrô kiểm soát tạp âm tuyệt đối, đệm da mềm ôm trọn tai.',
@@ -606,7 +606,7 @@ class ProductSeeder extends Seeder
                 'warranty' => 12,
                 'tag_slugs' => ['loa'],
                 'album' => [
-                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/m/a/marshall-emberton-ii-den.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/m/a/marshall-emberton-ii-den.png'],
+                    ['url' => 'https://cdn.tgdd.vn/Products/Images/2162/327436/loa-bluetooth-jbl-clip-5-den-1.jpg', 'path' => 'https://cdn.tgdd.vn/Products/Images/2162/327436/loa-bluetooth-jbl-clip-5-den-1.jpg'],
                     ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/m/a/marshall-emberton-ii-kem.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/m/a/marshall-emberton-ii-kem.png']
                 ],
                 'description' => 'Âm thanh đa hướng True Stereophonic 360 độ huyền thoại của Marshall trong thân hình nhỏ gọn di động, kháng nước bụi IP67 chuẩn dã ngoại.',
@@ -628,7 +628,7 @@ class ProductSeeder extends Seeder
                 'warranty' => 12,
                 'tag_slugs' => ['loa'],
                 'album' => [
-                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/j/b/jbl-charge-5-den.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/j/b/jbl-charge-5-den.png'],
+                    ['url' => 'https://cdn.tgdd.vn/Products/Images/2162/251230/bluetooth-jbl-charge-5-1-1.jpg', 'path' => 'https://cdn.tgdd.vn/Products/Images/2162/251230/bluetooth-jbl-charge-5-1-1.jpg'],
                     ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/j/b/jbl-charge-5-camo.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/j/b/jbl-charge-5-camo.png']
                 ],
                 'description' => 'Âm trầm JBL Pro Sound đầy nội lực với củ loa racetrack độc lập và loa tweeter riêng biệt, kiêm sạc dự phòng sạc ngược lại cho điện thoại.',
@@ -650,7 +650,7 @@ class ProductSeeder extends Seeder
                 'warranty' => 12,
                 'tag_slugs' => ['flagship'],
                 'album' => [
-                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/a/p/apple-watch-ultra-2.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/a/p/apple-watch-ultra-2.png'],
+                    ['url' => 'https://cdn.tgdd.vn/Products/Images/7077/344764/apple-watch-ultra-3-gps-cellular-49mm-vien-titanium-day-ocean-tu-nhien.jpg', 'path' => 'https://cdn.tgdd.vn/Products/Images/7077/344764/apple-watch-ultra-3-gps-cellular-49mm-vien-titanium-day-ocean-tu-nhien.jpg'],
                     ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/a/p/apple-watch-ultra-2-ocean.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/a/p/apple-watch-ultra-2-ocean.png']
                 ],
                 'description' => 'Đồng hồ thể thao chuyên nghiệp đỉnh cao với vỏ Titanium 49mm chống ăn mòn, màn hình sáng kỷ lục 3000 nits, chip S9 SiP và cử chỉ Double Tap.',
@@ -696,7 +696,7 @@ class ProductSeeder extends Seeder
                 'warranty' => 24,
                 'tag_slugs' => ['gaming', 'phukien'],
                 'album' => [
-                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/b/a/ban-phim-co-asus-rog-azoth.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/b/a/ban-phim-co-asus-rog-azoth.png'],
+                    ['url' => 'https://cdn.tgdd.vn/Products/Images/4547/279466/co-day-gaming-asus-tuf-k1-1.jpg', 'path' => 'https://cdn.tgdd.vn/Products/Images/4547/279466/co-day-gaming-asus-tuf-k1-1.jpg'],
                     ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/a/s/asus-rog-azoth-led.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/a/s/asus-rog-azoth-led.png']
                 ],
                 'description' => 'Bàn phím custom cơ không dây cao cấp với màn hình OLED hiển thị thông số và núm xoay ba chiều, gasket mount đệm silicon cho âm gõ êm ái đầm chắc.',
@@ -718,7 +718,7 @@ class ProductSeeder extends Seeder
                 'warranty' => 18,
                 'tag_slugs' => ['phukien'],
                 'album' => [
-                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/c/u/cu-sac-nhanh-anker-ganprime-65w-a2668.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/c/u/cu-sac-nhanh-anker-ganprime-65w-a2668.png'],
+                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/f/r/frame_511_5_.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/f/r/frame_511_5_.png'],
                     ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/c/u/cu-sac-anker-65w-2.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/c/u/cu-sac-anker-65w-2.png']
                 ],
                 'description' => 'Công nghệ GaNPrime độc quyền sạc nhanh cùng lúc cho MacBook, iPhone và tai nghe. Thiết kế nhỏ gọn hơn 53% so với củ sạc 67W thông thường.',
@@ -740,7 +740,7 @@ class ProductSeeder extends Seeder
                 'warranty' => 12,
                 'tag_slugs' => ['phukien'],
                 'album' => [
-                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/p/i/pin-sac-du-phong-baseus-blade-100w.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/p/i/pin-sac-du-phong-baseus-blade-100w.png'],
+                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/p/i/pin-du-phong-baseus-enercore-cr11-kem-cap-rut-gon-20000mah-67w.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/p/i/pin-du-phong-baseus-enercore-cr11-kem-cap-rut-gon-20000mah-67w.png'],
                     ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/p/i/baseus-blade-100w-man-hinh.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/p/i/baseus-blade-100w-man-hinh.png']
                 ],
                 'description' => 'Pin dự phòng siêu mỏng chỉ 18mm công suất khủng 100W Power Delivery sạc đầy laptop, màn hình LED kỹ thuật số hiển thị điện áp, công suất và thời gian còn lại.',
@@ -761,7 +761,7 @@ class ProductSeeder extends Seeder
                 'warranty' => 18,
                 'tag_slugs' => ['phukien'],
                 'album' => [
-                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/h/u/hub-chuyen-doi-ugreen-usb-c-9-in-1.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/h/u/hub-chuyen-doi-ugreen-usb-c-9-in-1.png'],
+                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/p/i/pin-du-phong-ugreen-10000mah-55w-1c1a-qc-3-0-man-hinh-tich-hop-cap-type-c-pb727-75701b.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/p/i/pin-du-phong-ugreen-10000mah-55w-1c1a-qc-3-0-man-hinh-tich-hop-cap-type-c-pb727-75701b.png'],
                     ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/u/g/ugreen-hub-9in1-cong.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/u/g/ugreen-hub-9in1-cong.png']
                 ],
                 'description' => 'Mở rộng cổng kết nối cho MacBook và laptop với cổng HDMI 4K@60Hz, Gigabit Ethernet RJ45 1000Mbps, khe thẻ SD/TF và sạc passthrough 100W.',
@@ -782,7 +782,7 @@ class ProductSeeder extends Seeder
                 'warranty' => 36,
                 'tag_slugs' => ['phukien', 'flagship'],
                 'album' => [
-                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/m/a/man-hinh-asus-proart-pa278cv.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/m/a/man-hinh-asus-proart-pa278cv.png'],
+                    ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/0/1/01_3.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/0/1/01_3.png'],
                     ['url' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/a/s/asus-proart-pa278cv-mat-sau.png', 'path' => 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/a/s/asus-proart-pa278cv-mat-sau.png']
                 ],
                 'description' => 'Màn hình chuyên nghiệp chuẩn đồ họa được cân màu sẵn tại nhà máy Calman Verified, độ phủ màu 100% sRGB, 100% Rec. 709 và cổng kết nối USB-C sạc 65W.',
