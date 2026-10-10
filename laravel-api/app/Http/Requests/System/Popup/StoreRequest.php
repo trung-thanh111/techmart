@@ -30,7 +30,7 @@ class StoreRequest extends BaseRequest
             "slug" => "required|string|max:255|unique:popups,slug",
             "content" => "nullable|string",
             "image" => "nullable|mimes:{$mimes}|max:{$max_size}",
-            "link" => "nullable|url|max:255",
+            "link" => "nullable|string|max:255",
             "button_text" => "nullable|string|max:255",
             "form_html" => "nullable|string",
             "show_delay" => "nullable|integer|min:0",
@@ -41,7 +41,7 @@ class StoreRequest extends BaseRequest
 
     public function prepareForValidation()
     {
-        if ($this->has('title') && !$this->has('slug')) {
+        if ($this->has('title') && empty($this->input('slug'))) {
             $this->merge([
                 'slug' => generate_slug($this->input('title')),
             ]);

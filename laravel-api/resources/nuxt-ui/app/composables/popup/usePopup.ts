@@ -30,14 +30,14 @@ export const usePopup = (initialFilters?: Record<string, any>, mode: "create" | 
         image: z
             .any()
             .optional()
-            .refine((file) => !file || file.size <= MAX_FILE_SIZE, "admin.common.maxFileSize")
-            .refine((file) => !file || ACCEPTED_IMAGE_TYPES.includes(file.type), "admin.common.acceptedImageTypes"),
-        link: z.string().url().max(255).nullable().optional(),
+            .refine((file) => !file || !(file instanceof File) || file.size <= MAX_FILE_SIZE, "admin.common.maxFileSize")
+            .refine((file) => !file || !(file instanceof File) || ACCEPTED_IMAGE_TYPES.includes(file.type), "admin.common.acceptedImageTypes"),
+        link: z.string().max(255).nullable().optional(),
         buttonText: z.string().max(255).nullable().optional(),
         formHtml: z.string().nullable().optional(),
-        showDelay: z.number().min(0).nullable().optional(),
+        showDelay: z.preprocess((val) => (val === "" || val === null || val === undefined ? 0 : Number(val)), z.number().min(0).nullable().optional()),
         priority: z.boolean().default(false).optional(),
-        publish: z.number({ required_error: "admin.validation.statusRequired" }).refine((val) => [0, 1, 2].includes(val), { message: "admin.validation.statusInvalid" }),
+        publish: z.preprocess((val) => (val === "" || val === null || val === undefined ? 2 : Number(val)), z.number().refine((val) => [0, 1, 2].includes(val), { message: "admin.validation.statusInvalid" })),
     };
 
     const createSchema = z.object({ ...schema });
@@ -47,6 +47,18 @@ export const usePopup = (initialFilters?: Record<string, any>, mode: "create" | 
 
     const { handleSubmit, values, errors, setValues, resetForm, setFieldError } = useForm<TPopupCreate | TPopupUpdate>({
         validationSchema: toTypedSchema(mode === "create" ? createSchema : updateSchema),
+        initialValues: mode === "create" ? ({
+            title: "",
+            type: "promotion",
+            slug: "",
+            content: "",
+            link: "",
+            buttonText: "",
+            formHtml: "",
+            showDelay: 1000,
+            priority: false,
+            publish: 2,
+        } as any) : undefined,
     });
 
     const typeOptions = computed(() => [
@@ -80,14 +92,29 @@ export const usePopup = (initialFilters?: Record<string, any>, mode: "create" | 
                 resetForm();
             } catch (error: any) {
                 if (error?.data?.isValidationError) {
-                    errorToField(setFieldError, error?.data?.errors, t, "title");
+                    const apiErrors = error?.data?.errors;
+                    if (apiErrors) {
+                        Object.entries(apiErrors).forEach(([field, msg]) => {
+                            const camelField = field.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
+                            const target = camelField === "slug" ? "title" : camelField;
+                            const message = Array.isArray(msg) ? msg[0] : (msg as string);
+                            setFieldError(target as any, message);
+                        });
+                        const firstMsg = Object.values(apiErrors)[0];
+                        toast.error(Array.isArray(firstMsg) ? firstMsg[0] : (firstMsg as string) || t("admin.messages.createFailed"));
+                    }
                     return;
                 }
                 console.error("Store error:", error);
-                toast.error(error?.response?.data?.message || t("admin.messages.createFailed"));
-                throw error;
+                toast.error(error?.response?.data?.message || error?.data?.message || t("admin.messages.createFailed"));
             } finally {
                 isLoading.value = false;
+            }
+        }, (invalid) => {
+            console.warn("Popup create validation failed:", invalid.errors);
+            const firstErr = Object.values(invalid.errors)[0];
+            if (firstErr) {
+                toast.error(t(firstErr as string) || String(firstErr));
             }
         });
 
@@ -126,13 +153,29 @@ export const usePopup = (initialFilters?: Record<string, any>, mode: "create" | 
                 }
             } catch (error: any) {
                 if (error?.data?.isValidationError) {
-                    errorToField(setFieldError, error?.data?.errors, t, "title");
+                    const apiErrors = error?.data?.errors;
+                    if (apiErrors) {
+                        Object.entries(apiErrors).forEach(([field, msg]) => {
+                            const camelField = field.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
+                            const target = camelField === "slug" ? "title" : camelField;
+                            const message = Array.isArray(msg) ? msg[0] : (msg as string);
+                            setFieldError(target as any, message);
+                        });
+                        const firstMsg = Object.values(apiErrors)[0];
+                        toast.error(Array.isArray(firstMsg) ? firstMsg[0] : (firstMsg as string) || t("admin.messages.updateFailed"));
+                    }
                     return;
                 }
                 console.error("Update error:", error);
-                toast.error(error?.response?.data?.message || t("admin.messages.updateFailed"));
+                toast.error(error?.response?.data?.message || error?.data?.message || t("admin.messages.updateFailed"));
             } finally {
                 isLoading.value = false;
+            }
+        }, (invalid) => {
+            console.warn("Popup update validation failed:", invalid.errors);
+            const firstErr = Object.values(invalid.errors)[0];
+            if (firstErr) {
+                toast.error(t(firstErr as string) || String(firstErr));
             }
         });
 

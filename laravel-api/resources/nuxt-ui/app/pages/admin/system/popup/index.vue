@@ -53,10 +53,22 @@
                                         <AppCheckbox :model-value="selectedIds" :value="item.id!" @update:model-value="handleSelectedIdsChange" />
                                     </td>
                                     <td>
-                                        <NuxtLink class="hover:text-teal-500" :to="`${POPUPINDEX}/${item.id}/edit`">
-                                            <div class="text-truncate">{{ item.title }}</div>
-                                            <div class="text-muted small">{{ item.type }}</div>
-                                        </NuxtLink>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <img
+                                                v-if="item.image?.url || item.image?.path || item.image"
+                                                :src="item.image?.url || (item.image?.path ? `/storage/${item.image.path}` : (typeof item.image === 'string' ? item.image : '/images/defaults/record.jpg'))"
+                                                alt="thumb"
+                                                class="rounded object-fit-cover flex-shrink-0 border"
+                                                style="width: 48px; height: 36px"
+                                                @error="($event.target as HTMLImageElement).src = '/images/defaults/record.jpg'"
+                                            />
+                                            <div class="overflow-hidden">
+                                                <NuxtLink class="hover:text-teal-500 d-block" :to="`${POPUPINDEX}/${item.id}/edit`">
+                                                    <div class="text-truncate fw-semibold">{{ item.title }}</div>
+                                                    <div class="text-muted small">{{ item.type }}</div>
+                                                </NuxtLink>
+                                            </div>
+                                        </div>
                                     </td>
                                     <td class="text-center">{{ item.type }}</td>
                                     <td class="text-center">

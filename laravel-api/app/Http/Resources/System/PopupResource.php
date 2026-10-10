@@ -14,6 +14,17 @@ class PopupResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $rawImage = $this->image;
+        $url = null;
+        if (!empty($rawImage)) {
+            if (str_starts_with($rawImage, 'http://') || str_starts_with($rawImage, 'https://') || str_starts_with($rawImage, '/')) {
+                $url = $rawImage;
+            } else {
+                $cleanPath = ltrim($rawImage, '/');
+                $url = str_starts_with($cleanPath, 'storage/') ? asset($cleanPath) : asset("storage/{$cleanPath}");
+            }
+        }
+
         return [
             'id' => $this->id,
             'title' => $this->title,
@@ -21,12 +32,8 @@ class PopupResource extends JsonResource
             'slug' => $this->slug,
             'content' => $this->content,
             'image' => [
-                'path' => $this->image ?? null,
-                'url' => $this->image
-                    ? (str_starts_with($this->image, 'http://') || str_starts_with($this->image, 'https://') || str_starts_with($this->image, '/')
-                        ? $this->image
-                        : asset("/storage/{$this->image}"))
-                    : null,
+                'path' => $rawImage ?? null,
+                'url' => $url,
             ],
             'link' => $this->link,
             'buttonText' => $this->button_text,

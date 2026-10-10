@@ -203,7 +203,7 @@ definePageMeta({
                                 <td>
                                     <div class="d-flex align-items-center gap-2">
                                         <img
-                                            :src="item.product?.image ? (item.product.image.startsWith('http') ? item.product.image : `/storage/${item.product.image}`) : '/images/defaults/record.jpg'"
+                                            :src="item.product?.image ? (item.product.image.startsWith('http') || item.product.image.startsWith('/') ? item.product.image : `/storage/${item.product.image}`) : '/images/defaults/record.jpg'"
                                             alt="product-thumb"
                                             class="rounded object-fit-cover flex-shrink-0"
                                             style="width: 44px; height: 44px"
@@ -352,7 +352,7 @@ definePageMeta({
                         <div class="col-12">
                             <div class="p-3 rounded bg-light border d-flex align-items-center gap-3">
                                 <img
-                                    :src="viewingReview.product?.image ? (viewingReview.product.image.startsWith('http') ? viewingReview.product.image : `/storage/${viewingReview.product.image}`) : '/images/defaults/record.jpg'"
+                                    :src="viewingReview.product?.image ? (viewingReview.product.image.startsWith('http') || viewingReview.product.image.startsWith('/') ? viewingReview.product.image : `/storage/${viewingReview.product.image}`) : '/images/defaults/record.jpg'"
                                     alt="product"
                                     class="rounded object-fit-cover"
                                     style="width: 56px; height: 56px"
@@ -425,13 +425,13 @@ definePageMeta({
                                     <a
                                         v-for="(img, idx) in viewingReview.images"
                                         :key="idx"
-                                        :href="img.startsWith('http') ? img : `/storage/${img}`"
+                                        :href="img.startsWith('http') || img.startsWith('/') ? img : `/storage/${img}`"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         class="d-inline-block border rounded overflow-hidden shadow-sm"
                                     >
                                         <img
-                                            :src="img.startsWith('http') ? img : `/storage/${img}`"
+                                            :src="img.startsWith('http') || img.startsWith('/') ? img : `/storage/${img}`"
                                             alt="review-img"
                                             class="object-fit-cover"
                                             style="width: 100px; height: 100px"

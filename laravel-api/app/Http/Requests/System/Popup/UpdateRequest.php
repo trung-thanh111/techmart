@@ -48,7 +48,7 @@ class UpdateRequest extends BaseRequest
             ],
             "content" => "{$sometime}|nullable|string",
             "image" => "{$sometime}|nullable|mimes:{$mimes}|max:{$max_size}",
-            "link" => "{$sometime}|nullable|url|max:255",
+            "link" => "{$sometime}|nullable|string|max:255",
             "button_text" => "{$sometime}|nullable|string|max:255",
             "form_html" => "{$sometime}|nullable|string",
             "show_delay" => "{$sometime}|nullable|integer|min:0",
@@ -59,7 +59,7 @@ class UpdateRequest extends BaseRequest
 
     public function prepareForValidation()
     {
-        if ($this->has('title') && !$this->has('slug')) {
+        if ($this->has('title') && empty($this->input('slug'))) {
             $this->merge([
                 'slug' => generate_slug($this->input('title')),
             ]);

@@ -21,7 +21,7 @@ trait HasUpload
 
     protected function uploadImage(Request $request, string $folder = '', $pipeline = 'default', string $name = ''): self
     {
-        if ($request->has($name)) {
+        if ($request->hasFile($name)) {
             // khởi tạo config -> nếu k muốn dùng mặc định trong config.upload
             $config = [
                 'files' => $request->file($name),
@@ -34,7 +34,9 @@ trait HasUpload
                 ],
             ];
             $process = $this->imageService->upload(...$config); // dùng spread operator truyền các tham số key của config
-            $this->modelData[$name] = $process['files']['path'] ?? '';
+            if (isset($process['files']['path'])) {
+                $this->modelData[$name] = $process['files']['path'];
+            }
         }
         return $this;
     }

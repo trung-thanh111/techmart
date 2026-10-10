@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <div v-if="!defaultImage" class="text-center">
-      <div class="w-full flex flex-col items-center justify-center text-center rounded border border-dashed p-4 min-h-[160px] bg-white text-gray-500 cursor-pointer" @click="trigger">
+  <div class="w-full">
+    <div v-if="!defaultImage" class="text-center w-full">
+      <div class="w-full flex flex-col items-center justify-center text-center rounded border border-dashed p-4 min-h-[160px] bg-white text-gray-500 cursor-pointer hover:border-sky-500 transition-colors" @click="trigger">
         <div class="flex items-center justify-center rounded-full w-10 h-10 bg-black/5">
           <i class="fa-solid fa-cloud-arrow-up text-green-600 text-xl"></i>
         </div>
@@ -12,11 +12,11 @@
         <input ref="inputRef" type="file" class="hidden" :accept="accept" @change="onChange" />
       </div>
     </div>
-    <div v-else class="text-center relative inline-block">
-      <button type="button" class="absolute -top-2 -right-1 text-red-500 hover:text-red-600" @click.stop="clearImage" aria-label="clear">
+    <div v-else class="text-center relative w-full">
+      <button type="button" class="absolute -top-2 -right-1 text-red-500 hover:text-red-600 z-10" @click.stop="clearImage" aria-label="clear">
         <i class="fa-solid fa-circle-xmark text-xl"></i>
       </button>
-      <NuxtImg :src="defaultImage" class="rounded shadow-md block mx-auto cursor-pointer" width="260" height="120" alt="preview" loading="lazy" @click="trigger" />
+      <img :src="defaultImage" class="rounded shadow-md block w-full object-cover cursor-pointer" style="max-height: 240px; width: 100%" alt="preview" @click="trigger" />
       <input ref="inputRef" type="file" class="hidden" :accept="accept" @change="onChange" />
       <div class="mt-1 text-xs text-gray-400">{{ extsLabel }} ({{ $t("common.maxSize", { size: maxSizeLabel }) }})</div>
     </div>
@@ -53,6 +53,16 @@ const trigger = () => inputRef.value?.click();
 watch(file, (f) => {
   if (f) emit("selected", f);
 });
+
+watch(
+  () => props.initialUrl,
+  (url) => {
+    if (!file.value) {
+      setInitialPreview(url || null);
+    }
+  },
+  { immediate: true }
+);
 
 onMounted(() => setInitialPreview(props.initialUrl || null));
 

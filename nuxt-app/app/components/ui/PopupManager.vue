@@ -2,7 +2,7 @@
   <Dialog v-model:visible="visible" modal :header="headerText" :style="{ width: dialogWidth }" :breakpoints="{ '1199px': '75vw', '575px': '95vw' }" append-to="body" @hide="onHide">
     <div v-if="currentPopup" class="space-y-4">
       <NuxtLink :to="currentPopup.link as any" v-if="hasImage(currentPopup)" class="w-full flex items-center justify-center cursor-pointer" @click="close">
-        <NuxtImg :src="getImageUrl(currentPopup)" :alt="headerText" class="max-h-[60vh] w-full object-contain rounded" loading="lazy" />
+        <img :src="getImageUrl(currentPopup)" :alt="headerText" class="max-h-[60vh] w-full object-contain rounded" loading="lazy" />
       </NuxtLink>
       <div class="px-2">
         <h3 class="text-lg font-semibold mb-2 text-gray-800">{{ headerText }}</h3>
@@ -66,8 +66,18 @@ const loadPopup = async () => {
   }
 };
 
-const hasImage = (p: any) => !!(p?.image?.url || p?.image?.path || p?.image);
-const getImageUrl = (p: any) => String(p?.image?.url || p?.image?.path || p?.image || "");
+const hasImage = (p: any) => Boolean(p?.image?.url || p?.image?.path || p?.image);
+const getImageUrl = (p: any) => {
+  const target = p?.image?.url || p?.image?.path || (typeof p?.image === "string" ? p?.image : "");
+  if (!target) return "";
+  if (target.startsWith("http://") || target.startsWith("https://") || target.startsWith("/")) return target;
+  try {
+    const config = useRuntimeConfig();
+    return `${config.public.baseUrl}/storage/${target.replace(/^\/+/, "")}`;
+  } catch {
+    return `/storage/${target}`;
+  }
+};
 const getHtmlContent = (p: any) => p?.content || p?.form_html || "";
 const getButtonText = (p: any) => p?.button_text || p?.buttonText || "";
 
