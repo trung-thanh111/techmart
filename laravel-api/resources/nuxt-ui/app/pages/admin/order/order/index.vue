@@ -54,9 +54,12 @@ definePageMeta({
     <div class="card shadow-sm">
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <div class="d-flex align-items-center fz-[12px] gap-2" :class="{ 'opacity-0': !hasSelectedItems }">
-                    <Button variant="delete" type="button" :label="`Xóa (${selectedIds.length})`" :loading="isLoading" :disabled="!hasSelectedItems" data-bs-toggle="modal" data-bs-target="#deleteMultipleRecord" class="rounded text-xs" size="small" />
-                    <Button variant="cancel" :loading="isLoading" :disabled="!hasSelectedItems" @click="updateSelectedIds([])" class="rounded text-xs" size="small" />
+                <div class="d-flex align-items-center gap-3">
+                    <h5 class="card-title mb-0 text-uppercase fw-bold fs-15">QUẢN LÝ ĐƠN HÀNG</h5>
+                    <div v-if="hasSelectedItems" class="d-flex align-items-center fz-[12px] gap-2">
+                        <Button variant="delete" type="button" :label="`Xóa (${selectedIds.length})`" :loading="isLoading" :disabled="!hasSelectedItems" data-bs-toggle="modal" data-bs-target="#deleteMultipleRecord" class="rounded text-xs" size="small" />
+                        <Button variant="cancel" :loading="isLoading" :disabled="!hasSelectedItems" @click="updateSelectedIds([])" class="rounded text-xs" size="small" />
+                    </div>
                 </div>
             </div>
             <FilterBar @search="search" :publish-filter="false">

@@ -302,7 +302,7 @@
             "viewAll": "Xem tất cả"
         },
         "sidebar": {
-            "menuList": "Danh sách menu",
+            "menuList": "Menu",
             "permission": "Phân quyền",
             "statistics": "Thống kê",
             "dashboard": "Bảng điều khiển",
@@ -328,7 +328,7 @@
             "agencyWorkingHour": "Giờ làm việc",
             "agencyList": "Danh sách",
             "agencyCreate": "Thêm mới",
-            "brands": "Thương hiệu & đối tác",
+            "brands": "Thương hiệu",
             "brandList": "Danh sách",
             "brandCreate": "Thêm mới",
             "banners": "Banner",
@@ -337,9 +337,9 @@
             "bannerPosition": "Vị trí",
             "bannerCreate": "Thêm mới",
             "popups": "Popups",
-            "popupList": "Danh sách Popups",
-            "popupCreate": "Thêm mới Popup",
-            "systemList": "Danh sách cấu hình",
+            "popupList": "Popups",
+            "popupCreate": "Thêm mới",
+            "systemList": "Cấu hình",
             "systemCreate": "Thêm mới",
             "tags": "Tag",
             "customers": "Khách hàng",
@@ -350,8 +350,8 @@
             "postCatalogue": "Nhóm bài viết",
             "postList": "Danh sách",
             "postCreate": "Thêm mới",
-            "faqs": "Câu hỏi thường gặp",
-            "faqCatalogue": "Nhóm câu hỏi thường gặp",
+            "faqs": "FAQ",
+            "faqCatalogue": "Nhóm FAQ",
             "faqList": "Danh sách",
             "faqCreate": "Thêm mới",
             "addressOrder": "Địa chỉ nhận hàng",
@@ -367,7 +367,7 @@
             "grid": "Lưới",
             "images": "Hình ảnh",
             "tabs": "Tabs",
-            "accordion": "Accordion & Collapse",
+            "accordion": "Accordion",
             "modals": "Modal",
             "offcanvas": "Offcanvas",
             "placeholders": "Placeholder",
@@ -386,7 +386,7 @@
         "footer": {
             "copyright": "Bản quyền",
             "version": "Phiên bản",
-            "designedBy": "Thiết kế và phát triển bởi Thanhtrung"
+            "designedBy": "Thiết kế và phát triển bởi Thanh Trung"
         },
         "page": {
             "shop": "Cửa hàng",
@@ -523,8 +523,8 @@
                 }
             },
             "faqCatalogue": {
-                "title": "nhóm câu hỏi thường gặp",
-                "breadcrumb": "Quản lý nhóm câu hỏi thường gặp",
+                "title": "nhóm FAQ",
+                "breadcrumb": "Quản lý nhóm FAQ",
                 "groupInfo": "Thông tin"
             },
             "inventory": {
@@ -679,8 +679,8 @@
                 "groupInfo": "Thông tin"
             },
             "faq": {
-                "title": "câu hỏi thường gặp",
-                "breadcrumb": "Quản lý câu hỏi thường gặp",
+                "title": "FAQ",
+                "breadcrumb": "Quản lý FAQ",
                 "groupInfo": "Thông tin",
                 "filterGroup": "Nhóm câu hỏi"
             },

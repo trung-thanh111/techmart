@@ -88,25 +88,28 @@ definePageMeta({
         <div class="card-body">
             <!-- Bulk Action Toolbar -->
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <div class="d-flex align-items-center gap-2" :class="{ 'opacity-0 pointer-events-none': !hasSelectedItems }">
-                    <span class="text-muted text-xs me-1">Đã chọn: <strong>{{ selectedIds.length }}</strong></span>
-                    <button
+                <div class="d-flex align-items-center gap-3">
+                    <h5 class="card-title mb-0 text-uppercase fw-bold fs-15">QUẢN LÝ ĐÁNH GIÁ SẢN PHẨM</h5>
+                    <div v-if="hasSelectedItems" class="d-flex align-items-center gap-2">
+
+                        <span class="text-muted text-xs me-1">Đã chọn: <strong>{{ selectedIds.length }}</strong></span>
+                        <button
                         type="button"
                         class="btn btn-sm btn-success d-flex align-items-center gap-1"
                         :disabled="!hasSelectedItems || isLoading"
                         @click="handleBulkStatus(2)"
-                    >
+                        >
                         <i class="ri-check-line"></i> Duyệt hiển thị
-                    </button>
-                    <button
+                        </button>
+                        <button
                         type="button"
                         class="btn btn-sm btn-warning d-flex align-items-center gap-1 text-white"
                         :disabled="!hasSelectedItems || isLoading"
                         @click="handleBulkStatus(0)"
-                    >
+                        >
                         <i class="ri-eye-off-line"></i> Ẩn đánh giá
-                    </button>
-                    <Button
+                        </button>
+                        <Button
                         variant="delete"
                         type="button"
                         :label="`Xóa (${selectedIds.length})`"
@@ -115,14 +118,15 @@ definePageMeta({
                         data-bs-toggle="modal"
                         data-bs-target="#deleteMultipleRecord"
                         class="btn-sm"
-                    />
-                    <Button
+                        />
+                        <Button
                         variant="cancel"
                         :loading="isLoading"
                         :disabled="!hasSelectedItems"
                         @click="updateSelectedIds([])"
                         class="btn-sm"
-                    />
+                        />
+                    </div>
                 </div>
             </div>
 

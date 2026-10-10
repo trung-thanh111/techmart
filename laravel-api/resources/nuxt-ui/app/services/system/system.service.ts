@@ -73,4 +73,17 @@ export const systemService = {
         const { privateFetch } = useApi();
         return await privateFetch<IApiOk<ISystem>>(`${endpoint.collection}?type=all`);
     },
+
+    getStructure: async (): Promise<IApiOk<Record<string, any>>> => {
+        const { privateFetch } = useApi();
+        return await privateFetch<IApiOk<Record<string, any>>>(`${endpoint.collection}/structure`);
+    },
+
+    saveSettings: async (settings: Record<string, any>): Promise<IApiOk<any>> => {
+        const { privateFetch } = useApi();
+        return await privateFetch<IApiOk<any>>(`${endpoint.collection}/save-settings`, {
+            method: "POST",
+            body: { settings },
+        });
+    },
 };

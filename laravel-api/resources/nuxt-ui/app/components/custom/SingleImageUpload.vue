@@ -12,11 +12,11 @@
                 <input ref="inputRef" type="file" class="hidden" :accept="accept" @change="onChange" />
             </div>
         </div>
-        <div v-else class="text-center relative inline-block">
-            <button type="button" class="absolute -top-2 -right-1 text-red-500 hover:text-red-600" @click.stop="clearImage" aria-label="clear">
+        <div v-else class="text-center relative">
+            <button type="button" class="absolute -top-2 -right-1 text-red-500 hover:text-red-600 z-10" @click.stop="clearImage" aria-label="clear">
                 <i class="fa-solid fa-circle-xmark text-xl"></i>
             </button>
-            <NuxtImg :src="defaultImage" class="rounded shadow-md block mx-auto cursor-pointer" width="260" height="120" alt="preview" loading="lazy" @click="trigger" />
+            <NuxtImg :src="defaultImage" class="rounded shadow-md block w-full object-cover cursor-pointer" style="max-height: 220px" alt="preview" loading="lazy" @click="trigger" />
             <input ref="inputRef" type="file" class="hidden" :accept="accept" @change="onChange" />
             <div class="mt-1 text-xs text-gray-400">{{ extsLabel }} (max. {{ maxSizeLabel }})</div>
         </div>

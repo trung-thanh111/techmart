@@ -57,7 +57,7 @@
             </div>
             <div class="flex justify-end gap-3 mt-4 position-sticky bottom-5 z-20">
                 <Button type="button" variant="cancel" @click="() => navigateTo(POPUPINDEX)" />
-                <Button type="button" variant="custom" severity="info" :label="$t('admin.components.buttons.confirm')" :loading="isLoading" @click="() => handleStore(false)" />
+                <Button type="button" variant="custom" severity="info" :label="$t('admin.components.buttons.confirm')" :loading="isLoading" @click="() => handleUpdate(false)" />
                 <Button type="submit" variant="success" :loading="isLoading" @click="() => handleUpdate(true)" />
             </div>
         </div>
@@ -101,7 +101,7 @@ import CKEditor from "~/components/custom/CKEditor.vue";
 import { usePopup } from "~/composables/popup/usePopup";
 import { POPUPINDEX } from "~/utils/constants";
 
-const { config, isLoading, values, slug, show, handleUpdate, setValues, typeOptions } = usePopup(undefined, "update");
+const { config, isLoading, values, slug, show, handleUpdate, handleStore, setValues, typeOptions } = usePopup(undefined, "update");
 
 const id = Number(useRoute().params.id);
 const { data } = await show(id);

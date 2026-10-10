@@ -52,9 +52,12 @@ definePageMeta({
     <div class="card shadow-sm">
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <div class="d-flex align-items-center fz-[12px] gap-2" :class="{ 'opacity-0': !selectedIds.length }">
-                    <Button variant="delete" type="button" :label="`${$t('admin.common.delete')} (${selectedIds.length})`" :loading="isLoading" :disabled="!selectedIds.length" data-bs-toggle="modal" data-bs-target="#deleteMultipleRecord" />
-                    <Button variant="cancel" :loading="isLoading" :disabled="!selectedIds.length" @click="selectedIds = []" />
+                <div class="d-flex align-items-center gap-3">
+                    <h5 class="card-title mb-0 text-uppercase fw-bold fs-15">QUẢN LÝ MENU</h5>
+                    <div v-if="selectedIds.length" class="d-flex align-items-center fz-[12px] gap-2">
+                        <Button variant="delete" type="button" :label="`${$t('admin.common.delete')} (${selectedIds.length})`" :loading="isLoading" :disabled="!selectedIds.length" data-bs-toggle="modal" data-bs-target="#deleteMultipleRecord" />
+                        <Button variant="cancel" :loading="isLoading" :disabled="!selectedIds.length" @click="selectedIds = []" />
+                    </div>
                 </div>
                 <NuxtLink :to="MENUCREATE" class="btn btn-success">
                     <i class="ri-add-line me-1"></i>
