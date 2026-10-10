@@ -54,4 +54,20 @@ class ProductReview extends Model
     {
         return $query->where('publish', 2);
     }
+
+    public function scopeKeyword($query, array $keyword = [])
+    {
+        if (!empty($keyword['q'])) {
+            $q = $keyword['q'];
+            $query->where(function ($subQuery) use ($keyword, $q) {
+                foreach ($keyword['fields'] as $field) {
+                    $subQuery->orWhere($field, 'like', '%' . $q . '%');
+                }
+                $subQuery->orWhereHas('product', function ($pq) use ($q) {
+                    $pq->where('name', 'like', '%' . $q . '%');
+                });
+            });
+        }
+        return $query;
+    }
 }

@@ -27,7 +27,11 @@ const itemStatusOptions = [
 
 const getImageUrl = (item: IOrderItem) => {
     if (item.productImage?.url) return item.productImage.url;
-    if (item.productImage?.path) return `${config.public.baseUrl}/storage/${item.productImage.path}`;
+    if (item.productImage?.path) {
+        const p = item.productImage.path;
+        if (p.startsWith("http://") || p.startsWith("https://") || p.startsWith("/")) return p;
+        return `${config.public.baseUrl}/storage/${p.replace(/^\/+/, "")}`;
+    }
     return IMAGEDEFAULT;
 };
 

@@ -217,7 +217,8 @@ const getProductName = (item: ICartItem): string => {
 const getVariantInfo = (item: ICartItem): string => {
   if (item.variant?.attributeData) {
     return Object.values(item.variant.attributeData)
-      .map((attr: any) => attr.name)
+      .map((attr: any) => (typeof attr === "object" ? attr?.name : String(attr)))
+      .filter(Boolean)
       .join(", ");
   }
   return "";

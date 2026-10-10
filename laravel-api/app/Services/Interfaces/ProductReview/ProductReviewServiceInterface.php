@@ -12,4 +12,8 @@ interface ProductReviewServiceInterface extends BaseServiceInterface
     public function createReview(Request $request);
 
     public function toggleLike(int $id): array;
+ 
+    public function updateStatus(int $id, int $publish);
+ 
+    public function bulkUpdateStatus(array $ids, int $publish): array;
 }

@@ -82,10 +82,23 @@ export const resolveImageUrl = (input?: any, fallback: string = IMAGEDEFAULT): s
 };
 
 export const resolveAlbum = (album: any[] = [], fallback: string = IMAGEDEFAULT): string[] => {
+    if (!Array.isArray(album) || !album.length) return [fallback];
     const config = useRuntimeConfig();
     const base = `${config.public.baseUrl}/storage`;
 
-    return album.length ? album.map((a) => (a?.path ? `${base}/${a.path.replace(/^\/+/, "")}` : fallback)) : [fallback];
+    return album.map((a) => {
+        if (!a) return fallback;
+        if (typeof a === "string") {
+            if (a.startsWith("http://") || a.startsWith("https://") || a.startsWith("/")) return a;
+            return `${base}/${a.replace(/^\/+/, "")}`;
+        }
+        const target = a?.url || a?.path;
+        if (typeof target === "string" && target.trim().length > 0) {
+            if (target.startsWith("http://") || target.startsWith("https://") || target.startsWith("/")) return target;
+            return `${base}/${target.replace(/^\/+/, "")}`;
+        }
+        return fallback;
+    });
 };
 
 export const formatPhoneVN = (phone?: string | null): string => {

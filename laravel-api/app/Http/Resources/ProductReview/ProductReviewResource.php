@@ -17,6 +17,14 @@ class ProductReviewResource extends JsonResource
         return [
             'id' => $this->id,
             'product_id' => $this->product_id,
+            'product' => $this->whenLoaded('product', function () {
+                return [
+                    'id' => $this->product->id,
+                    'name' => $this->product->name,
+                    'slug' => $this->product->slug,
+                    'image' => !empty($this->product->album) && is_array($this->product->album) ? $this->product->album[0] : null,
+                ];
+            }),
             'user_id' => $this->user_id,
             'user_name' => $this->user_name,
             'user_email' => $this->user_email,

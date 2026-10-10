@@ -50,4 +50,38 @@ class ProductReviewController extends BaseController
         $data = $this->service->toggleLike($id);
         return ApiResource::ok($data, Lang::get('message.successfully'));
     }
+
+    /**
+     * Cập nhật đánh giá
+     */
+    public function update(Request $request, int $id): JsonResponse
+    {
+        return $this->baseSave($request, $id);
+    }
+
+    /**
+     * Cập nhật trạng thái duyệt của đánh giá (0: ẩn, 1: chờ duyệt, 2: đã duyệt)
+     */
+    public function updateStatus(Request $request, int $id): JsonResponse
+    {
+        $request->validate([
+            'publish' => 'required|in:0,1,2',
+        ]);
+        $review = $this->service->updateStatus($id, (int) $request->input('publish'));
+        return ApiResource::ok($review, Lang::get('message.update_data_successfully'));
+    }
+
+    /**
+     * Cập nhật trạng thái duyệt hàng loạt
+     */
+    public function bulkStatus(Request $request): JsonResponse
+    {
+        $request->validate([
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'integer|exists:product_reviews,id',
+            'publish' => 'required|in:0,1,2',
+        ]);
+        $result = $this->service->bulkUpdateStatus($request->input('ids'), (int) $request->input('publish'));
+        return ApiResource::ok($result, Lang::get('message.update_data_successfully'));
+    }
 }

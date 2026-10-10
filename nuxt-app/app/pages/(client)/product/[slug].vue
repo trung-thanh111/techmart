@@ -829,6 +829,55 @@ const images = computed(() => {
   return resolveAlbum(productDetail.value.album);
 });
 
+const hashString = (str: string): number => {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash << 5) - hash + str.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash) || 1;
+};
+
+const getNormalizedAttributeData = (variant: any): Record<string, { id: number; name: string }> => {
+  if (!variant?.attributeData) return {};
+  let raw = variant.attributeData;
+  if (typeof raw === "string") {
+    try {
+      raw = JSON.parse(raw);
+      if (typeof raw === "string") raw = JSON.parse(raw);
+    } catch {
+      return {};
+    }
+  }
+  if (!raw || typeof raw !== "object") return {};
+
+  const result: Record<string, { id: number; name: string }> = {};
+
+  Object.entries(raw).forEach(([key, val]: [string, any]) => {
+    if (!val) return;
+    let groupName = key;
+    let id = typeof val === "object" ? (val.id ?? val.attribute_id ?? Number(key)) : Number(key) || 0;
+    let name = typeof val === "object" ? (val.name ?? val.value ?? val.label ?? "") : String(val);
+
+    if (/^\d+$/.test(groupName)) {
+      if (typeof val === "string") {
+        name = val;
+        id = Number(key);
+      }
+      groupName = "Thuộc tính";
+    }
+
+    if (name) {
+      result[groupName] = {
+        id: id || hashString(name),
+        name,
+      };
+    }
+  });
+
+  return result;
+};
+
 // Nhóm các thuộc tính từ variants
 const attributeGroups = computed(() => {
   if (!productDetail.value?.productVariants?.length) return {};
@@ -836,17 +885,16 @@ const attributeGroups = computed(() => {
   const groups: Record<string, { id: number; name: string }[]> = {};
 
   (productDetail.value.productVariants as any[]).forEach((variant: any) => {
-    if (variant?.attributeData) {
-      Object.entries(variant.attributeData).forEach(([attrName, attrValue]: [string, any]) => {
-        if (!groups[attrName]) {
-          groups[attrName] = [];
-        }
-        const exists = groups[attrName]?.find((item) => item.id === attrValue.id);
-        if (!exists) {
-          groups[attrName]?.push(attrValue);
-        }
-      });
-    }
+    const attrData = getNormalizedAttributeData(variant);
+    Object.entries(attrData).forEach(([attrName, attrValue]) => {
+      if (!groups[attrName]) {
+        groups[attrName] = [];
+      }
+      const exists = groups[attrName].find((item) => item.id === attrValue.id || item.name === attrValue.name);
+      if (!exists) {
+        groups[attrName].push(attrValue);
+      }
+    });
   });
 
   return groups;
@@ -857,17 +905,33 @@ const findMatchingVariant = () => {
   if (!productDetail.value?.productVariants?.length) return null;
 
   return (productDetail.value.productVariants as any[]).find((variant: any) => {
-    if (!variant?.attributeData) return false;
+    const attrData = getNormalizedAttributeData(variant);
+    if (!Object.keys(attrData).length) return false;
 
     return Object.entries(selectedAttributes.value).every(([attrName, attrId]) => {
-      return variant.attributeData?.[attrName]?.id === attrId;
+      return attrData[attrName]?.id === attrId;
     });
   });
 };
 
 const handleSelectAttribute = (attributeName: string, attributeId: number) => {
   selectedAttributes.value[attributeName] = attributeId;
-  selectedVariant.value = findMatchingVariant();
+  const matched = findMatchingVariant();
+  if (matched) {
+    selectedVariant.value = matched;
+  } else {
+    const fallback = (productDetail.value?.productVariants as any[])?.find((v: any) => {
+      const data = getNormalizedAttributeData(v);
+      return data[attributeName]?.id === attributeId;
+    });
+    if (fallback) {
+      selectedVariant.value = fallback;
+      const data = getNormalizedAttributeData(fallback);
+      Object.entries(data).forEach(([name, val]) => {
+        selectedAttributes.value[name] = val.id;
+      });
+    }
+  }
 };
 
 const displayPrice = computed(() => {
@@ -1038,8 +1102,8 @@ const isAttributeOptionInWishlist = (attrName: string, attrId: number): boolean 
   return (productDetail.value.productVariants as any[]).some((variant: any) => {
     if (!wishlistVariantIds.value.includes(variant.id)) return false;
 
-    if (!variant?.attributeData?.[attrName]) return false;
-    return variant.attributeData[attrName].id === attrId;
+    const data = getNormalizedAttributeData(variant);
+    return data[attrName]?.id === attrId;
   });
 };
 
@@ -1099,11 +1163,10 @@ onMounted(async () => {
     // Chọn variant đầu tiên mặc định
     if (productDetail.value?.productVariants?.length) {
       const firstVariant = (productDetail.value.productVariants as any[])[0];
-      if (firstVariant?.attributeData) {
-        Object.entries(firstVariant.attributeData).forEach(([attrName, attrValue]: [string, any]) => {
-          selectedAttributes.value[attrName] = attrValue.id;
-        });
-      }
+      const data = getNormalizedAttributeData(firstVariant);
+      Object.entries(data).forEach(([attrName, attr]) => {
+        selectedAttributes.value[attrName] = attr.id;
+      });
       selectedVariant.value = firstVariant;
     }
 

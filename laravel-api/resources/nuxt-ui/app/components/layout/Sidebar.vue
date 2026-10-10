@@ -74,6 +74,9 @@
                                 <li class="nav-item">
                                     <NuxtLink :to="PRODUCTTAGINDEX" class="nav-link" data-key="t-product-list">{{ $t("admin.sidebar.tags") }}</NuxtLink>
                                 </li>
+                                <li class="nav-item">
+                                    <NuxtLink :to="PRODUCTREVIEWINDEX" class="nav-link" data-key="t-product-review-list">Đánh giá sản phẩm</NuxtLink>
+                                </li>
                             </ul>
                         </div>
                     </li>
@@ -288,6 +291,7 @@ import {
     ATTRIBUTEINDEX,
     BRANDINDEX,
     PRODUCTTAGINDEX,
+    PRODUCTREVIEWINDEX,
     ORDERINDEX,
     PROMOTIONCATALOGUEINDEX,
     PROMOTIONINDEX,

@@ -18,7 +18,7 @@ class ProductReviewService extends BaseService implements ProductReviewServiceIn
     protected $complexFilter = ['id'];
     protected $simpleFilter = ['publish', 'product_id', 'rating', 'user_id'];
     protected $fieldSearchs = ['user_name', 'user_email', 'comment'];
-    protected $with = ['user'];
+    protected $with = ['user', 'product'];
 
     protected $cacheKeyPrefix = 'product_reviews';
     protected $cacheTags = ['product_reviews:collection'];
@@ -131,6 +131,31 @@ class ProductReviewService extends BaseService implements ProductReviewServiceIn
         return [
             'id' => $review->id,
             'likes_count' => $review->likes_count,
+        ];
+    }
+
+    public function updateStatus(int $id, int $publish)
+    {
+        $review = ProductReview::findOrFail($id);
+        $review->update(['publish' => $publish]);
+
+        $this->clearCacheById($id)->clearCacheByTags();
+
+        return new ProductReviewResource($review->load(['user', 'product']));
+    }
+
+    public function bulkUpdateStatus(array $ids, int $publish): array
+    {
+        ProductReview::whereIn('id', $ids)->update(['publish' => $publish]);
+
+        foreach ($ids as $id) {
+            $this->clearCacheById($id);
+        }
+        $this->clearCacheByTags();
+
+        return [
+            'updated_count' => count($ids),
+            'publish' => $publish,
         ];
     }
 

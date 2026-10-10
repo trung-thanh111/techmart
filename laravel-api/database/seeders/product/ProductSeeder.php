@@ -43,6 +43,10 @@ class ProductSeeder extends Seeder
             ['slug' => 'dung-luong'],
             ['name' => 'Dung lượng', 'publish' => 1, 'user_id' => 1]
         );
+        $attrCatRam = AttributeCatalogue::firstOrCreate(
+            ['slug' => 'cau-hinh'],
+            ['name' => 'Cấu hình', 'publish' => 1, 'user_id' => 1]
+        );
 
         // 3. Chuẩn bị Brands
         $brandNames = [
@@ -134,7 +138,13 @@ class ProductSeeder extends Seeder
                 'content' => '<p><strong>iPhone 16 Pro Max</strong> là đỉnh cao công nghệ của Apple với màn hình 6.9 inch viền mỏng nhất từ trước đến nay. Nút Action Button đa năng cùng Camera Control thế hệ mới đem đến trải nghiệm nhiếp ảnh chuyên nghiệp chuẩn Studio.</p><p>Thời lượng pin kỷ lục cùng sạc nhanh MagSafe thế hệ mới mang lại độ tin cậy vượt bậc.</p>',
                 'variants' => [
                     ['sku' => 'IP16PM-256-DES', 'name' => 'iPhone 16 Pro Max 256GB Titan Sa Mạc', 'price' => 34490000, 'stock' => 50, 'attrs' => ['256GB', 'Titan Sa Mạc']],
+                    ['sku' => 'IP16PM-256-NAT', 'name' => 'iPhone 16 Pro Max 256GB Titan Tự Nhiên', 'price' => 34490000, 'stock' => 45, 'attrs' => ['256GB', 'Titan Tự Nhiên']],
+                    ['sku' => 'IP16PM-256-BLK', 'name' => 'iPhone 16 Pro Max 256GB Titan Đen', 'price' => 34490000, 'stock' => 40, 'attrs' => ['256GB', 'Titan Đen']],
+                    ['sku' => 'IP16PM-512-DES', 'name' => 'iPhone 16 Pro Max 512GB Titan Sa Mạc', 'price' => 39990000, 'stock' => 30, 'attrs' => ['512GB', 'Titan Sa Mạc']],
                     ['sku' => 'IP16PM-512-NAT', 'name' => 'iPhone 16 Pro Max 512GB Titan Tự Nhiên', 'price' => 39990000, 'stock' => 35, 'attrs' => ['512GB', 'Titan Tự Nhiên']],
+                    ['sku' => 'IP16PM-512-BLK', 'name' => 'iPhone 16 Pro Max 512GB Titan Đen', 'price' => 39990000, 'stock' => 25, 'attrs' => ['512GB', 'Titan Đen']],
+                    ['sku' => 'IP16PM-1TB-DES', 'name' => 'iPhone 16 Pro Max 1TB Titan Sa Mạc', 'price' => 45990000, 'stock' => 15, 'attrs' => ['1TB', 'Titan Sa Mạc']],
+                    ['sku' => 'IP16PM-1TB-NAT', 'name' => 'iPhone 16 Pro Max 1TB Titan Tự Nhiên', 'price' => 45990000, 'stock' => 15, 'attrs' => ['1TB', 'Titan Tự Nhiên']],
                     ['sku' => 'IP16PM-1TB-BLK', 'name' => 'iPhone 16 Pro Max 1TB Titan Đen', 'price' => 45990000, 'stock' => 20, 'attrs' => ['1TB', 'Titan Đen']],
                 ]
             ],
@@ -157,7 +167,9 @@ class ProductSeeder extends Seeder
                 'content' => '<p><strong>iPhone 16</strong> sở hữu thiết kế thời thượng với bảng màu pastel rực rỡ, kính pha màu bền bỉ gấp 2 lần. Cảm biến chính Fusion 48MP cho ảnh chụp độ phân giải siêu nét.</p>',
                 'variants' => [
                     ['sku' => 'IP16-128-PNK', 'name' => 'iPhone 16 128GB Hồng', 'price' => 21990000, 'stock' => 60, 'attrs' => ['128GB', 'Hồng']],
-                    ['sku' => 'IP16-256-TEA', 'name' => 'iPhone 16 256GB Xanh Mòng Két', 'price' => 24990000, 'stock' => 40, 'attrs' => ['256GB', 'Xanh Dương']],
+                    ['sku' => 'IP16-128-BLU', 'name' => 'iPhone 16 128GB Xanh Dương', 'price' => 21990000, 'stock' => 50, 'attrs' => ['128GB', 'Xanh Dương']],
+                    ['sku' => 'IP16-256-PNK', 'name' => 'iPhone 16 256GB Hồng', 'price' => 24990000, 'stock' => 40, 'attrs' => ['256GB', 'Hồng']],
+                    ['sku' => 'IP16-256-TEA', 'name' => 'iPhone 16 256GB Xanh Dương', 'price' => 24990000, 'stock' => 40, 'attrs' => ['256GB', 'Xanh Dương']],
                 ]
             ],
             [
@@ -179,6 +191,8 @@ class ProductSeeder extends Seeder
                 'content' => '<p><strong>Samsung Galaxy S24 Ultra</strong> tích hợp vi xử lý Snapdragon 8 Gen 3 for Galaxy tối ưu hóa đồ họa ray tracing đỉnh cao. Camera 200MP bắt trọn từng khoảnh khắc đêm tuyệt hảo.</p>',
                 'variants' => [
                     ['sku' => 'S24U-256-GRY', 'name' => 'Galaxy S24 Ultra 256GB Xám Titan', 'price' => 28990000, 'stock' => 55, 'attrs' => ['256GB', 'Xám Titan']],
+                    ['sku' => 'S24U-256-BLK', 'name' => 'Galaxy S24 Ultra 256GB Đen Titan', 'price' => 28990000, 'stock' => 45, 'attrs' => ['256GB', 'Đen Titan']],
+                    ['sku' => 'S24U-512-GRY', 'name' => 'Galaxy S24 Ultra 512GB Xám Titan', 'price' => 32490000, 'stock' => 30, 'attrs' => ['512GB', 'Xám Titan']],
                     ['sku' => 'S24U-512-BLK', 'name' => 'Galaxy S24 Ultra 512GB Đen Titan', 'price' => 32490000, 'stock' => 30, 'attrs' => ['512GB', 'Đen Titan']],
                 ]
             ],
@@ -781,7 +795,7 @@ class ProductSeeder extends Seeder
 
         // 7. Thực hiện chèn từng sản phẩm và đồng bộ quan hệ
         foreach ($products as $idx => $prodData) {
-            DB::transaction(function () use ($prodData, $idx, $attrCatGeneral, $attrCatColor, $attrCatStorage) {
+            DB::transaction(function () use ($prodData, $idx, $attrCatGeneral, $attrCatColor, $attrCatStorage, $attrCatRam) {
                 $brand = Brand::where('name', $prodData['brand_name'])->first();
                 $catalogue = ProductCatalogue::where('slug', $prodData['catalogue_slug'])->first();
 
@@ -841,29 +855,44 @@ class ProductSeeder extends Seeder
 
                     foreach ($variantData['attrs'] as $attrName) {
                         // Xác định nhóm thuộc tính
-                        $catId = $attrCatGeneral->id;
-                        if (in_array($attrName, ['128GB', '256GB', '512GB', '1TB', '64GB', '8GB', '16GB', '18GB', '32GB', '36GB'])) {
-                            $catId = $attrCatStorage->id;
+                        $cat = $attrCatGeneral;
+                        if (in_array($attrName, ['8GB', '16GB', '18GB', '32GB', '36GB'])) {
+                            $cat = $attrCatRam;
+                        } elseif (in_array($attrName, ['64GB', '128GB', '256GB', '512GB', '1TB', '2TB'])) {
+                            $cat = $attrCatStorage;
                         } elseif (in_array($attrName, ['Titan Sa Mạc', 'Titan Tự Nhiên', 'Titan Đen', 'Đen Titan', 'Xám Titan', 'Đen', 'Trắng', 'Bạc', 'Vàng', 'Hồng', 'Xanh Dương', 'Xanh Lá'])) {
-                            $catId = $attrCatColor->id;
+                            $cat = $attrCatColor;
                         }
 
                         $attr = Attribute::firstOrCreate(
                             ['slug' => Str::slug($attrName)],
                             [
                                 'name' => $attrName,
-                                'attribute_catalogue_id' => $catId,
+                                'attribute_catalogue_id' => $cat->id,
                                 'publish' => 2,
                                 'user_id' => 1
                             ]
                         );
 
+                        if ($attr->attribute_catalogue_id !== $cat->id) {
+                            $attr->update(['attribute_catalogue_id' => $cat->id]);
+                        }
+
                         $attrIds[] = $attr->id;
-                        $attrData[$attr->id] = $attrName;
+                        $attrData[$cat->name] = [
+                            'id' => $attr->id,
+                            'name' => $attr->name,
+                        ];
                     }
 
+                    sort($attrIds);
+                    $variantCode = implode('_', $attrIds);
+
                     $variant->variant_attributes()->sync($attrIds);
-                    $variant->update(['attribute_data' => $attrData]);
+                    $variant->update([
+                        'attribute_data' => $attrData,
+                        'code' => $variantCode ?: $variantData['sku'],
+                    ]);
                 }
             });
         }

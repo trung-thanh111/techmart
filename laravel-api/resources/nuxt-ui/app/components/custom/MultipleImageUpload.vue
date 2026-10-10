@@ -165,11 +165,18 @@ const initializeFromModelValue = () => {
     }
     try {
         if (Array.isArray(props.modelValue)) {
-            images.value = props.modelValue.map((item, index) => ({
-                id: `existing_${index}`,
-                url: item.path ? `${config.public.baseUrl}/storage/${item.path}` : "",
-                path: item.path,
-            }));
+            images.value = props.modelValue.map((item, index) => {
+                const target = typeof item === "string" ? item : (item?.url || item?.path || "");
+                let resolvedUrl = target;
+                if (target && !target.startsWith("http://") && !target.startsWith("https://") && !target.startsWith("/")) {
+                    resolvedUrl = `${config.public.baseUrl}/storage/${target.replace(/^\/+/, "")}`;
+                }
+                return {
+                    id: `existing_${index}`,
+                    url: target ? resolvedUrl : "",
+                    path: typeof item === "string" ? item : (item?.path || target),
+                };
+            });
         }
     } catch {
         images.value = [];

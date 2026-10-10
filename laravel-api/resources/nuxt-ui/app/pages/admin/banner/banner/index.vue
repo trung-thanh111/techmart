@@ -7,6 +7,7 @@ import AppCheckbox from "~/components/custom/AppCheckbox.vue";
 import Button from "~/components/custom/Button.vue";
 import { useBanner } from "~/composables/banner/useBanner";
 import { BANNERUPDATE, BANNERCREATE } from "~/utils/constants";
+import { resolveAlbum } from "~/utils/helpers";
 
 const { data, config, isLoading, selectedIds, selectedItem, search, setPage, handleDeleteMultiple, setSelectedItem, confirmDelete, updateSelectedIds, getTotalItems, getAllItemIds, handleToggleIsHot } = useBanner();
 
@@ -96,8 +97,8 @@ definePageMeta({
                                     <NuxtLink class="hover:text-teal-500 flex items-center gap-2" :to="BANNERUPDATE(item.id)">
                                         <div :id="`carousel-${item.id}`" class="carousel slide carousel-fade w-[120px] h-[70px] rounded-md overflow-hidden" data-bs-ride="carousel">
                                             <div class="carousel-inner">
-                                                <div v-for="(img, idx) in item.album?.length ? item.album : [{ path: '/shared/images/defaults/record.jpg' }]" :key="idx" class="carousel-item" :class="{ active: idx === 0 }">
-                                                    <NuxtImg :src="img.path?.startsWith('uploads') ? `${config.public.baseUrl}/storage/${img.path}` : IMAGEDEFAULT" alt="banner-image" class="w-[120px] h-[70px] object-cover" loading="lazy" />
+                                                <div v-for="(imgSrc, idx) in resolveAlbum(item.album)" :key="idx" class="carousel-item" :class="{ active: idx === 0 }">
+                                                    <NuxtImg :src="imgSrc" alt="banner-image" class="w-[120px] h-[70px] object-cover" loading="lazy" @error="($event.target as HTMLImageElement).src = '/shared/images/defaults/record.jpg'" />
                                                 </div>
                                             </div>
                                             <button v-if="item.album?.length > 1" class="carousel-control-prev" type="button" :data-bs-target="`#carousel-${item.id}`" data-bs-slide="prev">

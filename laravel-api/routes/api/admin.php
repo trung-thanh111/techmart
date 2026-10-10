@@ -37,6 +37,7 @@ use App\Http\Controllers\Api\V1\Auth\AdminAuthController;
 use App\Http\Controllers\Api\V1\Auth\ChangePasswordController;
 use App\Http\Controllers\Api\V1\Order\OrderController;
 use App\Http\Controllers\Api\V1\Dashboard\DashboardController;
+use App\Http\Controllers\Api\V1\ProductReview\ProductReviewController;
 
 $routeExcept = ['create', 'edit'];
 $publicResourceExcept = ['create', 'edit', 'index', 'show'];
@@ -288,4 +289,13 @@ Route::group(['prefix' => 'v1/', 'middleware' => ['jwt:admin', 'convert', 'check
     Route::resource('post_comments', PostCommentController::class)->except($publicResourceExcept);
     Route::resource('post_likes', PostLikeController::class)->except($publicResourceExcept);
     Route::resource('post_comment_likes', PostCommentLikeController::class)->except($publicResourceExcept);
+
+    // Product Reviews (Admin Moderation)
+    Route::group(['prefix' => 'product_reviews'], function () {
+        Route::delete('bulkDelete', [ProductReviewController::class, 'bulkDelete']);
+        Route::post('bulkStatus', [ProductReviewController::class, 'bulkStatus']);
+        Route::put('{id}/status', [ProductReviewController::class, 'updateStatus']);
+        Route::patch('{id}/status', [ProductReviewController::class, 'updateStatus']);
+    });
+    Route::resource('product_reviews', ProductReviewController::class)->except($routeExcept);
 });

@@ -75,20 +75,68 @@ const selectedAttributes = ref<Record<string, number>>({});
 const selectedVariant = ref<any>(null);
 const quantity = ref(1);
 
+const hashString = (str: string): number => {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash << 5) - hash + str.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash) || 1;
+};
+
+const getNormalizedAttributeData = (variant: any): Record<string, { id: number; name: string }> => {
+  if (!variant?.attributeData) return {};
+  let raw = variant.attributeData;
+  if (typeof raw === "string") {
+    try {
+      raw = JSON.parse(raw);
+      if (typeof raw === "string") raw = JSON.parse(raw);
+    } catch {
+      return {};
+    }
+  }
+  if (!raw || typeof raw !== "object") return {};
+
+  const result: Record<string, { id: number; name: string }> = {};
+
+  Object.entries(raw).forEach(([key, val]: [string, any]) => {
+    if (!val) return;
+    let groupName = key;
+    let id = typeof val === "object" ? (val.id ?? val.attribute_id ?? Number(key)) : Number(key) || 0;
+    let name = typeof val === "object" ? (val.name ?? val.value ?? val.label ?? "") : String(val);
+
+    if (/^\d+$/.test(groupName)) {
+      if (typeof val === "string") {
+        name = val;
+        id = Number(key);
+      }
+      groupName = "Thuộc tính";
+    }
+
+    if (name) {
+      result[groupName] = {
+        id: id || hashString(name),
+        name,
+      };
+    }
+  });
+
+  return result;
+};
+
 // Compute attribute groups from product variants
 const attributeGroups = computed(() => {
   if (!props.product?.productVariants?.length) return {};
   const groups: Record<string, { id: number; name: string }[]> = {};
 
   (props.product.productVariants as any[]).forEach((variant: any) => {
-    if (variant?.attributeData) {
-      Object.entries(variant.attributeData).forEach(([attrName, attrValue]: [string, any]) => {
-        if (!groups[attrName]) groups[attrName] = [];
-        if (!groups[attrName].find((i) => i.id === attrValue.id)) {
-          groups[attrName].push(attrValue);
-        }
-      });
-    }
+    const attrData = getNormalizedAttributeData(variant);
+    Object.entries(attrData).forEach(([attrName, attrValue]) => {
+      if (!groups[attrName]) groups[attrName] = [];
+      if (!groups[attrName].find((i) => i.id === attrValue.id || i.name === attrValue.name)) {
+        groups[attrName].push(attrValue);
+      }
+    });
   });
   return groups;
 });
@@ -96,16 +144,32 @@ const attributeGroups = computed(() => {
 const findMatchingVariant = () => {
   if (!props.product?.productVariants?.length) return null;
   return (props.product.productVariants as any[]).find((variant: any) => {
-    if (!variant?.attributeData) return false;
+    const attrData = getNormalizedAttributeData(variant);
+    if (!Object.keys(attrData).length) return false;
     return Object.entries(selectedAttributes.value).every(([attrName, attrId]) => {
-      return variant.attributeData?.[attrName]?.id === attrId;
+      return attrData[attrName]?.id === attrId;
     });
   });
 };
 
 const handleSelectAttribute = (attrName: string, id: number) => {
   selectedAttributes.value[attrName] = id;
-  selectedVariant.value = findMatchingVariant();
+  const matched = findMatchingVariant();
+  if (matched) {
+    selectedVariant.value = matched;
+  } else {
+    const fallback = (props.product?.productVariants as any[])?.find((v: any) => {
+      const data = getNormalizedAttributeData(v);
+      return data[attrName]?.id === id;
+    });
+    if (fallback) {
+      selectedVariant.value = fallback;
+      const data = getNormalizedAttributeData(fallback);
+      Object.entries(data).forEach(([name, val]) => {
+        selectedAttributes.value[name] = val.id;
+      });
+    }
+  }
 };
 
 const close = () => {
@@ -135,8 +199,9 @@ watch(
       // Auto select first variant's attributes
       if (newProduct.productVariants?.length) {
         const first = (newProduct.productVariants as any[])[0];
-        if (first.attributeData) {
-          Object.entries(first.attributeData).forEach(([k, v]: [string, any]) => {
+        const data = getNormalizedAttributeData(first);
+        if (Object.keys(data).length) {
+          Object.entries(data).forEach(([k, v]) => {
             selectedAttributes.value[k] = v.id;
           });
           selectedVariant.value = first;

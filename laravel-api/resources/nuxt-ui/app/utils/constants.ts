@@ -72,6 +72,8 @@ export const PRODUCTTAGINDEX = "/admin/product/tag";
 export const PRODUCTTAGCREATE = "/admin/product/tag/create";
 export const PRODUCTTAGUPDATE = (id: string | number) => `/admin/product/tag/${id}/edit`;
 
+export const PRODUCTREVIEWINDEX = "/admin/product/review";
+
 // Order module
 export const ORDERINDEX = "/admin/order/order";
 export const ORDERUPDATE = (id: string | number) => `/admin/order/order/${id}/edit`;
