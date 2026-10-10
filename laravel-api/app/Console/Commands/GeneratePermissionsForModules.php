@@ -32,6 +32,7 @@ class GeneratePermissionsForModules extends Command
         'product_catalogues',
         'product_variants',
         'product_tags',
+        'product_reviews',
         'brands',
         'attributes',
         'attribute_catalogues',
@@ -46,13 +47,18 @@ class GeneratePermissionsForModules extends Command
         'banner_positions',
         'promotions',
         'promotion_catalogues',
+        'orders',
         'faqs',
         'faq_catalogues',
         'agencies',
         'agency_working_hours',
         'inventories',
+        'menus',
+        'menu_items',
+        'dashboard',
         'address_orders',
         'images',
+        'mails',
         'systems',
         'popups',
         'carts',
@@ -87,6 +93,29 @@ class GeneratePermissionsForModules extends Command
             } catch (\Exception $e) {
                 $this->error("✗ Failed to generate permissions for module {$module}: " . $e->getMessage());
             }
+        }
+
+        $this->newLine();
+
+        // Gán toàn bộ permissions cho nhóm Super Admin
+        $adminCatalogue = \App\Models\UserCatalogue::where('is_admin', true)
+            ->orWhere('slug', 'admin')
+            ->orWhere('id', 2)
+            ->first();
+
+        if ($adminCatalogue) {
+            $allPermissionIds = \App\Models\Permission::pluck('id')->toArray();
+            $adminCatalogue->permissions()->sync($allPermissionIds);
+            $this->info("✓ Assigned all " . count($allPermissionIds) . " permissions to Super Admin catalogue: {$adminCatalogue->name}");
+
+            // Đảm bảo các admin users được liên kết vào catalogue
+            $adminUsers = \App\Models\User::where('user_catalogue_id', $adminCatalogue->id)->get();
+            foreach ($adminUsers as $adminUser) {
+                if (!$adminUser->user_catalogues()->where('user_catalogues.id', $adminCatalogue->id)->exists()) {
+                    $adminUser->user_catalogues()->attach($adminCatalogue->id);
+                }
+            }
+            $this->info("✓ Linked " . $adminUsers->count() . " admin user(s) to catalogue: {$adminCatalogue->name}");
         }
 
         $this->newLine();

@@ -72,18 +72,39 @@ export const formatItemAttributes = (attrs: any): string => {
 /**
  * Get product image URL with fallback
  */
-export const getProductImage = (img?: string | { path?: string; url?: string }): string => {
+export const getProductImage = (img?: string | { path?: string; url?: string } | any): string => {
   if (!img) return IMAGEDEFAULT;
-  if (typeof img === "object" && img.url) return img.url;
-  if (typeof img === "string" && (img.startsWith("http://") || img.startsWith("https://"))) return img;
-  return IMAGEDEFAULT;
+  let target = "";
+  if (typeof img === "object") {
+    target = img.url || img.path || "";
+  } else if (typeof img === "string") {
+    target = img;
+  }
+  if (!target) return IMAGEDEFAULT;
+  if (target.endsWith("/storage") || target.endsWith("/storage/")) return IMAGEDEFAULT;
+  if (target.includes("/storage/http")) {
+    const httpsIdx = target.indexOf("https://");
+    const httpIdx = target.indexOf("http://");
+    if (httpsIdx !== -1) return target.slice(httpsIdx);
+    if (httpIdx !== -1) return target.slice(httpIdx);
+  }
+  if (target.startsWith("http://") || target.startsWith("https://") || target.startsWith("/")) return target;
+  try {
+    const config = useRuntimeConfig();
+    return `${config.public.baseUrl}/storage/${target.replace(/^\/+/, "")}`;
+  } catch {
+    return target;
+  }
 };
 
 /**
  * Handle image error - set to default image
  */
 export const handleImageError = (e: Event): void => {
-  (e.target as HTMLImageElement).src = IMAGEDEFAULT;
+  const target = e.target as HTMLImageElement;
+  if (target && target.src !== IMAGEDEFAULT) {
+    target.src = IMAGEDEFAULT;
+  }
 };
 
 /**

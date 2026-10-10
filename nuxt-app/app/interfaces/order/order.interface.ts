@@ -82,6 +82,7 @@ export interface IOrder {
   shippedAt?: string;
   deliveredAt?: string;
   cancelledAt?: string;
+  refundedAt?: string;
 }
 
 // Order group for display (grouped by date)

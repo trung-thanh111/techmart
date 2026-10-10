@@ -67,9 +67,13 @@ class AuthApiTest extends TestCase
             [
                 'name' => 'Admin Test User',
                 'password' => Hash::make($password),
+                'user_catalogue_id' => 2,
                 'publish' => 1,
             ]
         );
+        if ((int) $admin->user_catalogue_id !== 2) {
+            $admin->update(['user_catalogue_id' => 2]);
+        }
 
         $response = $this->postJson('/api/v1/admin/auth/login', [
             'email' => $admin->email,

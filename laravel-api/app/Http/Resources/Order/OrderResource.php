@@ -71,6 +71,7 @@ class OrderResource extends JsonResource
             'shippedAt' => $this->shipped_at?->toISOString(),
             'deliveredAt' => $this->delivered_at?->toISOString(),
             'cancelledAt' => $this->cancelled_at?->toISOString(),
+            'refundedAt' => $this->refunded_at?->toISOString(),
             'createdAt' => $this->created_at?->toISOString(),
             'updatedAt' => $this->updated_at?->toISOString(),
         ];

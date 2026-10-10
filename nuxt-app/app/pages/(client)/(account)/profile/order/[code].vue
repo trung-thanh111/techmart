@@ -103,17 +103,55 @@
               <div class="relative pl-8">
                 <div v-for="(step, idx) in orderSteps" :key="step.status" class="relative pb-8 last:pb-0">
                   <!-- Vertical Line -->
-                  <div v-if="idx < orderSteps.length - 1" class="absolute left-[-13px] top-8 w-0.5 h-[calc(100%-8px)]" :class="step.completed ? 'bg-green-500' : 'border-l-2 border-dashed border-gray-300'"></div>
+                  <div
+                    v-if="idx < orderSteps.length - 1"
+                    class="absolute left-[-13px] top-8 w-0.5 h-[calc(100%-8px)]"
+                    :class="orderSteps[idx + 1].completed ? (orderSteps[idx + 1].variant === 'danger' ? 'bg-red-400' : 'bg-green-500') : 'border-l-2 border-dashed border-gray-300'"
+                  ></div>
                   <!-- Circle -->
-                  <div :class="['absolute left-[-29px] w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold shadow-md border-2', step.completed || step.current ? 'bg-green-500 border-green-500 text-white' : 'bg-white border-gray-300 text-gray-400']">
-                    <svg v-if="step.completed || step.current" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <div
+                    :class="[
+                      'absolute left-[-29px] w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold shadow-md border-2',
+                      step.variant === 'danger'
+                        ? 'bg-red-500 border-red-500 text-white'
+                        : step.variant === 'warning'
+                        ? 'bg-orange-500 border-orange-500 text-white'
+                        : step.completed || step.current
+                        ? 'bg-green-500 border-green-500 text-white'
+                        : 'bg-white border-gray-300 text-gray-400',
+                    ]"
+                  >
+                    <!-- Danger/Cancelled icon -->
+                    <svg v-if="step.variant === 'danger'" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                    <!-- Warning/Refund icon -->
+                    <svg v-else-if="step.variant === 'warning'" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+                    </svg>
+                    <!-- Checkmark icon -->
+                    <svg v-else-if="step.completed || step.current" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                       <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                     </svg>
+                    <!-- Number -->
                     <span v-else>{{ idx + 1 }}</span>
                   </div>
                   <!-- Content -->
                   <div class="ml-4">
-                    <p :class="['text-sm font-semibold', step.completed || step.current ? 'text-green-600' : 'text-gray-400']">{{ step.label }}</p>
+                    <p
+                      :class="[
+                        'text-sm font-semibold',
+                        step.variant === 'danger'
+                          ? 'text-red-600'
+                          : step.variant === 'warning'
+                          ? 'text-orange-600'
+                          : step.completed || step.current
+                          ? 'text-green-600'
+                          : 'text-gray-400',
+                      ]"
+                    >
+                      {{ step.label }}
+                    </p>
                     <p class="text-xs text-gray-500 mt-0.5">{{ step.description }}</p>
                     <p v-if="step.timestamp" class="text-xs text-gray-400 mt-1">{{ formatFullDate(step.timestamp) }}</p>
                   </div>
@@ -128,7 +166,7 @@
                 <div v-for="item in order.items" :key="item.id" class="flex gap-4 p-3 border border-gray-100 rounded-lg hover:border-sky-400 transition bg-white">
                   <!-- Image -->
                   <div class="w-20 h-20 flex-shrink-0 bg-gray-100 rounded overflow-hidden">
-                    <NuxtImg :src="getProductImage(item.productImage) ?? IMAGEDEFAULT" :alt="item.productName" class="w-full h-full object-contain" loading="lazy" />
+                    <NuxtImg :src="getProductImage(item.productImage) ?? IMAGEDEFAULT" :alt="item.productName" class="w-full h-full object-contain" loading="lazy" @error="handleImageError" />
                   </div>
                   <!-- Info -->
                   <div class="flex-1 min-w-0">
@@ -230,7 +268,7 @@ import { formatPrice } from "~/utils/helpers";
 import { getCityName, getWardName } from "~/utils/address.helpers";
 import { useAppToast } from "~/composables/useAppToast";
 import { PROFILEORDER } from "~/utils/constants";
-import { getStatusClass, getProductImage, formatItemAttributes, formatFullDate } from "~/utils/order.helpers";
+import { getStatusClass, getProductImage, formatItemAttributes, formatFullDate, handleImageError } from "~/utils/order.helpers";
 import { IMAGEDEFAULT } from "~/utils/constants";
 
 definePageMeta({
@@ -321,34 +359,222 @@ const handleSaveNote = async () => {
   }
 };
 
-// Timeline
-const orderSteps = computed(() => {
-  const currentStatus = order.value?.status || "pending";
-  const currentIdx = STATUS_ORDER.indexOf(currentStatus as (typeof STATUS_ORDER)[number]);
+// Dynamic Order Timeline
+interface IOrderTimelineStep {
+  status: string;
+  label: string;
+  description: string;
+  completed: boolean;
+  current: boolean;
+  timestamp?: string;
+  variant?: "standard" | "danger" | "warning";
+}
 
-  if (currentStatus === "cancelled" || currentStatus === "failed" || currentStatus === "refunded") {
-    const config = STATUS_CONFIG[currentStatus] || { label: currentStatus, description: "" };
-    return [
-      { status: "pending", label: "Đặt hàng", description: STATUS_CONFIG.description, completed: true, current: false, timestamp: order.value?.createdAt },
-      { status: currentStatus, label: config.label, description: config.description, completed: true, current: true, timestamp: order.value?.cancelledAt || order.value?.updatedAt },
-    ];
+const STANDARD_FLOW = ["pending", "confirmed", "processing", "shipped", "delivered"] as const;
+
+const orderSteps = computed<IOrderTimelineStep[]>(() => {
+  if (!order.value) return [];
+  const currentStatus = order.value.status || "pending";
+
+  // Build map of status histories
+  const historyMap: Record<string, { timestamp?: string; note?: string }> = {};
+  if (Array.isArray(order.value.statusHistories)) {
+    for (const h of order.value.statusHistories) {
+      if (h.newStatus) {
+        historyMap[h.newStatus] = {
+          timestamp: h.createdAt,
+          note: h.note,
+        };
+      }
+    }
   }
 
-  return STATUS_ORDER.map((status, idx) => {
-    const timestamps: Record<string, string | undefined> = {
-      pending: order.value?.createdAt,
-      confirmed: order.value?.confirmedAt,
-      shipped: order.value?.shippedAt,
-      delivered: order.value?.deliveredAt,
-    };
+  const timestamps: Record<string, string | undefined> = {
+    pending: order.value.createdAt,
+    confirmed: order.value.confirmedAt || historyMap.confirmed?.timestamp,
+    processing: historyMap.processing?.timestamp || (["processing", "shipped", "delivered"].includes(currentStatus) ? order.value.confirmedAt : undefined),
+    shipped: order.value.shippedAt || historyMap.shipped?.timestamp,
+    delivered: order.value.deliveredAt || historyMap.delivered?.timestamp,
+    cancelled: order.value.cancelledAt || historyMap.cancelled?.timestamp || order.value.updatedAt,
+    failed: historyMap.failed?.timestamp || order.value.updatedAt,
+    refunded: (order.value as any).refundedAt || historyMap.refunded?.timestamp || order.value.updatedAt,
+  };
+
+  // Case 1: Cancelled
+  if (currentStatus === "cancelled") {
+    const steps: IOrderTimelineStep[] = [
+      {
+        status: "pending",
+        label: STATUS_CONFIG.pending?.label || "Đặt hàng",
+        description: STATUS_CONFIG.pending?.description || "Đơn hàng đã được tạo và đang chờ xác nhận",
+        completed: true,
+        current: false,
+        timestamp: timestamps.pending,
+        variant: "standard",
+      },
+    ];
+
+    if (timestamps.confirmed) {
+      steps.push({
+        status: "confirmed",
+        label: STATUS_CONFIG.confirmed?.label || "Xác nhận",
+        description: STATUS_CONFIG.confirmed?.description || "Đơn hàng đã được xác nhận bởi người bán hoặc hệ thống",
+        completed: true,
+        current: false,
+        timestamp: timestamps.confirmed,
+        variant: "standard",
+      });
+    }
+
+    if (historyMap.processing?.timestamp) {
+      steps.push({
+        status: "processing",
+        label: STATUS_CONFIG.processing?.label || "Đang xử lý",
+        description: STATUS_CONFIG.processing?.description || "Đơn hàng đang được đóng gói và chuẩn bị giao đến bạn",
+        completed: true,
+        current: false,
+        timestamp: timestamps.processing,
+        variant: "standard",
+      });
+    }
+
+    const cancelConfig = STATUS_CONFIG.cancelled || { label: "Đã hủy", description: "Đơn hàng đã bị hủy!" };
+    const cancelNote = historyMap.cancelled?.note || order.value.adminNote;
+    steps.push({
+      status: "cancelled",
+      label: cancelConfig.label,
+      description: cancelNote ? `Đơn hàng đã bị hủy (${cancelNote})` : cancelConfig.description,
+      completed: true,
+      current: true,
+      timestamp: timestamps.cancelled,
+      variant: "danger",
+    });
+
+    return steps;
+  }
+
+  // Case 2: Failed
+  if (currentStatus === "failed") {
+    const steps: IOrderTimelineStep[] = [
+      {
+        status: "pending",
+        label: STATUS_CONFIG.pending?.label || "Đặt hàng",
+        description: STATUS_CONFIG.pending?.description || "Đơn hàng đã được tạo và đang chờ xác nhận",
+        completed: true,
+        current: false,
+        timestamp: timestamps.pending,
+        variant: "standard",
+      },
+    ];
+
+    if (timestamps.confirmed) {
+      steps.push({
+        status: "confirmed",
+        label: STATUS_CONFIG.confirmed?.label || "Xác nhận",
+        description: STATUS_CONFIG.confirmed?.description || "Đơn hàng đã được xác nhận",
+        completed: true,
+        current: false,
+        timestamp: timestamps.confirmed,
+        variant: "standard",
+      });
+    }
+
+    if (timestamps.shipped) {
+      steps.push({
+        status: "shipped",
+        label: STATUS_CONFIG.shipped?.label || "Đang giao",
+        description: STATUS_CONFIG.shipped?.description || "Đơn hàng đã được giao cho đơn vị vận chuyển",
+        completed: true,
+        current: false,
+        timestamp: timestamps.shipped,
+        variant: "standard",
+      });
+    }
+
+    const failConfig = STATUS_CONFIG.failed || { label: "Thất bại", description: "Đơn hàng giao không thành công!" };
+    const failNote = historyMap.failed?.note || order.value.adminNote;
+    steps.push({
+      status: "failed",
+      label: failConfig.label,
+      description: failNote ? `Đơn hàng giao không thành công (${failNote})` : failConfig.description,
+      completed: true,
+      current: true,
+      timestamp: timestamps.failed,
+      variant: "danger",
+    });
+
+    return steps;
+  }
+
+  // Case 3: Refunded
+  if (currentStatus === "refunded") {
+    const steps: IOrderTimelineStep[] = [
+      {
+        status: "pending",
+        label: STATUS_CONFIG.pending?.label || "Đặt hàng",
+        description: STATUS_CONFIG.pending?.description || "Đơn hàng đã được tạo và đang chờ xác nhận",
+        completed: true,
+        current: false,
+        timestamp: timestamps.pending,
+        variant: "standard",
+      },
+    ];
+
+    if (timestamps.confirmed) {
+      steps.push({
+        status: "confirmed",
+        label: STATUS_CONFIG.confirmed?.label || "Xác nhận",
+        description: STATUS_CONFIG.confirmed?.description || "Đơn hàng đã được xác nhận",
+        completed: true,
+        current: false,
+        timestamp: timestamps.confirmed,
+        variant: "standard",
+      });
+    }
+
+    if (timestamps.delivered) {
+      steps.push({
+        status: "delivered",
+        label: STATUS_CONFIG.delivered?.label || "Hoàn thành",
+        description: STATUS_CONFIG.delivered?.description || "Đơn hàng đã được giao thành công!",
+        completed: true,
+        current: false,
+        timestamp: timestamps.delivered,
+        variant: "standard",
+      });
+    }
+
+    const refundConfig = STATUS_CONFIG.refunded || { label: "Hoàn tiền", description: "Đơn hàng đã được hoàn tiền!" };
+    const refundNote = historyMap.refunded?.note;
+    steps.push({
+      status: "refunded",
+      label: refundConfig.label,
+      description: refundNote ? `Đơn hàng đã được hoàn tiền (${refundNote})` : refundConfig.description,
+      completed: true,
+      current: true,
+      timestamp: timestamps.refunded,
+      variant: "warning",
+    });
+
+    return steps;
+  }
+
+  // Case 4: Standard flow (pending -> confirmed -> processing -> shipped -> delivered)
+  const currentIdx = STANDARD_FLOW.indexOf(currentStatus as (typeof STANDARD_FLOW)[number]);
+
+  return STANDARD_FLOW.map((status, idx) => {
     const config = STATUS_CONFIG[status] || { label: status, description: "" };
+    const isCompleted = currentIdx !== -1 ? idx <= currentIdx : idx === 0;
+    const isCurrent = currentIdx !== -1 ? idx === currentIdx : idx === 0;
+
     return {
       status,
       label: config.label,
       description: config.description,
-      completed: idx < currentIdx,
-      current: idx === currentIdx,
+      completed: isCompleted,
+      current: isCurrent,
       timestamp: timestamps[status],
+      variant: "standard",
     };
   });
 });

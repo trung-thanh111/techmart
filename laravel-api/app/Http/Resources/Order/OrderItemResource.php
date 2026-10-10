@@ -23,10 +23,28 @@ class OrderItemResource extends JsonResource
             'productName' => $this->product_name,
             'productDescription' => $this->product_description,
             'productAttributes' => $this->product_attributes,
-            'productImage' => [
-                'path' => $this->product_image ?? null,
-                'url' => asset("/storage/{$this->product_image}") ?? null,
-            ],
+            'productImage' => (function () {
+                $rawImage = $this->product_image;
+                if (empty($rawImage) && $this->product_id) {
+                    $prod = $this->relationLoaded('products') ? $this->products : \App\Models\Product::find($this->product_id);
+                    if ($prod && !empty($prod->album)) {
+                        $first = is_array($prod->album) ? ($prod->album[0] ?? null) : $prod->album;
+                        $rawImage = is_array($first) ? ($first['url'] ?? $first['path'] ?? null) : (is_string($first) ? $first : null);
+                    }
+                }
+                $imageUrl = null;
+                if (!empty($rawImage) && is_string($rawImage)) {
+                    if (str_starts_with($rawImage, 'http://') || str_starts_with($rawImage, 'https://') || str_starts_with($rawImage, '/')) {
+                        $imageUrl = $rawImage;
+                    } else {
+                        $imageUrl = asset('/storage/' . ltrim($rawImage, '/'));
+                    }
+                }
+                return [
+                    'path' => $rawImage ?: null,
+                    'url' => $imageUrl,
+                ];
+            })(),
             'quantity' => (int) $this->quantity,
             'unitPrice' => (float) $this->unit_price,
             'originalPrice' => $this->original_price ? (float) $this->original_price : null,

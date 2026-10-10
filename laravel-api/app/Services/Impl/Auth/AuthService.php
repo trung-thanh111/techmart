@@ -136,6 +136,22 @@ class AuthService implements AuthServiceInterface
                 throw new AuthenticationException(Lang::get('message.auth_failed'));
             }
 
+            // Nếu đăng nhập qua guard admin, chỉ cho phép tài khoản có quyền admin
+            if ($guard === Common::ADMIN) {
+                $user = $auth->user();
+                $isAllowedAdmin = (bool) (
+                    $user->is_admin
+                    || $user->user_catalogue?->is_admin
+                    || (int) $user->user_catalogue_id === 2
+                    || $user->user_catalogues()->where('is_admin', true)->exists()
+                );
+
+                if (!$isAllowedAdmin) {
+                    $auth->logout();
+                    throw new AuthenticationException(Lang::get('message.access_denied'));
+                }
+            }
+
             $this->accessToken = $accessToken;
         }
 

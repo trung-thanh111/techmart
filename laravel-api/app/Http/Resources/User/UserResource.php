@@ -28,13 +28,15 @@ class UserResource extends JsonResource
             'city' => $this->city ?? '',
             'ward' => $this->ward ?? '',
             'userCatalogueId' => (int) $this->user_catalogue_id,
-            'isAdmin' => $this->is_admin,
+            'isAdmin' => (bool) ($this->is_admin || $this->user_catalogue?->is_admin || (int) $this->user_catalogue_id === 2),
             'image' => [
                 'path' => $this->image ?? null,
                 'url' => asset("/storage/{$this->image}") ?? null,
             ],
             'addressOrder' => AddressOrderResource::collection($this->address_orders),
-            'userCatalogue' => UserCatalogueResource::collection($this->user_catalogues),
+            'userCatalogue' => ($this->user_catalogues && $this->user_catalogues->isNotEmpty())
+                ? UserCatalogueResource::collection($this->user_catalogues)
+                : ($this->user_catalogue ? [new UserCatalogueResource($this->user_catalogue)] : []),
             'publish' => (int) $this->publish,
             'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
             'updatedAt' => $this->updated_at?->format('Y-m-d H:i:s'),
