@@ -10,7 +10,13 @@
     </div>
 
     <!-- /chat  -->
-    <button class="group fixed bottom-36 right-6 z-50 w-[45px] h-[45px] flex items-center justify-center rounded-full cursor-pointer pt-[3px] bg-white shadow-lg transition-all duration-500">
+    <component
+      :is="chatUrl ? 'a' : 'button'"
+      :href="chatUrl || undefined"
+      :target="chatUrl ? '_blank' : undefined"
+      rel="noopener noreferrer"
+      class="group fixed bottom-36 right-6 z-50 w-[45px] h-[45px] flex items-center justify-center rounded-full cursor-pointer pt-[3px] bg-white shadow-lg transition-all duration-500"
+    >
       <svg viewBox="0 0 1000 1000" class="w-6 h-6">
         <defs>
           <linearGradient id="chatGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -21,7 +27,7 @@
         <path fill="url(#chatGradient)" d="M881.1,720.5H434.7L173.3,941V720.5h-54.4C58.8,720.5,10,671.1,10,610.2v-441C10,108.4,58.8,59,118.9,59h762.2C941.2,59,990,108.4,990,169.3v441C990,671.1,941.2,720.5,881.1,720.5L881.1,720.5z M935.6,169.3c0-30.4-24.4-55.2-54.5-55.2H118.9c-30.1,0-54.5,24.7-54.5,55.2v441c0,30.4,24.4,55.1,54.5,55.1h54.4h54.4v110.3l163.3-110.2H500h381.1c30.1,0,54.5-24.7,54.5-55.1V169.3L935.6,169.3z M717.8,444.8c-30.1,0-54.4-24.7-54.4-55.1c0-30.4,24.3-55.2,54.4-55.2c30.1,0,54.5,24.7,54.5,55.2C772.2,420.2,747.8,444.8,717.8,444.8L717.8,444.8z M500,444.8c-30.1,0-54.4-24.7-54.4-55.1c0-30.4,24.3-55.2,54.4-55.2c30.1,0,54.4,24.7,54.4,55.2C554.4,420.2,530.1,444.8,500,444.8L500,444.8z M282.2,444.8c-30.1,0-54.5-24.7-54.5-55.1c0-30.4,24.4-55.2,54.5-55.2c30.1,0,54.4,24.7,54.4,55.2C336.7,420.2,312.3,444.8,282.2,444.8L282.2,444.8z" />
       </svg>
       <span class="absolute -top-10 px-3 py-1 rounded-md text-white text-sm bg-orange-400 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none font-medium">{{ $t("utilityTool.chat") }}</span>
-    </button>
+    </component>
 
     <!-- Modal Voucher -->
     <button @click="openVoucherModal" class="fixed bottom-36 left-6 z-50 bg-white rounded-full shadow-md hover:scale-105 transition-all">
@@ -77,13 +83,17 @@
     </div>
 
     <!-- phone number  -->
-    <a href="tel:0812720008" class="group fixed bottom-20 left-6 z-50 flex items-center justify-start w-[45px] h-[45px] bg-[#00d757] rounded-full cursor-pointer overflow-hidden shadow-lg transition-all duration-300 active:translate-x-[2px] active:translate-y-[2px] hover:w-[150px] hover:rounded-[40px]">
+    <a
+      v-if="hotline"
+      :href="`tel:${cleanPhone(hotline)}`"
+      class="group fixed bottom-20 left-6 z-50 flex items-center justify-start w-[45px] h-[45px] bg-[#00d757] rounded-full cursor-pointer overflow-hidden shadow-lg transition-all duration-300 active:translate-x-[2px] active:translate-y-[2px] hover:w-[150px] hover:rounded-[40px]"
+    >
       <div class="flex justify-center items-center w-full group-hover:w-[30%] transition-all duration-300 pl-0 group-hover:pl-2">
         <svg class="w-[25px] h-[25px]" viewBox="0 0 16 16" fill="white">
           <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z" />
         </svg>
       </div>
-      <span class="block absolute right-0 w-0 opacity-0 text-white text-base font-semibold group-hover:w-[70%] group-hover:opacity-100 transition-all duration-300 pr-3">{{ $t("utilityTool.phoneNumber") }}</span>
+      <span class="block absolute right-0 w-0 opacity-0 text-white text-base font-semibold group-hover:w-[70%] group-hover:opacity-100 transition-all duration-300 pr-3">{{ hotline }}</span>
     </a>
 
     <!-- Drawer -->
@@ -156,16 +166,26 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import CompareBar from "~/components/navigation/CompareBar.vue";
 import SearchProductModal from "~/components/features/SearchProductModal.vue";
 import { promotionService } from "~/services/promotion/promotion.service";
 import type { IPromotion } from "~/interfaces/promotion/promotion.interface";
 import { useAppToast } from "~/composables/useAppToast";
+import { useSystemConfig } from "~/composables/system/useSystemConfig";
 
 const { t } = useI18n();
 const toast = useAppToast();
+const { hotline, messenger, zalo } = useSystemConfig();
+
+const cleanPhone = (phone: string) => {
+  return phone ? phone.replace(/[^\d+]/g, "") : "";
+};
+
+const chatUrl = computed(() => {
+  return messenger.value || zalo.value || "";
+});
 
 const showVoucherModal = ref(false);
 const showConditions = ref<boolean[]>([]);

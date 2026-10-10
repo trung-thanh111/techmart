@@ -1,47 +1,68 @@
 import type { SeoMeta } from "~/interfaces/seo/seo.interface";
+import { useSystemConfig } from "~/composables/system/useSystemConfig";
 
 export const useSeo = () => {
-  const defaultSeo = {
-    title: "TechMart",
-    description: "Techmart - Công nghệ tiên tiến, giá cả hợp lý",
-    ogTitle: "TechMart",
-    ogDescription: "Khám phá sản phẩm công nghệ mới nhất",
+  const { seo, companyName, favicon, headScript } = useSystemConfig();
+
+  const getDefaultSeo = () => ({
+    title: seo.value.meta_title || companyName.value || "TechMart",
+    description: seo.value.meta_description || "Techmart - Công nghệ tiên tiến, giá cả hợp lý",
+    keywords: seo.value.meta_keywords || "",
+    ogTitle: seo.value.meta_title || companyName.value || "TechMart",
+    ogDescription: seo.value.meta_description || "Khám phá sản phẩm công nghệ mới nhất",
     ogType: "website" as const,
-    ogImage: "/logo-favicon.png",
-    robots: "index, follow",
-  };
+    ogImage: seo.value.og_image || "/logo-favicon.png",
+    robots: seo.value.robots || "index, follow",
+  });
 
   // SEO (chỉ cho trang chủ và client pages)
   const setClientSeo = (customSeo?: Partial<SeoMeta>) => {
-    const seo = { ...defaultSeo, ...customSeo };
+    const defaultSeo = getDefaultSeo();
+    const resolved = { ...defaultSeo, ...customSeo };
+
+    const links: Array<Record<string, any>> = [{ rel: "stylesheet", href: "/css/customize.css" }];
+    if (favicon.value) {
+      links.push({ rel: "icon", href: favicon.value });
+    }
+
+    const scripts: Array<Record<string, any>> = [
+      { src: "https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js" },
+      { src: "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" },
+      { src: "//js/interface.js" },
+    ];
+    if (headScript.value) {
+      scripts.push({ innerHTML: headScript.value });
+    }
 
     useHead({
-      title: seo.title,
+      title: resolved.title,
       meta: [
-        { name: "description", content: seo.description },
-        { property: "og:title", content: seo.ogTitle },
-        { property: "og:description", content: seo.ogDescription },
-        { property: "og:type", content: seo.ogType },
-        { property: "og:image", content: seo.ogImage },
-        { name: "robots", content: seo.robots },
+        { name: "description", content: resolved.description },
+        { name: "keywords", content: resolved.keywords || "" },
+        { property: "og:title", content: resolved.ogTitle },
+        { property: "og:description", content: resolved.ogDescription },
+        { property: "og:type", content: resolved.ogType },
+        { property: "og:image", content: resolved.ogImage },
+        { name: "robots", content: resolved.robots },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
       ],
-      link: [{ rel: "stylesheet", href: "/css/customize.css" }],
-      script: [{ src: "https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js" }, { src: "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" }, { src: "//js/interface.js" }],
+      link: links,
+      script: scripts,
     });
 
     useSeoMeta({
-      title: seo.title,
-      description: seo.description,
-      ogTitle: seo.ogTitle,
-      ogDescription: seo.ogDescription,
-      ogType: seo.ogType as "website" | "article",
-      ogImage: seo.ogImage,
-      robots: seo.robots,
+      title: resolved.title,
+      description: resolved.description,
+      ogTitle: resolved.ogTitle,
+      ogDescription: resolved.ogDescription,
+      ogType: resolved.ogType as "website" | "article",
+      ogImage: resolved.ogImage,
+      robots: resolved.robots,
     });
   };
 
   const setPageSeo = (pageSeo: SeoMeta) => {
+    const defaultSeo = getDefaultSeo();
     useHead({
       title: pageSeo.title,
       meta: [

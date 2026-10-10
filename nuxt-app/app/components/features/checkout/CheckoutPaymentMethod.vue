@@ -14,7 +14,7 @@
                 <svg v-if="activePaymentMethod === method.id" class="w-4 h-4 text-teal-600" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                 </svg>
-                <img :src="method.icon" :alt="method.name" class="w-6 h-6 object-cover" />
+                <img :src="method.icon" :alt="method.name" loading="lazy" class="w-6 h-6 object-cover" />
                 <span class="text-sm font-medium">{{ method.name }}</span>
               </div>
             </div>
@@ -23,7 +23,7 @@
         <div class="bg-white border border-gray-200 rounded-lg p-6">
           <div v-if="activePaymentMethod === PAYMENT_METHODS.VNPAY" class="space-y-4">
             <div class="flex items-center gap-3 mb-4">
-              <img src="/images/logo/vnpay.webp" alt="VNPay" class="w-8 h-8" />
+              <img src="/images/logo/vnpay.webp" alt="VNPay" loading="lazy" class="w-8 h-8" />
               <h6 class="text-lg font-semibold">Thanh toán qua VNPay</h6>
             </div>
             <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
@@ -37,7 +37,7 @@
           </div>
           <div v-if="activePaymentMethod === PAYMENT_METHODS.MOMO" class="space-y-4">
             <div class="flex items-center gap-3 mb-4">
-              <img src="/images/logo/momo.svg" alt="MoMo" class="w-8 h-8" />
+              <img src="/images/logo/momo.svg" alt="MoMo" loading="lazy" class="w-8 h-8" />
               <h6 class="text-lg font-semibold">Thanh toán qua MoMo</h6>
             </div>
             <div class="bg-pink-50 border border-pink-200 rounded-lg p-4">
@@ -65,7 +65,7 @@
           </div>
           <div v-if="activePaymentMethod === PAYMENT_METHODS.COD" class="space-y-4">
             <div class="flex items-center gap-3 mb-4">
-              <img src="/images/cash-on-delivery.webp" alt="COD" class="w-8 h-8" />
+              <img src="/images/cash-on-delivery.webp" alt="COD" loading="lazy" class="w-8 h-8" />
               <h6 class="text-lg font-semibold">Thanh toán khi nhận hàng</h6>
             </div>
             <div class="bg-green-50 border border-green-200 rounded-lg p-4">

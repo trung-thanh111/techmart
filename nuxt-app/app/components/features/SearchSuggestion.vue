@@ -28,20 +28,31 @@
           </div>
         </div>
         <div v-else class="space-y-1 max-h-[200px] overflow-y-auto">
-          <div v-if="suggestions.length === 0" class="text-sm text-gray-500 py-2">{{ $t("search.noResults") }}</div>
-          <div v-else class="text-sm text-gray-500 py-2">{{ $t("search.suggestions") }}</div>
-          <div v-for="product in suggestions" :key="product.id" class="flex items-center gap-2 p-2 rounded hover:bg-gray-50">
-            <NuxtLink :to="`/product/${product.slug || ''}`" class="flex items-center gap-2 w-full text-gray-700 no-underline">
-              <img :src="getProductImage(product)" loading="lazy" :alt="getProductDisplayName(product)" class="w-10 h-8 object-cover rounded flex-shrink-0" @error="handleImgError" />
-              <div class="flex-1 min-w-0">
-                <p class="text-sm font-normal text-gray-800 truncate">{{ getProductDisplayName(product) }}</p>
-                <p class="text-xs text-red-600 mt-1">{{ getProductPrice(product) ? formatPrice(getProductPrice(product)) : $t("search.updating") }}</p>
+          <div v-if="isSearching" class="space-y-2 p-1">
+            <div v-for="i in 3" :key="i" class="flex items-center gap-2 p-1.5 animate-pulse">
+              <div class="w-10 h-8 bg-gray-200 rounded flex-shrink-0"></div>
+              <div class="flex-1 space-y-1.5">
+                <div class="h-3.5 bg-gray-200 rounded w-3/4"></div>
+                <div class="h-2.5 bg-gray-200 rounded w-1/3"></div>
               </div>
-            </NuxtLink>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="w-4 h-4 flex-shrink-0 text-gray-400">
-              <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
-            </svg>
+            </div>
           </div>
+          <div v-else-if="suggestions.length === 0" class="text-sm text-gray-500 py-2">{{ $t("search.noResults") }}</div>
+          <div v-else class="text-sm text-gray-500 py-2">{{ $t("search.suggestions") }}</div>
+          <template v-if="!isSearching">
+            <div v-for="product in suggestions" :key="product.id" class="flex items-center gap-2 p-2 rounded hover:bg-gray-50">
+              <NuxtLink :to="`/product/${product.slug || ''}`" class="flex items-center gap-2 w-full text-gray-700 no-underline">
+                <img :src="getProductImage(product)" loading="lazy" :alt="getProductDisplayName(product)" class="w-10 h-8 object-cover rounded flex-shrink-0" @error="handleImgError" />
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-normal text-gray-800 truncate">{{ getProductDisplayName(product) }}</p>
+                  <p class="text-xs text-red-600 mt-1">{{ getProductPrice(product) ? formatPrice(getProductPrice(product)) : $t("search.updating") }}</p>
+                </div>
+              </NuxtLink>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="w-4 h-4 flex-shrink-0 text-gray-400">
+                <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+              </svg>
+            </div>
+          </template>
         </div>
       </div>
       <div class="w-full max-w-7xl mx-auto">
@@ -115,12 +126,20 @@ const removeRecent = (index: number) => {
   } catch {}
 };
 
+const isSearching = ref(false);
+
 const debounced = useDebounceFn(async (val: string) => {
   if (!val.trim()) {
     suggestions.value = [];
+    isSearching.value = false;
     return;
   }
-  suggestions.value = await searchProducts(val, 10);
+  isSearching.value = true;
+  try {
+    suggestions.value = await searchProducts(val, 10);
+  } finally {
+    isSearching.value = false;
+  }
 }, 250);
 
 watch(keyword, (v) => {

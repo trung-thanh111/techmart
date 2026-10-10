@@ -4,7 +4,7 @@
       <div class="flex gap-4">
         <!-- Image -->
         <div class="w-1/3">
-          <NuxtImg :src="selectedVariant?.image || product.album?.[0] || ''" class="w-full aspect-square object-contain rounded border border-gray-200" />
+          <NuxtImg :src="selectedVariant?.image || product.album?.[0] || ''" loading="lazy" class="w-full aspect-square object-contain rounded border border-gray-200" />
         </div>
 
         <!-- Info -->

@@ -4,14 +4,12 @@
       <div class="bg-gradient-to-r from-[#00b88c] to-[#007c8b] py-2 text-white">
         <div class="max-w-7xl mx-auto flex justify-between items-center py-2 text-md">
           <div class="flex items-center flex-wrap gap-4">
-            <div class="flex items-center gap-1">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.72 19.72 0 0 1 2.09 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13 1.05.37 2.07.72 3.06a2 2 0 0 1-.45 2.11l-1.27 1.27a16 16 0 0 0 6.29 6.29l1.27-1.27a2 2 0 0 1 2.11-.45c.99.35 2.01.59 3.06.72A2 2 0 0 1 22 16.92z" /></svg>
-              <div class="flex gap-1">
-                <span>{{ $t("header.hotlineLabel") }}</span>
-                <NuxtLink to="#" class="hover:text-gray-300 transition-colors">{{ $t("header.hotline1") }} -</NuxtLink>
-                <NuxtLink to="#" class="hover:text-gray-300 transition-colors">{{ $t("header.hotline2") }}</NuxtLink>
-              </div>
-            </div>
+            <HotlineBadge
+              :show-secondary="true"
+              :show-label="true"
+              :label="$t('header.hotlineLabel')"
+              link-class="hover:text-gray-300 transition-colors"
+            />
             <NuxtLink :to="TOAGENCY" class="flex items-center gap-1 hover:text-gray-300 transition-colors">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4"><path d="M3 9l1-5h16l1 5M5 22V12H19V22M2 9h20" /></svg>
               <span>{{ $t("header.dealerSystem") }}</span>
@@ -46,9 +44,7 @@
       <div class="bg-gradient-to-r from-[#00b88c] to-[#007c8b] px-2 pt-3">
         <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
           <div class="hidden md:flex items-center gap-6">
-            <NuxtLink to="/" class="h-15 w-40 rounded flex items-center justify-center">
-              <img :src="logo" loading="lazy" alt="logo" />
-            </NuxtLink>
+            <AppLogo variant="header" class-name="h-15 w-40" />
           </div>
           <div class="flex-1 max-w-xl relative">
             <SearchSuggestion />
@@ -472,6 +468,7 @@
                   <img
                     :src="item.productImage?.url || IMAGEDEFAULT"
                     :alt="item.productName"
+                    loading="lazy"
                     class="w-12 h-12 object-contain rounded border border-gray-200 bg-white flex-shrink-0"
                   />
                   <div class="flex-1 min-w-0">
@@ -533,7 +530,8 @@ import { ref, computed, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { onClickOutside } from "@vueuse/core";
 import { TOLOGIN, TOAGENCY, TOFAQ, PROFILEINDEX, TOCART, TOPOLICY, TOWISHLIST, TOSHOP, PROFILEORDER, TOVOUCHER, PROFILECHANGEPASSWORD, PROFILEADDRESSORDER } from "~/utils/constants";
-import logo from "~/assets/images/logo/logo-website.png";
+import AppLogo from "~/components/ui/AppLogo.vue";
+import HotlineBadge from "~/components/ui/HotlineBadge.vue";
 import { useAuthStore } from "~/stores/auth/auth";
 import { useAuth } from "~/composables/auth/useAuth";
 import { useCart } from "~/composables/cart/useCart";

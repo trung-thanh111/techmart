@@ -3,27 +3,31 @@
     <footer class="bg-gradient-to-r from-[#00b88c] to-[#007c8b] px-2 sm:px-4 py-4 text-white">
       <div class="max-w-7xl mx-auto pb-4">
         <div class="py-2 md:py-4 flex flex-col items-start">
-          <nuxtImg src="/images/logo/logo-website.png" alt="logo footer" class="h-10 md:h-12 mb-2" format="webp" sizes="120px md:150px" loading="lazy" />
+          <AppLogo variant="footer" class-name="h-10 md:h-12 mb-2" />
+          <p v-if="slogan" class="text-xs text-white/80 italic mb-1">{{ slogan }}</p>
         </div>
         <div class="h-px w-full bg-gradient-to-r from-transparent via-white/30 to-transparent mb-4"></div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-4 py-5">
           <div class="space-y-2 text-sm">
             <h3 class="font-bold uppercase mb-2 text-base">{{ $t("footer.supportCustomer") }}</h3>
-            <p>
+            <p v-if="hotline">
               {{ $t("footer.hotline") }}:
-              <a :href="`tel:${$t('footer.hotlineNumber')}`" class="!text-red-500 font-semibold hover:text-gray-300 underline underline-offset-2">{{ $t("footer.hotlineNumber") }}</a>
+              <a :href="`tel:${cleanPhone(hotline)}`" class="!text-red-500 font-semibold hover:text-gray-300 underline underline-offset-2">{{ hotline }}</a>
             </p>
-            <p>
+            <p v-if="complaintsHotline">
               {{ $t("footer.complaints") }}:
-              <a :href="`tel:${$t('footer.complaintsNumber')}`" class="hover:text-gray-300 underline underline-offset-2">{{ $t("footer.complaintsNumber") }}</a>
+              <a :href="`tel:${cleanPhone(complaintsHotline)}`" class="hover:text-gray-300 underline underline-offset-2">{{ complaintsHotline }}</a>
             </p>
-            <p>
+            <p v-if="email">
               {{ $t("footer.email") }}:
-              <a :href="`mailto:${$t('footer.emailAddress')}`" class="hover:text-gray-300 underline underline-offset-2">{{ $t("footer.emailAddress") }}</a>
+              <a :href="`mailto:${email}`" class="hover:text-gray-300 underline underline-offset-2">{{ email }}</a>
             </p>
-            <p>
+            <p v-if="workingHours">
               {{ $t("footer.serviceTime") }}:
-              <span class="font-bold">{{ $t("footer.always") }}</span>
+              <span class="font-bold">{{ workingHours }}</span>
+            </p>
+            <p v-if="address" class="text-xs text-white/90">
+              <span class="font-semibold">{{ $t("footer.address") || "Địa chỉ" }}:</span> {{ address }}
             </p>
           </div>
 
@@ -71,16 +75,14 @@
         </div>
         <div class="h-px w-full bg-gradient-to-r from-transparent via-white/30 to-transparent mb-2"></div>
         <div class="border-t border-white/30 text-xs sm:text-sm py-2 text-left">
-          <p class="mb-2 font-medium">
-            {{ $t("footer.copyright.owner") }}
+          <p class="mb-1 font-medium">
+            <span v-if="companyName">{{ companyName }}</span>
+            <span v-if="taxCode"> - Mã số thuế: {{ taxCode }}</span>
             <br />
-            {{ $t("footer.copyright.text") }}
+            {{ copyright || $t("footer.copyright.text") }}
           </p>
-          <p class="mb-2">{{ $t("footer.copyright.contactMe") }}</p>
-          <div class="flex justify-start items-center gap-4 mt-2">
-            <a href="#" class="text-white text-xl md:text-2xl hover:text-blue-400"><i class="fab fa-facebook"></i></a>
-            <a href="#" class="text-white text-xl md:text-2xl hover:text-red-500"><i class="fab fa-youtube"></i></a>
-          </div>
+          <p v-if="intro" class="mb-2 text-xs text-white/80">{{ intro }}</p>
+          <SocialLinks wrapper-class="flex justify-start items-center gap-4 mt-2" icon-class="text-xl md:text-2xl text-white hover:text-blue-300 transition-colors" />
         </div>
       </div>
     </footer>
@@ -90,8 +92,27 @@
 
 <script setup>
 import UtilityTool from "~/components/navigation/UtilityTool.vue";
+import AppLogo from "~/components/ui/AppLogo.vue";
+import SocialLinks from "~/components/ui/SocialLinks.vue";
+import { useSystemConfig } from "~/composables/system/useSystemConfig";
 
 const { t } = useI18n();
+const {
+  companyName,
+  slogan,
+  hotline,
+  complaintsHotline,
+  email,
+  workingHours,
+  address,
+  taxCode,
+  copyright,
+  intro,
+} = useSystemConfig();
+
+const cleanPhone = (phone) => {
+  return phone ? phone.replace(/[^\d+]/g, "") : "";
+};
 
 const aboutLinks = [
   { text: "footer.aboutLinks.about", href: "#" },

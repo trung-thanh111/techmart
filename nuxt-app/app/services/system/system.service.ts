@@ -103,4 +103,28 @@ export const systemService = {
       },
     });
   },
+
+  getPublicConfigs: async (): Promise<IApiOk<import("~/interfaces/system/system.interface").ISystemPublicConfigs>> => {
+    const { publicFetch } = useApi();
+    return await publicFetch<IApiOk<import("~/interfaces/system/system.interface").ISystemPublicConfigs>>(
+      `${endpoint.collection}/public-configs`,
+      { method: "GET" }
+    );
+  },
+
+  getStructure: async (): Promise<IApiOk<Record<string, import("~/interfaces/system/system.interface").ISystemGroupSchema>>> => {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiOk<Record<string, import("~/interfaces/system/system.interface").ISystemGroupSchema>>>(
+      `${endpoint.collection}/structure`,
+      { method: "GET" }
+    );
+  },
+
+  saveSettings: async (settings: Record<string, any>): Promise<IApiOk<any>> => {
+    const { privateFetch } = useApi();
+    return await privateFetch<IApiOk<any>>(`${endpoint.collection}/save-settings`, {
+      method: "POST",
+      body: { settings },
+    });
+  },
 };

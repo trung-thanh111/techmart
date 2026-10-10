@@ -6,7 +6,7 @@
       <div v-else>
         <div v-for="(bannerTop, index) in bannerShopTops" :key="bannerTop.id" class="overflow-hidden grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div v-for="(imageUrl, i) in resolveAlbum(bannerTop.album || [])" :key="i" class="mb-2 last:mb-0">
-            <NuxtImg :src="imageUrl" :alt="`${bannerTop.name || $t('common.banner')} ${index + 1}-${i + 1}`" class="w-full h-full object-contain" />
+            <NuxtImg :src="imageUrl" :alt="`${bannerTop.name || $t('common.banner')} ${index + 1}-${i + 1}`" loading="lazy" class="w-full h-full object-contain" />
           </div>
         </div>
       </div>

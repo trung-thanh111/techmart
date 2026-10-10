@@ -641,6 +641,7 @@
                           class="w-8 h-8 rounded-full object-cover"
                           :src="item.user_avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(item.user_name)}&background=0284c7&color=fff`"
                           alt="avatar"
+                          loading="lazy"
                         />
                         <div>
                           <p class="text-sm font-semibold text-gray-800">{{ item.user_name }}</p>

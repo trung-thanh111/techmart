@@ -361,5 +361,26 @@
     "phoneNumber": "0812720008",
     "voucherCode": "TECHMART",
     "voucherCondition": "Apply on orders at TechMart"
+  },
+  "footer": {
+    "hotline": "Hotline",
+    "hotlineNumber": "0812720008",
+    "complaints": "Complaints & Feedback",
+    "complaintsNumber": "0812720008",
+    "email": "Email",
+    "emailAddress": "trungptdev2004@gmail.com",
+    "address": "Address",
+    "supportCustomer": "Customer Support",
+    "serviceTime": "Working Hours",
+    "always": "Always",
+    "aboutUs": "About Us",
+    "customerCare": "Customer Care",
+    "paymentMethods": "Payment Methods",
+    "downloadNow": "Download App",
+    "copyright": {
+      "owner": "TechMart Co., Ltd.",
+      "text": "All rights reserved.",
+      "contactMe": "Contact with us:"
+    }
   }
 }
