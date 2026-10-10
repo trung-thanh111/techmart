@@ -198,36 +198,33 @@
                                 <div class="row g-0 text-center">
                                     <div class="col-6 col-sm-3">
                                         <div class="p-3 border border-dashed border-start-0">
-                                            <h5 class="mb-1"><span class="counter-value" data-target="7585">0</span></h5>
+                                            <h5 class="mb-1"><span>{{ (stats?.overview?.orders?.total || 0).toLocaleString() }}</span></h5>
                                             <p class="text-muted mb-0">{{ $t("admin.page.dashboard.ordersCount") }}</p>
                                         </div>
                                     </div>
                                     <!--end col-->
                                     <div class="col-6 col-sm-3">
                                         <div class="p-3 border border-dashed border-start-0">
-                                            <h5 class="mb-1">
-                                                $
-                                                <span class="counter-value" data-target="22.89">0</span>
-                                                k
+                                            <h5 class="mb-1 text-success">
+                                                <span>{{ formatPrice(stats?.overview?.earnings?.this_month || 0) }}</span>
                                             </h5>
-                                            <p class="text-muted mb-0">{{ $t("admin.page.dashboard.income") }}</p>
+                                            <p class="text-muted mb-0">{{ $t("admin.page.dashboard.income") }} (Tháng này)</p>
                                         </div>
                                     </div>
                                     <!--end col-->
                                     <div class="col-6 col-sm-3">
                                         <div class="p-3 border border-dashed border-start-0">
-                                            <h5 class="mb-1"><span class="counter-value" data-target="367">0</span></h5>
-                                            <p class="text-muted mb-0">{{ $t("admin.page.dashboard.refunds") }}</p>
+                                            <h5 class="mb-1 text-danger"><span>{{ (stats?.overview?.orders?.cancelled || 0).toLocaleString() }}</span></h5>
+                                            <p class="text-muted mb-0">Đơn đã hủy</p>
                                         </div>
                                     </div>
                                     <!--end col-->
                                     <div class="col-6 col-sm-3">
                                         <div class="p-3 border border-dashed border-start-0 border-end-0">
-                                            <h5 class="mb-1 text-success">
-                                                <span class="counter-value" data-target="18.92">0</span>
-                                                %
+                                            <h5 class="mb-1 text-primary">
+                                                <span>{{ stats?.overview?.orders?.total ? Math.round(((stats?.overview?.orders?.completed || 0) / stats.overview.orders.total) * 100) : 0 }} %</span>
                                             </h5>
-                                            <p class="text-muted mb-0">{{ $t("admin.page.dashboard.conversionRate") }}</p>
+                                            <p class="text-muted mb-0">Tỷ lệ hoàn tất</p>
                                         </div>
                                     </div>
                                     <!--end col-->

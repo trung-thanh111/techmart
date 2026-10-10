@@ -58,6 +58,13 @@ const availableStatuses = computed(() => {
     return adminAllowedStatus.filter((status) => canTransitionStatus(order.value?.status, status));
 });
 
+// Print order invoice
+const printOrder = () => {
+    if (typeof window !== "undefined") {
+        window.print();
+    }
+};
+
 definePageMeta({
     layout: "admin",
     middleware: ["auth-required", "auth-admin"],
@@ -102,7 +109,10 @@ definePageMeta({
                             <p class="text-muted mb-1 fs-12">Cập nhật</p>
                             <p class="fw-medium mb-0">{{ formatDate(order?.updatedAt) }}</p>
                         </div>
-                        <div class="col-md-3 text-end">
+                        <div class="col-md-3 text-end d-flex gap-2 justify-content-end align-items-center">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="printOrder" title="In phiếu giao hàng">
+                                <i class="ri-printer-line me-1"></i> In đơn
+                            </button>
                             <Button v-if="availableStatuses.length > 0" size="sm" label="Cập nhật trạng thái" icon="ri-refresh-line" @click="openStatusModal" :loading="isLoading" />
                         </div>
                     </div>
@@ -179,3 +189,24 @@ definePageMeta({
         </div>
     </Teleport>
 </template>
+
+<style scoped>
+@media print {
+    header,
+    .app-menu,
+    .navbar-header,
+    .breadcrumb,
+    .btn,
+    button,
+    .modal {
+        display: none !important;
+    }
+
+    body,
+    .main-content {
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #fff !important;
+    }
+}
+</style>
