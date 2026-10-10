@@ -26,7 +26,7 @@
                 </div>
                 <div class="flex-shrink-0 mt-4 md:mt-0">
                   <div class="w-full md:w-60 rounded-md">
-                    <NuxtImg :src="featuredPostItem.image?.path ? (featuredPostItem.image?.url ?? '') : IMAGEDEFAULT" :alt="featuredPostItem.name" class="rounded-md object-contain w-full h-auto" loading="lazy" />
+                    <NuxtImg :src="featuredPostItem.image?.url || featuredPostItem.image?.path || IMAGEDEFAULT" :alt="featuredPostItem.name" class="rounded-md object-contain w-full h-auto" loading="lazy" />
                   </div>
                 </div>
               </div>
@@ -41,7 +41,7 @@
         <template v-for="(featuredPostLimitItem, idx) in featuredPostLimits" :key="featuredPostLimitItem.id">
           <div v-if="idx === 0" class="lg:col-span-2">
             <div class="relative rounded-xl overflow-hidden border border-gray-100 hover:border-cyan-200 hover:shadow-xl transition-all">
-              <NuxtImg :src="featuredPostLimitItem.image?.path ? (featuredPostLimitItem.image?.url ?? '') : IMAGEDEFAULT" :alt="featuredPostLimitItem.name" class="w-full h-[220px] md:h-[400px] object-cover" loading="lazy" />
+              <NuxtImg :src="featuredPostLimitItem.image?.url || featuredPostLimitItem.image?.path || IMAGEDEFAULT" :alt="featuredPostLimitItem.name" class="w-full h-[220px] md:h-[400px] object-cover" loading="lazy" />
               <div v-if="featuredPostLimitItem.isHot" class="absolute top-2 left-2 md:top-4 md:left-4 bg-white/10 backdrop-blur-sm rounded-lg px-2 py-1">
                 <span class="text-red-500 font-bold text-xs">{{ $t("post.hot") }}</span>
               </div>
@@ -55,7 +55,7 @@
           <NuxtLink v-else :to="`/post/${featuredPostLimitItem.slug}`" class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow border border-gray-100 hover:border-cyan-200 block">
             <div class="relative overflow-hidden">
               <div class="h-[140px] md:h-[216px] bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center relative">
-                <NuxtImg :src="featuredPostLimitItem.image?.path ? (featuredPostLimitItem.image?.url ?? '') : IMAGEDEFAULT" :alt="featuredPostLimitItem.name" class="object-cover w-full h-full" loading="lazy" />
+                <NuxtImg :src="featuredPostLimitItem.image?.url || featuredPostLimitItem.image?.path || IMAGEDEFAULT" :alt="featuredPostLimitItem.name" class="object-cover w-full h-full" loading="lazy" />
                 <div v-if="featuredPostLimitItem.isHot" class="absolute top-2 left-2 md:top-4 md:left-4 bg-white/10 backdrop-blur-sm rounded-lg px-2 py-1">
                   <span class="text-red-500 font-bold text-xs">{{ $t("post.hot") }}</span>
                 </div>
@@ -101,7 +101,7 @@
         <Splide :options="postProductOptions" id="post-product-slider">
           <SplideSlide v-for="post in byCatalogueCache[3]" :key="post.id">
             <NuxtLink :to="`/post/${post.slug}`" class="relative rounded-xl overflow-hidden border border-gray-100 hover:border-cyan-200 hover:shadow-xl transition-all block">
-              <NuxtImg :src="post.image?.path ? (post.image?.url ?? '') : IMAGEDEFAULT" :alt="post.name" class="w-full h-40 md:h-72 object-cover" loading="lazy" />
+              <NuxtImg :src="post.image?.url || post.image?.path || IMAGEDEFAULT" :alt="post.name" class="w-full h-40 md:h-72 object-cover" loading="lazy" />
               <div class="absolute bottom-0 left-0 w-full h-20 md:h-40 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
               <div class="absolute bottom-0 left-0 right-0 p-3 md:p-6">
                 <h2 class="text-gray-800 text-base md:text-2xl font-bold mb-1 md:mb-2 leading-tight hover:text-cyan-600 transition-colors line-clamp-2">{{ post.name }}</h2>
@@ -119,13 +119,13 @@
         <div class="col-span-12 lg:col-span-9">
           <div class="space-y-4 md:space-y-6">
             <NuxtLink v-for="postLatestItem in latestItems" :key="postLatestItem.id" :to="`/post/${postLatestItem.slug}`" class="flex items-start gap-2 md:gap-4 rounded-lg hover:bg-gray-100 border border-gray-100 hover:border-cyan-200 mb-3 md:mb-5">
-              <NuxtImg :src="postLatestItem.image?.path ? (postLatestItem.image?.url ?? '') : IMAGEDEFAULT" :alt="postLatestItem.name" class="w-28 md:w-[240px] h-24 md:h-[150px] rounded-lg object-cover flex-shrink-0" loading="lazy" />
+              <NuxtImg :src="postLatestItem.image?.url || postLatestItem.image?.path || IMAGEDEFAULT" :alt="postLatestItem.name" class="w-28 md:w-[240px] h-24 md:h-[150px] rounded-lg object-cover flex-shrink-0" loading="lazy" />
               <div class="p-2">
                 <h3 class="text-base md:text-lg font-semibold text-gray-800 hover:text-cyan-600 transition-colors md:line-clamp-2 line-clamp-1">{{ postLatestItem.name }}</h3>
                 <p class="text-xs md:text-sm text-gray-600 line-clamp-1 md:line-clamp-2">{{ postLatestItem.description }}</p>
                 <div class="flex items-center justify-between mt-1 md:mt-2">
                   <div class="flex items-center">
-                    <NuxtImg :src="postLatestItem.creator?.avatar ? postLatestItem.creator.avatar : IMAGEDEFAULT" :alt="postLatestItem.creator?.name || 'Author'" class="w-6 md:w-8 h-6 md:h-8 rounded-full mr-2" loading="lazy" />
+                    <NuxtImg :src="postLatestItem.creator?.avatar || DEFAULTAVATAR" :alt="postLatestItem.creator?.name || 'Author'" class="w-6 md:w-8 h-6 md:h-8 rounded-full mr-2" loading="lazy" />
                     <span class="text-xs md:text-sm text-gray-700 font-medium">{{ postLatestItem.creator?.name }}</span>
                   </div>
                   <span class="text-xs md:text-sm">{{ postLatestItem.createdAtHuman }}</span>
@@ -144,7 +144,7 @@
             <h2 class="text-base md:text-lg font-semibold text-gray-800 mb-2 md:mb-4">{{ $t("post.quickView") }}</h2>
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-2 gap-2 mb-3 md:mb-4">
               <NuxtLink v-for="post in hotQuickItems" :key="post.id" :to="`${TOPOST}/${post.slug}`" class="group block">
-                <NuxtImg :src="post.image?.path ? (post.image?.url ?? '') : IMAGEDEFAULT" :alt="post.name" class="rounded-md object-cover w-full h-16 md:w-[145px] md:h-[80px]" loading="lazy" />
+                <NuxtImg :src="post.image?.url || post.image?.path || IMAGEDEFAULT" :alt="post.name" class="rounded-md object-cover w-full h-16 md:w-[145px] md:h-[80px]" loading="lazy" />
                 <span class="text-xs md:text-sm text-gray-800 font-medium group-hover:text-cyan-600 transition-colors line-clamp-2">{{ post.name }}</span>
               </NuxtLink>
             </div>
@@ -160,7 +160,7 @@
               {{ $t("post.tags") }}
             </h2>
             <div class="flex flex-wrap gap-2">
-              <NuxtLink to="" v-for="tagItem in tagList" :key="tagItem.id" class="px-2 md:px-3 py-1 text-xs md:text-[12px] bg-[#d9dfe3] max-w-max rounded font-semibold text-[#7281a3]">#{{ tagItem.name }}</NuxtLink>
+              <NuxtLink :to="`/post?tag=${tagItem.slug}`" v-for="tagItem in tagList" :key="tagItem.id" class="px-2 md:px-3 py-1 text-xs md:text-[12px] bg-[#d9dfe3] max-w-max rounded font-semibold text-[#7281a3] hover:bg-[#c8d1d9] transition-colors">#{{ tagItem.name }}</NuxtLink>
             </div>
           </div>
         </div>
@@ -171,7 +171,7 @@
 <script setup lang="ts">
 import { usePostSlider } from "~/composables/usePostSlider";
 import { usePost } from "~/composables/post/usePost";
-import { IMAGEDEFAULT, TOPOST, TOPOSTCATEGORY, POSTCATEGORY } from "~/utils/constants";
+import { IMAGEDEFAULT, DEFAULTAVATAR, TOPOST, TOPOSTCATEGORY, POSTCATEGORY } from "~/utils/constants";
 import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
 import Category from "~/components/ui/Category.vue";
 import DataState from "~/components/ui/DataState.vue";

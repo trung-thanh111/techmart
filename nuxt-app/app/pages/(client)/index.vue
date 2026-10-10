@@ -588,7 +588,7 @@
         <Splide :options="postFeaturedOptions" id="featured-posts">
           <SplideSlide v-for="(item, index) in (homePosts.length ? homePosts.slice(0, 1) : postFeaturedItems)" :key="`main-${index}`" class="bg-gray-100 rounded-xl overflow-hidden shadow-md">
             <NuxtLink :to="item.slug ? `/post/${item.slug}` : (item.link || '/post')" class="block">
-              <img :src="item.image?.url || item.image?.path || item.image || '/images/posts/post-home-1.jpg'" loading="lazy" :alt="item.name || item.title" class="w-full object-cover max-h-[300px]" />
+              <img :src="item.image?.url || item.image?.path || item.image || IMAGEDEFAULT" loading="lazy" :alt="item.name || item.title" class="w-full object-cover max-h-[300px]" />
               <div class="relative p-4">
                 <span class="absolute top-0 left-0 -translate-y-10 translate-x-4 inline-block bg-sky-100/80 text-sky-600 font-semibold text-xs px-4 py-1 rounded-full uppercase shadow-lg tracking-wide">{{ (item.postCatalogues && item.postCatalogues[0]?.name) || item.category || $t("home.technology") }}</span>
                 <h3 class="text-lg md:text-xl font-bold text-gray-800 hover:text-cyan-600 transition-colors md:mb-2 mb-1 line-clamp-1">{{ item.name || item.title }}</h3>
@@ -604,7 +604,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 md:gap-6 gap-4">
           <div v-for="post in (homePosts.length > 1 ? homePosts.slice(1, 5) : postFeaturedItems.slice(0, 4))" :key="post.id || post.title" class="bg-gray-100 rounded-lg shadow-lg overflow-hidden flex flex-col justify-between">
             <NuxtLink :to="post.slug ? `/post/${post.slug}` : (post.link || '/post')" class="block cursor-pointer h-full">
-              <img :src="post.image?.url || post.image?.path || post.image || '/images/posts/post-home-2.jpg'" loading="lazy" :alt="post.name || post.title" class="w-full h-36 object-cover" />
+              <img :src="post.image?.url || post.image?.path || post.image || IMAGEDEFAULT" loading="lazy" :alt="post.name || post.title" class="w-full h-36 object-cover" />
               <div class="relative p-3">
                 <span class="absolute top-0 left-0 -translate-y-8 translate-x-4 inline-block bg-sky-100/80 text-sky-600 font-semibold text-[8px] md:text-[10px] px-4 py-1 rounded-full uppercase shadow-lg tracking-wide">{{ (post.postCatalogues && post.postCatalogues[0]?.name) || post.category || $t("home.technology") }}</span>
                 <h3 class="text-sm md:text-base font-semibold text-gray-800 hover:text-cyan-600 transition-colors line-clamp-1 mt-1">{{ post.name || post.title }}</h3>

@@ -46,9 +46,11 @@ class Order extends Model
         'cancelled_at',
         'refunded_at',
         'paid_at',
+        'is_stock_deducted',
     ];
 
     protected $casts = [
+        'is_stock_deducted' => 'boolean',
         'confirmed_at' => 'datetime',
         'shipped_at' => 'datetime',
         'delivered_at' => 'datetime',

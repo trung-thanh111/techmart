@@ -7,7 +7,7 @@
           <div class="grid grid-cols-12 gap-4">
             <div class="col-span-12 lg:col-span-9 bg-white rounded-lg shadow-md p-2">
               <div class="h-[40vw] max-h-[400px] min-h-[180px] overflow-hidden rounded-xl">
-                <NuxtImg :src="postDetail?.image?.url || '/images/posts/post-home-4.jpg'" :alt="postDetail?.name || 'Cover'" class="w-full h-full object-cover object-center" loading="lazy" />
+                <NuxtImg :src="postDetail?.image?.url || postDetail?.image?.path || IMAGEDEFAULT" :alt="postDetail?.name || 'Cover'" class="w-full h-full object-cover object-center" loading="lazy" />
               </div>
               <div class="max-w-4xl mx-auto px-2 sm:px-4 -mt-16 sm:-mt-24 relative z-10">
                 <div class="bg-white shadow-xl rounded-2xl p-3 sm:p-6 md:p-8">
@@ -21,7 +21,7 @@
                     {{ postDetail?.name || "Đang tải" }}
                   </h1>
                   <div class="flex items-center text-sm text-gray-500 mb-6">
-                    <NuxtImg :src="postDetail?.creator?.avatar || '/images/social/zalo.png'" :alt="postDetail?.creator?.name || 'Author'" class="w-8 h-8 rounded-full mr-3 border border-gray-300" loading="lazy" />
+                    <NuxtImg :src="postDetail?.creator?.avatar || DEFAULTAVATAR" :alt="postDetail?.creator?.name || 'Author'" class="w-8 h-8 rounded-full mr-3 border border-gray-300" loading="lazy" />
                     <div>
                       <p class="text-red-600 font-semibold">{{ postDetail?.creator?.name || $t("post.author") }}</p>
                       <div class="flex items-center text-gray-400">
@@ -141,7 +141,7 @@
                 <h2 class="text-base md:text-lg font-semibold text-gray-800 mb-2 md:mb-4">{{ $t("action.quickView") }}</h2>
                 <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-2 gap-2 mb-3 md:mb-4">
                   <NuxtLink v-for="post in (hotQuickItems || []).slice(0, 6)" :key="post.id" :to="TOPOSTDETAIL(post.slug as any)" class="group space-y-1 block">
-                    <NuxtImg :src="post.image?.url || '/images/posts/post-home-5.jpg'" :alt="post.name" class="rounded-md object-cover w-full h-16 md:w-[145px] md:h-[80px]" loading="lazy" />
+                    <NuxtImg :src="post.image?.url || post.image?.path || IMAGEDEFAULT" :alt="post.name" class="rounded-md object-cover w-full h-16 md:w-[145px] md:h-[80px]" loading="lazy" />
                     <span class="text-xs md:text-sm text-gray-800 font-medium group-hover:text-cyan-600 transition-colors line-clamp-2">
                       {{ post.name }}
                     </span>
@@ -168,7 +168,7 @@
               <NuxtLink :to="TOPOSTDETAIL(encodeURIComponent(relatedItem.slug))">
                 <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100 hover:border-cyan-200 flex flex-col h-full">
                   <div class="relative overflow-hidden aspect-[16/9] w-full">
-                    <NuxtImg :src="relatedItem.image?.url || '/images/posts/post-home-3.jpg'" :alt="relatedItem.name" class="w-full h-full object-cover object-center rounded-t-xl" loading="lazy" />
+                    <NuxtImg :src="relatedItem.image?.url || relatedItem.image?.path || IMAGEDEFAULT" :alt="relatedItem.name" class="w-full h-full object-cover object-center rounded-t-xl" loading="lazy" />
                     <div v-if="relatedItem.isHot" class="absolute top-2 left-2 bg-white/10 backdrop-blur-sm rounded-lg px-2 py-1">
                       <span class="text-red-500 font-bold text-xs">{{ $t("post.hot") }}</span>
                     </div>
@@ -182,7 +182,7 @@
                     </p>
                     <div class="flex items-center justify-between text-xs sm:text-sm text-gray-500 mt-auto">
                       <span class="font-semibold">{{ relatedItem.creator?.name }}</span>
-                      <span>{{ relatedItem.publishedAtHumen }}</span>
+                      <span>{{ relatedItem.publishedAtHuman || relatedItem.createdAtHuman }}</span>
                     </div>
                   </div>
                 </div>
@@ -196,7 +196,7 @@
 </template>
 <script setup lang="ts">
 import { Field } from "vee-validate";
-import { TOPOST, TOPOSTDETAIL, TOLOGIN } from "~/utils/constants";
+import { TOPOST, TOPOSTDETAIL, TOLOGIN, IMAGEDEFAULT, DEFAULTAVATAR } from "~/utils/constants";
 import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
 import CommentTree from "~/components/features/post/CommentTree.vue";
 import PostLikeButton from "~/components/features/post/PostLikeButton.vue";

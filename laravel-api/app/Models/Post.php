@@ -20,6 +20,9 @@ class Post extends Model
         'description',
         'content',
         'image',
+        'icon',
+        'album',
+        'extra_album',
         'table_of_content',
         'order',
         'is_hot',
@@ -32,6 +35,8 @@ class Post extends Model
         'meta_title',
         'meta_keyword',
         'meta_description',
+        'scheme',
+        'iframe',
         'published_at',
     ];
 

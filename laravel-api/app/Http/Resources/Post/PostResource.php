@@ -15,6 +15,20 @@ class PostResource extends JsonResource
      *
      * @return array<string, mixed>
      */
+    protected function formatImageUrl(?string $image): ?string
+    {
+        if (empty($image)) {
+            return null;
+        }
+        if (str_starts_with($image, 'http://') || str_starts_with($image, 'https://')) {
+            return $image;
+        }
+        if (str_starts_with($image, '/')) {
+            return asset($image);
+        }
+        return asset("/storage/{$image}");
+    }
+
     public function toArray(Request $request): array
     {
         if ($request->boolean('simple', false)) {
@@ -25,7 +39,7 @@ class PostResource extends JsonResource
                 'slug' => $this->slug,
                 'image' => [
                     'path' => $this->image ?? null,
-                    'url' => asset("/storage/{$this->image}") ?? null,
+                    'url' => $this->formatImageUrl($this->image),
                 ],
                 'isHot' => (bool) $this->is_hot,
                 'publish' => (int) $this->publish,
@@ -33,20 +47,12 @@ class PostResource extends JsonResource
                 'creator' => $this->whenLoaded('users', function () {
                     return $this->users ? [
                         'id' => $this->users->id,
-                        'avatar' => asset("/storage/{$this->users->image}") ?? null,
+                        'avatar' => $this->formatImageUrl($this->users->image),
                         'name' => $this->users->name,
                     ] : null;
                 }),
+                'postCatalogues' => PostCatalogueResource::collection($this->whenLoaded('post_catalogues')),
                 'createdAtHuman' => $this->created_at?->diffForHumans(),
-                // 'order' => (int) $this->order,
-                // 'viewCount' => (int) $this->view_count,
-                // 'postCatalogueId' => (int) $this->post_catalogue_id,
-                // 'tagId' => (int) $this->tag_id,
-                // 'createdAt' => $this->created_at?->format('Y-m-d H:i:s'),
-                // 'updatedAt' => $this->updated_at?->format('Y-m-d H:i:s'),
-                // 'publishedAt' => $this->published_at ? \Carbon\Carbon::parse($this->published_at)->format('Y-m-d H:i:s') : null,
-                // 'publishedAtHuman' => $this->published_at ? \Carbon\Carbon::parse($this->published_at)->diffForHumans() : null,
-                // 'updatedAtHuman' => $this->updated_at?->diffForHumans(),
             ];
         }
 
@@ -58,8 +64,14 @@ class PostResource extends JsonResource
             'content' => $this->content,
             'image' => [
                 'path' => $this->image ?? null,
-                'url' => asset("/storage/{$this->image}") ?? null,
+                'url' => $this->formatImageUrl($this->image),
             ],
+            'album' => is_array($this->album) ? array_map(function ($img) {
+                return [
+                    'path' => $img,
+                    'url' => $this->formatImageUrl($img),
+                ];
+            }, $this->album) : [],
             'tableOfContent' => (bool) $this->table_of_content,
             'isHot' => (bool) $this->is_hot,
             'order' => (int) $this->order,
@@ -71,7 +83,7 @@ class PostResource extends JsonResource
             'creator' => $this->whenLoaded('users', function () {
                 return $this->users ? [
                     'id' => $this->users->id,
-                    'avatar' => asset("/storage/{$this->users->image}") ?? null,
+                    'avatar' => $this->formatImageUrl($this->users->image),
                     'name' => $this->users->name,
                 ] : null;
             }),

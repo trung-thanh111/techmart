@@ -92,6 +92,9 @@ class ProcessPaymentCallback implements ShouldQueue
             );
         }
 
+        // 3. Tự động trừ tồn kho (inventories & product_variants.stock)
+        app(\App\Services\Impl\Inventory\InventorySyncService::class)->deductStockForOrder($order);
+
         Log::channel($this->getLogChannel())->info(
             "[ProcessPaymentCallback] Thanh toán thành công — order #{$order->id}, "
                 . "gateway_trans_id={$transaction->gateway_transaction_id}"

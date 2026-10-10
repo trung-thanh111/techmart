@@ -6,6 +6,8 @@ use App\Models\Post;
 use App\Models\PostCatalogue;
 use App\Models\PostTag;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 class PostSeeder extends Seeder
@@ -15,66 +17,119 @@ class PostSeeder extends Seeder
      */
     public function run(): void
     {
-        $catNews = PostCatalogue::where('slug', 'tin-tuc-cong-nghe')->first() ?? PostCatalogue::first();
-        $catReview = PostCatalogue::where('slug', 'danh-gia-san-pham')->first() ?? $catNews;
-        $tag = PostTag::first();
+        $jsonPath = base_path('scraped_sforum_posts.json');
+        
+        // Clean existing post relations and records
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        DB::table('related_posts')->truncate();
+        DB::table('post_catalogue_post')->truncate();
+        DB::table('post_tag_post')->truncate();
+        DB::table('posts')->truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
-        $posts = [
+        $fallbackPosts = [
             [
                 'name' => 'Đánh giá chi tiết iPhone 15 Pro Max: Đỉnh cao công nghệ và khung viền Titan',
+                'slug' => 'danh-gia-chi-tiet-iphone-15-pro-max',
                 'description' => 'iPhone 15 Pro Max mang đến trải nghiệm đỉnh cao với khung titan siêu nhẹ, chip A17 Pro mạnh mẽ và camera tiềm vọng 5x.',
                 'content' => '<p>iPhone 15 Pro Max là chiếc flagship đáng mua nhất trong năm nay với hàng loạt cải tiến đáng giá từ thiết kế đến hiệu năng...</p>',
-                'image' => '/images/posts/iphone-15-review.jpg',
+                'image' => 'https://cdn-media.sforum.vn/storage/app/media/wp-content/uploads/2024/01/danh-gia-iphone-15-pro-max-thumb.jpg',
+                'album' => [
+                    'https://cdn-media.sforum.vn/storage/app/media/wp-content/uploads/2024/01/danh-gia-iphone-15-pro-max-1.jpg',
+                    'https://cdn-media.sforum.vn/storage/app/media/wp-content/uploads/2024/01/danh-gia-iphone-15-pro-max-2.jpg',
+                ],
+                'cat_slug' => 'danh-gia-san-pham',
+                'tags' => ['iphone-15-series', 'review-camera'],
                 'is_hot' => 1,
+                'view_count' => 1520,
+                'like_count' => 180,
                 'order' => 1,
-                'post_catalogue_id' => $catReview ? $catReview->id : 1,
-                'tag_id' => $tag ? $tag->id : 1,
-                'publish' => 2,
-                'user_id' => 1,
-            ],
-            [
-                'name' => 'So sánh Samsung Galaxy S24 Ultra và iPhone 15 Pro Max: Kẻ tám lạng người nửa cân',
-                'description' => 'Trận chiến không khoan nhượng giữa hai đại diện xuất sắc nhất của thế giới Android và iOS hiện nay.',
-                'content' => '<p>Galaxy S24 Ultra nổi bật với AI thông minh tích hợp, bút S-Pen tiện dụng và màn hình chống chói ấn tượng...</p>',
-                'image' => '/images/posts/compare-s24-ip15.jpg',
-                'is_hot' => 1,
-                'order' => 2,
-                'post_catalogue_id' => $catReview ? $catReview->id : 1,
-                'tag_id' => $tag ? $tag->id : 1,
-                'publish' => 2,
-                'user_id' => 1,
-            ],
-            [
-                'name' => 'Xu hướng trí tuệ nhân tạo trên điện thoại di động năm 2026',
-                'description' => 'Trí tuệ nhân tạo (AI) đang dần định hình lại cách chúng ta tương tác với smartphone hàng ngày.',
-                'content' => '<p>Từ việc dịch thuật trực tiếp cuộc gọi, chỉnh sửa ảnh thông minh đến trợ lý ảo đa phương thức...</p>',
-                'image' => '/images/posts/ai-trends.jpg',
-                'is_hot' => 0,
-                'order' => 3,
-                'post_catalogue_id' => $catNews ? $catNews->id : 1,
-                'tag_id' => $tag ? $tag->id : 1,
-                'publish' => 2,
-                'user_id' => 1,
             ],
         ];
 
-        foreach ($posts as $item) {
-            $post = Post::firstOrCreate(
-                ['slug' => Str::slug($item['name'])],
-                array_merge($item, [
-                    'slug' => Str::slug($item['name']),
-                    'published_at' => now(),
-                ])
-            );
-
-            if ($item['post_catalogue_id']) {
-                $post->post_catalogues()->syncWithoutDetaching([$item['post_catalogue_id']]);
-            }
-            if ($item['tag_id']) {
-                $post->post_tags()->syncWithoutDetaching([$item['tag_id']]);
+        $postDataList = [];
+        if (File::exists($jsonPath)) {
+            $jsonContent = File::get($jsonPath);
+            $decoded = json_decode($jsonContent, true);
+            if (is_array($decoded) && count($decoded) > 0) {
+                $postDataList = $decoded;
             }
         }
 
-        $this->command->info('Posts seeded successfully!');
+        if (empty($postDataList)) {
+            $postDataList = $fallbackPosts;
+        }
+
+        $allCatalogues = PostCatalogue::all()->keyBy('slug');
+        $defaultCatalogue = $allCatalogues->first();
+        $allTags = PostTag::all()->keyBy('slug');
+
+        $createdPosts = [];
+
+        foreach ($postDataList as $index => $item) {
+            $name = trim($item['name'] ?? 'Bài viết công nghệ');
+            $slug = !empty($item['slug']) ? Str::slug($item['slug']) : Str::slug($name);
+            $catSlug = $item['cat_slug'] ?? '';
+            
+            $catalogue = $allCatalogues->get($catSlug) ?? $defaultCatalogue;
+            $catalogueId = $catalogue ? $catalogue->id : 1;
+
+            $tagSlugs = $item['tags'] ?? [];
+            $matchingTags = collect($tagSlugs)->map(fn($t) => $allTags->get($t))->filter();
+            $primaryTagId = $matchingTags->isNotEmpty() ? $matchingTags->first()->id : null;
+
+            $description = mb_substr($item['description'] ?? '', 0, 480);
+            $metaDescription = !empty($description) ? $description : mb_substr(strip_tags($item['content'] ?? ''), 0, 200);
+
+            $post = Post::create([
+                'name' => mb_substr($name, 0, 250),
+                'slug' => $slug,
+                'description' => $description,
+                'content' => $item['content'] ?? '',
+                'image' => $item['image'] ?? null,
+                'album' => $item['album'] ?? [],
+                'table_of_content' => 1,
+                'is_hot' => !empty($item['is_hot']) ? 1 : 0,
+                'order' => $item['order'] ?? ($index + 1),
+                'view_count' => $item['view_count'] ?? rand(500, 3500),
+                'like_count' => $item['like_count'] ?? rand(25, 280),
+                'post_catalogue_id' => $catalogueId,
+                'tag_id' => $primaryTagId,
+                'publish' => 2,
+                'user_id' => 1,
+                'meta_title' => mb_substr($name, 0, 250),
+                'meta_keyword' => implode(', ', $tagSlugs),
+                'meta_description' => $metaDescription,
+                'published_at' => now()->subDays(rand(1, 20))->subHours(rand(1, 23)),
+            ]);
+
+            // Sync catalogue
+            $post->post_catalogues()->sync([$catalogueId]);
+
+            // Sync tags
+            if ($matchingTags->isNotEmpty()) {
+                $post->post_tags()->sync($matchingTags->pluck('id')->toArray());
+            }
+
+            $createdPosts[] = $post;
+        }
+
+        // Attach related posts for each post
+        foreach ($createdPosts as $currentPost) {
+            $relatedCandidates = collect($createdPosts)
+                ->filter(fn($p) => $p->id !== $currentPost->id);
+
+            // Prefer same catalogue
+            $sameCatalogue = $relatedCandidates->filter(fn($p) => $p->post_catalogue_id === $currentPost->post_catalogue_id);
+            $selected = $sameCatalogue->count() >= 3 
+                ? $sameCatalogue->random(min(4, $sameCatalogue->count())) 
+                : $relatedCandidates->random(min(4, $relatedCandidates->count()));
+
+            if ($selected->isNotEmpty()) {
+                $currentPost->relateds()->sync($selected->pluck('id')->toArray());
+            }
+        }
+
+        $this->command->info('Successfully seeded ' . count($createdPosts) . ' CellphoneS Sforum posts with full content and relations!');
     }
 }

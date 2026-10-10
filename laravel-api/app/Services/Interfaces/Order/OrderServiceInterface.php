@@ -46,5 +46,15 @@ interface OrderServiceInterface
      * Tra cứu đơn hàng nhanh theo mã đơn và thông tin xác thực (SĐT / email / userId)
      */
     public function trackOrder(string $code, ?string $phone = null, ?string $email = null, ?int $userId = null, bool $isAdmin = false): Order;
+
+    /**
+     * Trừ tồn kho tự động khi đơn hàng xác nhận hoặc thanh toán
+     */
+    public function deductStock(Order $order): void;
+
+    /**
+     * Hoàn tồn kho tự động khi đơn hàng bị hủy hoặc hoàn tiền
+     */
+    public function releaseStock(Order $order): void;
 }
 

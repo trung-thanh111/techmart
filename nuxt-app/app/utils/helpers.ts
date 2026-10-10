@@ -101,8 +101,17 @@ export const resolveImageUrl = (input?: any, fallback: string = IMAGEDEFAULT): s
   return fallback;
 };
 
-export const resolveAlbum = (album: any[] = [], fallback: string = IMAGEDEFAULT): string[] => {
-  if (!Array.isArray(album)) return [fallback];
+export const resolveAlbum = (album: any = [], fallback: string = IMAGEDEFAULT): string[] => {
+  if (typeof album === "string") {
+    try {
+      const parsed = JSON.parse(album);
+      if (Array.isArray(parsed)) album = parsed;
+      else if (album.trim().length > 0) album = [album];
+    } catch {
+      album = album.trim().length > 0 ? [album] : [];
+    }
+  }
+  if (!Array.isArray(album) || album.length === 0) return [fallback];
   const config = useRuntimeConfig();
   const base = `${config.public.baseUrl}/storage`;
 

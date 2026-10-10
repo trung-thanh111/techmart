@@ -4,6 +4,7 @@ namespace App\Services\Impl\Inventory;
 
 use App\Models\Agency;
 use App\Models\Inventory;
+use App\Models\Order;
 use App\Models\ProductVariant;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -269,6 +270,156 @@ class InventorySyncService
                 'error' => $e->getMessage()
             ]);
             throw $e;
+        }
+    }
+
+    /**
+     * Tự động trừ tồn kho (inventories & product_variants.stock) khi đơn thanh toán/xác nhận.
+     * Đảm bảo tính idempotent: chỉ trừ một lần nếu chưa được trừ.
+     *
+     * @param Order $order
+     * @return bool True nếu trừ thành công, false nếu đơn đã được trừ trước đó
+     */
+    public function deductStockForOrder(Order $order): bool
+    {
+        if ($order->is_stock_deducted) {
+            return false;
+        }
+
+        return DB::transaction(function () use ($order) {
+            $freshOrder = Order::where('id', $order->id)->lockForUpdate()->first();
+            if (!$freshOrder || $freshOrder->is_stock_deducted) {
+                return false;
+            }
+
+            $items = $freshOrder->order_items()->get();
+
+            foreach ($items as $item) {
+                $variantId = $item->product_variant_id;
+                $quantity = (int) $item->quantity;
+
+                if (!$variantId || $quantity <= 0) {
+                    continue;
+                }
+
+                // 1. Trừ stock trên bảng product_variants
+                $variant = ProductVariant::where('id', $variantId)->lockForUpdate()->first();
+                if ($variant) {
+                    $variant->decrement('stock', $quantity);
+                }
+
+                // 2. Trừ stock trên bảng inventories theo từng agency
+                $this->deductInventoryStock($variantId, $quantity);
+            }
+
+            $freshOrder->is_stock_deducted = true;
+            $freshOrder->saveQuietly();
+            $order->is_stock_deducted = true;
+
+            Log::info("[InventoryAutoSync] Deducted stock for order #{$freshOrder->code} (ID: {$freshOrder->id})");
+
+            return true;
+        });
+    }
+
+    /**
+     * Tự động hoàn lại tồn kho khi đơn bị hủy (cancelled) hoặc hoàn tiền (refunded).
+     * Đảm bảo tính idempotent: chỉ hoàn lại nếu đơn đã từng bị trừ kho.
+     *
+     * @param Order $order
+     * @return bool True nếu hoàn thành công, false nếu đơn chưa từng bị trừ kho
+     */
+    public function releaseStockForOrder(Order $order): bool
+    {
+        if (!$order->is_stock_deducted) {
+            return false;
+        }
+
+        return DB::transaction(function () use ($order) {
+            $freshOrder = Order::where('id', $order->id)->lockForUpdate()->first();
+            if (!$freshOrder || !$freshOrder->is_stock_deducted) {
+                return false;
+            }
+
+            $items = $freshOrder->order_items()->get();
+
+            foreach ($items as $item) {
+                $variantId = $item->product_variant_id;
+                $quantity = (int) $item->quantity;
+
+                if (!$variantId || $quantity <= 0) {
+                    continue;
+                }
+
+                // 1. Hoàn lại stock trên bảng product_variants
+                $variant = ProductVariant::where('id', $variantId)->lockForUpdate()->first();
+                if ($variant) {
+                    $variant->increment('stock', $quantity);
+                }
+
+                // 2. Hoàn lại stock trên bảng inventories
+                $this->releaseInventoryStock($variantId, $quantity);
+            }
+
+            $freshOrder->is_stock_deducted = false;
+            $freshOrder->saveQuietly();
+            $order->is_stock_deducted = false;
+
+            Log::info("[InventoryAutoSync] Released stock for order #{$freshOrder->code} (ID: {$freshOrder->id})");
+
+            return true;
+        });
+    }
+
+    /**
+     * Trừ tồn kho trong bảng inventories phân bổ qua các agency có sẵn
+     */
+    protected function deductInventoryStock(int $variantId, int $quantity): void
+    {
+        $remaining = $quantity;
+
+        // Ưu tiên trừ kho có nhiều hàng nhất
+        $inventories = Inventory::where('product_variant_id', $variantId)
+            ->where('stock', '>', 0)
+            ->orderByDesc('stock')
+            ->lockForUpdate()
+            ->get();
+
+        foreach ($inventories as $inv) {
+            if ($remaining <= 0) {
+                break;
+            }
+
+            $deduct = min((int) $inv->stock, $remaining);
+            $inv->decrement('stock', $deduct);
+            $remaining -= $deduct;
+        }
+
+        // Nếu các kho có stock > 0 không đủ bù số lượng, trừ vào kho đầu tiên (nếu tồn tại)
+        if ($remaining > 0) {
+            $firstInv = Inventory::where('product_variant_id', $variantId)
+                ->orderBy('id', 'asc')
+                ->lockForUpdate()
+                ->first();
+
+            if ($firstInv) {
+                $firstInv->decrement('stock', $remaining);
+            }
+        }
+    }
+
+    /**
+     * Hoàn lại tồn kho trong bảng inventories
+     */
+    protected function releaseInventoryStock(int $variantId, int $quantity): void
+    {
+        $inv = Inventory::where('product_variant_id', $variantId)
+            ->orderByDesc('stock')
+            ->lockForUpdate()
+            ->first();
+
+        if ($inv) {
+            $inv->increment('stock', $quantity);
         }
     }
 }

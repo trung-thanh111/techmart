@@ -20,8 +20,10 @@ use App\Services\Interfaces\Product\WishlistServiceInterface;
 use App\Services\Impl\Product\WishlistService;
 use App\Models\ProductVariant;
 use App\Models\Agency;
+use App\Models\Order;
 use App\Observers\ProductVariantObserver;
 use App\Observers\AgencyObserver;
+use App\Observers\OrderObserver;
 use App\Services\Interfaces\Inventory\InventoryServiceInterface;
 use App\Services\Impl\Inventory\InventoryService;
 use App\Services\Impl\Inventory\InventorySyncService;
@@ -169,5 +171,6 @@ class AppServiceProvider extends ServiceProvider
         // Đăng ký Observers
         ProductVariant::observe(ProductVariantObserver::class);
         Agency::observe(AgencyObserver::class);
+        Order::observe(OrderObserver::class);
     }
 }

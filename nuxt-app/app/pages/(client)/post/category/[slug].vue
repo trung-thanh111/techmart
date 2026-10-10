@@ -23,7 +23,7 @@
             </div>
             <div class="lg:col-span-3 flex justify-center">
               <div class="relative overflow-hidden">
-                <NuxtImg :src="categoryDetail?.image?.path ? (categoryDetail?.image?.url ?? '') : IMAGEDEFAULT" :alt="categoryDetail?.name || 'category'" class="w-[120px] h-[120px] md:w-[160px] md:h-[160px] object-contain" sizes="(max-width: 640px) 120px, (max-width: 1024px) 160px, 160px" loading="lazy" />
+                <NuxtImg :src="categoryDetail?.image?.url || categoryDetail?.image?.path || IMAGEDEFAULT" :alt="categoryDetail?.name || 'category'" class="w-[120px] h-[120px] md:w-[160px] md:h-[160px] object-contain" sizes="(max-width: 640px) 120px, (max-width: 1024px) 160px, 160px" loading="lazy" />
               </div>
             </div>
           </div>
@@ -41,10 +41,10 @@
               <div class="bg-white rounded-xl shadow-lg overflow-hidden h-full relative">
                 <div class="flex flex-col lg:flex-row h-full">
                   <div class="lg:w-1/2 relative">
-                    <NuxtImg :src="post.image?.path ? (post.image?.url ?? '') : IMAGEDEFAULT" :alt="post.name" class="h-32 lg:h-[250px] w-full object-cover" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 600px" loading="lazy" />
+                    <NuxtImg :src="post.image?.url || post.image?.path || IMAGEDEFAULT" :alt="post.name" class="h-32 lg:h-[250px] w-full object-cover" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 600px" loading="lazy" />
                   </div>
                   <div class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
-                    <NuxtImg :src="post.creator?.avatar ?? post.image?.url ?? IMAGEDEFAULT" :alt="post.creator?.name ?? post.name" class="w-12 h-12 lg:w-20 lg:h-20 rounded-full border-3 border-sky-400 shadow-2xl object-cover" sizes="(max-width: 640px) 48px, 80px" loading="lazy" />
+                    <NuxtImg :src="post.creator?.avatar || DEFAULTAVATAR" :alt="post.creator?.name ?? post.name" class="w-12 h-12 lg:w-20 lg:h-20 rounded-full border-3 border-sky-400 shadow-2xl object-cover" sizes="(max-width: 640px) 48px, 80px" loading="lazy" />
                   </div>
                   <div class="lg:w-1/2 p-6 flex flex-col justify-center">
                     <div class="flex items-center mb-4">
@@ -73,7 +73,7 @@
 <script setup lang="ts">
 import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
 import DataState from "~/components/ui/DataState.vue";
-import { IMAGEDEFAULT, TOPOST, POSTCATEGORY, POSTCATEGORIES } from "~/utils/constants";
+import { IMAGEDEFAULT, DEFAULTAVATAR, TOPOST, POSTCATEGORY, POSTCATEGORIES } from "~/utils/constants";
 import { usePostCatalogue } from "~/composables/post/usePostCatalogue";
 import { usePost } from "~/composables/post/usePost";
 import { useDebounceFn } from "@vueuse/core";

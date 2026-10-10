@@ -12,6 +12,20 @@ class PostCatalogueResource extends JsonResource
      *
      * @return array<string, mixed>
      */
+    protected function formatImageUrl(?string $image): ?string
+    {
+        if (empty($image)) {
+            return null;
+        }
+        if (str_starts_with($image, 'http://') || str_starts_with($image, 'https://')) {
+            return $image;
+        }
+        if (str_starts_with($image, '/')) {
+            return asset($image);
+        }
+        return asset("/storage/{$image}");
+    }
+
     public function toArray(Request $request): array
     {
         return [
@@ -25,7 +39,7 @@ class PostCatalogueResource extends JsonResource
             'description' => $this->description,
             'image' => [
                 'path' => $this->image ?? null,
-                'url' => asset("/storage/{$this->image}") ?? null,
+                'url' => $this->formatImageUrl($this->image),
             ],
             'order' => (int) $this->order,
             'isHot' => (bool) $this->is_hot,

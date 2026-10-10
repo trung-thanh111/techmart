@@ -17,6 +17,7 @@ use App\Exceptions\SecurityException;
 use App\Repositories\Order\OrderRepository;
 use App\Http\Resources\Order\OrderResource;
 use App\Services\Interfaces\Order\OrderServiceInterface;
+use App\Services\Impl\Inventory\InventorySyncService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Str;
@@ -53,8 +54,10 @@ class OrderService extends BaseService implements OrderServiceInterface
 
     protected float $taxRate = 0.1; // 10%
 
-    public function __construct(OrderRepository $repository)
-    {
+    public function __construct(
+        OrderRepository $repository,
+        protected InventorySyncService $inventorySyncService
+    ) {
         $this->repository = $repository;
     }
 
@@ -135,6 +138,11 @@ class OrderService extends BaseService implements OrderServiceInterface
             // 8. Load relationships và return
             $order->load($this->with);
 
+            // Auto-deduct stock nếu đơn tạo ra đã confirmed hoặc paid
+            if (($order->status === OrderEnum::STATUS_CONFIRMED || $order->payment_status === OrderEnum::PAYMENT_STATUS_PAID) && !$order->is_stock_deducted) {
+                $this->deductStock($order);
+            }
+
             return $order;
         });
 
@@ -152,7 +160,7 @@ class OrderService extends BaseService implements OrderServiceInterface
     }
 
     /**
-     * Reserve stock với pessimistic locking để handle race condition
+     * Validate stock với pessimistic locking để handle race condition
      * Sử dụng SELECT FOR UPDATE để lock rows khi nhiều người mua cùng lúc
      */
     protected function reserveStock(array $items): array
@@ -177,9 +185,6 @@ class OrderService extends BaseService implements OrderServiceInterface
                         "Sản phẩm '{$variant->name}' chỉ còn {$variant->stock} sản phẩm, không đủ {$quantity} sản phẩm yêu cầu"
                     );
                 }
-
-                // Trừ stock (pessimistic lock đảm bảo atomic)
-                $variant->decrement('stock', $quantity);
 
                 $product = Product::find($productId);
 
@@ -220,9 +225,6 @@ class OrderService extends BaseService implements OrderServiceInterface
                     );
                 }
 
-                // Trừ stock từ variant đầu tiên
-                $variant->decrement('stock', $quantity);
-
                 $reservedItems[] = [
                     'product_id' => $productId,
                     'product_variant_id' => $variant->id ?? null,
@@ -243,16 +245,19 @@ class OrderService extends BaseService implements OrderServiceInterface
     }
 
     /**
-     * Rollback stock khi cancel order
+     * Trừ stock tự động khi order được xác nhận hoặc thanh toán
      */
-    protected function releaseStock(Order $order): void
+    public function deductStock(Order $order): void
     {
-        foreach ($order->order_items as $item) {
-            if ($item->product_variant_id) {
-                ProductVariant::where('id', $item->product_variant_id)
-                    ->increment('stock', $item->quantity);
-            }
-        }
+        $this->inventorySyncService->deductStockForOrder($order);
+    }
+
+    /**
+     * Rollback stock khi cancel order hoặc refund
+     */
+    public function releaseStock(Order $order): void
+    {
+        $this->inventorySyncService->releaseStockForOrder($order);
     }
 
     /**
@@ -373,21 +378,23 @@ class OrderService extends BaseService implements OrderServiceInterface
             switch ($newStatus) {
                 case 'confirmed':
                     $order->confirmed_at = now();
+                    $this->deductStock($order);
                     break;
+                case 'processing':
                 case 'shipped':
                     $order->shipped_at = now();
+                    $this->deductStock($order);
                     break;
                 case 'delivered':
                     $order->delivered_at = now();
+                    $this->deductStock($order);
                     break;
                 case 'cancelled':
                     $order->cancelled_at = now();
-                    // Release stock when cancelled
                     $this->releaseStock($order);
                     break;
                 case 'refunded':
                     $order->refunded_at = now();
-                    // Release stock when refunded
                     $this->releaseStock($order);
                     break;
             }
@@ -449,7 +456,7 @@ class OrderService extends BaseService implements OrderServiceInterface
         foreach ($order->order_items as $item) {
             $itemPriority = self::STATUS_PRIORITY[$item->status] ?? -99;
             if ($newOrderStatus === 'cancelled' || $newOrderStatus === 'refunded') {
-                $item->status = $newOrderStatus;
+                $item->status = $newOrderStatus === 'refunded' ? 'returned' : $newOrderStatus;
                 $item->save();
                 continue;
             }
@@ -592,6 +599,7 @@ class OrderService extends BaseService implements OrderServiceInterface
 
             if ($paymentStatus === 'paid') {
                 $order->paid_at = now();
+                $this->deductStock($order);
             }
 
             $order->save();
