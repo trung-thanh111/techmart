@@ -135,6 +135,8 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
         Route::get('agencies', [AgencyController::class, 'index']);
         Route::get('agencies/{id}', [AgencyController::class, 'show']);
 
+        Route::get('systems/public-configs', [SystemController::class, 'publicConfigs']);
+        Route::get('systems/structure', [SystemController::class, 'structure']);
         Route::get('systems', [SystemController::class, 'index']);
         Route::get('systems/{id}', [SystemController::class, 'show']);
 

@@ -47,6 +47,8 @@ class CheckPermission
         'charts' => 'paginate',
         'recentOrders' => 'paginate',
         'topProducts' => 'paginate',
+        'saveSettings' => 'update',
+        'structure' => 'show',
     ];
 
     /**

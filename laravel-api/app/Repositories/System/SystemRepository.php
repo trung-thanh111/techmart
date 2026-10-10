@@ -15,5 +15,13 @@ class SystemRepository extends BaseRepository
         parent::__construct($model);
     }
 
+    public function updateOrCreate(array $attributes, array $values = []): mixed
+    {
+        return $this->model->updateOrCreate($attributes, $values);
+    }
 
+    public function all(array $columns = ['*'])
+    {
+        return $this->model->all($columns);
+    }
 }

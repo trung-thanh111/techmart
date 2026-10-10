@@ -34,12 +34,15 @@ class ImageController extends Controller
             'overrideOptions' => [],
         ];
         $result = $this->imageService->upload(...$config);
+        $rawFiles = $result['files'] ?? [];
+        $filesList = isset($rawFiles['path']) ? [$rawFiles] : (is_array($rawFiles) ? $rawFiles : []);
         $response = [
             'id' => uniqid('temp_', true),
-            'files' => collect($result['files'])->map(function ($file) {
+            'files' => collect($filesList)->map(function ($file) {
+                $path = is_array($file) ? ($file['path'] ?? '') : (string) $file;
                 return [
-                    'url' => asset('storage/' . $file['path']),
-                    'path' => $file['path'],
+                    'url' => asset('storage/' . $path),
+                    'path' => $path,
                 ];
             }),
         ];

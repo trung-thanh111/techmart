@@ -30,7 +30,12 @@ class UploadTempRequest extends FormRequest
         ];
     }
 
-    public function prepareForValidation() {}
+    public function prepareForValidation()
+    {
+        if ($this->has('sessionId') && !$this->has('session_id')) {
+            $this->merge(['session_id' => $this->input('sessionId')]);
+        }
+    }
 
     public function messages()
     {

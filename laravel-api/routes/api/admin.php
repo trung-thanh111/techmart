@@ -233,6 +233,10 @@ Route::group(['prefix' => 'v1/', 'middleware' => ['jwt:admin', 'convert', 'check
     //generate route
 
     // Other Admin Resources
+    Route::group(['prefix' => 'systems'], function () {
+        Route::get('structure', [SystemController::class, 'structure']);
+        Route::post('save-settings', [SystemController::class, 'saveSettings']);
+    });
     Route::resource('systems', SystemController::class)->except($publicResourceExcept);
     Route::resource('popups', PopupController::class)->except($publicResourceExcept);
 

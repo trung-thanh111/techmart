@@ -4,6 +4,7 @@ namespace Database\Seeders\System;
 
 use App\Models\System;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Cache;
 
 class SystemSeeder extends Seeder
 {
@@ -12,6 +13,26 @@ class SystemSeeder extends Seeder
      */
     public function run(): void
     {
+        $groups = config('system.groups', []);
+        $seededCount = 0;
+
+        foreach ($groups as $groupKey => $group) {
+            foreach ($group['fields'] ?? [] as $fieldKey => $fieldConfig) {
+                $keyword = "{$groupKey}_{$fieldKey}";
+                $content = $fieldConfig['default'] ?? '';
+
+                System::updateOrCreate(
+                    ['keyword' => $keyword],
+                    [
+                        'content' => $content,
+                        'publish' => 2,
+                        'user_id' => 1,
+                    ]
+                );
+                $seededCount++;
+            }
+        }
+
         $policies = [
             [
                 'keyword' => 'privacy_policy',
@@ -40,12 +61,15 @@ class SystemSeeder extends Seeder
         ];
 
         foreach ($policies as $item) {
-            System::firstOrCreate(
+            System::updateOrCreate(
                 ['keyword' => $item['keyword']],
                 $item
             );
+            $seededCount++;
         }
 
-        $this->command->info('System policies seeded successfully!');
+        Cache::tags(['systems:collection'])->flush();
+
+        $this->command->info("Seeded {$seededCount} system configuration settings and policies successfully!");
     }
 }
