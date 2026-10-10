@@ -31,7 +31,7 @@
                           <Splide ref="mainSliderRef" :options="productImageMainOptions" class="mb-4">
                             <SplideSlide v-for="(image, index) in images" :key="index">
                               <div class="cursor-pointer" @click="showLightbox(index)">
-                                <NuxtImg :src="image" :alt="productDetail.name" class="w-full h-auto max-h-[400px] md:max-h-[500px] lg:max-h-[600px] aspect-[4/5] object-contain rounded mx-auto" loading="lazy" />
+                                <NuxtImg :src="image" :alt="productDetail.name" class="w-full h-auto max-h-[400px] md:max-h-[500px] lg:max-h-[600px] aspect-[4/5] object-contain rounded mx-auto" loading="lazy" @error="handleImageError" />
                               </div>
                             </SplideSlide>
                           </Splide>
@@ -41,7 +41,7 @@
 
                         <Splide ref="thumbSliderRef" :options="productImageThumbnailOptions" class="product-thumbnail-slider">
                           <SplideSlide v-for="(image, index) in images" :key="index">
-                            <NuxtImg :src="image" :alt="`${productDetail.name} - ${index + 1}`" class="object-contain w-full h-full aspect-square rounded cursor-pointer border border-gray-300 hover:border-blue-500" loading="lazy" />
+                            <NuxtImg :src="image" :alt="`${productDetail.name} - ${index + 1}`" class="object-contain w-full h-full aspect-square rounded cursor-pointer border border-gray-300 hover:border-blue-500" loading="lazy" @error="handleImageError" />
                           </SplideSlide>
                         </Splide>
                       </div>
@@ -718,7 +718,7 @@ import { useCompare } from "~/composables/product/useCompare";
 import { useCart } from "~/composables/cart/useCart";
 import { useProductReview } from "~/composables/product/useProductReview";
 import type { IPromotion, IPromotionTarget } from "~/interfaces/promotion/promotion.interface";
-import { TOEXCHANGEPOLICY, TOAGENCYSYSTEM, HOTLINE, TOCART } from "~/utils/constants";
+import { IMAGEDEFAULT, TOEXCHANGEPOLICY, TOAGENCYSYSTEM, HOTLINE, TOCART } from "~/utils/constants";
 import { useRoute } from "vue-router";
 import { computed, nextTick, onMounted, ref, watch } from "vue";
 import { navigateTo } from "#app";
@@ -818,6 +818,13 @@ const showLightbox = (index: number) => {
   lightboxVisible.value = true;
 };
 
+const handleImageError = (event: Event) => {
+  const target = event.target as HTMLImageElement;
+  if (target && target.src !== IMAGEDEFAULT) {
+    target.src = IMAGEDEFAULT;
+  }
+};
+
 // Computed
 const breadcrumbs = computed(() => [
   { label: t("page.shop"), href: TOSHOP },
@@ -825,8 +832,8 @@ const breadcrumbs = computed(() => [
 ]);
 
 const images = computed(() => {
-  if (!productDetail.value?.album?.length) return [];
-  return resolveAlbum(productDetail.value.album);
+  const list = resolveAlbum(productDetail.value?.album);
+  return list.length ? list : [IMAGEDEFAULT];
 });
 
 const hashString = (str: string): number => {

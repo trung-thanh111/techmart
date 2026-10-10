@@ -135,7 +135,7 @@
                 <ul class="space-y-3 text-sm text-gray-600">
                   <li v-for="(product_similar, id) in 3" :key="id">
                     <NuxtLink to="/shop" class="flex items-center gap-3 p-2 rounded-lg transition hover:bg-gray-50">
-                      <NuxtImg src="/images/products/iphone-16-pro-max.webp" loading="lazy" alt="Ốp lưng silicon" class="w-12 h-12 object-cover rounded-md" />
+                      <NuxtImg :src="IMAGEDEFAULT" loading="lazy" :alt="$t('home.suggestedProducts')" class="w-12 h-12 object-cover rounded-md" />
                       <div class="flex-1">
                         <h4 class="font-medium text-gray-700 transition line-clamp-1 group-hover:text-sky-500">Ốp lưng silicon iPhone</h4>
                         <span class="text-xs text-gray-500 line-clamp-1">Chống sốc, chống bám vân tay</span>
@@ -625,6 +625,7 @@ import CollectionProduct from "~/components/features/Collection.vue";
 import ButtonViewMore from "~/components/ui/Button.vue";
 import DataState from "~/components/ui/DataState.vue";
 import { useHomeSlider } from "~/composables/useHomeSlider";
+import { IMAGEDEFAULT } from "~/utils/constants";
 
 // Import auth composable
 import { useAuth } from "~/composables/auth/useAuth";

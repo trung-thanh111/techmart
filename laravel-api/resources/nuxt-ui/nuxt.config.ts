@@ -52,6 +52,7 @@ export default defineNuxtConfig({
     },
 
     image: {
+        domains: ["cdn2.cellphones.com.vn", "cellphones.com.vn", "ui-avatars.com", "flowbite.s3.amazonaws.com"],
         quality: 80,
         format: ["webp", "avif", "png", "jpg"],
         screens: {

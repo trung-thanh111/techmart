@@ -28,6 +28,10 @@ export default defineNuxtConfig({
     enabled: false,
   },
 
+  image: {
+    domains: ["cdn2.cellphones.com.vn", "cellphones.com.vn", "ui-avatars.com"],
+  },
+
   alias: {
     "@": resolve(__dirname, "./app"),
     "~": resolve(__dirname, "./app"),

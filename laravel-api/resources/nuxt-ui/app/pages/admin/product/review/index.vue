@@ -80,7 +80,7 @@ definePageMeta({
 
 <template>
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h5 class="mb-0 text-uppercase fw-bold">Quản lý Đánh giá Sản phẩm</h5>
+        <h5 class="mb-0 text-uppercase fw-bold">Quản lý Đánh giá</h5>
         <Breadcrumb :crumbs="[{ label: 'Sản phẩm', to: PRODUCTINDEX }, { label: 'Đánh giá' }]" />
     </div>
 
@@ -167,7 +167,7 @@ definePageMeta({
                             <th>Sản phẩm</th>
                             <th>Khách hàng</th>
                             <th class="text-center">Số sao</th>
-                            <th>Nhận xét & Đánh giá</th>
+                            <th>Đánh giá</th>
                             <th class="text-center">Lượt thích</th>
                             <th class="text-center">Trạng thái</th>
                             <th class="text-center">Thời gian</th>
@@ -180,8 +180,7 @@ definePageMeta({
                         </tr>
                         <tr v-else-if="!hasData">
                             <td colspan="9" class="text-center text-muted py-5">
-                                <i class="ri-chat-voice-line fs-1 text-secondary d-block mb-2"></i>
-                                Không tìm thấy đánh giá sản phẩm nào
+                                Không có dữ liệu
                             </td>
                         </tr>
                         <template v-else>

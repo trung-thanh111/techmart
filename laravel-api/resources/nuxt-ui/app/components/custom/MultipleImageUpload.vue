@@ -22,7 +22,7 @@
         </div>
         <div v-else class="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] gap-3 md:grid-cols-[repeat(auto-fill,minmax(100px,1fr))] md:gap-2">
             <div v-for="(image, index) in images" :key="image.id" class="relative rounded-lg overflow-hidden shadow-sm" @mouseenter="hoveredIndex = index" @mouseleave="hoveredIndex = null">
-                <NuxtImg :src="image.url" class="w-full h-full object-cover aspect-square transition-transform duration-200 hover:scale-105" alt="preview" loading="lazy" />
+                <NuxtImg :src="image.url" class="w-full h-full object-cover aspect-square transition-transform duration-200 hover:scale-105" alt="preview" loading="lazy" @error="($event.target as HTMLImageElement).src = '/images/defaults/record.jpg'" />
                 <div class="absolute top-0 left-0 m-2">
                     <div class="w-[18px] h-[18px] rounded-full flex items-center justify-center bg-green-600">
                         <i class="ri-check-line text-white text-[12px]"></i>

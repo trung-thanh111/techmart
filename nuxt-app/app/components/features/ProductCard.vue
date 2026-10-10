@@ -80,6 +80,7 @@
 import { computed, ref, watch } from "vue";
 import type { IProduct } from "~/interfaces/product/product.interface";
 import { formatPrice, resolveAlbum } from "~/utils/helpers";
+import { IMAGEDEFAULT } from "~/utils/constants";
 import { useCompare } from "~/composables/product/useCompare";
 import { useWishlist } from "~/composables/product/useWishlist";
 import { useCart } from "~/composables/cart/useCart";
@@ -90,8 +91,8 @@ const { handleAddToCompareFromProduct } = useCompare();
 const { handleToggleWishlistFromProduct, isProductVariantInWishlist } = useWishlist();
 const { addItem } = useCart();
 
-const FALLBACK_MAIN = "/images/products/iphone-16-pro-max.webp";
-const FALLBACK_SUB = "/images/products/iphone-16-pro-max-3.webp";
+const FALLBACK_MAIN = IMAGEDEFAULT;
+const FALLBACK_SUB = IMAGEDEFAULT;
 
 const rawMainImage = computed(() => {
   const images = resolveAlbum(props.product?.album);
