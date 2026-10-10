@@ -62,11 +62,20 @@ export const usePromotion = () => {
 
   const getDiscountBadge = (promo: IPromotion): string => {
     const action = promo.actions?.[0];
-    if (!action) return "Khuyến mãi";
+    if (!action) {
+      return promo.type === "free_ship" ? "Freeship" : "Khuyến mãi";
+    }
     if (action.actionType === "percent") {
       return `Giảm ${action.actionValue}%`;
     }
-    return `Giảm ${formatPrice(action.actionValue)}`;
+    if (action.actionType === "freeship") {
+      return "Freeship";
+    }
+    const val = Number(action.actionValue) || 0;
+    if (val > 0) {
+      return `Giảm ${new Intl.NumberFormat("vi-VN").format(val)}đ`;
+    }
+    return "Khuyến mãi";
   };
 
   const getConditionText = (promo: IPromotion): string => {

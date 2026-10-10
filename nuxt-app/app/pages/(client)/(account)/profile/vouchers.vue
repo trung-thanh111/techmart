@@ -78,64 +78,65 @@
       <div
         v-for="promo in filteredPromotions"
         :key="promo.id"
-        class="group relative bg-white rounded-xl border border-gray-200 hover:border-sky-300 hover:shadow-md transition-all duration-300 flex overflow-hidden"
+        class="group relative bg-white rounded-xl shadow-[0_2px_10px_rgba(0,0,0,0.06)] hover:shadow-lg border border-transparent hover:border-dashed hover:border-sky-400 transition-all duration-300 flex"
       >
-        <!-- Left Banner Ticket Styling -->
-        <div class="w-28 sm:w-32 bg-gradient-to-br from-sky-500 to-sky-700 text-white p-3 flex flex-col justify-between items-center text-center relative shrink-0">
-          <!-- Decorative Ticket Cutouts -->
-          <div class="absolute -top-2 -right-2 w-4 h-4 bg-white rounded-full"></div>
-          <div class="absolute -bottom-2 -right-2 w-4 h-4 bg-white rounded-full"></div>
+        <!-- Top Cutout Notch (50/50) with curved dashed border on hover -->
+        <div class="absolute -top-[1px] left-28 sm:left-32 -translate-x-1/2 w-5 h-2.5 z-10 pointer-events-none overflow-visible">
+          <svg class="w-5 h-2.5 overflow-visible" viewBox="0 0 20 10" fill="none">
+            <path d="M -0.5 -1.5 L 20.5 -1.5 L 20.5 0 C 20.5 5.52 15.82 10 10 10 C 4.18 10 -0.5 5.52 -0.5 0 Z" fill="#ffffff" />
+            <path d="M 0 0 C 0 5.52 4.48 10 10 10 C 15.52 10 20 5.52 20 0" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3,3" class="text-transparent group-hover:text-sky-400 transition-colors duration-300" />
+          </svg>
+        </div>
 
-          <div class="mt-2">
-            <span class="inline-block p-2 bg-white/20 rounded-full mb-1">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </span>
-            <div class="text-xs font-bold uppercase tracking-wider text-sky-100">TechMart</div>
+        <!-- Bottom Cutout Notch (50/50) with curved dashed border on hover -->
+        <div class="absolute -bottom-[1px] left-28 sm:left-32 -translate-x-1/2 w-5 h-2.5 z-10 pointer-events-none overflow-visible">
+          <svg class="w-5 h-2.5 overflow-visible" viewBox="0 0 20 10" fill="none">
+            <path d="M -0.5 11.5 L 20.5 11.5 L 20.5 10 C 20.5 4.48 15.82 0 10 0 C 4.18 0 -0.5 4.48 -0.5 10 Z" fill="#ffffff" />
+            <path d="M 0 10 C 0 4.48 4.48 0 10 0 C 15.52 0 20 4.48 20 10" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3,3" class="text-transparent group-hover:text-sky-400 transition-colors duration-300" />
+          </svg>
+        </div>
+
+        <!-- Left Banner Ticket Styling -->
+        <div class="w-28 sm:w-32 bg-gradient-to-br from-sky-500 to-sky-700 text-white p-2.5 sm:p-3 flex flex-col justify-center items-center text-center gap-1.5 sm:gap-2 relative shrink-0 rounded-l-xl">
+          <div class="flex flex-col items-center">
+            <img src="/images/icons/voucher-tag.png" alt="Voucher" class="w-6 h-6 sm:w-7 sm:h-7 object-contain mb-0.5" />
+            <div class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-sky-100">TechMart</div>
           </div>
 
-          <div class="my-auto">
-            <span class="text-xs font-extrabold uppercase bg-white text-sky-700 px-2 py-0.5 rounded shadow-sm">
+          <div>
+            <span class="text-[10px] sm:text-[11px] font-black uppercase bg-white text-sky-700 px-2 py-0.5 rounded shadow-xs whitespace-nowrap">
               {{ getDiscountBadge(promo) }}
             </span>
-          </div>
-
-          <div class="text-[10px] text-sky-100 mb-1">
-            {{ promo.remainingUsage ? `Còn ${promo.remainingUsage} lượt` : 'Số lượng có hạn' }}
           </div>
         </div>
 
         <!-- Right Content Details -->
-        <div class="flex-1 p-3.5 sm:p-4 flex flex-col justify-between">
+        <div class="flex-1 p-2.5 sm:p-3 flex flex-col justify-between rounded-r-xl min-w-0">
           <div>
-            <div class="flex items-start justify-between gap-2 mb-1.5">
-              <h2 class="text-sm sm:text-base font-bold text-gray-900 group-hover:text-sky-600 transition-colors line-clamp-1">
+            <div class="flex items-start justify-between gap-2 mb-1">
+              <h2 class="text-xs sm:text-sm font-bold text-gray-900 group-hover:text-sky-600 transition-colors line-clamp-1">
                 {{ promo.name }}
               </h2>
-              <span class="text-[10px] px-2 py-0.5 rounded font-medium shrink-0 bg-emerald-50 text-emerald-700 border border-emerald-200">
-                Khả dụng
-              </span>
             </div>
 
             <!-- Rules & Conditions -->
-            <p class="text-xs text-gray-600 flex items-center gap-1.5 mb-1">
+            <p class="text-[11px] sm:text-xs text-gray-600 flex items-center gap-1 mb-0.5">
               <svg class="w-3.5 h-3.5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span>{{ getConditionText(promo) }}</span>
+              <span class="truncate">{{ getConditionText(promo) }}</span>
             </p>
 
-            <p v-if="getMaxDiscountText(promo)" class="text-xs text-amber-600 flex items-center gap-1.5 mb-1">
+            <p v-if="getMaxDiscountText(promo)" class="text-[11px] sm:text-xs text-amber-600 flex items-center gap-1 mb-0.5">
               <svg class="w-3.5 h-3.5 text-amber-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span>{{ getMaxDiscountText(promo) }}</span>
+              <span class="truncate">{{ getMaxDiscountText(promo) }}</span>
             </p>
 
             <!-- Expiry Date -->
-            <p class="text-[11px] text-gray-500 flex items-center gap-1.5">
-              <svg class="w-3.5 h-3.5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <p class="text-[10px] sm:text-[11px] text-gray-500 flex items-center gap-1">
+              <svg class="w-3 h-3 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <span>{{ getExpiryText(promo) }}</span>
@@ -143,15 +144,15 @@
           </div>
 
           <!-- Actions Footer -->
-          <div class="mt-3 pt-3 border-t border-dashed border-gray-100 flex items-center justify-between gap-2">
+          <div class="mt-2 pt-2 border-t border-dashed border-gray-100 flex items-center justify-between gap-2">
             <!-- Voucher Code Pill -->
             <div
               @click="copyCode(promo.code)"
-              class="cursor-pointer group/code inline-flex items-center gap-1.5 px-2.5 py-1 bg-gray-50 hover:bg-sky-50 border border-dashed border-gray-300 hover:border-sky-300 rounded text-xs font-mono font-bold text-gray-700 hover:text-sky-700 transition-colors"
+              class="cursor-pointer group/code inline-flex items-center gap-1 px-2 py-0.5 bg-gray-50 hover:bg-sky-50 border border-dashed border-gray-300 hover:border-sky-300 rounded text-[11px] font-mono font-bold text-gray-700 hover:text-sky-700 transition-colors"
               title="Nhấn để sao chép"
             >
               <span>{{ promo.code }}</span>
-              <svg class="w-3.5 h-3.5 text-gray-400 group-hover/code:text-sky-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-3 h-3 text-gray-400 group-hover/code:text-sky-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
               </svg>
             </div>
@@ -160,7 +161,7 @@
             <button
               type="button"
               @click="useVoucher(promo.code)"
-              class="px-3 py-1 bg-sky-600 hover:bg-sky-700 active:bg-sky-800 text-white text-xs font-semibold rounded-lg shadow-sm transition-colors"
+              class="px-2.5 py-1 bg-sky-600 hover:bg-sky-700 active:bg-sky-800 text-white text-[11px] sm:text-xs font-semibold rounded-lg shadow-xs transition-colors"
             >
               Dùng ngay
             </button>

@@ -156,7 +156,7 @@
             </div>
 
             <div class="my-auto py-2">
-              <div class="text-xs font-black uppercase bg-white text-gray-900 px-2 py-0.5 rounded shadow-sm">
+              <div class="text-xs font-black uppercase bg-white text-gray-900 px-2 py-0.5 rounded shadow-sm whitespace-nowrap">
                 {{ getDiscountBadge(promo) }}
               </div>
             </div>
