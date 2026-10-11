@@ -241,7 +241,7 @@ import { USERINDEX } from "~/utils/constants";
 import { useUser } from "~/composables/user/useUser";
 import SingleImageUpload from "~/components/custom/SingleImageUpload.vue";
 import CKEditor from "~/components/custom/CKEditor.vue";
-import vietnamData from "../../../data/address_vietnam.json";
+import vietnamData from "~/data/address_vietnam.json";
 
 const { isLoading, showPassword, genderOptions, handleStore, userCatalogueOptions, setValues, values } = useUser();
 

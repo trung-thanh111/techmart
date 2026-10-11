@@ -241,7 +241,7 @@ import { useUser } from "~/composables/user/useUser";
 import { USERINDEX } from "~/utils/constants";
 import SingleImageUpload from "~/components/custom/SingleImageUpload.vue";
 import CKEditor from "~/components/custom/CKEditor.vue";
-import vietnamData from "../../../../data/address_vietnam.json";
+import vietnamData from "~/data/address_vietnam.json";
 
 const { isLoading, userCatalogueOptions, genderOptions, show, handleUpdate, setValues, values } = useUser(undefined, "update");
 const currentImageUrl = ref<string | null>(null);
