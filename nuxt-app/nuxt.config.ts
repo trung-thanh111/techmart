@@ -80,6 +80,18 @@ export default defineNuxtConfig({
         driver: "memory",
       },
     },
+    hooks: {
+      compiled: async (nitro) => {
+        const fs = await import("node:fs");
+        const path = await import("node:path");
+        const src = path.resolve("node_modules/@img");
+        const dest = path.join(nitro.options.output.serverDir, "node_modules/@img");
+        if (fs.existsSync(src)) {
+          fs.mkdirSync(path.dirname(dest), { recursive: true });
+          fs.cpSync(src, dest, { recursive: true });
+        }
+      },
+    },
   },
 
   experimental: {
@@ -89,9 +101,7 @@ export default defineNuxtConfig({
   },
 
   routeRules: {
-    "/admin/**": { ssr: false },
     "/**": { ssr: true },
-    "/": { prerender: true },
   },
 
   vite: {
@@ -135,6 +145,7 @@ export default defineNuxtConfig({
   typescript: {
     typeCheck: false,
   },
+
 
   // === TELEMETRY - Tắt ===
   telemetry: false,
