@@ -76,10 +76,10 @@
                   </thead>
                   <tbody>
                     <tr v-for="(spec, specIndex) in specifications" :key="specIndex" class="hover:bg-gray-50 transition-colors">
-                      <td class="border border-gray-200 px-3 py-3 md:px-4 md:py-5 font-medium text-gray-700 bg-gray-50 text-xs sm:text-sm md:text-base">
+                      <td class="border border-gray-200 px-3 py-3 md:px-4 md:py-5 font-medium text-gray-700 bg-gray-50 text-xs sm:text-sm">
                         {{ spec.attribute }}
                       </td>
-                      <td v-for="(item, itemIndex) in compareList" :key="item.variantId" class="border border-gray-200 px-3 py-3 md:px-4 md:py-5 text-gray-600 text-xs sm:text-sm md:text-base">
+                      <td v-for="(item, itemIndex) in compareList" :key="item.variantId" class="border border-gray-200 px-3 py-3 md:px-4 md:py-5 text-gray-600 text-xs sm:text-sm">
                         {{ spec[`product${itemIndex}`] || "-" }}
                       </td>
                       <td v-if="compareList.length < 3" v-for="n in 3 - compareList.length" :key="`empty-cell-${n}`" class="border border-gray-200 px-3 py-3 md:px-4 md:py-5"></td>

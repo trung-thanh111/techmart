@@ -2,7 +2,7 @@
   <div class="container-header">
     <header class="w-full text-sm font-medium">
       <div class="bg-gradient-to-r from-[#00b88c] to-[#007c8b] py-2 text-white">
-        <div class="max-w-7xl mx-auto flex justify-between items-center py-2 text-sm sm:text-base">
+        <div class="max-w-7xl mx-auto flex justify-between items-center py-2 text-sm">
           <div class="flex items-center flex-wrap gap-4">
             <HotlineBadge
               :show-secondary="true"

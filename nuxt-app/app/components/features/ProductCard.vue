@@ -31,7 +31,7 @@
             {{ product?.name || $t("productCard.sampleProductName") }}
           </h3>
           <div class="flex items-center gap-1.5 sm:gap-2 mt-0.5 sm:mt-1">
-            <span class="text-red-600 font-semibold text-xs sm:text-sm md:text-base">{{ formatPrice(currentPrice) }}</span>
+            <span class="text-red-600 font-semibold text-xs sm:text-sm">{{ formatPrice(currentPrice) }}</span>
             <span v-if="originalPrice > currentPrice" class="text-gray-400 line-through text-[10px] sm:text-xs">
               {{ formatPrice(originalPrice) }}
             </span>

@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center flex-wrap">
           <div>
             <h2 class="text-2xl md:text-3xl font-semibold mb-1 text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f]">{{ $t("common.searchResults") }}</h2>
-            <p class="text-sm text-gray-600 md:text-base">
+            <p class="text-sm text-gray-600">
               {{ $t("common.found") }}
               <span class="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f]">{{ totalProducts }}</span>
               {{ $t("common.results") }}
