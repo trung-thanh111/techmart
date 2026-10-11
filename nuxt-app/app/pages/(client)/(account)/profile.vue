@@ -13,11 +13,14 @@
 
 <script setup lang="ts">
 import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
-import Sidebar from "~/components//navigation/SidebarProfile.vue";
-import ProfileHeader from "~/components//navigation/ProfileHeader.vue";
+import Sidebar from "~/components/navigation/SidebarProfile.vue";
+import ProfileHeader from "~/components/navigation/ProfileHeader.vue";
 import { PROFILEINDEX } from "~/utils/constants";
+import { useI18n } from "vue-i18n";
+import { computed } from "vue";
 
-const breadcrumbs = [{ label: $t("profile.breadcrumb"), href: PROFILEINDEX }];
+const { t } = useI18n();
+const breadcrumbs = computed(() => [{ label: t("profile.breadcrumb"), href: PROFILEINDEX }]);
 
 definePageMeta({
   layout: "client",

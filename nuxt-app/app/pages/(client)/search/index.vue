@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center flex-wrap">
           <div>
             <h2 class="text-2xl md:text-3xl font-semibold mb-1 text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f]">{{ $t("common.searchResults") }}</h2>
-            <p class="text-sm text-gray-600 md:text-md">
+            <p class="text-sm text-gray-600 md:text-base">
               {{ $t("common.found") }}
               <span class="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f]">{{ totalProducts }}</span>
               {{ $t("common.results") }}
@@ -37,7 +37,7 @@
     </div>
 
     <DataState :loading="status === 'pending'" :error="false" :data="products" :show-empty-image="true">
-      <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 px-4 mb-5">
+      <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-4 px-2 sm:px-4 mb-5">
         <ProductCard v-for="product in products" :key="product.id" :product="product" />
       </div>
     </DataState>
@@ -48,10 +48,10 @@
 import { onMounted, ref, watch, computed } from "vue";
 import { useRoute } from "vue-router";
 import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
-import ProductCard from "~/components//features/ProductCard.vue";
-import FilterSort from "~/components//features/FilterSort.vue";
+import ProductCard from "~/components/features/ProductCard.vue";
+import FilterSort from "~/components/features/FilterSort.vue";
 import DataState from "~/components/ui/DataState.vue";
-import { useShop } from "~/composables/shop/useShop";
+import { useSearch } from "~/composables/shop/useShop";
 import { EMPTYBOX, TOSEARCH } from "~/utils/constants";
 import { definePageMeta } from "#imports";
 import { useI18n } from "vue-i18n";
@@ -60,7 +60,7 @@ const { t } = useI18n();
 const route = useRoute();
 const queryKeyword = ref((route.query.keyword as string) || "");
 
-const { products, totalProducts, filters, fetchProducts, setSort } = useShop();
+const { products, totalProducts, filters, fetchProducts, setSort } = useSearch();
 
 const perpage = 20;
 

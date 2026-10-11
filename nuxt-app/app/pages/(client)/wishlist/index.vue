@@ -25,7 +25,7 @@
       </div>
 
       <DataState :loading="isLoading" :error="false" :data="filteredProducts" :show-empty-image="true">
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-4">
         <ProductCardWishlist v-for="(item, index) in filteredProducts" :key="item.id || index" :product="item" @removed="handleProductRemoved" />
       </div>
       </DataState>
@@ -40,10 +40,11 @@
 </template>
 <script setup lang="ts">
 import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
-import ProductCardWishlist from "~/components//features/ProductCardWishlist.vue";
-import FilterWishlist from "~/components//features/FilterWishlist.vue";
-import FilterSort from "~/components//features/FilterSort.vue";
+import ProductCardWishlist from "~/components/features/ProductCardWishlist.vue";
+import FilterWishlist from "~/components/features/FilterWishlist.vue";
+import FilterSort from "~/components/features/FilterSort.vue";
 import DataState from "~/components/ui/DataState.vue";
+import { useI18n } from "vue-i18n";
 import { useWishlist } from "~/composables/product/useWishlist";
 import { productCatalogueService } from "~/services/product/catalogue.service";
 import { brandService } from "~/services/brand/brand.service";
@@ -227,7 +228,8 @@ onBeforeUnmount(() => {
   }
 });
 
-const breadcrumbs = computed(() => [{ label: $t("wishlist.breadcrumb"), href: "/wishlist" }]);
+const { t } = useI18n();
+const breadcrumbs = computed(() => [{ label: t("wishlist.breadcrumb"), href: "/wishlist" }]);
 
 definePageMeta({
   layout: "client",

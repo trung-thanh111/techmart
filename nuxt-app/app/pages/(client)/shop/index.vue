@@ -58,7 +58,7 @@
               <template v-if="totalProducts > 0 && chunks.length">
                 <Splide :options="sliderOptions" ref="splideRef">
                   <SplideSlide v-for="(chunk, idx) in chunks" :key="idx">
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
+                    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 sm:gap-3 md:gap-4">
                       <ProductCard v-for="product in chunk" :key="product.id" :product="product" />
                     </div>
                   </SplideSlide>
@@ -88,9 +88,13 @@
               <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-white via-green-300 to-green-300"></div>
             </div>
           </div>
-          <div class="content-about-product max-h-[800px] overflow-hidden">
-            <!-- ... giữ nguyên nội dung giới thiệu ... -->
-            <ViewMore />
+          <div class="content-about-product text-gray-600 text-sm leading-relaxed space-y-3 pt-2">
+            <p>
+              Chào mừng bạn đến với <strong>TechMart</strong> – hệ thống bán lẻ công nghệ và phụ kiện chính hãng. Chúng tôi cung cấp các sản phẩm thiết bị số, máy tính bảng, âm thanh và phụ kiện thông minh với cam kết chất lượng chuẩn hãng.
+            </p>
+            <p>
+              Mọi đơn hàng đều được hưởng chính sách bảo hành chính hãng, đổi trả linh hoạt và hỗ trợ kỹ thuật tận tâm. Hãy sử dụng bộ lọc tìm kiếm phía trên để dễ dàng chọn lựa sản phẩm phù hợp nhất với nhu cầu của bạn.
+            </p>
           </div>
         </div>
         <div class="lg:col-span-4 min-w-0 bg-white shadow-md rounded-md py-3 md:py-6 px-2 md:px-6 mb-4">
@@ -123,9 +127,9 @@ import DataState from "~/components/ui/DataState.vue";
 import { useShop } from "~/composables/shop/useShop";
 import Category from "~/components/ui/Category.vue";
 import FilterBar from "~/components/ui/FilterBar.vue";
-import ProductCard from "~/components//features/ProductCard.vue";
+import ProductCard from "~/components/features/ProductCard.vue";
 import { Splide, SplideSlide } from "@splidejs/vue-splide";
-import FilterSort from "~/components//features/FilterSort.vue";
+import FilterSort from "~/components/features/FilterSort.vue";
 import { EMPTYBOX, IMAGEDEFAULT, TOPOST, TOSHOP, PRODUCTCATEGORY, definePageMeta } from "#imports";
 import { resolveAlbum } from "~/utils/helpers";
 import { computed, nextTick, ref } from "vue";

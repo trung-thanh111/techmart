@@ -8,18 +8,19 @@ import type { IProduct } from "~/interfaces/product/product.interface";
 import type { IPaginate } from "~/interfaces/base.interface";
 import type { IPost } from "~/interfaces/post/post.interface";
 
-export const useShop = () => {
+export const useShop = (scope = "shop") => {
   const config = useRuntimeConfig();
 
   const banners = useState<IBanner[]>("shop-banners", () => []);
   const catalogues = useState<IProductCatalogue[]>("shop-catalogues", () => []);
-  const products = useState<IProduct[]>("shop-products", () => []);
+  const products = useState<IProduct[]>(`${scope}-products`, () => []);
   const summerProducts = useState<IProduct[]>("shop-summer", () => []);
   const posts = useState<IPost[]>("shop-posts", () => []);
   const bannerSeason = useState<IBanner[]>("shop-banner-season", () => []);
 
-  const filters = useState<Record<string, any>>("shop-filters", () => ({
+  const filters = useState<Record<string, any>>(`${scope}-filters`, () => ({
     sort: "created_at,desc",
+    keyword: "",
     product_variants: {
       variant_attributes: {
         "attributes.id": { in: "" },
@@ -29,13 +30,14 @@ export const useShop = () => {
     brand_id: { eq: null },
   }));
 
-  const paginate = useState<IPaginate<IProduct> | null>("shop-paginate", () => null);
-  const totalProducts = useState<number>("shop-total-products", () => 0);
-  const currentPage = useState<number>("shop-current-page", () => 1);
-  const hasMore = useState<boolean>("shop-has-more", () => true);
+  const paginate = useState<IPaginate<IProduct> | null>(`${scope}-paginate`, () => null);
+  const totalProducts = useState<number>(`${scope}-total-products`, () => 0);
+  const currentPage = useState<number>(`${scope}-current-page`, () => 1);
+  const hasMore = useState<boolean>(`${scope}-has-more`, () => true);
+  const currentPerPage = useState<number>(`${scope}-per-page`, () => (scope === "search" ? 20 : 8));
 
   const isLoading = ref(false);
-  const isInitialized = useState<boolean>("shop-initialized", () => false);
+  const isInitialized = useState<boolean>(`${scope}-initialized`, () => false);
 
   const fetchBanners = async () => {
     if (banners.value.length) return banners.value;
@@ -57,8 +59,9 @@ export const useShop = () => {
     return catalogues.value;
   };
 
-  const fetchProducts = async (page = 1, perPage = 8, append = false) => {
+  const fetchProducts = async (page = 1, perPage = currentPerPage.value, append = false) => {
     isLoading.value = true;
+    currentPerPage.value = perPage;
 
     try {
       const params: Record<string, any> = {
@@ -95,7 +98,7 @@ export const useShop = () => {
 
       return products.value;
     } catch (error) {
-      console.error("[useShop] fetchProducts error:", error);
+      console.error(`[useShop:${scope}] fetchProducts error:`, error);
       throw error;
     } finally {
       isLoading.value = false;
@@ -109,7 +112,7 @@ export const useShop = () => {
     if (filters.value.sort === sortValue) return;
     filters.value.sort = sortValue;
     currentPage.value = 1;
-    await fetchProducts(1, 8, false);
+    await fetchProducts(1, currentPerPage.value, false);
   };
 
   /**
@@ -136,12 +139,13 @@ export const useShop = () => {
     }
 
     currentPage.value = 1;
-    await fetchProducts(1, 8, false);
+    await fetchProducts(1, currentPerPage.value, false);
   };
 
   const resetFilters = async () => {
     filters.value = {
       sort: "created_at,desc",
+      keyword: "",
       product_variants: {
         variant_attributes: {
           "attributes.id": {
@@ -157,12 +161,12 @@ export const useShop = () => {
       },
     };
     currentPage.value = 1;
-    await fetchProducts(1, 8, false);
+    await fetchProducts(1, currentPerPage.value, false);
   };
 
   const loadMore = async () => {
     if (!hasMore.value || isLoading.value) return;
-    await fetchProducts(currentPage.value + 1, 8, true);
+    await fetchProducts(currentPage.value + 1, currentPerPage.value, true);
   };
 
   const fetchSummerProducts = async (limit = 3) => {
@@ -202,10 +206,10 @@ export const useShop = () => {
     if (isInitialized.value) return;
     isLoading.value = true;
     try {
-      await Promise.all([fetchBanners(), fetchBannerSeason(), fetchCatalogues(), fetchProducts(1, 8), fetchSummerProducts(), fetchPosts()]);
+      await Promise.all([fetchBanners(), fetchBannerSeason(), fetchCatalogues(), fetchProducts(1, currentPerPage.value), fetchSummerProducts(), fetchPosts()]);
       isInitialized.value = true;
     } catch (err) {
-      console.error("[useShop] Init failed:", err);
+      console.error(`[useShop:${scope}] Init failed:`, err);
     } finally {
       isLoading.value = false;
     }
@@ -239,3 +243,5 @@ export const useShop = () => {
     resetFilters,
   };
 };
+
+export const useSearch = () => useShop("search");
