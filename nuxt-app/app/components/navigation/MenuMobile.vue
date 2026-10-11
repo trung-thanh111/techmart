@@ -61,6 +61,12 @@
                     </svg>
                     <span class="group-hover:text-sky-600">{{ $t("menu.supportPolicy") }}</span>
                   </NuxtLink>
+                  <NuxtLink :to="TOAGENCY" @click="closeMenu" class="flex group items-center gap-3 p-3 rounded transition-colors text-gray-500 hover:bg-gray-100 hover:text-sky-600">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-gray-500 group-hover:text-sky-600">
+                      <path d="M3 9l1-5h16l1 5M5 22V12H19V22M2 9h20" />
+                    </svg>
+                    <span class="group-hover:text-sky-600">{{ $t("header.dealerSystem") }}</span>
+                  </NuxtLink>
                 </div>
               </div>
               <div v-else class="p-4 space-y-2">
@@ -90,7 +96,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { TOVOUCHER, TOFAQ, TOPOLICY } from "~/utils/constants";
+import { TOVOUCHER, TOFAQ, TOPOLICY, TOAGENCY } from "~/utils/constants";
 import type { TreeNode } from "~/utils/nested-tree";
 import type { IMenuItem } from "~/interfaces/menu/menu.interface";
 

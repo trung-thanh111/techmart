@@ -1,8 +1,8 @@
 <template>
   <div class="container-header">
     <header class="w-full text-sm font-medium">
-      <div class="bg-gradient-to-r from-[#00b88c] to-[#007c8b] py-2 text-white">
-        <div class="max-w-7xl mx-auto flex justify-between items-center py-2 text-sm">
+      <div class="hidden md:block bg-gradient-to-r from-[#00b88c] to-[#007c8b] py-2 text-white">
+        <div class="max-w-7xl mx-auto flex justify-between items-center py-2 text-sm px-4">
           <div class="flex items-center flex-wrap gap-4">
             <HotlineBadge
               :show-secondary="true"
@@ -28,29 +28,26 @@
               </svg>
               <span>{{ $t("header.supportPolicy") }}</span>
             </NuxtLink>
-            <!-- <NuxtLink to="#" class="flex items-center gap-1 hover:text-gray-300 transition-colors">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-7 7c0 3.87 3.13 7 7 7s7-3.13 7-7a7 7 0 0 0-7-7z" /></svg>
-              <span>{{ $t("header.showroom") }}</span>
-            </NuxtLink> -->
           </div>
         </div>
       </div>
 
-      <div class="w-full max-w-7xl mx-auto">
+      <div class="hidden md:block w-full max-w-7xl mx-auto">
         <div class="h-px w-full bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
       </div>
 
       <!-- Main Header -->
-      <div class="bg-gradient-to-r from-[#00b88c] to-[#007c8b] px-2 pt-3">
-        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
-          <div class="hidden md:flex items-center gap-6">
-            <AppLogo variant="header" class-name="h-15 w-40" />
+      <div class="bg-gradient-to-r from-[#00b88c] to-[#007c8b] px-3 sm:px-4 pt-2 md:pt-3">
+        <!-- Desktop Header (>= 768px) -->
+        <div class="hidden md:flex max-w-7xl mx-auto items-center justify-between gap-6 pb-2">
+          <div class="flex items-center gap-6">
+            <AppLogo variant="header" class-name="h-15 w-40 flex-shrink-0" />
           </div>
           <div class="flex-1 max-w-xl relative">
             <SearchSuggestion />
           </div>
           <ClientOnly>
-            <div class="items-center gap-4 hidden sm:flex text-white">
+            <div class="items-center gap-4 flex text-white flex-shrink-0">
               <a href="#" @click.prevent="openTrackingDialog" class="flex items-center gap-1 hover:text-gray-300 transition-colors">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-7 h-7 mt-1.5">
                   <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -184,152 +181,101 @@
               </div>
             </div>
           </ClientOnly>
+        </div>
 
-          <!-- Mobile -->
-          <div class="w-full flex items-center justify-between md:hidden my-2">
-            <button @click="toggleMobileMenu" class="text-white p-2">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6">
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <line x1="3" y1="12" x2="21" y2="12" />
-                <line x1="3" y1="18" x2="21" y2="18" />
-              </svg>
-            </button>
-            <div class="flex items-center gap-4 text-white">
-              <a href="#" @click.prevent="openTrackingDialog" class="flex items-center gap-1 hover:text-gray-300 transition-colors">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6 mt-1.5">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                  <polyline points="14,2 14,8 20,8" />
-                  <line x1="16" y1="13" x2="8" y2="13" />
-                  <line x1="16" y1="17" x2="8" y2="17" />
-                  <polyline points="10,9 9,9 8,9" />
+        <!-- Mobile / Tablet Header (< 768px) -->
+        <div class="md:hidden max-w-7xl mx-auto">
+          <!-- Row 1: Hamburger Menu + Logo on Left, Actions on Right -->
+          <div class="flex items-center justify-between gap-2 py-1 text-white">
+            <div class="flex items-center gap-2">
+              <button @click="toggleMobileMenu" class="text-white p-1.5 -ml-1 rounded-md hover:bg-white/10 transition-colors" aria-label="Menu">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6">
+                  <line x1="3" y1="6" x2="21" y2="6" />
+                  <line x1="3" y1="12" x2="21" y2="12" />
+                  <line x1="3" y1="18" x2="21" y2="18" />
                 </svg>
-                <span class="font-normal">
-                  {{ $t("header.track") }}
-                  <br />
-                  {{ $t("header.order") }}
-                </span>
-              </a>
-              <div class="relative inline-block text-left group">
-                <NuxtLink v-if="!user" :to="TOLOGIN" class="flex items-center gap-1">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6 mt-1.5">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                    <circle cx="12" cy="7" r="4" />
-                  </svg>
-                  <div>
-                    <span class="hover:underline">{{ $t("auth.login") }}</span>
-                    <p class="font-light text-xs">{{ $t("nav.account") }}</p>
-                  </div>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5 mt-1.5"><polyline points="6,9 12,15 18,9" /></svg>
-                </NuxtLink>
-                <div v-else class="flex items-center gap-1 cursor-pointer">
-                  <NuxtImg class="rounded-full w-9 h-9 object-cover" :src="avatar" :alt="$t('common.avatar') + ' ' + user?.name" loading="lazy" />
-                  <div class="text-xs">
-                    <p class="font-medium truncate max-w-[100px]">{{ user?.name }}</p>
-                    <p class="font-light">{{ user?.userCatalogueId === 1 ? $t("header.customer") : $t("header.admin") }}</p>
-                  </div>
-                </div>
+              </button>
+              <AppLogo variant="header" class-name="h-9 w-28 flex-shrink-0" />
+            </div>
 
-                <div class="absolute top-full right-0 w-full h-3 group-hover:block hidden z-0"></div>
-                <div v-if="user" class="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 hidden group-hover:block transition-all duration-300 ease-in-out">
-                  <div class="w-full bg-white rounded-md border-0 shadow-xl font-normal ring-black/10 divide-y divide-gray-100">
-                    <div class="px-4 py-2 text-sm text-gray-500 font-semibold">{{ $t("header.hello", { name: user?.name }) }}</div>
-                    <div class="py-1">
-                      <NuxtLink :to="PROFILEINDEX" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-gray-400 mr-2">
-                          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                          <circle cx="12" cy="7" r="4" />
-                        </svg>
+            <ClientOnly>
+              <div class="flex items-center gap-2 sm:gap-3 text-white">
+                <!-- Tra cứu đơn hàng -->
+                <a href="#" @click.prevent="openTrackingDialog" class="flex items-center p-1.5 rounded-md hover:bg-white/10 transition-colors" :title="$t('header.trackOrder')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14,2 14,8 20,8" />
+                    <line x1="16" y1="13" x2="8" y2="13" />
+                    <line x1="16" y1="17" x2="8" y2="17" />
+                    <polyline points="10,9 9,9 8,9" />
+                  </svg>
+                </a>
+
+                <!-- User / Auth -->
+                <div ref="mobileUserMenuRef" class="relative inline-block text-left">
+                  <NuxtLink v-if="!user" :to="TOLOGIN" class="flex items-center p-1.5 rounded-md hover:bg-white/10 transition-colors">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                      <circle cx="12" cy="7" r="4" />
+                    </svg>
+                  </NuxtLink>
+                  <button v-else type="button" @click="toggleMobileUserMenu" class="bg-transparent shadow-none focus:outline-none flex items-center p-0.5">
+                    <NuxtImg class="rounded-full w-7 h-7 object-cover border border-white/40" :src="avatar" :alt="$t('common.avatar') + ' ' + user?.name" loading="lazy" />
+                  </button>
+                  <div v-show="isMobileUserMenuOpen && user" class="absolute right-0 z-30 mt-2 w-52 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5">
+                    <div class="px-3 py-2 text-xs text-gray-500 font-semibold truncate">{{ $t("header.hello", { name: user?.name }) }}</div>
+                    <div class="py-1 text-xs">
+                      <NuxtLink :to="PROFILEINDEX" @click="isMobileUserMenuOpen = false" class="flex items-center px-3 py-2 text-gray-700 hover:bg-gray-100">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-gray-400 mr-2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
                         <span>{{ $t("nav.info") }}</span>
                       </NuxtLink>
-                      <NuxtLink :to="PROFILEORDER" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-gray-400 mr-2">
-                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                          <polyline points="14,2 14,8 20,8" />
-                        </svg>
+                      <NuxtLink :to="PROFILEORDER" @click="isMobileUserMenuOpen = false" class="flex items-center px-3 py-2 text-gray-700 hover:bg-gray-100">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-gray-400 mr-2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14,2 14,8 20,8" /></svg>
                         <span>{{ $t("sidebar.myOrders") }}</span>
                       </NuxtLink>
-                      <NuxtLink :to="TOWISHLIST" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="w-4 h-4 text-gray-400 cursor-pointer mr-2">
-                          <path d="M462.3 62.6C407 7.6 324.8-10.6 256 47.9 187.2-10.6 105-7.6 49.7 62.6-16.6 145.3 23.8 268.7 130.4 357.1L239 469.6c9.4 9.4 24.6 9.4 33.9 0l108.6-112.5C488.2 268.7 528.6 145.3 462.3 62.6z" />
-                        </svg>
+                      <NuxtLink :to="TOWISHLIST" @click="isMobileUserMenuOpen = false" class="flex items-center px-3 py-2 text-gray-700 hover:bg-gray-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="w-4 h-4 text-gray-400 mr-2"><path d="M462.3 62.6C407 7.6 324.8-10.6 256 47.9 187.2-10.6 105-7.6 49.7 62.6-16.6 145.3 23.8 268.7 130.4 357.1L239 469.6c9.4 9.4 24.6 9.4 33.9 0l108.6-112.5C488.2 268.7 528.6 145.3 462.3 62.6z" /></svg>
                         <span>{{ $t("nav.wishlist") }}</span>
                       </NuxtLink>
-                      <NuxtLink :to="PROFILEADDRESSORDER" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-gray-400 mr-2">
-                          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                          <circle cx="12" cy="10" r="3" />
-                        </svg>
+                      <NuxtLink :to="PROFILEADDRESSORDER" @click="isMobileUserMenuOpen = false" class="flex items-center px-3 py-2 text-gray-700 hover:bg-gray-100">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-gray-400 mr-2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
                         <span>{{ $t("sidebar.addressOrder") }}</span>
                       </NuxtLink>
-                      <NuxtLink :to="PROFILECHANGEPASSWORD" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-gray-400 mr-2">
-                          <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                        </svg>
+                      <NuxtLink :to="PROFILECHANGEPASSWORD" @click="isMobileUserMenuOpen = false" class="flex items-center px-3 py-2 text-gray-700 hover:bg-gray-100">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-gray-400 mr-2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
                         <span>{{ $t("sidebar.changePassword") }}</span>
                       </NuxtLink>
                     </div>
-                    <div class="py-1">
-                      <button @click="handleLogout" class="flex items-center px-4 py-2 text-sm text-red-700 hover:bg-red-100 w-full text-left">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 mr-2">
-                          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                          <polyline points="16,17 21,12 16,7" />
-                          <line x1="21" y1="12" x2="9" y2="12" />
-                        </svg>
+                    <div class="py-1 text-xs">
+                      <button @click="handleLogout(); isMobileUserMenuOpen = false" class="flex items-center px-3 py-2 text-red-700 hover:bg-red-50 w-full text-left">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 mr-2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16,17 21,12 16,7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>
                         <span>{{ $t("nav.logout") }}</span>
                       </button>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="relative inline-block text-left group">
-                <NuxtLink :to="TOCART" class="block relative text-white mt-4 group/cart">
-                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+
+                <!-- Giỏ hàng -->
+                <NuxtLink :to="TOCART" class="relative p-1.5 rounded-md hover:bg-white/10 transition-colors text-white block">
+                  <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                   </svg>
-                  <span v-if="cartCount > 0" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs px-1 min-w-[20px] text-center">
+                  <span v-if="cartCount > 0" class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full text-[10px] font-bold h-4 min-w-[16px] px-1 flex items-center justify-center leading-none shadow">
                     {{ cartCount }}
                   </span>
                 </NuxtLink>
-                <div class="absolute top-full right-0 w-full max-h-5 group-hover:block hidden z-10"></div>
-                <div v-if="cartItems.length > 0" class="absolute right-0 top-12 z-30 min-w-[24rem] origin-top-right bg-white shadow-md rounded-md hidden group-hover:block transition-all duration-300 ease-in-out">
-                  <div class="w-full rounded-md border-0 shadow-xl font-normal">
-                    <div class="w-full max-w-md rounded-lg shadow-lg overflow-hidden text-sm">
-                      <div class="px-4 py-2 bg-gradient-to-r from-[rgba(43,57,144,0.91)] via-[#0097cc] to-[#8dc63f] text-white font-medium">
-                        {{ $t("action.quickView") }}
-                      </div>
-                      <div class="max-h-[300px] overflow-y-auto">
-                        <div v-for="item in cartItems" :key="item.id" class="flex items-start px-4 py-3 border-b border-gray-100 hover:bg-gray-50">
-                          <NuxtImg :src="getCartItemImage(item)" :alt="getCartItemName(item)" class="w-14 h-14 object-cover rounded mr-3 flex-shrink-0" loading="lazy" />
-                          <div class="flex-1 min-w-0">
-                            <NuxtLink :to="`/product/${item.product?.slug || ''}`" v-tooltip.top="getCartItemName(item)" class="font-semibold text-gray-800 leading-snug text-sm hover:text-teal-600">
-                              <p class="line-clamp-2">
-                                {{ getCartItemName(item) }}
-                              </p>
-                            </NuxtLink>
-                            <div class="flex items-center justify-between mt-1">
-                              <span class="text-red-500 text-xs">{{ formatPrice((item.price || 0) * (item.quantity || 0)) }}</span>
-                              <span class="text-gray-400 text-xs">x{{ item.quantity }}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="flex items-center justify-between px-4 py-3 border-t border-gray-100">
-                        <span class="text-gray-500 text-sm">{{ $t("cart.itemsInCart", { count: cartCount }) }}</span>
-                        <NuxtLink :to="TOCART" class="!bg-[#0097cc] hover:!bg-[#007c8b] text-white font-medium p-2 rounded text-sm transition-all duration-200">
-                          {{ $t("action.viewCart") }}
-                        </NuxtLink>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
-            </div>
+            </ClientOnly>
+          </div>
+
+          <!-- Row 2: Search Suggestion Bar Full Width -->
+          <div class="w-full pb-2">
+            <SearchSuggestion />
           </div>
         </div>
 
         <div class="w-full max-w-7xl mx-auto">
-          <div class="mt-8 hidden sm:grid grid-cols-2 md:grid-cols-5 text-white text-sm">
+          <div class="mt-4 md:mt-8 hidden md:grid grid-cols-2 md:grid-cols-5 text-white text-sm">
             <!-- menu -->
             <Menu :menu-tree="menuTree" />
             <NuxtLink :to="TOSHOP" class="flex items-center justify-center cursor-pointer h-10 px-3 rounded transition-all hover:bg-white/10">
@@ -607,6 +553,19 @@ const closeCartMenu = () => {
 
 onClickOutside(userMenuRef, closeUserMenu);
 onClickOutside(cartMenuRef, closeCartMenu);
+
+const isMobileUserMenuOpen = ref(false);
+const mobileUserMenuRef = ref(null);
+
+const toggleMobileUserMenu = () => {
+  isMobileUserMenuOpen.value = !isMobileUserMenuOpen.value;
+};
+
+const closeMobileUserMenu = () => {
+  isMobileUserMenuOpen.value = false;
+};
+
+onClickOutside(mobileUserMenuRef, closeMobileUserMenu);
 
 const toggleMobileMenu = () => {
   isMobileMenuOpen.value = !isMobileMenuOpen.value;
