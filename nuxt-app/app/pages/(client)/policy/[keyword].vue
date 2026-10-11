@@ -48,7 +48,7 @@ import { ref, onMounted, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { systemService } from "~/services/system/system.service";
 import { getPolicyTitle } from "~/utils/system/policy";
-import SidebarPolicy from "~/components//navigation/SidebarPolicy.vue";
+import SidebarPolicy from "~/components/navigation/SidebarPolicy.vue";
 import DataState from "~/components/ui/DataState.vue";
 import { useRoute, useRouter } from "vue-router";
 import { TOPRIVACYPOLICY } from "~/utils/constants";

@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import type { ISystem } from "~/interfaces/system/system.interface";
 import { systemService } from "~/services/system/system.service";
 import { getMenuSections } from "~/utils/system/policy";
@@ -72,5 +72,9 @@ onMounted(async () => {
   handleResize();
   window.addEventListener("resize", handleResize);
   await loadPolicies();
+});
+
+onUnmounted(() => {
+  window.removeEventListener("resize", handleResize);
 });
 </script>

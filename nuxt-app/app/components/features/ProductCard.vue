@@ -1,58 +1,58 @@
 <template>
   <div>
-    <div class="product-item relative w-full h-[420px] bg-white shadow-md rounded-lg overflow-hidden group">
-      <div v-if="discountPercent > 0" class="absolute top-1 -left-8 w-24 text-center text-white text-[10px] py-0.5 font-medium shadow-md z-20 transform -rotate-45 bg-gradient-to-r from-red-400 via-red-500 to-green-300 rounded-md opacity-90">- {{ discountPercent }}%</div>
-      <div class="absolute top-0 right-0 h-full w-10 flex flex-col justify-start items-center gap-1 z-30 translate-x-full group-hover:translate-x-0 transition-all duration-300 ease-in-out bg-gradient-to-l from-white via-white/50 to-transparent rounded-l-md backdrop-blur-sm">
-        <NuxtLink to="" @click.prevent="handleToggleWishlist" class="text-gray-400 hover:text-red-500 p-2 transition duration-200">
+    <div class="product-item relative w-full h-[360px] sm:h-[390px] md:h-[420px] bg-white shadow-sm sm:shadow-md rounded-lg overflow-hidden group">
+      <div v-if="discountPercent > 0" class="absolute top-1 -left-8 w-24 text-center text-white text-[9px] sm:text-[10px] py-0.5 font-medium shadow-md z-20 transform -rotate-45 bg-gradient-to-r from-red-400 via-red-500 to-green-300 rounded-md opacity-90">- {{ discountPercent }}%</div>
+      <div class="absolute top-0 right-0 h-full w-8 sm:w-10 flex flex-col justify-start items-center gap-1 z-30 translate-x-full group-hover:translate-x-0 transition-all duration-300 ease-in-out bg-gradient-to-l from-white via-white/50 to-transparent rounded-l-md backdrop-blur-sm">
+        <NuxtLink to="" @click.prevent="handleToggleWishlist" class="text-gray-400 hover:text-red-500 p-1.5 sm:p-2 transition duration-200">
           <i :class="isInWishlist ? 'fas fa-heart text-red-500' : 'fa-regular fa-heart'"></i>
         </NuxtLink>
-        <NuxtLink to="#" @click.prevent="handleAddToCart" class="text-gray-400 hover:text-sky-500 p-2 transition duration-200" :title="$t('cart.addToCart')">
+        <NuxtLink to="#" @click.prevent="handleAddToCart" class="text-gray-400 hover:text-sky-500 p-1.5 sm:p-2 transition duration-200" :title="$t('cart.addToCart')">
           <i class="fas fa-cart-plus"></i>
         </NuxtLink>
-        <NuxtLink to="" @click.prevent="handleAddToCompare" class="text-gray-400 hover:text-sky-500 p-2 transition duration-200">
+        <NuxtLink to="" @click.prevent="handleAddToCompare" class="text-gray-400 hover:text-sky-500 p-1.5 sm:p-2 transition duration-200">
           <i class="fas fa-random"></i>
         </NuxtLink>
-        <NuxtLink :to="`/product/${product?.slug}`" class="text-gray-400 hover:text-sky-500 p-2 transition duration-200">
+        <NuxtLink :to="`/product/${product?.slug}`" class="text-gray-400 hover:text-sky-500 p-1.5 sm:p-2 transition duration-200">
           <i class="fas fa-eye"></i>
         </NuxtLink>
-        <NuxtLink to="#" class="text-gray-400 hover:text-sky-500 p-2 transition duration-200">
+        <NuxtLink to="#" class="text-gray-400 hover:text-sky-500 p-1.5 sm:p-2 transition duration-200">
           <i class="fas fa-share-alt"></i>
         </NuxtLink>
       </div>
 
       <div class="h-full flex flex-col relative overflow-hidden z-10">
         <div class="absolute z-10 group-hover:backdrop-blur-sm group-hover:bg-white/30 transition-all duration-300 pointer-events-none rounded-lg"></div>
-        <div class="relative h-[260px] overflow-hidden z-0">
-          <NuxtImg :src="mainImageSrc" loading="lazy" :alt="product?.name || $t('productCard.mainImage')" class="w-full h-full object-contain transition-opacity duration-300" :class="{ 'group-hover:opacity-0': hasHoverImage }" @error="handleMainImgError" />
-          <NuxtImg v-if="hasHoverImage" :src="subImageSrc" loading="lazy" :alt="product?.name || $t('productCard.subImage')" class="w-full h-full object-contain absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" @error="handleSubImgError" />
+        <div class="relative h-[190px] sm:h-[220px] md:h-[260px] overflow-hidden z-0">
+          <NuxtImg :src="mainImageSrc" loading="lazy" :alt="product?.name || $t('productCard.mainImage')" class="w-full h-full object-contain transition-opacity duration-300 p-2" :class="{ 'group-hover:opacity-0': hasHoverImage }" @error="handleMainImgError" />
+          <NuxtImg v-if="hasHoverImage" :src="subImageSrc" loading="lazy" :alt="product?.name || $t('productCard.subImage')" class="w-full h-full object-contain absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-2" @error="handleSubImgError" />
         </div>
-        <div class="px-1 flex-grow flex flex-col justify-between z-0">
-          <h3 class="text-sm font-medium text-gray-500 h-10 overflow-hidden leading-5 line-clamp-2">
+        <div class="px-2 sm:px-2.5 flex-grow flex flex-col justify-between z-0 pb-1">
+          <h3 class="text-xs sm:text-sm font-medium text-gray-700 h-8 sm:h-10 overflow-hidden leading-4 sm:leading-5 line-clamp-2">
             {{ product?.name || $t("productCard.sampleProductName") }}
           </h3>
-          <div class="flex items-center gap-2 mt-1">
-            <span class="text-red-600 font-semibold">{{ formatPrice(currentPrice) }}</span>
-            <span v-if="originalPrice > currentPrice" class="text-gray-400 line-through text-xs">
+          <div class="flex items-center gap-1.5 sm:gap-2 mt-0.5 sm:mt-1">
+            <span class="text-red-600 font-semibold text-xs sm:text-sm md:text-base">{{ formatPrice(currentPrice) }}</span>
+            <span v-if="originalPrice > currentPrice" class="text-gray-400 line-through text-[10px] sm:text-xs">
               {{ formatPrice(originalPrice) }}
             </span>
           </div>
-          <div class="flex flex-wrap justify-between items-center gap-2 mt-1 text-[12px] sm:text-[10px] text-gray-500 min-h-[28px]">
-            <div class="flex items-center gap-1 text-emerald-400">
+          <div class="flex flex-wrap justify-between items-center gap-1 sm:gap-2 mt-0.5 sm:mt-1 text-[11px] sm:text-[10px] text-gray-500 min-h-[22px] sm:min-h-[28px]">
+            <div class="flex items-center gap-1 text-emerald-500 text-[10px] sm:text-xs">
               <i class="fas fa-award"></i>
               <span class="hidden sm:inline">{{ $t("productCard.bestSeller") }}</span>
             </div>
-            <div class="flex items-center gap-1 text-sky-400">
+            <div class="flex items-center gap-1 text-sky-500 text-[10px] sm:text-xs">
               <i class="fas fa-wallet"></i>
               <span class="hidden sm:inline">{{ $t("productCard.goodPrice") }}</span>
             </div>
-            <div class="flex items-center gap-1 text-yellow-400">
+            <div class="flex items-center gap-1 text-amber-500 text-[10px] sm:text-xs">
               <i class="fas fa-fire"></i>
               <span class="hidden sm:inline">{{ $t("productCard.hotSale") }}</span>
             </div>
           </div>
-          <div class="py-2 text-center h-[42px]">
+          <div class="py-1 sm:py-2 text-center h-[32px] sm:h-[42px]">
             <template v-if="product?.warranty">
-              <span class="inline-flex items-center bg-sky-50 w-full rounded-sm px-2 py-1 text-[10px] text-sky-700">
+              <span class="inline-flex items-center justify-center bg-sky-50 w-full rounded-sm px-1.5 sm:px-2 py-0.5 sm:py-1 text-[9px] sm:text-[10px] text-sky-700 truncate">
                 {{ $t("productCard.warrantyText", { months: product.warranty }) }}
               </span>
             </template>

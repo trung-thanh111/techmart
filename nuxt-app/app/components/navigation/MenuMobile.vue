@@ -128,9 +128,9 @@ const currentItems = computed(() => {
 });
 
 const currentTitle = computed(() => {
-  if (currentLevel.value === 0) return $t("menu.title");
-  if (currentLevel.value === 1) return $t("menu.categories");
-  return currentParent.value?.name || $t("menu.title");
+  if (currentLevel.value === 0) return t("menu.title");
+  if (currentLevel.value === 1) return t("menu.categories");
+  return currentParent.value?.name || t("menu.title");
 });
 
 const hasChildren = (item: TreeNode<IMenuItem>): boolean => {

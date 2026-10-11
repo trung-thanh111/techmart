@@ -38,7 +38,7 @@
 <script setup lang="ts">
 import { computed, ref, onMounted } from "vue";
 import { useCompare } from "~/composables/product/useCompare";
-import ProductCardCompare from "~/components//features/ProductCardCompare.vue";
+import ProductCardCompare from "~/components/features/ProductCardCompare.vue";
 import { useRoute } from "vue-router";
 import { TOCOMPARE } from "~/utils/constants";
 import { navigateTo } from "#app";

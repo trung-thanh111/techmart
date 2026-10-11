@@ -195,9 +195,9 @@
                         </button>
                       </div>
                     </div>
-                    <div class="grid grid-cols-2 mb-2 gap-x-4 mt-5">
-                      <Button :label="$t('cart.addToCart')" icon="pi pi-shopping-cart" size="large" @click="handleAddToCart" :loading="isAddingToCart" class="border-0 !flex items-center justify-center !bg-gradient-to-r !from-sky-500 !to-sky-600 hover:!from-sky-600 hover:!to-sky-700 text-white font-semibold py-4 px-4 rounded-sm transition-all duration-300 ease-in-out transform hover:scale-98 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-1 uppercase text-sm md:text-base leading-none shadow-md hover:shadow-md" />
-                      <Button :label="$t('cart.buyNow')" icon="pi pi-bolt" severity="danger" size="large" @click="handleBuyNow" :loading="isBuyingNow" class="flex items-center justify-center bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-semibold py-4 px-4 rounded-sm transition-all duration-300 ease-in-out transform hover:scale-98 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 uppercase text-sm md:text-base leading-none shadow-md hover:shadow-md" />
+                    <div class="grid grid-cols-2 mb-2 gap-2 sm:gap-4 mt-5">
+                      <Button :label="$t('cart.addToCart')" icon="pi pi-shopping-cart" size="large" @click="handleAddToCart" :loading="isAddingToCart" class="border-0 !flex items-center justify-center !bg-gradient-to-r !from-sky-500 !to-sky-600 hover:!from-sky-600 hover:!to-sky-700 text-white font-semibold py-3 sm:py-3.5 md:py-4 px-2 sm:px-3 md:px-4 rounded-sm transition-all duration-300 ease-in-out transform hover:scale-98 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-1 uppercase text-xs sm:text-sm md:text-base leading-none shadow-md hover:shadow-md" />
+                      <Button :label="$t('cart.buyNow')" icon="pi pi-bolt" severity="danger" size="large" @click="handleBuyNow" :loading="isBuyingNow" class="flex items-center justify-center bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-semibold py-3 sm:py-3.5 md:py-4 px-2 sm:px-3 md:px-4 rounded-sm transition-all duration-300 ease-in-out transform hover:scale-98 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 uppercase text-xs sm:text-sm md:text-base leading-none shadow-md hover:shadow-md" />
                     </div>
                     <div class="font-medium text-gray-500 text-xs description">
                       <NuxtLink to="#" class="font-bold underline cursor-pointer text-sky-400 hover:text-sky-600">{{ $t("header.loginRequired") }}</NuxtLink>
@@ -706,7 +706,7 @@
 </template>
 <script setup lang="ts">
 import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
-import ProductCard from "~/components//features/ProductCard.vue";
+import ProductCard from "~/components/features/ProductCard.vue";
 import DataState from "~/components/ui/DataState.vue";
 import { Splide, SplideSlide } from "@splidejs/vue-splide";
 import { useProduct } from "~/composables/product/useProduct";

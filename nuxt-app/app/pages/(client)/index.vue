@@ -100,7 +100,7 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-4">
         <ProductCard v-for="product in superSaleProducts" :key="product.id" :product="product" />
       </div>
       <!-- xem thêm  -->
@@ -154,7 +154,7 @@
         <p class="text-gray-600 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("home.popularLightingDesc") }}</p>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-4">
         <ProductCard v-for="product in bestSellerProducts" :key="product.id" :product="product" />
       </div>
       <!-- xem thêm  -->
@@ -312,7 +312,7 @@
         </div>
         <p class="text-white/90 md:mt-2 mt-1 max-w-xl md:text-sm text-xs">{{ $t("home.lightingDesc") }}</p>
       </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-4">
         <ProductCard v-for="product in highConfigProducts" :key="product.id" :product="product" />
       </div>
       <!-- xem thêm  -->
@@ -398,7 +398,7 @@
             <NuxtImg :src="introBanner" loading="lazy" :alt="$t('home.introBanner')" class="object-cover w-full h-full" />
             <div class="absolute w-full max-w-[300px] inset-0 bg-black/20 flex items-end justify-center py-4">
               <div class="mx-auto mt-6 hidden lg:block">
-                <NuxtLink to="/shop" class="relative flex items-center justify-center px-6 py-2 overflow-hidden font-medium text-md transition-all bg-gradient-to-r from-sky-500 to-cyan-400 rounded-md shadow-lg group hover:scale-105 hover:from-sky-600 hover:to-cyan-500 focus:outline-none focus:ring-2 focus:ring-sky-400">
+                <NuxtLink to="/shop" class="relative flex items-center justify-center px-6 py-2 overflow-hidden font-medium text-sm sm:text-base transition-all bg-gradient-to-r from-sky-500 to-cyan-400 rounded-md shadow-lg group hover:scale-105 hover:from-sky-600 hover:to-cyan-500 focus:outline-none focus:ring-2 focus:ring-sky-400">
                   <span class="absolute top-0 right-0 inline-block w-4 h-4 transition-all duration-500 ease-in-out bg-sky-700 rounded group-hover:-mr-4 group-hover:-mt-4">
                     <span class="absolute top-0 right-0 w-5 h-5 rotate-45 translate-x-1/2 -translate-y-1/2 bg-white"></span>
                   </span>
@@ -414,7 +414,7 @@
         </div>
         <!-- slide sản phẩm -->
         <div class="w-full lg:w-4/5 min-w-0">
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 grid-rows-2 gap-4">
+          <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4">
             <ProductCard v-for="product in highConfigAccessoryProducts" :key="product.id" :product="product" />
           </div>
         </div>
@@ -450,7 +450,7 @@
             </li>
           </ul>
           <div class="max-w-[120px] md:max-w-[180px]">
-            <NuxtLink to="/shop" class="relative flex items-center justify-center px-6 py-2 overflow-hidden font-medium text-md transition-all bg-gradient-to-r from-sky-500 to-cyan-400 rounded-md shadow-lg group hover:scale-105 hover:from-sky-600 hover:to-cyan-500 focus:outline-none focus:ring-2 focus:ring-sky-400">
+            <NuxtLink to="/shop" class="relative flex items-center justify-center px-6 py-2 overflow-hidden font-medium text-sm sm:text-base transition-all bg-gradient-to-r from-sky-500 to-cyan-400 rounded-md shadow-lg group hover:scale-105 hover:from-sky-600 hover:to-cyan-500 focus:outline-none focus:ring-2 focus:ring-sky-400">
               <span class="absolute top-0 right-0 inline-block w-4 h-4 transition-all duration-500 ease-in-out bg-sky-700 rounded group-hover:-mr-4 group-hover:-mt-4">
                 <span class="absolute top-0 right-0 w-5 h-5 rotate-45 translate-x-1/2 -translate-y-1/2 bg-white"></span>
               </span>

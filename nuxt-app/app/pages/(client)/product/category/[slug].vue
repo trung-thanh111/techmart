@@ -31,7 +31,7 @@
 
     <section class="mx-auto bg-white shadow-md rounded-md py-3 md:py-6 px-3 md:px-6 md:mb-8 mb-4">
       <DataState :loading="!categoryDetail" :error="false" :data="(categoryDetail as any)?.products" :show-empty-image="true">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 sm:gap-4">
           <div v-for="product in (categoryDetail as any).products" :key="product.id" class="flex justify-center">
             <ProductCard :product="product" />
           </div>
@@ -49,7 +49,7 @@ import { onMounted } from "vue";
 import { definePageMeta } from "#imports";
 import Breadcrumb from "~/components/navigation/Breadcrumb.vue";
 import Category from "~/components/ui/Category.vue";
-import ProductCard from "~/components//features/ProductCard.vue";
+import ProductCard from "~/components/features/ProductCard.vue";
 import DataState from "~/components/ui/DataState.vue";
 import { IMAGEDEFAULT, TOSHOP, PRODUCTCATEGORY } from "~/utils/constants";
 import { useProductCatalogue } from "~/composables/product/useProductCatalogue";
