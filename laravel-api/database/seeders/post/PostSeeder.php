@@ -80,6 +80,7 @@ class PostSeeder extends Seeder
 
             $description = mb_substr($item['description'] ?? '', 0, 480);
             $metaDescription = !empty($description) ? $description : mb_substr(strip_tags($item['content'] ?? ''), 0, 200);
+            $publishedAt = now()->subDays(rand(1, 20))->subHours(rand(1, 23));
 
             $post = Post::create([
                 'name' => mb_substr($name, 0, 250),
@@ -100,7 +101,9 @@ class PostSeeder extends Seeder
                 'meta_title' => mb_substr($name, 0, 250),
                 'meta_keyword' => implode(', ', $tagSlugs),
                 'meta_description' => $metaDescription,
-                'published_at' => now()->subDays(rand(1, 20))->subHours(rand(1, 23)),
+                'published_at' => $publishedAt,
+                'created_at' => $publishedAt,
+                'updated_at' => $publishedAt,
             ]);
 
             // Sync catalogue
