@@ -122,7 +122,7 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
         // Guest & User Tracking & Checkout Orders
         Route::match(['get', 'post'], 'orders/track', [OrderController::class, 'track']);
         Route::match(['get', 'post'], 'order/track', [OrderController::class, 'track']);
-        Route::post('orders', [OrderController::class, 'store']);
+        Route::post('orders', [OrderController::class, 'store'])->middleware('throttle:60,1');
         Route::get('orders/{id}', [OrderController::class, 'show']);
 
         Route::get('products', [ProductController::class, 'index']);
@@ -165,7 +165,6 @@ Route::group(['prefix' => 'v1'], function () use ($routeExcept) {
         Route::get('popups', [PopupController::class, 'index']);
         Route::get('popups/{id}', [PopupController::class, 'show']);
 
-        Route::get('post_tags', [PostTagController::class, 'index']);
         Route::get('post_tags', [PostTagController::class, 'index']);
         Route::get('product_tags', [ProductTagController::class, 'index']);
 

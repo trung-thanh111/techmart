@@ -56,7 +56,7 @@ class OrderResource extends JsonResource
 
             // Notes
             'customerNote' => $this->customer_note,
-            'adminNote' => $this->admin_note,
+            'adminNote' => $this->when((bool) (auth('admin')->user()?->is_admin ?? false), $this->admin_note),
 
             // Relations
             'items' => OrderItemResource::collection($this->whenLoaded('order_items')),

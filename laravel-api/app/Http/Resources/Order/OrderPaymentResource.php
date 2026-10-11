@@ -33,7 +33,7 @@ class OrderPaymentResource extends JsonResource
             'cardLast4' => $this->card_last4,
 
             // Response
-            'gatewayResponse' => $this->gateway_response,
+            'gatewayResponse' => $this->when((bool) (auth('admin')->user()?->is_admin ?? false), $this->gateway_response),
             'failureReason' => $this->failure_reason,
 
             // Timestamps
