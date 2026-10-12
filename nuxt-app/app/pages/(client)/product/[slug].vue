@@ -78,33 +78,103 @@
                       </div>
                     </div>
                     <div class="p-3 lg:px-4">
-                      <div class="rounded-lg border border-gray-300 overflow-hidden">
-                        <h4 class="text-gray-600 body-text font-medium px-4 py-2 bg-gray-200">{{ $t("header.promotionTitle") }}</h4>
-                        <div class="max-w-none py-3 px-3 lg:px-4 promotion-content space-y-3">
+                      <div class="rounded-xl border border-gray-200 shadow-2xs overflow-hidden bg-white">
+                        <div class="flex items-center justify-between px-4 py-2.5 bg-gray-50 border-b border-gray-200">
+                          <h4 class="text-gray-800 text-sm font-semibold flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-sky-500"></span>
+                            <span>{{ $t("header.promotionTitle") }}</span>
+                          </h4>
+                          <NuxtLink to="/voucher" class="text-xs text-sky-600 hover:text-sky-700 font-medium hover:underline flex items-center gap-1">
+                            <span>Xem tất cả voucher</span>
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                          </NuxtLink>
+                        </div>
+                        <div class="p-3 space-y-2.5 bg-gray-50/40">
                           <template v-if="applicablePromotions.length">
-                            <div v-for="promotion in applicablePromotions" :key="promotion.id" class="rounded-md border border-sky-100 bg-sky-50/40 p-3 space-y-2">
-                              <div class="flex flex-wrap justify-between gap-3">
-                                <div>
-                                  <p class="text-base font-semibold text-sky-700 mb-1">{{ promotion.name }}</p>
-                                  <p class="text-sm text-gray-600">
-                                    {{ $t("header.discountText") }} {{ formatPromotionDiscount(promotion) }}
-                                    <span v-if="getPromotionMaxDiscount(promotion)"> ({{ $t("header.maxDiscount", { amount: formatCurrency(getPromotionMaxDiscount(promotion)) }) }})</span>
-                                  </p>
-                                  <p v-if="promotionWindow(promotion)" class="text-xs text-gray-500">{{ $t("header.timeLabel") }} {{ promotionWindow(promotion) }}</p>
+                            <div
+                              v-for="promotion in applicablePromotions"
+                              :key="promotion.id"
+                              class="group relative bg-white rounded-xl border border-gray-200 hover:border-sky-400 hover:shadow-xs transition-all duration-200 flex overflow-hidden flex-col"
+                            >
+                              <!-- Top row: Ticket Notch style -->
+                              <div class="flex items-stretch min-h-[74px]">
+                                <!-- Left Ticket Notch Column -->
+                                <div
+                                  :class="[
+                                    'w-24 p-2 text-white flex flex-col justify-between items-center text-center relative shrink-0',
+                                    promotion.type === 'free_ship' || promotion.code?.includes('SHIP')
+                                      ? 'bg-gradient-to-br from-emerald-500 to-teal-700'
+                                      : 'bg-gradient-to-br from-sky-600 to-indigo-700'
+                                  ]"
+                                >
+                                  <!-- Cutout Notch circles -->
+                                  <div class="absolute -top-2 -right-2 w-4 h-4 bg-white rounded-full"></div>
+                                  <div class="absolute -bottom-2 -right-2 w-4 h-4 bg-white rounded-full"></div>
+
+                                  <div class="pt-0.5">
+                                    <span class="inline-block p-1 bg-white/20 rounded-full mb-0.5">
+                                      <svg v-if="promotion.type === 'free_ship' || promotion.code?.includes('SHIP')" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                                      </svg>
+                                      <svg v-else class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                      </svg>
+                                    </span>
+                                    <div class="text-[9px] uppercase font-bold tracking-wider opacity-90">
+                                      {{ promotion.type === 'free_ship' || promotion.code?.includes('SHIP') ? 'FREESHIP' : 'VOUCHER' }}
+                                    </div>
+                                  </div>
+
+                                  <div class="my-auto py-0.5">
+                                    <div class="text-[10px] font-black uppercase bg-white text-gray-900 px-1.5 py-0.5 rounded shadow-2xs whitespace-nowrap">
+                                      {{ getPromotionBadge(promotion) }}
+                                    </div>
+                                  </div>
                                 </div>
-                                <span class="inline-flex items-center text-xs font-semibold uppercase tracking-wide bg-sky-500 text-white rounded-full px-3 py-1">{{ $t("common.priority") }} #{{ promotion.priority ?? 0 }}</span>
+
+                                <!-- Right Content Details -->
+                                <div class="flex-1 p-2.5 flex flex-col justify-center">
+                                  <h5 class="text-xs sm:text-sm font-bold text-gray-800 line-clamp-1 mb-1">
+                                    {{ promotion.name }}
+                                  </h5>
+                                  <p class="text-xs text-sky-700 font-medium flex items-center gap-1 mb-0.5">
+                                    <span>
+                                      Giảm {{ formatPromotionDiscount(promotion) }}
+                                      <template v-if="getPromotionMaxDiscount(promotion)"> (Tối đa {{ formatCurrency(getPromotionMaxDiscount(promotion)) }})</template>
+                                    </span>
+                                  </p>
+                                  <p class="text-[11px] text-gray-500 flex items-center gap-1">
+                                    <svg class="w-3 h-3 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <span>{{ getPromotionExpiry(promotion) }}</span>
+                                  </p>
+                                </div>
                               </div>
-                              <div v-if="promotion.description" class="text-sm text-gray-600 leading-relaxed prose max-w-none" v-html="promotion.description"></div>
-                              <div v-if="promotion.applicableTargets?.length" class="text-xs text-gray-500 flex flex-wrap items-center gap-2">
-                                <span class="font-semibold text-gray-600">{{ $t("header.appliesTo") }}:</span>
-                                <span v-for="target in promotion.applicableTargets" :key="`${promotion.id}-${target.id || target.productVariantId || target.productId || target.productCatalogueId}`" class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-white text-gray-600 border border-gray-200">
-                                  <span v-if="target.isGift" class="text-[10px] font-semibold text-pink-600 uppercase">{{ $t("common.gift") }}</span>
-                                  <span>{{ resolvePromotionTargetLabel(target) }}</span>
-                                </span>
+
+                              <!-- Bottom Code Badge (if code exists) -->
+                              <div v-if="promotion.code" class="px-3 py-1.5 bg-gray-50/80 border-t border-dashed border-gray-200 flex items-center justify-between gap-2">
+                                <div
+                                  @click="copyPromotionCode(promotion.code)"
+                                  class="cursor-pointer group/code inline-flex items-center gap-1.5 px-2 py-0.5 bg-white hover:bg-sky-50 border border-dashed border-gray-300 hover:border-sky-400 rounded text-[11px] font-mono font-bold text-gray-700 hover:text-sky-700 transition-colors shadow-2xs"
+                                  title="Nhấn để sao chép mã"
+                                >
+                                  <span>{{ promotion.code }}</span>
+                                  <svg class="w-3 h-3 text-gray-400 group-hover/code:text-sky-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                  </svg>
+                                </div>
+                                <button
+                                  type="button"
+                                  @click="copyPromotionCode(promotion.code)"
+                                  class="text-[11px] text-sky-600 hover:text-sky-700 font-semibold transition-colors"
+                                >
+                                  Sao chép mã
+                                </button>
                               </div>
                             </div>
                           </template>
-                          <p v-else class="text-sm text-gray-500 m-0">{{ $t("header.noPromotion") }}</p>
+                          <p v-else class="text-sm text-gray-500 py-3 text-center italic">{{ $t("header.noPromotion") }}</p>
                         </div>
                       </div>
                     </div>
@@ -723,6 +793,7 @@ import { useAuthStore } from "~/stores/auth/auth";
 import { useWishlist } from "~/composables/product/useWishlist";
 import { useCompare } from "~/composables/product/useCompare";
 import { useCart } from "~/composables/cart/useCart";
+import { useAppToast } from "~/composables/useAppToast";
 import { useProductReview } from "~/composables/product/useProductReview";
 import type { IPromotion, IPromotionTarget } from "~/interfaces/promotion/promotion.interface";
 import { IMAGEDEFAULT, TOEXCHANGEPOLICY, TOAGENCYSYSTEM, HOTLINE, TOCART } from "~/utils/constants";
@@ -734,6 +805,7 @@ import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const route = useRoute();
+const toast = useAppToast();
 type PromotionWithTargets = IPromotion & { applicableTargets: IPromotionTarget[] };
 
 const { productDetail, productDetailLoading, productDetailError, trackView, fetchById } = useProduct();
@@ -1011,9 +1083,9 @@ const formatCurrency = (value?: number | string | null) => {
 
 const getPromotionMaxDiscount = (promotion: any) => {
   const action = promotion.actions?.[0] || promotion.promotionActions?.[0];
-  const type = action?.actionType || promotion.discountType;
+  const type = action?.actionType || action?.action_type || promotion.discountType || promotion.discount_type;
   if (type === "percent") {
-    const maxVal = action?.maxDiscount ?? promotion.maxDiscountValue;
+    const maxVal = action?.maxDiscount ?? action?.max_discount ?? promotion.maxDiscountValue ?? promotion.max_discount_value;
     return maxVal ? Number(maxVal) : null;
   }
   return null;
@@ -1021,14 +1093,75 @@ const getPromotionMaxDiscount = (promotion: any) => {
 
 const formatPromotionDiscount = (promotion: any) => {
   const action = promotion.actions?.[0] || promotion.promotionActions?.[0];
-  const type = action?.actionType || promotion.discountType || (promotion.type === "percent" ? "percent" : "fixed");
-  const rawValue = action?.actionValue ?? promotion.discountValue ?? 0;
+  const type = action?.actionType || action?.action_type || promotion.discountType || promotion.discount_type || (promotion.type === "percent" ? "percent" : "fixed");
+  const rawValue = action?.actionValue ?? action?.action_value ?? promotion.discountValue ?? promotion.discount_value ?? 0;
   const value = typeof rawValue === "number" ? rawValue : Number(rawValue || 0);
 
   if (type === "percent") {
     return `${value}%`;
   }
   return formatCurrency(value);
+};
+
+const getPromotionBadge = (promo: any): string => {
+  const action = promo.actions?.[0] || promo.promotionActions?.[0];
+  const actionType = action?.actionType || action?.action_type;
+  const actionValue = action?.actionValue ?? action?.action_value;
+
+  if (promo.type === "free_ship" || promo.code?.toLowerCase().includes("ship") || actionType === "freeship") {
+    return "Freeship";
+  }
+
+  if (actionType === "percent") {
+    return `Giảm ${actionValue}%`;
+  }
+
+  const val = Number(actionValue ?? promo.discountValue ?? promo.discount_value) || 0;
+  if (val > 0) {
+    if (val >= 1000000 && val % 100000 === 0) {
+      return `Giảm ${val / 1000000}Tr`;
+    }
+    if (val >= 1000 && val % 1000 === 0) {
+      return `Giảm ${val / 1000}K`;
+    }
+    return `Giảm ${formatCurrency(val)}`;
+  }
+
+  return "Ưu đãi";
+};
+
+const getPromotionExpiry = (promo: any): string => {
+  const dateStr = promo.endDate || promo.end_date;
+  if (!dateStr) return "Không thời hạn";
+  try {
+    const d = new Date(dateStr);
+    if (Number.isNaN(d.getTime())) return `HSD: ${dateStr}`;
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = d.getFullYear();
+    return `HSD: ${day}/${month}/${year}`;
+  } catch {
+    return `HSD: ${dateStr}`;
+  }
+};
+
+const copyPromotionCode = async (code?: string | null) => {
+  if (!code) return;
+  try {
+    if (typeof navigator !== "undefined" && navigator?.clipboard?.writeText) {
+      await navigator.clipboard.writeText(code);
+    } else if (typeof document !== "undefined") {
+      const input = document.createElement("input");
+      input.value = code;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand("copy");
+      document.body.removeChild(input);
+    }
+    toast.success(`Đã sao chép mã ${code}`);
+  } catch {
+    toast.error("Không thể sao chép mã");
+  }
 };
 
 const promotionWindow = (promotion: IPromotion) => {
@@ -1038,8 +1171,8 @@ const promotionWindow = (promotion: IPromotion) => {
     if (Number.isNaN(parsed.getTime())) return null;
     return parsed.toLocaleDateString("vi-VN");
   };
-  const start = formatDate(promotion.startDate);
-  const end = formatDate(promotion.endDate);
+  const start = formatDate(promotion.startDate || (promotion as any).start_date);
+  const end = formatDate(promotion.endDate || (promotion as any).end_date);
   if (start && end) return `${start} - ${end}`;
   if (start) return `Từ ${start}`;
   if (end) return `Đến ${end}`;
