@@ -217,7 +217,7 @@ class ProductSeeder extends Seeder
                     ['sku' => 'ZF5-256-BLU', 'name' => 'Galaxy Z Fold5 256GB Xanh Icy', 'price' => 31990000, 'stock' => 25, 'attrs' => ['256GB', 'Xanh Dương']],
                     ['sku' => 'ZF5-256-BLK', 'name' => 'Galaxy Z Fold5 256GB Đen Phantom', 'price' => 31990000, 'stock' => 20, 'attrs' => ['256GB', 'Đen']],
                     ['sku' => 'ZF5-512-BLU', 'name' => 'Galaxy Z Fold5 512GB Xanh Icy', 'price' => 35990000, 'stock' => 15, 'attrs' => ['512GB', 'Xanh Dương']],
-                    ['sku' => 'ZF5-512-BLK', 'name' => 'Galaxy Z Fold5 512GB Đen Phantom', 'price' => 35990000, 'stock' => 15, 'attrs' => ['512GB', 'Đen']],
+                    ['sku' => 'ZF5-512-BLK', 'name' => 'Galaxy Z Fold5 512GB Đen Phantom', 'price' => 35990000, 'stock' => 0, 'attrs' => ['512GB', 'Đen']],
                 ]
             ],
             [
@@ -309,7 +309,7 @@ class ProductSeeder extends Seeder
                 'content' => '<p><strong>MacBook Pro M3 Pro</strong> được chế tác cho lập trình viên, nhà dựng phim 4K/8K và đồ họa 3D. Kiến trúc GPU thế hệ mới hỗ trợ dò tia tăng tốc phần cứng.</p>',
                 'variants' => [
                     ['sku' => 'MBP-M3P-18-512-BLK', 'name' => 'MacBook Pro 14 M3 Pro 18GB 512GB Đen', 'price' => 48490000, 'stock' => 20, 'attrs' => ['18GB', '512GB', 'Đen']],
-                    ['sku' => 'MBP-M3P-18-512-SIL', 'name' => 'MacBook Pro 14 M3 Pro 18GB 512GB Bạc', 'price' => 48490000, 'stock' => 18, 'attrs' => ['18GB', '512GB', 'Bạc']],
+                    ['sku' => 'MBP-M3P-18-512-SIL', 'name' => 'MacBook Pro 14 M3 Pro 18GB 512GB Bạc', 'price' => 48490000, 'stock' => 0, 'attrs' => ['18GB', '512GB', 'Bạc']],
                     ['sku' => 'MBP-M3P-18-1TB-BLK', 'name' => 'MacBook Pro 14 M3 Pro 18GB 1TB Đen', 'price' => 53990000, 'stock' => 15, 'attrs' => ['18GB', '1TB', 'Đen']],
                     ['sku' => 'MBP-M3P-18-1TB-SIL', 'name' => 'MacBook Pro 14 M3 Pro 18GB 1TB Bạc', 'price' => 53990000, 'stock' => 15, 'attrs' => ['18GB', '1TB', 'Bạc']],
                     ['sku' => 'MBP-M3P-36-512-BLK', 'name' => 'MacBook Pro 14 M3 Pro 36GB 512GB Đen', 'price' => 54490000, 'stock' => 12, 'attrs' => ['36GB', '512GB', 'Đen']],
