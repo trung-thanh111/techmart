@@ -17,7 +17,7 @@ import { useSeo } from "~/composables/useSeo";
 import { useSystemConfig } from "~/composables/system/useSystemConfig";
 
 const { fetchConfigs } = useSystemConfig();
-await useAsyncData("system_configs", () => fetchConfigs());
+useAsyncData("system_configs", () => fetchConfigs());
 
 const { setClientSeo } = useSeo();
 setClientSeo();
