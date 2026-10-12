@@ -7,6 +7,7 @@ import { productTagService } from "~/services/product/tag.service";
 import type { IProductCatalogue } from "~/interfaces/product/catalogue.interface";
 import { productCatalogueService } from "~/services/product/catalogue.service";
 import { buildRelationParams } from "~/utils/helpers";
+import { clientCache } from "~/utils/cache/clientCache";
 
 export const useProduct = () => {
   const isLoading: Ref<boolean> = ref(false);
@@ -61,6 +62,12 @@ export const useProduct = () => {
    * Lấy danh sách bài viết (featured, latest...)
    */
   const fetchList = async (option: "featured" | "featuredLimit" | "latest"): Promise<IProduct[]> => {
+    const cacheKey = `product:list:${option}`;
+    const cached = clientCache.get<IProduct[]>(cacheKey);
+    if (cached) {
+      list.value = cached;
+      return cached;
+    }
     isLoading.value = true;
     try {
       let response: IApiOk<IProduct[]>;
@@ -77,8 +84,10 @@ export const useProduct = () => {
         default:
           throw new Error(`Unknown type: ${option}`);
       }
-      list.value = response.data ?? [];
-      return list.value;
+      const data = response.data ?? [];
+      list.value = data;
+      clientCache.set(cacheKey, data, "PRODUCT");
+      return data;
     } catch (error: any) {
       console.error("Lỗi khi load list:", error);
       throw error;
@@ -88,13 +97,20 @@ export const useProduct = () => {
   };
 
   const fetchTags = async (): Promise<IProductTag[]> => {
-    if (isTagsLoaded.value) return tagList.value; // Cache hit
+    const cached = clientCache.get<IProductTag[]>("product:tags:all");
+    if (cached) {
+      tagList.value = cached;
+      isTagsLoaded.value = true;
+      return cached;
+    }
     isLoading.value = true;
     try {
       const response = await productTagService.all();
-      tagList.value = response.data ?? [];
+      const data = response.data ?? [];
+      tagList.value = data;
       isTagsLoaded.value = true;
-      return tagList.value;
+      clientCache.set("product:tags:all", data, "PRODUCT");
+      return data;
     } catch (error: any) {
       console.error("Lỗi khi load tag list:", error);
       throw error;
@@ -104,13 +120,20 @@ export const useProduct = () => {
   };
 
   const fetchProductCatalogues = async (): Promise<IProductCatalogue[]> => {
-    if (isCataloguesLoaded.value) return productCatalogueList.value; // Cache hit
+    const cached = clientCache.get<IProductCatalogue[]>("catalogue:all");
+    if (cached) {
+      productCatalogueList.value = cached;
+      isCataloguesLoaded.value = true;
+      return cached;
+    }
     isLoading.value = true;
     try {
       const response = await productCatalogueService.all();
-      productCatalogueList.value = response.data ?? [];
+      const data = response.data ?? [];
+      productCatalogueList.value = data;
       isCataloguesLoaded.value = true;
-      return productCatalogueList.value;
+      clientCache.set("catalogue:all", data, "CATALOGUE");
+      return data;
     } catch (error: any) {
       console.error("Lỗi khi load product catalogue list:", error);
       throw error;
@@ -120,10 +143,17 @@ export const useProduct = () => {
   };
 
   const fetchHotCatalogueProducts = async (): Promise<IProduct[]> => {
+    const cached = clientCache.get<IProduct[]>("product:hotCatalogue");
+    if (cached) {
+      hotCatalogueProducts.value = cached;
+      return cached;
+    }
     try {
       const response = await productService.getByHotCatalogue();
-      hotCatalogueProducts.value = response.data ?? [];
-      return hotCatalogueProducts.value;
+      const data = response.data ?? [];
+      hotCatalogueProducts.value = data;
+      clientCache.set("product:hotCatalogue", data, "PRODUCT");
+      return data;
     } catch (error: any) {
       console.error("Lỗi khi load danh sách bài viết theo danh mục nổi bật:", error);
       hotCatalogueProducts.value = [];
@@ -133,13 +163,19 @@ export const useProduct = () => {
 
   const fetchProductsByCatalogueId = async (catalogueId: number): Promise<IProduct[]> => {
     if (!catalogueId || Number.isNaN(catalogueId)) return [];
-    if (byCatalogueCache[catalogueId]?.length) return byCatalogueCache[catalogueId] ?? [];
+    const cacheKey = `product:byCatalogue:${catalogueId}`;
+    const cached = clientCache.get<IProduct[]>(cacheKey) || byCatalogueCache[catalogueId];
+    if (cached?.length) {
+      byCatalogueCache[catalogueId] = cached;
+      return cached;
+    }
     byCatalogueLoading[catalogueId] = true;
     byCatalogueError[catalogueId] = null;
     try {
       const response = await productService.getByCatalogueId(catalogueId);
       const data = response.data ?? [];
       byCatalogueCache[catalogueId] = data;
+      clientCache.set(cacheKey, data, "PRODUCT");
       return data;
     } catch (error: any) {
       console.error("Lỗi khi load bài theo catalogue id:", error);
@@ -194,11 +230,22 @@ export const useProduct = () => {
 
   const fetchById = async (slug: string): Promise<IProduct | null> => {
     if (!slug) return null;
+    const cacheKey = `product:detail:${slug}`;
+    const cached = clientCache.get<IProduct>(cacheKey);
+    if (cached) {
+      productDetail.value = cached;
+      productDetailLoading.value = false;
+      return cached;
+    }
     productDetailLoading.value = true;
     productDetailError.value = null;
     try {
       const res = await productService.show(slug);
-      productDetail.value = (res as any)?.data ?? null;
+      const val = (res as any)?.data ?? null;
+      productDetail.value = val;
+      if (val) {
+        clientCache.set(cacheKey, val, "PRODUCT");
+      }
       return productDetail.value;
     } catch (e: any) {
       productDetailError.value = e?.message || "Không tải được bài viết";
@@ -226,11 +273,18 @@ export const useProduct = () => {
   const mostLikedLoading = ref(false);
 
   const fetchMostLiked = async (): Promise<IProduct[]> => {
+    const cached = clientCache.get<IProduct[]>("product:mostLiked");
+    if (cached) {
+      mostLikedItems.value = cached;
+      return cached;
+    }
     mostLikedLoading.value = true;
     try {
       const response = await productService.getMostLiked();
-      mostLikedItems.value = response.data ?? [];
-      return mostLikedItems.value;
+      const data = response.data ?? [];
+      mostLikedItems.value = data;
+      clientCache.set("product:mostLiked", data, "PRODUCT");
+      return data;
     } catch (error: any) {
       console.error("Lỗi khi load most liked products:", error);
       throw error;

@@ -3,6 +3,7 @@ import { menuService } from "~/services/menu/menu.service";
 import { buildTree } from "~/utils/nested-tree";
 import type { IMenu, IMenuItem } from "~/interfaces/menu/menu.interface";
 import type { TreeNode } from "~/utils/nested-tree";
+import { clientCache } from "~/utils/cache/clientCache";
 
 export const useMenu = () => {
   // State
@@ -11,15 +12,14 @@ export const useMenu = () => {
   const loading = ref(false);
   const error = ref<string | null>(null);
 
-  const menuCache = new Map<string, { menu: IMenu; tree: TreeNode<IMenuItem>[] }>();
-
   /**
    * Load menu theo slug và build tree structure
    */
   const loadMenuBySlug = async (slug: string) => {
+    const cacheKey = `menu:tree:${slug}`;
+    const cached = clientCache.get<{ menu: IMenu; tree: TreeNode<IMenuItem>[] }>(cacheKey);
     // Kiểm tra cache trước
-    if (menuCache.has(slug)) {
-      const cached = menuCache.get(slug)!;
+    if (cached) {
       menu.value = cached.menu;
       menuTree.value = cached.tree;
       return;
@@ -47,7 +47,7 @@ export const useMenu = () => {
 
       menuTree.value = tree;
 
-      menuCache.set(slug, { menu: response.data, tree });
+      clientCache.set(cacheKey, { menu: response.data, tree }, "MENU");
     } catch (err) {
       error.value = err instanceof Error ? err.message : "Unknown error";
       menu.value = null;
@@ -118,7 +118,7 @@ export const useMenu = () => {
   };
 
   const clearCache = () => {
-    menuCache.clear();
+    clientCache.invalidateDomain("MENU");
     menu.value = null;
     menuTree.value = [];
   };

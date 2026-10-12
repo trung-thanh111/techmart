@@ -1,6 +1,7 @@
 import type { FetchOptions } from "ofetch";
 import { TOLOGIN } from "~/utils/constants";
 import { useAuthStore } from "~/stores/auth/auth";
+import { clientCache, type CacheDomain } from "~/utils/cache/clientCache";
 
 // Kiểu response chung
 export interface ApiResponse<T = any> {
@@ -18,6 +19,22 @@ const createFetch = (options: FetchOptions = {}) => {
     timeout: 30000, // ms
     credentials: "include", // Để gửi cookie
     ...options,
+    onResponse({ request, options: reqOptions, response }) {
+      if (response.status >= 200 && response.status < 300) {
+        const method = (reqOptions.method || "GET").toUpperCase();
+        // Khi có mutation CRUD thành công, tự động xóa cache domain tương ứng
+        if (["POST", "PUT", "PATCH", "DELETE"].includes(method)) {
+          const url = typeof request === "string" ? request : (request as any)?.url || "";
+          clientCache.invalidateByUrl(url);
+
+          const headerVal = response.headers?.get?.("x-cache-invalidate") || (response.headers as any)?.["x-cache-invalidate"];
+          if (headerVal) {
+            const domains = String(headerVal).split(",").map((s) => s.trim().toUpperCase()) as CacheDomain[];
+            clientCache.invalidateDomain(domains);
+          }
+        }
+      }
+    },
     onResponseError({ request, response }) {
       console.error("API Error:", request, response);
       if (response.status === 401) {

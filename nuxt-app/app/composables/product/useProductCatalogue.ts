@@ -9,6 +9,7 @@ import type { BasePayloadFilter, IApiOk, IPaginate } from "~/interfaces/base.int
 import type { IProductCatalogue, CataloguePayloadFilter } from "~/interfaces/product/catalogue.interface";
 import { PRODUCTCATALOGUEINDEX, MAX_FILE_SIZE, ACCEPTED_IMAGE_TYPES } from "~/utils/constants";
 import { productService } from "~/services/product/product.service";
+import { clientCache } from "~/utils/cache/clientCache";
 
 export const useProductCatalogue = (initialFilters?: CataloguePayloadFilter, mode: "create" | "update" = "create") => {
   const { t } = useI18n();
@@ -132,9 +133,16 @@ export const useProductCatalogue = (initialFilters?: CataloguePayloadFilter, mod
 
   const loadproductCatalogue = async () => {
     try {
+      const cached = clientCache.get<{ name: string; value: number }[]>("catalogue:options:all");
+      if (cached) {
+        productCatalogueOptions.value = cached;
+        return;
+      }
       const response = await productCatalogueService.all();
       const rows = response?.data ?? [];
-      productCatalogueOptions.value = (Array.isArray(rows) ? rows : [rows]).map((item: any) => ({ name: item.name, value: Number(item.id) })).filter((opt: any) => opt.name && !Number.isNaN(opt.value));
+      const opts = (Array.isArray(rows) ? rows : [rows]).map((item: any) => ({ name: item.name, value: Number(item.id) })).filter((opt: any) => opt.name && !Number.isNaN(opt.value));
+      productCatalogueOptions.value = opts;
+      clientCache.set("catalogue:options:all", opts, "CATALOGUE");
     } catch (error) {
       console.error("Lỗi! khi tải dữ liệu product catalogue all :", error);
     }
@@ -176,10 +184,20 @@ export const useProductCatalogue = (initialFilters?: CataloguePayloadFilter, mod
 
   const fetchById = async (slug: string): Promise<IProductCatalogue | null> => {
     if (!slug) return null;
+    const cacheKey = `catalogue:detail:${slug}`;
+    const cached = clientCache.get<IProductCatalogue>(cacheKey);
+    if (cached) {
+      categoryDetail.value = cached;
+      return cached;
+    }
     isLoading.value = true;
     try {
       const res = await productCatalogueService.show(slug);
-      categoryDetail.value = (res as any)?.data ?? null;
+      const val = (res as any)?.data ?? null;
+      categoryDetail.value = val;
+      if (val) {
+        clientCache.set(cacheKey, val, "CATALOGUE");
+      }
       return categoryDetail.value;
     } catch (e: any) {
       categoryDetail.value = null;

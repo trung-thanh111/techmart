@@ -127,6 +127,7 @@ import DataState from "~/components/ui/DataState.vue";
 import { IMAGEDEFAULT, TOSHOP, PRODUCTCATEGORY } from "~/utils/constants";
 import { useProductCatalogue } from "~/composables/product/useProductCatalogue";
 import { useProduct } from "~/composables/product/useProduct";
+import { clientCache } from "~/utils/cache/clientCache";
 
 const { t } = useI18n();
 const route = useRoute();
@@ -137,6 +138,14 @@ const selectedBrand = computed(() => ((route.query.brand as string) || "").toLow
 
 const { categoryDetail, fetchById, isLoading } = useProductCatalogue() as any;
 const { productCatalogueList, fetchProductCatalogues } = useProduct();
+
+// Prefill từ clientCache nếu có sẵn để hiển thị tức thì (Instant Render)
+if (slug.value) {
+  const cachedDetail = clientCache.get<any>(`catalogue:detail:${slug.value}`);
+  if (cachedDetail) {
+    categoryDetail.value = cachedDetail;
+  }
+}
 
 // Danh sách thương hiệu khả dụng từ các sản phẩm thuộc danh mục
 const availableBrands = computed(() => {
