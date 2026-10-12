@@ -19,7 +19,7 @@ class ProductCatalogueService extends BaseService implements ProductCatalogueSer
     private const PIPELINE = 'default';
     protected $complexFilter = ['id'];
 
-    protected $with = ['users', 'products'];
+    protected $with = ['users', 'products', 'products.brands', 'products.product_variants'];
     protected $relationFilter = [];
 
     protected $cacheKeyPrefix = 'product_catalogues';
