@@ -215,6 +215,8 @@ class ProductSeeder extends Seeder
                 'content' => '<p><strong>Galaxy Z Fold5</strong> nâng tầm hiệu suất làm việc với thanh tác vụ Taskbar đa nhiệm thông minh, hỗ trợ chạy 3 ứng dụng cùng lúc mượt mà.</p>',
                 'variants' => [
                     ['sku' => 'ZF5-256-BLU', 'name' => 'Galaxy Z Fold5 256GB Xanh Icy', 'price' => 31990000, 'stock' => 25, 'attrs' => ['256GB', 'Xanh Dương']],
+                    ['sku' => 'ZF5-256-BLK', 'name' => 'Galaxy Z Fold5 256GB Đen Phantom', 'price' => 31990000, 'stock' => 20, 'attrs' => ['256GB', 'Đen']],
+                    ['sku' => 'ZF5-512-BLU', 'name' => 'Galaxy Z Fold5 512GB Xanh Icy', 'price' => 35990000, 'stock' => 15, 'attrs' => ['512GB', 'Xanh Dương']],
                     ['sku' => 'ZF5-512-BLK', 'name' => 'Galaxy Z Fold5 512GB Đen Phantom', 'price' => 35990000, 'stock' => 15, 'attrs' => ['512GB', 'Đen']],
                 ]
             ],
@@ -259,6 +261,8 @@ class ProductSeeder extends Seeder
                 'content' => '<p><strong>Redmi Note 13 Pro 5G</strong> mang lại trải nghiệm màn hình viền mỏng ấn tượng, chip Snapdragon 7s Gen 2 mạnh mẽ chơi game mượt mà.</p>',
                 'variants' => [
                     ['sku' => 'RN13P-128-BLK', 'name' => 'Redmi Note 13 Pro 5G 128GB Đen', 'price' => 8490000, 'stock' => 80, 'attrs' => ['128GB', 'Đen']],
+                    ['sku' => 'RN13P-128-BLU', 'name' => 'Redmi Note 13 Pro 5G 128GB Xanh Đại Dương', 'price' => 8490000, 'stock' => 75, 'attrs' => ['128GB', 'Xanh Dương']],
+                    ['sku' => 'RN13P-256-BLK', 'name' => 'Redmi Note 13 Pro 5G 256GB Đen', 'price' => 8990000, 'stock' => 70, 'attrs' => ['256GB', 'Đen']],
                     ['sku' => 'RN13P-256-BLU', 'name' => 'Redmi Note 13 Pro 5G 256GB Xanh Đại Dương', 'price' => 8990000, 'stock' => 70, 'attrs' => ['256GB', 'Xanh Dương']],
                 ]
             ],
@@ -305,6 +309,12 @@ class ProductSeeder extends Seeder
                 'content' => '<p><strong>MacBook Pro M3 Pro</strong> được chế tác cho lập trình viên, nhà dựng phim 4K/8K và đồ họa 3D. Kiến trúc GPU thế hệ mới hỗ trợ dò tia tăng tốc phần cứng.</p>',
                 'variants' => [
                     ['sku' => 'MBP-M3P-18-512-BLK', 'name' => 'MacBook Pro 14 M3 Pro 18GB 512GB Đen', 'price' => 48490000, 'stock' => 20, 'attrs' => ['18GB', '512GB', 'Đen']],
+                    ['sku' => 'MBP-M3P-18-512-SIL', 'name' => 'MacBook Pro 14 M3 Pro 18GB 512GB Bạc', 'price' => 48490000, 'stock' => 18, 'attrs' => ['18GB', '512GB', 'Bạc']],
+                    ['sku' => 'MBP-M3P-18-1TB-BLK', 'name' => 'MacBook Pro 14 M3 Pro 18GB 1TB Đen', 'price' => 53990000, 'stock' => 15, 'attrs' => ['18GB', '1TB', 'Đen']],
+                    ['sku' => 'MBP-M3P-18-1TB-SIL', 'name' => 'MacBook Pro 14 M3 Pro 18GB 1TB Bạc', 'price' => 53990000, 'stock' => 15, 'attrs' => ['18GB', '1TB', 'Bạc']],
+                    ['sku' => 'MBP-M3P-36-512-BLK', 'name' => 'MacBook Pro 14 M3 Pro 36GB 512GB Đen', 'price' => 54490000, 'stock' => 12, 'attrs' => ['36GB', '512GB', 'Đen']],
+                    ['sku' => 'MBP-M3P-36-512-SIL', 'name' => 'MacBook Pro 14 M3 Pro 36GB 512GB Bạc', 'price' => 54490000, 'stock' => 10, 'attrs' => ['36GB', '512GB', 'Bạc']],
+                    ['sku' => 'MBP-M3P-36-1TB-BLK', 'name' => 'MacBook Pro 14 M3 Pro 36GB 1TB Đen', 'price' => 59990000, 'stock' => 10, 'attrs' => ['36GB', '1TB', 'Đen']],
                     ['sku' => 'MBP-M3P-36-1TB-SIL', 'name' => 'MacBook Pro 14 M3 Pro 36GB 1TB Bạc', 'price' => 59990000, 'stock' => 12, 'attrs' => ['36GB', '1TB', 'Bạc']],
                 ]
             ],
@@ -327,6 +337,12 @@ class ProductSeeder extends Seeder
                 'content' => '<p><strong>MacBook Air M3</strong> là chiếc máy tính xách tay hoàn hảo cho sinh viên và giới văn phòng với vỏ nhôm nguyên khối tái chế 100%, bàn phím Magic Keyboard êm ái.</p>',
                 'variants' => [
                     ['sku' => 'MBA-M3-8-256-GRY', 'name' => 'MacBook Air 13 M3 8GB 256GB Xám', 'price' => 26490000, 'stock' => 45, 'attrs' => ['8GB', '256GB', 'Xám Titan']],
+                    ['sku' => 'MBA-M3-8-256-BLK', 'name' => 'MacBook Air 13 M3 8GB 256GB Midnight', 'price' => 26490000, 'stock' => 40, 'attrs' => ['8GB', '256GB', 'Đen']],
+                    ['sku' => 'MBA-M3-8-512-GRY', 'name' => 'MacBook Air 13 M3 8GB 512GB Xám', 'price' => 29490000, 'stock' => 25, 'attrs' => ['8GB', '512GB', 'Xám Titan']],
+                    ['sku' => 'MBA-M3-8-512-BLK', 'name' => 'MacBook Air 13 M3 8GB 512GB Midnight', 'price' => 29490000, 'stock' => 25, 'attrs' => ['8GB', '512GB', 'Đen']],
+                    ['sku' => 'MBA-M3-16-256-GRY', 'name' => 'MacBook Air 13 M3 16GB 256GB Xám', 'price' => 28990000, 'stock' => 30, 'attrs' => ['16GB', '256GB', 'Xám Titan']],
+                    ['sku' => 'MBA-M3-16-256-BLK', 'name' => 'MacBook Air 13 M3 16GB 256GB Midnight', 'price' => 28990000, 'stock' => 30, 'attrs' => ['16GB', '256GB', 'Đen']],
+                    ['sku' => 'MBA-M3-16-512-GRY', 'name' => 'MacBook Air 13 M3 16GB 512GB Xám', 'price' => 31990000, 'stock' => 20, 'attrs' => ['16GB', '512GB', 'Xám Titan']],
                     ['sku' => 'MBA-M3-16-512-MID', 'name' => 'MacBook Air 13 M3 16GB 512GB Midnight', 'price' => 31990000, 'stock' => 30, 'attrs' => ['16GB', '512GB', 'Đen']],
                 ]
             ],
@@ -370,6 +386,12 @@ class ProductSeeder extends Seeder
                 'content' => '<p><strong>Dell XPS 13 Plus</strong> sở hữu màn hình InfinityEdge 3.5K OLED rực rỡ, Intel Core i7 thế hệ 13 mang lại hiệu năng giải quyết công việc tức thì.</p>',
                 'variants' => [
                     ['sku' => 'XPS13-16-512-SIL', 'name' => 'Dell XPS 13 Plus 16GB 512GB Bạc', 'price' => 49990000, 'stock' => 18, 'attrs' => ['16GB', '512GB', 'Bạc']],
+                    ['sku' => 'XPS13-16-512-BLK', 'name' => 'Dell XPS 13 Plus 16GB 512GB Graphite', 'price' => 49990000, 'stock' => 15, 'attrs' => ['16GB', '512GB', 'Đen']],
+                    ['sku' => 'XPS13-16-1TB-SIL', 'name' => 'Dell XPS 13 Plus 16GB 1TB Bạc', 'price' => 52990000, 'stock' => 12, 'attrs' => ['16GB', '1TB', 'Bạc']],
+                    ['sku' => 'XPS13-16-1TB-BLK', 'name' => 'Dell XPS 13 Plus 16GB 1TB Graphite', 'price' => 52990000, 'stock' => 12, 'attrs' => ['16GB', '1TB', 'Đen']],
+                    ['sku' => 'XPS13-32-512-SIL', 'name' => 'Dell XPS 13 Plus 32GB 512GB Bạc', 'price' => 53490000, 'stock' => 10, 'attrs' => ['32GB', '512GB', 'Bạc']],
+                    ['sku' => 'XPS13-32-512-BLK', 'name' => 'Dell XPS 13 Plus 32GB 512GB Graphite', 'price' => 53490000, 'stock' => 10, 'attrs' => ['32GB', '512GB', 'Đen']],
+                    ['sku' => 'XPS13-32-1TB-SIL', 'name' => 'Dell XPS 13 Plus 32GB 1TB Bạc', 'price' => 55490000, 'stock' => 10, 'attrs' => ['32GB', '1TB', 'Bạc']],
                     ['sku' => 'XPS13-32-1TB-BLK', 'name' => 'Dell XPS 13 Plus 32GB 1TB Graphite', 'price' => 55490000, 'stock' => 10, 'attrs' => ['32GB', '1TB', 'Đen']],
                 ]
             ],
@@ -392,6 +414,8 @@ class ProductSeeder extends Seeder
                 'content' => '<p><strong>ThinkPad X1 Carbon Gen 11</strong> nặng chỉ 1.12kg nhưng trang bị đầy đủ cổng kết nối cao cấp: 2 cổng Thunderbolt 4, HDMI, USB-A cùng bảo mật vân tay và nhận diện khuôn mặt IR.</p>',
                 'variants' => [
                     ['sku' => 'X1-16-512-BLK', 'name' => 'ThinkPad X1 Carbon 16GB 512GB Đen', 'price' => 41990000, 'stock' => 20, 'attrs' => ['16GB', '512GB', 'Đen']],
+                    ['sku' => 'X1-16-1TB-BLK', 'name' => 'ThinkPad X1 Carbon 16GB 1TB Đen', 'price' => 44990000, 'stock' => 15, 'attrs' => ['16GB', '1TB', 'Đen']],
+                    ['sku' => 'X1-32-512-BLK', 'name' => 'ThinkPad X1 Carbon 32GB 512GB Đen', 'price' => 45490000, 'stock' => 15, 'attrs' => ['32GB', '512GB', 'Đen']],
                     ['sku' => 'X1-32-1TB-BLK', 'name' => 'ThinkPad X1 Carbon 32GB 1TB Đen', 'price' => 47990000, 'stock' => 10, 'attrs' => ['32GB', '1TB', 'Đen']],
                 ]
             ],
@@ -458,6 +482,8 @@ class ProductSeeder extends Seeder
                 'content' => '<p><strong>iPad Pro M4</strong> tương thích hoàn hảo với Apple Pencil Pro có phản hồi xúc giác và Magic Keyboard mới với bàn rê chuột haptic lớn hơn.</p>',
                 'variants' => [
                     ['sku' => 'IPAD-M4-256-BLK', 'name' => 'iPad Pro M4 11 256GB Đen Không Gian', 'price' => 27990000, 'stock' => 35, 'attrs' => ['256GB', 'Đen']],
+                    ['sku' => 'IPAD-M4-256-SIL', 'name' => 'iPad Pro M4 11 256GB Bạc', 'price' => 27990000, 'stock' => 30, 'attrs' => ['256GB', 'Bạc']],
+                    ['sku' => 'IPAD-M4-512-BLK', 'name' => 'iPad Pro M4 11 512GB Đen Không Gian', 'price' => 33490000, 'stock' => 25, 'attrs' => ['512GB', 'Đen']],
                     ['sku' => 'IPAD-M4-512-SIL', 'name' => 'iPad Pro M4 11 512GB Bạc', 'price' => 33490000, 'stock' => 20, 'attrs' => ['512GB', 'Bạc']],
                 ]
             ],
@@ -480,6 +506,8 @@ class ProductSeeder extends Seeder
                 'content' => '<p><strong>iPad Air 6 M2</strong> mang lại sức mạnh đồ họa đỉnh cao với bộ nhớ trong khởi điểm 128GB gấp đôi thế hệ trước.</p>',
                 'variants' => [
                     ['sku' => 'IPAD-AIR6-128-BLU', 'name' => 'iPad Air 6 128GB Xanh Dương', 'price' => 16290000, 'stock' => 50, 'attrs' => ['128GB', 'Xanh Dương']],
+                    ['sku' => 'IPAD-AIR6-128-GRY', 'name' => 'iPad Air 6 128GB Xám Không Gian', 'price' => 16290000, 'stock' => 45, 'attrs' => ['128GB', 'Xám Titan']],
+                    ['sku' => 'IPAD-AIR6-256-BLU', 'name' => 'iPad Air 6 256GB Xanh Dương', 'price' => 18990000, 'stock' => 35, 'attrs' => ['256GB', 'Xanh Dương']],
                     ['sku' => 'IPAD-AIR6-256-GRY', 'name' => 'iPad Air 6 256GB Xám Không Gian', 'price' => 18990000, 'stock' => 30, 'attrs' => ['256GB', 'Xám Titan']],
                 ]
             ],
@@ -523,8 +551,10 @@ class ProductSeeder extends Seeder
                 'description' => 'Máy tính bảng cấu hình số 1 tầm giá với màn hình 11 inch 2.8K tần số quét 144Hz 7 mức điều chỉnh, chip Snapdragon 870 và pin 8840mAh.',
                 'content' => '<p><strong>Xiaomi Pad 6</strong> hoàn hảo cho nhu cầu xem phim, giải trí và học tập với thân máy kim loại nguyên khối unibody siêu mỏng 6.51mm.</p>',
                 'variants' => [
-                    ['sku' => 'MIPAD6-8-128', 'name' => 'Xiaomi Pad 6 8GB 128GB Xám', 'price' => 7990000, 'stock' => 60, 'attrs' => ['8GB', '128GB', 'Xám Titan']],
-                    ['sku' => 'MIPAD6-8-256', 'name' => 'Xiaomi Pad 6 8GB 256GB Xanh', 'price' => 8490000, 'stock' => 40, 'attrs' => ['8GB', '256GB', 'Xanh Dương']],
+                    ['sku' => 'MIPAD6-8-128-GRY', 'name' => 'Xiaomi Pad 6 8GB 128GB Xám', 'price' => 7990000, 'stock' => 60, 'attrs' => ['8GB', '128GB', 'Xám Titan']],
+                    ['sku' => 'MIPAD6-8-128-BLU', 'name' => 'Xiaomi Pad 6 8GB 128GB Xanh', 'price' => 7990000, 'stock' => 50, 'attrs' => ['8GB', '128GB', 'Xanh Dương']],
+                    ['sku' => 'MIPAD6-8-256-GRY', 'name' => 'Xiaomi Pad 6 8GB 256GB Xám', 'price' => 8490000, 'stock' => 45, 'attrs' => ['8GB', '256GB', 'Xám Titan']],
+                    ['sku' => 'MIPAD6-8-256-BLU', 'name' => 'Xiaomi Pad 6 8GB 256GB Xanh', 'price' => 8490000, 'stock' => 40, 'attrs' => ['8GB', '256GB', 'Xanh Dương']],
                 ]
             ],
             [
@@ -546,6 +576,8 @@ class ProductSeeder extends Seeder
                 'content' => '<p><strong>iPad Gen 10</strong> hỗ trợ bàn phím Magic Keyboard Folio 2 mảnh và Apple Pencil, là thiết bị học tập và làm việc lý tưởng cho học sinh, sinh viên.</p>',
                 'variants' => [
                     ['sku' => 'IPAD-GEN10-64-YEL', 'name' => 'iPad Gen 10 64GB Vàng', 'price' => 9490000, 'stock' => 70, 'attrs' => ['64GB', 'Vàng']],
+                    ['sku' => 'IPAD-GEN10-64-SIL', 'name' => 'iPad Gen 10 64GB Bạc', 'price' => 9490000, 'stock' => 60, 'attrs' => ['64GB', 'Bạc']],
+                    ['sku' => 'IPAD-GEN10-256-YEL', 'name' => 'iPad Gen 10 256GB Vàng', 'price' => 12990000, 'stock' => 45, 'attrs' => ['256GB', 'Vàng']],
                     ['sku' => 'IPAD-GEN10-256-SIL', 'name' => 'iPad Gen 10 256GB Bạc', 'price' => 12990000, 'stock' => 40, 'attrs' => ['256GB', 'Bạc']],
                 ]
             ],
