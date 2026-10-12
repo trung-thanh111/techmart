@@ -27,6 +27,9 @@
                 </div>
               </div>
             </div>
+            <div v-if="!selectedVariant" class="text-xs text-amber-700 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded mt-2">
+              Phiên bản kết hợp này hiện không khả dụng. Vui lòng chọn cấu hình khác.
+            </div>
           </div>
           <div v-else class="text-sm text-gray-500 italic">
             {{ $t("product.noVariants") }}
@@ -153,23 +156,9 @@ const findMatchingVariant = () => {
 };
 
 const handleSelectAttribute = (attrName: string, id: number) => {
+  // Chỉ cập nhật thuộc tính cho nhóm đang chọn - đảm bảo tính độc lập giữa các nhóm
   selectedAttributes.value[attrName] = id;
-  const matched = findMatchingVariant();
-  if (matched) {
-    selectedVariant.value = matched;
-  } else {
-    const fallback = (props.product?.productVariants as any[])?.find((v: any) => {
-      const data = getNormalizedAttributeData(v);
-      return data[attrName]?.id === id;
-    });
-    if (fallback) {
-      selectedVariant.value = fallback;
-      const data = getNormalizedAttributeData(fallback);
-      Object.entries(data).forEach(([name, val]) => {
-        selectedAttributes.value[name] = val.id;
-      });
-    }
-  }
+  selectedVariant.value = findMatchingVariant() || null;
 };
 
 const close = () => {

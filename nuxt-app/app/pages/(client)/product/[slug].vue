@@ -172,22 +172,28 @@
                           </div>
                         </div>
                       </div>
+                      <div v-if="hasVariants && !selectedVariant" class="text-xs text-amber-700 bg-amber-50 border border-amber-200 px-3 py-2 rounded-md mb-2 flex items-center gap-1.5">
+                        <svg class="w-4 h-4 flex-shrink-0 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                        <span>Phiên bản kết hợp này hiện không khả dụng. Vui lòng chọn cấu hình khác.</span>
+                      </div>
                     </div>
                   </div>
                   <div class="px-4 pb-3 bg-white">
                     <div class="relative">
                       <div class="flex items-center gap-2 mb-2">
                         <span class="text-gray-600 text-sm">{{ $t("field.quantity") }}</span>
-                        <span class="font-medium text-sky-500 text-sm">{{ displayStock }}</span>
+                        <span class="font-medium text-sm" :class="!isPurchaseDisabled ? 'text-sky-500' : 'text-red-500'">
+                          {{ hasVariants && !selectedVariant ? "Không có sẵn" : (displayStock > 0 ? displayStock : "Hết hàng") }}
+                        </span>
                       </div>
                       <div class="flex items-center mt-2 border border-gray-300 rounded overflow-hidden w-max h-[38px]">
-                        <button @click="quantity = Math.max(1, quantity - 1)" title="quantity-decrease" class="px-3 flex items-center justify-center text-gray-500 hover:text-gray-700">
+                        <button @click="quantity = Math.max(1, quantity - 1)" title="quantity-decrease" :disabled="isPurchaseDisabled" class="px-3 flex items-center justify-center text-gray-500 hover:text-gray-700 disabled:opacity-40">
                           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 18 18">
                             <path d="M3.75 9H14.25"></path>
                           </svg>
                         </button>
-                        <input v-model.number="quantity" type="number" :min="1" :max="displayStock" @input="handleQuantityInput" class="w-12 text-center border-x border-gray-200 text-gray-700 text-sm focus:outline-none" inputmode="numeric" />
-                        <button @click="quantity = Math.min(displayStock, quantity + 1)" title="quantity-increase" class="px-3 flex items-center justify-center text-gray-500 hover:text-gray-700">
+                        <input v-model.number="quantity" type="number" :min="1" :max="displayStock" :disabled="isPurchaseDisabled" @input="handleQuantityInput" class="w-12 text-center border-x border-gray-200 text-gray-700 text-sm focus:outline-none disabled:bg-gray-100 disabled:text-gray-400" inputmode="numeric" />
+                        <button @click="quantity = Math.min(displayStock, quantity + 1)" title="quantity-increase" :disabled="isPurchaseDisabled" class="px-3 flex items-center justify-center text-gray-500 hover:text-gray-700 disabled:opacity-40">
                           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 18 18">
                             <path d="M9 3.75V14.25"></path>
                             <path d="M3.75 9H14.25"></path>
@@ -196,8 +202,8 @@
                       </div>
                     </div>
                     <div class="grid grid-cols-2 mb-2 gap-2 sm:gap-4 mt-5">
-                      <Button :label="$t('cart.addToCart')" icon="pi pi-shopping-cart" size="large" @click="handleAddToCart" :loading="isAddingToCart" class="border-0 !flex items-center justify-center !bg-gradient-to-r !from-sky-500 !to-sky-600 hover:!from-sky-600 hover:!to-sky-700 text-white font-semibold py-3 sm:py-3.5 md:py-4 px-2 sm:px-3 md:px-4 rounded-sm transition-all duration-300 ease-in-out transform hover:scale-98 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-1 uppercase text-xs sm:text-sm md:text-base leading-none shadow-md hover:shadow-md" />
-                      <Button :label="$t('cart.buyNow')" icon="pi pi-bolt" severity="danger" size="large" @click="handleBuyNow" :loading="isBuyingNow" class="flex items-center justify-center bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-semibold py-3 sm:py-3.5 md:py-4 px-2 sm:px-3 md:px-4 rounded-sm transition-all duration-300 ease-in-out transform hover:scale-98 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 uppercase text-xs sm:text-sm md:text-base leading-none shadow-md hover:shadow-md" />
+                      <Button :label="$t('cart.addToCart')" icon="pi pi-shopping-cart" size="large" @click="handleAddToCart" :loading="isAddingToCart" :disabled="isPurchaseDisabled" class="border-0 !flex items-center justify-center !bg-gradient-to-r !from-sky-500 !to-sky-600 hover:!from-sky-600 hover:!to-sky-700 text-white font-semibold py-3 sm:py-3.5 md:py-4 px-2 sm:px-3 md:px-4 rounded-sm transition-all duration-300 ease-in-out transform hover:scale-98 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-1 uppercase text-xs sm:text-sm md:text-base leading-none shadow-md hover:shadow-md disabled:!opacity-50 disabled:!cursor-not-allowed disabled:!pointer-events-none" />
+                      <Button :label="$t('cart.buyNow')" icon="pi pi-bolt" severity="danger" size="large" @click="handleBuyNow" :loading="isBuyingNow" :disabled="isPurchaseDisabled" class="flex items-center justify-center bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-semibold py-3 sm:py-3.5 md:py-4 px-2 sm:px-3 md:px-4 rounded-sm transition-all duration-300 ease-in-out transform hover:scale-98 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 uppercase text-xs sm:text-sm md:text-base leading-none shadow-md hover:shadow-md disabled:!opacity-50 disabled:!cursor-not-allowed disabled:!pointer-events-none" />
                     </div>
                     <div class="font-medium text-gray-500 text-xs description">
                       <NuxtLink to="#" class="font-bold underline cursor-pointer text-sky-400 hover:text-sky-600">{{ $t("header.loginRequired") }}</NuxtLink>
@@ -923,23 +929,9 @@ const findMatchingVariant = () => {
 };
 
 const handleSelectAttribute = (attributeName: string, attributeId: number) => {
+  // Chỉ cập nhật thuộc tính cho nhóm đang chọn - đảm bảo tính độc lập giữa các nhóm
   selectedAttributes.value[attributeName] = attributeId;
-  const matched = findMatchingVariant();
-  if (matched) {
-    selectedVariant.value = matched;
-  } else {
-    const fallback = (productDetail.value?.productVariants as any[])?.find((v: any) => {
-      const data = getNormalizedAttributeData(v);
-      return data[attributeName]?.id === attributeId;
-    });
-    if (fallback) {
-      selectedVariant.value = fallback;
-      const data = getNormalizedAttributeData(fallback);
-      Object.entries(data).forEach(([name, val]) => {
-        selectedAttributes.value[name] = val.id;
-      });
-    }
-  }
+  selectedVariant.value = findMatchingVariant() || null;
 };
 
 const displayPrice = computed(() => {
@@ -957,6 +949,12 @@ const displayStock = computed(() => {
     return selectedVariant.value.stock;
   }
   return 0;
+});
+
+const hasVariants = computed(() => Boolean(productDetail.value?.productVariants?.length));
+const isPurchaseDisabled = computed(() => {
+  if (hasVariants.value && !selectedVariant.value) return true;
+  return displayStock.value <= 0;
 });
 
 const productCatalogueIds = computed<number[]>(() => {
@@ -1145,12 +1143,12 @@ const scrollToTab = (tabName: string) => {
 };
 
 const handleAddToCart = async () => {
-  if (!selectedVariant.value && !productDetail.value) return;
+  if (isPurchaseDisabled.value || !productDetail.value) return;
   await addItem(productDetail.value!, selectedVariant.value, quantity.value, false);
 };
 
 const handleBuyNow = async () => {
-  if (!selectedVariant.value && !productDetail.value) return;
+  if (isPurchaseDisabled.value || !productDetail.value) return;
   const success = await addItem(productDetail.value!, selectedVariant.value, quantity.value, true);
   if (success) {
     await navigateTo(TOCART);
