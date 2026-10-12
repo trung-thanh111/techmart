@@ -21,7 +21,20 @@
               <div class="flex flex-col gap-2">
                 <span class="text-sm font-medium text-gray-700">{{ attrName }}:</span>
                 <div class="flex flex-wrap gap-2">
-                  <div v-for="attr in attributes" :key="attr.id" class="cursor-pointer px-3 py-1 border rounded text-sm transition-colors" :class="[selectedAttributes[attrName] === attr.id ? 'border-sky-500 bg-sky-50 text-sky-700 font-semibold' : 'border-gray-300 hover:border-sky-300']" @click="handleSelectAttribute(attrName, attr.id)">
+                  <div
+                    v-for="attr in attributes"
+                    :key="attr.id"
+                    class="px-3 py-1 border rounded text-sm transition-colors select-none"
+                    :class="[
+                      isAttributeDisabled(attrName, attr.id)
+                        ? 'opacity-40 bg-gray-100 border-dashed border-gray-300 text-gray-400 cursor-not-allowed line-through pointer-events-none'
+                        : selectedAttributes[attrName] === attr.id
+                          ? 'border-sky-500 bg-sky-50 text-sky-700 font-semibold cursor-pointer'
+                          : 'border-gray-300 hover:border-sky-300 cursor-pointer bg-white text-gray-700'
+                    ]"
+                    :title="isAttributeDisabled(attrName, attr.id) ? 'Tạm hết hàng' : attr.name"
+                    @click="!isAttributeDisabled(attrName, attr.id) && handleSelectAttribute(attrName, attr.id)"
+                  >
                     {{ attr.name }}
                   </div>
                 </div>
@@ -155,9 +168,54 @@ const findMatchingVariant = () => {
   });
 };
 
+// Kiểm tra xem một thuộc tính có bị hết hàng / không khả dụng với tổ hợp hiện tại không
+const isAttributeDisabled = (attrName: string, attrId: number): boolean => {
+  const variants = props.product?.productVariants as any[];
+  if (!variants?.length) return false;
+
+  // 1. Kiểm tra tuyệt đối: Biến thể chứa thuộc tính này có còn hàng trong toàn bộ sản phẩm không?
+  const hasAnyInStock = variants.some((v: any) => {
+    if ((v.stock ?? 0) <= 0) return false;
+    const data = getNormalizedAttributeData(v);
+    return data[attrName]?.id === attrId;
+  });
+  if (!hasAnyInStock) return true;
+
+  // 2. Kiểm tra theo tổ hợp với các nhóm thuộc tính khác đang chọn
+  const hasMatchingInStock = variants.some((v: any) => {
+    if ((v.stock ?? 0) <= 0) return false;
+    const data = getNormalizedAttributeData(v);
+    if (data[attrName]?.id !== attrId) return false;
+
+    return Object.entries(selectedAttributes.value).every(([otherName, otherId]) => {
+      if (otherName === attrName) return true;
+      if (!otherId) return true;
+      return data[otherName]?.id === otherId;
+    });
+  });
+
+  return !hasMatchingInStock;
+};
+
 const handleSelectAttribute = (attrName: string, id: number) => {
-  // Chỉ cập nhật thuộc tính cho nhóm đang chọn - đảm bảo tính độc lập giữa các nhóm
+  if (isAttributeDisabled(attrName, id)) return;
+
   selectedAttributes.value[attrName] = id;
+
+  // Nếu thuộc tính đang chọn của một nhóm khác bị hết hàng với lựa chọn mới,
+  // tự động chuyển sang thuộc tính còn hàng đầu tiên của nhóm đó
+  Object.keys(attributeGroups.value).forEach((group) => {
+    if (group !== attrName) {
+      const currentId = selectedAttributes.value[group];
+      if (currentId && isAttributeDisabled(group, currentId)) {
+        const firstAvailable = attributeGroups.value[group].find((a) => !isAttributeDisabled(group, a.id));
+        if (firstAvailable) {
+          selectedAttributes.value[group] = firstAvailable.id;
+        }
+      }
+    }
+  });
+
   selectedVariant.value = findMatchingVariant() || null;
 };
 
@@ -185,9 +243,10 @@ watch(
       quantity.value = 1;
       selectedVariant.value = null;
 
-      // Auto select first variant's attributes
+      // Auto select first in-stock variant's attributes
       if (newProduct.productVariants?.length) {
-        const first = (newProduct.productVariants as any[])[0];
+        const variants = newProduct.productVariants as any[];
+        const first = variants.find((v: any) => (v.stock ?? 0) > 0) || variants[0];
         const data = getNormalizedAttributeData(first);
         if (Object.keys(data).length) {
           Object.entries(data).forEach(([k, v]) => {

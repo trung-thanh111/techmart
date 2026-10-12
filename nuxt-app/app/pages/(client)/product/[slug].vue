@@ -225,15 +225,44 @@
                         <div>
                           <div class="mb-2 caption text-sm">
                             <span class="text-gray-600">{{ attrName }}:</span>
-                            <span class="font-medium ml-2 text-xs text-sky-500">{{ attributes.find((a) => a.id === selectedAttributes[attrName])?.name || "" }}</span>
+                            <span class="font-medium ml-2 text-xs text-sky-500">{{ attributes.find((a) => a.id === selectedAttributes[attrName] && !isAttributeDisabled(attrName, a.id))?.name || "" }}</span>
                           </div>
                           <div class="flex flex-wrap gap-2">
-                            <label v-for="attr in attributes" :key="attr.id" class="relative cursor-pointer">
-                              <input type="radio" :name="`attr-${attrName}`" :value="attr.id" :checked="selectedAttributes[attrName] === attr.id" @change="handleSelectAttribute(attrName, attr.id)" class="sr-only peer" />
-                              <div class="flex items-center flex-wrap justify-center px-2 min-w-[80px] h-9 bg-white text-gray-700 font-semibold rounded peer-checked:border-sky-500 peer-checked:bg-sky-50 peer-checked:text-sky-600 hover:bg-sky-100 hover:border-sky-500 border border-gray-300 transition-colors duration-200 text-sm">
+                            <label
+                              v-for="attr in attributes"
+                              :key="attr.id"
+                              :class="[
+                                isAttributeDisabled(attrName, attr.id)
+                                  ? 'cursor-not-allowed opacity-40 select-none'
+                                  : 'cursor-pointer'
+                              ]"
+                              class="relative"
+                              :title="isAttributeDisabled(attrName, attr.id) ? 'Tạm hết hàng' : attr.name"
+                            >
+                              <input
+                                type="radio"
+                                :name="`attr-${attrName}`"
+                                :value="attr.id"
+                                :disabled="isAttributeDisabled(attrName, attr.id)"
+                                :checked="!isAttributeDisabled(attrName, attr.id) && selectedAttributes[attrName] === attr.id"
+                                @change="!isAttributeDisabled(attrName, attr.id) && handleSelectAttribute(attrName, attr.id)"
+                                class="sr-only peer"
+                              />
+                              <div
+                                :class="[
+                                  isAttributeDisabled(attrName, attr.id)
+                                    ? 'bg-gray-100 border-dashed border-gray-300 text-gray-400 line-through pointer-events-none'
+                                    : 'bg-white text-gray-700 hover:bg-sky-50 hover:border-sky-500 border-gray-300 peer-checked:border-sky-500 peer-checked:bg-sky-50 peer-checked:text-sky-600'
+                                ]"
+                                class="flex items-center flex-wrap justify-center px-2 min-w-[80px] h-9 font-semibold rounded border transition-colors duration-200 text-sm"
+                              >
                                 {{ attr.name }}
                               </div>
-                              <div class="rounded-tr-sm absolute top-0 right-0 w-5 h-5 bg-gradient-to-tr from-sky-600 to-cyan-500 peer-checked:flex hidden" style="clip-path: polygon(110% 0, 0 0, 110% 110%)">
+                              <div
+                                v-if="!isAttributeDisabled(attrName, attr.id)"
+                                class="rounded-tr-sm absolute top-0 right-0 w-5 h-5 bg-gradient-to-tr from-sky-600 to-cyan-500 peer-checked:flex hidden pointer-events-none"
+                                style="clip-path: polygon(110% 0, 0 0, 110% 110%)"
+                              >
                                 <svg class="absolute top-[1px] right-[1px] w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
                                   <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z" clip-rule="evenodd" />
                                 </svg>
@@ -1000,9 +1029,56 @@ const findMatchingVariant = () => {
   });
 };
 
+// Kiểm tra xem một thuộc tính có bị hết hàng / không khả dụng với tổ hợp hiện tại không
+const isAttributeDisabled = (attrName: string, attrId: number): boolean => {
+  const variants = productDetail.value?.productVariants as any[];
+  if (!variants?.length) return false;
+
+  // 1. Kiểm tra tuyệt đối: Biến thể chứa thuộc tính này có còn hàng trong toàn bộ sản phẩm không?
+  const hasAnyInStock = variants.some((v: any) => {
+    if ((v.stock ?? 0) <= 0) return false;
+    const data = getNormalizedAttributeData(v);
+    return data[attrName]?.id === attrId;
+  });
+  if (!hasAnyInStock) return true;
+
+  // 2. Kiểm tra theo tổ hợp với các nhóm thuộc tính khác đang chọn
+  const hasMatchingInStock = variants.some((v: any) => {
+    if ((v.stock ?? 0) <= 0) return false;
+    const data = getNormalizedAttributeData(v);
+    if (data[attrName]?.id !== attrId) return false;
+
+    return Object.entries(selectedAttributes.value).every(([otherName, otherId]) => {
+      if (otherName === attrName) return true;
+      if (!otherId) return true;
+      return data[otherName]?.id === otherId;
+    });
+  });
+
+  return !hasMatchingInStock;
+};
+
 const handleSelectAttribute = (attributeName: string, attributeId: number) => {
-  // Chỉ cập nhật thuộc tính cho nhóm đang chọn - đảm bảo tính độc lập giữa các nhóm
+  // Nếu thuộc tính bị vô hiệu hóa/hết hàng thì không cho chọn
+  if (isAttributeDisabled(attributeName, attributeId)) return;
+
+  // Cập nhật thuộc tính cho nhóm đang chọn
   selectedAttributes.value[attributeName] = attributeId;
+
+  // Nếu thuộc tính đang chọn của một nhóm khác bị hết hàng với lựa chọn mới,
+  // tự động chuyển sang thuộc tính còn hàng đầu tiên của nhóm đó
+  Object.keys(attributeGroups.value).forEach((group) => {
+    if (group !== attributeName) {
+      const currentId = selectedAttributes.value[group];
+      if (currentId && isAttributeDisabled(group, currentId)) {
+        const firstAvailable = attributeGroups.value[group].find((a) => !isAttributeDisabled(group, a.id));
+        if (firstAvailable) {
+          selectedAttributes.value[group] = firstAvailable.id;
+        }
+      }
+    }
+  });
+
   selectedVariant.value = findMatchingVariant() || null;
 };
 
@@ -1299,14 +1375,15 @@ onMounted(async () => {
       await fetchWishlist();
     }
 
-    // Chọn variant đầu tiên mặc định
+    // Chọn variant còn hàng đầu tiên mặc định
     if (productDetail.value?.productVariants?.length) {
-      const firstVariant = (productDetail.value.productVariants as any[])[0];
-      const data = getNormalizedAttributeData(firstVariant);
+      const variants = productDetail.value.productVariants as any[];
+      const firstInStockVariant = variants.find((v: any) => (v.stock ?? 0) > 0) || variants[0];
+      const data = getNormalizedAttributeData(firstInStockVariant);
       Object.entries(data).forEach(([attrName, attr]) => {
         selectedAttributes.value[attrName] = attr.id;
       });
-      selectedVariant.value = firstVariant;
+      selectedVariant.value = firstInStockVariant;
     }
 
     // Fetch reviews
