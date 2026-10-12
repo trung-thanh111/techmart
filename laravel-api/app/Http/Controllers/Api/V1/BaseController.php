@@ -32,20 +32,48 @@ abstract class BaseController extends Controller
     public function baseSave(Request $request, ?int $id = null): JsonResponse
     {
         $response = $this->service->save($request, $id);
-        return ApiResource::ok($response, Lang::get('message.save_data_successfully'));
+        $res = ApiResource::ok($response, Lang::get('message.save_data_successfully'));
+        return $this->attachCacheInvalidateHeader($res);
     }
 
     public function destroy(int $id = 0)
     {
         $response = $this->service->destroy($id);
-        return ApiResource::message(Lang::get('message.delete_successfully'));
+        $res = ApiResource::message(Lang::get('message.delete_successfully'));
+        return $this->attachCacheInvalidateHeader($res);
     }
 
     public function bulkDelete(Request $request): JsonResponse
     {
         $countRecord = count($request->ids);
         $response = $this->service->bulkDestroy($request);
-        return ApiResource::message(Lang::get("message.delete_successfully") . " ({$countRecord})");
+        $res = ApiResource::message(Lang::get("message.delete_successfully") . " ({$countRecord})");
+        return $this->attachCacheInvalidateHeader($res);
+    }
+
+    protected function getCacheInvalidateDomains(): array
+    {
+        $class = class_basename(static::class);
+        if (str_contains($class, 'ProductCatalogue')) return ['CATALOGUE', 'PRODUCT'];
+        if (str_contains($class, 'Product')) return ['PRODUCT'];
+        if (str_contains($class, 'PostCatalogue') || str_contains($class, 'Post')) return ['POST'];
+        if (str_contains($class, 'Menu')) return ['MENU'];
+        if (str_contains($class, 'Promotion')) return ['PROMOTION', 'PRODUCT'];
+        if (str_contains($class, 'Agency')) return ['AGENCY'];
+        if (str_contains($class, 'Faq')) return ['FAQ'];
+        if (str_contains($class, 'Banner')) return ['BANNER'];
+        if (str_contains($class, 'Order') || str_contains($class, 'Cart')) return ['USER', 'PRODUCT'];
+        if (str_contains($class, 'System')) return ['SYSTEM'];
+        return [];
+    }
+
+    protected function attachCacheInvalidateHeader(JsonResponse $response): JsonResponse
+    {
+        $domains = $this->getCacheInvalidateDomains();
+        if (!empty($domains)) {
+            $response->header('X-Cache-Invalidate', implode(',', $domains));
+        }
+        return $response;
     }
 
     public function show($id): JsonResponse
@@ -63,7 +91,8 @@ abstract class BaseController extends Controller
     public function baseRelation(Request $request, int $id = 0, string $action = '')
     {
         $response = $this->service->relation($request, $id, $action);
-        return ApiResource::message(Lang::get('message.action_relation_successfully'));
+        $res = ApiResource::message(Lang::get('message.action_relation_successfully'));
+        return $this->attachCacheInvalidateHeader($res);
     }
 
     public function baseBulkSave(Request $request, string $action = ''): JsonResponse
@@ -71,12 +100,14 @@ abstract class BaseController extends Controller
         $countRecord = count($request->data);
         $message = $action === 'store' ? Lang::get('message.save_data_successfully') . " ({$countRecord})" : Lang::get('message.update_data_successfully') . " ({$countRecord})";
         $response = $this->service->bulkSave($request, $action);
-        return ApiResource::message($message);
+        $res = ApiResource::message($message);
+        return $this->attachCacheInvalidateHeader($res);
     }
 
     public function baseRestore(request $request, int $id = 0): JsonResponse
     {
         $response = $this->service->restore($request, $id);
-        return ApiResource::ok($response, Lang::get('message.restore_successfully') . " ({$id})");
+        $res = ApiResource::ok($response, Lang::get('message.restore_successfully') . " ({$id})");
+        return $this->attachCacheInvalidateHeader($res);
     }
 }
