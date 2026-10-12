@@ -16,7 +16,7 @@
             <div class="p-4">
               <ul class="space-y-1">
                 <li v-for="item in level1Items" :key="item.id" @mouseenter="handleLevel1Hover(item)">
-                  <NuxtLink :to="`/${item.slug}`" :class="['flex items-center justify-between px-3 py-2.5 rounded cursor-pointer transition-all duration-150', hoveredLevel1?.id === item.id ? 'bg-sky-50 text-sky-600 font-semibold shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-sky-500']">
+                  <NuxtLink :to="`/${item.slug}`" @click="handleMenuClose" :class="['flex items-center justify-between px-3 py-2.5 rounded cursor-pointer transition-all duration-150', hoveredLevel1?.id === item.id ? 'bg-sky-50 text-sky-600 font-semibold shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:text-sky-500']">
                     <span class="text-sm">{{ item.name }}</span>
                     <svg v-if="hasChildren(item)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 flex-shrink-0">
                       <polyline points="9,18 15,12 9,6" />
@@ -35,7 +35,7 @@
                   </h4>
                   <ul class="space-y-1">
                     <li v-for="item in level2Items" :key="item.id" @mouseenter="handleLevel2Hover(item)">
-                      <NuxtLink :to="`/${item.slug}`" :class="['flex items-center justify-between px-3 py-2 rounded text-sm transition-all duration-150', hoveredLevel2?.id === item.id ? 'bg-sky-50 text-sky-600 font-medium' : 'text-gray-700 hover:bg-gray-50 hover:text-sky-500']">
+                      <NuxtLink :to="`/${item.slug}`" @click="handleMenuClose" :class="['flex items-center justify-between px-3 py-2 rounded text-sm transition-all duration-150', hoveredLevel2?.id === item.id ? 'bg-sky-50 text-sky-600 font-medium' : 'text-gray-700 hover:bg-gray-50 hover:text-sky-500']">
                         <span>{{ item.name }}</span>
                         <svg v-if="hasChildren(item)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-3.5 h-3.5 flex-shrink-0">
                           <polyline points="9,18 15,12 9,6" />
@@ -44,7 +44,7 @@
                     </li>
                   </ul>
                   <div v-if="hoveredLevel1.slug" class="mt-4 pt-3 border-t border-gray-100">
-                    <NuxtLink :to="`/${hoveredLevel1.slug}`" class="text-xs text-sky-600 hover:text-sky-700 font-medium hover:underline">{{ $t("common.viewAll") }} {{ hoveredLevel1.name }}</NuxtLink>
+                    <NuxtLink :to="`/${hoveredLevel1.slug}`" @click="handleMenuClose" class="text-xs text-sky-600 hover:text-sky-700 font-medium hover:underline">{{ $t("common.viewAll") }} {{ hoveredLevel1.name }}</NuxtLink>
                   </div>
                 </div>
               </div>
@@ -55,7 +55,7 @@
                   </h4>
                   <ul class="space-y-1">
                     <li v-for="item in level3Items" :key="item.id" @mouseenter="handleLevel3Hover(item)">
-                      <NuxtLink :to="`/${item.slug}`" :class="['flex items-center justify-between px-3 py-2 rounded text-sm transition-all duration-150', hoveredLevel3?.id === item.id ? 'bg-sky-50 text-sky-600 font-medium' : 'text-gray-700 hover:bg-gray-50 hover:text-sky-500']">
+                      <NuxtLink :to="`/${item.slug}`" @click="handleMenuClose" :class="['flex items-center justify-between px-3 py-2 rounded text-sm transition-all duration-150', hoveredLevel3?.id === item.id ? 'bg-sky-50 text-sky-600 font-medium' : 'text-gray-700 hover:bg-gray-50 hover:text-sky-500']">
                         <span>{{ item.name }}</span>
                         <svg v-if="hasChildren(item)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-3.5 h-3.5 flex-shrink-0">
                           <polyline points="9,18 15,12 9,6" />
@@ -64,7 +64,7 @@
                     </li>
                   </ul>
                   <div v-if="hoveredLevel2.slug" class="mt-4 pt-3 border-t border-gray-100">
-                    <NuxtLink :to="`/${hoveredLevel2.slug}`" class="text-xs text-sky-600 hover:text-sky-700 font-medium hover:underline">{{ $t("common.viewAll") }} {{ hoveredLevel2.name }}</NuxtLink>
+                    <NuxtLink :to="`/${hoveredLevel2.slug}`" @click="handleMenuClose" class="text-xs text-sky-600 hover:text-sky-700 font-medium hover:underline">{{ $t("common.viewAll") }} {{ hoveredLevel2.name }}</NuxtLink>
                   </div>
                 </div>
               </div>
@@ -75,13 +75,13 @@
                   </h4>
                   <ul class="space-y-1">
                     <li v-for="item in level4Items" :key="item.id">
-                      <NuxtLink :to="`/${item.slug}`" class="block px-3 py-2 rounded text-sm text-gray-700 hover:bg-gray-50 hover:text-sky-500 transition-all duration-150">
+                      <NuxtLink :to="`/${item.slug}`" @click="handleMenuClose" class="block px-3 py-2 rounded text-sm text-gray-700 hover:bg-gray-50 hover:text-sky-500 transition-all duration-150">
                         {{ item.name }}
                       </NuxtLink>
                     </li>
                   </ul>
                   <div v-if="hoveredLevel3.slug" class="mt-4 pt-3 border-t border-gray-100">
-                    <NuxtLink :to="`/${hoveredLevel3.slug}`" class="text-xs text-sky-600 hover:text-sky-700 font-medium hover:underline">{{ $t("common.viewAll") }} {{ hoveredLevel3.name }}</NuxtLink>
+                    <NuxtLink :to="`/${hoveredLevel3.slug}`" @click="handleMenuClose" class="text-xs text-sky-600 hover:text-sky-700 font-medium hover:underline">{{ $t("common.viewAll") }} {{ hoveredLevel3.name }}</NuxtLink>
                   </div>
                 </div>
               </div>
@@ -98,7 +98,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
+import { useRoute } from "vue-router";
 import { onClickOutside } from "@vueuse/core";
 import logoWebsite from "~/assets/images/logo/logo-website.png";
 import type { TreeNode } from "~/utils/nested-tree";
@@ -110,6 +111,7 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+const route = useRoute();
 
 // State
 const isOpen = ref(false);
@@ -121,6 +123,14 @@ const hoveredLevel3 = ref<TreeNode<IMenuItem> | null>(null);
 onClickOutside(menuRef, () => {
   handleMenuClose();
 });
+
+// Tự động đóng menu khi điều hướng / route thay đổi
+watch(
+  () => route.fullPath,
+  () => {
+    handleMenuClose();
+  }
+);
 
 // Computed: Level 1 items (parentId = 0)
 const level1Items = computed(() => {

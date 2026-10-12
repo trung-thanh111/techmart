@@ -468,10 +468,11 @@
       </div>
     </Dialog>
   </div>
-
 </template>
+
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
+import { useRoute } from "vue-router";
 
 import { useI18n } from "vue-i18n";
 import { onClickOutside } from "@vueuse/core";
@@ -578,6 +579,17 @@ const closeMobileMenu = () => {
   productMenuOpen.value = null;
   document.body.style.overflow = "";
 };
+
+const route = useRoute();
+watch(
+  () => route.fullPath,
+  () => {
+    closeUserMenu();
+    closeCartMenu();
+    closeMobileMenu();
+    closeMobileUserMenu();
+  }
+);
 
 onMounted(async () => {
   await loadCart();

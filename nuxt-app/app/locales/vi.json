@@ -98,7 +98,23 @@
       "subject": "Chủ đề",
       "content": "Nội dung",
       "confirm": "Xác nhận"
-    }
+    },
+    "avatar": "Ảnh đại diện",
+    "brandPlaceholder": "Chọn thương hiệu",
+    "cancel": "Hủy",
+    "cataloguePlaceholder": "Chọn danh mục",
+    "close": "Đóng",
+    "like": "Thích",
+    "maxSize": "Kích thước tối đa",
+    "products": "sản phẩm",
+    "resetFilters": "Đặt lại bộ lọc",
+    "save": "Lưu",
+    "selectPriceRange": "Chọn khoảng giá",
+    "viewResults": "Xem kết quả",
+    "brand": "Thương hiệu",
+    "all": "Tất cả",
+    "clearFilter": "Xóa bộ lọc",
+    "clearBrandFilter": "Xóa bộ lọc thương hiệu"
   },
   "action": {
     "save": "Lưu",
@@ -426,14 +442,19 @@
       "logout": "Đăng xuất"
     },
     "mockReview1": "Bài viết rất đúng trọng tâm. Thực sự đáng thời gian đọc. Cảm ơn bạn! Nhưng công cụ chỉ là phương tiện cho các nhà thiết kế UX...",
-    "mockReply": "Rất cảm kích! Vui vì bạn đã thích nó"
+    "mockReply": "Rất cảm kích! Vui vì bạn đã thích nó",
+    "addToWishlist": "Thêm vào danh sách yêu thích",
+    "noVariants": "Sản phẩm không có phiên bản",
+    "selectVariant": "Vui lòng chọn phiên bản"
   },
   "productCard": {
     "sampleProductName": "Tên sản phẩm mẫu",
     "bestSeller": "Bán chạy",
     "goodPrice": "Giá tốt",
     "hotSale": "Cháy hàng",
-    "warrantyText": "Bảo hành {months} tháng tại các cơ sở"
+    "warrantyText": "Bảo hành {months} tháng tại các cơ sở",
+    "mainImage": "Ảnh chính sản phẩm",
+    "subImage": "Ảnh phụ sản phẩm"
   },
   "post": {
     "breadcrumb": "Bài viết",
@@ -475,7 +496,8 @@
     "commentHiddenError": "Không thể ẩn bình luận",
     "commentDeleted": "Đã xóa bình luận",
     "commentDeleteError": "Không thể xóa bình luận",
-    "actionFailed": "Không thể thực hiện thao tác"
+    "actionFailed": "Không thể thực hiện thao tác",
+    "quickView": "Xem nhanh bài viết"
   },
   "cart": {
     "addSuccess": "Thêm vào giỏ hàng thành công",
@@ -900,7 +922,8 @@
     "loadMore": "Tải thêm"
   },
   "page": {
-    "shop": "Cửa hàng"
+    "shop": "Cửa hàng",
+    "post": "Bài viết"
   },
   "menu": {
     "title": "Menu",
@@ -938,7 +961,8 @@
     "copied": "Đã chép",
     "copySuccess": "Đã sao chép mã voucher vào clipboard",
     "noVouchers": "Hiện chưa có mã ưu đãi nào",
-    "expiryPrefix": "HSD: "
+    "expiryPrefix": "HSD: ",
+    "compareProducts": "So sánh sản phẩm"
   },
   "searchModal": {
     "noResults": "Không tìm thấy sản phẩm",

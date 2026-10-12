@@ -18,11 +18,11 @@
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                 </svg>
-                <span>{{ displayedProducts.length }} {{ $t("common.products") || "sản phẩm" }}</span>
+                <span>{{ displayedProducts.length }} {{ $t("common.products") }}</span>
               </span>
               <span v-if="selectedBrand" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-sky-100 text-sky-800">
-                <span>Thương hiệu: <strong class="capitalize">{{ selectedBrand }}</strong></span>
-                <button type="button" @click="selectBrand('')" class="hover:text-red-600 ml-1">✕</button>
+                <span>{{ $t("common.brand") }}: <strong class="capitalize">{{ selectedBrand }}</strong></span>
+                <button type="button" @click="selectBrand('')" class="hover:text-red-600 ml-1" :title="$t('common.clearFilter')">✕</button>
               </span>
             </div>
           </div>
@@ -47,7 +47,7 @@
         <svg class="w-3.5 h-3.5 text-[#00b88c]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
         </svg>
-        <span>Thương hiệu</span>
+        <span>{{ $t("common.brand") }}</span>
       </div>
       <div class="flex flex-wrap gap-2">
         <button
@@ -60,7 +60,7 @@
           ]"
           class="px-3 py-1.5 rounded-lg text-xs transition-colors"
         >
-          Tất cả ({{ (categoryDetail as any)?.products?.length || 0 }})
+          {{ $t("common.all") }} ({{ (categoryDetail as any)?.products?.length || 0 }})
         </button>
         <button
           v-for="brand in availableBrands"
@@ -93,13 +93,13 @@
     <section class="mx-auto bg-white shadow-sm border border-gray-100 rounded-xl py-4 sm:py-6 px-3 sm:px-6 mb-6">
       <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
         <span class="text-xs sm:text-sm text-gray-600">
-          {{ $t("common.display") || "Hiển thị" }}:
+          {{ $t("common.display") }}:
           <strong class="text-sky-600 font-semibold">{{ displayedProducts.length }}</strong>
-          {{ $t("common.products") || "sản phẩm" }}
+          {{ $t("common.products") }}
         </span>
         <div v-if="selectedBrand" class="text-xs">
           <button type="button" @click="selectBrand('')" class="text-sky-600 hover:underline">
-            Xoá bộ lọc thương hiệu
+            {{ $t("common.clearBrandFilter") }}
           </button>
         </div>
       </div>
